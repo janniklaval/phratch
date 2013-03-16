@@ -119,7 +119,9 @@ ConfigurationOfPhratch >> baseline10: spec [
 			spec package: 'BitBltPen'.
 			spec project: 'Sound' with: [
 				spec
-					repository: 'http://smalltalkhub.com/mc/PharoExtras/Sound/main'; className: 'ConfigurationOfPharoSound'].
+					repository: 'http://smalltalkhub.com/mc/PharoExtras/Sound/main'; 
+					versionString:'5.0-baseline';
+					className: 'ConfigurationOfPharoSound'].
 			"spec package: 'Sound' with: [ 
 				spec requires: 'BitBltPen'  
 			]."
