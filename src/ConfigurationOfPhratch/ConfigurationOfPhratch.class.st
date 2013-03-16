@@ -117,9 +117,12 @@ ConfigurationOfPhratch >> baseline10: spec [
 			spec blessing: #baseline.
 			spec repository: 'http://smalltalkhub.com/mc/JLaval/Phratch/main'.
 			spec package: 'BitBltPen'.
-			spec package: 'Sound' with: [ 
+			spec project: 'Sound' with: [
+				spec
+					repository: 'http://smalltalkhub.com/mc/PharoExtras/Sound/main'; className: 'ConfigurationOfPharoSound'].
+			"spec package: 'Sound' with: [ 
 				spec requires: 'BitBltPen'  
-			].
+			]."
 			spec package: 'MorphicNewTextSupport'. 
 			spec package: 'NScratch' with: [ 
 				spec requires: 'Sound'.
