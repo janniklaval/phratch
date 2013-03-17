@@ -116,7 +116,7 @@ ConfigurationOfPhratch >> baseline10: spec [
 	spec for: #common do: [
 			spec blessing: #baseline.
 			spec repository: 'http://smalltalkhub.com/mc/JLaval/Phratch/main'.
-			spec package: 'BitBltPen'.
+			"spec package: 'BitBltPen'."
 			spec project: 'Sound' with: [
 				spec
 					repository: 'http://smalltalkhub.com/mc/PharoExtras/Sound/main'; 
