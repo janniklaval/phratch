@@ -128,8 +128,7 @@ ConfigurationOfPhratch >> baseline10: spec [
 			spec package: 'MorphicNewTextSupport'. 
 			spec package: 'NScratch' with: [ 
 				spec requires: 'Sound'.
-				spec requires: 'MorphicNewTextSupport' .
-				spec requires: 'BitBltPen'  
+				spec requires: 'MorphicNewTextSupport' 
 			].
 	].
 
