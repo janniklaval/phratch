@@ -121,6 +121,10 @@ ConfigurationOfPhratch >> baseline10: spec [
 					repository: 'http://smalltalkhub.com/mc/PharoExtras/Sound/main'; 
 					versionString:'5.0-baseline';
 					className: 'ConfigurationOfPharoSound'].
+			spec project: 'OSProcess' with: [
+				spec
+					repository: 'http://www.squeaksource.com/OSProcess'; 
+					versionString: #stable ].
 			spec package: 'NScratch' with: [ 
 				spec requires: 'Sound'.
 			].
