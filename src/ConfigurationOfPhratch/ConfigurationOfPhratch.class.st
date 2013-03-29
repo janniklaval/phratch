@@ -123,10 +123,12 @@ ConfigurationOfPhratch >> baseline10: spec [
 					className: 'ConfigurationOfPharoSound'].
 			spec project: 'OSProcess' with: [
 				spec
-					repository: 'http://www.squeaksource.com/OSProcess'; 
+					repository: 'http://www.squeaksource.com/MetacelloRepository'; 
+					className: 'ConfigurationOfOSProcess';
 					versionString: #stable ].
 			spec package: 'NScratch' with: [ 
 				spec requires: 'Sound'.
+				spec requires: 'OSProcess'
 			].
 	].
 
