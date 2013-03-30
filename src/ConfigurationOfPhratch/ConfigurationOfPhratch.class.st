@@ -116,11 +116,12 @@ ConfigurationOfPhratch >> baseline10: spec [
 	spec for: #common do: [
 			spec blessing: #baseline.
 			spec repository: 'http://smalltalkhub.com/mc/JLaval/Phratch/main'.
-			spec project: 'Sound' with: [
+			spec package: 'Sound'.
+			"spec project: 'Sound' with: [
 				spec
 					repository: 'http://smalltalkhub.com/mc/PharoExtras/Sound/main'; 
 					versionString:'5.0-baseline';
-					className: 'ConfigurationOfPharoSound'].
+					className: 'ConfigurationOfPharoSound']."
 			spec project: 'OSProcess' with: [
 				spec
 					repository: 'http://www.squeaksource.com/MetacelloRepository'; 
