@@ -127,7 +127,7 @@ ConfigurationOfPhratch >> baseline10: spec [
 					repository: 'http://www.squeaksource.com/MetacelloRepository'; 
 					className: 'ConfigurationOfOSProcess';
 					versionString: #stable ].
-			spec package: 'Sound'.
+			"spec package: 'Sound'."
 			spec package: 'NScratch' with: [ 
 				spec requires: 'Sound'.
 				spec requires: 'OSProcess'
