@@ -1,7 +1,7 @@
 Class {
 	#name : #PhratchWarpBlt,
 	#superclass : #WarpBlt,
-	#category : #'Phratch-System Subclasses'
+	#category : #'Phratch-Compatibility'
 }
 
 { #category : #'as yet unclassified' }

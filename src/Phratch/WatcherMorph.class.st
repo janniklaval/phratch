@@ -26,7 +26,7 @@ Class {
 WatcherMorph >> buildReadout [
 	"Build my readout component morphs."
 
-	readout := ScratchUpdatingStringMorph new
+	readout := PhratchUpdatingStringMorph new
 		contents: '';
 		floatPrecision: 0.1;
 		stepTime: 100.
@@ -218,7 +218,7 @@ WatcherMorph >> initFieldsFrom: anObjStream version: classVersion [
 WatcherMorph >> initialize [
 
 	super initialize.
-	titleMorph := ScratchStringMorph contents: '???'.
+	titleMorph := PhratchStringMorph contents: '???'.
 	titleMorph font: (ScratchFrameMorph getFont: #Watcher).
 	readout := readoutFrame := scratchSlider := nil.
 	lastTargetName := nil.

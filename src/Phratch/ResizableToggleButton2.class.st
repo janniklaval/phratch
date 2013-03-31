@@ -127,7 +127,7 @@ ResizableToggleButton2 >> initialize [
 	vOffset := 5.
 	padding := 8@8.
 
-	label := ScratchStringMorph new.
+	label := PhratchStringMorph new.
 	labelColorOff := Color r: (78/255) g: (82/255) b: (82/255).
 	labelColorOn := Color black.
 	labelColorOver := labelColorOff.
@@ -413,7 +413,7 @@ ResizableToggleButton2 >> pressed: aMorph [
 ResizableToggleButton2 >> rightButtonMenu [
 
 	| menu |
-	(self owner isKindOf: ScratchBlockPaletteMorph) ifTrue: [
+	(self owner isKindOf: PhratchBlockPaletteMorph) ifTrue: [
 		menu := MenuMorph new defaultTarget: self.
 		menu add: 'help' action: #presentHelpScreen.
 		menu localize; popUpInWorld].

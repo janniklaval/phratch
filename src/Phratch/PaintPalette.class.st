@@ -531,7 +531,7 @@ PaintPalette >> updateOptionsPane [
 			centering: #center;
 			color: Color transparent.
 		font := (StrikeFont fontName: 'VerdanaBold' size: 11).
-		s := (ScratchStringMorph contents: 'Brush size: ' localized).
+		s := (PhratchStringMorph contents: 'Brush size: ' localized).
 		self mode = #erase ifTrue: [s contents: ('Eraser size' localized ,': ')].
 		s font: font; color: Color gray darker.
 		brushSizeMorph addMorphBack: s.
@@ -628,12 +628,12 @@ PaintPalette >> updateOptionsPane [
 		font := (StrikeFont fontName: 'VerdanaBold' size: 11).
 		fName := canvasMorph canvasTextBox font name.
 		textFontMenu := ImageMorph new form: (ScratchFrameMorph skinAt: #textFontMenu).
-		textFontMorph := ScratchStringMorph new font: font.
+		textFontMorph := PhratchStringMorph new font: font.
 		textFontMorph contents: (textFontMorph stringWithEllipses: fName limitedToWidth: 109).
 		textFontMenu addMorph: textFontMorph.
 		textFontMorph position: 8@3.
 		textSizeMenu := ImageMorph new form: (ScratchFrameMorph skinAt: #textSizeMenu).
-		textSizeMorph := ScratchStringMorph contents: canvasMorph canvasTextBox font pointSize asString font: font.
+		textSizeMorph := PhratchStringMorph contents: canvasMorph canvasTextBox font pointSize asString font: font.
 		textSizeMenu addMorph: textSizeMorph.
 		textSizeMorph position: 9@3.
 		aColor2 := self color1.

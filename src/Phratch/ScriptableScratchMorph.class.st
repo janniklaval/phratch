@@ -1024,7 +1024,7 @@ ScriptableScratchMorph >> addWatcherForNewVariable: varName withScope: spriteOrS
 	| sFrame |
 	(sFrame := self ownerOrYourselfThatIsA: ScratchFrameMorph) ifNil: [^ self].
 	sFrame viewerPane pageViewer submorphs do: [:s | 
-		(s isKindOf: ScratchBlockPaletteMorph) ifTrue: [
+		(s isKindOf: PhratchBlockPaletteMorph) ifTrue: [
 			s submorphs do: [:block | 
 				(block isKindOf: VariableBlockMorph) ifTrue: [
 					(block receiver = spriteOrStage) &
@@ -1100,7 +1100,7 @@ ScriptableScratchMorph >> allVarNames [
 { #category : #'sensing ops' }
 ScriptableScratchMorph >> answer [
 
-	^ ScratchPrompterMorph lastAnswer
+	^ PhratchPrompterMorph lastAnswer
 
 ]
 
@@ -1369,7 +1369,7 @@ ScriptableScratchMorph >> blockFromOldFormTuple: tuple receiver: scriptOwner [
 		^ block].
 
 	#scratchComment = k ifTrue: [
-		block := ScratchCommentMorph new.
+		block := PhratchCommentMorph new.
 		tuple size > 1 ifTrue: [block commentMorph contents: (tuple at: 2)].
 		tuple size > 2 ifTrue: [(tuple at: 3) ifFalse: [block toggleShowing]].
 		tuple size > 3 ifTrue: [block width: (tuple at: 4)].
@@ -1705,7 +1705,7 @@ ScriptableScratchMorph >> blockFromTuple: tuple receiver: scriptOwner [
 		^ block].
 
 	#scratchComment = k ifTrue: [
-		block := ScratchCommentMorph new.
+		block := PhratchCommentMorph new.
 		tuple size > 3 ifTrue: [block commentMorph contents: (tuple at: 4)].
 		tuple size > 4 ifTrue: [(tuple at: 5) ifFalse: [block toggleShowing]].
 		tuple size > 5 ifTrue: [block width: (tuple at: 6)].
@@ -2269,7 +2269,7 @@ ScriptableScratchMorph >> click: evt [
 	h := World activeHand.
 	h toolType ifNotNil: [^ self handleTool: h toolType hand: h].
 
-	clickEvt := ScratchEvent new
+	clickEvt := PhratchEvent new
 		name: 'Scratch-MouseClickEvent'
 		argument: 0.
 	self eventReceived: clickEvt.
@@ -2441,7 +2441,7 @@ ScriptableScratchMorph >> convertStacksToTuples [
 
 	stacks := (blocksBin submorphs select: [:m | m respondsTo: #tupleSequence]).
 	blocks := stacks select: [:m | m isKindOf: BlockMorph].
-	comments := stacks select: [:m | m isKindOf: ScratchCommentMorph].
+	comments := stacks select: [:m | m isKindOf: PhratchCommentMorph].
 
 	blocks := blocks collect: [:blockM | 
 		Array
@@ -2495,7 +2495,7 @@ ScriptableScratchMorph >> convertTuplesToStacks [
 	self convertTuplesToDefinitions.
 
 	tuplesList := blocksBin.
-	blocksBin := ScratchScriptsMorph new.
+	blocksBin := PhratchScriptsMorph new.
 	tuplesList do: [:pair |
 		stack := self stackFromTupleList: pair second receiver: self.
 		stack position: pair first.
@@ -2782,12 +2782,12 @@ ScriptableScratchMorph >> costumesPage: xOffset [
 	xMargin := 15.
 	yMargin := 15.
 
-	bin := ScratchBlockPaletteMorph new color: ScratchFrameMorph scriptsPaneColor.
+	bin := PhratchBlockPaletteMorph new color: ScratchFrameMorph scriptsPaneColor.
 
 	(self isKindOf: ScratchStageMorph)
 		ifTrue: [label := 'New background:' localized]
 		ifFalse: [label := 'New costume:' localized].
-	m := ScratchStringMorph
+	m := PhratchStringMorph
 		contents: label
 		font: (ScratchFrameMorph getFont: #CostumesPage).
 	m color: Color white.
@@ -3285,7 +3285,7 @@ ScriptableScratchMorph >> deleteSprite [
 	| frame sprites i presenter instances |
 	frame := self ownerOrYourselfThatIsA: ScratchFrameMorph. 
 	frame ifNil: [
-		presenter := World findA: ScratchPresenterMorph.
+		presenter := World findA: PhratchPresenterMorph.
 		presenter ifNil: [^ self delete].
 		frame := presenter frame].
 
@@ -3326,7 +3326,7 @@ ScriptableScratchMorph >> deleteSpriteQuickly [
 	| frame sprites presenter instances |
 	frame := self ownerOrYourselfThatIsA: ScratchFrameMorph. 
 	frame ifNil: [
-		presenter := World findA: ScratchPresenterMorph.
+		presenter := World findA: PhratchPresenterMorph.
 		presenter ifNil: [^ self delete].
 		frame := presenter frame].
 
@@ -3460,8 +3460,8 @@ ScriptableScratchMorph >> drum: midiKey duration: beats elapsed: elapsedMSecs fr
 
 	| stage player |
 	aNotePlayer ifNil: [  "first call, start playing the drum"
-		(stage := self ownerOrYourselfThatIsA: ScratchStageMorph) ifNil: [^ ScratchNotePlayer new].
-		(player := stage notePlayerFor: self) ifNil: [^ ScratchNotePlayer new].
+		(stage := self ownerOrYourselfThatIsA: ScratchStageMorph) ifNil: [^ PhratchNotePlayer new].
+		(player := stage notePlayerFor: self) ifNil: [^ PhratchNotePlayer new].
 		^ player copy drumOn: midiKey].
 
 	elapsedMSecs >= ((60000 * beats) // self tempo) ifTrue: [aNotePlayer drumOff].
@@ -4492,7 +4492,7 @@ ScriptableScratchMorph >> initialize [
 	objName := self nextInstanceName.
 	vars := Dictionary new.
 	lists := Dictionary new.
-	blocksBin := ScratchScriptsMorph new.
+	blocksBin := PhratchScriptsMorph new.
 	isClone := false.
 	costume := self defaultImageMedia.
 	media := OrderedCollection new.
@@ -5632,8 +5632,8 @@ ScriptableScratchMorph >> noteOn: midiKey duration: beats elapsed: elapsedMSecs 
 
 	| stage player |
 	aNotePlayer ifNil: [  "first call, start playing the note"
-		(stage := self ownerOrYourselfThatIsA: ScratchStageMorph) ifNil: [^ ScratchNotePlayer new].
-		(player := stage notePlayerFor: self) ifNil: [^ ScratchNotePlayer new].
+		(stage := self ownerOrYourselfThatIsA: ScratchStageMorph) ifNil: [^ PhratchNotePlayer new].
+		(player := stage notePlayerFor: self) ifNil: [^ PhratchNotePlayer new].
 		^ player copy noteOn: midiKey].
 
 	elapsedMSecs >= ((60000 * beats) // self tempo) ifTrue: [aNotePlayer noteOff].
@@ -5650,7 +5650,7 @@ ScriptableScratchMorph >> noteSelector [
 	notePlayer := stageMorph notePlayerFor: self.
 	notePlayer ifNil: [^ self midiNoteMenu].
 
-	^ (ScratchNoteSelector new setNotePlayer: notePlayer)
+	^ (PhratchNoteSelector new setNotePlayer: notePlayer)
 
 ]
 
@@ -5986,7 +5986,7 @@ ScriptableScratchMorph >> promptForInput: questionString [
 
 	| s prompter |
 	(s := self ownerOrYourselfThatIsA: ScratchStageMorph) ifNil: [^ self].
-	prompter := ScratchPrompterMorph new.
+	prompter := PhratchPrompterMorph new.
 	((self isKindOf: ScratchStageMorph) | (self isHidden))
 		ifTrue: [
 			prompter question: questionString]
@@ -6013,7 +6013,7 @@ ScriptableScratchMorph >> promptInProgress [
 	| s |
 	(s := self ownerOrYourselfThatIsA: ScratchStageMorph) ifNil: [^ false].
 	s submorphsDo: [:m |
-		(m isKindOf: ScratchPrompterMorph) ifTrue: [^ true]].
+		(m isKindOf: PhratchPrompterMorph) ifTrue: [^ true]].
 	^ false
 
 ]
@@ -6112,9 +6112,9 @@ ScriptableScratchMorph >> recordSound [
 	frame ifNil: [^ Beeper beep].
 	frame stopAll.
 	World submorphs do: [:m |
-		(m isKindOf: ScratchSoundRecorderDialogMorph) ifTrue: [m delete]].
+		(m isKindOf: PhratchSoundRecorderDialogMorph) ifTrue: [m delete]].
 
-	ScratchSoundRecorderDialogMorph forClient: self.
+	PhratchSoundRecorderDialogMorph forClient: self.
 
 
 ]
@@ -6651,9 +6651,9 @@ ScriptableScratchMorph >> soundsPage: xOffset [
 	xMargin := 15.
 	yMargin := 15.
 
-	bin := ScratchBlockPaletteMorph new.
+	bin := PhratchBlockPaletteMorph new.
 
-	m := ScratchStringMorph
+	m := PhratchStringMorph
 		contents: 'New sound:' localized
 		font: (ScratchFrameMorph getFont: #SoundsPage).
 	m color: Color white.
@@ -6862,7 +6862,7 @@ ScriptableScratchMorph >> stringLength: anObject [
 ScriptableScratchMorph >> takePhoto [
 	"Take a photo."
 
-	ScratchCameraDialog new
+	PhratchCameraDialog new
 		client: self;
 		openInWorld;
 		openCamera.
@@ -7304,7 +7304,7 @@ ScriptableScratchMorph >> variablesPage [
 	"Answer a morph containing my variables."
 
 	| page addButton deleteButton hasVars stage x y maxX |
-	page := ScratchBlockPaletteMorph new
+	page := PhratchBlockPaletteMorph new
 		color: (Color r: 0.8 g: 0.8 b: 1.0);
 		borderWidth: 0.
 
@@ -7413,7 +7413,7 @@ ScriptableScratchMorph >> viewerPageForCategory: aCategoryName [
 	aCategoryName = 'motion' ifTrue: [^ self viewerPageForMotion].
 	aCategoryName = 'sensing' ifTrue: [^ self viewerPageForSensing].
 
-	bin := ScratchBlockPaletteMorph new.
+	bin := PhratchBlockPaletteMorph new.
 	x := 12.
 	y := 10.
 	(self blocksFor: aCategoryName) do: [:blockOrSym |
@@ -7437,7 +7437,7 @@ ScriptableScratchMorph >> viewerPageForMotion [
 	"Answer a morph containing mtion blocks for the given category for use in the given ScratchViewer."
 
 	| bin isStage addMotorBlocks s font x y m |
-	bin := ScratchBlockPaletteMorph new.
+	bin := PhratchBlockPaletteMorph new.
 
 	(self isKindOf: ScratchStageMorph)
 		ifTrue: [
@@ -7452,9 +7452,9 @@ ScriptableScratchMorph >> viewerPageForMotion [
 		font := (ScratchFrameMorph getFont: #ViewerPage).
 		x := 20.
 		y := 12.
-		m := ScratchStringMorph contents: 'Stage selected:' localized font: font.
+		m := PhratchStringMorph contents: 'Stage selected:' localized font: font.
 		bin addMorph: (m color: Color white; position: x@y).
-		m := ScratchStringMorph contents: 'No motion blocks' localized font: font.
+		m := PhratchStringMorph contents: 'No motion blocks' localized font: font.
 		bin addMorph: (m color: Color white; position: x@(y + 17)).
 		^ bin].
 
@@ -7496,7 +7496,7 @@ ScriptableScratchMorph >> viewerPageForSensing [
 	"Answer a morph containing mtion blocks for the given category for use in the given ScratchViewer."
 
 	| bin x y |
-	bin := ScratchBlockPaletteMorph new.
+	bin := PhratchBlockPaletteMorph new.
 	x := 12.
 	y := 10.
 	(self blocksFor: 'sensing') do: [:blockOrSym |

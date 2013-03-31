@@ -419,7 +419,7 @@ LambdaBlockMorph >> showValue [
 
 	| tooltip w worldBounds |
 
-	tooltip := (ScratchReporterToolTipMorph string: self morphToShow imageForm for: self)
+	tooltip := (PhratchReporterToolTipMorph string: self morphToShow imageForm for: self)
 		left: self right;
 		bottom: self top.
 	ScratchTranslator isRTL ifTrue: [tooltip right: self left].

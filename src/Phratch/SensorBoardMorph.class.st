@@ -79,12 +79,12 @@ SensorBoardMorph >> addReadoutLabeled: aString [
 	| row box readout |
 	row := AlignmentMorph newRow color: column color; inset: 2.
 	row addMorphBack: (Morph new color: column color; extent: 1@3). "spacer"
-	row addMorphBack: (ScratchStringMorph contents: aString capitalized font: (StrikeFont fontName: 'VerdanaBold' size: 10)).
+	row addMorphBack: (PhratchStringMorph contents: aString capitalized font: (StrikeFont fontName: 'VerdanaBold' size: 10)).
 	row addMorphBack: (AlignmentMorph new color: column color; extent: 10@1; hResizing: #spaceFill).  "spacer"
 	box := WatcherReadoutFrameMorph new
 		extent: 42@14;
 		color: (ScriptableScratchMorph blockColorFor: 'sensing').
-	readout := ScratchStringMorph contents: '0' font: (StrikeFont fontName: 'VerdanaBold' size: 10).
+	readout := PhratchStringMorph contents: '0' font: (StrikeFont fontName: 'VerdanaBold' size: 10).
 	readout color: Color white.
 	box addMorph: readout.
 	row addMorphBack: box.
@@ -119,7 +119,7 @@ SensorBoardMorph >> addReadouts [
 		useRoundedCorners;
 		inset: 3.
 
-	titleMorph := ScratchStringMorph
+	titleMorph := PhratchStringMorph
 		contents: ''
 		font: (StrikeFont fontName: 'VerdanaBold' size: 10).
 	column addMorph: titleMorph.

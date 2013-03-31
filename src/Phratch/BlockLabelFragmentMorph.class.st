@@ -1,6 +1,6 @@
 Class {
 	#name : #BlockLabelFragmentMorph,
-	#superclass : #ScratchStringMorph,
+	#superclass : #PhratchStringMorph,
 	#instVars : [
 		'labelFragment'
 	],

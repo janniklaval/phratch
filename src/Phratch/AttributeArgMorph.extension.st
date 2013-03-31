@@ -117,7 +117,7 @@ AttributeArgMorph >> universalAttributeChoice: aSymbol [
 			ifTrue: [owner addLabel]
 			ifFalse: [owner fixBlockLayout]].
 
-	(palette := self ownerOrYourselfThatIsA: ScratchBlockPaletteMorph) ifNil: [^ self].
+	(palette := self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph) ifNil: [^ self].
 	(block := self ownerOrYourselfThatIsA: BlockMorph) ifNil: [^ self].
 
 	block isReporter ifTrue: [palette updateWatcherButtonsForFrame: frame].

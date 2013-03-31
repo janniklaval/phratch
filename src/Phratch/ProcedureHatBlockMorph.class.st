@@ -180,7 +180,7 @@ ProcedureHatBlockMorph >> replaceArgMorph: oldMorph by: newMorph [
 { #category : #'as yet unclassified' }
 ProcedureHatBlockMorph >> rootForGrabOf: aMorph [
 
-	(owner isKindOf: ScratchScriptsMorph) ifTrue: [^nil].
+	(owner isKindOf: PhratchScriptsMorph) ifTrue: [^nil].
 
 	^ super rootForGrabOf: aMorph
 ]

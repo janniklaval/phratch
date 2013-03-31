@@ -109,7 +109,7 @@ WatcherReadoutFrameMorph >> fixLayout [
 
 	| watcher readout isLarge s e readoutWidth yOffset w inset blist |
 
-	((submorphs size = 1) and: [submorphs first isKindOf: ScratchStringMorph]) ifFalse: [^ self].
+	((submorphs size = 1) and: [submorphs first isKindOf: PhratchStringMorph]) ifFalse: [^ self].
 
 	watcher := self ownerOrYourselfThatIsA: WatcherMorph.
 	readout := submorphs first.

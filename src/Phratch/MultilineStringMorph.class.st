@@ -583,7 +583,7 @@ MultilineStringMorph >> font [
 MultilineStringMorph >> font: aFont [
 
 	font := aFont.
-	renderer := ScratchStringMorph new font: aFont.
+	renderer := PhratchStringMorph new font: aFont.
 	lineHeight := renderer stringHeight: ScratchTranslator renderHintString, 'Ag'.
 	self wordWrapAll.
 

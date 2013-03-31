@@ -619,7 +619,7 @@ ScrollingStringMorph >> font [
 ScrollingStringMorph >> font: aFont [
 
 	font := aFont.
-	renderer := ScratchStringMorph new font: aFont.
+	renderer := PhratchStringMorph new font: aFont.
 	lineHeight := renderer stringHeight: ScratchTranslator renderHintString, 'Ag'.
 	lineHeight = 0 ifTrue: [lineHeight := 10].  "workaround for possible bug in stringHeight:"
 	layoutNeeded := true.
@@ -754,7 +754,7 @@ ScrollingStringMorph >> initialize [
 	blinkState := true.
 	layoutNeeded := false.
 
-	scrollbar := ScratchScrollBar newVertical
+	scrollbar := PhratchScrollBar newVertical
 		width: 16;
 		target: self;
 		selector: #scrollRelative:.

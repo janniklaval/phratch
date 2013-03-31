@@ -217,7 +217,7 @@ MultiArgReporterBlockMorph >> fixBlockLayoutWrap [
 				x := left].
 			(m isKindOf: BlockMorph) ifTrue: [m fixBlockLayout].
 			(m isKindOf: ArgMorph) ifTrue: [m fixArgLayout].
-			(m isKindOf: ScratchStringMorph)
+			(m isKindOf: PhratchStringMorph)
 				ifTrue: [m color: self labelColor]
 				ifFalse: [x := x max: minXForArgs].
 
@@ -309,8 +309,8 @@ MultiArgReporterBlockMorph >> fixBlockLayoutWrap [
 
 	ifFalse: [ self extent: w @ h].
 
-	(self ownerOrYourselfThatIsA: ScratchBlockPaletteMorph) ifNotNil: [
-		(self ownerOrYourselfThatIsA: ScratchBlockPaletteMorph) fixLayout].
+	(self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph) ifNotNil: [
+		(self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph) fixLayout].
 
 
 ]
@@ -396,7 +396,7 @@ MultiArgReporterBlockMorph >> showValue [
 
 	(self isBooleanReporter or: [msg = 'Error!']) ifTrue: [
 		msg := msg localized].
-	tooltip := (ScratchReporterToolTipMorph string: msg for: self)
+	tooltip := (PhratchReporterToolTipMorph string: msg for: self)
 		left: self right;
 		bottom: self top.
 	ScratchTranslator isRTL ifTrue: [tooltip right: self left].

@@ -595,7 +595,7 @@ CommandBlockMorph >> editElements [
 	| cls sel |
 	sel := selector.
 	cls := receiver class classThatUnderstands: sel.
-	cls ifNil: [cls := ScratchProcess].
+	cls ifNil: [cls := PhratchProcess].
 	(cls canUnderstand: sel)
 		ifFalse: [isSpecialForm ifTrue: [
 			(#(getBlockVar: getVar:) includes: sel) ifTrue: [sel := #getVar].
@@ -735,7 +735,7 @@ CommandBlockMorph >> fixBlockLayoutNoWrap [
 	self nonControlFlowSubmorphs do: [:m |
 		(m isKindOf: BlockMorph) ifTrue: [m fixBlockLayout].
 		(m isKindOf: ArgMorph) ifTrue: [m fixArgLayout].
-		(isFirst and: [(m isKindOf: ScratchStringMorph) not]) ifTrue: [
+		(isFirst and: [(m isKindOf: PhratchStringMorph) not]) ifTrue: [
 			"extra space when an arg overlaps with notch"
 			h := h max: m height + 3.
 			hAdjust := 1].
@@ -754,7 +754,7 @@ CommandBlockMorph >> fixBlockLayoutNoWrap [
 
 	x := self left + 5.
 	self nonControlFlowSubmorphs do: [:m |
-		(m isKindOf: ScratchStringMorph)
+		(m isKindOf: PhratchStringMorph)
 			ifTrue: [(m isKindOf: BlockLabelFragmentMorph) 
 				ifFalse: [m color: self labelColor]]
 			ifFalse: [x := x max: minXForArgs].
@@ -825,7 +825,7 @@ CommandBlockMorph >> fixBlockLayoutWrap [
 				x := left].
 			(m isKindOf: BlockMorph) ifTrue: [m fixBlockLayout].
 			(m isKindOf: ArgMorph) ifTrue: [m fixArgLayout].
-			(m isKindOf: ScratchStringMorph)
+			(m isKindOf: PhratchStringMorph)
 				ifTrue: [m color: self labelColor]
 				ifFalse: [x := x max: minXForArgs].
 
@@ -1027,7 +1027,7 @@ CommandBlockMorph >> labelMorphFor: aString [
 	s := aString.
 	commandSpec isUnicode ifTrue: [s := UTF8 withAll: s]
 		ifFalse:[s := s asString].
-	^ (ScratchStringMorph contents: s font: (ScratchFrameMorph getFont: #Label))
+	^ (PhratchStringMorph contents: s font: (ScratchFrameMorph getFont: #Label))
 		color: self labelColor
 
 ]
@@ -1228,7 +1228,7 @@ CommandBlockMorph >> rightButtonMenu [
 	menu := MenuMorphNG new defaultTarget: self.
 	menu add: 'help' value: #presentHelpScreen.
 
-	(owner isKindOf: ScratchBlockPaletteMorph) ifFalse: [
+	(owner isKindOf: PhratchBlockPaletteMorph) ifFalse: [
 		menu addLine.
 		(#(+ - * / \\) includes: selector) ifTrue: [
 			#(+ - * / mod) with: #(+ - * / \\) do: [:s :op | menu add: s value: op]].
@@ -1292,7 +1292,7 @@ CommandBlockMorph >> scratchObject [
 	be := self ownerOrYourselfThatIsA: BlockEditorFrameMorph.
 	be isNil
 		ifTrue: [
-			sm := self ownerOrYourselfThatIsA: ScratchScriptsMorph.
+			sm := self ownerOrYourselfThatIsA: PhratchScriptsMorph.
 			sf := self ownerOrYourselfThatIsA: ScratchFrameMorph.
 			sm isNil | sf isNil ifTrue: [^ nil].
 			so := sf scratchObjects detect: [:obj | obj blocksBin = sm] ifNone: [sf workPane]]

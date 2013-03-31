@@ -1,6 +1,6 @@
 Class {
 	#name : #PhratchUpdatingStringMorph,
-	#superclass : #StringMorph,
+	#superclass : #PhratchStringMorph,
 	#instVars : [
 		'format',
 		'target',
@@ -12,7 +12,7 @@ Class {
 		'growable',
 		'stepTime'
 	],
-	#category : #'Phratch-System Subclasses'
+	#category : #'Phratch-Compatibility'
 }
 
 { #category : #'as yet unclassified' }
@@ -68,12 +68,14 @@ PhratchUpdatingStringMorph >> fieldsVersion [
 PhratchUpdatingStringMorph >> fitContents [
 
 	|  newExtent |
-	newExtent := (self stringExtent: contents) max: 5@0.
+	newExtent := (font 
+		ifNil: [self stringExtent: contents] 
+		ifNotNil: [ScratchTranslator stringExtent: contents font: font]) max: 5@0.
 	self extent = newExtent ifFalse: [
 		self extent: newExtent.
 		self changed.
-		(self ownerThatIsA: EventHatMorph) ifNotNil:[
-			(self ownerThatIsA: EventHatMorph) forceLayout]].
+		(self ownerOrYourselfThatIsA: EventHatMorph) ifNotNil:[
+			(self ownerOrYourselfThatIsA: EventHatMorph) forceLayout]].
 
 ]
 

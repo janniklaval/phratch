@@ -43,12 +43,12 @@ ShadowedStringMorph >> contents: aString [
 { #category : #accessing }
 ShadowedStringMorph >> contents: aString color: aColor font: aFont kern: aNumber [
 
-	mainMorph := ScratchStringMorph new
+	mainMorph := PhratchStringMorph new
 		contents: aString;
 		color: aColor;
 		font: aFont;
 		kern: aNumber.
-	shadowMorph := ScratchStringMorph new
+	shadowMorph := PhratchStringMorph new
 		contents: aString;
 		color: (Color black mixed: 0.2 with: self color);
 		font: aFont;

@@ -110,8 +110,8 @@ ResizableToggleButton >> isOn [
 ResizableToggleButton >> label: aString font: aFont [
 
 	| oldLabel m |
-	(oldLabel := self findA: ScratchStringMorph) ifNotNil: [oldLabel delete].
-	m := ScratchStringMorph contents: aString font: (aFont ifNil: [PhratchPreferences standardButtonFont]).
+	(oldLabel := self findA: PhratchStringMorph) ifNotNil: [oldLabel delete].
+	m := PhratchStringMorph contents: aString font: (aFont ifNil: [PhratchPreferences standardButtonFont]).
 	m color: (Color r: (78/255) g: (82/255) b: (82/255)).
 	self extent: m extent + borderWidth.
 	self width: self width + sideMargin.
@@ -186,7 +186,7 @@ ResizableToggleButton >> off [
 	isOn := false.
 	self changed.
 
-	(myLabel := self findA: ScratchStringMorph) ifNotNil: [
+	(myLabel := self findA: PhratchStringMorph) ifNotNil: [
 		offLabelColor ifNotNil: [
 			myLabel color: offLabelColor]].
 
@@ -201,7 +201,7 @@ ResizableToggleButton >> on [
 	isOn := true.
 	self changed.
 
-	(myLabel := self findA: ScratchStringMorph) ifNotNil: [
+	(myLabel := self findA: PhratchStringMorph) ifNotNil: [
 		offLabelColor := myLabel color.
 		myLabel color: Color black].
 
@@ -233,7 +233,7 @@ ResizableToggleButton >> rightButtonMenu [
 
 	| menu |
 
-	(self owner isKindOf: ScratchBlockPaletteMorph) ifTrue: [
+	(self owner isKindOf: PhratchBlockPaletteMorph) ifTrue: [
 		menu := MenuMorph new defaultTarget: self.
 		menu add: 'help' action: #presentHelpScreen.
 		menu localize; popUpInWorld].

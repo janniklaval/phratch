@@ -62,7 +62,7 @@ CommentBlockMorph >> initialize [
 	self color: (Color r: 0.670 g: 0.685 b: 0.670).
 	isShowing := true.
 
-	labelMorph := (ScratchStringMorph contents: 'comment' localized font: (ScratchFrameMorph getFont: #Label)) color: LabelColor.
+	labelMorph := (PhratchStringMorph contents: 'comment' localized font: (ScratchFrameMorph getFont: #Label)) color: LabelColor.
 	self addMorph: labelMorph.
 
 	commentMorph := MultilineStringMorph new

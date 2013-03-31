@@ -167,7 +167,7 @@ SpriteArgMorph >> initialize [
 	self borderWidth: 1.
 	self color: Color white.
 
-	labelMorph := ScratchStringMorph new
+	labelMorph := PhratchStringMorph new
 		font: (ScratchFrameMorph getFont: #Arg);
 		forceUnicodeRendering: true;
 		color: Color white.
@@ -338,8 +338,8 @@ SpriteArgMorph >> updateLabel [
 		menuIconMorph position: (self right - borderWidth - 10)@(self top + borderWidth + 4).
 		(self owner isKindOf: BlockMorph) ifTrue: [
 			self owner addLabel].
-		(self ownerOrYourselfThatIsA: ScratchBlockPaletteMorph) ifNotNil: [
-			(self ownerOrYourselfThatIsA: ScratchBlockPaletteMorph) fixLayout]].
+		(self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph) ifNotNil: [
+			(self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph) fixLayout]].
 
 ]
 

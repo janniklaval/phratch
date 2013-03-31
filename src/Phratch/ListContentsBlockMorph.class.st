@@ -70,7 +70,7 @@ ListContentsBlockMorph >> toggleWatcher [
 			listMorph delete].
 
 	(frame := self ownerOrYourselfThatIsA: ScratchFrameMorph) ifNil: [^ self].				
-	palette := self ownerOrYourselfThatIsA: ScratchBlockPaletteMorph.
+	palette := self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph.
 	palette ifNotNil: [palette updateWatcherButtonsForFrame: frame].
 
 ]

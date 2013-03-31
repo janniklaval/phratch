@@ -345,7 +345,7 @@ ScratchFileChooserDialog class >> setHomeDir: aStringOrNil [
 ScratchFileChooserDialog class >> setLastFolderTo: dir forType: type [
 	"Remember the given dir as the last folder used for the given type of file."
 
-	(dir isKindOf: ScratchServerDirectory) ifTrue: [^ self].
+	(dir isKindOf: PhratchServerDirectory) ifTrue: [^ self].
 	LastFolderForType at: type put: dir.
 
 
@@ -452,7 +452,7 @@ ScratchFileChooserDialog >> choosingFolder: aBoolean [
 ScratchFileChooserDialog >> createFileChooserLayout: allowNewFile [
 	"Create the file chooser dialog box."
 
-	list := ScratchFilePicker new.
+	list := PhratchFilePicker new.
 	self removeAllMorphs.
 	bottomSpacer delete.
 	bottomSpacer := nil.
@@ -461,7 +461,7 @@ ScratchFileChooserDialog >> createFileChooserLayout: allowNewFile [
 	self title: 'Open'.
 	allowNewFile ifTrue: [
 		self title: 'Save As'.
-		newFileTitle := ScratchStringMorph new
+		newFileTitle := PhratchStringMorph new
 			contents: 'New Filename:' localized, ' ';
 			color: (Color gray: 0.3);
 			font: (ScratchFrameMorph getFont: #FileChooserNewFileTitle).
@@ -499,7 +499,7 @@ ScratchFileChooserDialog >> createPhratchFileChooserFor: aScratchFrameMorph savi
 	readingScratchFile := savingFlag not.
 
 "	list := ScratchFilePicker new extensions: #(scratch sb sct)."
-	list := ScratchFilePicker new extensions: #(sct).
+	list := PhratchFilePicker new extensions: #(sct).
 	self removeAllMorphs.
 	bottomSpacer delete.
 	bottomSpacer := nil.
@@ -616,7 +616,7 @@ ScratchFileChooserDialog >> createScratchFileChooserFor: aScratchFrameMorph savi
 	scratchFrame := aScratchFrameMorph.
 	readingScratchFile := savingFlag not.
 
-	list := ScratchFilePicker new extensions: #(scratch sb ypr).
+	list := PhratchFilePicker new extensions: #(scratch sb ypr).
 	self removeAllMorphs.
 	bottomSpacer delete.
 	bottomSpacer := nil.
@@ -632,7 +632,7 @@ ScratchFileChooserDialog >> createScratchFileChooserFor: aScratchFrameMorph savi
 
 	savingFlag ifTrue: [
 		self title: 'Save Project'.
-		newFileTitle := ScratchStringMorph contents: ('New Filename:' localized, ' ') font: labelFont.
+		newFileTitle := PhratchStringMorph contents: ('New Filename:' localized, ' ') font: labelFont.
 		newFileTitle color: (Color gray: 0.3).
 		newFileName := StringFieldMorph new
 			contents: scratchFrame projectName;
@@ -671,7 +671,7 @@ ScratchFileChooserDialog >> createScratchFileChooserFor: aScratchFrameMorph savi
 	thumbnailMorph := ImageMorph new form: (Form extent: 160@120 depth: 1).
 	thumbnailFrameMorph addMorphFront: (thumbnailMorph position: ((thumbnailFrameMorph position) + (5@5))).
 
-	authorLabelMorph := ScratchStringMorph contents: 'Project author:' localized font: labelFont.
+	authorLabelMorph := PhratchStringMorph contents: 'Project author:' localized font: labelFont.
 	authorLabelMorph color: (Color gray: 0.3).
 	fileInfoColumn addMorphBack: authorLabelMorph.
 	savingFlag
@@ -691,7 +691,7 @@ ScratchFileChooserDialog >> createScratchFileChooserFor: aScratchFrameMorph savi
 		addMorphBack: authorMorph;
 		addMorphBack: (Morph new extent: (5@6); color: Color transparent). "spacer"
 
-	commentLabelMorph := ScratchStringMorph contents: 'About this project:' localized font: labelFont.
+	commentLabelMorph := PhratchStringMorph contents: 'About this project:' localized font: labelFont.
 	commentLabelMorph color: authorLabelMorph color.
 	fileInfoColumn addMorphBack: commentLabelMorph.
 	commentMorph := ScrollingStringMorph new
@@ -733,7 +733,7 @@ ScratchFileChooserDialog >> defaultName: aString [
 ScratchFileChooserDialog >> delete [
 
 	super delete.
-	(list isKindOf: ScratchFilePicker) ifTrue: [list stopPlayingSound].
+	(list isKindOf: PhratchFilePicker) ifTrue: [list stopPlayingSound].
 
 ]
 
@@ -770,7 +770,7 @@ ScratchFileChooserDialog >> getUserResponse [
 		scratchFrame author: authorMorph contents trimBoth.
 		scratchFrame projectComment: commentMorph contents].
 
-	(list currentDirectory isKindOf: ScratchServerDirectory)
+	(list currentDirectory isKindOf: PhratchServerDirectory)
 		ifTrue: [^ list projectFetcher]
 		ifFalse: [^ (list currentDirectory / list selectedFile)].
 

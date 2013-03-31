@@ -45,7 +45,7 @@ KeyEventHatMorph >> initialize [
 
 	parts := ScratchTranslator labelPartsFor: 'when %k key pressed'.
 
-	s := ScratchStringMorph new
+	s := PhratchStringMorph new
 		contents: parts first; font: (ScratchFrameMorph getFont: #Label);
 		color: Color white.
 	self addMorphBack: s.

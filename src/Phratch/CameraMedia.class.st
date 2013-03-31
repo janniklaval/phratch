@@ -1,6 +1,6 @@
 Class {
 	#name : #CameraMedia,
-	#superclass : #ScratchMedia,
+	#superclass : #PhratchMedia,
 	#instVars : [
 		'cameraNum',
 		'frameExtent',

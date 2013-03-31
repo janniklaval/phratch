@@ -44,13 +44,13 @@ VariableBlockMorph >> addLabel [
 		self addMorphBack: (self labelMorphFor: '...') ].
 
 	labelFragment isTemplate ifTrue: [
-		self addMorphBack: ((ScratchStringMorph contents: '^') color: self labelColor) ].
+		self addMorphBack: ((PhratchStringMorph contents: '^') color: self labelColor) ].
 
 	labelFragment isLoop ifTrue: [
-		self addMorphBack: ((ScratchStringMorph contents: '[') color: self labelColor) ].
+		self addMorphBack: ((PhratchStringMorph contents: '[') color: self labelColor) ].
 
 	labelFragment isUnevaluated ifTrue: [
-		self addMorphBack: ((ScratchStringMorph contents: '*') color: self labelColor) ].
+		self addMorphBack: ((PhratchStringMorph contents: '*') color: self labelColor) ].
 
 	(' ' asUTF8 = dflt or: [dflt isEmpty]) ifFalse: [
 		self addMorphBack: (self labelMorphFor: '=', labelFragment default asString)].
@@ -116,7 +116,7 @@ VariableBlockMorph >> click: evt [
 	self isBlockTemplate
 		ifFalse: [^ super click: evt]. 
 
-	(owner isKindOf: ScratchBlockPaletteMorph)
+	(owner isKindOf: PhratchBlockPaletteMorph)
 		ifTrue: [^ super click: evt].
 
 	((owner isKindOf: BlockMorph) and: [owner isCustomBlock and: [owner isTemplate]])

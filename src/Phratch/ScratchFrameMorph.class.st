@@ -997,7 +997,7 @@ ScratchFrameMorph >> checkBoxLabelled: aString marked: aBool width: anInt [
 		ifTrue: [cnts := ' ', aString localized asMacRoman]
 		ifFalse: [cnts := ' ' asUTF8, aString localized].
 
-	label := ScratchStringMorph contents: cnts font: PhratchPreferences standardMenuFont.
+	label := PhratchStringMorph contents: cnts font: PhratchPreferences standardMenuFont.
 	line := Morph new color: Color transparent.
 	line height: (box height max: label height).
 	line width: (box width + label width max: anInt).
@@ -1077,7 +1077,7 @@ ScratchFrameMorph >> closeMediaEditorsAndDialogs [
 		mList do: [:m | m cancelled; delete].
 		paintingInProgress := false].
 
-	mList := ScratchSoundRecorderDialogMorph allInstances select: [:m | m isInWorld].
+	mList := PhratchSoundRecorderDialogMorph allInstances select: [:m | m isInWorld].
 	mList size > 0 ifTrue: [
 		(DialogBoxMorph ask: 'Close sound recorder?') ifFalse: [^ false].
 		mList do: [:m | m cancelled; delete]].
@@ -1197,12 +1197,12 @@ ScratchFrameMorph >> createBasicPanes [
 	"Create and add my palette (viewer), script editor, stage, and library panes."
 
 	topPane := ImageFrameMorph new initFromForm: (ScratchFrameMorph skinAt: 'topPane').
-	viewerPane := ScratchViewerMorph new rebuildCategorySelectors.	
-	scriptsPane := ScratchScriptEditorMorph new.
+	viewerPane := PhratchViewerMorph new rebuildCategorySelectors.	
+	scriptsPane := PhratchScriptEditorMorph new.
 	stageFrame := ImageFrameMorph new initFromForm: (ScratchFrameMorph skinAt: 'stagePane').
 	titlePane := ImageFrameMorph new initFromForm: (ScratchFrameMorph skinAt: 'titlePane').
 	workPane := ScratchStageMorph new extent: WorkpaneExtent.
-	libraryPane := ScratchLibraryMorph new.
+	libraryPane := PhratchLibraryMorph new.
 
 	"make panes sticky so clicking on them doesn't pick up entire frame"
 	self
@@ -1256,7 +1256,7 @@ ScratchFrameMorph >> createMenuPanel [
 	).
 
 	menuSpecs do: [:spec |
-		m := ScratchMenuTitleMorph new
+		m := PhratchMenuTitleMorph new
 			contents: (spec at: 1) localized;
 			target: self selector: (spec at: 2).
 		menuPanel addMorphBack: m.
@@ -1294,7 +1294,7 @@ ScratchFrameMorph >> createStageButtonsPanel [
 		centering: #center;
 		height: 20.
 
-	projectTitleMorph := ScratchStringMorph new
+	projectTitleMorph := PhratchStringMorph new
 		forceUnicodeRendering: true;
 		contents: '';
 		font: (ScratchFrameMorph getFont: #FrameMorphProjectTitle).
@@ -1604,7 +1604,7 @@ ScratchFrameMorph >> editMenu: aMenuTitleMorph [
 { #category : #'falta adaptar' }
 ScratchFrameMorph >> editNotes [
 
-	(ScratchNotesDialog editNotesFor: self) getUserResponse.
+	(PhratchNotesDialog editNotesFor: self) getUserResponse.
 
 ]
 
@@ -1659,7 +1659,7 @@ ScratchFrameMorph >> enterPresentationMode [
 
 	self closeDialogBoxes.
 	workPane isQuarterSize: false.
-	presenter := ScratchPresenterMorph new frame: self.
+	presenter := PhratchPresenterMorph new frame: self.
 
 	self delete.
 
@@ -2411,8 +2411,8 @@ ScratchFrameMorph >> installNewProject: newWorkpane [
 	libraryPane clearLibrary.
 	workPane clearPenTrails.
 	"self updateProjectName".
-	ScratchProcess blockHighlightMSecs: 1.
-	ScratchPrompterMorph clearLastAnswer.
+	PhratchProcess blockHighlightMSecs: 1.
+	PhratchPrompterMorph clearLastAnswer.
 
 	(projectInfo at: 'isHosting' ifAbsent: [false]) ifTrue: [
 		self enableRemoteSensors].
@@ -2454,7 +2454,7 @@ ScratchFrameMorph >> isDevelopmentMode [
 
 { #category : #byob }
 ScratchFrameMorph >> isTurbo [
-	^ ScratchProcess blockHighlightMSecs < 1
+	^ PhratchProcess blockHighlightMSecs < 1
 ]
 
 { #category : #'menu/button actions' }
@@ -2672,8 +2672,8 @@ ScratchFrameMorph >> makeXYReadout [
 	panel := Morph new color: (Color r: 0.753 g: 0.764 b: 0.776).
 
 	ScratchTranslator isRTL
-		ifTrue: [labelX := ScratchStringMorph new font: normalFont; contents: ':x' asUTF8]
-		ifFalse: [labelX := ScratchStringMorph new font: normalFont; contents: 'x:' asUTF8].
+		ifTrue: [labelX := PhratchStringMorph new font: normalFont; contents: ':x' asUTF8]
+		ifFalse: [labelX := PhratchStringMorph new font: normalFont; contents: 'x:' asUTF8].
 	readoutX := UpdatingStringMorph new
 		target: self; getSelector: #mouseX;
 		forceUnicodeRendering: true;
@@ -3252,7 +3252,7 @@ ScratchFrameMorph >> quitScratch [
 	self stopAll.
 
 	(justSaved or: [self projectIsEmpty]) ifFalse: [
-		response := ScratchCloseDialog new getUserResponse.
+		response := PhratchCloseDialog new getUserResponse.
 		response = #cancelled ifTrue: [^ self].
 		response ifTrue: [
 			self saveScratchProjectNoDialog.
@@ -4164,9 +4164,9 @@ ScratchFrameMorph >> toggleShowMotorBlocks [
 ScratchFrameMorph >> toggleSingleStepping [
 	"Toggle single stepping."
 
-	ScratchProcess blockHighlightMSecs <= 1
-		ifTrue: [ScratchProcess blockHighlightMSecs: 60]
-		ifFalse: [ScratchProcess blockHighlightMSecs: 1].
+	PhratchProcess blockHighlightMSecs <= 1
+		ifTrue: [PhratchProcess blockHighlightMSecs: 60]
+		ifFalse: [PhratchProcess blockHighlightMSecs: 1].
 
 ]
 
@@ -4194,8 +4194,8 @@ ScratchFrameMorph >> toggleTranslucentDragging [
 ScratchFrameMorph >> toggleTurboMode [
 
 	self isTurbo ifTrue: [
-		^ ScratchProcess blockHighlightMSecs: 1].
-	ScratchProcess blockHighlightMSecs: 0
+		^ PhratchProcess blockHighlightMSecs: 1].
+	PhratchProcess blockHighlightMSecs: 0
 ]
 
 { #category : #byob }
@@ -4531,7 +4531,7 @@ ScratchFrameMorph >> wantsDroppedMorph: aMorph event: evt [
 
 	^ (aMorph isKindOf: BlockMorph) or: [
 	  	(aMorph isKindOf: ScriptableScratchMorph) or: [
-			(aMorph isKindOf: ScratchCommentMorph)]].
+			(aMorph isKindOf: PhratchCommentMorph)]].
 
 ]
 

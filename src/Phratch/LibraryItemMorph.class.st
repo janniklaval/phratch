@@ -38,7 +38,7 @@ LibraryItemMorph >> acceptDroppingMorph: aMorph event: evt [
 		evt hand rejectDropMorph: aMorph event: evt.
 		target addStack: aMorph fullCopy].
 
-	(aMorph isKindOf: ScratchCommentMorph) ifTrue: [
+	(aMorph isKindOf: PhratchCommentMorph) ifTrue: [
 		evt hand rejectDropMorph: aMorph event: evt.
 		target addComment: aMorph fullCopy].
 
@@ -102,7 +102,7 @@ LibraryItemMorph >> childrenMenu [
 	"Present the children menu on a sprite icon"
 
 	| menu library frame |
-	library := self ownerOrYourselfThatIsA: ScratchLibraryMorph.
+	library := self ownerOrYourselfThatIsA: PhratchLibraryMorph.
 	library ifNil: [^ self].
 	frame := self ownerOrYourselfThatIsA: ScratchFrameMorph.
 	frame ifNil: [^ self].
@@ -180,7 +180,7 @@ LibraryItemMorph >> handlesMouseOverDragging: evt [
 	| m |
 	evt hand submorphs size = 1 ifFalse: [^ false].
 	m := evt hand firstSubmorph.
-	^ ((m isKindOf: BlockMorph) or: [(m isKindOf: MediaItemMorph) or: [m isKindOf: ScratchCommentMorph]])
+	^ ((m isKindOf: BlockMorph) or: [(m isKindOf: MediaItemMorph) or: [m isKindOf: PhratchCommentMorph]])
 
 ]
 
@@ -228,8 +228,8 @@ LibraryItemMorph >> justDroppedInto: aMorph event: evt [
 true ifTrue: [^ self].
 
 	"delete me when dropped on the blocks palette or the script editor"
-	(((aMorph ownerOrYourselfThatIsA: ScratchViewerMorph) notNil) 
-		or: [(aMorph ownerOrYourselfThatIsA: ScratchScriptEditorMorph) notNil]) ifTrue: [
+	(((aMorph ownerOrYourselfThatIsA: PhratchViewerMorph) notNil) 
+		or: [(aMorph ownerOrYourselfThatIsA: PhratchScriptEditorMorph) notNil]) ifTrue: [
 		^ self target undoableDeleteSprite].
 
 	"blocks cannot be dropped onto the stage"
@@ -392,7 +392,7 @@ LibraryItemMorph >> rightButtonMenu [
 { #category : #'event handling' }
 LibraryItemMorph >> select [
 
-	(self ownerOrYourselfThatIsA: ScratchLibraryMorph) unhighlightAll. "unhighlight others"
+	(self ownerOrYourselfThatIsA: PhratchLibraryMorph) unhighlightAll. "unhighlight others"
 	self highlight: true.
 	World displayWorldSafely. "force immediate feedback"
 
@@ -403,7 +403,7 @@ LibraryItemMorph >> stageMenu [
 	"Present the right button menu on the stage icon"
 
 	| menu library frame |
-	library := self ownerOrYourselfThatIsA: ScratchLibraryMorph.
+	library := self ownerOrYourselfThatIsA: PhratchLibraryMorph.
 	library ifNil: [^ self].
 	frame := self ownerOrYourselfThatIsA: ScratchFrameMorph.
 	frame ifNil: [^ self].
@@ -425,7 +425,7 @@ LibraryItemMorph >> startDrag: evt [
 
 	(self target isKindOf: ScratchStageMorph) ifTrue: [^ self]. "cannot drag stage thumbnail"
 
-	(self ownerOrYourselfThatIsA: ScratchLibraryMorph)
+	(self ownerOrYourselfThatIsA: PhratchLibraryMorph)
 		ifNil: [evt hand grabMorph: self]
 		ifNotNil: [evt hand attachMorph: self fullCopy].
 
@@ -619,6 +619,6 @@ LibraryItemMorph >> wantsDroppedMorph: aMorph event: evt [
 
 	^ (aMorph isKindOf: BlockMorph) or: [
 		(aMorph isKindOf: MediaItemMorph) or: [
-			aMorph isKindOf: ScratchCommentMorph]]
+			aMorph isKindOf: PhratchCommentMorph]]
 
 ]

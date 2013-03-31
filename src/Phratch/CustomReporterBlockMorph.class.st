@@ -532,7 +532,7 @@ CustomReporterBlockMorph >> rightButtonMenu [
 	menu addLine.
 	menu add: 'edit' value: #editScript.
 
-	(owner isKindOf: ScratchBlockPaletteMorph) ifFalse: [
+	(owner isKindOf: PhratchBlockPaletteMorph) ifFalse: [
 
 		menu add: 'relabel' value: #rename.
 		menu addLine.
@@ -540,7 +540,7 @@ CustomReporterBlockMorph >> rightButtonMenu [
 		(self owner isKindOf: BlockMorph) ifFalse: [  "can't yet delete a blocks inside a script"
 			menu add: 'delete' value: #delete]].
 
-	(owner isKindOf: ScratchBlockPaletteMorph) ifTrue: [
+	(owner isKindOf: PhratchBlockPaletteMorph) ifTrue: [
 		menu add: 'delete block definition' value: #deleteDefinition ].
 
 	"^ (menu localize; invokeModal) selectedValue"
@@ -659,7 +659,7 @@ CustomReporterBlockMorph >> showValue [
 
 	((self isBooleanReporter or: [msg = 'Error!']) and: [msg isKindOf: String]) ifTrue: [
 		msg := msg localized].
-	tooltip := (ScratchReporterToolTipMorph string: msg for: self)
+	tooltip := (PhratchReporterToolTipMorph string: msg for: self)
 		left: self right;
 		bottom: self top.
 	ScratchTranslator isRTL ifTrue: [tooltip right: self left].

@@ -82,7 +82,7 @@ SliderRangeDialog >> initialize [
 	self title: '?'.
 	self message: 'Slider range:'.
 
-	minLabel := ScratchStringMorph new
+	minLabel := PhratchStringMorph new
 		contents: 'Min:' localized;
 		forceUnicodeRendering: true;
 		font: (ScratchFrameMorph getFont: #StringDialogTypeIn).

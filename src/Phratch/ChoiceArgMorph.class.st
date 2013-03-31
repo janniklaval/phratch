@@ -110,7 +110,7 @@ ChoiceArgMorph >> choice: aSymbol [
 		(owner respondsTo: #adjustInputParadigm:) ifTrue: [
 			owner adjustInputParadigm: choice asMacRoman localized]]. 
 
-	(palette := self ownerOrYourselfThatIsA: ScratchBlockPaletteMorph) ifNil: [^ self].
+	(palette := self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph) ifNil: [^ self].
 	(block := self ownerOrYourselfThatIsA: BlockMorph) ifNil: [^ self].
 
 	block isReporter ifTrue: [palette updateWatcherButtonsForFrame: frame].
@@ -200,7 +200,7 @@ ChoiceArgMorph >> initialize [
 	self borderInset.
 	self borderWidth: 1.
 	self color: Color brown.
-	labelMorph := ScratchStringMorph new
+	labelMorph := PhratchStringMorph new
 		font: (ScratchFrameMorph getFont: #Arg);
 		forceUnicodeRendering: true;
 		color: Color white.
@@ -345,7 +345,7 @@ ChoiceArgMorph >> privateSetChoice: aSymbol [
 		(owner respondsTo: #adjustInputParadigm:) ifTrue: [
 			owner adjustInputParadigm: choice ]].
 "
-	(palette := self ownerOrYourselfThatIsA: ScratchBlockPaletteMorph) ifNil: [^ self].
+	(palette := self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph) ifNil: [^ self].
 	(block := self ownerOrYourselfThatIsA: BlockMorph) ifNil: [^ self].
 
 	block isReporter ifTrue: [palette updateWatcherButtonsForFrame: frame].

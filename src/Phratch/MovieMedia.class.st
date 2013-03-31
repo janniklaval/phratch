@@ -4,7 +4,7 @@ I am a Scratch movie media object. I hold the state and the current frame of a m
 "
 Class {
 	#name : #MovieMedia,
-	#superclass : #ScratchMedia,
+	#superclass : #PhratchMedia,
 	#instVars : [
 		'fileName',
 		'fade',

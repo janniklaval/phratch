@@ -79,7 +79,7 @@ ScratchTranslator class >> centerOffsetForButtonWithFont: aStrikeFont [
 	(RenderCenterOffsetCache includesKey: aStrikeFont) ifTrue: [
 		^ RenderCenterOffsetCache at: aStrikeFont].
 
-	f := (ScratchStringMorph contents: self renderHintString font: aStrikeFont) imageForm.
+	f := (PhratchStringMorph contents: self renderHintString font: aStrikeFont) imageForm.
 	r := f rectangleEnclosingPixelsNotOfColor: Color transparent.
 	vOffset := r top + (r height // 2).  "offset of string morph above the centerline of a button to center the given letter"
 
@@ -1165,7 +1165,7 @@ ScratchTranslator class >> showHintString [
 
 	| f p r |
 	p := 20@70.
-	f := (ScratchStringMorph contents: self renderHintString font: (StrikeFont fontName: 'Verdana' size: 18)) imageForm.
+	f := (PhratchStringMorph contents: self renderHintString font: (StrikeFont fontName: 'Verdana' size: 18)) imageForm.
 	r := f rectangleEnclosingPixelsNotOfColor: (f colorAt: 0@0).
 	Display fillWhite: (p extent: f extent).
 	f displayOn: Display at: p rule: Form paint.
@@ -1474,7 +1474,7 @@ ScratchTranslator class >> verticalTrimForFont: aStrikeFont [
 	(RenderVerticalTrimCache includesKey: aStrikeFont) ifTrue: [
 		^ RenderVerticalTrimCache at: aStrikeFont].
 
-	f := (ScratchStringMorph contents: self renderHintString font: aStrikeFont) imageForm.
+	f := (PhratchStringMorph contents: self renderHintString font: aStrikeFont) imageForm.
 	r := f rectangleEnclosingPixelsNotOfColor: (f colorAt: 0@0).
 	extra := (f height - r height - 2) max: 0.
 	RenderVerticalTrimCache at: aStrikeFont put: extra.

@@ -402,7 +402,7 @@ ExpressionArgMorphWithMenu >> mouseDown: evt [
 	 [(owner isKindOf: BlockMorph) and: 
 	 [(rcvr := owner receiver) notNil]]) ifFalse: [^ Beeper beep].
 	menu := rcvr perform: getMenuSelector.
-	(menu isKindOf: ScratchNoteSelector) ifTrue: [
+	(menu isKindOf: PhratchNoteSelector) ifTrue: [
 		menu position: owner bottomLeft + (((owner width - menu width) // 2) @ -4).
 		].
 	choice := menu selectedValue.

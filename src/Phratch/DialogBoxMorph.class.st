@@ -362,7 +362,7 @@ DialogBoxMorph >> fixLayoutForExtent: aPoint [
 	fileInfoColumn submorphsDo: [: m |
 		fileColumnWidth := m width max: fileColumnWidth].
 	fileInfoColumn submorphsDo: [: m |
-		(m isKindOf: ScratchStringMorph)
+		(m isKindOf: PhratchStringMorph)
 			ifFalse: [m width: fileColumnWidth]].
 
 	"position and size title"
@@ -500,13 +500,13 @@ DialogBoxMorph >> message: aMessage details: aDetailsString font: aStrikeFont [
 		centering: #center.
 	lines := aMessage lines.
 	1 to: lines size do: [:n |
-		m := ScratchStringMorph
+		m := PhratchStringMorph
 			contents: (lines at: n)
 			font: aStrikeFont.
 		messageLineMorphs addMorphBack: m].
 	lines := aDetailsString lines.
 	1 to: lines size do: [:n |
-		m := ScratchStringMorph
+		m := PhratchStringMorph
 			contents: (lines at: n)
 			font: aStrikeFont.
 		messageLineMorphs addMorphBack: m].
@@ -533,7 +533,7 @@ DialogBoxMorph >> message: aMessage font: aStrikeFont [
 		centering: #center.
 	lines := aMessage lines.
 	1 to: lines size do: [:n |
-		m := ScratchStringMorph
+		m := PhratchStringMorph
 			contents: (lines at: n)
 			font: aStrikeFont.
 		messageLineMorphs addMorphBack: m].

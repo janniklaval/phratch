@@ -15,7 +15,7 @@ When there is a text layer, compositeForm caches the base form with the text pai
 "
 Class {
 	#name : #ImageMedia,
-	#superclass : #ScratchMedia,
+	#superclass : #PhratchMedia,
 	#instVars : [
 		'form',
 		'rotationCenter',

@@ -48,7 +48,7 @@ ScratchToolTipMorph >> message: aString [
 			str := aString.
 			(aString isKindOf: String) ifFalse: [
 				str := aString printString].
-			message := ScratchStringMorph
+			message := PhratchStringMorph
 				contents: str
 				font: self messageFont ].
 	self addMorph: message.

@@ -254,8 +254,8 @@ ReporterBlockMorph >> fixBlockLayout [
 	x := x + (isBoolean ifTrue: [1] ifFalse: [-3]).
 
 	self extent: (x + 4) @ h.
-	(self ownerThatIsA: ScratchBlockPaletteMorph) ifNotNil: [
-		(self ownerThatIsA: ScratchBlockPaletteMorph) fixLayout].
+	(self ownerThatIsA: PhratchBlockPaletteMorph) ifNotNil: [
+		(self ownerThatIsA: PhratchBlockPaletteMorph) fixLayout].
 
 ]
 
@@ -290,10 +290,10 @@ ReporterBlockMorph >> fixBlockLayoutNoWrap [
 	h := (maxH + 4) max: 17.
 
 	x := isBoolean ifTrue: [8] ifFalse: [4].
-	(mList size > 0 and: [mList first isKindOf: ScratchStringMorph]) ifTrue: [x := x + 2].
+	(mList size > 0 and: [mList first isKindOf: PhratchStringMorph]) ifTrue: [x := x + 2].
 
 	mList do: [:m |
-		(m isKindOf: ScratchStringMorph) 
+		(m isKindOf: PhratchStringMorph) 
 			ifTrue: [(m isKindOf: BlockLabelFragmentMorph) 
 				ifFalse: [m color: self labelColor]].
 
@@ -303,8 +303,8 @@ ReporterBlockMorph >> fixBlockLayoutNoWrap [
 	x := x + (isBoolean ifTrue: [1] ifFalse: [-3]).
 
 	self extent: (x + 4) @ h.
-	(self ownerOrYourselfThatIsA: ScratchBlockPaletteMorph) ifNotNil: [
-		(self ownerOrYourselfThatIsA: ScratchBlockPaletteMorph) fixLayout].
+	(self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph) ifNotNil: [
+		(self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph) fixLayout].
 
 
 ]
@@ -360,7 +360,7 @@ ReporterBlockMorph >> fixBlockLayoutWrap [
 				x := left].
 			(m isKindOf: BlockMorph) ifTrue: [m fixBlockLayout].
 			(m isKindOf: ArgMorph) ifTrue: [m fixArgLayout].
-			(m isKindOf: ScratchStringMorph)
+			(m isKindOf: PhratchStringMorph)
 				ifTrue: [m color: self labelColor]
 				ifFalse: [x := x max: minXForArgs].
 
@@ -457,8 +457,8 @@ ReporterBlockMorph >> fixBlockLayoutWrap [
 
 	ifFalse: [ self extent: w @ h].
 
-	(self ownerOrYourselfThatIsA: ScratchBlockPaletteMorph) ifNotNil: [
-		(self ownerOrYourselfThatIsA: ScratchBlockPaletteMorph) fixLayout].
+	(self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph) ifNotNil: [
+		(self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph) fixLayout].
 
 
 ]
@@ -529,7 +529,7 @@ ReporterBlockMorph >> lambdaMenu [
 	| menu choice |
 	menu := MenuMorph new defaultTarget: self.
 
-	(owner isKindOf: ScratchBlockPaletteMorph) ifTrue: [^ self].
+	(owner isKindOf: PhratchBlockPaletteMorph) ifTrue: [^ self].
 
 	(owner isKindOf: ReporterScriptBlockMorph)
 		ifFalse: [ menu add: 'quote' action: #lambdafied ].
@@ -599,7 +599,7 @@ ReporterBlockMorph >> showLambdaValue [
 
 	(self isBooleanReporter or: [msg = 'Error!']) ifTrue: [
 		msg := msg localized].
-	tooltip := (ScratchReporterToolTipMorph string: msg for: self)
+	tooltip := (PhratchReporterToolTipMorph string: msg for: self)
 		left: self right;
 		bottom: self top.
 	ScratchTranslator isRTL ifTrue: [tooltip right: self left].
@@ -638,7 +638,7 @@ ReporterBlockMorph >> showValue [
 
 	(self isBooleanReporter or: [msg = 'Error!']) ifTrue: [
 		msg := msg localized].
-	tooltip := (ScratchReporterToolTipMorph string: msg for: self)
+	tooltip := (PhratchReporterToolTipMorph string: msg for: self)
 		left: self right;
 		bottom: self top.
 	ScratchTranslator isRTL ifTrue: [tooltip right: self left].
@@ -703,7 +703,7 @@ ReporterBlockMorph >> toggleWatcher [
 		ifNil: [frame showWatcher: self createWatcher]
 		ifNotNil: [w delete].
 			
-	palette := self ownerOrYourselfThatIsA: ScratchBlockPaletteMorph.
+	palette := self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph.
 	palette ifNotNil: [palette updateWatcherButtonsForFrame: frame].
 
 ]

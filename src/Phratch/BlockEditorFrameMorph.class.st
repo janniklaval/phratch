@@ -285,7 +285,7 @@ BlockEditorFrameMorph >> initialize [
 
 	super initialize.
 	self title: 'Block Editor' localized.
-	resizeMorph := ScratchResizeMorph ofType: #corner.
+	resizeMorph := PhratchResizeMorph ofType: #corner.
 	line := AlignmentMorph newRow
 		color: Color transparent.
 
@@ -299,7 +299,7 @@ BlockEditorFrameMorph >> initialize [
 		growthFraction: 0.0;
 		color: ScratchFrameMorph scriptsPaneColor.
 
-	bin := ScratchScriptsMorph new.
+	bin := PhratchScriptsMorph new.
 	sl contents: bin.
 
 	line addMorphBack: container.

@@ -62,7 +62,7 @@ MultiArgMorph >> buildControls [
 
 	submorphs do: [:sm | sm delete].
 
-	self addMorphBack: ((ScratchStringMorph contents: text font: (ScratchFrameMorph getFont: #Label))
+	self addMorphBack: ((PhratchStringMorph contents: text font: (ScratchFrameMorph getFont: #Label))
 		color: ((owner respondsTo: #labelColor) ifTrue: [owner labelColor] ifFalse: [Color white])).
 
 	self addMorphBack: (ImageMorph new form: (ArgMorph dropDownMenuForm rotateBy: 90)).
@@ -126,7 +126,7 @@ MultiArgMorph >> defaultValue: aScratchListMorph [
 MultiArgMorph >> elements [
 	^ submorphs reject: [:sm |
 		(sm isKindOf: ImageMorph)
-		or: [sm isKindOf: ScratchStringMorph]]
+		or: [sm isKindOf: PhratchStringMorph]]
 ]
 
 { #category : #'as yet unclassified' }
@@ -169,7 +169,7 @@ MultiArgMorph >> fixArgLayout [
 	isMultiC ifTrue: [
 		self width: 50 ].
 
-	parts := submorphs select: [:sm| sm isVisible and: [(sm isKindOf: ScratchStringMorph) not]].
+	parts := submorphs select: [:sm| sm isVisible and: [(sm isKindOf: PhratchStringMorph) not]].
 
 	parts do: [:m |
 	(m isKindOf: ReporterBlockMorph) & isMultiC

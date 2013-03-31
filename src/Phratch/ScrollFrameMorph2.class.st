@@ -117,10 +117,10 @@ ScrollFrameMorph2 >> initialize [
 		borderWidth: 0;
 		enableDragNDrop: true.
 
-	hScrollbar := ScratchScrollBar newHorizontal
+	hScrollbar := PhratchScrollBar newHorizontal
 		target: self;
 		selector: #hScrollRelative:.
-	vScrollbar := ScratchScrollBar newVertical
+	vScrollbar := PhratchScrollBar newVertical
 		target: self;
 		selector: #vScrollRelative:.
 
@@ -142,25 +142,25 @@ ScrollFrameMorph2 >> isBeingDragged [
 ScrollFrameMorph2 >> isScrollable [
 	"private - answer true if the receiver is partially hidden and thus can be scrolled"
 
-	^(self findA: ScratchScrollBar) notNil and: [
+	^(self findA: PhratchScrollBar) notNil and: [
 		(self ownerThatIsA: OffscreenWorldMorph) isNil ]
 ]
 
 { #category : #'event handling' }
 ScrollFrameMorph2 >> mouseDown: evt [ 
-	(owner isKindOf: ScratchFilePicker) ifTrue: [^owner mouseDown: evt].
+	(owner isKindOf: PhratchFilePicker) ifTrue: [^owner mouseDown: evt].
 	evt redButtonPressed ifTrue: [ self grabContentsAt: evt cursorPoint ]
 ]
 
 { #category : #'event handling' }
 ScrollFrameMorph2 >> mouseMove: evt [ 
-	(owner isKindOf: ScratchFilePicker) ifTrue: [^owner mouseMove: evt].
+	(owner isKindOf: PhratchFilePicker) ifTrue: [^owner mouseMove: evt].
 	dragOffset ifNotNil: [self dragContentsTo: evt cursorPoint]
 ]
 
 { #category : #'event handling' }
 ScrollFrameMorph2 >> mouseUp: evt [
-	(owner isKindOf: ScratchFilePicker) ifTrue: [^owner mouseUp: evt].
+	(owner isKindOf: PhratchFilePicker) ifTrue: [^owner mouseUp: evt].
 	self dropContents
 ]
 

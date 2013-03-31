@@ -64,7 +64,7 @@ BlockMorph >> contrastColor [
 			isContrasted := true.
 			color := color twiceLighter " lighter slightlyLighter "]].
 
-	submorphs do: [:m | (m isKindOf: ScratchStringMorph)
+	submorphs do: [:m | (m isKindOf: PhratchStringMorph)
 		ifTrue: [m color: self labelColor ]
 		ifFalse: [ (m isKindOf: MultiArgMorph)
 			ifTrue: [m contrastColor]]].	
@@ -76,7 +76,7 @@ BlockMorph >> contrastColor [
 BlockMorph >> disinheritAttribute [
 
 	| sel rcv oi |
-	(self ownerOrYourselfThatIsA: ScratchBlockPaletteMorph)
+	(self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph)
 		ifNil: [^ false].
 	(self respondsTo: #selector) ifFalse: [
 		^ false].
@@ -142,7 +142,7 @@ BlockMorph >> fastDuplicate [
 BlockMorph >> inheritAttribute [
 
 	| sel rcv oi |
-	(self ownerOrYourselfThatIsA: ScratchBlockPaletteMorph)
+	(self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph)
 		ifNil: [^ false].
 	(self respondsTo: #selector) ifFalse: [
 		^ false].
@@ -190,7 +190,7 @@ BlockMorph >> isCustomBlock [
 BlockMorph >> isDeletedAttribute [
 
 	| sel rcv oi |
-	(self ownerOrYourselfThatIsA: ScratchBlockPaletteMorph)
+	(self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph)
 		ifNil: [^ false].
 	(self respondsTo: #selector) ifFalse: [
 		^ false].
@@ -223,7 +223,7 @@ BlockMorph >> isInheritableAttribute [
 	"indicate if my context menu lets me delete my attribute"
 
 	| sel rcv oi |
-	(self ownerOrYourselfThatIsA: ScratchBlockPaletteMorph)
+	(self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph)
 		ifNil: [^ false].
 	(self respondsTo: #selector) ifFalse: [
 		^ false].

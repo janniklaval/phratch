@@ -471,7 +471,7 @@ CustomCommandBlockMorph >> remove [
 	nb := self nextBlock.
 	(self ownerOrYourselfThatIsA: BlockEditorFrameMorph) isNil
 		ifTrue: [
-			sm := self ownerOrYourselfThatIsA: ScratchScriptsMorph.
+			sm := self ownerOrYourselfThatIsA: PhratchScriptsMorph.
 			(nb notNil & sm notNil) ifTrue: [sm addMorph: nb]]
 		ifFalse: [
 			sm := self owner.
@@ -542,7 +542,7 @@ CustomCommandBlockMorph >> rightButtonMenu [
 		ifTrue: [menu add: 'change category' value: #editSpec ]
 		ifFalse: [menu add: 'edit' value: #editScript].
 
-	((owner isKindOf: ScratchBlockPaletteMorph) or: [isTemplate]) ifFalse: [
+	((owner isKindOf: PhratchBlockPaletteMorph) or: [isTemplate]) ifFalse: [
 		menu add: 'relabel' value: #rename.
 		menu addLine.
 		menu add: 'duplicate' value: #duplicate.
@@ -551,7 +551,7 @@ CustomCommandBlockMorph >> rightButtonMenu [
 		(self owner isKindOf: BlockMorph) ifFalse: [  "can't yet delete a blocks inside a script"
 			menu add: 'delete' value: #delete]].
 
-	(owner isKindOf: ScratchBlockPaletteMorph) ifTrue: [
+	(owner isKindOf: PhratchBlockPaletteMorph) ifTrue: [
 		menu add: 'delete block definition' value: #deleteDefinition ].
 
 	menu localize; invokeModal.

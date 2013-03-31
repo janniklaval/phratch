@@ -282,7 +282,7 @@ ScratchSpriteMorph >> bubble: obj thinkFlag: thinkFlag promptFlag: promptFlag [
 			ifTrue: [s := ImageMorph new form: objToShow thumbnailImageForm]
 			ifFalse: [s := ImageMorph new form: objToShow imageForm ]].
 
-	talkBubble := ScratchTalkBubbleMorph new message: s.
+	talkBubble := PhratchTalkBubbleMorph new message: s.
 	thinkFlag ifTrue: [talkBubble beThoughtBubble: true].
 	promptFlag ifTrue: [talkBubble bePrompt: true].
 	talkBubble lock; position: self position.
@@ -408,7 +408,7 @@ ScratchSpriteMorph >> cloneAndSend: msgName [
 		(m isKindOf: BlockMorph) ifTrue: [m stop]].
 
 	frame workPane addMorph: clone.
-	clone eventReceived: (ScratchEvent new name: msgName asString argument: 0).
+	clone eventReceived: (PhratchEvent new name: msgName asString argument: 0).
 
 ]
 
@@ -558,7 +558,7 @@ ScratchSpriteMorph >> drawSubmorphsOn: aCanvas [
 	"Display submorphs back to front, but do not draw and talk/think bubble submorphs."
 
 	submorphs reverseDo: [:m |
-		(m isKindOf: ScratchTalkBubbleMorph) ifFalse: [
+		(m isKindOf: PhratchTalkBubbleMorph) ifFalse: [
 			aCanvas fullDrawMorph: m]].
 
 ]
@@ -569,7 +569,7 @@ ScratchSpriteMorph >> drawTalkBubbleOn: aCanvas [
 
 	submorphs size = 0 ifTrue: [^ self].
 	submorphs reverseDo: [:m |
-		(m isKindOf: ScratchTalkBubbleMorph) ifTrue: [
+		(m isKindOf: PhratchTalkBubbleMorph) ifTrue: [
 			aCanvas fullDrawMorph: m]].
 
 ]
@@ -697,7 +697,7 @@ ScratchSpriteMorph >> generateRotatedForm [
 			((scalePoint x < 1.0) or: [scalePoint y < 1.0])
 				ifTrue: [smoothPix := 2]
 				ifFalse: [smoothPix := 1].
-			pair := ScratchWarpBlt
+			pair := PhratchWarpBlt
 				rotate: srcForm
 				degrees: adjustedAngle negated
 				center: costume rotationCenter
@@ -1289,7 +1289,7 @@ ScratchSpriteMorph >> passiveRotationStyle: aNumber [
 	rotationStyle := #(none normal leftRight) at: aNumber asNumberNoError rounded + 1 ifAbsent: [#normal].
 	self costumeChanged.
 	self positionTalkBubble.
-	se := blocksBin ownerOrYourselfThatIsA: ScratchScriptEditorMorph.
+	se := blocksBin ownerOrYourselfThatIsA: PhratchScriptEditorMorph.
 	se ifNil: [^ self].
 	se updateRotationButtonHighlight.
 	se animateRotationStyle.
@@ -1303,7 +1303,7 @@ ScratchSpriteMorph >> passiveSetDraggable: aBoolean [
 
 	| se |
 	draggable := aBoolean.
-	se := blocksBin ownerOrYourselfThatIsA: ScratchScriptEditorMorph.
+	se := blocksBin ownerOrYourselfThatIsA: PhratchScriptEditorMorph.
 	se ifNil: [^ self].
 	se updateLockButton
 

@@ -4,7 +4,7 @@ I am a Scratch sound media object. A sound can be played under script control bu
 "
 Class {
 	#name : #SoundMedia,
-	#superclass : #ScratchMedia,
+	#superclass : #PhratchMedia,
 	#instVars : [
 		'originalSound',
 		'volume',

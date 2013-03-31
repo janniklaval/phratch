@@ -137,7 +137,7 @@ ElementsEditorFrameMorph >> handlesMouseDown: evt [
 ElementsEditorFrameMorph >> initialize [
 	super initialize.
 	self title: 'Elements Editor'.
-	resizeMorph := ScratchResizeMorph ofType: #corner.
+	resizeMorph := PhratchResizeMorph ofType: #corner.
 	
 	editor := ElementsMethodEditorMorph new.
 

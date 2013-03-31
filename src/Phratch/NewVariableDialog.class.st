@@ -65,7 +65,7 @@ NewVariableDialog >> initialize [
 		on;
 		target: self;
 		actionSelector: #toggleSpriteSpecific.
-	label1 := ScratchStringMorph new
+	label1 := PhratchStringMorph new
 		contents: ('For all sprites' localized);
 		font: (ScratchFrameMorph getFont: #NewVariableDialogBox).
 	radioButtons addMorphBack: allSpritesRadioButton.
@@ -74,7 +74,7 @@ NewVariableDialog >> initialize [
 	radioButtons addMorphBack: (Morph new extent: (15@5); color: Color transparent).
 
 	thisSpriteRadioButton := allSpritesRadioButton fullCopy off.
-	label2 := ScratchStringMorph new
+	label2 := PhratchStringMorph new
 		contents: ('For this sprite only' localized);
 		font: (ScratchFrameMorph getFont: #NewVariableDialogBox).
 	radioButtons addMorphBack: thisSpriteRadioButton.

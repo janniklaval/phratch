@@ -172,7 +172,7 @@ DebuggerFrameMorph >> initialize [
 
 	super initialize.
 	self title: 'Debugger'.
-	resizeMorph := ScratchResizeMorph ofType: #corner.
+	resizeMorph := PhratchResizeMorph ofType: #corner.
 
 	scroller := ScrollFrameMorph2 new
 		growthFraction: 0.0;

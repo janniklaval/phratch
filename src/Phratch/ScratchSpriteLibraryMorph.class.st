@@ -64,7 +64,7 @@ ScratchSpriteLibraryMorph >> insertItem: item1 before: item2orNil [
 					self replaceSubmorph: s by: nextItem.
 					nextItem := s].
 				self addMorphBack: nextItem]].
-	(self ownerOrYourselfThatIsA: ScratchLibraryMorph) fixLayout.
+	(self ownerOrYourselfThatIsA: PhratchLibraryMorph) fixLayout.
 
 ]
 

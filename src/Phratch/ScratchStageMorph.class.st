@@ -190,7 +190,7 @@ ScratchStageMorph >> broadcastEventNamed: name with: value [
 
 	| event objList newProcs |
 	scratchServer ifNotNil: [scratchServer queueBroadcast: name].
-	event := ScratchEvent new name: name argument: value.
+	event := PhratchEvent new name: name argument: value.
 	newProcs := OrderedCollection new.
 
 	"start scripts"
@@ -861,7 +861,7 @@ ScratchStageMorph >> notePlayerFor: aScratchObject [
 		channelUsage at: ch put: (channelUsage at: ch) + 1].
 	newCh := channelUsage indexOf: channelUsage min.
 
-	newPlayer := ScratchNotePlayer new
+	newPlayer := PhratchNotePlayer new
 		channel: newCh;
 		midiPort: midiPort;
 		instrument: 1.
@@ -1361,7 +1361,7 @@ ScratchStageMorph >> startProcessFor: topBlock [
 
 	topBlock scratchProc ifNotNil: [topBlock stop].
 
-	proc := ScratchProcess new
+	proc := PhratchProcess new
 		topBlock: topBlock;
 		expression: sequence.
 	topBlock scratchProc: proc.
@@ -1384,7 +1384,7 @@ ScratchStageMorph >> startProcessForSequence: anArray [
 
 	topBlock scratchProc ifNotNil: [topBlock stop].
 
-	proc := ScratchProcess new
+	proc := PhratchProcess new
 		topBlock: topBlock;
 		scriptList: anArray;
 		expression: sequence.
@@ -1425,7 +1425,7 @@ ScratchStageMorph >> stepProcesses [
 	| proc |
 "	sensorBoard processIncomingData."
 
-	ScratchProcess blockHighlightMSecs = 0 ifTrue: [^ self stepProcessesTurbo].
+	PhratchProcess blockHighlightMSecs = 0 ifTrue: [^ self stepProcessesTurbo].
 
 	inProcessStep ifTrue: [^ self].
 	inProcessStep := true.
@@ -1540,8 +1540,8 @@ ScratchStageMorph >> stopAllSounds [
 ScratchStageMorph >> stopAsks [
 	"Stop/close any ask that is currently on the screen."
 
-	ScratchPrompterMorph allInstancesDo: [:m | m stopAsk].
-	ScratchPrompterMorph clearLastAnswer.
+	PhratchPrompterMorph allInstancesDo: [:m | m stopAsk].
+	PhratchPrompterMorph clearLastAnswer.
 
 ]
 

@@ -230,7 +230,7 @@ BlockMorph >> blockID [
 	sticky comments"
 
 	| sm |
-	sm := self ownerOrYourselfThatIsA: ScratchScriptsMorph.
+	sm := self ownerOrYourselfThatIsA: PhratchScriptsMorph.
 	sm ifNil: [^ nil].
 	^ (sm allMorphs select: [:m |
 		m isKindOf: BlockMorph]) indexOf: self
@@ -418,10 +418,10 @@ BlockMorph >> commentMorph [
 	"answer a comment which has been sticked to the receiver, if any"
 
 	| sm |
-	sm := self ownerOrYourselfThatIsA: ScratchScriptsMorph.
+	sm := self ownerOrYourselfThatIsA: PhratchScriptsMorph.
 	sm ifNil: [^ nil].
 	^ sm submorphs detect: [: m |
-		(m isKindOf: ScratchCommentMorph) and: [
+		(m isKindOf: PhratchCommentMorph) and: [
 			m anchor == self]] ifNone: [nil].
 
 ]
@@ -472,7 +472,7 @@ BlockMorph >> contrastColor [
 			isContrasted := true.
 			color := color twiceLighter " lighter slightlyLighter "]].
 
-	submorphs do: [:m | (m isKindOf: ScratchStringMorph)
+	submorphs do: [:m | (m isKindOf: PhratchStringMorph)
 		ifTrue: [m color: self labelColor ]
 		ifFalse: [ (m isKindOf: MultiArgMorph)
 			ifTrue: [m contrastColor]]].	
@@ -505,7 +505,7 @@ BlockMorph >> delete [
 BlockMorph >> disinheritAttribute [
 
 	| sel rcv oi |
-	(self ownerOrYourselfThatIsA: ScratchBlockPaletteMorph)
+	(self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph)
 		ifNil: [^ false].
 	(self respondsTo: #selector) ifFalse: [
 		^ false].
@@ -871,13 +871,13 @@ BlockMorph >> handleReporterDrop [
 	"This block, a reporter, has just been dropped. Try to embed it in a command block."
 
 	| scriptsMorph editorMorph argM argOwner trgt tp|
-	scriptsMorph := self ownerOrYourselfThatIsA: ScratchScriptsMorph.
+	scriptsMorph := self ownerOrYourselfThatIsA: PhratchScriptsMorph.
 	editorMorph := self ownerOrYourselfThatIsA: BlockEditorFrameMorph.
 	trgt := scriptsMorph ifNil: [editorMorph].
 
 	self isReporter ifTrue: [
 		(#(
-			'ScratchScriptsMorph'
+			#PhratchScriptsMorph
 			'BlockEditorFrameMorph'
 			'ReporterBlockDropTargetMorph'
 		) includes: owner class printString) ifFalse: [^self ]].
@@ -920,12 +920,12 @@ BlockMorph >> handleTool: toolName hand: hand [
 	| myStack myOwner copiedStack sFrame varToDelete |
 	toolName = 'CopyTool' ifTrue: [
 		Sensor shiftPressed ifFalse: [hand toolType: nil].
-		(owner isKindOf: ScratchBlockPaletteMorph) ifTrue: [^ self].  "ignore if in palette"
+		(owner isKindOf: PhratchBlockPaletteMorph) ifTrue: [^ self].  "ignore if in palette"
 		^ self duplicate].
 
 	toolName = 'CutTool' ifTrue: [
 		Sensor shiftPressed ifFalse: [hand toolType: nil].
-		(self topBlock owner isKindOf: ScratchScriptsMorph) ifTrue: [
+		(self topBlock owner isKindOf: PhratchScriptsMorph) ifTrue: [
 			myStack := self nextBlock.
 			myOwner := self owner.
 			myStack ifNotNil: [
@@ -939,7 +939,7 @@ BlockMorph >> handleTool: toolName hand: hand [
 						copiedStack delete."
 						myOwner attachBlock: myStack]
 					ifFalse: [
-						(myOwner isKindOf: ScratchScriptsMorph)
+						(myOwner isKindOf: PhratchScriptsMorph)
 							ifTrue: [myOwner addMorph: myStack]
 							ifFalse: [
 							"	copiedStack := myStack shallowCopy.
@@ -958,12 +958,12 @@ BlockMorph >> handleTool: toolName hand: hand [
 					self aboutToBeGrabbedBy: hand].
 				ScratchFrameMorph putInClipboard: self.
 				self delete.
-				(myOwner isKindOf: ScratchScriptsMorph) ifTrue: [myOwner step].
+				(myOwner isKindOf: PhratchScriptsMorph) ifTrue: [myOwner step].
 				^ self]
 		ifFalse: [
 			sFrame := self ownerOrYourselfThatIsA: ScratchFrameMorph.
 			sFrame ifNil: [^self].
-			((owner isKindOf: ScratchBlockPaletteMorph) and:
+			((owner isKindOf: PhratchBlockPaletteMorph) and:
 			 [sFrame viewerPane currentCategory = #variables]) ifTrue: [
 				(self isKindOf: SetterBlockMorph) ifTrue: [
 					self variable ifNotNil: [
@@ -1016,7 +1016,7 @@ BlockMorph >> helpScreenName [
 BlockMorph >> inheritAttribute [
 
 	| sel rcv oi |
-	(self ownerOrYourselfThatIsA: ScratchBlockPaletteMorph)
+	(self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph)
 		ifNil: [^ false].
 	(self respondsTo: #selector) ifFalse: [
 		^ false].
@@ -1124,7 +1124,7 @@ BlockMorph >> isCustomBlock [
 BlockMorph >> isDeletedAttribute [
 
 	| sel rcv oi |
-	(self ownerOrYourselfThatIsA: ScratchBlockPaletteMorph)
+	(self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph)
 		ifNil: [^ false].
 	(self respondsTo: #selector) ifFalse: [
 		^ false].
@@ -1172,7 +1172,7 @@ BlockMorph >> isInheritableAttribute [
 	"indicate if my context menu lets me delete my attribute"
 
 	| sel rcv oi |
-	(self ownerOrYourselfThatIsA: ScratchBlockPaletteMorph)
+	(self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph)
 		ifNil: [^ false].
 	(self respondsTo: #selector) ifFalse: [
 		^ false].
@@ -1252,12 +1252,12 @@ BlockMorph >> justDroppedInto: newOwner event: evt [
 	(frame := newOwner ownerOrYourselfThatIsA: ScratchFrameMorph)
 		ifNotNil: [frame projectModified].
 
-	((self ownerOrYourselfThatIsA: ScratchViewerMorph) notNil) ifTrue: [
+	((self ownerOrYourselfThatIsA: PhratchViewerMorph) notNil) ifTrue: [
 		"delete myself when dropped in the blocks palette area"
 		self delete.
 		^ self].
 
-	((self ownerOrYourselfThatIsA: ScratchBlockPaletteMorph) notNil) ifTrue: [
+	((self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph) notNil) ifTrue: [
 		"delete myself when dropped in the blocks palette area of a Block Editor"
 		self delete.
 		^ self].
@@ -1269,13 +1269,13 @@ BlockMorph >> justDroppedInto: newOwner event: evt [
 	"okay to drop blocks into the world during development"
 	((owner == World) and: [PhratchPreferences noviceMode not]) ifTrue: [^ self].
 
-	((owner isKindOf: ScratchScriptsMorph) or:
+	((owner isKindOf: PhratchScriptsMorph) or:
 	 [(owner isKindOf: BlockMorph) or:
 	 [(owner isKindOf: ScratchStageMorph) and: [self isReporter]]]) ifFalse: [
 		^ evt hand rejectDropMorph: self event: evt].
 
 	self isReporter ifTrue: [^ self handleReporterDrop].
-	(newOwner isKindOf: ScratchScriptsMorph) ifTrue: [
+	(newOwner isKindOf: PhratchScriptsMorph) ifTrue: [
 		newOwner recordDroppedBlock: self bottom: self bottomBlock kickedOut: nil].
 
 	targetAssoc := self closestAttachTargetIn: newOwner.
@@ -1370,7 +1370,7 @@ BlockMorph >> litUp: aBoolean [
 
 	aBoolean ifTrue: [
 		World
-			cycleWhileWaitingMSecs: ScratchProcess blockHighlightMSecs
+			cycleWhileWaitingMSecs: PhratchProcess blockHighlightMSecs
 			doInput: true
 			doSteps: false].
 
@@ -1541,7 +1541,7 @@ BlockMorph >> printCodeSubmorph: aMorph on: aStream [
 		aMorph printCodeOn: aStream indent: 0.
 		aStream skip: -1.  "remove carriage return"
 		aStream nextPut: $)].
-	(aMorph isKindOf: ScratchStringMorph) ifTrue: [
+	(aMorph isKindOf: PhratchStringMorph) ifTrue: [
 		((aMorph contents = '?') | (aMorph contents = '%'))
 			ifTrue: [aStream skip: -1].	"remove space before ? or %"
 		aStream nextPutAll: aMorph contents].
@@ -1611,7 +1611,7 @@ BlockMorph >> rightButtonMenu [
 	menu := MenuMorphNG new defaultTarget: self.
 	menu add: 'help' value: #presentHelpScreen.
 
-	(owner isKindOf: ScratchBlockPaletteMorph) ifFalse: [
+	(owner isKindOf: PhratchBlockPaletteMorph) ifFalse: [
 		menu addLine.
 		menu add: 'duplicate' value: #duplicate.	
 		(self owner isKindOf: BlockMorph) ifFalse: [  "we can't yet delete a blocks inside a script"
@@ -1691,7 +1691,7 @@ BlockMorph >> slideBackToFormerSituation: evt [
 	(o := evt hand formerOwner) ifNil: [^ self].
 	(o isKindOf: BlockMorph) ifTrue: [
 		wasEmbedded := true.
-		(pane := o ownerOrYourselfThatIsA: ScratchScriptsMorph) ifNotNil: [
+		(pane := o ownerOrYourselfThatIsA: PhratchScriptsMorph) ifNotNil: [
 			o := pane]].
 
 	"restore the old position relative to the old owner,

@@ -106,7 +106,7 @@ MediaItemMorph >> buildRightSideMorph [
 	nameMorph width: (5 * nameMorph height) asInteger.
 	rightMorph addMorphBack: nameMorph.
 
-	infoMorph := (ScratchStringMorph contents: (media infoString))
+	infoMorph := (PhratchStringMorph contents: (media infoString))
 		font: (ScratchFrameMorph getFont: #MediaItemInfo);
 		position: nameMorph left + 2 @ (nameMorph bottom).
 	rightMorph addMorph: infoMorph.
@@ -136,7 +136,7 @@ MediaItemMorph >> buildRightSideMorph [
 	nameMorph extent: (deleteButton right max: nameMorph width)@(nameMorph extent y).
 	deleteButton position: (nameMorph right - deleteButton width)@(infoMorph bottom + 6).
 
-	soundSizeMorph := (ScratchStringMorph contents: '')
+	soundSizeMorph := (PhratchStringMorph contents: '')
 		font: (ScratchFrameMorph getFont: #MediaItemInfo);
 		position: nameMorph right @ nameMorph bottom.
 	rightMorph addMorph: soundSizeMorph.
@@ -155,7 +155,7 @@ MediaItemMorph >> buildSubmorphs [
 	| thumbHeight |
 	self buildRightSideMorph.
 
-	numberMorph := (ScratchStringMorph contents: '345')
+	numberMorph := (PhratchStringMorph contents: '345')
 		font: (ScratchFrameMorph getFont: #MediaItemInfo);
 		color: Color white;
 		position: topRightInset.
@@ -264,7 +264,7 @@ MediaItemMorph >> editSound [
 	sFrame ifNil: [^ self].
 	workPane := sFrame workPane.
 
-	editor := ScratchSoundEditor new client: scratchObj; sound: media sound.
+	editor := PhratchSoundEditor new client: scratchObj; sound: media sound.
 	editor soundName: media mediaName.
 	editor position: workPane topLeft + (10@10).
 	workPane addMorph: editor.
@@ -385,11 +385,11 @@ MediaItemMorph >> initialize [
 MediaItemMorph >> justDroppedInto: aMorph event: evt [
 
 	self delete.
-	(aMorph ownerOrYourselfThatIsA: ScratchViewerMorph) ifNotNil: [
+	(aMorph ownerOrYourselfThatIsA: PhratchViewerMorph) ifNotNil: [
 		"delete myself when dropped on the blocks palette"
 		^ self deleteMedia].
 
-	(aMorph ownerOrYourselfThatIsA: ScratchBlockPaletteMorph) ifNotNil: [
+	(aMorph ownerOrYourselfThatIsA: PhratchBlockPaletteMorph) ifNotNil: [
 		"I have been accepted into a media list; exit this method to prevent myself from being put into the Clipboard again"
 		^ self].
 
@@ -496,7 +496,7 @@ MediaItemMorph >> setNumber: anInteger [
 { #category : #'event handling' }
 MediaItemMorph >> startDrag: evt [
 
-	(self ownerOrYourselfThatIsA: ScratchScriptEditorMorph)
+	(self ownerOrYourselfThatIsA: PhratchScriptEditorMorph)
 		ifNil: [evt hand grabMorph: self]
 		ifNotNil: [evt hand attachMorph: self fullCopy configureForDragging].
 

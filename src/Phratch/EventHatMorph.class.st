@@ -43,8 +43,8 @@ EventHatMorph >> eventName: aString [
 
 	scriptNameMorph eventName: aString.
 	self fixBlockLayout.
-	(self ownerOrYourselfThatIsA: ScratchViewerMorph) ifNotNil:[
-		(self ownerOrYourselfThatIsA: ScratchViewerMorph) updateContents].
+	(self ownerOrYourselfThatIsA: PhratchViewerMorph) ifNotNil:[
+		(self ownerOrYourselfThatIsA: PhratchViewerMorph) updateContents].
 
 ]
 
@@ -57,7 +57,7 @@ EventHatMorph >> forStartEvent [
 
 	parts := ScratchTranslator labelPartsFor: 'when %m clicked'.
 
-	s := ScratchStringMorph new contents: parts first; font: (ScratchFrameMorph getFont: #Label); color: Color white.
+	s := PhratchStringMorph new contents: parts first; font: (ScratchFrameMorph getFont: #Label); color: Color white.
 	self addMorphBack: s.
 
 	m := ImageMorph new form: (ScratchFrameMorph skinAt: #goButton).
@@ -78,8 +78,8 @@ EventHatMorph >> forceLayout [
 	"My UpdatingStringMorph calls this when its contents change"
 
 	self fixBlockLayout.
-	(self ownerOrYourselfThatIsA: ScratchBlockPaletteMorph) ifNotNil:[
-		(self ownerOrYourselfThatIsA: ScratchBlockPaletteMorph) fixLayout].
+	(self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph) ifNotNil:[
+		(self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph) fixLayout].
 
 ]
 
@@ -107,7 +107,7 @@ EventHatMorph >> initialize [
 	parts := ScratchTranslator labelPartsFor: 'when I receive %e'.
 
 	parts first size > 0 ifTrue: [
-		label := ScratchStringMorph contents: parts first font: (ScratchFrameMorph getFont: #Label).
+		label := PhratchStringMorph contents: parts first font: (ScratchFrameMorph getFont: #Label).
 		label color: Color white.
 		self addMorphBack: label].
 
@@ -115,7 +115,7 @@ EventHatMorph >> initialize [
 	self addMorphBack: scriptNameMorph.
 
 	parts second size > 0 ifTrue: [
-		label := (ScratchStringMorph contents: parts second font: (ScratchFrameMorph getFont: #Label)) color: Color white.
+		label := (PhratchStringMorph contents: parts second font: (ScratchFrameMorph getFont: #Label)) color: Color white.
 		self addMorphBack: label].
 
 ]

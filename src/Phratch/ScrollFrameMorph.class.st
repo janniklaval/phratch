@@ -290,7 +290,7 @@ ScrollFrameMorph >> nearestEdge: aPoint [
 	scrolling will be triggered"
 	cordon := 55.
 
-	(self findA: ScratchScrollBar) ifNil: [^nil ].
+	(self findA: PhratchScrollBar) ifNil: [^nil ].
 	(self containsPoint: aPoint) ifFalse: [^nil ].
 
 	aPoint y < (self top + cordon) ifTrue: [^#top ].

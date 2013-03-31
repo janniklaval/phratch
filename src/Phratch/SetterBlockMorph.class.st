@@ -207,7 +207,7 @@ SetterBlockMorph >> labelMorphFor: aString [
 	s := aString.
 	commandSpec isUnicode ifTrue: [s := UTF8 withAll: s].
 	self variable isUnicode ifTrue: [s := UTF8 withAll: s].
-	^ (ScratchStringMorph contents: s font: (ScratchFrameMorph getFont: #Label))
+	^ (PhratchStringMorph contents: s font: (ScratchFrameMorph getFont: #Label))
 		color: self labelColor
 
 ]

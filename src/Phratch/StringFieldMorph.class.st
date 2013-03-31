@@ -434,7 +434,7 @@ StringFieldMorph >> initialize [
 
 	super initialize.
 
-	stringMorph := ScratchStringMorph new
+	stringMorph := PhratchStringMorph new
 		contents: String new font: (StrikeFont fontName: 'Verdana' size: 12);
 		forceUnicodeRendering: true.
 	self addMorph: stringMorph.
@@ -551,7 +551,7 @@ StringFieldMorph >> keyStroke: evt [
 
 	(ch = 10) | (ch = 13) ifTrue: [  "cr, lf, or enter key"
 		(m := self ownerOrYourselfThatIsA: DialogBoxMorph) ifNotNil: [^ m enterKeyPressed: evt].
-		(m := self ownerOrYourselfThatIsA: ScratchPrompterMorph) ifNotNil: [^ m enterKeyPressed].
+		(m := self ownerOrYourselfThatIsA: PhratchPrompterMorph) ifNotNil: [^ m enterKeyPressed].
 		evt hand newKeyboardFocus: nil.
 		^ self].
 

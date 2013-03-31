@@ -309,8 +309,8 @@ ObjStream class >> userClasses [
 		(102		RectangleMorph)
 		(103		EllipseMorph)
 		(104		AlignmentMorph)
-		(105		ScratchStringMorph)
-		(106		ScratchUpdatingStringMorph)
+		(105		#PhratchStringMorph)
+		(106		#PhratchUpdatingStringMorph)
 		(107		SimpleSliderMorph)
 		(108		SimpleButtonMorph)
 		(109		SampledSound)
@@ -337,8 +337,8 @@ ObjStream class >> userClasses [
 		"(150	MethodCallBlockMorph)"
 		(151		HatBlockMorph)
 		"(152	ScratchButtonMorph)"
-		(153		ScratchScriptsMorph)
-		(154		ScratchSliderMorph)
+		(153		#PhratchScriptsMorph)
+		(154		#PhratchSliderMorph)
 		(155		WatcherMorph)
 		"(156	ParameterMorph)"
 		(157		SetterBlockMorph)
@@ -364,7 +364,7 @@ ObjStream class >> userClasses [
 
 		(180		ScrollFrameMorph2)
 		(181		ListMultilineStringMorph)
-		(182		ScratchScrollBar)
+		(182		#PhratchScrollBar)
 
 		(200		CustomCommandBlockMorph)
 		(201		CustomBlockDefinition)
