@@ -1,0 +1,82 @@
+"
+I am a hat block for stacks triggered by Scratch keyboard events.
+
+"
+Class {
+	#name : #KeyEventHatMorph,
+	#superclass : #EventHatMorph,
+	#category : #'Phratch-Blocks'
+}
+
+{ #category : #other }
+KeyEventHatMorph >> asBlockTuple [
+	"Answer a tuple (Array) describing this block and its arguments."
+
+	^ Array
+		with: #byob
+		with: ''
+		with: self class name
+		with: scriptNameMorph choice
+
+]
+
+{ #category : #other }
+KeyEventHatMorph >> choice: aString [
+
+	scriptNameMorph choice: aString.
+	self fixBlockLayout.
+	self changed.
+
+]
+
+{ #category : #other }
+KeyEventHatMorph >> eventName [
+
+	^ 'Scratch-KeyPressedEvent'
+
+]
+
+{ #category : #initialization }
+KeyEventHatMorph >> initialize [
+
+	| parts s |
+	super initialize.
+	self removeAllMorphs.
+
+	parts := ScratchTranslator labelPartsFor: 'when %k key pressed'.
+
+	s := ScratchStringMorph new
+		contents: parts first; font: (ScratchFrameMorph getFont: #Label);
+		color: Color white.
+	self addMorphBack: s.
+
+	scriptNameMorph := ChoiceArgMorph new
+		getOptionsSelector: #keyNames;
+		options: ScriptableScratchMorph new keyNames;
+		choice: 'space'.
+	self addMorphBack: scriptNameMorph.
+
+	s := s fullCopy contents: parts second.
+	self addMorphBack: s.
+
+]
+
+{ #category : #other }
+KeyEventHatMorph >> printHatNameOn: aStream [
+	"Append a human-readable string for this hat block's name to the given stream."
+
+	aStream nextPutAll: 'when ', scriptNameMorph choice, ' key pressed'; cr.
+
+]
+
+{ #category : #other }
+KeyEventHatMorph >> respondsToKeyEvent: aMorphicKeyEvent [
+
+	| evtAscii |
+	evtAscii := aMorphicKeyEvent keyCharacter asLowercase asciiValue.
+	evtAscii = Character enter asciiValue ifTrue: [
+		evtAscii := Character cr asciiValue].
+
+	^ evtAscii = (ScriptableScratchMorph new asciiFor: scriptNameMorph choice asString)
+
+]

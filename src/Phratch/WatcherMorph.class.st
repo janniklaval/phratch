@@ -1,0 +1,666 @@
+"
+I am a Scratch variable readout/editor. I can view both variables and reporter values. I support various display modes.
+
+"
+Class {
+	#name : #WatcherMorph,
+	#superclass : #AlignmentMorph,
+	#instVars : [
+		'titleMorph',
+		'readout',
+		'readoutFrame',
+		'scratchSlider',
+		'watcher',
+		'lastTargetName',
+		'isSpriteSpecific',
+		'isLarge',
+		'lastPosition',
+		'sliderMin',
+		'sliderMax',
+		'unused'
+	],
+	#category : #'Phratch-UI-Watchers'
+}
+
+{ #category : #initialization }
+WatcherMorph >> buildReadout [
+	"Build my readout component morphs."
+
+	readout := ScratchUpdatingStringMorph new
+		contents: '';
+		floatPrecision: 0.1;
+		stepTime: 100.
+	readout
+		font: (ScratchFrameMorph getFont: #Watcher);
+		forceUnicodeRendering: true;
+		color: Color white;
+		kern: 1.
+	readoutFrame := WatcherReadoutFrameMorph new addMorph: readout.
+
+]
+
+{ #category : #'event handling' }
+WatcherMorph >> click: evt [
+
+	evt hand toolType = 'CutTool' ifTrue: [
+		evt shiftPressed ifFalse: [evt hand toolType: nil].
+		ScratchFrameMorph putInClipboard: self.
+		self aboutToBeGrabbedBy: evt hand.
+		self delete].
+
+]
+
+{ #category : #'falta adaptar' }
+WatcherMorph >> convertFromOldWatcher [
+	"Convert myself from old watcher structure to the current structure."
+
+	| o p target selector param wasLarge showSlider oldRange c |
+	o := self owner.
+	p := self position.
+	target := readout target.
+	selector := readout getSelector.
+	(selector = #getUserVar:) ifTrue: [selector := #getVar:].  "update selector"
+	param := readout parameter.
+	wasLarge := readoutFrame isLarge.
+	showSlider := scratchSlider notNil.
+	oldRange := self sliderRange.
+
+	self delete; removeAllMorphs; initialize.
+	self
+		position: p;
+		target: target selector: selector parameter: param;
+		sliderRange: oldRange.
+	self layoutForViewer.
+
+	selector = #getVar:
+		ifTrue: [self setCategoryColor: target variableBlockColor]
+		ifFalse: [
+			c := ScriptableScratchMorph blockColorDict at: selector ifAbsent: [nil].
+			c ifNotNil: [self setCategoryColor: c]].
+
+	o addMorph: self.
+	self updateTargetName.
+	wasLarge ifTrue: [self showLargeReadout].
+	showSlider ifTrue: [self showSlider].
+
+]
+
+{ #category : #copying }
+WatcherMorph >> copyRecordingIn: dict [
+	"Overridden to copy my readout if it is not currently showing. This avoids accidentally sharing the readout morph with the original Watcher that is being copied. If the readout is showing, it is copied by the fullCopy operation, so we don't need to copy it."
+
+	| result |
+	result := super copyRecordingIn: dict.
+	readoutFrame owner ifNil: [result readoutFrame: readoutFrame fullCopy].
+	^ result
+
+]
+
+{ #category : #'right button menu' }
+WatcherMorph >> delete [
+
+	super delete.
+	ScratchFrameMorph allInstancesDo: [:frame | frame deletingWatcher].
+
+]
+
+{ #category : #'falta adaptar' }
+WatcherMorph >> doubleClick: evt [
+	"Toggle slider/large readout view if I'm in the work pane."
+
+	(self owner isKindOf: ScratchStageMorph) ifFalse: [^ self].  "ignore if not on stage"
+
+	scratchSlider ifNotNil: [^ self showLargeReadout]. "slider -> large readout"
+	isLarge ifTrue: [^ self showSmallReadout].  "large readout -> small readout"
+	self isVariableWatcher
+		ifTrue: [self showSlider]  "small readout -> slider"
+		ifFalse: [self showLargeReadout].  "small readout -> large readout"
+
+]
+
+{ #category : #accessing }
+WatcherMorph >> evaluate [
+	"Answer the value of my variable."
+
+	^ readout valueFromTargetOrNil
+
+]
+
+{ #category : #'as yet unclassified' }
+WatcherMorph >> eventHandler [ 
+	self assureExtension.
+	^ super eventHandler
+]
+
+{ #category : #'object i/o' }
+WatcherMorph >> fieldsVersion [
+
+	^ 5
+
+]
+
+{ #category : #accessing }
+WatcherMorph >> getAssociatedSprite [
+	"Return my target."
+
+	^ self target
+
+]
+
+{ #category : #accessing }
+WatcherMorph >> getSelector [
+
+	^ readout getSelector
+
+]
+
+{ #category : #accessing }
+WatcherMorph >> getVariable [
+
+	readout parameter notNil
+		ifTrue: [^ readout parameter]
+		ifFalse: [^ readout getSelector]
+
+]
+
+{ #category : #'event handling' }
+WatcherMorph >> handlesMouseDown: evt [
+
+	^ self world notNil
+]
+
+{ #category : #'right button menu' }
+WatcherMorph >> hideSlider [
+
+	scratchSlider ifNotNil: [
+		sliderMin := scratchSlider minVal.
+		sliderMax := scratchSlider maxVal.
+		scratchSlider delete.
+		scratchSlider := nil].
+
+]
+
+{ #category : #'object i/o' }
+WatcherMorph >> initFieldsFrom: anObjStream version: classVersion [
+
+	super initFieldsFrom: anObjStream version: classVersion.
+	self initFieldsNamed: #(
+		titleMorph
+		readout
+		readoutFrame
+		scratchSlider
+		watcher) from: anObjStream.
+	watcher ifNotNil: [watcher useRoundedCorners].
+	classVersion = 1 ifTrue: [^ self].
+	
+	"fields added in version 2"
+	self initFieldsNamed: #(
+		isSpriteSpecific
+		unused
+	) from: anObjStream.
+
+	"fields added in version 4"
+	classVersion < 4 ifTrue: [^ self].
+	self initFieldsNamed: #(
+		sliderMin
+		sliderMax
+	) from: anObjStream.
+
+	"fields added in version 5"
+	classVersion < 5 ifTrue: [^ self].
+	self initFieldsNamed: #(
+		isLarge
+	) from: anObjStream.
+
+]
+
+{ #category : #initialization }
+WatcherMorph >> initialize [
+
+	super initialize.
+	titleMorph := ScratchStringMorph contents: '???'.
+	titleMorph font: (ScratchFrameMorph getFont: #Watcher).
+	readout := readoutFrame := scratchSlider := nil.
+	lastTargetName := nil.
+	isSpriteSpecific := true.
+	isLarge := false.
+	sliderMin := 0.
+	sliderMax := 100.
+	watcher := AlignmentMorph new
+		color: Color transparent;
+		borderWidth: 0;
+		inset: 0;
+		listDirection: #leftToRight;
+		hResizing: #shrinkWrap;
+		vResizing: #shrinkWrap;
+		cellPositioning: #leftCenter;
+		centering: #center.
+	self 
+		color: (Color r: (193/255) g: (196/255) b: (199/255));
+		borderWidth: 1;
+		borderColor: (Color r: (148/255) g: (145/255) b: (145/255));
+		listDirection: #topToBottom;
+		centering: #center;
+		inset: 2;
+		hResizing: #shrinkWrap;
+		vResizing: #shrinkWrap;
+		buildReadout;
+		useRoundedCorners;
+		addMorphBack: watcher;
+		addMorphBack: (Morph new color: Color transparent; extent: 5@1).
+
+]
+
+{ #category : #accessing }
+WatcherMorph >> isLarge [
+
+	^ isLarge
+
+]
+
+{ #category : #accessing }
+WatcherMorph >> isReporter [
+
+	^ true
+
+]
+
+{ #category : #private }
+WatcherMorph >> isVariableWatcher [
+	"Answer true if I am watching a variable."
+
+	^ readout getSelector = #getVar:
+
+]
+
+{ #category : #'dropping/grabbing' }
+WatcherMorph >> justDroppedInto: aMorph event: evt [
+
+	(aMorph isKindOf: ScratchStageMorph) ifTrue: [
+		super justDroppedInto: aMorph event: evt.
+		self world ifNotNil: [self world startSteppingSubmorphsOf: self].
+		^ self].
+
+	"delete me if dropped anywhere but the stage"
+	lastPosition ifNil: [lastPosition := (self formerPosition ifNil: [0@0])].
+	self position: lastPosition.
+	^ self delete
+
+]
+
+{ #category : #accessing }
+WatcherMorph >> languageChanged [
+	"Force label update after switching languages."
+
+	lastTargetName := nil.
+	self updateTargetName.
+	readout target: readout target.  "forces contents to update"
+	titleMorph extent: (ScratchTranslator stringExtent: titleMorph contents font: titleMorph font).
+	(readout contents isKindOf: Form) ifTrue: [
+		readout extent: readout contents extent + (10 @ 10).
+		^self ].
+	readout extent: (ScratchTranslator stringExtent: readout contents font: readout font).
+
+]
+
+{ #category : #private }
+WatcherMorph >> layoutForViewer [
+
+	watcher removeAllMorphs.
+	ScratchTranslator isRTL
+		ifTrue: [watcher
+			addMorphBack: (Morph new color: color; extent: 2@0);
+			addMorphBack: readoutFrame;
+			addMorphBack: (AlignmentMorph new color: color; width: 4; hResizing: #rigid);
+			addMorphBack: titleMorph;
+			addMorphBack: (Morph new color: color; extent: 3@0)]
+		ifFalse: [watcher
+			addMorphBack: (Morph new color: color; extent: 3@0);
+			addMorphBack: titleMorph;
+			addMorphBack: (AlignmentMorph new color: color; width: 4; hResizing: #rigid);
+			addMorphBack: readoutFrame;
+			addMorphBack: (Morph new color: color; extent: 2@0)].
+
+]
+
+{ #category : #accessing }
+WatcherMorph >> layoutStyle [
+	"Return a symbol indicating my current layout type: small, slider, large."
+
+	scratchSlider notNil ifTrue: [^ #slider].
+	^ self isLarge ifTrue: [#large] ifFalse: [#small]
+
+]
+
+{ #category : #accessing }
+WatcherMorph >> layoutStyle: aSymbol [
+	"Set my layout style to one of: #small, #slider, #large."
+
+	self layoutForViewer.
+	#slider = aSymbol ifTrue: [^ self showSlider].
+	#large = aSymbol ifTrue: [^ self showLargeReadout].
+	self showSmallReadout.
+
+]
+
+{ #category : #copying }
+WatcherMorph >> mapReceiver: oldObj to: newObj [
+	"Used in cloning an object to make blocks that refererred to the original object new refer to the new copy."
+
+	readout target == oldObj ifTrue: [readout target: newObj].
+
+]
+
+{ #category : #'event handling' }
+WatcherMorph >> mouseDown: evt [
+
+	evt rightButtonPressed ifTrue: [Sensor waitNoButton. ^ self rightButtonMenu].
+
+	evt hand waitForClicksOrDrag: self event: evt.
+
+]
+
+{ #category : #accessing }
+WatcherMorph >> parameter [
+
+	^ readout parameter
+
+]
+
+{ #category : #copying }
+WatcherMorph >> readoutFrame: readoutFrameMorph [
+	"Fix up my readout when copying."
+
+	readoutFrame := readoutFrameMorph.
+	readout := readoutFrameMorph firstSubmorph.
+
+]
+
+{ #category : #private }
+WatcherMorph >> replace: argStr with: translatedArg in: s [
+	"Answer a copy of the given string in which the first (only) occurance of argStr is replaced by translatedArg."
+
+	| i |
+	i := s findString: argStr startingAt: 1.
+	i = 0 ifTrue: [^ s].
+	^ ((s copyFrom: 1 to: i - 1), translatedArg, (s copyFrom: i + argStr size to: s size)) asUTF8
+
+]
+
+{ #category : #'right button menu' }
+WatcherMorph >> rightButtonMenu [
+
+	| menu hasSlider |
+	(self ownerOrYourselfThatIsA: ScratchStageMorph) ifNil: [^ self].
+
+	menu := MenuMorph new defaultTarget: self.
+	hasSlider := self isVariableWatcher and: [scratchSlider notNil].
+
+	hasSlider not & isLarge not
+		ifTrue: [menu add: '* ' asUTF8, 'normal readout' localized,' *'	action: #showSmallReadout]
+		ifFalse: [menu add: '  ' asUTF8, 'normal readout' localized		action: #showSmallReadout].
+
+	hasSlider not & isLarge
+		ifTrue: [menu add: '* ' asUTF8, 'large readout' localized, ' *'		action: #showLargeReadout]
+		ifFalse: [menu add: '  ' asUTF8, 'large readout' localized			action: #showLargeReadout].
+
+	self isVariableWatcher ifTrue: [
+		scratchSlider
+			ifNil: [menu add: '  ' asUTF8, 'slider' localized action: #showSlider]
+			ifNotNil: [
+				menu add: '* ' asUTF8, 'slider' localized,' *' action: #showSlider.
+				menu addLine.
+				menu add: '  ' asUTF8, 'set slider min and max' localized action: #setSliderMinAndMax]].
+
+	menu addLine.
+	menu add: '  ' asUTF8,  'hide' localized action: #delete.
+	menu popUpInWorld.
+
+]
+
+{ #category : #'dropping/grabbing' }
+WatcherMorph >> rootForGrabOf: aMorph [
+	"Allow myself to be extracted."
+
+	(owner notNil and: [owner isPartsBin])
+		ifTrue: [^ super rootForGrabOf: aMorph]
+		ifFalse: [^ self].
+
+]
+
+{ #category : #accessing }
+WatcherMorph >> selectorAndArg [
+	"Answer an array containing my selector and argument (if any)."
+
+	^ Array with: readout getSelector with: readout parameter
+]
+
+{ #category : #initialization }
+WatcherMorph >> setCategoryColor: aColor [
+
+	readoutFrame color: aColor.
+
+]
+
+{ #category : #'falta adaptar' }
+WatcherMorph >> setSliderMinAndMax [
+
+	| newRange |
+	newRange := SliderRangeDialog initialMin: sliderMin max: sliderMax.
+	newRange ifNil: [^ self].
+
+	sliderMin := newRange first.
+	sliderMax := newRange last.
+	scratchSlider ifNotNil: [
+		scratchSlider
+			minVal: sliderMin;
+			maxVal: sliderMax;
+			truncate: (sliderMin isInteger & sliderMax isInteger);
+			updateSliderPosition].
+
+]
+
+{ #category : #'right button menu' }
+WatcherMorph >> showLargeReadout [
+
+	self hideSlider.
+
+	isLarge := true.
+	readout font: (ScratchFrameMorph getFont: #WatcherLarge).
+	readoutFrame
+		borderColor: (Color gray: 3);
+		fixLayout.
+	watcher removeAllMorphs; addMorphBack: readoutFrame.
+	self
+		inset: 0;
+		color: Color transparent;
+		borderColor: Color transparent;
+		cornerStyle: #square.
+
+]
+
+{ #category : #'falta adaptar' }
+WatcherMorph >> showSlider [
+
+	self hideSlider.
+	self showSmallReadout.
+
+	scratchSlider := WatcherSliderMorph new
+		target: readout target;
+		actionSelector: #setVar:to:;
+		arguments: (Array with: self getVariable);
+		truncate: (sliderMin isInteger & sliderMax isInteger);
+		minVal: sliderMin;
+		maxVal: sliderMax;
+		sliderThickness: 0;
+		height: 10;
+		width: self width - 12.
+
+	self addMorphBack: scratchSlider.
+	self world ifNotNil: [self world startSteppingSubmorphsOf: scratchSlider].
+	scratchSlider updateSliderPosition.
+
+]
+
+{ #category : #'right button menu' }
+WatcherMorph >> showSmallReadout [
+
+	self hideSlider.
+
+	isLarge := false.
+	readout font: (ScratchFrameMorph getFont: #Watcher).
+	readoutFrame
+		borderColor: Color white;
+		fixLayout.
+	self
+		inset: 2;
+		color: (Color r: (193/255) g: (196/255) b: (199/255));
+		borderColor: (Color r: (148/255) g: (145/255) b: (145/255));
+		cornerStyle: #rounded.
+
+	self layoutForViewer.
+
+]
+
+{ #category : #accessing }
+WatcherMorph >> sliderRange [
+	"Return an array containting the slider max and min."
+
+	^ Array with: sliderMin with: sliderMax
+
+]
+
+{ #category : #accessing }
+WatcherMorph >> sliderRange: anArray [
+	"Set the slider max and min."
+
+	sliderMin := anArray first.
+	sliderMax := anArray second.
+
+]
+
+{ #category : #'event handling' }
+WatcherMorph >> startDrag: evt [
+
+	self world ifNil: [^ self].  "don't pick me up if in presentation mode"
+	lastPosition := self position.
+	super startDrag: evt.
+
+]
+
+{ #category : #stepping }
+WatcherMorph >> step [
+
+	self updateTargetName.
+	readoutFrame ifNotNil: [readoutFrame fixLayout].
+	scratchSlider ifNotNil: [
+		(World activeHand hasMouseFocus: scratchSlider) ifFalse: [
+			scratchSlider width: self width - 12.
+			scratchSlider updateSliderPosition]].
+
+]
+
+{ #category : #stepping }
+WatcherMorph >> stepTime [
+
+	^ 100
+
+]
+
+{ #category : #'object i/o' }
+WatcherMorph >> storeFieldsOn: anObjStream [
+
+	super storeFieldsOn: anObjStream.
+	self storeFieldsNamed: #(
+		titleMorph
+		readout
+		readoutFrame
+		scratchSlider
+		watcher
+		isSpriteSpecific
+		unused
+		sliderMin
+		sliderMax
+		isLarge
+	) on: anObjStream.
+
+]
+
+{ #category : #accessing }
+WatcherMorph >> target [
+
+	^ readout target
+
+]
+
+{ #category : #accessing }
+WatcherMorph >> target: anObject [
+
+	readout target: anObject.
+
+]
+
+{ #category : #'falta adaptar' }
+WatcherMorph >> target: anObject selector: selector parameter: parameter [
+	"Initialize this watcher. If parameter is not nil, then this watcher is used to access user-defined variables or parameterized reporters."
+
+	readout
+		target: anObject;
+		getSelector: selector asSymbol;
+		parameter: parameter.
+
+	isSpriteSpecific := ScriptableScratchMorph isSpriteSpecificTarget: anObject selector: selector.
+
+]
+
+{ #category : #private }
+WatcherMorph >> translatedName [
+	"Answer the name for this watcher based on my selector and argument. The names of reporters are translated into the current language. The names of variables are left untouched."
+
+	| sel spec result param |
+	readout target ifNil: [^ 'xxx'].
+	sel := readout getSelector.
+	#getVar: = sel ifTrue: [^ readout parameter].
+
+	spec := readout target blockSpecForSelector: sel.
+	spec ifNil: [^ sel].
+
+	result := ScratchTranslator translationFor: spec.
+	param := readout parameter.
+	param ifNil: [param := ''].
+
+	#sensor: = sel ifTrue: [
+		result := self replace: '%H' with: (ScratchTranslator translationFor: param) in: result].
+	#sensorPressed: = sel ifTrue: [
+		result := self replace: '%h' with: (ScratchTranslator translationFor: param) in: result].
+
+	^ result
+
+]
+
+{ #category : #private }
+WatcherMorph >> updateTargetName [
+	"Check if I should display my target's name."
+
+	| targetName |
+	(self ownerOrYourselfThatIsA: HandMorph) ifNotNil: [^ self].  "do nothing when in a HandMorph"
+	isLarge ifTrue: [^ self].  "don't show target or var name if large readout showing"
+
+	targetName := readout target objName asUTF8.
+	(lastTargetName = targetName) ifTrue: [^ self].  "no change"
+
+	isSpriteSpecific
+		ifTrue: [titleMorph contents: targetName, ' ', self translatedName asUTF8]
+		ifFalse: [titleMorph contents: self translatedName].
+
+	lastTargetName := targetName.
+
+]
+
+{ #category : #'event handling' }
+WatcherMorph >> wantsKeyboardFocusFor: aSubmorph [
+	"Don't allow shift-click editing of my label."
+
+	^ false
+
+]

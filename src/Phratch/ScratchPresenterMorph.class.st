@@ -1,0 +1,392 @@
+"
+I present the Scratch stage all by itself on the screen in presentation mode.
+
+"
+Class {
+	#name : #ScratchPresenterMorph,
+	#superclass : #Morph,
+	#instVars : [
+		'frame',
+		'stage',
+		'buttons',
+		'flagButton',
+		'pauseButton',
+		'offscreenWorld',
+		'doubleSize',
+		'mouseFocus',
+		'mouseDownPoint',
+		'dragOffset',
+		'clickWasHandled',
+		'mouseMoved',
+		'lastStepTime'
+	],
+	#category : #'Phratch-UI-Panes'
+}
+
+{ #category : #initialization }
+ScratchPresenterMorph >> beDoubleSize [
+
+	doubleSize := true.
+	ScriptableScratchMorph doubleSize: true.
+
+]
+
+{ #category : #initialization }
+ScratchPresenterMorph >> buttons [
+
+	^ buttons
+
+]
+
+{ #category : #drawing }
+ScratchPresenterMorph >> drawOn: aCanvas [
+
+	| stageRect |
+	stageRect := Rectangle
+		center: stage center
+		extent: (doubleSize ifTrue: [2 * stage extent] ifFalse: [stage extent]).
+
+	(self bounds areasOutside: stageRect) do: [:r |
+		aCanvas fillRectangle: r color: color].
+
+	(aCanvas clipRect intersects: stageRect) ifTrue: [
+		offscreenWorld invalidRect: aCanvas clipRect.
+		offscreenWorld incrRedrawDouble: doubleSize].
+
+]
+
+{ #category : #'button actions' }
+ScratchPresenterMorph >> exitPresentation [
+
+	self delete.
+	frame exitPresentationMode.
+
+]
+
+{ #category : #geometry }
+ScratchPresenterMorph >> extent: aPoint [
+
+	super extent: aPoint.
+	self fixLayout.
+
+]
+
+{ #category : #geometry }
+ScratchPresenterMorph >> fixLayout [
+
+	| stageExtent stageBox y totalW x |
+	stageExtent := doubleSize ifTrue: [2 * stage extent] ifFalse: [stage extent].
+	stageBox := Rectangle center: self center extent: stageExtent.
+	stage owner center: self center.
+	y := stageBox top - 24.
+	buttons first position: (stageBox left + 5) @ y.  "exit presentation button"
+
+	"other buttons"
+	totalW := (buttons collect: [:b | b width] from: 2 to: buttons size) sum.
+	x := stageBox right - totalW - (2 * (buttons size - 2)) - 5.
+	buttons allButFirst do: [:b |
+		b position: x@y.
+		x := x + b width + 2].
+
+	offscreenWorld redrawAll.
+
+]
+
+{ #category : #BYOB }
+ScratchPresenterMorph >> frame [
+	^ frame
+]
+
+{ #category : #initialization }
+ScratchPresenterMorph >> frame: aScratchFrameMorph [
+
+	frame := aScratchFrameMorph.
+	stage := aScratchFrameMorph workPane.
+
+	"insert stage in an OffscreenWorldMorph to detect damage"
+	offscreenWorld := OffscreenWorldMorph new on: stage.
+	offscreenWorld frame: aScratchFrameMorph.
+
+]
+
+{ #category : #'event handling' }
+ScratchPresenterMorph >> handlesKeyboard: evt [
+	^ true
+]
+
+{ #category : #'event handling' }
+ScratchPresenterMorph >> handlesMouseDown: evt [
+
+	^ true
+
+]
+
+{ #category : #initialization }
+ScratchPresenterMorph >> initialize [
+
+	| button |
+	super initialize.
+	self color: Color black.
+	doubleSize := false.
+	lastStepTime := IdentityDictionary new.
+
+	buttons := #(
+		(presentationExit	exitPresentation		'Exit presentation')
+		(go					shoutGo				'Start green flag scripts')
+		(pause				togglePause			'Pause/resume everything')
+		(stop				stopAll				'Stop everything')
+	) collect: [:spec |
+		button := ToggleButton
+			onForm: (ScratchFrameMorph skinAt: (spec first, 'ButtonBlackPressed'))
+			offForm: (ScratchFrameMorph skinAt: (spec first, 'ButtonBlack'))
+			overForm: (ScratchFrameMorph skinAt: (spec first, 'ButtonBlackPressed')).
+		button
+			target: self;
+			actionSelector: spec second;
+			isMomentary: true;
+			actWhen: #buttonUp;
+			setProperty: #balloonText toValue: spec third localized;
+			drawToolTipAbove: true;
+			off.
+		#togglePause = spec second ifTrue: [pauseButton := button].
+		#shoutGo = spec second ifTrue: [flagButton := button].
+		button].
+
+	buttons do: [:b | self addMorph: b].
+
+]
+
+{ #category : #'event handling' }
+ScratchPresenterMorph >> keyStroke: evt [
+	| prompter ch |
+	prompter := stage submorphs detect: [ :m | m isKindOf: ScratchPrompterMorph ] ifNone: [ nil ].
+	ch := evt keyValue.
+	ch = 27
+		ifTrue: [ ^ self exitPresentation ].	"escape"
+	prompter
+		ifNotNil: [ prompter dispatchKeyStroke: evt ]
+		ifNil: [ 
+			ch = 3 | (ch = 13)
+				ifTrue: [ ^ self shoutGo ].
+			stage broadcastEventNamed: 'Scratch-KeyPressedEvent' with: evt ]
+]
+
+{ #category : #'event handling' }
+ScratchPresenterMorph >> mouseDown: evt [
+	"There are three possible cases: drag a sprite, and adjust a slider, and do nothing. To drag a sprite, set mouseFocus to the sprite and dragOffset to the cursor offset the sprite's position. To adjust a slider, set the mouseFocus to the slider and dragOffset to nil. To do nothing, set both to nil."
+
+	| p adjustedEvt rootM |
+	mouseFocus := nil.
+	dragOffset := nil.
+	clickWasHandled := false.
+	mouseMoved := false.
+	evt hand toolType: nil.
+
+	p := mouseDownPoint := stage adjustedCursorPoint.
+	adjustedEvt := evt copy setCursorPoint: p.
+
+	rootM := stage submorphs
+		detect: [:m | (m containsPoint: p) & m isVisible]
+		ifNone: [
+			(stage containsPoint: p) ifTrue: [stage click: adjustedEvt].
+			clickWasHandled := true.
+			^ self].
+
+	(rootM isKindOf: ScratchSpriteMorph) ifTrue: [
+		rootM draggable
+			ifTrue: [
+				rootM holdSubsprites.
+				rootM comeToFront.
+				mouseFocus := rootM.
+				dragOffset := rootM position - p]
+			ifFalse: [
+				rootM click: adjustedEvt.
+				clickWasHandled := true].
+		^ self].
+
+	(rootM unlockedMorphsAt: p) do: [:m |
+		(m handlesMouseDown: adjustedEvt) ifTrue: [
+			mouseFocus := m.
+			dragOffset := nil.
+			mouseFocus mouseDown: adjustedEvt.
+			^ self]].
+
+
+
+]
+
+{ #category : #'event handling' }
+ScratchPresenterMorph >> mouseMove: evt [
+
+	| p |
+	p := stage adjustedCursorPoint.
+	p = mouseDownPoint ifFalse: [mouseMoved := true].
+	mouseFocus ifNotNil: [
+		dragOffset
+			ifNil: [mouseMoved ifTrue: [mouseFocus mouseMove: (evt copy setCursorPoint: p)]]
+			ifNotNil: [mouseFocus position: p + dragOffset]].
+
+
+]
+
+{ #category : #'event handling' }
+ScratchPresenterMorph >> mouseUp: evt [
+
+	| p |
+
+	self mouseMove: evt.
+
+	stage allMorphsDo: [:m | 
+		(m isKindOf: ScratchSpriteMorph) ifTrue: [
+			m releaseSubsprites.
+			m xpos: m xpos.
+			m ypos: m ypos ]].
+
+	clickWasHandled ifTrue: [^ self].
+
+	p := stage adjustedCursorPoint.
+	mouseFocus ifNotNil: [
+		mouseMoved ifFalse: [mouseFocus click: (MorphicEvent new setCursorPoint: p)]].
+
+	mouseFocus := nil.
+	dragOffset := nil.
+
+
+]
+
+{ #category : #'event handling' }
+ScratchPresenterMorph >> processKeyboardEvents [
+
+	| prompter evt ch |
+	prompter := stage submorphs detect: [:m | m isKindOf: ScratchPrompterMorph] ifNone: [nil].
+	World hands do: [:h |
+		[(evt := h nextUnclaimedKeystrokeOrNil) notNil] whileTrue: [
+			ch := evt keyValue.
+			ch = 27 ifTrue: [^ self exitPresentation].  "escape"
+			prompter
+				ifNotNil: [
+					prompter dispatchKeyStroke: evt]
+				ifNil: [
+					(ch = 3) | (ch = 13) ifTrue: [^ self shoutGo].
+					stage broadcastEventNamed: 'Scratch-KeyPressedEvent' with: evt]]].
+
+]
+
+{ #category : #'event handling' }
+ScratchPresenterMorph >> processWhenConditions [
+	"Trigger any 'when <condition>' hats."
+
+	| objList |
+	true ifTrue: [^ self].  "disabled"
+	objList := stage submorphs select: [:m | m isKindOf: ScriptableScratchMorph].
+	objList := objList copyWith: stage.
+	objList do: [:obj |
+		obj scripts do: [:hat |
+			(hat isMemberOf: WhenHatBlockMorph) ifTrue: [
+				(hat hasRunningProcess not and: [hat evaluateCondition]) ifTrue: [
+					hat start; layoutChanged]]]].
+
+]
+
+{ #category : #'button actions' }
+ScratchPresenterMorph >> shoutGo [
+
+	frame ifNotNil: [frame shoutGo].
+	flagButton on.
+	self showPause.
+	World displayWorldSafely.  "force button flash"
+	(Delay forMilliseconds:  20) wait.
+
+]
+
+{ #category : #'button actions' }
+ScratchPresenterMorph >> showPause [
+
+	pauseButton
+		onForm: (ScratchFrameMorph skinAt: #pauseButtonBlackPressed)
+		offForm: (ScratchFrameMorph skinAt: #pauseButtonBlack)
+		overForm: (ScratchFrameMorph skinAt: #pauseButtonBlackPressed)
+
+]
+
+{ #category : #'button actions' }
+ScratchPresenterMorph >> showPlay [
+
+	pauseButton
+		onForm: (ScratchFrameMorph skinAt: #playButtonBlackPressed)
+		offForm: (ScratchFrameMorph skinAt: #playButtonBlack)
+		overForm: (ScratchFrameMorph skinAt: #playButtonBlackPressed)
+
+]
+
+{ #category : #BYOB }
+ScratchPresenterMorph >> stage [
+	^ stage
+]
+
+{ #category : #stepping }
+ScratchPresenterMorph >> step [
+	"Run each process until it gives up control, then filter out any processes that have terminated."
+
+	| screenExtent |
+	screenExtent := DisplayScreen actualScreenSize.
+	((self position = (0@0)) and: [self extent = screenExtent]) ifFalse: [
+		self position: 0@0.
+		^ self extent: screenExtent].
+
+	ScriptableScratchMorph scratchOrigin: stage center.
+
+	stage scratchServer ifNotNil: [stage scratchServer stepServer].
+	self processWhenConditions.
+	self processKeyboardEvents.
+	stage stepProcesses.
+	stage step.
+	self stepSubmorphs.
+	offscreenWorld incrRedrawDouble: doubleSize.
+
+	stage processesToRun size > 0
+		ifTrue: [flagButton on]
+		ifFalse: [flagButton off. self showPause].
+
+]
+
+{ #category : #stepping }
+ScratchPresenterMorph >> stepSubmorphs [
+	"Run my submorph 'step' methods if their time has come."
+
+	| now lastTime |
+	now := Time millisecondClockValue.
+	stage submorphsDo: [:topM |
+		topM allMorphsDo: [:m |
+			lastTime := lastStepTime at: m ifAbsent: [-1000000].
+			((now - lastTime) > m stepTime) ifTrue: [
+				m step.
+				lastStepTime at: m put: now]]].
+
+]
+
+{ #category : #stepping }
+ScratchPresenterMorph >> stepTime [
+	"Every screen update cycle."
+
+	^ 0
+
+]
+
+{ #category : #'button actions' }
+ScratchPresenterMorph >> stopAll [
+
+	frame ifNotNil: [frame stopAll].
+
+
+]
+
+{ #category : #'button actions' }
+ScratchPresenterMorph >> togglePause [
+
+	stage togglePause.
+	stage isPaused
+		ifTrue: [self showPlay]
+		ifFalse: [self showPause]
+
+]
