@@ -128,7 +128,7 @@ ConfigurationOfPhratch >> baseline10: spec [
 					className: 'ConfigurationOfOSProcess';
 					versionString: #stable ].
 			"spec package: 'Sound'."
-			spec package: 'NScratch' with: [ 
+			spec package: 'Phratch' with: [ 
 				spec requires: 'Sound'.
 				spec requires: 'OSProcess'
 			].
