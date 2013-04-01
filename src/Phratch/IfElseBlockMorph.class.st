@@ -82,24 +82,24 @@ IfElseBlockMorph >> blockAttachPoints: aSet [
 	self = self topBlock ifTrue: [result := result copyWith: self topLeft -> self].
 
 	(self isKindOf: HatBlockMorph) ifFalse: [
-		ScratchTranslator isRTL
+		PhratchTranslator isRTL
 			ifTrue: [result := result copyWith: (self topRight -> self)]
 			ifFalse: [result := result copyWith: (self topLeft -> self)]].
 
 	trueBlock
-		ifNil: [ScratchTranslator isRTL
+		ifNil: [PhratchTranslator isRTL
 			ifTrue: [result := result copyWith: ((self right - 12)@(self top + self topBarHeight + 7)) -> self]
 			ifFalse: [result := result copyWith: (self topLeft + (12@(self topBarHeight + 7))) -> self]]
 		ifNotNil: [trueBlock blockAttachPoints: aSet].
 
 	falseBlock
-		ifNil: [ScratchTranslator isRTL
+		ifNil: [PhratchTranslator isRTL
 			ifTrue: [result := result copyWith: ((self right - 12)@(self top + elseBarY + self elseBarHeight + 9)) -> self]
 			ifFalse: [result := result copyWith: (self topLeft + (12@(elseBarY + self elseBarHeight + 9))) -> self]]
 		ifNotNil: [falseBlock blockAttachPoints: aSet].
 
 	nextBlock
-		ifNil: [ScratchTranslator isRTL
+		ifNil: [PhratchTranslator isRTL
 			ifTrue: [result := result copyWith: self bottomRight -> self]
 			ifFalse: [result := result copyWith: self bottomLeft -> self]]
 		ifNotNil: [nextBlock blockAttachPoints: aSet].
@@ -284,7 +284,7 @@ IfElseBlockMorph >> drawVerticalBarOn: aCanvas [
 { #category : #private }
 IfElseBlockMorph >> elseBarHeight [
 
-	 ^ (ScratchTranslator stringExtent: 'else' localized font: (ScratchFrameMorph getFont: #Label)) y
+	 ^ (PhratchTranslator stringExtent: 'else' localized font: (PhratchFrameMorph getFont: #Label)) y
 
 ]
 
@@ -335,7 +335,7 @@ IfElseBlockMorph >> fixBlockLayout [
 		ifNil: [newH := newH + 15]
 		ifNotNil: [
 			trueBlock fixBlockLayout.
-			ScratchTranslator isRTL
+			PhratchTranslator isRTL
 				ifTrue: [trueBlock position: (self right - trueBlock width - CBlockBracketThickness)@(self top + newH)]
 				ifFalse: [trueBlock position: self position + (CBlockBracketThickness@newH)].
 			newH := newH + trueBlock fullBounds height.
@@ -348,7 +348,7 @@ IfElseBlockMorph >> fixBlockLayout [
 		ifNil: [newH := newH + 15]
 		ifNotNil: [
 			falseBlock fixBlockLayout.
-			ScratchTranslator isRTL
+			PhratchTranslator isRTL
 				ifTrue: [falseBlock position: (self right - falseBlock width - CBlockBracketThickness)@(self top + newH)]
 				ifFalse: [falseBlock position: self position + (CBlockBracketThickness@newH)].
 			newH := newH + falseBlock fullBounds height.
@@ -356,15 +356,15 @@ IfElseBlockMorph >> fixBlockLayout [
 
 	newH := newH + CBlockBracketThickness.
 	self height: newH.
-	nextBlock ifNotNil: [ScratchTranslator isRTL
+	nextBlock ifNotNil: [PhratchTranslator isRTL
 		ifTrue: [nextBlock position: (self right - nextBlock width)@(self bottom - 4)]
 		ifFalse: [nextBlock position: self left@(self bottom - 4)]].
 
-	ScratchTranslator isRTL
+	PhratchTranslator isRTL
 		ifTrue: [elseMorph position: (self right - elseMorph width - 6)@(self top + elseBarY
-			+ ((ScratchTranslator centerOffsetForButtonWithFont: (ScratchFrameMorph getFont: #Label)) // 4))]
+			+ ((PhratchTranslator centerOffsetForButtonWithFont: (PhratchFrameMorph getFont: #Label)) // 4))]
 		ifFalse: [elseMorph position: (self left + 6)@(self top + elseBarY
-			+ ((ScratchTranslator centerOffsetForButtonWithFont: (ScratchFrameMorph getFont: #Label)) // 4))].
+			+ ((PhratchTranslator centerOffsetForButtonWithFont: (PhratchFrameMorph getFont: #Label)) // 4))].
 
 ]
 

@@ -72,7 +72,7 @@ PhratchViewerMorph >> initialize [
 
 	super initialize.
 	self
-		initFrontFromForm: (ScratchFrameMorph skinAt: #blocksPaletteFrameTransparent2)
+		initFrontFromForm: (PhratchFrameMorph skinAt: #blocksPaletteFrameTransparent2)
 		topSectionHeight: 120.
 	self middleBarLeftMargin: 5 rightMargin: 0.
 	color := (Color r: 0.584 g: 0.603 b: 0.623).
@@ -117,11 +117,11 @@ PhratchViewerMorph >> rebuildCategorySelectors [
 	"Create new buttons, keeping track of the maximum extent."
 	maxExtent := 75@0.
 	buttons := catList collect: [:cat |
-		label := (ScratchTranslator translationFor: cat asString) capitalized.
-		offForm := (ScratchFrameMorph skinAt: cat).
-		onForm := (ScratchFrameMorph skinAt: (cat, 'Pressed')).
-		overForm := (ScratchFrameMorph skinAt: (cat, 'Over')).
-		ScratchTranslator isRTL
+		label := (PhratchTranslator translationFor: cat asString) capitalized.
+		offForm := (PhratchFrameMorph skinAt: cat).
+		onForm := (PhratchFrameMorph skinAt: (cat, 'Pressed')).
+		overForm := (PhratchFrameMorph skinAt: (cat, 'Over')).
+		PhratchTranslator isRTL
 			ifTrue:[
 				b := ResizableToggleButton2 new
 					offForm:	(offForm flipBy: #horizontal centerAt: offForm center)
@@ -133,14 +133,14 @@ PhratchViewerMorph >> rebuildCategorySelectors [
 					onForm:		onForm
 					overForm:	overForm].
 		b
-			label: label font: (ScratchFrameMorph getFont: #Category);
+			label: label font: (PhratchFrameMorph getFont: #Category);
 			setLabelColor: Color white;
 			target: self;
 			actionSelector: #currentCategory:;
 			arguments: (Array with: cat);
 			toggleButtonMode: true;
 			toggleMode: false.
-		ScratchTranslator isRTL
+		PhratchTranslator isRTL
 			ifTrue:[b rightJustifyInset: 10]
 			ifFalse:[b leftJustifyInset: 10].
 		maxExtent := maxExtent max: (b extent + (3 @ -6)).
@@ -208,16 +208,16 @@ PhratchViewerMorph >> updateContents [
 
 	| p |
 	self target ifNil: [
-		pageViewer contents: (Morph new color: ScratchFrameMorph palettePaneColor).
+		pageViewer contents: (Morph new color: PhratchFrameMorph palettePaneColor).
 		^ self].
 
 	p := self target viewerPageForCategory: currentCategory.
-	p color: ScratchFrameMorph palettePaneColor.
+	p color: PhratchFrameMorph palettePaneColor.
 
 	pageViewer contents: p.
 	self isInWorld ifTrue: [self world startSteppingSubmorphsOf: p].
 	p fixLayout.
-	ScratchTranslator isRTL
+	PhratchTranslator isRTL
 		ifTrue: [pageViewer hScrollPixels: (p right)].
 
 ]

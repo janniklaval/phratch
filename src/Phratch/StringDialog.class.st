@@ -121,7 +121,7 @@ StringDialog >> initialize [
 			color: (Color r: (211/255) g: (214/255) b: (216/255)));
 		addMorph: (Morph new extent: (5@6); color: Color transparent).
 	typeinMorph
-		font: (ScratchFrameMorph getFont: #StringDialogTypeIn);
+		font: (PhratchFrameMorph getFont: #StringDialogTypeIn);
 		width: 250.
 
 	tabFields add: typeinMorph.

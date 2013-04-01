@@ -689,7 +689,7 @@ PaintCanvas >> extractProjectFrom: aByteArray [
 
 	| s version proj |
 	s := ReadStream on: aByteArray.
-	version := ObjStream scratchFileVersionFrom: (s next: 10) asString.
+	version := ObjStream phratchFileVersionFrom: (s next: 10) asString.
 	version = 0 ifTrue: [
 		s position: 0.
 		proj := ObjStream new readObjFrom: s showProgress: true].
@@ -697,15 +697,15 @@ PaintCanvas >> extractProjectFrom: aByteArray [
 		s skip: s uint32.  "skip header"
 		proj := ObjStream new readObjFrom: s showProgress: true].
 
-	proj class = ScratchStageMorph ifFalse: [
+	proj class = PhratchStageMorph ifFalse: [
 		version > 2
 			ifTrue: [self error: 'Project created by a later version of Scratch']
 			ifFalse: [self error: 'Problem reading project.'].
 		^ nil].
 
-	ScriptableScratchMorph buildBlockSpecDictionary.
+	ScriptablePhratchMorph buildBlockSpecDictionary.
 	proj allMorphsDo: [:m |
-		(m isKindOf: ScriptableScratchMorph) ifTrue: [  "covert to new blocks"
+		(m isKindOf: ScriptablePhratchMorph) ifTrue: [  "covert to new blocks"
 			m convertStacksToTuples.
 			m convertTuplesToStacks]].
 
@@ -785,10 +785,10 @@ PaintCanvas >> import [
 	palette showRotationCenter: false.
 
 	spriteOrStage := self owner originalObject.
-	(spriteOrStage isKindOf: ScratchStageMorph)
+	(spriteOrStage isKindOf: PhratchStageMorph)
 		ifTrue: [type := #background]
 		ifFalse: [type := #costume].
-	fName := ScratchFileChooserDialog
+	fName := PhratchFileChooserDialog
 		chooseImageFileType: type
 		title: 'Import Image'.
 	(fName isNil or: [fName = #cancelled]) ifTrue: [^ self].
@@ -800,7 +800,7 @@ PaintCanvas >> import [
 			[f := Form fromFileNamed: fName] ifError: [nil]].
 	f ifNil: [^ self].
 
-	f := ScratchFrameMorph scaledFormForPaintEditor: f.
+	f := PhratchFrameMorph scaledFormForPaintEditor: f.
 
 	(owner isKindOf: PaintFrame) ifTrue: [owner scaleCanvas: 1].
 
@@ -824,7 +824,7 @@ PaintCanvas >> importCostumeFromSprite: fName [
 	[importedStage := self extractProjectFrom: data] ifError: [^ nil].
 
 	importedStage submorphs do: [:m |
-		(m isKindOf: ScratchSpriteMorph) ifTrue: [
+		(m isKindOf: PhratchSpriteMorph) ifTrue: [
 			^ m costumeForm]].
 
 	^ nil
@@ -1019,7 +1019,7 @@ PaintCanvas >> mouseMove: evt [
 	"Draw and/or give feedback."
 
 	| screenP |
-	((#paint ~= palette mode) & (ScratchFrameMorph isXO not))
+	((#paint ~= palette mode) & (PhratchFrameMorph isXO not))
 		ifTrue: [self autoScroll: evt cursorPoint].
 
 	palette showRotationCenter ifTrue: [

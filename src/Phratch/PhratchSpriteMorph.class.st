@@ -14,8 +14,8 @@ The leftRight style is useful for side-views of things such as cars, horses, etc
 
 "
 Class {
-	#name : #ScratchSpriteMorph,
-	#superclass : #ScriptableScratchMorph,
+	#name : #PhratchSpriteMorph,
+	#superclass : #ScriptablePhratchMorph,
 	#instVars : [
 		'scalePoint',
 		'rotationDegrees',
@@ -40,7 +40,7 @@ Class {
 }
 
 { #category : #'block specs' }
-ScratchSpriteMorph class >> blockSpecs [
+PhratchSpriteMorph class >> blockSpecs [
 
 	| blocks |
 	blocks := #(
@@ -147,7 +147,7 @@ ScratchSpriteMorph class >> blockSpecs [
 ]
 
 { #category : #nesting }
-ScratchSpriteMorph >> addSubsprite: aSprite [
+PhratchSpriteMorph >> addSubsprite: aSprite [
 	"private"
 
 	subsprites add: aSprite
@@ -155,7 +155,7 @@ ScratchSpriteMorph >> addSubsprite: aSprite [
 ]
 
 { #category : #nesting }
-ScratchSpriteMorph >> allBounds [
+PhratchSpriteMorph >> allBounds [
 
 	| l t r b |
 	l := ((self allSubsprites add: self; yourself) collect: [:s | s fullBounds left]) min.
@@ -169,7 +169,7 @@ ScratchSpriteMorph >> allBounds [
 ]
 
 { #category : #nesting }
-ScratchSpriteMorph >> allSubsprites [
+PhratchSpriteMorph >> allSubsprites [
 
 	| all |
 	all := subsprites copy.
@@ -179,7 +179,7 @@ ScratchSpriteMorph >> allSubsprites [
 ]
 
 { #category : #'byob OOP' }
-ScratchSpriteMorph >> asReferenceTuple [
+PhratchSpriteMorph >> asReferenceTuple [
 
 	" answer an array describing the receiver in an abstract way
 	format conventions:"
@@ -191,7 +191,7 @@ ScratchSpriteMorph >> asReferenceTuple [
 ]
 
 { #category : #'byob OOP' }
-ScratchSpriteMorph >> attribute: attr [
+PhratchSpriteMorph >> attribute: attr [
 	"Answer the value of my variable or built-in attribute with the given name. Answer zero if I have no attribute or variable with the given name."
 
 	| a |
@@ -214,21 +214,21 @@ ScratchSpriteMorph >> attribute: attr [
 	'name' localized = a ifTrue: [^ self objName].
 	'prototype' localized = a ifTrue: [^ self prototype].
 	'owner' localized = a ifTrue: [^ self ownerSprite].
-	'parts' localized = a ifTrue: [^ ScratchListMorph on: self subsprites].
+	'parts' localized = a ifTrue: [^ PhratchListMorph on: self subsprites].
 
 	^ 0
 
 ]
 
 { #category : #'sensing ops' }
-ScratchSpriteMorph >> attributeNames [
+PhratchSpriteMorph >> attributeNames [
 
 	^ #('x position' 'y position' 'direction' 'costume #' 'size' 'volume') collect: [:s | s]
 
 ]
 
 { #category : #'motion ops' }
-ScratchSpriteMorph >> bounceOffEdge [
+PhratchSpriteMorph >> bounceOffEdge [
 	"Set my direction to bounce off the edge."
 
 	| myBox edgeBox dirX dirY |
@@ -255,7 +255,7 @@ ScratchSpriteMorph >> bounceOffEdge [
 ]
 
 { #category : #'looks ops' }
-ScratchSpriteMorph >> bubble: obj thinkFlag: thinkFlag promptFlag: promptFlag [
+PhratchSpriteMorph >> bubble: obj thinkFlag: thinkFlag promptFlag: promptFlag [
 	"Make a talk bubble with the given string."
 
 	| s talkBubble objToShow |
@@ -295,13 +295,13 @@ ScratchSpriteMorph >> bubble: obj thinkFlag: thinkFlag promptFlag: promptFlag [
 ]
 
 { #category : #nesting }
-ScratchSpriteMorph >> cacheRefPos [
+PhratchSpriteMorph >> cacheRefPos [
 	refPos := self referencePosition.
 	self spread
 ]
 
 { #category : #'pen ops' }
-ScratchSpriteMorph >> changePenHueBy: aNumber [
+PhratchSpriteMorph >> changePenHueBy: aNumber [
 	"Change the pen hue by given number."
 
 	self setPenHueTo: penHue + aNumber.
@@ -310,7 +310,7 @@ ScratchSpriteMorph >> changePenHueBy: aNumber [
 ]
 
 { #category : #'pen ops' }
-ScratchSpriteMorph >> changePenShadeBy: aNumber [
+PhratchSpriteMorph >> changePenShadeBy: aNumber [
 	"Change the pen shade (lightness) by given number"
 
 	self setPenShadeTo: penShade + aNumber.
@@ -318,7 +318,7 @@ ScratchSpriteMorph >> changePenShadeBy: aNumber [
 ]
 
 { #category : #'pen ops' }
-ScratchSpriteMorph >> changePenSizeBy: aNumber [
+PhratchSpriteMorph >> changePenSizeBy: aNumber [
 	"Change my pen width."
 
 	self penSize: penSize + aNumber.
@@ -326,7 +326,7 @@ ScratchSpriteMorph >> changePenSizeBy: aNumber [
 ]
 
 { #category : #'looks ops' }
-ScratchSpriteMorph >> changeSizeBy: delta [
+PhratchSpriteMorph >> changeSizeBy: delta [
 	"Change my size by the given delta."
 
 	self setSizeTo: (self virtualScale + delta).
@@ -334,7 +334,7 @@ ScratchSpriteMorph >> changeSizeBy: delta [
 ]
 
 { #category : #'looks ops' }
-ScratchSpriteMorph >> changeStretchBy: delta [
+PhratchSpriteMorph >> changeStretchBy: delta [
 	"Change my aspect ratio by the given amount."
 
 	| currentStretch |
@@ -344,7 +344,7 @@ ScratchSpriteMorph >> changeStretchBy: delta [
 ]
 
 { #category : #'motion ops' }
-ScratchSpriteMorph >> changeXposBy: aNumber [
+PhratchSpriteMorph >> changeXposBy: aNumber [
 	"Move right by the given amount."
 
 	self xpos: self xpos + aNumber
@@ -356,7 +356,7 @@ ScratchSpriteMorph >> changeXposBy: aNumber [
 ]
 
 { #category : #'motion ops' }
-ScratchSpriteMorph >> changeYposBy: aNumber [
+PhratchSpriteMorph >> changeYposBy: aNumber [
 	"Move up by the given amount."
 
 	self ypos: self ypos + aNumber
@@ -368,14 +368,14 @@ ScratchSpriteMorph >> changeYposBy: aNumber [
 ]
 
 { #category : #'byob OOP' }
-ScratchSpriteMorph >> children [
-	^ ScratchListMorph on: self instances
+PhratchSpriteMorph >> children [
+	^ PhratchListMorph on: self instances
 ]
 
 { #category : #'byob OOP' }
-ScratchSpriteMorph >> choosePrototype [
+PhratchSpriteMorph >> choosePrototype [
 	| stage choice |
-	stage := self ownerOrYourselfThatIsA: ScratchStageMorph.
+	stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
 	stage ifNil: [^ self].
 	choice := stage userSelectSpriteDefault: prototype butNotAnyOf: {self. prototype}.
 	choice ifNil: [^ self].
@@ -385,21 +385,21 @@ ScratchSpriteMorph >> choosePrototype [
 ]
 
 { #category : #'pen ops' }
-ScratchSpriteMorph >> clearPenTrails [
+PhratchSpriteMorph >> clearPenTrails [
 	"Clear the pen trails layer."
 
 	| m |
-	(m := self ownerOrYourselfThatIsA: ScratchStageMorph)
+	(m := self ownerOrYourselfThatIsA: PhratchStageMorph)
 		ifNotNil: [m clearPenTrails].
 
 ]
 
 { #category : #'clone ops' }
-ScratchSpriteMorph >> cloneAndSend: msgName [
+PhratchSpriteMorph >> cloneAndSend: msgName [
 	"Clone this sprite and send the clone (and only the clone) the given message."
 
 	| frame clone |
-	(frame := self ownerOrYourselfThatIsA: ScratchFrameMorph) ifNil: [^ self].
+	(frame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNil: [^ self].
 
 	clone := self fullCopy.
 	clone objName: objName, ' clone'.
@@ -413,7 +413,7 @@ ScratchSpriteMorph >> cloneAndSend: msgName [
 ]
 
 { #category : #'motion ops' }
-ScratchSpriteMorph >> color: sensitiveColor sees: soughtColor [
+PhratchSpriteMorph >> color: sensitiveColor sees: soughtColor [
 	"Return true if any of my pixels of sensitiveColor intersect with pixels of soughtColor in the world."
 
 	| r myImage sensitivePixelsMask map index imageBelowMe result |
@@ -452,7 +452,7 @@ ScratchSpriteMorph >> color: sensitiveColor sees: soughtColor [
 ]
 
 { #category : #geometry }
-ScratchSpriteMorph >> containsPoint: aPoint [
+PhratchSpriteMorph >> containsPoint: aPoint [
 
 	^ (self bounds containsPoint: aPoint) and:
 	  [(self rotatedForm isTransparentAt: aPoint - bounds origin) not]
@@ -460,12 +460,12 @@ ScratchSpriteMorph >> containsPoint: aPoint [
 ]
 
 { #category : #nesting }
-ScratchSpriteMorph >> copyForExport [
+PhratchSpriteMorph >> copyForExport [
 	"Answer a copy of me for exporting."
 	"Note: Sprites are always exported in the context of an empty background."
 
 	| objToExport |
-	objToExport := ScratchStageMorph new clearMediaAndCostume.
+	objToExport := PhratchStageMorph new clearMediaAndCostume.
 	objToExport position: owner position.
 	customBlocks ifNotNil: [
 		customBlocks do: [:eachDef | 
@@ -480,7 +480,7 @@ ScratchSpriteMorph >> copyForExport [
 ]
 
 { #category : #accessing }
-ScratchSpriteMorph >> defaultImageMedia [
+PhratchSpriteMorph >> defaultImageMedia [
 
 	^ ImageMedia new
 		form: (Form extent: 8@8 depth: 8) fillWhite;
@@ -489,7 +489,7 @@ ScratchSpriteMorph >> defaultImageMedia [
 ]
 
 { #category : #'motion ops' }
-ScratchSpriteMorph >> directionMenu [
+PhratchSpriteMorph >> directionMenu [
 	"Provides a drop-down menu for setting the sprite direction."
 
 	| menu |
@@ -507,7 +507,7 @@ ScratchSpriteMorph >> directionMenu [
 ]
 
 { #category : #'motion ops' }
-ScratchSpriteMorph >> distanceTo: anObject [
+PhratchSpriteMorph >> distanceTo: anObject [
 	"Answer the distance to the given sprite."
 
 	| aSpriteOrSymbol |
@@ -522,7 +522,7 @@ ScratchSpriteMorph >> distanceTo: anObject [
 ]
 
 { #category : #accessing }
-ScratchSpriteMorph >> draggable [
+PhratchSpriteMorph >> draggable [
 
 	draggable ifNil: [draggable := true].
 	^ draggable
@@ -530,7 +530,7 @@ ScratchSpriteMorph >> draggable [
 ]
 
 { #category : #accessing }
-ScratchSpriteMorph >> draggable: aBoolean [
+PhratchSpriteMorph >> draggable: aBoolean [
 
 	self undeleteAttribute: #isDraggable.
 	self passiveSetDraggable: aBoolean
@@ -538,7 +538,7 @@ ScratchSpriteMorph >> draggable: aBoolean [
 ]
 
 { #category : #drawing }
-ScratchSpriteMorph >> drawOn: aCanvas [
+PhratchSpriteMorph >> drawOn: aCanvas [
 	"Draw myself if my visibility is > 0. If my visibility is 1, draw using the normal 'paint' mode. Otherwise, draw using 'alpha' resulting in a partially transparent rendering."
 
 	| f alpha |
@@ -554,7 +554,7 @@ ScratchSpriteMorph >> drawOn: aCanvas [
 ]
 
 { #category : #drawing }
-ScratchSpriteMorph >> drawSubmorphsOn: aCanvas [
+PhratchSpriteMorph >> drawSubmorphsOn: aCanvas [
 	"Display submorphs back to front, but do not draw and talk/think bubble submorphs."
 
 	submorphs reverseDo: [:m |
@@ -564,7 +564,7 @@ ScratchSpriteMorph >> drawSubmorphsOn: aCanvas [
 ]
 
 { #category : #drawing }
-ScratchSpriteMorph >> drawTalkBubbleOn: aCanvas [
+PhratchSpriteMorph >> drawTalkBubbleOn: aCanvas [
 	"Draw and talk/think bubble submorphs."
 
 	submorphs size = 0 ifTrue: [^ self].
@@ -575,7 +575,7 @@ ScratchSpriteMorph >> drawTalkBubbleOn: aCanvas [
 ]
 
 { #category : #nesting }
-ScratchSpriteMorph >> feedbackMorph [
+PhratchSpriteMorph >> feedbackMorph [
 
 	|outline1 outline2 rf stage realPos|
 	rf := self rotatedForm.
@@ -610,7 +610,7 @@ ScratchSpriteMorph >> feedbackMorph [
 		combinationRule: Form paint;
 		copyQuad: outline1 boundingBox innerCorners toRect: (outline2 boundingBox insetBy: 3).
 
-	stage := self ownerOrYourselfThatIsA: ScratchStageMorph.
+	stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
 	(stage notNil and: [stage isQuarterSize]) ifTrue: [
 		outline2 := outline2 magnifyBy: 0.5.
 		realPos := stage position + (self position - stage position / 2).
@@ -627,28 +627,28 @@ ScratchSpriteMorph >> feedbackMorph [
 ]
 
 { #category : #'object i/o' }
-ScratchSpriteMorph >> fieldsVersion [
+PhratchSpriteMorph >> fieldsVersion [
 
 	^ 5
 
 ]
 
 { #category : #nesting }
-ScratchSpriteMorph >> follow [
+PhratchSpriteMorph >> follow [
 	offset ifNil: [
 		offset := self referencePosition - ownerSprite referencePosition].
 	self spread
 ]
 
 { #category : #nesting }
-ScratchSpriteMorph >> followNow [
+PhratchSpriteMorph >> followNow [
 	self step.
 	self spread.
 
 ]
 
 { #category : #'motion ops' }
-ScratchSpriteMorph >> forward: distance [
+PhratchSpriteMorph >> forward: distance [
 	"Move the object forward (i.e., the direction of its heading) by the given distance.
 	Avoid infinite or NaN coordinates"
 
@@ -674,7 +674,7 @@ ScratchSpriteMorph >> forward: distance [
 ]
 
 { #category : #private }
-ScratchSpriteMorph >> generateRotatedForm [
+PhratchSpriteMorph >> generateRotatedForm [
 	"Compute my rotatedForm and offsetWhenRotated."
 
 	| adjustedAngle srcForm smoothPix pair |
@@ -715,7 +715,7 @@ ScratchSpriteMorph >> generateRotatedForm [
 ]
 
 { #category : #'sensing ops' }
-ScratchSpriteMorph >> getAttribute: attr [
+PhratchSpriteMorph >> getAttribute: attr [
 	"Answer the value of my variable or built-in attribute with the given name. Answer zero if I have no attribute or variable with the given name."
 
 	| a |
@@ -734,7 +734,7 @@ ScratchSpriteMorph >> getAttribute: attr [
 ]
 
 { #category : #'byob OOP' }
-ScratchSpriteMorph >> getIsDraggable [
+PhratchSpriteMorph >> getIsDraggable [
 
 	| att |
 	att := #isDraggable.
@@ -746,7 +746,7 @@ ScratchSpriteMorph >> getIsDraggable [
 ]
 
 { #category : #'byob OOP' }
-ScratchSpriteMorph >> getRotationStyle [
+PhratchSpriteMorph >> getRotationStyle [
 	"Set my rotation style to #normal, #leftRight, or #none. Styles mean:
 		#normal	-- smooth 360 degree rotation
 		#leftRight	-- flip about the vertical axis
@@ -766,7 +766,7 @@ ScratchSpriteMorph >> getRotationStyle [
 ]
 
 { #category : #'motion ops' }
-ScratchSpriteMorph >> glideSecs: duration toX: endX y: endY elapsed: elapsed from: startPoint [
+PhratchSpriteMorph >> glideSecs: duration toX: endX y: endY elapsed: elapsed from: startPoint [
 	"Interpolate my position from my current postion to the given x and y over the given duration. If startPoint is nil, just answer my current position; this sets the starting point for the interpolation."
 
 	| fraction endPoint rPos |
@@ -802,7 +802,7 @@ ScratchSpriteMorph >> glideSecs: duration toX: endX y: endY elapsed: elapsed fro
 ]
 
 { #category : #'looks ops' }
-ScratchSpriteMorph >> goBackByLayers: aNumber [
+PhratchSpriteMorph >> goBackByLayers: aNumber [
 	"Decrease my layer by (i.e., move me towards the back by) the given number of layers."
 
 	self setLayerTo: self layer + aNumber truncated
@@ -815,11 +815,11 @@ ScratchSpriteMorph >> goBackByLayers: aNumber [
 ]
 
 { #category : #'motion ops' }
-ScratchSpriteMorph >> gotoSpriteOrMouse: anObject [
+PhratchSpriteMorph >> gotoSpriteOrMouse: anObject [
 	"Go to the given sprite or mouse position."
 
 	| x y len aSpriteOrSymbol p |
-	(anObject isKindOf: ScratchListMorph) ifTrue: [ "try to go the coordinates specified in a list"
+	(anObject isKindOf: PhratchListMorph) ifTrue: [ "try to go the coordinates specified in a list"
 		x := self xpos.
 		y := self ypos.
 		len := anObject lineCount.
@@ -840,7 +840,7 @@ ScratchSpriteMorph >> gotoSpriteOrMouse: anObject [
 ]
 
 { #category : #'motion ops' }
-ScratchSpriteMorph >> gotoX: x y: y [
+PhratchSpriteMorph >> gotoX: x y: y [
 
 	self xpos: x; ypos: y
 
@@ -855,7 +855,7 @@ ScratchSpriteMorph >> gotoX: x y: y [
 ]
 
 { #category : #'motion ops' }
-ScratchSpriteMorph >> gotoX: endX y: endY duration: duration elapsed: elapsed from: startPoint [
+PhratchSpriteMorph >> gotoX: endX y: endY duration: duration elapsed: elapsed from: startPoint [
 	"Interpolate my position from startPoint to endPoint over the given duration. If startPoint is nil, just answer my current position; this sets the starting point for the interpolation."
 
 	| fraction endPoint |
@@ -871,7 +871,7 @@ ScratchSpriteMorph >> gotoX: endX y: endY duration: duration elapsed: elapsed fr
 ]
 
 { #category : #private }
-ScratchSpriteMorph >> grabFormFromScreen [
+PhratchSpriteMorph >> grabFormFromScreen [
 	"Grab a rectangular portion of the screen selected by the user and trim white pixels from around edges (this assumes the stage is white). If the resulting form is empty, return nil."
 
 	| f f2 |
@@ -887,7 +887,7 @@ ScratchSpriteMorph >> grabFormFromScreen [
 ]
 
 { #category : #'right button menu' }
-ScratchSpriteMorph >> grabFromScreen [
+PhratchSpriteMorph >> grabFromScreen [
 	"Set my form to be a rectangular portion of the screen."
 
 	| f el |
@@ -904,12 +904,12 @@ ScratchSpriteMorph >> grabFromScreen [
 ]
 
 { #category : #nesting }
-ScratchSpriteMorph >> hasSubsprites [
+PhratchSpriteMorph >> hasSubsprites [
 	^subsprites size > 0
 ]
 
 { #category : #accessing }
-ScratchSpriteMorph >> heading [
+PhratchSpriteMorph >> heading [
 	"Answer my heading in degrees, a number between -180 and 180."
 
 	| result att |
@@ -926,7 +926,7 @@ ScratchSpriteMorph >> heading [
 ]
 
 { #category : #accessing }
-ScratchSpriteMorph >> heading: headingDegrees [
+PhratchSpriteMorph >> heading: headingDegrees [
 	"Set my heading in degrees, where 0 degrees is facing up and the heading increases clockwise."
 	"Note: Our convention is that artwork is drawing facing to the right. Thus, a heading of 90 corresponds to a rotationDegrees of zero."
 
@@ -935,7 +935,7 @@ ScratchSpriteMorph >> heading: headingDegrees [
 ]
 
 { #category : #'looks ops' }
-ScratchSpriteMorph >> hide [
+PhratchSpriteMorph >> hide [
 	"Make myself invisible."
 
 	self setHideFlagTo: true
@@ -947,20 +947,20 @@ ScratchSpriteMorph >> hide [
 ]
 
 { #category : #'sensing ops' }
-ScratchSpriteMorph >> hideQuestion [
+PhratchSpriteMorph >> hideQuestion [
 	"Hide my question prompt."
 
 ]
 
 { #category : #nesting }
-ScratchSpriteMorph >> holdSubsprites [
+PhratchSpriteMorph >> holdSubsprites [
 	"private"
 
 	subsprites do: [:each | each follow].
 ]
 
 { #category : #'object i/o' }
-ScratchSpriteMorph >> initFieldsFrom: anObjStream version: classVersion [
+PhratchSpriteMorph >> initFieldsFrom: anObjStream version: classVersion [
 
 	super initFieldsFrom: anObjStream version: classVersion.
 
@@ -1015,7 +1015,7 @@ ScratchSpriteMorph >> initFieldsFrom: anObjStream version: classVersion [
 ]
 
 { #category : #initialization }
-ScratchSpriteMorph >> initialize [
+PhratchSpriteMorph >> initialize [
 
 	super initialize.
 	subsprites := OrderedCollection new.
@@ -1035,32 +1035,32 @@ ScratchSpriteMorph >> initialize [
 ]
 
 { #category : #nesting }
-ScratchSpriteMorph >> initializeNodes [
+PhratchSpriteMorph >> initializeNodes [
 	ownerSprite := nil.
 	subsprites := OrderedCollection new.
 ]
 
 { #category : #'motion ops' }
-ScratchSpriteMorph >> isClone [
+PhratchSpriteMorph >> isClone [
 
 	^ isClone
 
 ]
 
 { #category : #accessing }
-ScratchSpriteMorph >> isClone: aBoolean [
+PhratchSpriteMorph >> isClone: aBoolean [
 
 	isClone := aBoolean.
 
 ]
 
 { #category : #nesting }
-ScratchSpriteMorph >> isNested [
+PhratchSpriteMorph >> isNested [
 	^self hasSubsprites or: [ownerSprite notNil]
 ]
 
 { #category : #'motion ops' }
-ScratchSpriteMorph >> isOnEdge [
+PhratchSpriteMorph >> isOnEdge [
 	"Answer true if I'm touching the edge of my owner."
 
 	| result |
@@ -1073,7 +1073,7 @@ ScratchSpriteMorph >> isOnEdge [
 ]
 
 { #category : #nesting }
-ScratchSpriteMorph >> isOrContains: aSprite [
+PhratchSpriteMorph >> isOrContains: aSprite [
 
 	self == aSprite
 		ifTrue: [^ true].
@@ -1083,7 +1083,7 @@ ScratchSpriteMorph >> isOrContains: aSprite [
 ]
 
 { #category : #accessing }
-ScratchSpriteMorph >> isPaintable [
+PhratchSpriteMorph >> isPaintable [
 	"Answer true if my image can be repainted."
 
 	^ true
@@ -1091,7 +1091,7 @@ ScratchSpriteMorph >> isPaintable [
 ]
 
 { #category : #accessing }
-ScratchSpriteMorph >> isRotatable [
+PhratchSpriteMorph >> isRotatable [
 	"Answer true if my image can be rotated."
 
 	^ true
@@ -1099,18 +1099,18 @@ ScratchSpriteMorph >> isRotatable [
 ]
 
 { #category : #accessing }
-ScratchSpriteMorph >> isSprite [
+PhratchSpriteMorph >> isSprite [
 
 	^ true
 
 ]
 
 { #category : #'event handling' }
-ScratchSpriteMorph >> justDroppedInto: newOwner event: evt [
+PhratchSpriteMorph >> justDroppedInto: newOwner event: evt [
 	
 	self releaseSubsprites.
 	super justDroppedInto: newOwner event: evt.
-	(newOwner isKindOf: ScratchStageMorph) ifTrue: [self positionTalkBubble].
+	(newOwner isKindOf: PhratchStageMorph) ifTrue: [self positionTalkBubble].
 
 	self xpos: self xpos.
 	self ypos: self ypos 
@@ -1119,7 +1119,7 @@ ScratchSpriteMorph >> justDroppedInto: newOwner event: evt [
 ]
 
 { #category : #nesting }
-ScratchSpriteMorph >> keepOnScreen [
+PhratchSpriteMorph >> keepOnScreen [
 	"Make me stick to edge of my owner."
 
 	| edgeBox allBounds xpos ypos |
@@ -1128,7 +1128,7 @@ ScratchSpriteMorph >> keepOnScreen [
 
 	ownerSprite ifNotNil: [^self].
 	owner ifNil: [^ self].
-	(owner isKindOf: ScratchStageMorph) ifFalse: [^ self].
+	(owner isKindOf: PhratchStageMorph) ifFalse: [^ self].
 	
 	allBounds := self allBounds.
 	(owner bounds containsRect: allBounds) ifTrue: [^ self].  "entirely on screen"
@@ -1156,7 +1156,7 @@ ScratchSpriteMorph >> keepOnScreen [
 ]
 
 { #category : #'looks ops' }
-ScratchSpriteMorph >> layer: aNumber [
+PhratchSpriteMorph >> layer: aNumber [
 
 	| n submorphsMinusMe newSubmorphs |
 	owner ifNil: [^ 1].
@@ -1172,7 +1172,7 @@ ScratchSpriteMorph >> layer: aNumber [
 ]
 
 { #category : #private }
-ScratchSpriteMorph >> layoutChanged [
+PhratchSpriteMorph >> layoutChanged [
 	"Update rotatedForm and offsetWhenRotated and compute new bounds."
 
 	| refPoint |
@@ -1191,7 +1191,7 @@ ScratchSpriteMorph >> layoutChanged [
 ]
 
 { #category : #'looks ops' }
-ScratchSpriteMorph >> lookLike: costumeName [
+PhratchSpriteMorph >> lookLike: costumeName [
 
 	self undeleteAttribute: #costumeIndex.
 	self passiveLookLike: costumeName.
@@ -1200,7 +1200,7 @@ ScratchSpriteMorph >> lookLike: costumeName [
 ]
 
 { #category : #'looks ops' }
-ScratchSpriteMorph >> multiplySizeBy: factor [
+PhratchSpriteMorph >> multiplySizeBy: factor [
 	"Used by the magnifying glass tool. Multiply my scale by the given factor."
 
 	self setSizeTo: 100.0 * (self scalePoint x max: self scalePoint y) * factor.
@@ -1208,7 +1208,7 @@ ScratchSpriteMorph >> multiplySizeBy: factor [
 ]
 
 { #category : #nesting }
-ScratchSpriteMorph >> ownerSprite [
+PhratchSpriteMorph >> ownerSprite [
 
 	| att |
 	att := #anchor.
@@ -1220,12 +1220,12 @@ ScratchSpriteMorph >> ownerSprite [
 ]
 
 { #category : #'byob OOP' }
-ScratchSpriteMorph >> parts [
-	^ ScratchListMorph on: self subsprites
+PhratchSpriteMorph >> parts [
+	^ PhratchListMorph on: self subsprites
 ]
 
 { #category : #'byob OOP' }
-ScratchSpriteMorph >> passiveLookLike: costumeName [
+PhratchSpriteMorph >> passiveLookLike: costumeName [
 
 	super lookLike: costumeName.
 	self positionTalkBubble.
@@ -1236,7 +1236,7 @@ ScratchSpriteMorph >> passiveLookLike: costumeName [
 ]
 
 { #category : #'byob OOP' }
-ScratchSpriteMorph >> passivePenColor: aColor [
+PhratchSpriteMorph >> passivePenColor: aColor [
 	"Set my pen color."
 
 	| b |
@@ -1252,7 +1252,7 @@ ScratchSpriteMorph >> passivePenColor: aColor [
 ]
 
 { #category : #'byob OOP' }
-ScratchSpriteMorph >> passivePenDown: aBoolean [
+PhratchSpriteMorph >> passivePenDown: aBoolean [
 
 	| m |
 	(aBoolean isKindOf: Boolean)
@@ -1261,7 +1261,7 @@ ScratchSpriteMorph >> passivePenDown: aBoolean [
 	penColor ifNil: [penColor := Color black].  "initialize if necessary"
 	penSize ifNil: [penSize := 1].  "initialize if necessary"
 
-	(m := self ownerOrYourselfThatIsA: ScratchStageMorph)
+	(m := self ownerOrYourselfThatIsA: PhratchStageMorph)
 		ifNotNil: [m penUpOrDownChangeFor: self].
 
 	self propagate: #penDown
@@ -1269,17 +1269,17 @@ ScratchSpriteMorph >> passivePenDown: aBoolean [
 ]
 
 { #category : #'byob OOP' }
-ScratchSpriteMorph >> passivePenSize: aNumber [
+PhratchSpriteMorph >> passivePenSize: aNumber [
 	"Set my pen width."
 
-	penSize := aNumber asNumberNoError rounded min: (ScratchFrameMorph workpaneExtent x * 2) max: 1.
+	penSize := aNumber asNumberNoError rounded min: (PhratchFrameMorph workpaneExtent x * 2) max: 1.
 
 	self propagate: #penSize
 
 ]
 
 { #category : #'byob OOP' }
-ScratchSpriteMorph >> passiveRotationStyle: aNumber [
+PhratchSpriteMorph >> passiveRotationStyle: aNumber [
 	"Set my rotation style to #normal, #leftRight, or #none. Styles mean:
 		#normal	-- smooth 360 degree rotation
 		#leftRight	-- flip about the vertical axis
@@ -1299,7 +1299,7 @@ ScratchSpriteMorph >> passiveRotationStyle: aNumber [
 ]
 
 { #category : #'byob OOP' }
-ScratchSpriteMorph >> passiveSetDraggable: aBoolean [
+PhratchSpriteMorph >> passiveSetDraggable: aBoolean [
 
 	| se |
 	draggable := aBoolean.
@@ -1310,7 +1310,7 @@ ScratchSpriteMorph >> passiveSetDraggable: aBoolean [
 ]
 
 { #category : #'byob OOP' }
-ScratchSpriteMorph >> passiveSetPenHueTo: aNumber [
+PhratchSpriteMorph >> passiveSetPenHueTo: aNumber [
 	"Set the pen hue to given number between 0 and 200. (That makes 100 the 'maximum' distance away from the original color on the color wheel.)"
 
 	penHue := aNumber asNumberNoError \\ 200.
@@ -1321,7 +1321,7 @@ ScratchSpriteMorph >> passiveSetPenHueTo: aNumber [
 ]
 
 { #category : #'byob OOP' }
-ScratchSpriteMorph >> passiveSetPenShadeTo: aNumber [
+PhratchSpriteMorph >> passiveSetPenShadeTo: aNumber [
 	"Set the pen shade (lightness) to given number between 0 and 100. A shade of 0 is black, 100 is white, and 50 is fully saturated color."
 	"Details: We don't want to get all the way to pure black or white, so we divide the range 0..50 by a number > 50 when computing the fraction of the original color to mix with black or white."
 
@@ -1344,14 +1344,14 @@ ScratchSpriteMorph >> passiveSetPenShadeTo: aNumber [
 ]
 
 { #category : #nesting }
-ScratchSpriteMorph >> passiveSetRotateWithOwner: aBoolean [
+PhratchSpriteMorph >> passiveSetRotateWithOwner: aBoolean [
 	rotateWithOwner := aBoolean.
 	self costumeChanged
 
 ]
 
 { #category : #'byob OOP' }
-ScratchSpriteMorph >> passiveSetSizeTo: percent [
+PhratchSpriteMorph >> passiveSetSizeTo: percent [
 	"Set my size to the given percent of the original size. Limit the range to avoid accidentally 
 	making me invisibly tiny or really huge. Retain my aspect ratio (i.e., my stretch)."
 
@@ -1362,7 +1362,7 @@ ScratchSpriteMorph >> passiveSetSizeTo: percent [
 
 	origExtent := self costumeForm extent asFloatPoint.
 	minExtent := (origExtent min: 5@5) asFloatPoint.
-	maxExtent := ScratchFrameMorph workpaneExtent asFloatPoint * 1.5.
+	maxExtent := PhratchFrameMorph workpaneExtent asFloatPoint * 1.5.
 	minScale := ((minExtent x / origExtent x) max: (minExtent y / origExtent y)) min: 1.0.
 	maxScale := (maxExtent x / origExtent x) min: (maxExtent y / origExtent y).
 
@@ -1385,9 +1385,9 @@ ScratchSpriteMorph >> passiveSetSizeTo: percent [
 ]
 
 { #category : #nesting }
-ScratchSpriteMorph >> passiveStickTo: aSprite [
+PhratchSpriteMorph >> passiveStickTo: aSprite [
 
-	(aSprite isKindOf: ScratchSpriteMorph) ifFalse: [
+	(aSprite isKindOf: PhratchSpriteMorph) ifFalse: [
 		^ self unhinge].
 
 	(self isOrContains: aSprite) ifTrue: [^self].
@@ -1403,7 +1403,7 @@ ScratchSpriteMorph >> passiveStickTo: aSprite [
 ]
 
 { #category : #'byob OOP' }
-ScratchSpriteMorph >> passiveTurn: degrees [
+PhratchSpriteMorph >> passiveTurn: degrees [
 	| newPos |
 	"Turn clockwise the given number of degrees."
 
@@ -1421,7 +1421,7 @@ ScratchSpriteMorph >> passiveTurn: degrees [
 ]
 
 { #category : #'byob OOP' }
-ScratchSpriteMorph >> passiveXpos: aNumber [ 
+PhratchSpriteMorph >> passiveXpos: aNumber [ 
 
 	| num newX |
 	num := aNumber asNumberNoError.
@@ -1436,7 +1436,7 @@ ScratchSpriteMorph >> passiveXpos: aNumber [
 ]
 
 { #category : #'byob OOP' }
-ScratchSpriteMorph >> passiveYpos: aNumber [
+PhratchSpriteMorph >> passiveYpos: aNumber [
 
 	| num newY |
 	num := aNumber asNumberNoError.
@@ -1451,14 +1451,14 @@ ScratchSpriteMorph >> passiveYpos: aNumber [
 ]
 
 { #category : #'pen ops' }
-ScratchSpriteMorph >> penColor [
+PhratchSpriteMorph >> penColor [
 
 	^ penColor
 
 ]
 
 { #category : #'pen ops' }
-ScratchSpriteMorph >> penColor: aColor [
+PhratchSpriteMorph >> penColor: aColor [
 	"Set my pen color."
 
 	self undeleteAttribute: #penColor.
@@ -1466,7 +1466,7 @@ ScratchSpriteMorph >> penColor: aColor [
 ]
 
 { #category : #'pen ops' }
-ScratchSpriteMorph >> penDown [
+PhratchSpriteMorph >> penDown [
 
 	| att |
 	att := #penDown.
@@ -1479,14 +1479,14 @@ ScratchSpriteMorph >> penDown [
 ]
 
 { #category : #'pen ops' }
-ScratchSpriteMorph >> penDown: aBoolean [
+PhratchSpriteMorph >> penDown: aBoolean [
 
 	self undeleteAttribute: #penDown.
 	self passivePenDown: aBoolean
 ]
 
 { #category : #'BYOB attributes' }
-ScratchSpriteMorph >> penHue [
+PhratchSpriteMorph >> penHue [
 
 	| att |
 	att := #penColor.
@@ -1498,14 +1498,14 @@ ScratchSpriteMorph >> penHue [
 ]
 
 { #category : #'pen ops' }
-ScratchSpriteMorph >> penPosition [
+PhratchSpriteMorph >> penPosition [
 
 	^ self referencePosition
 
 ]
 
 { #category : #'BYOB attributes' }
-ScratchSpriteMorph >> penShade [
+PhratchSpriteMorph >> penShade [
 
 	| att |
 	att := #penShade.
@@ -1517,7 +1517,7 @@ ScratchSpriteMorph >> penShade [
 ]
 
 { #category : #'pen ops' }
-ScratchSpriteMorph >> penSize [
+PhratchSpriteMorph >> penSize [
 
 	| att |
 	att := #penSize.
@@ -1530,7 +1530,7 @@ ScratchSpriteMorph >> penSize [
 ]
 
 { #category : #'pen ops' }
-ScratchSpriteMorph >> penSize: aNumber [
+PhratchSpriteMorph >> penSize: aNumber [
 	"Set my pen width."
 
 	self undeleteAttribute: #penSize.
@@ -1538,7 +1538,7 @@ ScratchSpriteMorph >> penSize: aNumber [
 ]
 
 { #category : #'motion ops' }
-ScratchSpriteMorph >> pointToX: x y: y [
+PhratchSpriteMorph >> pointToX: x y: y [
 	"Set my heading to point at the given point."
 
 	| delta angle |
@@ -1559,7 +1559,7 @@ ScratchSpriteMorph >> pointToX: x y: y [
 ]
 
 { #category : #'motion ops' }
-ScratchSpriteMorph >> pointTowards: anObject [
+PhratchSpriteMorph >> pointTowards: anObject [
 	"Point toward the given sprite."
 
 	| aSpriteOrSymbol p |
@@ -1574,7 +1574,7 @@ ScratchSpriteMorph >> pointTowards: anObject [
 ]
 
 { #category : #accessing }
-ScratchSpriteMorph >> position: aPoint [ 
+PhratchSpriteMorph >> position: aPoint [ 
 	"Change the position of this morph and and all of its
 	submorphs. "
 	| delta box |
@@ -1599,11 +1599,11 @@ ScratchSpriteMorph >> position: aPoint [
 ]
 
 { #category : #private }
-ScratchSpriteMorph >> positionTalkBubble [
+PhratchSpriteMorph >> positionTalkBubble [
 
 	| bubble stage stageBounds y f r yInset strip x |
 	(bubble := self valueOfProperty: #talkBubble) ifNil: [^ self].
-	(stage := self ownerOrYourselfThatIsA: ScratchStageMorph) ifNil: [^ self].
+	(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNil: [^ self].
 	stageBounds := stage bounds.
 
 	f := self imageForm.
@@ -1629,24 +1629,24 @@ ScratchSpriteMorph >> positionTalkBubble [
 ]
 
 { #category : #nesting }
-ScratchSpriteMorph >> privateOwnerSprite: aSprite [
+PhratchSpriteMorph >> privateOwnerSprite: aSprite [
 
 	ownerSprite := aSprite
 ]
 
 { #category : #nesting }
-ScratchSpriteMorph >> privateSubsprites: anOrderedCollection [
+PhratchSpriteMorph >> privateSubsprites: anOrderedCollection [
 
 	subsprites := anOrderedCollection
 ]
 
 { #category : #'byob OOP' }
-ScratchSpriteMorph >> prototype [
+PhratchSpriteMorph >> prototype [
 	^ prototype
 ]
 
 { #category : #'byob OOP' }
-ScratchSpriteMorph >> prototype: aSprite [
+PhratchSpriteMorph >> prototype: aSprite [
 
 	| sFrame |
 	prototype := aSprite.
@@ -1656,14 +1656,14 @@ ScratchSpriteMorph >> prototype: aSprite [
 		undeleteAllAttributes;
 		undeleteAllVariables;
 		undeleteAllBlocks.
-	(sFrame := self ownerOrYourselfThatIsA: ScratchFrameMorph) ifNil: [^ self].
+	(sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNil: [^ self].
 	sFrame viewerPane categoryChanged: sFrame viewerPane currentCategory.
 	self inheritCostumesNow.
 	self inheritSoundsNow
 ]
 
 { #category : #'pen ops' }
-ScratchSpriteMorph >> putPenDown [
+PhratchSpriteMorph >> putPenDown [
 	"Put down my drawing pen (i.e. start drawing a pen trail)."
 
 	self penDown: true.
@@ -1671,7 +1671,7 @@ ScratchSpriteMorph >> putPenDown [
 ]
 
 { #category : #'pen ops' }
-ScratchSpriteMorph >> putPenUp [
+PhratchSpriteMorph >> putPenUp [
 	"Put up my drawing pen (i.e. stop drawing a pen trail)."
 
 	self penDown: false.
@@ -1679,12 +1679,12 @@ ScratchSpriteMorph >> putPenUp [
 ]
 
 { #category : #nesting }
-ScratchSpriteMorph >> realScale [
+PhratchSpriteMorph >> realScale [
 	^(100 * scalePoint x)
 ]
 
 { #category : #'looks ops' }
-ScratchSpriteMorph >> recordScene: sceneName [
+PhratchSpriteMorph >> recordScene: sceneName [
 
 	| state |
 	self isHidden ifTrue: [
@@ -1700,24 +1700,24 @@ ScratchSpriteMorph >> recordScene: sceneName [
 ]
 
 { #category : #nesting }
-ScratchSpriteMorph >> refPos [
+PhratchSpriteMorph >> refPos [
 	^refPos
 ]
 
 { #category : #nesting }
-ScratchSpriteMorph >> refPos: aPoint [
+PhratchSpriteMorph >> refPos: aPoint [
 	refPos := aPoint
 ]
 
 { #category : #accessing }
-ScratchSpriteMorph >> referencePosition [
+PhratchSpriteMorph >> referencePosition [
 
 	| p s |
 	p := (bounds origin + offsetWhenRotated) - ScratchOrigin.
 
 	"adjust when in Hand in quartersize mode:"
 	((owner isKindOf: HandMorph) and:
-	 [((s := owner formerOwner) isKindOf: ScratchStageMorph) and:
+	 [((s := owner formerOwner) isKindOf: PhratchStageMorph) and:
 	 [s isQuarterSize]]) ifTrue: [
 		"Note: this is not quite right when rotation center is offset"
 		p := (p * 2) + (240@180)].
@@ -1727,7 +1727,7 @@ ScratchSpriteMorph >> referencePosition [
 ]
 
 { #category : #accessing }
-ScratchSpriteMorph >> referencePosition: aPoint [
+PhratchSpriteMorph >> referencePosition: aPoint [
 	"Set my reference position. Avoid infinite or NaN coordinates. Keep on screen."
 
 	| newX newY p |
@@ -1745,21 +1745,21 @@ ScratchSpriteMorph >> referencePosition: aPoint [
 ]
 
 { #category : #nesting }
-ScratchSpriteMorph >> releaseSubsprites [
+PhratchSpriteMorph >> releaseSubsprites [
 
 	self followNow.
 	subsprites do: [:each | each stopFollowing].
 ]
 
 { #category : #'byob OOP' }
-ScratchSpriteMorph >> removeLocalBlockDefinitions [
+PhratchSpriteMorph >> removeLocalBlockDefinitions [
 	customBlocks ifNil: [^ self].
 	customBlocks := customBlocks select: [:def |
 		def isGlobal]
 ]
 
 { #category : #nesting }
-ScratchSpriteMorph >> removeSubsprite: aSprite [
+PhratchSpriteMorph >> removeSubsprite: aSprite [
 	"private"
 
 	subsprites remove: aSprite ifAbsent: [].
@@ -1767,23 +1767,23 @@ ScratchSpriteMorph >> removeSubsprite: aSprite [
 ]
 
 { #category : #'handle ops' }
-ScratchSpriteMorph >> resizeHandle [
+PhratchSpriteMorph >> resizeHandle [
 
 	SpriteHandleMorph resize: self
 ]
 
 { #category : #'right button menu' }
-ScratchSpriteMorph >> rightButtonMenu [
+PhratchSpriteMorph >> rightButtonMenu [
 	"Present the right button menu."
 
 	| menu stage |
 	menu := MenuMorph new defaultTarget: self.
 	menu add: 'grab screen region for new costume' action: #grabFromScreen.
 	menu add: 'export this sprite' action: #exportObject.
-	stage := self ownerOrYourselfThatIsA: ScratchStageMorph.
+	stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
 	stage ifNotNil: [
-		(stage scratchServer notNil and: 
-		[stage scratchServer sessionInProgress])
+		(stage phratchServer notNil and: 
+		[stage phratchServer sessionInProgress])
 			ifTrue: [
 				menu add: 'share this sprite' action: #shareObject ]].
 	menu addLine.
@@ -1804,7 +1804,7 @@ ScratchSpriteMorph >> rightButtonMenu [
 ]
 
 { #category : #nesting }
-ScratchSpriteMorph >> rootSprite [
+PhratchSpriteMorph >> rootSprite [
 
 	| current |
 	current := self.
@@ -1814,7 +1814,7 @@ ScratchSpriteMorph >> rootSprite [
 ]
 
 { #category : #private }
-ScratchSpriteMorph >> rotateByFlipping [
+PhratchSpriteMorph >> rotateByFlipping [
 	"Compute my rotatedForm and offsetWhenRotated for unscaled rotation by a multiple of 90 degrees."
 
 	| a center srcForm |
@@ -1839,13 +1839,13 @@ ScratchSpriteMorph >> rotateByFlipping [
 ]
 
 { #category : #'handle ops' }
-ScratchSpriteMorph >> rotateHandle [
+PhratchSpriteMorph >> rotateHandle [
 
 	SpriteHandleMorph rotate: self
 ]
 
 { #category : #nesting }
-ScratchSpriteMorph >> rotateWithOwner [
+PhratchSpriteMorph >> rotateWithOwner [
 
 	| att |
 	att := #rotateWithOwner.
@@ -1858,7 +1858,7 @@ ScratchSpriteMorph >> rotateWithOwner [
 ]
 
 { #category : #nesting }
-ScratchSpriteMorph >> rotateWithOwner: aBoolean [
+PhratchSpriteMorph >> rotateWithOwner: aBoolean [
 
 	self undeleteAttribute: #rotateWithOwner.
 	self passiveSetRotateWithOwner: aBoolean
@@ -1866,7 +1866,7 @@ ScratchSpriteMorph >> rotateWithOwner: aBoolean [
 ]
 
 { #category : #accessing }
-ScratchSpriteMorph >> rotatedForm [
+PhratchSpriteMorph >> rotatedForm [
 	"Answer my rotated and scaled form."
 
 	rotatedForm ifNil: [self costumeChanged].
@@ -1875,21 +1875,21 @@ ScratchSpriteMorph >> rotatedForm [
 ]
 
 { #category : #accessing }
-ScratchSpriteMorph >> rotationCenter [
+PhratchSpriteMorph >> rotationCenter [
 
 	^ costume rotationCenter
 
 ]
 
 { #category : #accessing }
-ScratchSpriteMorph >> rotationDegrees [
+PhratchSpriteMorph >> rotationDegrees [
 
 	^ rotationDegrees
 
 ]
 
 { #category : #accessing }
-ScratchSpriteMorph >> rotationDegrees: newRotationDegrees [
+PhratchSpriteMorph >> rotationDegrees: newRotationDegrees [
 
 	rotationDegrees ~= newRotationDegrees ifTrue: [
 		rotationDegrees := newRotationDegrees asFloat \\ 360.0.
@@ -1900,7 +1900,7 @@ ScratchSpriteMorph >> rotationDegrees: newRotationDegrees [
 ]
 
 { #category : #private }
-ScratchSpriteMorph >> rotationDegrees: newRotationDegrees scalePoint: newScalePoint [
+PhratchSpriteMorph >> rotationDegrees: newRotationDegrees scalePoint: newScalePoint [
 
 	((newRotationDegrees ~= self rotationDegrees) or:
 	 [scalePoint ~= newScalePoint]) ifTrue: [
@@ -1911,14 +1911,14 @@ ScratchSpriteMorph >> rotationDegrees: newRotationDegrees scalePoint: newScalePo
 ]
 
 { #category : #accessing }
-ScratchSpriteMorph >> rotationStyle [
+PhratchSpriteMorph >> rotationStyle [
 
 	^ rotationStyle
 
 ]
 
 { #category : #accessing }
-ScratchSpriteMorph >> rotationStyle: aSymbol [
+PhratchSpriteMorph >> rotationStyle: aSymbol [
 	"Set my rotation style to #normal, #leftRight, or #none. Styles mean:
 		#normal	-- smooth 360 degree rotation
 		#leftRight	-- flip about the vertical axis
@@ -1931,7 +1931,7 @@ ScratchSpriteMorph >> rotationStyle: aSymbol [
 ]
 
 { #category : #'looks ops' }
-ScratchSpriteMorph >> say: aValue [
+PhratchSpriteMorph >> say: aValue [
 	"Present a talk bubble with the given string."
 
 	self bubble: aValue thinkFlag: false promptFlag: false.
@@ -1939,7 +1939,7 @@ ScratchSpriteMorph >> say: aValue [
 ]
 
 { #category : #'looks ops' }
-ScratchSpriteMorph >> say: stringOrNum duration: durationSecs elapsed: elapsedMSecs from: startPoint [
+PhratchSpriteMorph >> say: stringOrNum duration: durationSecs elapsed: elapsedMSecs from: startPoint [
 
 	startPoint ifNil: [^ self say: stringOrNum].  "first call, show talk bubble"
 	elapsedMSecs >= (1000 * durationSecs) ifTrue: [self sayNothing].  "clear bubble"
@@ -1947,7 +1947,7 @@ ScratchSpriteMorph >> say: stringOrNum duration: durationSecs elapsed: elapsedMS
 ]
 
 { #category : #'looks ops' }
-ScratchSpriteMorph >> sayNothing [
+PhratchSpriteMorph >> sayNothing [
 	"Delete my talk bubble if I have one."
 
 	| talkBubble |
@@ -1958,7 +1958,7 @@ ScratchSpriteMorph >> sayNothing [
 ]
 
 { #category : #accessing }
-ScratchSpriteMorph >> scale [
+PhratchSpriteMorph >> scale [
 
 	| att |
 	att := #size.
@@ -1970,14 +1970,14 @@ ScratchSpriteMorph >> scale [
 ]
 
 { #category : #accessing }
-ScratchSpriteMorph >> scalePoint [
+PhratchSpriteMorph >> scalePoint [
 
 	^ scalePoint
 
 ]
 
 { #category : #accessing }
-ScratchSpriteMorph >> scalePoint: aPoint [
+PhratchSpriteMorph >> scalePoint: aPoint [
 
 	scalePoint := aPoint.
 	self costumeChanged.
@@ -1986,14 +1986,14 @@ ScratchSpriteMorph >> scalePoint: aPoint [
 ]
 
 { #category : #'looks ops' }
-ScratchSpriteMorph >> scenes [
+PhratchSpriteMorph >> scenes [
 
 	^ sceneStates keys
 
 ]
 
 { #category : #'pen ops' }
-ScratchSpriteMorph >> setPenColorFromCostumedNamed: costumeNameOrIndex x: x y: y [
+PhratchSpriteMorph >> setPenColorFromCostumedNamed: costumeNameOrIndex x: x y: y [
 	"Set my pen color from my costume of the given name at the given point. If the point is off the edge, set my color to black."
 
 	| cName m f pixel |
@@ -2005,7 +2005,7 @@ ScratchSpriteMorph >> setPenColorFromCostumedNamed: costumeNameOrIndex x: x y: y
 
 	f := m form.
 	f unhibernate.
-	pixel := ScratchPlugin
+	pixel := PhratchPlugin
 		primInterpolate: f bits
 		width: f width
 		x: (x * 1024) rounded
@@ -2018,7 +2018,7 @@ ScratchSpriteMorph >> setPenColorFromCostumedNamed: costumeNameOrIndex x: x y: y
 ]
 
 { #category : #'pen ops' }
-ScratchSpriteMorph >> setPenHueTo: aNumber [
+PhratchSpriteMorph >> setPenHueTo: aNumber [
 	"Set the pen hue to given number between 0 and 200. (That makes 100 the 'maximum' distance away from the original color on the color wheel.)"
 
 	self undeleteAttribute: #penColor.
@@ -2026,7 +2026,7 @@ ScratchSpriteMorph >> setPenHueTo: aNumber [
 ]
 
 { #category : #'pen ops' }
-ScratchSpriteMorph >> setPenShadeTo: aNumber [
+PhratchSpriteMorph >> setPenShadeTo: aNumber [
 	"Set the pen shade (lightness) to given number between 0 and 100. A shade of 0 is black, 100 is white, and 50 is fully saturated color."
 	"Details: We don't want to get all the way to pure black or white, so we divide the range 0..50 by a number > 50 when computing the fraction of the original color to mix with black or white."
 
@@ -2035,7 +2035,7 @@ ScratchSpriteMorph >> setPenShadeTo: aNumber [
 ]
 
 { #category : #'byob OOP' }
-ScratchSpriteMorph >> setRotationStyle: aNumber [
+PhratchSpriteMorph >> setRotationStyle: aNumber [
 	"Set my rotation style to #normal, #leftRight, or #none. Styles mean:
 		#normal	-- smooth 360 degree rotation
 		#leftRight	-- flip about the vertical axis
@@ -2046,7 +2046,7 @@ ScratchSpriteMorph >> setRotationStyle: aNumber [
 ]
 
 { #category : #'looks ops' }
-ScratchSpriteMorph >> setScene: sceneName [
+PhratchSpriteMorph >> setScene: sceneName [
 
 	| sceneState |
 	sceneState := sceneStates at: sceneName ifAbsent: [^ self hide].
@@ -2058,7 +2058,7 @@ ScratchSpriteMorph >> setScene: sceneName [
 ]
 
 { #category : #'looks ops' }
-ScratchSpriteMorph >> setSizeTo: percent [
+PhratchSpriteMorph >> setSizeTo: percent [
 	"Set my size to the given percent of the original size. Limit the range to avoid accidentally making me invisibly tiny or really huge. Retain my aspect ratio (i.e., my stretch)."
 
 	self undeleteAttribute: #size.
@@ -2067,7 +2067,7 @@ ScratchSpriteMorph >> setSizeTo: percent [
 ]
 
 { #category : #'looks ops' }
-ScratchSpriteMorph >> setStretchTo: percent [
+PhratchSpriteMorph >> setStretchTo: percent [
 	"Set x stretch percent relative to y. For example, a stretch of 200 stretches x by a factor of two relative to y while a stretch of 50 compresses x by a factor of two. As my stretch is changed, my x scale changes but my y scale remains the same."
 
 	| baseScale origExtent minStretch maxStretch newStretchFactor |
@@ -2081,7 +2081,7 @@ ScratchSpriteMorph >> setStretchTo: percent [
 ]
 
 { #category : #'looks ops' }
-ScratchSpriteMorph >> show [
+PhratchSpriteMorph >> show [
 	"Make myself visible."
 
 	self setHideFlagTo: false
@@ -2093,7 +2093,7 @@ ScratchSpriteMorph >> show [
 ]
 
 { #category : #'sensing ops' }
-ScratchSpriteMorph >> showQuestion: aString [
+PhratchSpriteMorph >> showQuestion: aString [
 	"Show the given question prompt."
 
 	self bubble: aString thinkFlag: false promptFlag: true.
@@ -2101,7 +2101,7 @@ ScratchSpriteMorph >> showQuestion: aString [
 ]
 
 { #category : #nesting }
-ScratchSpriteMorph >> slideBackToFormerSituation: evt [
+PhratchSpriteMorph >> slideBackToFormerSituation: evt [
 
 	self holdSubsprites.
 	super slideBackToFormerSituation: evt.
@@ -2114,13 +2114,13 @@ ScratchSpriteMorph >> slideBackToFormerSituation: evt [
 ]
 
 { #category : #'byob OOP' }
-ScratchSpriteMorph >> spawn [
+PhratchSpriteMorph >> spawn [
 
 	| stage child |
 "
 	(frame := self ownerOrYourselfThatIsA: ScratchFrameMorph) ifNil: [^ nil].
 "
-	stage := self ownerOrYourselfThatIsA: ScratchStageMorph.
+	stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
 	stage ifNil: [^ self].
 	child := self fullCopy.
 	child blocksBin allMorphsDo: [:m |
@@ -2139,7 +2139,7 @@ ScratchSpriteMorph >> spawn [
 ]
 
 { #category : #nesting }
-ScratchSpriteMorph >> spread [
+PhratchSpriteMorph >> spread [
 	"private - apply the method calling me to all subsprites"
 
 	| sel args |
@@ -2155,7 +2155,7 @@ ScratchSpriteMorph >> spread [
 ]
 
 { #category : #nesting }
-ScratchSpriteMorph >> spreadToFollowers [
+PhratchSpriteMorph >> spreadToFollowers [
 	"private - apply the method calling me to all subsprites who follow my rotation"
 
 	| followers sel args |
@@ -2174,18 +2174,18 @@ ScratchSpriteMorph >> spreadToFollowers [
 ]
 
 { #category : #'pen ops' }
-ScratchSpriteMorph >> stampCostume [
+PhratchSpriteMorph >> stampCostume [
 	"Stamp a copy of my current costume on the pen trails layer."
 
 	| m |
 	self step.  "update costume if necessary"
-	(m := self ownerOrYourselfThatIsA: ScratchStageMorph)
+	(m := self ownerOrYourselfThatIsA: PhratchStageMorph)
 		ifNotNil: [m stampCostume: self].
 
 ]
 
 { #category : #'event handling' }
-ScratchSpriteMorph >> startDrag: evt [
+PhratchSpriteMorph >> startDrag: evt [
 	"This is a drag gesture; pick me up."
 
 	self holdSubsprites.
@@ -2194,7 +2194,7 @@ ScratchSpriteMorph >> startDrag: evt [
 ]
 
 { #category : #stepping }
-ScratchSpriteMorph >> step [
+PhratchSpriteMorph >> step [
 
 	offset notNil & ownerSprite notNil ifTrue: [
 		self referencePosition: ownerSprite referencePosition + offset ].
@@ -2203,21 +2203,21 @@ ScratchSpriteMorph >> step [
 ]
 
 { #category : #nesting }
-ScratchSpriteMorph >> stickTo: aSprite [
+PhratchSpriteMorph >> stickTo: aSprite [
 
 	self undeleteAttribute: #anchor.
 	self passiveStickTo: aSprite
 ]
 
 { #category : #nesting }
-ScratchSpriteMorph >> stopFollowing [
+PhratchSpriteMorph >> stopFollowing [
 
 	offset := nil.
 	self spread
 ]
 
 { #category : #'movie ops' }
-ScratchSpriteMorph >> stopPlaying [
+PhratchSpriteMorph >> stopPlaying [
 	"Reset my transient state, such as pen down."
 
 	super stopPlaying.
@@ -2227,7 +2227,7 @@ ScratchSpriteMorph >> stopPlaying [
 ]
 
 { #category : #'object i/o' }
-ScratchSpriteMorph >> storeFieldsOn: anObjStream [
+PhratchSpriteMorph >> storeFieldsOn: anObjStream [
 
 	| oldP |
 	self sayNothing.  "delete talk bubble before saving"
@@ -2261,12 +2261,12 @@ ScratchSpriteMorph >> storeFieldsOn: anObjStream [
 ]
 
 { #category : #nesting }
-ScratchSpriteMorph >> subsprites [
+PhratchSpriteMorph >> subsprites [
 	^subsprites
 ]
 
 { #category : #'looks ops' }
-ScratchSpriteMorph >> think: aValue [
+PhratchSpriteMorph >> think: aValue [
 	"Present a thought bubble with the given string."
 
 	self bubble: aValue thinkFlag: true promptFlag: false.
@@ -2274,7 +2274,7 @@ ScratchSpriteMorph >> think: aValue [
 ]
 
 { #category : #'looks ops' }
-ScratchSpriteMorph >> think: stringOrNum duration: durationSecs elapsed: elapsedMSecs from: startPoint [
+PhratchSpriteMorph >> think: stringOrNum duration: durationSecs elapsed: elapsedMSecs from: startPoint [
 
 	startPoint ifNil: [^ self think: stringOrNum].  "first call, show think bubble"
 	elapsedMSecs >= (1000 * durationSecs) ifTrue: [self sayNothing].  "clear bubble"
@@ -2282,13 +2282,13 @@ ScratchSpriteMorph >> think: stringOrNum duration: durationSecs elapsed: elapsed
 ]
 
 { #category : #nesting }
-ScratchSpriteMorph >> toggleRotationRule [
+PhratchSpriteMorph >> toggleRotationRule [
 
 	rotateWithOwner := self rotateWithOwner not
 ]
 
 { #category : #'motion ops' }
-ScratchSpriteMorph >> touching: anObject [
+PhratchSpriteMorph >> touching: anObject [
 	"Answer true if any visible part of me touches a visible part of the given sprite."
 	"Details: Currently uses the bounding box; should follow this up with comparison of visible pixels."
 
@@ -2296,7 +2296,7 @@ ScratchSpriteMorph >> touching: anObject [
 	aSpriteOrSymbol := self coerceSpriteArg: anObject.
 
 	aSpriteOrSymbol = #mouse ifTrue: [
-		(stage := self ownerOrYourselfThatIsA: ScratchStageMorph) ifNil: [^ false].
+		(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNil: [^ false].
 		result := self containsPoint: stage adjustedCursorPoint.
 			result ifTrue: [^true].
 	^(subsprites collect: [:sub | sub touching: anObject ]) includes: true ].
@@ -2337,7 +2337,7 @@ ScratchSpriteMorph >> touching: anObject [
 ]
 
 { #category : #accessing }
-ScratchSpriteMorph >> touchingColor: soughtColor [
+PhratchSpriteMorph >> touchingColor: soughtColor [
 	"Answer true if any of my non-transparent pixels touch pixels of the given color in the world."
 
 	| r myImage sensitivePixelsMask map imageBelowMe result |
@@ -2377,7 +2377,7 @@ ScratchSpriteMorph >> touchingColor: soughtColor [
 ]
 
 { #category : #'motion ops' }
-ScratchSpriteMorph >> turn: degrees [
+PhratchSpriteMorph >> turn: degrees [
 	"Turn clockwise the given number of degrees."
 
 	self undeleteAttribute: #heading.
@@ -2385,14 +2385,14 @@ ScratchSpriteMorph >> turn: degrees [
 ]
 
 { #category : #'motion ops' }
-ScratchSpriteMorph >> turnAwayFromEdge [
+PhratchSpriteMorph >> turnAwayFromEdge [
 	"Turn away from the nearest edge."
 
 	| dirX dirY refP delta |
 	dirX := self rotationDegrees degreesToRadians cos.
 	dirY := self rotationDegrees degreesToRadians sin negated.
 	refP := self referencePosition.
-	delta := (ScratchFrameMorph workpaneExtent // 2) - refP abs.
+	delta := (PhratchFrameMorph workpaneExtent // 2) - refP abs.
 
 	(delta x < delta y) | (delta x < 0) ifTrue: [  "point dirX towards center"
 		dirX = 0.0 ifTrue: [dirX := 0.1].
@@ -2410,7 +2410,7 @@ ScratchSpriteMorph >> turnAwayFromEdge [
 ]
 
 { #category : #'motion ops' }
-ScratchSpriteMorph >> turnLeft: degrees [
+PhratchSpriteMorph >> turnLeft: degrees [
 	"Turn counter-clockwise the given number of degrees."
 
 	| newPos |
@@ -2426,7 +2426,7 @@ ScratchSpriteMorph >> turnLeft: degrees [
 ]
 
 { #category : #'motion ops' }
-ScratchSpriteMorph >> turnRight: degrees [
+PhratchSpriteMorph >> turnRight: degrees [
 	| newPos |
 	"Turn clockwise the given number of degrees."
 
@@ -2442,9 +2442,9 @@ ScratchSpriteMorph >> turnRight: degrees [
 ]
 
 { #category : #nesting }
-ScratchSpriteMorph >> unhinge [
+PhratchSpriteMorph >> unhinge [
 
-	(ownerSprite isKindOf: ScratchSpriteMorph)
+	(ownerSprite isKindOf: PhratchSpriteMorph)
 		ifFalse: [ownerSprite := nil].
 	ownerSprite ifNil: [^self].
 	ownerSprite removeSubsprite: self.
@@ -2455,7 +2455,7 @@ ScratchSpriteMorph >> unhinge [
 ]
 
 { #category : #nesting }
-ScratchSpriteMorph >> unhingeAll [
+PhratchSpriteMorph >> unhingeAll [
 
 	subsprites copy do: [:each |
 		each unhinge ].
@@ -2464,7 +2464,7 @@ ScratchSpriteMorph >> unhingeAll [
 ]
 
 { #category : #'as yet unclassified' }
-ScratchSpriteMorph >> veryDeepFixupWith: deepCopier [
+PhratchSpriteMorph >> veryDeepFixupWith: deepCopier [
 	"If fields were weakly copied, fix them here.  If they were in the tree being copied, fix them up, otherwise point to the originals."
 
 	super veryDeepFixupWith: deepCopier.
@@ -2474,7 +2474,7 @@ ScratchSpriteMorph >> veryDeepFixupWith: deepCopier [
 ]
 
 { #category : #'as yet unclassified' }
-ScratchSpriteMorph >> veryDeepInner: deepCopier [
+PhratchSpriteMorph >> veryDeepInner: deepCopier [
 	"Copy all of my instance variables.  Some need to be not copied at all, but shared.  	Warning!!  Every instance variable defined in this class must be handled.  We must also implement veryDeepFixupWith:.  See DeepCopier class comment."
 
 	super veryDeepInner: deepCopier.
@@ -2499,19 +2499,19 @@ ScratchSpriteMorph >> veryDeepInner: deepCopier [
 ]
 
 { #category : #nesting }
-ScratchSpriteMorph >> virtualScale [
+PhratchSpriteMorph >> virtualScale [
 
 	^virtualScale ifNil: [
 		virtualScale := self realScale]
 ]
 
 { #category : #nesting }
-ScratchSpriteMorph >> virtualScale: aPoint [
+PhratchSpriteMorph >> virtualScale: aPoint [
 	virtualScale := aPoint
 ]
 
 { #category : #accessing }
-ScratchSpriteMorph >> xpos [
+PhratchSpriteMorph >> xpos [
 
 	| att |
 	att := #xPosition.
@@ -2524,14 +2524,14 @@ ScratchSpriteMorph >> xpos [
 ]
 
 { #category : #accessing }
-ScratchSpriteMorph >> xpos: aNumber [ 
+PhratchSpriteMorph >> xpos: aNumber [ 
 
 	self undeleteAttribute: #xPosition.
 	self passiveXpos: aNumber
 ]
 
 { #category : #accessing }
-ScratchSpriteMorph >> ypos [
+PhratchSpriteMorph >> ypos [
 
 	| att |
 	att := #yPosition.
@@ -2544,7 +2544,7 @@ ScratchSpriteMorph >> ypos [
 ]
 
 { #category : #accessing }
-ScratchSpriteMorph >> ypos: aNumber [ 
+PhratchSpriteMorph >> ypos: aNumber [ 
 
 	self undeleteAttribute: #yPosition.
 	self passiveYpos: aNumber

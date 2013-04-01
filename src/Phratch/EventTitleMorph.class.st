@@ -102,7 +102,7 @@ EventTitleMorph >> initialize [
 	self addMorphFront: menuIconMorph.
 
 	labelMorph := StringMorph new
-		font: (ScratchFrameMorph getFont: #Arg);
+		font: (PhratchFrameMorph getFont: #Arg);
 		forceUnicodeRendering: true;
 		color: Color white.
 	self addMorph: labelMorph.
@@ -133,10 +133,10 @@ EventTitleMorph >> presentMenu [
 	| eventNames sFrame menu choice s be |
 	eventNames := #().
 
-	sFrame := self ownerOrYourselfThatIsA: ScratchFrameMorph.
+	sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
 	sFrame ifNil: [
 		be := self ownerOrYourselfThatIsA: BlockEditorFrameMorph.
-		be ifNotNil: [sFrame := be scratchFrame]].
+		be ifNotNil: [sFrame := be phratchFrame]].
 
 	sFrame ifNotNil: [eventNames := sFrame workPane allEventNames].
 
@@ -147,7 +147,7 @@ EventTitleMorph >> presentMenu [
 		argument: n asString ].
 	menu addLine.
 	menu
-		add: 'new' localized , ScratchTranslator ellipsesSuffix
+		add: 'new' localized , PhratchTranslator ellipsesSuffix
 		target: self
 		selector: #newEvent.
 

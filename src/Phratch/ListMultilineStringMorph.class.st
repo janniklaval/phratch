@@ -33,8 +33,8 @@ ListMultilineStringMorph >> fixLayout [
 	readout := self ownerOrYourselfThatIsA: WatcherReadoutFrameMorph.
 	readout ifNotNil: [
 		(readout complexObject isKindOf: BYOBList) ifTrue: [^self].
-		(readout complexObject isKindOf: ScratchListMorph) ifTrue: [^self].
-		(readout complexObject isKindOf: ScriptableScratchMorph) ifTrue: [^self].
+		(readout complexObject isKindOf: PhratchListMorph) ifTrue: [^self].
+		(readout complexObject isKindOf: ScriptablePhratchMorph) ifTrue: [^self].
 		deleteMorph position: (readout bottomRight) - (deleteMorph extent) - (3@5)]
 ]
 
@@ -54,7 +54,7 @@ ListMultilineStringMorph >> handlesMouseOver: evt [
 ListMultilineStringMorph >> initialize [
 
 	super initialize.
-	deleteMorph := (ImageMorph new form: (ScratchFrameMorph skinAt: #deleteItem)).
+	deleteMorph := (ImageMorph new form: (PhratchFrameMorph skinAt: #deleteItem)).
    
 ]
 
@@ -63,7 +63,7 @@ ListMultilineStringMorph >> isList [
 
 	|rf|
 	rf := self ownerOrYourselfThatIsA: WatcherReadoutFrameMorph.
-	rf ifNotNil: [^ ((rf complexObject isKindOf: ScratchListMorph) or: [
+	rf ifNotNil: [^ ((rf complexObject isKindOf: PhratchListMorph) or: [
 		rf complexObject isKindOf: BYOBList])].
 	^ false
 
@@ -74,7 +74,7 @@ ListMultilineStringMorph >> keyStroke: evt [
 
 	| ch ownerList newCell oldH |
 	ch := evt keyValue.
-	ownerList := self ownerOrYourselfThatIsA: ScratchListMorph.
+	ownerList := self ownerOrYourselfThatIsA: PhratchListMorph.
 
 	"insert list item with cr"
 	(ch = 3) & (evt buttons = 0) ifTrue: [ch := 13].	"map enter key to cr"
@@ -111,12 +111,12 @@ ListMultilineStringMorph >> keyboardFocusChange: aBoolean [
 	hasFocus
 		ifTrue: [
 			self textColor: (Color gray: 0.15).
-			self owner color: (ScriptableScratchMorph listBlockColor mixed: 0.4 with: Color white).
+			self owner color: (ScriptablePhratchMorph listBlockColor mixed: 0.4 with: Color white).
 			self addMorphBack: deleteMorph.
 			self fixLayout]
 		ifFalse: [
 			self textColor: Color white.
-			self owner color: ScriptableScratchMorph listBlockColor.
+			self owner color: ScriptablePhratchMorph listBlockColor.
 			deleteMorph delete].
 
 ]
@@ -126,7 +126,7 @@ ListMultilineStringMorph >> list [
 
 	|rf|
 	rf := self ownerOrYourselfThatIsA: WatcherReadoutFrameMorph.
-	rf ifNotNil: [((rf complexObject isKindOf: ScratchListMorph) or: [
+	rf ifNotNil: [((rf complexObject isKindOf: PhratchListMorph) or: [
 		rf complexObject isKindOf: BYOBList])
 			ifTrue: [ (rf complexObject isKindOf: BYOBList)
 				ifTrue: [^ rf submorphs detect: [:sm | sm isKindOf: BYOBListWatcherMorph] ifNone: [nil]]
@@ -145,10 +145,10 @@ ListMultilineStringMorph >> mouseDown: evt [
 	super mouseDown: evt.
 	p := evt cursorPoint.
 
-	(list := self ownerOrYourselfThatIsA: ScratchListMorph)
+	(list := self ownerOrYourselfThatIsA: PhratchListMorph)
 		ifNotNil: [list focusCell: owner].
 
-	ownerList := self ownerThatIsA: ScratchListMorph.
+	ownerList := self ownerThatIsA: PhratchListMorph.
 	((deleteMorph bounds expandBy: 4) containsPoint: p) ifTrue: [
 		(ownerList notNil) ifTrue: [
 			i := ownerList indexOfCell: self owner. 

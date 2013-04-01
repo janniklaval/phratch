@@ -54,7 +54,7 @@ PhratchFilePickerImageEntry >> highlight: aBoolean [
 
 	aBoolean ifFalse: [
 		self color: owner color.
-		nameMorph font: (ScratchFrameMorph getFont: #FilePickerEntry); color: Color black.
+		nameMorph font: (PhratchFrameMorph getFont: #FilePickerEntry); color: Color black.
 		highlit := false.
 		borderWidth := 0.
 		nameMorph left: self left + ((self width - nameMorph width) // 2).
@@ -66,7 +66,7 @@ PhratchFilePickerImageEntry >> highlight: aBoolean [
 
 	self color: (Color r: (96/255) g: (136/255) b: (182/255)).
 
-	nameMorph font: (ScratchFrameMorph getFont: #FilePickerEntryHighlighted); color: Color white.
+	nameMorph font: (PhratchFrameMorph getFont: #FilePickerEntryHighlighted); color: Color white.
 	nameMorph left: self left + ((self width - nameMorph width) // 2).
 
 	highlit := true.
@@ -87,20 +87,20 @@ PhratchFilePickerImageEntry >> name: aString dir: owningDirectory isDirectory: d
 
 	thumbnailMorph := ImageMorph new.
 	entryIsDirectory
-		ifTrue: [thumbnailMorph form: (ScratchFrameMorph skinAt: #bigFolderIcon)]
+		ifTrue: [thumbnailMorph form: (PhratchFrameMorph skinAt: #bigFolderIcon)]
 		ifFalse: [thumbnailMorph form: ((Form extent: 4@4 depth: 8) fillColor: Color transparent)].
 
 	thumbnailMorph top: self bottom - thumbnailMorph height - 23.
 	thumbnailMorph left: self left + ((self width - thumbnailMorph width) // 2).
 
 	n := dirFlag ifTrue: [entryName] ifFalse: [(owningDirectory / entryName) basename].
-	nameMorph := StringMorph contents: (String  withAll: n) font: (ScratchFrameMorph getFont: #FilePickerEntry).
+	nameMorph := StringMorph contents: (String  withAll: n) font: (PhratchFrameMorph getFont: #FilePickerEntry).
 
 	"trim file name to fit button, if necessary"
 	truncated := false.
-	eWidth := (ScratchTranslator stringExtent: '...' font: (ScratchFrameMorph getFont: #FilePickerEntryHighlighted)) x.
+	eWidth := (PhratchTranslator stringExtent: '...' font: (PhratchFrameMorph getFont: #FilePickerEntryHighlighted)) x.
 	w := 100 - eWidth.
-	[((ScratchTranslator stringExtent: n font: nameMorph font) x) > w] whileTrue: [
+	[((PhratchTranslator stringExtent: n font: nameMorph font) x) > w] whileTrue: [
 		truncated := true.
 		n := n copyFrom: 1 to: n size - 1].
 	truncated ifTrue: [n := n, '...'].

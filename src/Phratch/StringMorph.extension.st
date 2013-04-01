@@ -80,8 +80,8 @@ StringMorph >> stringExtent: aString [
 	s := aString.
 	usingOSFont := font notNil and: [font isOSFont].
 	s isUnicode | usingOSFont ifTrue: [
-		ScratchTranslator canRenderUnicode
-			ifTrue: [^ ScratchTranslator stringExtent: s asMacRoman    font: self font]
+		PhratchTranslator canRenderUnicode
+			ifTrue: [^ PhratchTranslator stringExtent: s asMacRoman    font: self font]
 			ifFalse: [s := s asMacRoman]].
 
 	scanner := MultiDisplayScanner quickPrintOn: Display box: Display boundingBox font: self font.
@@ -123,7 +123,7 @@ StringMorph >> stringWithEllipses: aString limitedToWidth: aNumber [
 	"Answer the given string limited in width. If the string is too wide to fit, truncate it and append ellipses."
 
 	| ellipses maxW s w |
-	ellipses := ScratchTranslator ellipsesSuffix "asUTF32".
+	ellipses := PhratchTranslator ellipsesSuffix "asUTF32".
 	maxW := (aNumber - (self stringWidth: ellipses)) max: 10.
 	s := aString "asUTF32".
 	(self stringWidth: s) < maxW ifTrue: [^ aString].
@@ -143,8 +143,8 @@ StringMorph >> xRangesFor: s [
 	"StringMorph new xRangesFor: 'Hello' asUTF8"
 
 	s isUnicode ifTrue: [
-		ScratchTranslator canRenderUnicode
-			ifTrue: [^ ScratchTranslator xRangesFor: s asMacRoman  font: self font]
+		PhratchTranslator canRenderUnicode
+			ifTrue: [^ PhratchTranslator xRangesFor: s asMacRoman  font: self font]
 			ifFalse: [^ self font xRangesFor: s asMacRoman]].
 
 	^ self font xRangesFor: s

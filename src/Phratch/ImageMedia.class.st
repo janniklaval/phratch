@@ -76,7 +76,7 @@ ImageMedia >> exportFilename: fileName for: stageOrSprite [
 		ifTrue: [fName := fileName]
 		ifFalse: [fName := fileName, '.bmp'].
 
-	(stageOrSprite isKindOf: ScratchSpriteMorph)
+	(stageOrSprite isKindOf: PhratchSpriteMorph)
 		ifTrue: [
 			f := Form extent: myForm extent depth: 32.
 			f fillColor: Color white.  "BMP cannot handle transparency; use white as BG color"

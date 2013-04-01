@@ -168,11 +168,11 @@ PhratchScrollBar >> initVertical: aBoolean [
 
 	aBoolean
 		ifTrue: [
-		 	self vFrameForm: (ScratchFrameMorph skinAt: #vScrollFrame)
-				sliderForm: (ScratchFrameMorph skinAt: #vScrollSlider)]
+		 	self vFrameForm: (PhratchFrameMorph skinAt: #vScrollFrame)
+				sliderForm: (PhratchFrameMorph skinAt: #vScrollSlider)]
 		ifFalse: [
-		 	self hFrameForm: (ScratchFrameMorph skinAt: #hScrollFrame)
-				sliderForm: (ScratchFrameMorph skinAt: #hScrollSlider)].
+		 	self hFrameForm: (PhratchFrameMorph skinAt: #hScrollFrame)
+				sliderForm: (PhratchFrameMorph skinAt: #hScrollSlider)].
 
 ]
 

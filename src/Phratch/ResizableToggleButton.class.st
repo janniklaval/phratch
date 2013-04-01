@@ -140,7 +140,7 @@ ResizableToggleButton >> mouseDown: evt [
 { #category : #'event handling' }
 ResizableToggleButton >> mouseLeave: evt [
 
-	ScratchToolTipMorph clearToolTips.
+	PhratchToolTipMorph clearToolTips.
 
 ]
 
@@ -212,7 +212,7 @@ ResizableToggleButton >> presentHelpScreen [
 	"Answer the name of the help screen for this block, or nil if no help is available."
 
 	| fr |
-	fr := self ownerOrYourselfThatIsA: ScratchFrameMorph.
+	fr := self ownerOrYourselfThatIsA: PhratchFrameMorph.
 	fr
 		ifNil: [^ nil]
 		ifNotNil: [fr presentHelpScreen: self helpScreenName]

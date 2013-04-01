@@ -186,15 +186,15 @@ ObjStream class >> initialize [
 ]
 
 { #category : #testing }
-ObjStream class >> scratchFileVersionFrom: aString [
+ObjStream class >> phratchFileVersionFrom: aString [
 	"Answer the Scratch file version number from the given string. If the string is of the form: 'ScratchVxx', were xx is a two-digit integer, answer the value of xx. Otherwise, answer 0."
 	"self scratchFileVersionFrom: 'ScratchV01'"
 
 	"changed for the BYOB-prototype -Jens"
 
 	(aString beginsWith: 'BloxExpV') 
-		ifTrue: [ScriptableScratchMorph decodeAsByob]
-		ifFalse: [ScriptableScratchMorph decodeAsScratch].
+		ifTrue: [ScriptablePhratchMorph decodeAsByob]
+		ifFalse: [ScriptablePhratchMorph decodeAsScratch].
 
 	((aString beginsWith: 'BloxExpV') 
 		or: [aString beginsWith: 'ScratchV']) ifFalse: [^ 0].
@@ -203,12 +203,12 @@ ObjStream class >> scratchFileVersionFrom: aString [
 ]
 
 { #category : #testing }
-ObjStream class >> scratchObjectsFrom: aFileName [
+ObjStream class >> phratchObjectsFrom: aFileName [
 	"Read a Scratch project from the file with the given name and answer the objects array."
 
 	| f version objects |
 	f := (FileStream readOnlyFileNamed: aFileName) binary.
-	version := self scratchFileVersionFrom: (f next: 10) asString.
+	version := self phratchFileVersionFrom: (f next: 10) asString.
 	version = 0 ifTrue: [
 		f position: 0.
 		objects := ObjStream new readObjFrom: f].
@@ -232,7 +232,7 @@ ObjStream class >> serializeAndDeserialize: anObject [
 ]
 
 { #category : #testing }
-ObjStream class >> tallyScratchObjectsFrom: aDirectory [
+ObjStream class >> tallyPhratchObjectsFrom: aDirectory [
 	"Tally the object class ID's for all Scratch projects in the given directory into the given array."
 	"self tallyScratchObjectsFrom: FileDirectory default"
 
@@ -240,7 +240,7 @@ ObjStream class >> tallyScratchObjectsFrom: aDirectory [
 	classIDCounts := Array new: 256 withAll: 0.
 	aDirectory fileNames do: [:fn |
 		((fn endsWith: '.sb') | (fn endsWith: '.ypr')) ifTrue: [
-			objTable := self scratchObjectsFrom: (aDirectory fullNameFor: fn).
+			objTable := self phratchObjectsFrom: (aDirectory fullNameFor: fn).
 			objTable do: [:entry |
 				id := entry at: 2.
 				classIDCounts at: id put: (classIDCounts at: id) + 1]]].
@@ -256,12 +256,12 @@ ObjStream class >> tallyScratchObjectsFrom: aDirectory [
 ]
 
 { #category : #testing }
-ObjStream class >> tallyScratchObjectsFromFile: aFileName [
+ObjStream class >> tallyPhratchObjectsFromFile: aFileName [
 	"Read the Scratch project from the file with the given name and tally it's object class IDs."
 
 	| classIDCounts objTable id result count cName |
 	classIDCounts := Array new: 256 withAll: 0.
-	objTable := self scratchObjectsFrom: aFileName.
+	objTable := self phratchObjectsFrom: aFileName.
 	objTable do: [:entry |
 		id := entry at: 2.
 		classIDCounts at: id put: (classIDCounts at: id) + 1].
@@ -321,8 +321,8 @@ ObjStream class >> userClasses [
 		"(121		SoundMorph)"
 		"(122	ImageBoxMorph)"
 		(123		SensorBoardMorph)
-		(124		ScratchSpriteMorph)
-		(125		ScratchStageMorph)
+		(124		#PhratchSpriteMorph)
+		(125		#PhratchStageMorph)
 
 		(140		ChoiceArgMorph)
 		(141		ColorArgMorph)
@@ -359,7 +359,7 @@ ObjStream class >> userClasses [
 		(172		ToggleButton)
 		(173		WatcherReadoutFrameMorph)
 		(174		WatcherSliderMorph)
-		(175		ScratchListMorph)
+		(175		#PhratchListMorph)
 		(176		ScrollingStringMorph)
 
 		(180		ScrollFrameMorph2)
@@ -400,7 +400,7 @@ ObjStream class >> writeTestFile [
 	all add: 'This is a string.'.
 	all add: #thisIsASymbol.
 	all add: #(100 101 102 253 254 255) asByteArray.
-	all add: ScriptableScratchMorph popSound samples.
+	all add: ScriptablePhratchMorph popSound samples.
 	all add: (ImageMorph defaultForm asFormOfDepth: 32) bits.
 	all add: (Array with: 1 with: 2 with: 3).
 	all add: (Array with: 1 with: 2 with: 3) asOrderedCollection.
@@ -944,7 +944,7 @@ ObjStream >> readObjFrom: aStream showProgress: showProgress [
 	showProgress
 		ifTrue: [
 			tenPercent := objCount // 10.
-			('Reading...' localized, ScratchTranslator ellipsesSuffix)
+			('Reading...' localized, PhratchTranslator ellipsesSuffix)
 				displayProgressAt: Display center - (32@5)  "Sensor cursorPoint"
 				from: 0 to: objCount + tenPercent
 				during: [:progressBar |

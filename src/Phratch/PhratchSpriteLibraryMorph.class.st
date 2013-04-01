@@ -1,16 +1,16 @@
 Class {
-	#name : #ScratchSpriteLibraryMorph,
+	#name : #PhratchSpriteLibraryMorph,
 	#superclass : #BorderedMorph,
 	#category : #'Phratch-UI-Support'
 }
 
 { #category : #'dropping/grabbing' }
-ScratchSpriteLibraryMorph >> acceptDroppingMorph: aMorph event: evt [
+PhratchSpriteLibraryMorph >> acceptDroppingMorph: aMorph event: evt [
 	"This method allows re-ordering of sprites in the sprite library area."
 
 	| insertAfter libraryItems spriteLibrary movedThumbnail mostOverlap mostOverlapIndex sf |
 	((aMorph isKindOf: LibraryItemMorph) and:
-	 [(spriteLibrary := self ownerOrYourselfThatIsA: ScratchSpriteLibraryMorph) notNil])
+	 [(spriteLibrary := self ownerOrYourselfThatIsA: PhratchSpriteLibraryMorph) notNil])
 		ifFalse: [^ super acceptDroppingMorph: aMorph event: evt].
 
 	"Set the new position of the morph that just moved"
@@ -42,13 +42,13 @@ ScratchSpriteLibraryMorph >> acceptDroppingMorph: aMorph event: evt [
 
 	spriteLibrary insertItem: movedThumbnail before: insertAfter.
 
-	sf := self ownerOrYourselfThatIsA: ScratchFrameMorph.
+	sf := self ownerOrYourselfThatIsA: PhratchFrameMorph.
 	sf ifNotNil: [ sf workPane updateSpritesList ].
 
 ]
 
 { #category : #'dropping/grabbing' }
-ScratchSpriteLibraryMorph >> insertItem: item1 before: item2orNil [
+PhratchSpriteLibraryMorph >> insertItem: item1 before: item2orNil [
 	"Shuffle my sprite thumbnails.  I rearrange my submorphs so that the library is shuffled and layed out properly.  I don't bother updating the sprites list which is stored in the stage; I let it update on its own when updateSpritesList is called"
 
 	| nextItem |
@@ -69,14 +69,14 @@ ScratchSpriteLibraryMorph >> insertItem: item1 before: item2orNil [
 ]
 
 { #category : #'dropping/grabbing' }
-ScratchSpriteLibraryMorph >> isPartsBin [
+PhratchSpriteLibraryMorph >> isPartsBin [
 
 	^ true
 
 ]
 
 { #category : #'dropping/grabbing' }
-ScratchSpriteLibraryMorph >> rootForGrabOf: aMorph [
+PhratchSpriteLibraryMorph >> rootForGrabOf: aMorph [
 	"I act like a parts bin; answer a new copy of the morph being extracted."
 
 	| root |
@@ -91,7 +91,7 @@ ScratchSpriteLibraryMorph >> rootForGrabOf: aMorph [
 ]
 
 { #category : #'dropping/grabbing' }
-ScratchSpriteLibraryMorph >> wantsDroppedMorph: aMorph event: evt [
+PhratchSpriteLibraryMorph >> wantsDroppedMorph: aMorph event: evt [
 
 	^ (aMorph isKindOf: LibraryItemMorph)
 

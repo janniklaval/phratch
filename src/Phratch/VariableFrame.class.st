@@ -48,7 +48,7 @@ VariableFrame class >> variableBlockColor [
 
 	ScopeContrast
 		ifTrue: [^ (Color brown darker mixed: 0.8 with: Color orange) lighter]
-		ifFalse: [^ ScriptableScratchMorph blockColorFor: 'variables']
+		ifFalse: [^ ScriptablePhratchMorph blockColorFor: 'variables']
 	
 
 ]
@@ -76,7 +76,7 @@ VariableFrame >> convertStacksToTuples [
 	| obj isCyclic |
 	vars keysDo: [:key |
 		obj := vars at: key. 
-		(obj isKindOf: ScriptableScratchMorph)
+		(obj isKindOf: ScriptablePhratchMorph)
 			ifTrue: [ vars at: key put: obj asReferenceTuple ]
 			ifFalse: [
 			(obj respondsTo: #convertStacksToTuples) ifTrue: [		"this must be a list or another variable"
@@ -127,7 +127,7 @@ VariableFrame >> convertTuplesToStacks [
 
 	| obj stage rcvr block |
 
-	stage := ScratchFrameMorph someInstance workPane.
+	stage := PhratchFrameMorph someInstance workPane.
 
 	vars keysDo: [:key |
 		obj := vars at: key.
@@ -154,7 +154,7 @@ VariableFrame >> convertTuplesToStacks [
 			#sprite = obj first ifTrue: [
 				vars at: key put: (stage coerceSpriteArg: obj second)]].
 
-		(obj isKindOf: ScratchListMorph) ifTrue: [
+		(obj isKindOf: PhratchListMorph) ifTrue: [
 			obj convertTuplesToStacks ]]
 ]
 
@@ -255,7 +255,7 @@ VariableFrame >> isReferencing: aVarFrame [
 						(m receiver isKindOf: self class) and: [
 							m receiver isReferencing: aVarFrame]]]])
 				ifTrue: [^ true]].
-		(obj isKindOf: ScratchListMorph) ifTrue: [
+		(obj isKindOf: PhratchListMorph) ifTrue: [
 			(obj asArray anySatisfy: [ :item |
 				(item isKindOf: SetterBlockMorph) | (item isKindOf: VariableBlockMorph) and: [
 					item receiver == aVarFrame or: [

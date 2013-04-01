@@ -74,7 +74,7 @@ TextBoxMorph >> handlesMouseDown: evt [
 TextBoxMorph >> initialize [
 
 	super initialize.
-	self initFromForm: (ScratchFrameMorph skinAt: #btn).
+	self initFromForm: (PhratchFrameMorph skinAt: #btn).
 	contentsMorph := ScrollingStringMorph new
 		contents: '';
 		borderColor: (Color gray: 0.6);

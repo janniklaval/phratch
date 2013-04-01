@@ -132,7 +132,7 @@ CommandScriptBlockMorph >> blockAttachPoints: aSet [
 	result := #().
 
 	nestedBlock
-		ifNil: [ScratchTranslator isRTL
+		ifNil: [PhratchTranslator isRTL
 			ifTrue: [result := result copyWith: ((self topRight + (-12@(self topBarHeight + 7))) -> self)]
 			ifFalse: [result := result copyWith: ((self topLeft + (12@(self topBarHeight + 7))) -> self)]]
 		ifNotNil: [nestedBlock blockAttachPoints: aSet].
@@ -430,13 +430,13 @@ CommandScriptBlockMorph >> fixBlockLayoutNoWrap [
 			stretchHeight := 0.
 			nestedBlock fixBlockLayout.
 			newH := newH + nestedBlock fullBounds height - 1.
-			ScratchTranslator isRTL
+			PhratchTranslator isRTL
 				ifTrue: [nestedBlock position: self topRight - ((CBlockBracketThickness + nestedBlock width)@0)
 					+ (0@(self topBarHeight + 3))]
 				ifFalse: [nestedBlock position: self position + (CBlockBracketThickness@(self topBarHeight + 3))].
 			nestedBlock blockSequence last isStopOrForever ifTrue: [newH := newH + 4]].
 	self extent: newW@newH + (0@stretchHeight).
-	ScratchTranslator isRTL ifTrue: [
+	PhratchTranslator isRTL ifTrue: [
 		self left: self left + (oldExtent x - newW)].
 
 

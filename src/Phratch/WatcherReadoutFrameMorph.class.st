@@ -23,7 +23,7 @@ WatcherReadoutFrameMorph >> complexObject: anObject [
 
 	complexObject := anObject.
 
-	(anObject isKindOf: ScratchListMorph) ifTrue: [
+	(anObject isKindOf: PhratchListMorph) ifTrue: [
 		submorphs := submorphs copyWithout: anObject.
 		anObject position: self position + 5.
 		self addMorphBack: anObject.
@@ -136,7 +136,7 @@ WatcherReadoutFrameMorph >> fixLayout [
 				readout position: self position + (5@5).
 				^self layoutChanged ]].
 
-	e := ScratchTranslator stringExtent: s font: readout font.
+	e := PhratchTranslator stringExtent: s font: readout font.
 	readoutWidth := e x.
 	(readoutWidth + 10) > self width ifTrue: [self width: readoutWidth + 12].
 	self width > (readoutWidth + 50) ifTrue: [self width: readoutWidth + 50].
@@ -147,11 +147,11 @@ WatcherReadoutFrameMorph >> fixLayout [
 		ifTrue: [self height: (e y max: 23)]
 		ifFalse: [self height: (e y max: 14)].
 
-	yOffset := (self height // 2) - (ScratchTranslator centerOffsetForButtonWithFont: readout font) + 1.
+	yOffset := (self height // 2) - (PhratchTranslator centerOffsetForButtonWithFont: readout font) + 1.
 	(((s indexOf: $.) = (s size - 2)) and: [((s indexOf: $.) = 0) not]) "one digit after the decimal point"
 		ifTrue: [  "right-justify the string"
-			w := (ScratchTranslator stringExtent: (s copyUpTo: $.) font: readout font) x.
-			inset := (ScratchTranslator stringExtent: '.0' font: readout font) x.
+			w := (PhratchTranslator stringExtent: (s copyUpTo: $.) font: readout font) x.
+			inset := (PhratchTranslator stringExtent: '.0' font: readout font) x.
 			self isLarge ifTrue: [inset := inset + 1].
 			readout position: self topRight - ((w + inset + 5) @ (-1 * yOffset))]
 		ifFalse: [

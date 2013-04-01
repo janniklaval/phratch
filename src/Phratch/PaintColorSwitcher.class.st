@@ -56,7 +56,7 @@ PaintColorSwitcher >> createSwitcher [
 
 	switcher := IconicButton new.
 	switcher
-		labelGraphic: (ScratchFrameMorph skinAt: #paintColorSwitcher) borderWidth: 0;
+		labelGraphic: (PhratchFrameMorph skinAt: #paintColorSwitcher) borderWidth: 0;
 		actionSelector: #switchColors;
 		target: self;
 		actWhen: #buttonDown.
@@ -99,8 +99,8 @@ PaintColorSwitcher >> handlesMouseDown: evt [
 PaintColorSwitcher >> initialize [
 
 	super initialize.
-	self form: (ScratchFrameMorph skinAt: #paintColorSwitcherPane).
-	transparentMorph := ImageMorph new form: (ScratchFrameMorph skinAt: #transparentColorSwitchPanel).
+	self form: (PhratchFrameMorph skinAt: #paintColorSwitcherPane).
+	transparentMorph := ImageMorph new form: (PhratchFrameMorph skinAt: #transparentColorSwitchPanel).
 	self createSwitcher.
 	self createForegroundBackground.
 
@@ -116,7 +116,7 @@ PaintColorSwitcher >> mouseDown: evt [
 { #category : #'event handling' }
 PaintColorSwitcher >> mouseLeave: evt [
 
-	ScratchToolTipMorph clearToolTips.
+	PhratchToolTipMorph clearToolTips.
 
 ]
 
@@ -126,7 +126,7 @@ PaintColorSwitcher >> showBalloon: msg [
 	| w worldBounds tooltip |
 
 	w := self world.
-	tooltip := (ScratchToolTipMorph string: msg for: self).
+	tooltip := (PhratchToolTipMorph string: msg for: self).
 	w addMorphFront: (tooltip position: self bottomLeft + (0@8)).
 	((worldBounds := w bounds) containsRect: tooltip bounds) ifFalse:
 		[tooltip bounds: (tooltip bounds translatedToBeWithin: worldBounds)].

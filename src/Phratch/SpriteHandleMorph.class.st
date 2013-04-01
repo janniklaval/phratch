@@ -23,7 +23,7 @@ SpriteHandleMorph class >> resize: aSprite [
 	self vanish.
 	Current := self new 
 		type: #resize;
-		form: (ScratchFrameMorph skinAt: #spriteResize); 
+		form: (PhratchFrameMorph skinAt: #spriteResize); 
 		target: aSprite;
 		setBalloonText: 'drag to resize' localized.
 	^ Current
@@ -37,7 +37,7 @@ SpriteHandleMorph class >> rotate: aSprite [
 	self vanish.
 	Current := self new 
 		type: #rotate;
-		form: (ScratchFrameMorph skinAt: #spriteRotate); 
+		form: (PhratchFrameMorph skinAt: #spriteRotate); 
 		target: aSprite;
 		setBalloonText: 'drag to rotate' localized.
 	^ Current
@@ -58,7 +58,7 @@ SpriteHandleMorph >> atMax [
 	"answer true if the target sprite cannot be made any bigger"
 
 	| maxExtent |
-	maxExtent := ScratchFrameMorph workpaneExtent asFloatPoint * 1.5.
+	maxExtent := PhratchFrameMorph workpaneExtent asFloatPoint * 1.5.
 	^(target extent x >= maxExtent x) or:
 		[target extent y >= maxExtent y]
 ]
@@ -121,8 +121,8 @@ SpriteHandleMorph >> mouseDown: evt [
 SpriteHandleMorph >> mouseEnter: evt [
 
 	(#resize = type)
-		ifTrue: [self form: (ScratchFrameMorph skinAt: #spriteResizeOver)]
-		ifFalse: [self form: (ScratchFrameMorph skinAt: #spriteRotateOver)].
+		ifTrue: [self form: (PhratchFrameMorph skinAt: #spriteResizeOver)]
+		ifFalse: [self form: (PhratchFrameMorph skinAt: #spriteRotateOver)].
 
 ]
 
@@ -130,8 +130,8 @@ SpriteHandleMorph >> mouseEnter: evt [
 SpriteHandleMorph >> mouseLeave: evt [
 
 	(#resize = type)
-		ifTrue: [self form: (ScratchFrameMorph skinAt: #spriteResize)]
-		ifFalse: [self form: (ScratchFrameMorph skinAt: #spriteRotate)].
+		ifTrue: [self form: (PhratchFrameMorph skinAt: #spriteResize)]
+		ifFalse: [self form: (PhratchFrameMorph skinAt: #spriteRotate)].
 
 ]
 
@@ -197,7 +197,7 @@ SpriteHandleMorph >> target: aSprite [
 
 	| stage tb x |
 	target := aSprite.
-	stage := target ownerOrYourselfThatIsA: ScratchStageMorph.
+	stage := target ownerOrYourselfThatIsA: PhratchStageMorph.
 	tb := self targetBounds.
 
 	"make sure the target sprite is onstage"
@@ -231,7 +231,7 @@ SpriteHandleMorph >> targetBounds [
 	| stage ratio home center |
 
 	ratio := 1.
-	stage := target ownerOrYourselfThatIsA: ScratchStageMorph.
+	stage := target ownerOrYourselfThatIsA: PhratchStageMorph.
 	stage notNil & stage isQuarterSize ifTrue: [ratio := 0.5 ].
 	home:= 0 @ 0.
 	stage ifNotNil: [home := stage position ].

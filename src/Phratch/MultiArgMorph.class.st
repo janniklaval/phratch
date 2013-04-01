@@ -62,7 +62,7 @@ MultiArgMorph >> buildControls [
 
 	submorphs do: [:sm | sm delete].
 
-	self addMorphBack: ((PhratchStringMorph contents: text font: (ScratchFrameMorph getFont: #Label))
+	self addMorphBack: ((PhratchStringMorph contents: text font: (PhratchFrameMorph getFont: #Label))
 		color: ((owner respondsTo: #labelColor) ifTrue: [owner labelColor] ifFalse: [Color white])).
 
 	self addMorphBack: (ImageMorph new form: (ArgMorph dropDownMenuForm rotateBy: 90)).
@@ -101,7 +101,7 @@ MultiArgMorph >> defaultValue: aScratchListMorph [
 
 	| element |
 
-	(aScratchListMorph isKindOf: ScratchListMorph)
+	(aScratchListMorph isKindOf: PhratchListMorph)
 		ifFalse: [^ self].
 	1 to: aScratchListMorph lineCount do: [:i |
 		element := aScratchListMorph lineAt: i.
@@ -136,10 +136,10 @@ MultiArgMorph >> evaluate [
 	(self isEmptySlot and: [implicitValue notNil])
 		ifTrue: [^implicitValue].
 
-	list := ScratchListMorph new.
+	list := PhratchListMorph new.
 	list listName: '' target: nil.
 	self elements do: [:each |
-		list insertLine:  (ScriptableScratchMorph new asListElement: each evaluate) at: (list lineCount + 1) ].
+		list insertLine:  (ScriptablePhratchMorph new asListElement: each evaluate) at: (list lineCount + 1) ].
 	list updateCountMorph.
 	list fixLayout.
 	list startStepping.
@@ -319,7 +319,7 @@ MultiArgMorph >> lessButton [
 { #category : #'as yet unclassified' }
 MultiArgMorph >> listValue [
 	 | list item |
-	list := ScratchListMorph new.
+	list := PhratchListMorph new.
 	list listName: '' target: nil.
 	self elements do: [:each |
 		(each isKindOf: ReporterBlockMorph)
@@ -327,7 +327,7 @@ MultiArgMorph >> listValue [
 			ifFalse: [each isEmptySlot
 				ifTrue: [item := nil]
 				ifFalse: [item := each evaluate]].
-		list insertLine: (ScriptableScratchMorph new asListElement: item) at: (list lineCount + 1) ].
+		list insertLine: (ScriptablePhratchMorph new asListElement: item) at: (list lineCount + 1) ].
 	list updateCountMorph.
 	^list	
 ]

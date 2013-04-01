@@ -36,7 +36,7 @@ PhratchFilePickerEntry >> highlight: aBoolean [
 	aBoolean ifFalse: [
 		highlit := false.
 		self color: owner color.
-		nameMorph font: (ScratchFrameMorph getFont: #FilePickerEntry); color: Color black.
+		nameMorph font: (PhratchFrameMorph getFont: #FilePickerEntry); color: Color black.
 		borderWidth := 0.
 		^ self].
 
@@ -48,7 +48,7 @@ PhratchFilePickerEntry >> highlight: aBoolean [
 
 	self color: (Color r: (96/255) g: (136/255) b: (182/255)).
 
-	nameMorph font: (ScratchFrameMorph getFont: #FilePickerEntryHighlighted); color: Color white.
+	nameMorph font: (PhratchFrameMorph getFont: #FilePickerEntryHighlighted); color: Color white.
 
 ]
 
@@ -71,11 +71,11 @@ PhratchFilePickerEntry >> name: aString dir: owningDirectory isDirectory: dirFla
 	entryIsDirectory := dirFlag.
 
 	entryIsDirectory
-		ifTrue: [icon := ScratchFrameMorph skinAt: #folderIcon]
-		ifFalse: [icon := ScratchFrameMorph skinAt: #fileIcon].
+		ifTrue: [icon := PhratchFrameMorph skinAt: #folderIcon]
+		ifFalse: [icon := PhratchFrameMorph skinAt: #fileIcon].
 
 	n := dirFlag ifTrue: [entryName] ifFalse: [(FileSystem workingDirectory / entryName) basename].
-	nameMorph := StringMorph contents: (String  withAll: n) font: (ScratchFrameMorph getFont: #FilePickerEntry).
+	nameMorph := StringMorph contents: (String  withAll: n) font: (PhratchFrameMorph getFont: #FilePickerEntry).
 	self addMorph: (nameMorph position: self position + (28@3)).
 
 	m := ImageMorph new form: icon.

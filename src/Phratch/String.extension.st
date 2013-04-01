@@ -82,8 +82,8 @@ String >> localized [
 
 	| selfAsString |
 	selfAsString := self asString.
-	ScratchTranslator addUITranslation: selfAsString.
-	^( ScratchTranslator translationFor: selfAsString) asMacRoman .
+	PhratchTranslator addUITranslation: selfAsString.
+	^( PhratchTranslator translationFor: selfAsString) asMacRoman .
 
 ]
 
@@ -91,8 +91,8 @@ String >> localized [
 String >> localizedMIDI [
 	"Answer myself translated into the current Scratch language. If there is no translation for me, then answer myself."
 
-	ScratchTranslator addMIDITranslation: self.
-	^ ScratchTranslator translationFor: self
+	PhratchTranslator addMIDITranslation: self.
+	^ PhratchTranslator translationFor: self
 ]
 
 { #category : #'*Phratch' }

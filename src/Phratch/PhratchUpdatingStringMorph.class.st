@@ -70,7 +70,7 @@ PhratchUpdatingStringMorph >> fitContents [
 	|  newExtent |
 	newExtent := (font 
 		ifNil: [self stringExtent: contents] 
-		ifNotNil: [ScratchTranslator stringExtent: contents font: font]) max: 5@0.
+		ifNotNil: [PhratchTranslator stringExtent: contents font: font]) max: 5@0.
 	self extent = newExtent ifFalse: [
 		self extent: newExtent.
 		self changed.

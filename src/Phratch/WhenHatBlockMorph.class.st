@@ -98,9 +98,9 @@ WhenHatBlockMorph >> initialize [
 	s1 := 'when' localized.
 	s2 := 'is true' localized.
 	self removeAllMorphs.
-	self addMorphBack: ((PhratchStringMorph contents: s1 font: (ScratchFrameMorph getFont: #Label)) color: Color white).
+	self addMorphBack: ((PhratchStringMorph contents: s1 font: (PhratchFrameMorph getFont: #Label)) color: Color white).
 	self addMorphBack: argMorph.
-	self addMorphBack: ((PhratchStringMorph contents: s2 font: (ScratchFrameMorph getFont: #Label)) color: Color white).
+	self addMorphBack: ((PhratchStringMorph contents: s2 font: (PhratchFrameMorph getFont: #Label)) color: Color white).
 
 ]
 

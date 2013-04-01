@@ -3,8 +3,8 @@ I represent the background of the Scratch work pane. Like a sprite, I have a set
 
 "
 Class {
-	#name : #ScratchStageMorph,
-	#superclass : #ScriptableScratchMorph,
+	#name : #PhratchStageMorph,
+	#superclass : #ScriptablePhratchMorph,
 	#instVars : [
 		'zoom',
 		'hPan',
@@ -19,17 +19,17 @@ Class {
 		'notePlayerDict',
 		'obsoleteSavedState',
 		'sprites',
-		'scratchServer',
 		'isQuarterSize',
 		'cachedForm',
 		'showMotorBlocks',
-		'feedbackMorph'
+		'feedbackMorph',
+		'phratchServer'
 	],
 	#category : #'Phratch-Objects'
 }
 
 { #category : #'block specs' }
-ScratchStageMorph class >> blockSpecs [
+PhratchStageMorph class >> blockSpecs [
 
 	| blocks |
 	blocks := #(
@@ -77,7 +77,7 @@ ScratchStageMorph class >> blockSpecs [
 ]
 
 { #category : #'dropping/grabbing' }
-ScratchStageMorph >> acceptDroppingMorph: aMorph event: evt [
+PhratchStageMorph >> acceptDroppingMorph: aMorph event: evt [
 
 	self isQuarterSize ifTrue: [
 		aMorph center: (2 * aMorph center) - self position.
@@ -93,7 +93,7 @@ ScratchStageMorph >> acceptDroppingMorph: aMorph event: evt [
 ]
 
 { #category : #'-- all --' }
-ScratchStageMorph >> adjustedCursorPoint [
+PhratchStageMorph >> adjustedCursorPoint [
 	"Answer the current mouse cursorPoint adjusted for the scaling presentation and q-mode."
 
 	DoubleSize
@@ -109,27 +109,27 @@ ScratchStageMorph >> adjustedCursorPoint [
 ]
 
 { #category : #clones }
-ScratchStageMorph >> allClones [
+PhratchStageMorph >> allClones [
 	"Answer a collection of all sprite clones."
 
 	^ self submorphs select: [:m |
-		(m isKindOf: ScriptableScratchMorph) and: [m isClone]].
+		(m isKindOf: ScriptablePhratchMorph) and: [m isClone]].
 
 ]
 
 { #category : #'scratch processes/events' }
-ScratchStageMorph >> allEventNames [
+PhratchStageMorph >> allEventNames [
 	"Answer a list of all events that have been defined in this project."
 
 	| result |
 	result := Set new: 100.
 	self submorphsDo: [:m |
-		(m isKindOf: ScriptableScratchMorph) ifTrue: [
+		(m isKindOf: ScriptablePhratchMorph) ifTrue: [
 			m addEventNamesTo: result]].
 	self addEventNamesTo: result.
 
-	scratchServer ifNotNil: [
-		result addAll: scratchServer broadcastsSeen].
+	phratchServer ifNotNil: [
+		result addAll: phratchServer broadcastsSeen].
 
 	"remove empty string"
 	result remove: '' ifAbsent: [].
@@ -139,7 +139,7 @@ ScratchStageMorph >> allEventNames [
 ]
 
 { #category : #'byob OOP' }
-ScratchStageMorph >> asReferenceTuple [
+PhratchStageMorph >> asReferenceTuple [
 
 	" answer an array describing the receiver in an abstract way
 	format conventions:"
@@ -149,7 +149,7 @@ ScratchStageMorph >> asReferenceTuple [
 ]
 
 { #category : #'byob OOP' }
-ScratchStageMorph >> attribute: attr [
+PhratchStageMorph >> attribute: attr [
 	"Answer the value of my variable or built-in attribute with the given name. Answer zero if I have no attribute or variable with the given name."
 
 	| a |
@@ -170,14 +170,14 @@ ScratchStageMorph >> attribute: attr [
 ]
 
 { #category : #'sensing ops' }
-ScratchStageMorph >> attributeNames [
+PhratchStageMorph >> attributeNames [
 
 	^ #('background #' 'volume') collect: [:s | s]
 
 ]
 
 { #category : #'looks ops' }
-ScratchStageMorph >> backgroundIndex [
+PhratchStageMorph >> backgroundIndex [
 	"Answer the index of my current costume."
 
 	^ self costumeIndex
@@ -185,16 +185,16 @@ ScratchStageMorph >> backgroundIndex [
 ]
 
 { #category : #'scratch processes/events' }
-ScratchStageMorph >> broadcastEventNamed: name with: value [
+PhratchStageMorph >> broadcastEventNamed: name with: value [
 	"Broadcast a ScratchEvent with given name and argument value to all Scratch objects and answer a collection of the newly created processes. This is done by finding all public scripts that respond to this event, and starting new processes for any not already running."
 
 	| event objList newProcs |
-	scratchServer ifNotNil: [scratchServer queueBroadcast: name].
+	phratchServer ifNotNil: [phratchServer queueBroadcast: name].
 	event := PhratchEvent new name: name argument: value.
 	newProcs := OrderedCollection new.
 
 	"start scripts"
-	objList := submorphs select: [:m | m isKindOf: ScriptableScratchMorph].
+	objList := submorphs select: [:m | m isKindOf: ScriptablePhratchMorph].
 	objList do: [:obj |
 		newProcs addAll: (obj eventReceived: event)].
 	newProcs addAll: (self eventReceived: event).
@@ -204,7 +204,7 @@ ScratchStageMorph >> broadcastEventNamed: name with: value [
 ]
 
 { #category : #'looks ops' }
-ScratchStageMorph >> changeBackgroundIndexBy: aNumber [
+PhratchStageMorph >> changeBackgroundIndexBy: aNumber [
 	"Change my background index by the given amount."
 
 	self changeCostumeIndexBy: aNumber.
@@ -212,7 +212,7 @@ ScratchStageMorph >> changeBackgroundIndexBy: aNumber [
 ]
 
 { #category : #'looks ops' }
-ScratchStageMorph >> changeHPanBy: amount [
+PhratchStageMorph >> changeHPanBy: amount [
 	"Change my horizontal pan by the given amount."
 
 	hPan := hPan + amount truncated.
@@ -221,7 +221,7 @@ ScratchStageMorph >> changeHPanBy: amount [
 ]
 
 { #category : #'looks ops' }
-ScratchStageMorph >> changeVPanBy: amount [
+PhratchStageMorph >> changeVPanBy: amount [
 	"Change my vertical pan by the given amount."
 
 	vPan := vPan + amount truncated.
@@ -230,7 +230,7 @@ ScratchStageMorph >> changeVPanBy: amount [
 ]
 
 { #category : #'looks ops' }
-ScratchStageMorph >> changeZoomBy: percent [
+PhratchStageMorph >> changeZoomBy: percent [
 	"Change my zoom by the given percent."
 
 	zoom := zoom + percent.
@@ -239,7 +239,7 @@ ScratchStageMorph >> changeZoomBy: percent [
 ]
 
 { #category : #byob }
-ScratchStageMorph >> clearAllVariables [
+PhratchStageMorph >> clearAllVariables [
 
 	self clearVariables.
 	sprites do: [:each |
@@ -248,7 +248,7 @@ ScratchStageMorph >> clearAllVariables [
 ]
 
 { #category : #'pen support' }
-ScratchStageMorph >> clearPenTrails [
+PhratchStageMorph >> clearPenTrails [
 	"Remove my pen trails Form. It will be recreated later if it is needed."
 
 	penTrailsForm := nil.
@@ -257,7 +257,7 @@ ScratchStageMorph >> clearPenTrails [
 ]
 
 { #category : #midi }
-ScratchStageMorph >> closeMIDI [
+PhratchStageMorph >> closeMIDI [
 	"Close the MIDI port and clear the note player dictionary."
 
 	midiPort ifNotNil: [
@@ -268,7 +268,7 @@ ScratchStageMorph >> closeMIDI [
 ]
 
 { #category : #'event handling' }
-ScratchStageMorph >> containsPoint: aPoint [
+PhratchStageMorph >> containsPoint: aPoint [
 
 	self isQuarterSize ifTrue: [^ (self position extent: self extent // 2)  containsPoint: aPoint].
 	^ self bounds containsPoint: aPoint
@@ -276,7 +276,7 @@ ScratchStageMorph >> containsPoint: aPoint [
 ]
 
 { #category : #accessing }
-ScratchStageMorph >> copyForExport [
+PhratchStageMorph >> copyForExport [
 	"Answer a copy of me with no sprites for use in exporting the background by itself."
 
 	^ super copyForExport removeAllMorphs
@@ -284,7 +284,7 @@ ScratchStageMorph >> copyForExport [
 ]
 
 { #category : #accessing }
-ScratchStageMorph >> costumeChanged [
+PhratchStageMorph >> costumeChanged [
 
 	costumeChangeMSecs := Time millisecondClockValue.
 	filterPack ifNotNil: [filterPack clearFilterCaches].
@@ -293,7 +293,7 @@ ScratchStageMorph >> costumeChanged [
 ]
 
 { #category : #'pen support' }
-ScratchStageMorph >> createOrResizeTrailsForm [
+PhratchStageMorph >> createOrResizeTrailsForm [
 	"If necessary, create a new penTrailsForm or resize the existing one to fill my bounds. On return, penTrailsForm will be a Form of the correct size."
 
 	| newForm |
@@ -313,7 +313,7 @@ ScratchStageMorph >> createOrResizeTrailsForm [
 ]
 
 { #category : #'scratch processes/events' }
-ScratchStageMorph >> defaultEventName [
+PhratchStageMorph >> defaultEventName [
 	"Answer a default event name for message send and receive blocks."
 
 	| evtNames |
@@ -323,16 +323,16 @@ ScratchStageMorph >> defaultEventName [
 ]
 
 { #category : #accessing }
-ScratchStageMorph >> defaultImageMedia [
+PhratchStageMorph >> defaultImageMedia [
 
 	^ ImageMedia new
-		form: ScriptableScratchMorph defaultBackgroundForm;
+		form: ScriptablePhratchMorph defaultBackgroundForm;
 		mediaName: ('background' localized, '1')
 
 ]
 
 { #category : #clones }
-ScratchStageMorph >> deleteAllClones [
+PhratchStageMorph >> deleteAllClones [
 	"Delete all clones."
 
 	self allClones do: [:clone | clone delete].
@@ -340,13 +340,13 @@ ScratchStageMorph >> deleteAllClones [
 ]
 
 { #category : #'byob OOP' }
-ScratchStageMorph >> deleteSprite [
+PhratchStageMorph >> deleteSprite [
 	"override the inherited default method to do nothing"
 	^ self
 ]
 
 { #category : #clones }
-ScratchStageMorph >> deleteTerminatedClones [
+PhratchStageMorph >> deleteTerminatedClones [
 	"Delete all clones that have no running scripts."
 
 	| isRunning |
@@ -360,7 +360,7 @@ ScratchStageMorph >> deleteTerminatedClones [
 ]
 
 { #category : #drawing }
-ScratchStageMorph >> drawOn: aCanvas [
+PhratchStageMorph >> drawOn: aCanvas [
 	"Draw myself if my visibility is > 0. If my visibility is 1, draw using the normal 'paint' mode. Otherwise, draw using 'alpha' resulting in a partially transparent rendering."
 
 	| clipC f p alpha |
@@ -383,7 +383,7 @@ ScratchStageMorph >> drawOn: aCanvas [
 ]
 
 { #category : #'pen support' }
-ScratchStageMorph >> drawPenTrailFor: aMorph from: oldPoint to: newPoint [
+PhratchStageMorph >> drawPenTrailFor: aMorph from: oldPoint to: newPoint [
 	"Draw a pen trail between the given points for the given morph using its pen size and color. The points are in Scratch coordinates (that is, 0@0 is the center of the work pane and y increases toward the top of the screen."
 	"The penTrailsForm is created on demand when the first pen is put down and removed (to save space) when pen trails are cleared."
 
@@ -405,7 +405,7 @@ ScratchStageMorph >> drawPenTrailFor: aMorph from: oldPoint to: newPoint [
 ]
 
 { #category : #drawing }
-ScratchStageMorph >> drawQuarterSizeOn: aCanvas [
+PhratchStageMorph >> drawQuarterSizeOn: aCanvas [
 	"Draw myself and my submorphs to an offscreen canvas, then scale down to quarter size and draw that on the given canvas."
 
 	| r srcR c |
@@ -418,7 +418,7 @@ ScratchStageMorph >> drawQuarterSizeOn: aCanvas [
 		clipRect: srcR.
 	super fullDrawOn: c.
 
-	ScratchPlugin halfSize: cachedForm into: Display srcPoint: srcR origin dstRect: r.
+	PhratchPlugin halfSize: cachedForm into: Display srcPoint: srcR origin dstRect: r.
 
 "xxx
 	cachedForm unhibernate.
@@ -442,7 +442,7 @@ xxx"
 ]
 
 { #category : #drawing }
-ScratchStageMorph >> drawSubmorphsOn: aCanvas [
+PhratchStageMorph >> drawSubmorphsOn: aCanvas [
 	"Clip submorph drawing to my bounds."
 
 	| clipCanvas |
@@ -453,7 +453,7 @@ ScratchStageMorph >> drawSubmorphsOn: aCanvas [
 
 	"draw sprite talk bubbles in front of all morphs:"
 	submorphs reverseDo:[:m |
-		((m isKindOf: ScratchSpriteMorph) and:
+		((m isKindOf: PhratchSpriteMorph) and:
 		 [m isHidden not and:
 		 [clipCanvas isVisible: m fullBounds]]) ifTrue: [
 			m drawTalkBubbleOn: clipCanvas]].
@@ -462,7 +462,7 @@ ScratchStageMorph >> drawSubmorphsOn: aCanvas [
 ]
 
 { #category : #drawing }
-ScratchStageMorph >> exportFileName: fileName [
+PhratchStageMorph >> exportFileName: fileName [
 
 	| form fName |
 	form := self stageShotForm.
@@ -481,14 +481,14 @@ ScratchStageMorph >> exportFileName: fileName [
 ]
 
 { #category : #'object i/o' }
-ScratchStageMorph >> fieldsVersion [
+PhratchStageMorph >> fieldsVersion [
 
 	^ 5
 
 ]
 
 { #category : #drawing }
-ScratchStageMorph >> fullBounds [
+PhratchStageMorph >> fullBounds [
 	"Overridden to clip submorph hit detection to my bounds."
 
 	^ bounds
@@ -496,7 +496,7 @@ ScratchStageMorph >> fullBounds [
 ]
 
 { #category : #'event handling' }
-ScratchStageMorph >> fullContainsPoint: aPoint [
+PhratchStageMorph >> fullContainsPoint: aPoint [
 	"Answer true if the given point is in my visible bounds. In quarterSize mode, my visible bounds is only half of my extent."
 
 	| r |
@@ -509,7 +509,7 @@ ScratchStageMorph >> fullContainsPoint: aPoint [
 ]
 
 { #category : #drawing }
-ScratchStageMorph >> fullDrawOn: aCanvas [
+PhratchStageMorph >> fullDrawOn: aCanvas [
 	"Calls super fullDrawOn and then draws the frame shadow"
 
 	| shadowOrigin topShadowExtent leftShadowExtent alphas |
@@ -520,7 +520,7 @@ ScratchStageMorph >> fullDrawOn: aCanvas [
 	super fullDrawOn: aCanvas.
 
 	"don't draw shadows if owner is not a ScratchFrameMorph"
-	(owner isKindOf: ScratchFrameMorph) ifFalse: [^ self].
+	(owner isKindOf: PhratchFrameMorph) ifFalse: [^ self].
 
 	"shadow constants"
 	shadowOrigin := self topLeft + aCanvas origin.
@@ -572,7 +572,7 @@ ScratchStageMorph >> fullDrawOn: aCanvas [
 ]
 
 { #category : #'sensing ops' }
-ScratchStageMorph >> getAttribute: attr [
+PhratchStageMorph >> getAttribute: attr [
 	"Answer the value of my variable or built-in attribute with the given name. Answer zero if I have no attribute or variable with the given name."
 
 	| a |
@@ -588,12 +588,12 @@ ScratchStageMorph >> getAttribute: attr [
 ]
 
 { #category : #'event handling' }
-ScratchStageMorph >> grabSpriteFromScreen [
+PhratchStageMorph >> grabSpriteFromScreen [
 	"Create a new sprite, grabbing it's costume from an area of the screen."
 
 	| frame m f |
-	(frame := self ownerOrYourselfThatIsA: ScratchFrameMorph) ifNil: [^ self].
-	m := ScratchSpriteMorph new.
+	(frame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNil: [^ self].
+	m := PhratchSpriteMorph new.
 	(f := m grabFormFromScreen) ifNil: [^ self].
 	m onlyCostume: f.
 	frame addAndView: m.
@@ -602,7 +602,7 @@ ScratchStageMorph >> grabSpriteFromScreen [
 ]
 
 { #category : #drawing }
-ScratchStageMorph >> incrRedraw: damageList [
+PhratchStageMorph >> incrRedraw: damageList [
 	"Redraw the damaged areas of this stage directly onto the display. Assumes that no other morph is in front of me."
 
 	| f c p screenR |
@@ -616,7 +616,7 @@ ScratchStageMorph >> incrRedraw: damageList [
 				screenR := p extent: 2 * f extent.
 				(Display boundingBox containsRect: screenR) ifTrue: [
 					[
-						ScratchPlugin
+						PhratchPlugin
 							primDouble: f bits w: f width h: f height
 							into: Display bits w: Display width h: Display height
 							x: screenR left y: screenR top.
@@ -628,7 +628,7 @@ ScratchStageMorph >> incrRedraw: damageList [
 ]
 
 { #category : #'object i/o' }
-ScratchStageMorph >> initFieldsFrom: anObjStream version: classVersion [
+PhratchStageMorph >> initFieldsFrom: anObjStream version: classVersion [
 
 	super initFieldsFrom: anObjStream version: classVersion.
 	self initFieldsNamed: #(
@@ -667,7 +667,7 @@ ScratchStageMorph >> initFieldsFrom: anObjStream version: classVersion [
 ]
 
 { #category : #initialization }
-ScratchStageMorph >> initialize [
+PhratchStageMorph >> initialize [
 
 	super initialize.
 	color := Color white.
@@ -690,13 +690,13 @@ ScratchStageMorph >> initialize [
 ]
 
 { #category : #drawing }
-ScratchStageMorph >> invalidRect: damageRect [
+PhratchStageMorph >> invalidRect: damageRect [
 	"Clip damage reports to my bounds, since drawing is clipped to my bounds."
 
 	| r |
-	(owner isKindOf: ScratchFrameMorph) ifTrue: [owner projectModified].
+	(owner isKindOf: PhratchFrameMorph) ifTrue: [owner projectModified].
 
-	(self isQuarterSize and: [owner isKindOf: ScratchFrameMorph])
+	(self isQuarterSize and: [owner isKindOf: PhratchFrameMorph])
 		ifTrue: [
 			r := (bounds origin + ((damageRect origin - bounds origin) / 2.0)) extent: (damageRect extent / 2.0).
 			r := r intersect: (bounds origin extent: bounds extent // 2)]
@@ -709,22 +709,22 @@ ScratchStageMorph >> invalidRect: damageRect [
 ]
 
 { #category : #byob }
-ScratchStageMorph >> isPaused [
+PhratchStageMorph >> isPaused [
 
 	| allObjs |
-	allObjs := submorphs select: [:m | m isKindOf: ScriptableScratchMorph].
+	allObjs := submorphs select: [:m | m isKindOf: ScriptablePhratchMorph].
 	allObjs := allObjs copyWith: self.
 	allObjs do: [:obj |
 		(obj blocksBin isKindOf: Morph) ifTrue: [
 			obj blocksBin submorphs do: [:b |
-				(b isKindOf: BlockMorph) ifTrue: [(b scratchProc notNil and: [b scratchProc isPaused not]) ifTrue: [^ false]]]]].
+				(b isKindOf: BlockMorph) ifTrue: [(b phratchProc notNil and: [b phratchProc isPaused not]) ifTrue: [^ false]]]]].
 	^ true
 
 
 ]
 
 { #category : #accessing }
-ScratchStageMorph >> isQuarterSize [
+PhratchStageMorph >> isQuarterSize [
 
 	isQuarterSize ifNil: [isQuarterSize := false].  "lazy initialization"
 	^ isQuarterSize
@@ -732,14 +732,14 @@ ScratchStageMorph >> isQuarterSize [
 ]
 
 { #category : #accessing }
-ScratchStageMorph >> isQuarterSize: aBoolean [
+PhratchStageMorph >> isQuarterSize: aBoolean [
 
 	isQuarterSize := aBoolean.
 
 ]
 
 { #category : #byob }
-ScratchStageMorph >> listInVarNamed: varName targetName: targetName [
+PhratchStageMorph >> listInVarNamed: varName targetName: targetName [
 
 	targetName = 'Stage' ifTrue: [
 		^self getVar: varName].
@@ -752,7 +752,7 @@ ScratchStageMorph >> listInVarNamed: varName targetName: targetName [
 ]
 
 { #category : #byob }
-ScratchStageMorph >> listNamed: listName targetName: targetName [
+PhratchStageMorph >> listNamed: listName targetName: targetName [
 
 	targetName = 'Stage' ifTrue: [
 		^self listNamed: listName ].
@@ -765,7 +765,7 @@ ScratchStageMorph >> listNamed: listName targetName: targetName [
 ]
 
 { #category : #'looks ops' }
-ScratchStageMorph >> lookLike: costumeName [
+PhratchStageMorph >> lookLike: costumeName [
 
 	self undeleteAttribute: #costumeIndex.
 	self passiveLookLike: costumeName.
@@ -774,13 +774,13 @@ ScratchStageMorph >> lookLike: costumeName [
 ]
 
 { #category : #'looks ops' }
-ScratchStageMorph >> makeVisible [
+PhratchStageMorph >> makeVisible [
 	"Do nothing. I'm always visible."
 
 ]
 
 { #category : #midi }
-ScratchStageMorph >> midiAllNotesOff [
+PhratchStageMorph >> midiAllNotesOff [
 	"If the MIDI port is open, send an 'all notes off' command on every channel."
 
 	midiPort ifNil: [^ self].
@@ -790,14 +790,14 @@ ScratchStageMorph >> midiAllNotesOff [
 ]
 
 { #category : #midi }
-ScratchStageMorph >> midiPortNum [
+PhratchStageMorph >> midiPortNum [
 
 	^ midiPortNum
 
 ]
 
 { #category : #midi }
-ScratchStageMorph >> midiPortNum: anInteger [
+PhratchStageMorph >> midiPortNum: anInteger [
 
 	midiPortNum := anInteger.
 
@@ -805,7 +805,7 @@ ScratchStageMorph >> midiPortNum: anInteger [
 ]
 
 { #category : #'event handling' }
-ScratchStageMorph >> mouseDown: evt [
+PhratchStageMorph >> mouseDown: evt [
 	"Handle a mouse down event."
 
 	evt hand newKeyboardFocus: nil.
@@ -818,7 +818,7 @@ ScratchStageMorph >> mouseDown: evt [
 ]
 
 { #category : #'looks ops' }
-ScratchStageMorph >> newScene [
+PhratchStageMorph >> newScene [
 
 	| sceneName |
 	sceneName := StringDialog ask: 'Enter Scene Name:'.
@@ -826,13 +826,13 @@ ScratchStageMorph >> newScene [
 
 	sceneStates at: sceneName put: self backgroundIndex.
 	submorphs do: [:m |
-		(m isKindOf: ScratchSpriteMorph) ifTrue: [
+		(m isKindOf: PhratchSpriteMorph) ifTrue: [
 			m recordScene: sceneName]].
 
 ]
 
 { #category : #'looks ops' }
-ScratchStageMorph >> nextBackground [
+PhratchStageMorph >> nextBackground [
 	"Show the next background in my backgrounds list."
 
 	self nextCostume.
@@ -840,7 +840,7 @@ ScratchStageMorph >> nextBackground [
 ]
 
 { #category : #midi }
-ScratchStageMorph >> notePlayerFor: aScratchObject [
+PhratchStageMorph >> notePlayerFor: aScratchObject [
 	"Answer a note player for the given object, creating one if necessary. Open the MIDI port if necessary."
 
 	| deletedMorphs channelUsage ch newCh newPlayer |
@@ -872,14 +872,14 @@ ScratchStageMorph >> notePlayerFor: aScratchObject [
 ]
 
 { #category : #accessing }
-ScratchStageMorph >> objName [
+PhratchStageMorph >> objName [
 
 	^ 'Stage' localized
 
 ]
 
 { #category : #midi }
-ScratchStageMorph >> openMIDI [
+PhratchStageMorph >> openMIDI [
 	"Prompt the user to select a MIDI port number, then open it."
 
 	| possiblePorts dir menu choice |
@@ -899,7 +899,7 @@ ScratchStageMorph >> openMIDI [
 ]
 
 { #category : #'byob OOP' }
-ScratchStageMorph >> passiveLookLike: costumeName [
+PhratchStageMorph >> passiveLookLike: costumeName [
 	"Change to the costume with the given name. Noop if there is no costume of the given name in my library."
 
 	zoom := 100.
@@ -911,7 +911,7 @@ ScratchStageMorph >> passiveLookLike: costumeName [
 ]
 
 { #category : #drawing }
-ScratchStageMorph >> patchAt: patchRect withoutWatchersAnd: stopMorph andNothingAbove: stopThere [
+PhratchStageMorph >> patchAt: patchRect withoutWatchersAnd: stopMorph andNothingAbove: stopThere [
 	"Return a complete rendering of this patch of the display screen without drawing stopMorph and, if stopThere is true, without drawing any morph above it."
 
 	| c morphsToDraw i |
@@ -939,7 +939,7 @@ ScratchStageMorph >> patchAt: patchRect withoutWatchersAnd: stopMorph andNothing
 ]
 
 { #category : #byob }
-ScratchStageMorph >> pauseAllProcesses [
+PhratchStageMorph >> pauseAllProcesses [
 	"Pause all running Scratch processes."
 
 	| allObjs |
@@ -962,14 +962,14 @@ ScratchStageMorph >> pauseAllProcesses [
 ]
 
 { #category : #'pen support' }
-ScratchStageMorph >> penTrailsForm [
+PhratchStageMorph >> penTrailsForm [
 
 	^ penTrailsForm
 
 ]
 
 { #category : #'pen support' }
-ScratchStageMorph >> penTrailsForm: aForm [
+PhratchStageMorph >> penTrailsForm: aForm [
 
 	penTrailsForm := aForm.
 	penTrailsForm ifNotNil: [self createOrResizeTrailsForm].
@@ -977,7 +977,7 @@ ScratchStageMorph >> penTrailsForm: aForm [
 ]
 
 { #category : #'pen support' }
-ScratchStageMorph >> penUpOrDownChangeFor: aSprite [
+PhratchStageMorph >> penUpOrDownChangeFor: aSprite [
 	"The pen up/down state for the given sprite may have changed; update lastPenPositions accordingly."
 
 	| p |
@@ -994,8 +994,22 @@ ScratchStageMorph >> penUpOrDownChangeFor: aSprite [
 
 ]
 
+{ #category : #accessing }
+PhratchStageMorph >> phratchServer [
+
+	^ phratchServer
+
+]
+
+{ #category : #accessing }
+PhratchStageMorph >> phratchServer: anObject [
+
+	phratchServer := anObject.
+
+]
+
 { #category : #drawing }
-ScratchStageMorph >> previewForm [
+PhratchStageMorph >> previewForm [
 	"Answer a full-size preview of me and my submorphs. Use super fullDrawOn: to avoid drawing the shadows along the top and left edges of the workspace."
 
 	| canvas |
@@ -1006,11 +1020,11 @@ ScratchStageMorph >> previewForm [
 ]
 
 { #category : #'scratch processes/events' }
-ScratchStageMorph >> processesToRun [
+PhratchStageMorph >> processesToRun [
 	"Answer a collection of processes to run. Filter out any processes for objects have been picked up. Always return a copy of the processes list."
 
 	| result m |
-	result := runningBlocks collect: [:b | b scratchProc].
+	result := runningBlocks collect: [:b | b phratchProc].
 	result := result select: [:proc | proc notNil].
 
 	World activeHand submorphs size > 0 ifTrue: [
@@ -1022,7 +1036,7 @@ ScratchStageMorph >> processesToRun [
 ]
 
 { #category : #byob }
-ScratchStageMorph >> referenceToList: aScratchList [
+PhratchStageMorph >> referenceToList: aScratchList [
 
 	"answer an Array describing the variable which holds an anonymous list, nil
 	if there isn't any.
@@ -1045,20 +1059,20 @@ ScratchStageMorph >> referenceToList: aScratchList [
 ]
 
 { #category : #'scratch processes/events' }
-ScratchStageMorph >> rejectDropEvent: evt [
+PhratchStageMorph >> rejectDropEvent: evt [
 	"we should only reject drops if they're not sprites, variables, etc. Should check it out better"
 	self flag: 'to review'.  
 	^false
 ]
 
 { #category : #'scratch processes/events' }
-ScratchStageMorph >> removeTerminatedProcesses [
+PhratchStageMorph >> removeTerminatedProcesses [
 	"Remove terminated processes from the process list."
 
 	| newRunning proc |
 	newRunning := runningBlocks species new: 100.
 	runningBlocks do: [:b |
-		(proc := b scratchProc) ifNotNil: [
+		(proc := b phratchProc) ifNotNil: [
 			proc isRunning
 				ifTrue: [newRunning addLast: b]
 				ifFalse: [proc errorFlag ifFalse: [b stop]]]].
@@ -1068,7 +1082,7 @@ ScratchStageMorph >> removeTerminatedProcesses [
 ]
 
 { #category : #'looks ops' }
-ScratchStageMorph >> rerecordScene [
+PhratchStageMorph >> rerecordScene [
 
 	| sceneName sceneList menu |
 	sceneList := self sceneNames .
@@ -1084,16 +1098,16 @@ ScratchStageMorph >> rerecordScene [
 ]
 
 { #category : #'as yet unclassified' }
-ScratchStageMorph >> rerecordScene: sceneName [
+PhratchStageMorph >> rerecordScene: sceneName [
 	sceneStates at: sceneName put: self backgroundIndex.
 	submorphs do: [:m |
-		(m isKindOf: ScratchSpriteMorph) ifTrue: [
+		(m isKindOf: PhratchSpriteMorph) ifTrue: [
 			m recordScene: sceneName]].
 
 ]
 
 { #category : #byob }
-ScratchStageMorph >> resumeAllProcesses [
+PhratchStageMorph >> resumeAllProcesses [
 	"Pause all running Scratch processes."
 
 	| allObjs |
@@ -1117,7 +1131,7 @@ ScratchStageMorph >> resumeAllProcesses [
 ]
 
 { #category : #menus }
-ScratchStageMorph >> rightButtonMenu [
+PhratchStageMorph >> rightButtonMenu [
 	"Present the right button menu."
 
 	| menu |
@@ -1130,7 +1144,7 @@ ScratchStageMorph >> rightButtonMenu [
 ]
 
 { #category : #'dropping/grabbing' }
-ScratchStageMorph >> rootForGrabOf: aMorph [
+PhratchStageMorph >> rootForGrabOf: aMorph [
 	"Allow the given submorph to be extracted."
 
 	| root |
@@ -1144,14 +1158,14 @@ ScratchStageMorph >> rootForGrabOf: aMorph [
 ]
 
 { #category : #accessing }
-ScratchStageMorph >> rotationCenter [
+PhratchStageMorph >> rotationCenter [
 
 	^ costume rotationCenter
 
 ]
 
 { #category : #media }
-ScratchStageMorph >> savePhoto: aForm [
+PhratchStageMorph >> savePhoto: aForm [
 
 	| n f |
 	n := self unusedMediaNameFromBaseName: 'background' localized, '1'.
@@ -1169,51 +1183,37 @@ ScratchStageMorph >> savePhoto: aForm [
 ]
 
 { #category : #'looks ops' }
-ScratchStageMorph >> sceneNames [
+PhratchStageMorph >> sceneNames [
 
 	| setOfNames |
 	setOfNames := Set new.
 	submorphs do: [:m |
-		(m isKindOf: ScratchSpriteMorph) ifTrue: [
+		(m isKindOf: PhratchSpriteMorph) ifTrue: [
 			setOfNames addAll: m scenes]].
 
 	^ setOfNames asArray sort, (Array
 		with: '-'
-		with: 'record' localized, ScratchTranslator ellipsesSuffix
-		with: 're-record' localized, ScratchTranslator ellipsesSuffix)
+		with: 'record' localized, PhratchTranslator ellipsesSuffix
+		with: 're-record' localized, PhratchTranslator ellipsesSuffix)
 
 ]
 
 { #category : #accessing }
-ScratchStageMorph >> scratchServer [
-
-	^ scratchServer
-
-]
-
-{ #category : #accessing }
-ScratchStageMorph >> scratchServer: anObject [
-
-	scratchServer := anObject.
-
-]
-
-{ #category : #accessing }
-ScratchStageMorph >> sensorBoard [
+PhratchStageMorph >> sensorBoard [
 
 	^ sensorBoard
 
 ]
 
 { #category : #accessing }
-ScratchStageMorph >> sensorBoard: aSensorBoardMorph [
+PhratchStageMorph >> sensorBoard: aSensorBoardMorph [
 
 	sensorBoard := aSensorBoardMorph.
 
 ]
 
 { #category : #'looks ops' }
-ScratchStageMorph >> setHPanTo: aNumber [
+PhratchStageMorph >> setHPanTo: aNumber [
 	"Set my horizontal pan to the given offset."
 
 	hPan := aNumber truncated.
@@ -1223,14 +1223,14 @@ ScratchStageMorph >> setHPanTo: aNumber [
 ]
 
 { #category : #'sound ops' }
-ScratchStageMorph >> setTempoTo: aNumber [
+PhratchStageMorph >> setTempoTo: aNumber [
 
 	tempoBPM := (aNumber asNumberNoError within: 20 and: 500).
 
 ]
 
 { #category : #'looks ops' }
-ScratchStageMorph >> setVPanTo: aNumber [
+PhratchStageMorph >> setVPanTo: aNumber [
 	"Set my vertical pan to the given offset."
 
 	vPan := aNumber truncated.
@@ -1240,7 +1240,7 @@ ScratchStageMorph >> setVPanTo: aNumber [
 ]
 
 { #category : #'looks ops' }
-ScratchStageMorph >> setZoomTo: percent [
+PhratchStageMorph >> setZoomTo: percent [
 	"Set my zoom to the given percent."
 
 	zoom := percent truncated.
@@ -1249,7 +1249,7 @@ ScratchStageMorph >> setZoomTo: percent [
 ]
 
 { #category : #'looks ops' }
-ScratchStageMorph >> showBackground: costumeNameOrIndex [
+PhratchStageMorph >> showBackground: costumeNameOrIndex [
 	"This is lookLike: for the stage..."
 
 	self lookLike: costumeNameOrIndex.
@@ -1257,43 +1257,43 @@ ScratchStageMorph >> showBackground: costumeNameOrIndex [
 ]
 
 { #category : #accessing }
-ScratchStageMorph >> showMotorBlocks [
+PhratchStageMorph >> showMotorBlocks [
 
 	^ showMotorBlocks
 
 ]
 
 { #category : #accessing }
-ScratchStageMorph >> showMotorBlocks: aBoolean [
+PhratchStageMorph >> showMotorBlocks: aBoolean [
 
 	showMotorBlocks := aBoolean.
 
 ]
 
 { #category : #'looks ops' }
-ScratchStageMorph >> showScene: sceneName [
+PhratchStageMorph >> showScene: sceneName [
 
 	(sceneStates includesKey: sceneName) ifTrue: [
 		self showBackground: (sceneStates at: sceneName)].
 
 	submorphs do: [:m |
-		(m isKindOf: ScratchSpriteMorph) ifTrue: [
+		(m isKindOf: PhratchSpriteMorph) ifTrue: [
 			m setScene: sceneName]].
 
 ]
 
 { #category : #accessing }
-ScratchStageMorph >> sprites [
+PhratchStageMorph >> sprites [
 
 	^ sprites
 
 ]
 
 { #category : #'event handling' }
-ScratchStageMorph >> stageShot [
+PhratchStageMorph >> stageShot [
 
 	| result |
-	result := ScratchFileChooserDialog
+	result := PhratchFileChooserDialog
 		chooseNewFileDefault: ''
 		title: 'Save Stage Shot'
 		type: #stageShot.
@@ -1303,7 +1303,7 @@ ScratchStageMorph >> stageShot [
 ]
 
 { #category : #drawing }
-ScratchStageMorph >> stageShotForm [
+PhratchStageMorph >> stageShotForm [
 	"Answer a stage shot of me and my submorphs."
 
 	^ self stageShotSized: self width @ self height
@@ -1311,7 +1311,7 @@ ScratchStageMorph >> stageShotForm [
 ]
 
 { #category : #drawing }
-ScratchStageMorph >> stageShotSized: size [
+PhratchStageMorph >> stageShotSized: size [
 	"Answer a thumbnail of me and my submorphs. Use super fullDrawOn: to avoid drawing the shadows along the top and left edges of the workspace."
 
 	| canvas thumbForm |
@@ -1333,7 +1333,7 @@ ScratchStageMorph >> stageShotSized: size [
 ]
 
 { #category : #'pen support' }
-ScratchStageMorph >> stampCostume: aSprite [
+PhratchStageMorph >> stampCostume: aSprite [
 	"Stamp a copy of the given sprite on my pen trails form."
 
 	self createOrResizeTrailsForm.
@@ -1345,13 +1345,13 @@ ScratchStageMorph >> stampCostume: aSprite [
 ]
 
 { #category : #'event handling' }
-ScratchStageMorph >> startDrag: evt [
+PhratchStageMorph >> startDrag: evt [
 	"Ignore drag events."
 
 ]
 
 { #category : #'scratch processes/events' }
-ScratchStageMorph >> startProcessFor: topBlock [
+PhratchStageMorph >> startProcessFor: topBlock [
 	"Start a process to run the given block or stack of blocks. Return the new process."
 
 	| sequence proc |
@@ -1359,12 +1359,12 @@ ScratchStageMorph >> startProcessFor: topBlock [
 	sequence first isHatBlock ifTrue: [
 		sequence := sequence allButFirst].  "skip hat block"
 
-	topBlock scratchProc ifNotNil: [topBlock stop].
+	topBlock phratchProc ifNotNil: [topBlock stop].
 
 	proc := PhratchProcess new
 		topBlock: topBlock;
 		expression: sequence.
-	topBlock scratchProc: proc.
+	topBlock phratchProc: proc.
 
 	(runningBlocks includes: topBlock) ifFalse: [runningBlocks addLast: topBlock].
 
@@ -1373,7 +1373,7 @@ ScratchStageMorph >> startProcessFor: topBlock [
 ]
 
 { #category : #byob }
-ScratchStageMorph >> startProcessForSequence: anArray [
+PhratchStageMorph >> startProcessForSequence: anArray [
 	"Start a process to run the given block or stack of blocks. Return the new process."
 
 	| sequence proc topBlock |
@@ -1382,13 +1382,13 @@ ScratchStageMorph >> startProcessForSequence: anArray [
 	sequence first isHatBlock ifTrue: [
 		sequence := sequence allButFirst].  "skip hat block"
 
-	topBlock scratchProc ifNotNil: [topBlock stop].
+	topBlock phratchProc ifNotNil: [topBlock stop].
 
 	proc := PhratchProcess new
 		topBlock: topBlock;
 		scriptList: anArray;
 		expression: sequence.
-	topBlock scratchProc: proc.
+	topBlock phratchProc: proc.
 	(runningBlocks includes: topBlock) ifFalse: [runningBlocks addLast: topBlock].
 
 	^ proc
@@ -1396,7 +1396,7 @@ ScratchStageMorph >> startProcessForSequence: anArray [
 ]
 
 { #category : #nesting }
-ScratchStageMorph >> step [
+PhratchStageMorph >> step [
 
 	| cp targets dragged |
 	super step.
@@ -1418,7 +1418,7 @@ ScratchStageMorph >> step [
 ]
 
 { #category : #'scratch processes/events' }
-ScratchStageMorph >> stepProcesses [
+PhratchStageMorph >> stepProcesses [
 	"Run each Scratch process until it gives up control, then filter out any processes that have terminated."
 	"Details: Iterate over a copy of processes to allow processes to stop themselves. During development, the error catcher makes it difficult to track down errors, so it can be disabled."
 
@@ -1429,7 +1429,7 @@ ScratchStageMorph >> stepProcesses [
 
 	inProcessStep ifTrue: [^ self].
 	inProcessStep := true.
-	ScratchFrameMorph useErrorCatcher
+	PhratchFrameMorph useErrorCatcher
 		ifTrue: [
 			[self processesToRun do: [:p | (proc := p) runStepFor: self]]
 				ifError: [proc errorFlag: true]]
@@ -1444,7 +1444,7 @@ ScratchStageMorph >> stepProcesses [
 ]
 
 { #category : #'scratch processes/events' }
-ScratchStageMorph >> stepProcessesTurbo [
+PhratchStageMorph >> stepProcessesTurbo [
 	"Run each Scratch process until it gives up control, then filter out any processes that have terminated. Do this repeatedly until time is up."
 
 	| sliceMSecs startMSecs now proc |
@@ -1466,7 +1466,7 @@ ScratchStageMorph >> stepProcessesTurbo [
 ]
 
 { #category : #'scratch processes/events' }
-ScratchStageMorph >> stopAll [
+PhratchStageMorph >> stopAll [
 	"Stop all processes and make sure I am stepping."
 
 	| sFrame |
@@ -1481,11 +1481,11 @@ ScratchStageMorph >> stopAll [
 "	WeDoPlugin resetWeDo."
 	self stopPlaying.
 	self allMorphsDo: [:m |
-		(m isKindOf: ScriptableScratchMorph) ifTrue: [m stopPlaying]].
+		(m isKindOf: ScriptablePhratchMorph) ifTrue: [m stopPlaying]].
 
 	DebuggerFrameMorph allInstancesDo: [:df | df delete ].
 
-	(sFrame := self ownerOrYourselfThatIsA: ScratchFrameMorph) ifNotNil: [
+	(sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNotNil: [
 		sFrame scriptsPane allMorphsDo: [:m |
 			(m respondsTo: #stop) ifTrue: [m stop].
 			(m respondsTo: #litUp:) ifTrue: [m litUp: false]].
@@ -1496,12 +1496,12 @@ ScratchStageMorph >> stopAll [
 ]
 
 { #category : #'scratch processes/events' }
-ScratchStageMorph >> stopAllProcesses [
+PhratchStageMorph >> stopAllProcesses [
 	"Stop all running Scratch processes."
 
 	| allObjs |
 	"clear all processes, including those with error feedback"
-	allObjs := submorphs select: [:m | m isKindOf: ScriptableScratchMorph].
+	allObjs := submorphs select: [:m | m isKindOf: ScriptablePhratchMorph].
 	allObjs := allObjs copyWith: self.
 	allObjs do: [:obj |
 		(obj blocksBin isKindOf: Morph) ifTrue: [
@@ -1514,20 +1514,20 @@ ScratchStageMorph >> stopAllProcesses [
 ]
 
 { #category : #byob }
-ScratchStageMorph >> stopAllScriptsFor: eventName [
+PhratchStageMorph >> stopAllScriptsFor: eventName [
 
 "	remember to implement this in the mesh network later -jens"
 "	scratchServer ifNotNil: [scratchServer queueBroadcast: name]."
 
 	"stop scripts"
-	submorphs do: [:m | (m isKindOf: ScriptableScratchMorph) ifTrue: [
+	submorphs do: [:m | (m isKindOf: ScriptablePhratchMorph) ifTrue: [
 		m stopScriptsFor: eventName]].
 	self stopScriptsFor: eventName 
 
 ]
 
 { #category : #'scratch processes/events' }
-ScratchStageMorph >> stopAllSounds [
+PhratchStageMorph >> stopAllSounds [
 	"Stop all sounds and MIDI notes/drums."
 
 	SoundPlayer shutDown.
@@ -1537,7 +1537,7 @@ ScratchStageMorph >> stopAllSounds [
 ]
 
 { #category : #'scratch processes/events' }
-ScratchStageMorph >> stopAsks [
+PhratchStageMorph >> stopAsks [
 	"Stop/close any ask that is currently on the screen."
 
 	PhratchPrompterMorph allInstancesDo: [:m | m stopAsk].
@@ -1546,7 +1546,7 @@ ScratchStageMorph >> stopAsks [
 ]
 
 { #category : #'object i/o' }
-ScratchStageMorph >> storeFieldsOn: anObjStream [
+PhratchStageMorph >> storeFieldsOn: anObjStream [
 
 	super storeFieldsOn: anObjStream.
 	self storeFieldsNamed: #(
@@ -1564,14 +1564,14 @@ ScratchStageMorph >> storeFieldsOn: anObjStream [
 ]
 
 { #category : #'sound ops' }
-ScratchStageMorph >> tempo [
+PhratchStageMorph >> tempo [
 
 	^ tempoBPM
 
 ]
 
 { #category : #drawing }
-ScratchStageMorph >> thumbnailForm [
+PhratchStageMorph >> thumbnailForm [
 	"Answer a thumbnail of me and my submorphs."
 
 	^ self stageShotSized: (160@120)
@@ -1579,7 +1579,7 @@ ScratchStageMorph >> thumbnailForm [
 ]
 
 { #category : #byob }
-ScratchStageMorph >> togglePause [
+PhratchStageMorph >> togglePause [
 
 	self isPaused
 		ifTrue: [self resumeAllProcesses]
@@ -1587,7 +1587,7 @@ ScratchStageMorph >> togglePause [
 ]
 
 { #category : #'event handling' }
-ScratchStageMorph >> transformFrom: uberMorph [
+PhratchStageMorph >> transformFrom: uberMorph [
 	"Return a transform to map coorinates of uberMorph, a morph above me in my owner chain, into the coordinates of my submorphs."
 
 	| transform |
@@ -1602,7 +1602,7 @@ ScratchStageMorph >> transformFrom: uberMorph [
 ]
 
 { #category : #midi }
-ScratchStageMorph >> tryToOpenMidiPort [
+PhratchStageMorph >> tryToOpenMidiPort [
 	"Attempt to open the MIDI port. First try the port selected by the user, if any. If that port number is not a MIDI output port, try to find another port number. If all measures fail, leave midiPort set to nil."
 
 	| possiblePorts dir portNum |
@@ -1625,11 +1625,11 @@ ScratchStageMorph >> tryToOpenMidiPort [
 ]
 
 { #category : #byob }
-ScratchStageMorph >> unloadAllUnusedCustomBlocks [
+PhratchStageMorph >> unloadAllUnusedCustomBlocks [
 
 	'updating...' 
 		displayProgressAt: Display center - (32@5)  "Sensor cursorPoint"
-		from: 0 to: ((self allMorphs) select: [:m| m isKindOf: ScriptableScratchMorph]) size
+		from: 0 to: ((self allMorphs) select: [:m| m isKindOf: ScriptablePhratchMorph]) size
 		during: [:bar | | i | i := 0.
 
 	{self}, self sprites do: [:obj |
@@ -1639,7 +1639,7 @@ ScratchStageMorph >> unloadAllUnusedCustomBlocks [
 ]
 
 { #category : #'event handling' }
-ScratchStageMorph >> unlockedMorphsAt: aPoint addTo: mList [
+PhratchStageMorph >> unlockedMorphsAt: aPoint addTo: mList [
 	"Adjust aPoint to handle quarter-size case if necessary."
 
 	| p |
@@ -1659,7 +1659,7 @@ ScratchStageMorph >> unlockedMorphsAt: aPoint addTo: mList [
 ]
 
 { #category : #'pen support' }
-ScratchStageMorph >> updatePenPositionFor: aSprite [
+PhratchStageMorph >> updatePenPositionFor: aSprite [
 	"Update the given sprites pen position if necessary. Used to avoid drawing glitches when going between normal and presentation mode."
 
 	lastPenPositions ifNil: [^ self].  "no pens are down"
@@ -1669,11 +1669,11 @@ ScratchStageMorph >> updatePenPositionFor: aSprite [
 ]
 
 { #category : #accessing }
-ScratchStageMorph >> updateSpritesList [
+PhratchStageMorph >> updateSpritesList [
 	"Populate the sprites list, which keeps track of the ordering of the sprite thumbnails"
 
 	| frame |
-	frame := self ownerOrYourselfThatIsA: ScratchFrameMorph.
+	frame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
 	frame ifNil: [^ self].
 	sprites := OrderedCollection new.
 	frame libraryPane spriteThumbnails do: [:m | m target ifNotNil: [sprites addLast: m target]].
@@ -1681,7 +1681,7 @@ ScratchStageMorph >> updateSpritesList [
 ]
 
 { #category : #drawing }
-ScratchStageMorph >> updateStageDisplay [
+PhratchStageMorph >> updateStageDisplay [
 	"Redraw the damaged areas of this stage directly onto the display. Assumes that no other morph is in front of me."
 
 	| root damageList |
@@ -1695,7 +1695,7 @@ ScratchStageMorph >> updateStageDisplay [
 ]
 
 { #category : #'pen support' }
-ScratchStageMorph >> updateTrailsForm [
+PhratchStageMorph >> updateTrailsForm [
 	"Update the pen trails form using the current positions of all sprites with their pens down."
 	"Details: The positions of all sprites with their pens down are recorded by my draw method. If the list from the last display update isn't empty, then trails are drawn from the old to the current positions of all such morphs on the pen trails form. The pen trails form is created on demand when the first pen is put down and removed (to save space) when the pen trails are cleared."
 
@@ -1720,11 +1720,11 @@ ScratchStageMorph >> updateTrailsForm [
 ]
 
 { #category : #byob }
-ScratchStageMorph >> userSelectSpriteDefault: defaultSprite butNotAnyOf: excludeArray [
+PhratchStageMorph >> userSelectSpriteDefault: defaultSprite butNotAnyOf: excludeArray [
 
 	| menu current |
 	menu := MenuMorphNG new defaultTarget: self.
-	(defaultSprite isKindOf: ScratchSpriteMorph)
+	(defaultSprite isKindOf: PhratchSpriteMorph)
 		ifTrue: [current := defaultSprite objName]
 		ifFalse: [current := 'none'].
 	menu title: 'current parent: ', current.

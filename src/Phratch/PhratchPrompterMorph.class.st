@@ -81,16 +81,16 @@ PhratchPrompterMorph >> fixLayout [
 	typeinMorph
 		width: self width - 36;
 		bottom: self bottom - 6.
-	ScratchTranslator isRTL
+	PhratchTranslator isRTL
 		ifTrue:[typeinMorph right: self right - 8]
 		ifFalse:[typeinMorph left: self left + 8].
 
 	questionMorph ifNotNil: [
-		ScratchTranslator isRTL
+		PhratchTranslator isRTL
 			ifTrue: [questionMorph position: self topRight - ((questionMorph width + 8)@0) + (0@5)]
 			ifFalse: [questionMorph position: self position + (8@5)]].
 
-	ScratchTranslator isRTL
+	PhratchTranslator isRTL
 		ifTrue:[okButton position: typeinMorph topLeft - ((okButton width + 2)@0)]
 		ifFalse:[okButton position: typeinMorph topRight + (2@0)].
 
@@ -108,18 +108,18 @@ PhratchPrompterMorph >> initialize [
 	"Set the forms for all my UI elements, create a row to hold my buttons, and a column to hold my shortcut buttons."
 
 	super initialize.
-	self initFromForm: (ScratchFrameMorph skinAt: #promptBubbleFrame).
+	self initFromForm: (PhratchFrameMorph skinAt: #promptBubbleFrame).
 	done := false.
 
 	typeinMorph := StringFieldMorph
 		new client: self;
 		borderWidth: 2;
 		color: (Color gray: 55);
-		font: (ScratchFrameMorph getFont: #StringDialogTypeIn).
+		font: (PhratchFrameMorph getFont: #StringDialogTypeIn).
 
 	okButton := ToggleButton
-		onForm: (ScratchFrameMorph skinAt: #promptCheckButtonPressed)
-		offForm: (ScratchFrameMorph skinAt: #promptCheckButton).
+		onForm: (PhratchFrameMorph skinAt: #promptCheckButtonPressed)
+		offForm: (PhratchFrameMorph skinAt: #promptCheckButton).
 	okButton
 		target: self;
 		actionSelector: #accept;
@@ -127,7 +127,7 @@ PhratchPrompterMorph >> initialize [
 		toggleMode: false;
 		setBalloonText: 'Close and continue' localized.
 
-	ScratchTranslator isRTL
+	PhratchTranslator isRTL
 		ifTrue: [self addMorph: okButton.
 			self addMorph: typeinMorph]
 		ifFalse: [self addMorph: typeinMorph.
@@ -157,7 +157,7 @@ PhratchPrompterMorph >> question: aString [
 		ifFalse: [
 			questionMorph := PhratchStringMorph new
 				contents: aString asString;
-				font: (ScratchFrameMorph getFont: #DialogBoxButton)].
+				font: (PhratchFrameMorph getFont: #DialogBoxButton)].
 
 	self addMorph: questionMorph.
 	self height: questionMorph height + typeinMorph height + 16.

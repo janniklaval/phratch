@@ -3,7 +3,7 @@ I manage language translations for Scratch. All of my code in in class methods.
 
 "
 Class {
-	#name : #ScratchTranslator,
+	#name : #PhratchTranslator,
 	#superclass : #Object,
 	#classVars : [
 		'ColonSuffix',
@@ -30,14 +30,14 @@ Class {
 }
 
 { #category : #'language translation' }
-ScratchTranslator class >> addMIDITranslation: aString [
+PhratchTranslator class >> addMIDITranslation: aString [
 
 	MIDITranslationSet add: aString.
 
 ]
 
 { #category : #'language translation' }
-ScratchTranslator class >> addSensorTranslations [
+PhratchTranslator class >> addSensorTranslations [
 	"Add translations for the sensor names such as 'resistance-A' and 'A connected' from the translations of the root words if they exist."
 
 	| root prefix postfix |
@@ -57,21 +57,21 @@ ScratchTranslator class >> addSensorTranslations [
 ]
 
 { #category : #'language translation' }
-ScratchTranslator class >> addUITranslation: aString [
+PhratchTranslator class >> addUITranslation: aString [
 
 	UITranslationSet add: aString.
 
 ]
 
 { #category : #'Unicode rendering' }
-ScratchTranslator class >> canRenderUnicode [
+PhratchTranslator class >> canRenderUnicode [
 
 	^ RenderPlugin notNil
 
 ]
 
 { #category : #'Unicode rendering' }
-ScratchTranslator class >> centerOffsetForButtonWithFont: aStrikeFont [
+PhratchTranslator class >> centerOffsetForButtonWithFont: aStrikeFont [
 	"Answer the vertical offset above the center of a button for the given font. If the translator has provided a render hint string, return an offset that will center the first character of that string. Otherwise, return an offset that will center a lowercase 'x'."
 	"[self centerOffsetForFont: (StrikeFont fontName: 'VerdanaBold' size: 10)] msecs"
 
@@ -91,7 +91,7 @@ ScratchTranslator class >> centerOffsetForButtonWithFont: aStrikeFont [
 ]
 
 { #category : #'Unicode rendering' }
-ScratchTranslator class >> centerOffsetForLabelWithFont: aStrikeFont [
+PhratchTranslator class >> centerOffsetForLabelWithFont: aStrikeFont [
 	
 	| co |
 	co := self centerOffsetForButtonWithFont: aStrikeFont.
@@ -100,7 +100,7 @@ ScratchTranslator class >> centerOffsetForLabelWithFont: aStrikeFont [
 ]
 
 { #category : #'language translation' }
-ScratchTranslator class >> checkAllTranslations [
+PhratchTranslator class >> checkAllTranslations [
 	"Check all the translation dictionaries."
 	"self checkAllTranslations"
 
@@ -113,7 +113,7 @@ ScratchTranslator class >> checkAllTranslations [
 ]
 
 { #category : #'language translation' }
-ScratchTranslator class >> checkTranslationDict [
+PhratchTranslator class >> checkTranslationDict [
 	"Do some sanity check on the current translation dictionary."
 
 	| categories allSpecs mathOps |
@@ -128,12 +128,12 @@ ScratchTranslator class >> checkTranslationDict [
 
 	"makes sure there is a translation for every block in every category (except variables)"
 	allSpecs := Set new: 100.
-	(ScratchSpriteMorph blockSpecs, ScratchStageMorph blockSpecs) do: [:spec |
+	(PhratchSpriteMorph blockSpecs, PhratchStageMorph blockSpecs) do: [:spec |
 		(spec isKindOf: Array) ifTrue: [allSpecs add: spec]].
 	allSpecs add: #('else').
 
 	"remove obsolete specs and math operators"
-	ScratchSpriteMorph obsoleteBlockSpecs do: [:spec |  "remove obsolete block specs"
+	PhratchSpriteMorph obsoleteBlockSpecs do: [:spec |  "remove obsolete block specs"
 		allSpecs remove: spec ifAbsent: []].
 	mathOps := ('+-*/<=>' asArray collect: [:ch | '%n ', ch asString, ' %n']) asSet.
 	allSpecs := allSpecs select: [:spec | (mathOps includes: spec first) not].
@@ -144,7 +144,7 @@ ScratchTranslator class >> checkTranslationDict [
 ]
 
 { #category : #'language translation' }
-ScratchTranslator class >> colonSuffix [
+PhratchTranslator class >> colonSuffix [
 	"Answer a colon suffix. If the current language is RTL, then include the Unicode RTL mark after the colon."
 
 	^ self isRTL ifTrue: [ColonSuffix] ifFalse: [':']
@@ -152,7 +152,7 @@ ScratchTranslator class >> colonSuffix [
 ]
 
 { #category : #'Unicode rendering' }
-ScratchTranslator class >> convertToMacRoman [
+PhratchTranslator class >> convertToMacRoman [
 	"Convert my translations from UTF8 to MacRoman."
 
 	| s |
@@ -165,7 +165,7 @@ ScratchTranslator class >> convertToMacRoman [
 ]
 
 { #category : #'language translation' }
-ScratchTranslator class >> currentLanguage [
+PhratchTranslator class >> currentLanguage [
 
 	Language ifNil: [Language := 'en'].
 	^ Language
@@ -173,7 +173,7 @@ ScratchTranslator class >> currentLanguage [
 ]
 
 { #category : #'Unicode rendering' }
-ScratchTranslator class >> detectRenderPlugin [
+PhratchTranslator class >> detectRenderPlugin [
 	"Determine which plugin is available for rendering Unicode."
 	"self detectRenderPlugin"
 
@@ -199,7 +199,7 @@ ScratchTranslator class >> detectRenderPlugin [
 ]
 
 { #category : #'language translation' }
-ScratchTranslator class >> doNotTranslate [
+PhratchTranslator class >> doNotTranslate [
 
 	^ #(
 	'!'
@@ -284,7 +284,7 @@ ScratchTranslator class >> doNotTranslate [
 ]
 
 { #category : #'language translation' }
-ScratchTranslator class >> ellipsesSuffix [
+PhratchTranslator class >> ellipsesSuffix [
 	"Answer an ellipses suffix (three periods). If the current language is RTL, then include the Unicode RTL mark after the colon."
 
 	^ self isRTL ifTrue: [EllipsesSuffix] ifFalse: ['...']
@@ -292,7 +292,7 @@ ScratchTranslator class >> ellipsesSuffix [
 ]
 
 { #category : #'import/export' }
-ScratchTranslator class >> export: keyString value: aStringOrUTF8 to: aStream [
+PhratchTranslator class >> export: keyString value: aStringOrUTF8 to: aStream [
 	"Write the given string to the given stream as a quoted gettext format. If the string is multiple lines. store it as a sequence of strings in double quotes, each ending with '\n'."
 
 	| lines |
@@ -307,7 +307,7 @@ ScratchTranslator class >> export: keyString value: aStringOrUTF8 to: aStream [
 ]
 
 { #category : #'import/export' }
-ScratchTranslator class >> exportPootleTranslations [
+PhratchTranslator class >> exportPootleTranslations [
 	"Exports translations from the locale folder into a new localeForPootle directory with a different subdirectory structure"
 	"Need to figure out how to overwrite files without getting a permission dialog"
 	"self exportPootleTranslations"
@@ -330,7 +330,7 @@ ScratchTranslator class >> exportPootleTranslations [
 ]
 
 { #category : #'import/export' }
-ScratchTranslator class >> exportStringsToTranslateFrom: aDictionary toFile: fName [
+PhratchTranslator class >> exportStringsToTranslateFrom: aDictionary toFile: fName [
 	"Export the strings to be translated either to Scratch.pot or an existing translation (.po) file."
 	"self resetUITranslationSet. self resetMIDITranslationSet. self exportStringsToTranslateFrom: nil toFile: nil"
 	"self resetMIDITranslationSet. self exportStringsToTranslateFrom: (self importTranslation: 'es.po') toFile: 'exportTest.po'"
@@ -361,7 +361,7 @@ ScratchTranslator class >> exportStringsToTranslateFrom: aDictionary toFile: fNa
 
 	sections := {
 		{'FORMATTING'.			self formattingHeaderFields}.
-		{'BLOCKS'.				ScriptableScratchMorph blockSpecsForTranslation}.
+		{'BLOCKS'.				ScriptablePhratchMorph blockSpecsForTranslation}.
 		{'USER INTERFACE'.		self uiTranslationSetAsSortedArray}.
  		{'MIDI INSTRUMENTS'.	self midiTranslationSet asArray sort}
 	}.
@@ -420,7 +420,7 @@ ScratchTranslator class >> exportStringsToTranslateFrom: aDictionary toFile: fNa
 ]
 
 { #category : #'import/export' }
-ScratchTranslator class >> extractLanguageFromFileNamed: aFilename [
+PhratchTranslator class >> extractLanguageFromFileNamed: aFilename [
 	"Return the UTF8 value of the 'Language-Name:' header from the file with the given name, or nil if the file does not exist or it does not include that header."
 	"self extractLanguageFromFileNamed: (self translationDir fullNameFor: 'Scratch.pot')"
 
@@ -445,7 +445,7 @@ ScratchTranslator class >> extractLanguageFromFileNamed: aFilename [
 ]
 
 { #category : #'language translation' }
-ScratchTranslator class >> extractQuotedStringFrom: aString [
+PhratchTranslator class >> extractQuotedStringFrom: aString [
 	"Extract the contents of a quoted string from a translation file line. If the line contains no double-quote characters, the string after the first space character is returned or, if there is no space character, the entire line. Only two escape sequences are currently recognized: newline and double-quote."
 
 	| i s result ch |
@@ -467,7 +467,7 @@ ScratchTranslator class >> extractQuotedStringFrom: aString [
 ]
 
 { #category : #'Unicode rendering' }
-ScratchTranslator class >> fixAmbigousRTLPunctuation [
+PhratchTranslator class >> fixAmbigousRTLPunctuation [
 	"In a right-to-left language such as Arabic, punctuation characters such as period can be treated as either right-to-left or left-to-right characters. When they appear at the beginning of a string, the directionality is ambiguous. We assume that translation strings that start with punctuation characters are intended to start in left-to-right mode. This method prefixes punctuation characters with the Unicode LTR mark character, U+200E."
 	"Note: Embedded colons are prefixed with the LTR mark everwhere that they appear since block translation strings are broken into component parts that can start with a colon."
 
@@ -491,7 +491,7 @@ ScratchTranslator class >> fixAmbigousRTLPunctuation [
 ]
 
 { #category : #'rendering menu' }
-ScratchTranslator class >> fontMenu [
+PhratchTranslator class >> fontMenu [
 	"Present a menu of fonts."
 
 	| menu choice |
@@ -507,7 +507,7 @@ ScratchTranslator class >> fontMenu [
 ]
 
 { #category : #'rendering menu' }
-ScratchTranslator class >> fontScaleMenu [
+PhratchTranslator class >> fontScaleMenu [
 	"Present a menu of font scales."
 
 	| menu choice s |
@@ -523,7 +523,7 @@ ScratchTranslator class >> fontScaleMenu [
 ]
 
 { #category : #'Unicode rendering' }
-ScratchTranslator class >> formFor: aString font: aStrikeFont fgColor: fgColor bgColor: bgColor [
+PhratchTranslator class >> formFor: aString font: aStrikeFont fgColor: fgColor bgColor: bgColor [
 	"Answer a Form containing the given string in the given font and color rendered with the current rendering system. Answer nil if no rendering system is available."
 	"(self formFor: 'Hello, Scratch!' font: (StrikeFont fontName: 'VerdanaBold' size: 48) fgColor: Color black bgColor: Color blue) display"
 
@@ -544,7 +544,7 @@ ScratchTranslator class >> formFor: aString font: aStrikeFont fgColor: fgColor b
 ]
 
 { #category : #'Unicode rendering' }
-ScratchTranslator class >> formFor: aString font: aStrikeFont fgColor: fgColor bgColor: bgColor suppressAntiAliasing: suppressAntiAliasing [
+PhratchTranslator class >> formFor: aString font: aStrikeFont fgColor: fgColor bgColor: bgColor suppressAntiAliasing: suppressAntiAliasing [
 	"Answer a Form containing the given string in the given font and color rendered with the current rendering system. The suppressAntiAliasing flag is useful when the background color is not constant, such as when part of the text is highlighted during editing. Answer nil if no rendering system is available."
 	"(self formFor: 'Hello, Scratch!' font: (StrikeFont fontName: 'VerdanaBold' size: 48) fgColor: Color black bgColor: Color blue) display"
 
@@ -565,7 +565,7 @@ ScratchTranslator class >> formFor: aString font: aStrikeFont fgColor: fgColor b
 ]
 
 { #category : #'language translation' }
-ScratchTranslator class >> formattingHeaderFields [
+PhratchTranslator class >> formattingHeaderFields [
 
 	^ #(
 		'Language-Name'
@@ -579,7 +579,7 @@ ScratchTranslator class >> formattingHeaderFields [
 ]
 
 { #category : #'language translation' }
-ScratchTranslator class >> formattingSectionForPOT [
+PhratchTranslator class >> formattingSectionForPOT [
 
 	| s |
 	s :=
@@ -625,7 +625,7 @@ msgstr ""
 ]
 
 { #category : #locale }
-ScratchTranslator class >> guessLanguage [
+PhratchTranslator class >> guessLanguage [
 	"Try to guess a language setting based on the local."
 	"ScratchTranslator guessLanguage"
 
@@ -649,7 +649,7 @@ ScratchTranslator class >> guessLanguage [
 ]
 
 { #category : #'language translation' }
-ScratchTranslator class >> importLanguagesList [
+PhratchTranslator class >> importLanguagesList [
 	"Import the list of languages and language codes translated for Scratch by file names from 'Help/Translations'"
 
 	| dir code lang |
@@ -668,7 +668,7 @@ ScratchTranslator class >> importLanguagesList [
 ]
 
 { #category : #'import/export' }
-ScratchTranslator class >> importOLPCTranslations [
+PhratchTranslator class >> importOLPCTranslations [
 	"Imports translations from the OLPC Pootle translation directory into the Scratch/locale/ directory and renames the .po files"
 	"First copy the /scratch/ folder from https://dev.laptop.org/~sayamindu/scratch_translations.zip to the local directory, then run this"
 	"self importOLPCTranslations"
@@ -685,7 +685,7 @@ ScratchTranslator class >> importOLPCTranslations [
 ]
 
 { #category : #'import/export' }
-ScratchTranslator class >> importPootleTranslations [
+PhratchTranslator class >> importPootleTranslations [
 	"Imports translations from the LLK Pootle translation directory into the Scratch/locale/ directory"
 	"First checkout svn://translate.scratch.mit.edu:52400 to the local directory, then run this"
 	"self importPootleTranslations"
@@ -708,7 +708,7 @@ ScratchTranslator class >> importPootleTranslations [
 ]
 
 { #category : #'import/export' }
-ScratchTranslator class >> importTranslation: aFilename [
+PhratchTranslator class >> importTranslation: aFilename [
 	"Import a translation dictionary."
 	"self importTranslation: 'cs.po'"
 
@@ -731,7 +731,7 @@ ScratchTranslator class >> importTranslation: aFilename [
 ]
 
 { #category : #'class initialization' }
-ScratchTranslator class >> initialize [
+PhratchTranslator class >> initialize [
 	"ScratchTranslator initialize"
 
 	TranslationDict := Dictionary new.
@@ -750,14 +750,14 @@ ScratchTranslator class >> initialize [
 ]
 
 { #category : #'language translation' }
-ScratchTranslator class >> insertISOCode: code forLanguage: lang [
+PhratchTranslator class >> insertISOCode: code forLanguage: lang [
 
 	ISODict at: code put: lang.
 
 ]
 
 { #category : #'import/export' }
-ScratchTranslator class >> isRTL [
+PhratchTranslator class >> isRTL [
 	"Returns true if the header 'Language-Direction' is set to 'RTL'"
 
 	^ IsRTL
@@ -765,14 +765,14 @@ ScratchTranslator class >> isRTL [
 ]
 
 { #category : #'Unicode rendering' }
-ScratchTranslator class >> isRTL: aBoolean [
+PhratchTranslator class >> isRTL: aBoolean [
 
 	IsRTL := aBoolean.
 
 ]
 
 { #category : #'language translation' }
-ScratchTranslator class >> isRTLMath [
+PhratchTranslator class >> isRTLMath [
 	"Returns true if the header 'Language-Direction' is set to 'RTL-math'"
 
 	^ IsRTLMath
@@ -780,7 +780,7 @@ ScratchTranslator class >> isRTLMath [
 ]
 
 { #category : #'language translation' }
-ScratchTranslator class >> isoCodeForName: aString [
+PhratchTranslator class >> isoCodeForName: aString [
 
 	(ISODict includes: aString)
 		ifFalse:[^ aString]
@@ -789,18 +789,18 @@ ScratchTranslator class >> isoCodeForName: aString [
 ]
 
 { #category : #'language translation' }
-ScratchTranslator class >> isoDict [
+PhratchTranslator class >> isoDict [
 
 	^ ISODict
 
 ]
 
 { #category : #'language translation' }
-ScratchTranslator class >> labelPartsFor: aString [
+PhratchTranslator class >> labelPartsFor: aString [
 	"Answer a collection label strings for the translation of given block label. Currently handles one or two-part labels. In a two-part label, the label is split at the field name begginning with a percent sign. For example, 'when %s clicked' would yield the two label parts 'when' and 'clicked'."
 
 	| s i p1 p2 |
-	s := ScratchTranslator translationFor: aString.
+	s := PhratchTranslator translationFor: aString.
 	i := s indexOf: $% ifAbsent: [^ Array with: s with: ''].
 	p1 := (s copyFrom: 1 to: i - 1) trimBoth.
 	p2 := (s copyFrom: i + 2 to: s size) trimBoth.
@@ -809,7 +809,7 @@ ScratchTranslator class >> labelPartsFor: aString [
 ]
 
 { #category : #'language translation' }
-ScratchTranslator class >> languageNames [
+PhratchTranslator class >> languageNames [
 	"Answer a list of language names for the languages menu. These are generally in the native language (e.g. 'Español') and must match the strings in the setLanguage: method."
 
 	self importLanguagesList.
@@ -818,7 +818,7 @@ ScratchTranslator class >> languageNames [
 ]
 
 { #category : #'import/export' }
-ScratchTranslator class >> lineOf: aString containingIndex: anIndex [
+PhratchTranslator class >> lineOf: aString containingIndex: anIndex [
 	"Answer the line of the given string that contains the given index."
 
 	| cr lf i j ch |
@@ -832,14 +832,14 @@ ScratchTranslator class >> lineOf: aString containingIndex: anIndex [
 ]
 
 { #category : #'language translation' }
-ScratchTranslator class >> midiTranslationSet [
+PhratchTranslator class >> midiTranslationSet [
 
 	^ MIDITranslationSet
 
 ]
 
 { #category : #'language translation' }
-ScratchTranslator class >> parameterSpecs: aString [
+PhratchTranslator class >> parameterSpecs: aString [
 	"Answer the sequence of parameter specs (e.g. %n) for the given block specification. Used for checking translations."
 	"self parameterSpecs: 'this %b is %s a %c test %n%'"
 	"self parameterSpecs: 'this %b'"
@@ -861,7 +861,7 @@ ScratchTranslator class >> parameterSpecs: aString [
 ]
 
 { #category : #'import/export' }
-ScratchTranslator class >> parseCommandSpec: aCommandSpec [
+PhratchTranslator class >> parseCommandSpec: aCommandSpec [
 	"Answer an array of token strings containing my keywords and argument specs."
 	"self parseCommandSpec: '%a of %m'"
 
@@ -890,7 +890,7 @@ ScratchTranslator class >> parseCommandSpec: aCommandSpec [
 ]
 
 { #category : #'import/export' }
-ScratchTranslator class >> parseTranslationLines: lineStream [
+PhratchTranslator class >> parseTranslationLines: lineStream [
 	"Parse a language translation from the given stream of lines and answer the resulting translation dictionary."
 
 	| result key val comments fuzzy |
@@ -927,7 +927,7 @@ ScratchTranslator class >> parseTranslationLines: lineStream [
 ]
 
 { #category : #locale }
-ScratchTranslator class >> primCountry [
+PhratchTranslator class >> primCountry [
 	"Return a string with ISO 639 country tag for this system, or nil if the primitive fails."
 	"self primCountry"
 
@@ -937,7 +937,7 @@ ScratchTranslator class >> primCountry [
 ]
 
 { #category : #locale }
-ScratchTranslator class >> primLanguage [
+PhratchTranslator class >> primLanguage [
 	"Return a string with ISO 639 language tag for this system, or nil if the primitive fails."
 	"self primLanguage"
 
@@ -947,7 +947,7 @@ ScratchTranslator class >> primLanguage [
 ]
 
 { #category : #'rendering menu' }
-ScratchTranslator class >> renderAntiAliasing [
+PhratchTranslator class >> renderAntiAliasing [
 
 	^ RenderAntiAliasing
 
@@ -955,23 +955,23 @@ ScratchTranslator class >> renderAntiAliasing [
 ]
 
 { #category : #'as yet unclassified' }
-ScratchTranslator class >> renderFont: choice [
+PhratchTranslator class >> renderFont: choice [
 	choice ifNotNil: [
 		RenderFont := choice.
-		self updateScratchUI].
+		self updatePhratchUI].
 
 ]
 
 { #category : #'as yet unclassified' }
-ScratchTranslator class >> renderFontScale: choice [
+PhratchTranslator class >> renderFontScale: choice [
 
 		choice ifNotNil: [
 			RenderScale := choice.
-			self updateScratchUI].
+			self updatePhratchUI].
 ]
 
 { #category : #'Unicode rendering' }
-ScratchTranslator class >> renderHintString [
+PhratchTranslator class >> renderHintString [
 	"Answer a string to be used as an example button lable to adjust button size and label centering."
 	"self renderHintString"
 	"self showHintString"
@@ -991,21 +991,21 @@ ScratchTranslator class >> renderHintString [
 ]
 
 { #category : #'Unicode rendering' }
-ScratchTranslator class >> renderScale [
+PhratchTranslator class >> renderScale [
 
 	^ RenderScale
 
 ]
 
 { #category : #'Unicode rendering' }
-ScratchTranslator class >> renderWithSqueak [
+PhratchTranslator class >> renderWithSqueak [
 
 	^ RenderWithSqueak
 
 ]
 
 { #category : #'rendering menu' }
-ScratchTranslator class >> renderingMenu [
+PhratchTranslator class >> renderingMenu [
 	"Present a menu for experimenting with rendering settings."
 	"self renderingMenu"
 
@@ -1024,7 +1024,7 @@ ScratchTranslator class >> renderingMenu [
 ]
 
 { #category : #'language translation' }
-ScratchTranslator class >> resetMIDITranslationSet [
+PhratchTranslator class >> resetMIDITranslationSet [
 
 	MIDITranslationSet := Set new.
 	#('Accordion' 'Acoustic Bass' 'Acoustic Bass Drum' 'Acoustic Grand' 'Acoustic Snare' 'Agogo' 'Alto Sax' 'Applause' 'Bagpipe' 'Banjo' 'Baritone Sax' 'Bass Drum 1' 'Bassoon' 'Bird Tweet' 'Blown Bottle' 'Brass Section' 'Breath Noise' 'Bright Acoustic' 'Cabasa' 'Celesta' 'Cello' 'Chinese Cymbal' 'Choir Aahs' 'Church Organ' 'Clarinet' 'Claves' 'Clavinet' 'Closed Hi-Hat' 'Contrabass' 'Cowbell' 'Crash Cymbal 1' 'Crash Cymbal 2' 'Distortion Guitar' 'Drawbar Organ' 'Dulcimer' 'Electric Bass (finger)' 'Electric Bass (pick)' 'Electric Clean Guitar' 'Electric Grand' 'Electric Jazz Guitar' 'Electric Muted Guitar' 'Electric Piano 1' 'Electric Piano 2' 'Electric Snare' 'English Horn' 'FX 1 (rain)' 'FX 2 (soundtrack)' 'FX 3 (crystal)' 'FX 4 (atmosphere)' 'FX 5 (brightness)' 'FX 6 (goblins)' 'FX 7 (echoes)' 'FX 8 (sci-fi)' 'Fiddle' 'Flute' 'French Horn' 'Fretless Bass' 'Glockenspiel' 'Guitar Fret Noise' 'Guitar Harmonics' 'Gunshot' 'Hand Clap' 'Harmonica' 'Harpsichord' 'Helicopter' 'Hi Bongo' 'Hi Wood Block' 'Hi-Mid Tom' 'High Agogo' 'High Floor Tom' 'High Timbale' 'High Tom' 'Honky-Tonk' 'Kalimba' 'Koto' 'Lead 1 (square)' 'Lead 2 (sawtooth)' 'Lead 3 (calliope)' 'Lead 4 (chiff)' 'Lead 5 (charang)' 'Lead 6 (voice)' 'Lead 7 (fifths)' 'Lead 8 (bass+lead)' 'Long Guiro' 'Long Whistle' 'Low Agogo' 'Low Bongo' 'Low Conga' 'Low Floor Tom' 'Low Timbale' 'Low Tom' 'Low Wood Block' 'Low-Mid Tom' 'Maracas' 'Marimba' 'Melodic Tom' 'Music Box' 'Mute Cuica' 'Mute Hi Conga' 'Mute Triangle' 'Muted Trumpet' 'Nylon String Guitar' 'Oboe' 'Ocarina' 'Open Cuica' 'Open Hi Conga' 'Open Hi-Hat' 'Open Triangle' 'Orchestra Hit' 'Orchestral Strings' 'Overdriven Guitar' 'Pad 1 (new age)' 'Pad 2 (warm)' 'Pad 3 (polysynth)' 'Pad 4 (choir)' 'Pad 5 (bowed)' 'Pad 6 (metallic)' 'Pad 7 (halo)' 'Pad 8 (sweep)' 'Pan Flute' 'Pedal Hi-Hat' 'Percussive Organ' 'Piccolo' 'Pizzicato Strings' 'Recorder' 'Reed Organ' 'Reverse Cymbal' 'Ride Bell' 'Ride Cymbal 1' 'Ride Cymbal 2' 'Rock Organ' 'Seashore' 'Shakuhachi' 'Shamisen' 'Shanai' 'Short Guiro' 'Short Whistle' 'Side Stick' 'Sitar' 'Slap Bass 1' 'Slap Bass 2' 'Soprano Sax' 'Splash Cymbal' 'Steel Drums' 'Steel String Guitar' 'String Ensemble 1' 'String Ensemble 2' 'Synth Bass 1' 'Synth Bass 2' 'Synth Drum' 'Synth Voice' 'SynthBrass 1' 'SynthBrass 2' 'SynthStrings 1' 'SynthStrings 2' 'Taiko Drum' 'Tambourine' 'Tango Accordion' 'Telephone Ring' 'Tenor Sax' 'Timpani' 'Tinkle Bell' 'Tremolo Strings' 'Trombone' 'Trumpet' 'Tuba' 'Tubular Bells' 'Vibraphone' 'Vibraslap' 'Viola' 'Violin' 'Voice Oohs' 'Whistle' 'Woodblock' 'Xylophone') do:[:t |
@@ -1034,7 +1034,7 @@ ScratchTranslator class >> resetMIDITranslationSet [
 ]
 
 { #category : #'language translation' }
-ScratchTranslator class >> resetUITranslationSet [
+PhratchTranslator class >> resetUITranslationSet [
 
 	UITranslationSet := Set new.
 	#('Normal' 'new' 'New' 't' 'New sound:' 'New sprite:' 'No' 'New costume:' 'New Filename:' 'New background:' 'No motion blocks' 'OK' 'New Sprite' '3' 'No variables.' 'no scripts' 'm' 'normal readout' 'No serial ports found' 'No MIDI ports currently available.' 'Open' 'Off' 'f' 'Open Project' 'On' 'Preparing project...' 'or' 'Open a Scratch project' 'only face left-right' '10 ^' 'B' '10' 'play' 'Pictures' 'Password:' 'Project Notes' 'Project notes' 'Paint' 'pop' 'Project uploaded.' 'u' 'Project name' 'Please enter a number' 'Paint Editor' 'Projects' 'Paintbrush' 'pixelate' 'Project author:' 'Paint new sprite' 'Percent? (100 gives original size)' '4' 'n' 'abs' 'atan' 'Position the cross-hair to set the rotation center' 'asin' 'Quit' 'Quit Scratch' 'About Scratch' 'and' '-' 'acos' 'all' 'any' 'Brush size: ' 'g' '1 script' 'add comment' 'Animation' 'Art' 'add comment here' 'About this project:' 'Redo' 'right' 'resistance' 'backgrounds' 'Backgrounds' 'button pressed' 'Reference Guide' 'button' 'save picture of stage...' 'recording' 'Save As' 'record' 'Record' 'right arrow' '<' 'background' 'brightness' 'Remove viewer from stage' 'v' 're-record' 'set translation formatting...' 'reverse' 'Rotate clock-wise' 'Rotation degrees?' 'resize this sprite' 'rotate this sprite' 'Remote sensor connections enabled' 'Reading' 'Rotate counter-clock-wise' '5' 'Clear' 'o' 'space' 'Sounds' 'slider' 'cancel' 'sin' 'Sprite1' 'Sprites' 'connected' 'Stage' 'Could not read' 'stop' 'Choose a folder' 'color' 'Sound Recorder' 'cos' 'Save failed' 'Slider range:' 'costumes' 'sqrt' 'set slider min and max' 'Costumes' 'show ScratchBoard watcher' 'Cancel' 'Single-step speed?' 'costume' 'Computer' 'Sounds compressed' 'Set language' 'Camera' 'Clear canvas' 'Compress Sounds' 'select serial/USB port' 'Sprite' 'e ^' 'close port' 'Close dialog?' 'Compress Images' 'Rectangle tool (draw outlined or filled rectangle or square)' 'Save this project' 'Share this project' 'Scratch' 'Save the current project' 'Share' 'Switch to full stage' 'Show Motor Blocks' 'Could not write file' 'Switch to small stage' 'Stage selected:' 'Switch to presentation mode' 'a' 'Copy' 'tan' 'Set costume center' 'Save changes before quitting?' 'Shrink' 'Story' 'Save Project' 'Close paint editor?' 'thing' 'Support Site' 'Close sound recorder?' 'Select tool (move, modify, or delete selection)' 'Set Single Stepping' 'Start Single Stepping' 'Save the current project?' 'Simulation' 'Set rotation center' 'Create an empty project' 'Share This Project Online' 'Save' 'Stop everything' 'Scripts' 'Close and continue' 'Switch colors' 'Turbo speed' 'h' 'Stamp tool (select area, then stamp copies of it)' 'Done' 'can rotate' 'Tags:' 'Delete a list' 'Don''t Save' 'down arrow' 'Shrink sprite' 'clean up' 'distance' 'disable remote sensor connections' 'Save Stage Shot' 'Save Scripts Snapshot' 'this way' 'delete' 'Delete' 'drag to rotate' 'down' 'Text tool (edit text layer)' 'duplicate' 'Duplicate' 'Documents' 'Delete a variable' 'drag to resize' 'don''t rotate' 'Desktop' 'that way' 'p' 'Delete this background' 'Export failed' 'up' 'That variable name is already in use' 'tilt' 'Delete this sprite' 'enter' 'Eraser' 'Save a copy of the current project' 'Exit presentation mode' 'Export Costume' 'Undelete' 'Examples' 'Could not read project; file may be damaged' 'Updating thumbnails' 'Exit presentation' 'Export Sprite' 'Create account' 'Choose new sprite from file' 'Compress sounds and images' 'Eraser size' 'export this sprite' '/' 'Delete this costume' 'Connecting to ' '=' 'Upload succeeded!' 'true' 'up arrow' 'enable remote sensor connections' 'export' 'Extras menu' 'Export Sound' 'Eyedropper tool (select a color)' 'Enter presentation mode' 'save picture of scripts' 'Upload to Scratch Server' 'Start green flag scripts' 'Export Background' 'Data sent. Waiting for response...' 'edge' '6' 'Failed:' 'Edit' 'Ellipse tool (draw outlined or filled ellipse or circle)' 'draggable on website?' 'Stop Single Stepping' 'File' 'Delete this sound' 'w' 'Variable name?' 'View on stage' 'For all sprites' 'b' 'enable remote access...' 'false' 'first' 'Undo' 'Flip vertically' 'File not found' 'Flip horizontally' 'i' 'turn into new sprite' 'fisheye' 'For this sprite only' 'Sound quality:' 'The file name already exists. Overwrite existing file?' 'Uploading' 'Error!' 'export this costume' 'Flash blocks (fast)' 'export this sound' 'Flash blocks (slow)' '!' '>' 'x' 'Hmm...' 'Fill tool (fill areas with color or gradient)' 'Game' 'Grow' 'Getting Started' 'world' '7' 'whirl' 'ghost' 'What''s your name?' 'q' 'Get the last thing deleted' 'Grow sprite' 'Write Multiple Project Summaries' 'Get surprise sprite' 'Write Project Summary' 'Go To Scratch Website' 'grab screen region for new costume' '0' 'j' 'grab screen region for new sprite' 'help' 'Home' 'Help' 'Help Page' 'Hello!' 'hello ' 'Help Screens' 'Hide Motor Blocks' 'Host Mesh' 'c' '(empty)' 'High (biggest)' 'Yes' 'y' 'JPEG Quality (10-100)?' 'Import Project' 'import project' 'Import Image' 'Images compressed' 'import' 'Import' 'Import Sound' 'Import Costume' 'Your project is now online at' 'Import Background' '8' 'Incompatible Scratch file format' 'Import List' 'r' 'Your Scratch website login name:' 'Import an image on top of your current canvas' 'Is the folder read-only?' '1' 'k' 'Zoom in' 'Join Mesh' #'[' 'Zoom out' '*' 'd' 'kbytes' 'z' '9' 's' 'left' 'light' 'Language' 'ln' 'List name?' 'Low' 'log' '2' 'last' 'l' 'left arrow' 'length' 'large readout' 'Lowest (smallest)' 'Line tool (draw lines)' '+' 'e' 'Music' 'mosaic' 'Message name:' 'meow' 'mod' #']' 'Min:' 'more' 'mouse-pointer' 'Move' 'Make a variable' 'Max:' 'More tags:' 'Make a list' 'My Projects' 'mouse x:' 'mouse y:' 'A' 'New file name?') do: [:t |
@@ -1043,7 +1043,7 @@ ScratchTranslator class >> resetUITranslationSet [
 ]
 
 { #category : #'Unicode rendering' }
-ScratchTranslator class >> setFont: aStrikeFont antialias: antialiasFlag [
+PhratchTranslator class >> setFont: aStrikeFont antialias: antialiasFlag [
 
 	| font isBold fontName fontSize |
 	font := aStrikeFont.
@@ -1079,7 +1079,7 @@ ScratchTranslator class >> setFont: aStrikeFont antialias: antialiasFlag [
 ]
 
 { #category : #'language translation' }
-ScratchTranslator class >> setLanguage: aString [
+PhratchTranslator class >> setLanguage: aString [
 	"Set the current language. If the language is not supported, use English (i.e. an empty translation dictionary)."
 
 	| dict |
@@ -1088,7 +1088,7 @@ ScratchTranslator class >> setLanguage: aString [
 	TranslationDict := Dictionary new.
 	HeaderString := ''.
 	self setRenderingHints.  "clear rendering hints"
-	ScratchTranslator detectRenderPlugin.
+	PhratchTranslator detectRenderPlugin.
 
 	aString = 'en' ifTrue: [^ self].
 
@@ -1106,7 +1106,7 @@ ScratchTranslator class >> setLanguage: aString [
 ]
 
 { #category : #'Unicode rendering' }
-ScratchTranslator class >> setRenderingHints [
+PhratchTranslator class >> setRenderingHints [
 	"Set optional rendering hints from fields in the translation file header. If a given hint is not explicitly set by the header, set it to its default value."
 
 	| s |
@@ -1160,7 +1160,7 @@ ScratchTranslator class >> setRenderingHints [
 ]
 
 { #category : #'Unicode rendering' }
-ScratchTranslator class >> showHintString [
+PhratchTranslator class >> showHintString [
 	"self showHintString"
 
 	| f p r |
@@ -1180,7 +1180,7 @@ ScratchTranslator class >> showHintString [
 ]
 
 { #category : #startup }
-ScratchTranslator class >> shutDown [
+PhratchTranslator class >> shutDown [
 	"Clear the rendering plugin."
 
 	RenderPlugin := nil.
@@ -1188,7 +1188,7 @@ ScratchTranslator class >> shutDown [
 ]
 
 { #category : #startup }
-ScratchTranslator class >> startUp [
+PhratchTranslator class >> startUp [
 	"self startup"
 
 	self detectRenderPlugin.
@@ -1196,7 +1196,7 @@ ScratchTranslator class >> startUp [
 ]
 
 { #category : #'Unicode rendering' }
-ScratchTranslator class >> stringExtent: aString font: aStrikeFont [
+PhratchTranslator class >> stringExtent: aString font: aStrikeFont [
 	"Answer the extent of the given string using my font under the current font rendering system."
 	"self stringExtent: 'Hello, Scratch!' font: (StrikeFont fontName: 'Verdana' size: 18)"
 
@@ -1214,7 +1214,7 @@ ScratchTranslator class >> stringExtent: aString font: aStrikeFont [
 ]
 
 { #category : #'import/export' }
-ScratchTranslator class >> templateFilename [
+PhratchTranslator class >> templateFilename [
 	"Returns the filename for the translation template file to send to users."
 
 	^ 'BYOB.pot'
@@ -1222,30 +1222,30 @@ ScratchTranslator class >> templateFilename [
 ]
 
 { #category : #'rendering menu' }
-ScratchTranslator class >> toggleAntiAliasing [
+PhratchTranslator class >> toggleAntiAliasing [
 
 	RenderAntiAliasing := RenderAntiAliasing not.
-	self updateScratchUI.
+	self updatePhratchUI.
 
 ]
 
 { #category : #'rendering menu' }
-ScratchTranslator class >> toggleSuppressBold [
+PhratchTranslator class >> toggleSuppressBold [
 
 	RenderSuppressBold := RenderSuppressBold not.
-	self updateScratchUI.
+	self updatePhratchUI.
 
 ]
 
 { #category : #'language translation' }
-ScratchTranslator class >> translationDict [
+PhratchTranslator class >> translationDict [
 
 	^ TranslationDict
 
 ]
 
 { #category : #'import/export' }
-ScratchTranslator class >> translationDir [
+PhratchTranslator class >> translationDir [
 	"Returns the directory which contains the translation files and creates it if it doesn't exist."
 	
 	| dir |
@@ -1260,7 +1260,7 @@ ScratchTranslator class >> translationDir [
 ]
 
 { #category : #'language translation' }
-ScratchTranslator class >> translationFor: englishString [
+PhratchTranslator class >> translationFor: englishString [
 	"Return the translation of the given (English) string for the current language. If there is no entry for the given string, return the original string."
 
 	| s |
@@ -1275,9 +1275,9 @@ ScratchTranslator class >> translationFor: englishString [
 ]
 
 { #category : #'language translation' }
-ScratchTranslator class >> uiTranslationSet [
+PhratchTranslator class >> uiTranslationSet [
 
-	#('' '?'), ScriptableScratchMorph blockSpecsForTranslation do: [:e |
+	#('' '?'), ScriptablePhratchMorph blockSpecsForTranslation do: [:e |
 		UITranslationSet remove: e ifAbsent: []].
 
 	^ UITranslationSet
@@ -1285,7 +1285,7 @@ ScratchTranslator class >> uiTranslationSet [
 ]
 
 { #category : #'language translation' }
-ScratchTranslator class >> uiTranslationSetAsSortedArray [
+PhratchTranslator class >> uiTranslationSetAsSortedArray [
 
 	^ self uiTranslationSet asArray
 		sort: [:a :b | a asLowercase <= b asLowercase]
@@ -1293,7 +1293,7 @@ ScratchTranslator class >> uiTranslationSetAsSortedArray [
 ]
 
 { #category : #'Unicode copy/paste' }
-ScratchTranslator class >> unicodeClipboard [
+PhratchTranslator class >> unicodeClipboard [
 	"Get the contents of the Unicode clipboard as UTF32."
 	"self unicodeClipboard asArray"
 	"(StringMorph contents: self unicodeClipboard) openInWorld"
@@ -1333,7 +1333,7 @@ ScratchTranslator class >> unicodeClipboard [
 ]
 
 { #category : #'Unicode copy/paste' }
-ScratchTranslator class >> unicodeClipboardPut: unicodeOrString [
+PhratchTranslator class >> unicodeClipboardPut: unicodeOrString [
 	"Store the given string in the Unicode paste buffer of the underlying OS. If the argument is a String, it is assumed to be encoded in MacRoman and is converted to Unicode."
 	"self unicodeClipboardPut: (UTF32 withAll: #(65 0 0 66 67 13 12354 0 27700 119070))"
  " Corregido error sintaxsis"
@@ -1367,17 +1367,17 @@ ScratchTranslator class >> unicodeClipboardPut: unicodeOrString [
 ]
 
 { #category : #'rendering menu' }
-ScratchTranslator class >> updateScratchUI [
+PhratchTranslator class >> updatePhratchUI [
 	"Update the UI of all ScratchFrameMorphs after changing the font or font scale."
 
 	RenderCenterOffsetCache := RenderCenterOffsetCache species new.
 	RenderVerticalTrimCache := RenderVerticalTrimCache species new.
-	ScratchFrameMorph allInstancesDo: [:m | m rebuildUIForNewLanguage].
+	PhratchFrameMorph allInstancesDo: [:m | m rebuildUIForNewLanguage].
 
 ]
 
 { #category : #'import/export' }
-ScratchTranslator class >> updateTranslationFiles [
+PhratchTranslator class >> updateTranslationFiles [
 	"Takes the existing .po files and updates them to reflect the latest Scratch strings to be translated."
 	"self updateTranslationFiles"
 
@@ -1392,7 +1392,7 @@ ScratchTranslator class >> updateTranslationFiles [
 ]
 
 { #category : #'Unicode rendering' }
-ScratchTranslator class >> useSqueakRendering [
+PhratchTranslator class >> useSqueakRendering [
 	"Answer true if the current langauge can (or must) be rendered using Squeak,based on the availablility of a rendering plugin, the settings in the .po file and the contents of the translations. Assume that the header has already been processed to initialize HeaderDict."
 
 	self canRenderUnicode ifFalse: [^ true].
@@ -1414,18 +1414,18 @@ true ifTrue: [^ false].  "disable Squeak rendering, even if language can be repr
 ]
 
 { #category : #'language translation' }
-ScratchTranslator class >> varSpecTranslationFor: spec varName: varName [
+PhratchTranslator class >> varSpecTranslationFor: spec varName: varName [
 	"Return the translation of a variable setter command spec for the given variable."
 
 	| s i |
-	s :=  ScratchTranslator translationFor: spec.
+	s :=  PhratchTranslator translationFor: spec.
 	i := s indexOfSubCollection: '%v' startingAt: 1.
 	^ (s copyFrom: 1 to: i - 1), varName, (s copyFrom: (i + 2) to: s size).
 
 ]
 
 { #category : #'import/export' }
-ScratchTranslator class >> verifyTranslationFiles [
+PhratchTranslator class >> verifyTranslationFiles [
 	"Returns a dictionary with each language filename as a key and a dictionary with the header and formatting fields as the key's value"
 	"self verifyTranslationFiles"
 
@@ -1443,7 +1443,7 @@ ScratchTranslator class >> verifyTranslationFiles [
 ]
 
 { #category : #'import/export' }
-ScratchTranslator class >> verifyTranslationFilesArgOrder [
+PhratchTranslator class >> verifyTranslationFilesArgOrder [
 	"Returns a dictionary with any language file with invalid arguments as the key and the invalid arguments as the value"
 	"self verifyTranslationFilesArgOrder2"
 
@@ -1452,7 +1452,7 @@ ScratchTranslator class >> verifyTranslationFilesArgOrder [
 	self translationDir fileNames do: [: n |
 		dict := self importTranslation: n.
 		subDict := Dictionary new.
-		ScriptableScratchMorph blockSpecsForTranslation do: [:s |
+		ScriptablePhratchMorph blockSpecsForTranslation do: [:s |
 			ts := dict at: s ifAbsent: [s].
 			argsS := (CommandBlockMorph parseCommandSpec: s) select: [:a | CommandBlockMorph isArgSpec: a].
 			argsTS := (CommandBlockMorph parseCommandSpec: ts) select: [:a | CommandBlockMorph isArgSpec: a].
@@ -1466,7 +1466,7 @@ ScratchTranslator class >> verifyTranslationFilesArgOrder [
 ]
 
 { #category : #'Unicode rendering' }
-ScratchTranslator class >> verticalTrimForFont: aStrikeFont [
+PhratchTranslator class >> verticalTrimForFont: aStrikeFont [
 	"Answer the number of pixels to trim from a button labeled with the given font. Some rendering systems (e.g. Pango on Mac OS), add excess space below the lowest extent of a font in some languages. This method computes the actual space needed by from the render hints string. It is the translator's responsibility to provide a render hints string that includes the tallest character and the the character with the maximum descent."
 	"[self verticalTrimForFont: (StrikeFont fontName: 'VerdanaBold' size: 10)] msecs"
 
@@ -1484,7 +1484,7 @@ ScratchTranslator class >> verticalTrimForFont: aStrikeFont [
 ]
 
 { #category : #'import/export' }
-ScratchTranslator class >> withoutComment: s [
+PhratchTranslator class >> withoutComment: s [
 	"Answer the given string without any comment. A hash character (#) begins a comment that runs to the end of the line unless the hash character is inside a double-quoted string."
 	"ScratchTranslator withoutComment: '# full line comment'"
 	"ScratchTranslator withoutComment: 'contents Öffnen # plus s comment'"
@@ -1506,7 +1506,7 @@ ScratchTranslator class >> withoutComment: s [
 ]
 
 { #category : #'Unicode rendering' }
-ScratchTranslator class >> xRangesFor: utf8 font: aStrikeFont [
+PhratchTranslator class >> xRangesFor: utf8 font: aStrikeFont [
 	"Anwer an array of (leftX, rightX) pairs for the given Unicode string. There will be an entry in the resulting array for each UTF character in the input string, even when characters combine. Thus, in general, the x ranges for characters can overlap."
 
 	RenderPlugin ifNil: [^ Array new: (utf8 asUTF32 size) withAll: #(0 0)].

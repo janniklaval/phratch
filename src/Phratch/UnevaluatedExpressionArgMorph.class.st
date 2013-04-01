@@ -14,19 +14,19 @@ UnevaluatedExpressionArgMorph >> evaluate [
 	lambdafy := [:xpr |
 		| rcv answerBlock reportBlock bool |
 		rcv := owner receiver.
-		rcv ifNil: [rcv := ScriptableScratchMorph new].
+		rcv ifNil: [rcv := ScriptablePhratchMorph new].
 		answerBlock := rcv blockFromSpec: (rcv wholeBlockSpecForSelector: #procedure) 
-									color: (ScriptableScratchMorph blockColorFor: 'operators').
+									color: (ScriptablePhratchMorph blockColorFor: 'operators').
 		answerBlock isAtomic: true.
 		reportBlock := rcv blockFromSpec: (rcv wholeBlockSpecForSelector: #doAnswer) 
-									color: (ScriptableScratchMorph blockColorFor: 'control').
+									color: (ScriptablePhratchMorph blockColorFor: 'control').
 		(xpr isKindOf: Boolean)
 			ifTrue: [
 				xpr
 					ifTrue: [bool := rcv blockFromSpec: (rcv wholeBlockSpecForSelector: #getTrue) 
-									color: (ScriptableScratchMorph blockColorFor: 'operators').]
+									color: (ScriptablePhratchMorph blockColorFor: 'operators').]
 					ifFalse: [bool := rcv blockFromSpec: (rcv wholeBlockSpecForSelector: #getFalse) 
-									color: (ScriptableScratchMorph blockColorFor: 'operators').].
+									color: (ScriptablePhratchMorph blockColorFor: 'operators').].
 				reportBlock replaceArgMorph: reportBlock argMorphs first by: bool]
 			ifFalse: [reportBlock argMorphs first defaultValue: xpr].
 		answerBlock attachBlock: reportBlock.

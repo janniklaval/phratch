@@ -43,9 +43,9 @@ PhratchCommentMorph >> addTopBar [
 	labelMorph := PhratchStringMorph new
 		color: (Color gray: 0.33);
 		contents: '';
-		font: (ScratchFrameMorph getFont: #Label).
+		font: (PhratchFrameMorph getFont: #Label).
 
-	showHideMorph := ImageMorph new form: (ScratchFrameMorph skinAt: #arrowOpenComment).
+	showHideMorph := ImageMorph new form: (PhratchFrameMorph skinAt: #arrowOpenComment).
 	showHideMorph form colors: (Array
 		with: Color transparent
 		with: (self color mixed: 0.5 with: Color black)).
@@ -166,7 +166,7 @@ PhratchCommentMorph >> defaultWidth [
 PhratchCommentMorph >> delete [
 
 	self detach.
-	ScratchFrameMorph putInClipboard: self.
+	PhratchFrameMorph putInClipboard: self.
 	super delete
 
 ]
@@ -235,8 +235,8 @@ PhratchCommentMorph >> initialize [
 		color: self commentMorphColor;
 		growWithText: true;
 		borderWidth: 0;
-		font: (ScratchFrameMorph getFont: #CommentBlock);
-		contents: 'add comment here' localized, ScratchTranslator ellipsesSuffix;
+		font: (PhratchFrameMorph getFont: #CommentBlock);
+		contents: 'add comment here' localized, PhratchTranslator ellipsesSuffix;
 		width: self defaultWidth - resizeMorph width.
 	bottomBar addMorphBack: commentMorph.
 	bottomBar addMorphBack: resizeMorph.
@@ -260,7 +260,7 @@ PhratchCommentMorph >> justDroppedInto: newOwner event: evt [
 	"Handle being dropped into a new situation."
 
 	| frame target |
-	(frame := newOwner ownerOrYourselfThatIsA: ScratchFrameMorph)
+	(frame := newOwner ownerOrYourselfThatIsA: PhratchFrameMorph)
 		ifNotNil: [frame projectModified].
 
 	((self ownerOrYourselfThatIsA: PhratchViewerMorph) notNil) ifTrue: [
@@ -269,7 +269,7 @@ PhratchCommentMorph >> justDroppedInto: newOwner event: evt [
 		^ self].
 
 	"comments cannot be dropped onto the stage"
-	(owner isKindOf: ScratchStageMorph) ifTrue: [
+	(owner isKindOf: PhratchStageMorph) ifTrue: [
 		^ evt hand rejectDropMorph: self event: evt].
 
 	"okay to drop comments into the world during development"
@@ -291,7 +291,7 @@ PhratchCommentMorph >> labelWhenClosed [
 	maxW := self width - 22.
 	firstLine := commentMorph lines at: 1.
 	(labelMorph stringWidth: firstLine) < maxW ifTrue: [^ firstLine].
-	ellipses := ScratchTranslator ellipsesSuffix asUTF32.
+	ellipses := PhratchTranslator ellipsesSuffix asUTF32.
 
 	1 to: firstLine size do: [:i |
 		s := firstLine copyFrom: 1 to: i.
@@ -362,7 +362,7 @@ PhratchCommentMorph >> refreshConnector [
 		connector goBehind].
 
 	y := self top + 7.
-	ScratchTranslator isRTL
+	PhratchTranslator isRTL
 		ifTrue: [
 			connector
 				from: (anchor left + 1) @ y
@@ -482,7 +482,7 @@ PhratchCommentMorph >> toggleShowing [
 	colors := showHideMorph form colors.
 	isShowing
 		ifTrue: [
-			showHideMorph form: (ScratchFrameMorph skinAt: #arrowOpenComment).
+			showHideMorph form: (PhratchFrameMorph skinAt: #arrowOpenComment).
 			showHideMorph form colors: colors.
 			(self submorphs at: 2) addMorphBack: commentMorph.
 			(self submorphs at: 2) addMorphBack: resizeMorph.
@@ -491,7 +491,7 @@ PhratchCommentMorph >> toggleShowing [
 			self comeToFront.
 			self color: self commentMorphColor]
 		ifFalse: [
-			showHideMorph form: (ScratchFrameMorph skinAt: #arrowClosedComment).
+			showHideMorph form: (PhratchFrameMorph skinAt: #arrowClosedComment).
 			showHideMorph form colors: colors.
 			commentMorph delete.
 			resizeMorph delete.
@@ -565,11 +565,11 @@ PhratchCommentMorph >> updateAnchorOffset [
 
 	[touching := rects detect: [:r | (r intersects: self bounds)] ifNone: [nil].
 	 touching isNil] whileFalse: [
-		ScratchTranslator isRTL
+		PhratchTranslator isRTL
 			ifTrue: [self right: (self right min: (touching left - extraSpace))]
 			ifFalse: [self left: (self left max: (touching right + extraSpace))]].
 
-	ScratchTranslator isRTL
+	PhratchTranslator isRTL
 		ifTrue: [anchorOffset := anchor left - self right]
 		ifFalse: [anchorOffset := self left - anchor right].
 
@@ -584,7 +584,7 @@ PhratchCommentMorph >> updatePosition [
 	anchor ifNil: [^ self].
 
 	vOffset := (anchor isKindOf: HatBlockMorph) ifTrue: [19] ifFalse: [3].
-	ScratchTranslator isRTL
+	PhratchTranslator isRTL
 		ifTrue: [self position: (anchor left - self width - anchorOffset) @ (anchor top + vOffset)]
 		ifFalse: [self position: (anchor right + anchorOffset) @ (anchor top + vOffset)].
 

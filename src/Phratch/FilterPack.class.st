@@ -160,24 +160,24 @@ FilterPack >> applyStaticFiltersTo: srcForm [
 	resultForm unhibernate.
 
 	hueShift = 0 ifFalse: [
-		ScratchPlugin primShiftHue: resultForm bits
+		PhratchPlugin primShiftHue: resultForm bits
 			into: resultForm bits byDegrees: (1.8 * hueShift) asInteger].
 	saturationShift = 0 ifFalse: [
-		ScratchPlugin primShiftSaturation: resultForm bits
+		PhratchPlugin primShiftSaturation: resultForm bits
 			into: resultForm bits by: saturationShift asInteger].
 	brightnessShift = 0 ifFalse: [
-		ScratchPlugin primShiftBrightness: resultForm bits
+		PhratchPlugin primShiftBrightness: resultForm bits
 			into: resultForm bits by: brightnessShift asInteger].
 
 	whirl = 0 ifFalse: [
 		fOut := resultForm deepCopy.
-		ScratchPlugin primWhirl: resultForm bits
+		PhratchPlugin primWhirl: resultForm bits
 			into: fOut bits width: resultForm width angle: whirl asInteger.
 		resultForm := fOut].
 
 	fisheye = 0 ifFalse: [
 		"Note: The primitive takes power >= 0 where 100 is normal, >100 is fisheye, <100 is blackhole effect"
-		ScratchPlugin
+		PhratchPlugin
 			primFisheye: resultForm bits copy  "copy the source bits"
 			into: resultForm bits
 			width: resultForm width
@@ -189,7 +189,7 @@ FilterPack >> applyStaticFiltersTo: srcForm [
 	blur = 0 ifFalse: [
 		fOut := resultForm deepCopy.
 		(blur asInteger min: 100) timesRepeat: [
-			ScratchPlugin primBlur: resultForm bits into: fOut bits width: resultForm width.
+			PhratchPlugin primBlur: resultForm bits into: fOut bits width: resultForm width.
 			tmp := resultForm.
 			resultForm := fOut.
 			fOut := tmp]].
@@ -207,7 +207,7 @@ FilterPack >> applyWaterRippleFilter [
 	waterArray2 ifNil: [waterArray2 := ByteArray new: (8 * fOut width * fOut height)].
 	ripply := (100.0 * (waterRippleRate abs / fOut width) sqrt) asInteger max: 1.
 
-	ScratchPlugin
+	PhratchPlugin
 		primWaterRipples1: cachedForm bits
 		into: fOut bits
 		width: fOut width asInteger

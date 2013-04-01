@@ -18,7 +18,7 @@ Each cell consists of a frame containing a line-wrapping string morph.
 
 "
 Class {
-	#name : #ScratchListMorph,
+	#name : #PhratchListMorph,
 	#superclass : #BorderedMorph,
 	#instVars : [
 		'titleMorph',
@@ -44,17 +44,17 @@ Class {
 }
 
 { #category : #'instance creation' }
-ScratchListMorph class >> deepCopyFrom: anArray [
+PhratchListMorph class >> deepCopyFrom: anArray [
 	^self deepCopyFrom: anArray from: 1 to: anArray size
 
 
 ]
 
 { #category : #'instance creation' }
-ScratchListMorph class >> deepCopyFrom: anArray from: start to: stop [
+PhratchListMorph class >> deepCopyFrom: anArray from: start to: stop [
 
 	| ans converter element |
-	converter := ScriptableScratchMorph new.
+	converter := ScriptablePhratchMorph new.
 	ans := self new.
 	ans listName: '' target: nil.
 	start to: stop do: [:i |
@@ -72,17 +72,17 @@ ScratchListMorph class >> deepCopyFrom: anArray from: start to: stop [
 ]
 
 { #category : #'instance creation' }
-ScratchListMorph class >> on: anArray [
+PhratchListMorph class >> on: anArray [
 	^self on: anArray from: 1 to: anArray size
 
 
 ]
 
 { #category : #'instance creation' }
-ScratchListMorph class >> on: anArray from: start to: stop [
+PhratchListMorph class >> on: anArray from: start to: stop [
 
 	| ans converter |
-	converter := ScriptableScratchMorph new.
+	converter := ScriptablePhratchMorph new.
 	ans := self new.
 	ans listName: '' target: nil.
 	start to: stop do: [:i |
@@ -97,16 +97,16 @@ ScratchListMorph class >> on: anArray from: start to: stop [
 ]
 
 { #category : #'instance creation' }
-ScratchListMorph class >> with: anObject [
+PhratchListMorph class >> with: anObject [
 
 	^ self new
-		insertLine: (ScriptableScratchMorph new asListElement: anObject) at: 1
+		insertLine: (ScriptablePhratchMorph new asListElement: anObject) at: 1
 	
 
 ]
 
 { #category : #'byob lambdas' }
-ScratchListMorph >> aboutToBeGrabbedBy: aHand [
+PhratchListMorph >> aboutToBeGrabbedBy: aHand [
 
 	self listOwner
 		ifNil: [^ self]
@@ -114,7 +114,7 @@ ScratchListMorph >> aboutToBeGrabbedBy: aHand [
 ]
 
 { #category : #'list ops' }
-ScratchListMorph >> addLettersOf: anObject [
+PhratchListMorph >> addLettersOf: anObject [
 
 	anObject asString asUTF32 do: [:ch |
 		cellMorphs addLast: (self createCell: (String with: ch) asUTF8)].
@@ -124,7 +124,7 @@ ScratchListMorph >> addLettersOf: anObject [
 ]
 
 { #category : #initialization }
-ScratchListMorph >> addScrollPane [
+PhratchListMorph >> addScrollPane [
 
 	scrollPane := ScrollFrameMorph2 new
 		vBarInset: 16;
@@ -139,22 +139,22 @@ ScratchListMorph >> addScrollPane [
 ]
 
 { #category : #initialization }
-ScratchListMorph >> addTitleAndControls [
+PhratchListMorph >> addTitleAndControls [
 
-	titleMorph := PhratchStringMorph new contents: 'myList'; font: (ScratchFrameMorph getFont: #Label).
-	deleteMorph := (ImageMorph new form: (ScratchFrameMorph skinAt: #deleteItem)).
-	addItemMorph := (ImageMorph new form: (ScratchFrameMorph skinAt: #addItem)).
+	titleMorph := PhratchStringMorph new contents: 'myList'; font: (PhratchFrameMorph getFont: #Label).
+	deleteMorph := (ImageMorph new form: (PhratchFrameMorph skinAt: #deleteItem)).
+	addItemMorph := (ImageMorph new form: (PhratchFrameMorph skinAt: #addItem)).
 	addSublistMorph := (ImageMorph new form: self sublistIcon).
 	resizeMorph := PhratchResizeMorph ofType: #corner.
 	countMorph := PhratchStringMorph new
 		contents: '0';
-		font: (ScratchFrameMorph getFont: #XYReadout);
+		font: (PhratchFrameMorph getFont: #XYReadout);
 		color: (Color gray: 0.15).
 
 	"emptyMorph is added to contents pane when list is empty"
 	emptyMorph := PhratchStringMorph new
 		contents: '(empty)' localized;
-		font: (ScratchFrameMorph getFont: #CommentBlock).
+		font: (PhratchFrameMorph getFont: #CommentBlock).
 
 	self addMorph: titleMorph.
 	self addMorph: deleteMorph.
@@ -166,7 +166,7 @@ ScratchListMorph >> addTitleAndControls [
 ]
 
 { #category : #'byob lambdas' }
-ScratchListMorph >> asArray [
+PhratchListMorph >> asArray [
 
 	| result |
 	result := Array new: self lineCount.
@@ -176,7 +176,7 @@ ScratchListMorph >> asArray [
 ]
 
 { #category : #'byob lambdas' }
-ScratchListMorph >> asReferenceTuple [
+PhratchListMorph >> asReferenceTuple [
 
 	" answer an array describing the receiver in an abstract way
 	format conventions:
@@ -200,12 +200,12 @@ ScratchListMorph >> asReferenceTuple [
 	| stage rcvr ref |
 
 	target isNil ifTrue: [
-		stage := ScratchFrameMorph someInstance workPane.
+		stage := PhratchFrameMorph someInstance workPane.
 		ref := stage referenceToList: self.
 		ref ifNil: [^nil].
 		^(Array with: #variableList), ref].
 
-	stage := target ownerOrYourselfThatIsA: ScratchStageMorph.
+	stage := target ownerOrYourselfThatIsA: PhratchStageMorph.
 	target == stage
 		ifTrue: [rcvr := 'Stage']
 		ifFalse: [rcvr := target objName].
@@ -215,7 +215,7 @@ ScratchListMorph >> asReferenceTuple [
 ]
 
 { #category : #'list ops' }
-ScratchListMorph >> clear [
+PhratchListMorph >> clear [
 
 	cellMorphs := cellMorphs species new: 1000.
 	self updateContents.
@@ -223,7 +223,7 @@ ScratchListMorph >> clear [
 ]
 
 { #category : #'byob lambdas' }
-ScratchListMorph >> complexContents: anArray [
+PhratchListMorph >> complexContents: anArray [
 
 	| obj |
 	1 to: anArray size do: [:i |
@@ -234,7 +234,7 @@ ScratchListMorph >> complexContents: anArray [
 ]
 
 { #category : #'list ops' }
-ScratchListMorph >> concatenatedLines [
+PhratchListMorph >> concatenatedLines [
 
 	| isSingleLetters s |
 	isSingleLetters := true.
@@ -255,11 +255,11 @@ ScratchListMorph >> concatenatedLines [
 ]
 
 { #category : #'list ops' }
-ScratchListMorph >> contains: anObject [
+PhratchListMorph >> contains: anObject [
 
 	| s isComplex |
-	isComplex := (anObject isKindOf: ScriptableScratchMorph) 
-				| (anObject isKindOf: ScratchListMorph) 
+	isComplex := (anObject isKindOf: ScriptablePhratchMorph) 
+				| (anObject isKindOf: PhratchListMorph) 
 				| (anObject isKindOf: CommandBlockMorph).
 
 	isComplex ifTrue: [
@@ -277,7 +277,7 @@ ScratchListMorph >> contains: anObject [
 ]
 
 { #category : #'byob lambdas' }
-ScratchListMorph >> containsRecursive: anObject [
+PhratchListMorph >> containsRecursive: anObject [
 
 	| s |
 	s := anObject asString asUTF8.
@@ -295,7 +295,7 @@ ScratchListMorph >> containsRecursive: anObject [
 ]
 
 { #category : #'byob lambdas' }
-ScratchListMorph >> convertBlockTuplesToStacksFor: aScriptableScratchMorph [
+PhratchListMorph >> convertBlockTuplesToStacksFor: aScriptableScratchMorph [
 
 	"only for multi arg persistence"
 	| obj block |
@@ -312,7 +312,7 @@ ScratchListMorph >> convertBlockTuplesToStacksFor: aScriptableScratchMorph [
 ]
 
 { #category : #'byob lambdas' }
-ScratchListMorph >> convertStacksToTuples [
+PhratchListMorph >> convertStacksToTuples [
 
 	"format conventions:
 
@@ -343,8 +343,8 @@ ScratchListMorph >> convertStacksToTuples [
 	cellMorphs do: [:m | obj := m complexObject.
 
 		(obj isKindOf: BlockMorph) ifTrue: [
-			(obj receiver isKindOf: ScriptableScratchMorph)
-				ifTrue: [(obj receiver isKindOf: ScratchStageMorph)
+			(obj receiver isKindOf: ScriptablePhratchMorph)
+				ifTrue: [(obj receiver isKindOf: PhratchStageMorph)
 					ifTrue: [rcvr := 'Stage']
 					ifFalse: [rcvr := obj receiver objName]]
 				ifFalse: [ rcvr := '' ].
@@ -356,14 +356,14 @@ ScratchListMorph >> convertStacksToTuples [
 				ifTrue: [ obj convertStacksToTuples]
 				ifFalse: [ m complexObject: ref]].
 
-		(obj isKindOf: ScriptableScratchMorph) ifTrue: [ 
+		(obj isKindOf: ScriptablePhratchMorph) ifTrue: [ 
 			ref := obj asReferenceTuple.
 			m complexObject: ref]].
 
 ]
 
 { #category : #'byob lambdas' }
-ScratchListMorph >> convertTuplesToStacks [
+PhratchListMorph >> convertTuplesToStacks [
 
 	"format conventions:
 
@@ -401,8 +401,8 @@ ScratchListMorph >> convertTuplesToStacks [
 		(obj isKindOf: Array) ifTrue: [
 
 			target isNil
-				ifTrue: [ stage := ScratchFrameMorph someInstance workPane]
-				ifFalse: [stage := target ownerOrYourselfThatIsA: ScratchStageMorph ].
+				ifTrue: [ stage := PhratchFrameMorph someInstance workPane]
+				ifFalse: [stage := target ownerOrYourselfThatIsA: PhratchStageMorph ].
 
 			obj second = 'Stage'
 				ifTrue: [rcvr := stage ]
@@ -432,7 +432,7 @@ ScratchListMorph >> convertTuplesToStacks [
 ]
 
 { #category : #'list ops' }
-ScratchListMorph >> createCell: anObject [
+PhratchListMorph >> createCell: anObject [
 
 	| readout cell font numberRight txt double |
 
@@ -440,23 +440,23 @@ ScratchListMorph >> createCell: anObject [
 	(anObject isKindOf: String)
 		ifFalse: [txt := anObject printString].
 
-	font := ScratchFrameMorph getFont: #Watcher.
+	font := PhratchFrameMorph getFont: #Watcher.
 	readout := ListMultilineStringMorph new
 		borderWidth: 0;
 		color: Color transparent;
 		textColor: Color white;
 		growWithText: true;
 		contents: txt font: font.
-	readout height: ((ScratchTranslator stringExtent: 'A' font: font) y) + 6.
-	ScratchTranslator isRTL
+	readout height: ((PhratchTranslator stringExtent: 'A' font: font) y) + 6.
+	PhratchTranslator isRTL
 		ifTrue: [numberRight := self right - 5]
 		ifFalse: [numberRight := self left + self largestIndexWidth + 6].
-	ScratchTranslator isRTL
+	PhratchTranslator isRTL
 		ifTrue: [readout width: self right - self left - self largestIndexWidth - 33]
 		ifFalse: [readout width: self right - numberRight - 25].
 
 	cell := WatcherReadoutFrameMorph new
-		color: ScriptableScratchMorph listBlockColor;
+		color: ScriptablePhratchMorph listBlockColor;
 		extent: readout extent + 3;
 		addMorphBack: readout.
 
@@ -480,15 +480,15 @@ ScratchListMorph >> createCell: anObject [
 ]
 
 { #category : #'dropping/grabbing' }
-ScratchListMorph >> delete [
+PhratchListMorph >> delete [
 
 	super delete.
-	ScratchFrameMorph allInstancesDo: [:frame | frame deletingWatcher].
+	PhratchFrameMorph allInstancesDo: [:frame | frame deletingWatcher].
 
 ]
 
 { #category : #'list ops' }
-ScratchListMorph >> deleteLineAt: aNumber [
+PhratchListMorph >> deleteLineAt: aNumber [
 
 	| index |
 
@@ -508,21 +508,21 @@ ScratchListMorph >> deleteLineAt: aNumber [
 ]
 
 { #category : #'byob lambdas' }
-ScratchListMorph >> equals: another [
+PhratchListMorph >> equals: another [
 
 	another class == self class ifFalse: [^ false].
 	^ self asArray = another asArray
 ]
 
 { #category : #'import/export' }
-ScratchListMorph >> exportList [
+PhratchListMorph >> exportList [
 
 	| fName f |
 	fName := titleMorph contents.
 	fName size <= 1 ifTrue: [fName := 'newList'].
 	fName := fName, '.txt'.
 
-	fName := ScratchFileChooserDialog
+	fName := PhratchFileChooserDialog
 		chooseNewFileDefault: fName
 		title: 'File Name?'
 		type: #list.
@@ -536,7 +536,7 @@ ScratchListMorph >> exportList [
 ]
 
 { #category : #geometry }
-ScratchListMorph >> extent: aPoint [
+PhratchListMorph >> extent: aPoint [
 
 	super extent: (aPoint max: 95@115).
 	self fixLayout.
@@ -544,14 +544,14 @@ ScratchListMorph >> extent: aPoint [
 ]
 
 { #category : #'object i/o' }
-ScratchListMorph >> fieldsVersion [
+PhratchListMorph >> fieldsVersion [
 
 	^ 3
 
 ]
 
 { #category : #geometry }
-ScratchListMorph >> fixLayout [
+PhratchListMorph >> fixLayout [
 
 	titleMorph fitContents.
 	(titleMorph width > (self width - 12)) ifTrue: [
@@ -584,14 +584,14 @@ ScratchListMorph >> fixLayout [
 ]
 
 { #category : #geometry }
-ScratchListMorph >> fixLayoutForNewLanguage [
+PhratchListMorph >> fixLayoutForNewLanguage [
 	"This method updates the height and word-wrapping of cells after a language or font change."
 
 	| cellContents oldH |
 	cellMorphs size = 0 ifTrue: [self fixLayout. ^ self showEmpty].
 	cellContents := cellMorphs first firstSubmorph.
 	oldH := cellContents height.
-	(cellContents isKindOf: ScratchListMorph)
+	(cellContents isKindOf: PhratchListMorph)
 		ifFalse: [ cellContents font: cellContents font].
 	cellContents height = oldH ifTrue: [self fixLayout. ^ self].  "no size change"
 
@@ -602,7 +602,7 @@ ScratchListMorph >> fixLayoutForNewLanguage [
 ]
 
 { #category : #accessing }
-ScratchListMorph >> focusCell: cellMorph [
+PhratchListMorph >> focusCell: cellMorph [
 
 	focusIndex := cellMorphs indexOf: cellMorph ifAbsent: [1].
 	World activeHand newKeyboardFocus: cellMorph firstSubmorph.
@@ -610,14 +610,14 @@ ScratchListMorph >> focusCell: cellMorph [
 ]
 
 { #category : #accessing }
-ScratchListMorph >> focusIndex [
+PhratchListMorph >> focusIndex [
 
 	^ focusIndex
 
 ]
 
 { #category : #accessing }
-ScratchListMorph >> focusIndex: anInteger [
+PhratchListMorph >> focusIndex: anInteger [
 
 	| cell |
 	focusIndex := anInteger.
@@ -633,23 +633,23 @@ ScratchListMorph >> focusIndex: anInteger [
 ]
 
 { #category : #'byob lambdas' }
-ScratchListMorph >> fullDrawOn: aCanvas [
+PhratchListMorph >> fullDrawOn: aCanvas [
 	"private - ensure that I show the correct length"
 	self updateCountMorph.
 	super fullDrawOn: aCanvas
 ]
 
 { #category : #'event handling' }
-ScratchListMorph >> handlesMouseDown: evt [
+PhratchListMorph >> handlesMouseDown: evt [
 
 	^ self world notNil
 ]
 
 { #category : #'import/export' }
-ScratchListMorph >> importList [
+PhratchListMorph >> importList [
 
 	| result |
-	result := ScratchFileChooserDialog
+	result := PhratchFileChooserDialog
 		chooseExistingFileType: #list
 		extensions: #(txt)
 		title: 'Import List'.
@@ -660,7 +660,7 @@ ScratchListMorph >> importList [
 ]
 
 { #category : #'import/export' }
-ScratchListMorph >> importListFromFileNamed: aFilename [
+PhratchListMorph >> importListFromFileNamed: aFilename [
 
 	| f |
 	f := FileStream readOnlyFileNamedOrNil: (( aFilename) fullName).
@@ -676,14 +676,14 @@ ScratchListMorph >> importListFromFileNamed: aFilename [
 ]
 
 { #category : #private }
-ScratchListMorph >> indexColor [
+PhratchListMorph >> indexColor [
 
 	^ Color gray: 0.32
 
 ]
 
 { #category : #'byob lambdas' }
-ScratchListMorph >> indexOf: anObject [
+PhratchListMorph >> indexOf: anObject [
 
 	1 to: self lineCount do: [:i | 
 		(self lineAt: i) = anObject ifTrue: [^ i]].
@@ -691,14 +691,14 @@ ScratchListMorph >> indexOf: anObject [
 ]
 
 { #category : #accessing }
-ScratchListMorph >> indexOfCell: cellMorph [
+PhratchListMorph >> indexOfCell: cellMorph [
 
 	^ cellMorphs indexOf: cellMorph ifAbsent: [-1]
 
 ]
 
 { #category : #'object i/o' }
-ScratchListMorph >> initFieldsFrom: anObjStream version: classVersion [
+PhratchListMorph >> initFieldsFrom: anObjStream version: classVersion [
 	"Note: To simplify my representation in the project file, my submorphs are removed before saving and restored when I am read in from an object file."
 
 	| strings complex |
@@ -721,7 +721,7 @@ ScratchListMorph >> initFieldsFrom: anObjStream version: classVersion [
 ]
 
 { #category : #initialization }
-ScratchListMorph >> initialize [
+PhratchListMorph >> initialize [
 
 	super initialize.
 	self
@@ -745,7 +745,7 @@ ScratchListMorph >> initialize [
 ]
 
 { #category : #'list ops' }
-ScratchListMorph >> insertLine: aString at: aNumber [
+PhratchListMorph >> insertLine: aString at: aNumber [
 
 	| index newCell |
 
@@ -775,7 +775,7 @@ ScratchListMorph >> insertLine: aString at: aNumber [
 ]
 
 { #category : #'byob lambdas' }
-ScratchListMorph >> isMaxNestedAt: int [
+PhratchListMorph >> isMaxNestedAt: int [
 	"kludge-alert!"
 
 	int > VariableFrame maxNestingDepth
@@ -791,9 +791,9 @@ ScratchListMorph >> isMaxNestedAt: int [
 ]
 
 { #category : #'dropping/grabbing' }
-ScratchListMorph >> justDroppedInto: aMorph event: evt [
+PhratchListMorph >> justDroppedInto: aMorph event: evt [
 
-	(aMorph isKindOf: ScratchStageMorph) ifTrue: [
+	(aMorph isKindOf: PhratchStageMorph) ifTrue: [
 		super justDroppedInto: aMorph event: evt.
 		self world ifNotNil: [self world startSteppingSubmorphsOf: self].
 		^ self].
@@ -805,12 +805,12 @@ ScratchListMorph >> justDroppedInto: aMorph event: evt [
 ]
 
 { #category : #private }
-ScratchListMorph >> largestIndexWidth [
+PhratchListMorph >> largestIndexWidth [
 	"Estimate the width needed for the largest cell number."
 	"Note: we estimate using the width of the the digit '0' times the number of digits needed."
 
 	| digitWidth digitCount n |
-	digitWidth := (ScratchFrameMorph getFont: #Label) widthOf: $0.
+	digitWidth := (PhratchFrameMorph getFont: #Label) widthOf: $0.
 	n := cellMorphs size + 1 max: 100.
 	digitCount := n log ceiling.
 	^ digitCount * digitWidth
@@ -819,7 +819,7 @@ ScratchListMorph >> largestIndexWidth [
 ]
 
 { #category : #'list ops' }
-ScratchListMorph >> lineAt: aNumber [
+PhratchListMorph >> lineAt: aNumber [
 
 	| index cell |
 
@@ -838,28 +838,28 @@ ScratchListMorph >> lineAt: aNumber [
 ]
 
 { #category : #'list ops' }
-ScratchListMorph >> lineCount [
+PhratchListMorph >> lineCount [
 
 	^ cellMorphs size
 
 ]
 
 { #category : #accessing }
-ScratchListMorph >> listContents [
+PhratchListMorph >> listContents [
 
 	^ cellMorphs collect: [:m | m firstSubmorph contents].
 
 ]
 
 { #category : #accessing }
-ScratchListMorph >> listName [
+PhratchListMorph >> listName [
 
 	^ listName
 
 ]
 
 { #category : #initialization }
-ScratchListMorph >> listName: asString target: aScriptableSpriteMorph [
+PhratchListMorph >> listName: asString target: aScriptableSpriteMorph [
 
 	listName := asString asUTF8.
 	target := aScriptableSpriteMorph.
@@ -868,7 +868,7 @@ ScratchListMorph >> listName: asString target: aScriptableSpriteMorph [
 ]
 
 { #category : #'byob lambdas' }
-ScratchListMorph >> listOwner [
+PhratchListMorph >> listOwner [
 
 	owner ifNil: [^ nil].
 	^ owner ownerOrYourselfThatIsA: self class.
@@ -876,7 +876,7 @@ ScratchListMorph >> listOwner [
 ]
 
 { #category : #'event handling' }
-ScratchListMorph >> mouseDown: evt [
+PhratchListMorph >> mouseDown: evt [
 	"Handle a mouse click. Left button either drags or performs click action. Right button brings up a menu."
 
 	| p listOwner newList |
@@ -894,7 +894,7 @@ ScratchListMorph >> mouseDown: evt [
 		^ self insertLine: '' at: (self lineCount + 1)].
 
 	((addSublistMorph bounds expandBy: 2) containsPoint: p) ifTrue: [
-		newList := ScratchListMorph new 
+		newList := PhratchListMorph new 
 							listName: '' target: nil; 
 							updateCountMorph; 
 							startStepping;
@@ -916,7 +916,7 @@ ScratchListMorph >> mouseDown: evt [
 ]
 
 { #category : #'event handling' }
-ScratchListMorph >> mouseMove: evt [
+PhratchListMorph >> mouseMove: evt [
 
 	resizeOffset ifNotNil: [
 		self extent: (evt cursorPoint - self topLeft) + resizeOffset].
@@ -924,7 +924,7 @@ ScratchListMorph >> mouseMove: evt [
 ]
 
 { #category : #private }
-ScratchListMorph >> newContents: listOfStrings [
+PhratchListMorph >> newContents: listOfStrings [
 	"Set my contents to the given collection of strings."
 
 	scrollPane contents
@@ -941,14 +941,14 @@ ScratchListMorph >> newContents: listOfStrings [
 ]
 
 { #category : #private }
-ScratchListMorph >> normalBorderColor [
+PhratchListMorph >> normalBorderColor [
 
 	^ Color r: (148/255) g: (145/255) b: (145/255)
 
 ]
 
 { #category : #private }
-ScratchListMorph >> noteChangeAtIndex: index [
+PhratchListMorph >> noteChangeAtIndex: index [
 
 	lastActivityIndex := index.	
 
@@ -965,7 +965,7 @@ ScratchListMorph >> noteChangeAtIndex: index [
 ]
 
 { #category : #'-- all --' }
-ScratchListMorph >> noteChangeForReadingAtIndex: index [
+PhratchListMorph >> noteChangeForReadingAtIndex: index [
 
 	lastActivityIndex := index.	
 
@@ -982,7 +982,7 @@ ScratchListMorph >> noteChangeForReadingAtIndex: index [
 ]
 
 { #category : #'byob lambdas' }
-ScratchListMorph >> privateInsertLine: aString at: aNumber [
+PhratchListMorph >> privateInsertLine: aString at: aNumber [
 
 	| index newCell |
 	index := aNumber asInteger.
@@ -1002,7 +1002,7 @@ ScratchListMorph >> privateInsertLine: aString at: aNumber [
 ]
 
 { #category : #'byob lambdas' }
-ScratchListMorph >> references: anObject [
+PhratchListMorph >> references: anObject [
 
 	cellMorphs do: [:m |
 		m complexObject ifNotNil: [
@@ -1014,7 +1014,7 @@ ScratchListMorph >> references: anObject [
 ]
 
 { #category : #'event handling' }
-ScratchListMorph >> rightButtonMenu [
+PhratchListMorph >> rightButtonMenu [
 
 	| menu |
 	menu := MenuMorph new defaultTarget: self.
@@ -1025,12 +1025,12 @@ ScratchListMorph >> rightButtonMenu [
 
 	menu localize.
 	menu labels at: 2 put: 
-		((menu labels at: 2) contents copyFrom: 1 to: (menu labels at: 2) contents size - 1), ScratchTranslator ellipsesSuffix.
+		((menu labels at: 2) contents copyFrom: 1 to: (menu labels at: 2) contents size - 1), PhratchTranslator ellipsesSuffix.
 	menu popUpInWorld.
 ]
 
 { #category : #private }
-ScratchListMorph >> scrollActiveCellIntoView [
+PhratchListMorph >> scrollActiveCellIntoView [
 
 	| cell page newTop |
 	lastActivityIndex := lastActivityIndex within: 1 and: cellMorphs size.
@@ -1045,7 +1045,7 @@ ScratchListMorph >> scrollActiveCellIntoView [
 ]
 
 { #category : #'list ops' }
-ScratchListMorph >> setLineAt: aNumber to: newContents [
+PhratchListMorph >> setLineAt: aNumber to: newContents [
 
 	| index cell obj |
 
@@ -1086,7 +1086,7 @@ ScratchListMorph >> setLineAt: aNumber to: newContents [
 ]
 
 { #category : #private }
-ScratchListMorph >> showEmpty [
+PhratchListMorph >> showEmpty [
 	"Show the empty label."
 
 	| page |
@@ -1109,7 +1109,7 @@ ScratchListMorph >> showEmpty [
 ]
 
 { #category : #stepping }
-ScratchListMorph >> step [
+PhratchListMorph >> step [
 
 	self updateTitle.
 	self updateBorder.
@@ -1120,14 +1120,14 @@ ScratchListMorph >> step [
 ]
 
 { #category : #stepping }
-ScratchListMorph >> stepTime [
+PhratchListMorph >> stepTime [
 
 	^ 200
 
 ]
 
 { #category : #'object i/o' }
-ScratchListMorph >> storeFieldsOn: anObjStream [
+PhratchListMorph >> storeFieldsOn: anObjStream [
 	"Note: To simplify my representation in the project file, my submorphs are removed before saving and restored when I am read in from an object file."
 
 	| strings complex |
@@ -1156,14 +1156,14 @@ ScratchListMorph >> storeFieldsOn: anObjStream [
 ]
 
 { #category : #'byob lambdas' }
-ScratchListMorph >> sublistIcon [
+PhratchListMorph >> sublistIcon [
 
 	| block slot form halfList big |
-	block := ReporterBlockMorph new color: (ScriptableScratchMorph blockColorFor: 'list'); commandSpec: '%s'.
+	block := ReporterBlockMorph new color: (ScriptablePhratchMorph blockColorFor: 'list'); commandSpec: '%s'.
 	slot := block argMorphs first.
 	slot extent: 7 @ 4.
 	form := slot imageForm.
-	form replaceColor: (form colorAt: 2@2) withColor: (ScriptableScratchMorph blockColorFor: 'list').
+	form replaceColor: (form colorAt: 2@2) withColor: (ScriptablePhratchMorph blockColorFor: 'list').
 	halfList := slot extent + 1.
 	big := Form extent: halfList x @ (halfList y * 2) depth: 8.
 	(WarpBlt toForm: big)
@@ -1181,14 +1181,14 @@ ScratchListMorph >> sublistIcon [
 ]
 
 { #category : #accessing }
-ScratchListMorph >> target [
+PhratchListMorph >> target [
 
 	^ target
 
 ]
 
 { #category : #stepping }
-ScratchListMorph >> updateBorder [
+PhratchListMorph >> updateBorder [
 
 	lastActivityError
 		ifTrue: [self borderColor: Color red]
@@ -1198,7 +1198,7 @@ ScratchListMorph >> updateBorder [
 ]
 
 { #category : #'list ops' }
-ScratchListMorph >> updateContents [
+PhratchListMorph >> updateContents [
 	"Update and layout my contents."
 
 	| page numberRight cellWidth inset x y listOwner |
@@ -1215,12 +1215,12 @@ ScratchListMorph >> updateContents [
 	page := scrollPane contents.
 	page changed.
 
-	ScratchTranslator isRTL
+	PhratchTranslator isRTL
 		ifTrue: [numberRight := self right - 5]
 		ifFalse: [numberRight := self left + self largestIndexWidth + 6].
 
 	"word-wrap cell contents and fix cell extents, if needed"
-	ScratchTranslator isRTL
+	PhratchTranslator isRTL
 		ifTrue: [cellWidth := self right - self left - self largestIndexWidth - 33]
 		ifFalse: [cellWidth := self right - numberRight - 25].
 	inset := 3.
@@ -1238,7 +1238,7 @@ ScratchListMorph >> updateContents [
 				cell extent: cell firstSubmorph extent + inset]]].
 
 	"position cells"
-	ScratchTranslator isRTL
+	PhratchTranslator isRTL
 		ifTrue: [x := self left + 26]
 		ifFalse: [x := numberRight + 4].
 	y := page top + 3.
@@ -1264,7 +1264,7 @@ ScratchListMorph >> updateContents [
 ]
 
 { #category : #'list ops' }
-ScratchListMorph >> updateContentsForReading [
+PhratchListMorph >> updateContentsForReading [
 	"Update and layout my contents."
 
 	| page numberRight cellWidth inset x y listOwner |
@@ -1281,12 +1281,12 @@ ScratchListMorph >> updateContentsForReading [
 	page := scrollPane contents.
 	page changed.
 
-	ScratchTranslator isRTL
+	PhratchTranslator isRTL
 		ifTrue: [numberRight := self right - 5]
 		ifFalse: [numberRight := self left + self largestIndexWidth + 6].
 
 	"word-wrap cell contents and fix cell extents, if needed"
-	ScratchTranslator isRTL
+	PhratchTranslator isRTL
 		ifTrue: [cellWidth := self right - self left - self largestIndexWidth - 33]
 		ifFalse: [cellWidth := self right - numberRight - 25].
 	inset := 3.
@@ -1302,7 +1302,7 @@ ScratchListMorph >> updateContentsForReading [
 				cell extent: cell firstSubmorph extent + inset]]].
 
 	"position cells"
-	ScratchTranslator isRTL
+	PhratchTranslator isRTL
 		ifTrue: [x := self left + 26]
 		ifFalse: [x := numberRight + 4].
 	y := page top + 3.
@@ -1328,7 +1328,7 @@ ScratchListMorph >> updateContentsForReading [
 ]
 
 { #category : #private }
-ScratchListMorph >> updateContentsRecursive [
+PhratchListMorph >> updateContentsRecursive [
 	"Update and layout my contents and those of my children."
 
 	| page numberRight cellWidth inset x y |
@@ -1339,12 +1339,12 @@ ScratchListMorph >> updateContentsRecursive [
 	page := scrollPane contents.
 	page changed.
 
-	ScratchTranslator isRTL
+	PhratchTranslator isRTL
 		ifTrue: [numberRight := self right - 5]
 		ifFalse: [numberRight := self left + self largestIndexWidth + 6].
 
 	"word-wrap cell contents and fix cell extents, if needed"
-	ScratchTranslator isRTL
+	PhratchTranslator isRTL
 		ifTrue: [cellWidth := self right - self left - self largestIndexWidth - 33]
 		ifFalse: [cellWidth := self right - numberRight - 25].
 	inset := 3.
@@ -1363,7 +1363,7 @@ ScratchListMorph >> updateContentsRecursive [
 				cell extent: cell firstSubmorph extent + inset]]].
 
 	"position cells"
-	ScratchTranslator isRTL
+	PhratchTranslator isRTL
 		ifTrue: [x := self left + 26]
 		ifFalse: [x := numberRight + 4].
 	y := page top + 3.
@@ -1389,15 +1389,15 @@ ScratchListMorph >> updateContentsRecursive [
 ]
 
 { #category : #stepping }
-ScratchListMorph >> updateCountMorph [
+PhratchListMorph >> updateCountMorph [
 
-	countMorph contents: 'length' localized, ScratchTranslator colonSuffix, ' ', self lineCount printString.
+	countMorph contents: 'length' localized, PhratchTranslator colonSuffix, ' ', self lineCount printString.
 	countMorph left: ((self left + ((self width - countMorph width) // 2) + 3) max: (addSublistMorph right + 1))
 
 ]
 
 { #category : #stepping }
-ScratchListMorph >> updateIndexHighlight [
+PhratchListMorph >> updateIndexHighlight [
 	"Update the highlighted index."
 
 	highlightActive ifTrue: [
@@ -1407,7 +1407,7 @@ ScratchListMorph >> updateIndexHighlight [
 ]
 
 { #category : #private }
-ScratchListMorph >> updateIndices: rightX [
+PhratchListMorph >> updateIndices: rightX [
 
 	| s newNumbers page num cell |
 	numberMorphs size > cellMorphs size ifTrue: [
@@ -1419,7 +1419,7 @@ ScratchListMorph >> updateIndices: rightX [
 		page := scrollPane contents.
 		s := PhratchStringMorph new
 			color: self indexColor;
-			font: (ScratchFrameMorph getFont: #Label).
+			font: (PhratchFrameMorph getFont: #Label).
 		newNumbers := (numberMorphs size + 1 to: cellMorphs size)
 			collect: [:i | s fullCopy contents: i printString].
 		newNumbers do: [:m | page addMorph: m].
@@ -1434,13 +1434,13 @@ ScratchListMorph >> updateIndices: rightX [
 ]
 
 { #category : #stepping }
-ScratchListMorph >> updateTitle [
+PhratchListMorph >> updateTitle [
 	"Update my title if I am owned by a sprite and the sprite name changes."
 
 	| s |
 	listName ifNil: [^ self].
 
-	(target isKindOf: ScratchSpriteMorph)
+	(target isKindOf: PhratchSpriteMorph)
 		ifTrue: [s := target objName, ' ', listName]
 		ifFalse: [s := listName].
 

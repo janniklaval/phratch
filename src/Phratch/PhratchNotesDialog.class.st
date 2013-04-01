@@ -30,13 +30,13 @@ PhratchNotesDialog >> createNotesDialogFor: aScratchFrameMorph [
 	"Create a Scratch project notes dialog box."
 
 	| commentFont |
-	commentFont := (ScratchFrameMorph getFont: #ProjectNotes).
+	commentFont := (PhratchFrameMorph getFont: #ProjectNotes).
 
 	commentMorph := ScrollingStringMorph new
 		borderWidth: 0;
 		contents: '';
 		font: commentFont;
-		backForm: (ScratchFrameMorph skinAt: #stringFieldFrame);
+		backForm: (PhratchFrameMorph skinAt: #stringFieldFrame);
 		width: 300.
 
 	self title: 'Project Notes'.

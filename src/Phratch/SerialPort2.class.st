@@ -11,8 +11,8 @@ Class {
 SerialPort2 class >> portNames [
 	"Answer a collection of serial port names."
 
-	^ (1 to: ScratchPlugin portCount)
-		collect: [:i | ScratchPlugin portName: i]
+	^ (1 to: PhratchPlugin portCount)
+		collect: [:i | PhratchPlugin portName: i]
 
 ]
 
@@ -30,7 +30,7 @@ SerialPort2 >> close [
 
 	portNum ifNil: [^ self].
 	self flushInputBuffer.
-	ScratchPlugin closePort: portNum.
+	PhratchPlugin closePort: portNum.
 	portNum := nil.
 
 ]
@@ -42,7 +42,7 @@ SerialPort2 >> flushInputBuffer [
 	| count buf n |
 	count := 0.
 	buf := ByteArray new: 2000.
-	[(n := ScratchPlugin readPort: portNum into: buf) > 0] whileTrue: [count := count + n].
+	[(n := PhratchPlugin readPort: portNum into: buf) > 0] whileTrue: [count := count + n].
 	^ count
 
 ]
@@ -51,7 +51,7 @@ SerialPort2 >> flushInputBuffer [
 SerialPort2 >> getOption: optionNum [
 	"Answer the current setting of the given option."
 
-	^ ScratchPlugin port: portNum getOption: optionNum.
+	^ PhratchPlugin port: portNum getOption: optionNum.
 
 ]
 
@@ -60,7 +60,7 @@ SerialPort2 >> isOpen [
 	"Answer true if this serial port is open."
 
 	portNum ifNil: [^ false].
-	(ScratchPlugin isPortOpen: portNum)
+	(PhratchPlugin isPortOpen: portNum)
 		ifTrue: [^ true]
 		ifFalse: [portNum := nil. ^ false].
 
@@ -75,7 +75,7 @@ SerialPort2 >> next: byteCount [
 	result := ByteArray new: 0.
 	[result size < byteCount] whileTrue: [
 		buf := ByteArray new: byteCount - result size.
-		n := ScratchPlugin readPort: portNum into: buf.
+		n := PhratchPlugin readPort: portNum into: buf.
 		n > 0
 			ifTrue: [result := result, (buf copyFrom: 1 to: n)]
 			ifFalse: [(Delay forMilliseconds: 10) wait]].
@@ -97,7 +97,7 @@ SerialPort2 >> nextPutAll: aStringOrByteArray [
 	"Send the given bytes out this serial port. The port must be open."
 
 	self isOpen ifFalse: [^ self].
-	ScratchPlugin writePort: portNum data: aStringOrByteArray.
+	PhratchPlugin writePort: portNum data: aStringOrByteArray.
 
 ]
 
@@ -106,7 +106,7 @@ SerialPort2 >> openPortNamed: aString baud: baudRate [
 	"Open the serial port with the given name at the given speed."
 
 	self close.
-	portNum := ScratchPlugin openPortNamed: aString baud: baudRate.
+	portNum := PhratchPlugin openPortNamed: aString baud: baudRate.
 	portNum < 0 ifTrue: [portNum := nil].
 
 ]
@@ -118,7 +118,7 @@ SerialPort2 >> readByteArray [
 	| buf count |
 	self isOpen ifFalse: [^ ByteArray new].
 	buf := ByteArray new: 2000.
-	count := ScratchPlugin readPort: portNum into: buf.
+	count := PhratchPlugin readPort: portNum into: buf.
 	count <= 0 ifTrue: [^ ByteArray new].
 	^ buf copyFrom: 1 to: count
 
@@ -131,7 +131,7 @@ SerialPort2 >> readString [
 	| buf count |
 	self isOpen ifFalse: [^ String new].
 	buf := String new: 1000.
-	count := ScratchPlugin readPort: portNum into: buf.
+	count := PhratchPlugin readPort: portNum into: buf.
 	count <= 0 ifTrue: [^ String new].
 	^ buf copyFrom: 1 to: count
 
@@ -141,6 +141,6 @@ SerialPort2 >> readString [
 SerialPort2 >> setOption: optionNum to: anInteger [
 	"Set the given option to the given value."
 
-	ScratchPlugin port: portNum setOption: optionNum to: anInteger.
+	PhratchPlugin port: portNum setOption: optionNum to: anInteger.
 
 ]

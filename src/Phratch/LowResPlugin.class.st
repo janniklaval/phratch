@@ -176,7 +176,7 @@ LowResPlugin class >> benchmarkScale [
 
 	start := Time millisecondClockValue.
 	1 to: 1000 do: [:i|
-		ScratchPlugin primScale: f bits w: f width h: f height into: fOut bits w: fOut width h: fOut height. ].
+		PhratchPlugin primScale: f bits w: f width h: f height into: fOut bits w: fOut width h: fOut height. ].
 	^Time millisecondClockValue - start.
 ]
 

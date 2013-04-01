@@ -136,19 +136,19 @@ CommandBlockMorph >> addCommandIcons [
 
 	| f m |
 	#turnLeft: = selector ifTrue: [
-		f := ScratchFrameMorph skinAt: #turnCCW ifAbsent: [^ self].
+		f := PhratchFrameMorph skinAt: #turnCCW ifAbsent: [^ self].
 		m := self firstSubmorph delete.
 		self addMorphFront: (ImageMorph new form: f).
 		self addMorphFront: m].
 
 	#turnRight: = selector ifTrue: [
-		f := ScratchFrameMorph skinAt: #turnCW ifAbsent: [^ self].
+		f := PhratchFrameMorph skinAt: #turnCW ifAbsent: [^ self].
 		m := self firstSubmorph delete.
 		self addMorphFront: (ImageMorph new form: f).
 		self addMorphFront: m].
 
 	#stopAll = selector ifTrue: [
-		f := ScratchFrameMorph skinAt: #stopButton ifAbsent: [^ self].
+		f := PhratchFrameMorph skinAt: #stopButton ifAbsent: [^ self].
 		self addMorphBack: (ImageMorph new form: f)].
 
 ]
@@ -273,7 +273,7 @@ CommandBlockMorph >> argMorphToReplace: aMorph [
 
 	(#setVar:to: = selector and: [(argSpecs at: i) = '%n']) ifTrue: [
 		^ argM stringExpression: '0'].
-	spec := ScriptableScratchMorph blockSpecDict at: selector ifAbsent: [^ argM].
+	spec := ScriptablePhratchMorph blockSpecDict at: selector ifAbsent: [^ argM].
 
 	defaults := receiver defaultArgsFor: spec.
 	i <= defaults size ifTrue: [
@@ -342,7 +342,7 @@ CommandBlockMorph >> asBlockTuple [
 
 	argList := argMorphs.
 	argList := self organizeArgs: argList.
-	((#(+ - / * =) includes: selector) and: [ScratchTranslator isRTLMath]) "RTLMath operators are RTL"
+	((#(+ - / * =) includes: selector) and: [PhratchTranslator isRTLMath]) "RTLMath operators are RTL"
 		ifTrue: [argList := argList reversed].
 	1 to: argList size do: [:i |
 		arg := argList at: i.
@@ -375,7 +375,7 @@ CommandBlockMorph >> asLambda [
 
 	| lambda |
 	lambda := CommandScriptBlockMorph new
-		receiver: ScriptableScratchMorph new;
+		receiver: ScriptablePhratchMorph new;
 		isSpecialForm: false;
 		minArgs: 1;
 		commandSpec: '.';
@@ -624,13 +624,13 @@ CommandBlockMorph >> evaluateInfixWithArgs: rawArgs [
 		((args first isKindOf: String) and: [args second isKindOf: Boolean]) ifTrue: [
 			(args first = 'true') ifTrue: [^ args second = true].
 			(args first = 'false') ifTrue: [^ args second = false].
-			(args first = (ScratchTranslator translationFor: 'true')) ifTrue: [^ args second = true].
-			(args first = (ScratchTranslator translationFor: 'false')) ifTrue: [^ args second = false]].
+			(args first = (PhratchTranslator translationFor: 'true')) ifTrue: [^ args second = true].
+			(args first = (PhratchTranslator translationFor: 'false')) ifTrue: [^ args second = false]].
 		((args first isKindOf: Boolean) and: [args second isKindOf: String]) ifTrue: [
 			(args second = 'true') ifTrue: [^ args first = true].
 			(args second = 'false') ifTrue: [^ args first = false].
-			(args second = (ScratchTranslator translationFor: 'true')) ifTrue: [^ args first = true].
-			(args second = (ScratchTranslator translationFor: 'false')) ifTrue: [^ args first = false]]].
+			(args second = (PhratchTranslator translationFor: 'true')) ifTrue: [^ args first = true].
+			(args second = (PhratchTranslator translationFor: 'false')) ifTrue: [^ args first = false]]].
 
 	(#(< = >) includes: selector)
 		ifTrue: [((args first isKindOf: String) or: [args second isKindOf: String])
@@ -646,15 +646,15 @@ CommandBlockMorph >> evaluateInfixWithArgs: rawArgs [
 					^ arg1 perform: selector with: arg2].
 				^ false]
 			ifFalse: [
-				(args first isKindOf: ScratchListMorph)
+				(args first isKindOf: PhratchListMorph)
 					ifTrue: [^ args first equals: args second].
-				(args second isKindOf: ScratchListMorph)
+				(args second isKindOf: PhratchListMorph)
 					ifTrue: [^ args second equals: args first]]]
-		ifFalse: [(ScratchTranslator isRTLMath and: [((selector = #\\) not)]) ifTrue: [args := args reversed]]. "RTLMath operators are RTL"
+		ifFalse: [(PhratchTranslator isRTLMath and: [((selector = #\\) not)]) ifTrue: [args := args reversed]]. "RTLMath operators are RTL"
 
 	(#(& |) includes: selector) ifTrue: [^ args first perform: selector with: args second].
 
-	((args first isKindOf: ScriptableScratchMorph) or: [args second isKindOf: ScriptableScratchMorph])
+	((args first isKindOf: ScriptablePhratchMorph) or: [args second isKindOf: ScriptablePhratchMorph])
 		ifTrue: [^ args first = args second].
 
 	^ args first asNumberNoError perform: selector with: args second asNumberNoError
@@ -766,12 +766,12 @@ CommandBlockMorph >> fixBlockLayoutNoWrap [
 	 [self isKindOf: IfElseBlockMorph])
 		ifTrue: [w := w max: 71].
 	self extent: w @ h.
-	ScratchTranslator isRTL ifTrue: [
+	PhratchTranslator isRTL ifTrue: [
 		self left: oldPos x + (oldExtent x - self width)].
 
 	(nextB := self nextBlock) ifNotNil: [
 		(self isKindOf: CBlockMorph) ifFalse: [
-			ScratchTranslator isRTL
+			PhratchTranslator isRTL
 				ifTrue: [nextB position: (self right - nextB width)@(self bottom - 4)]
 				ifFalse: [nextB position: self left@(self bottom - 4)]].
 		nextB fixBlockLayout].
@@ -1027,7 +1027,7 @@ CommandBlockMorph >> labelMorphFor: aString [
 	s := aString.
 	commandSpec isUnicode ifTrue: [s := UTF8 withAll: s]
 		ifFalse:[s := s asString].
-	^ (PhratchStringMorph contents: s font: (ScratchFrameMorph getFont: #Label))
+	^ (PhratchStringMorph contents: s font: (PhratchFrameMorph getFont: #Label))
 		color: self labelColor
 
 ]
@@ -1142,6 +1142,21 @@ CommandBlockMorph >> parseCommandSpec [
 
 ]
 
+{ #category : #byob }
+CommandBlockMorph >> phratchObject [
+
+	| be sm sf so |
+	be := self ownerOrYourselfThatIsA: BlockEditorFrameMorph.
+	be isNil
+		ifTrue: [
+			sm := self ownerOrYourselfThatIsA: PhratchScriptsMorph.
+			sf := self ownerOrYourselfThatIsA: PhratchFrameMorph.
+			sm isNil | sf isNil ifTrue: [^ nil].
+			so := sf phratchObjects detect: [:obj | obj blocksBin = sm] ifNone: [sf workPane]]
+		ifFalse: [so := be template receiver].
+	^so
+]
+
 { #category : #private }
 CommandBlockMorph >> printCodeOn: aStream indent: indent [
 	"Append a human-readable string for this block on the given stream."
@@ -1166,8 +1181,8 @@ CommandBlockMorph >> rcvr [
 	"answer a String description of my receiver which can be used in a tuple"
 
 	| rcvr |
-	(receiver isKindOf: ScriptableScratchMorph)
-		ifTrue: [(receiver isKindOf: ScratchStageMorph)
+	(receiver isKindOf: ScriptablePhratchMorph)
+		ifTrue: [(receiver isKindOf: PhratchStageMorph)
 			ifTrue: [rcvr := 'Stage']
 			ifFalse: [rcvr := receiver objName]]
 		ifFalse: [ rcvr := '' ].
@@ -1255,13 +1270,13 @@ CommandBlockMorph >> rightButtonMenu [
 	
 	menu add: 'edit elements' value: #editElements.
 
-	sFrame := self ownerOrYourselfThatIsA: ScratchFrameMorph.
+	sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
 	(sFrame notNil and: [#(sensor: sensorPressed:) includes: selector]) ifTrue: [
 		menu addLine.
 		menu add: 'show ScratchBoard watcher' value: #showSensorBoard.
-		sFrame workPane scratchServer
+		sFrame workPane phratchServer
 			ifNil: [menu add: 'enable remote sensor connections' value: #enableRemoteSensors]
-			ifNotNil: [menu add: 'disable remote sensor connections' value: #exitScratchSession]].
+			ifNotNil: [menu add: 'disable remote sensor connections' value: #exitPhratchSession]].
 
 	DebugMenu ifTrue: [
 		menu addLine.
@@ -1271,33 +1286,18 @@ CommandBlockMorph >> rightButtonMenu [
 	(#(presentHelpScreen duplicate fastDuplicate rename delete editElements inheritAttribute disinheritAttribute) includes: choice) ifTrue: [^ self perform: choice].
 	choice = #showSensorBoard ifTrue: [sFrame showSensorBoard. ^ self].
 	choice = #enableRemoteSensors ifTrue: [sFrame enableRemoteSensors. ^ self].
-	choice = #exitScratchSession ifTrue: [sFrame exitScratchSession. ^ self].
+	choice = #exitPhratchSession ifTrue: [sFrame exitPhratchSession. ^ self].
 	choice = #showTuples ifTrue: [^ self showTuples].
 
 	"change operator"
 	spec := '%n ', choice, ' %n'.
-	'\\' = choice	ifTrue: [spec := ScratchTranslator translationFor: '%n mod %n'].
-	'&' = choice	ifTrue: [spec := ScratchTranslator translationFor: '%b and %b'].
-	'|' = choice	ifTrue: [spec := ScratchTranslator translationFor: '%b or %b'].
+	'\\' = choice	ifTrue: [spec := PhratchTranslator translationFor: '%n mod %n'].
+	'&' = choice	ifTrue: [spec := PhratchTranslator translationFor: '%b and %b'].
+	'|' = choice	ifTrue: [spec := PhratchTranslator translationFor: '%b or %b'].
 
 	self commandSpec: spec.
 	self selector: choice.
 
-]
-
-{ #category : #byob }
-CommandBlockMorph >> scratchObject [
-
-	| be sm sf so |
-	be := self ownerOrYourselfThatIsA: BlockEditorFrameMorph.
-	be isNil
-		ifTrue: [
-			sm := self ownerOrYourselfThatIsA: PhratchScriptsMorph.
-			sf := self ownerOrYourselfThatIsA: ScratchFrameMorph.
-			sm isNil | sf isNil ifTrue: [^ nil].
-			so := sf scratchObjects detect: [:obj | obj blocksBin = sm] ifNone: [sf workPane]]
-		ifFalse: [so := be template receiver].
-	^so
 ]
 
 { #category : #byob }
@@ -1361,9 +1361,9 @@ CommandBlockMorph >> start [
 	scratchProc ifNotNil: [^ self].  "this stack is already running"
 
 	rcvr := self receiver.
-	(rcvr isKindOf: ScriptableScratchMorph)
-		ifTrue: [ (stage := rcvr ownerOrYourselfThatIsA: ScratchStageMorph) ifNil: [^ self]]
-		ifFalse: [stage := (self ownerOrYourselfThatIsA: ScratchFrameMorph) workPane].	
+	(rcvr isKindOf: ScriptablePhratchMorph)
+		ifTrue: [ (stage := rcvr ownerOrYourselfThatIsA: PhratchStageMorph) ifNil: [^ self]]
+		ifFalse: [stage := (self ownerOrYourselfThatIsA: PhratchFrameMorph) workPane].	
 
 	scratchProc := stage startProcessFor: self.
 	self changed.
@@ -1571,7 +1571,7 @@ CommandBlockMorph >> varNamesMenu [
 
 	| blockVars objVars obj | 
 
-	obj := self scratchObject.
+	obj := self phratchObject.
 	obj ifNil: [^#()].
 	blockVars := self scriptVars asSortedCollection asArray.
 	objVars := obj varNamesMenu asOrderedCollection.

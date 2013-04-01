@@ -405,7 +405,7 @@ PhratchProcess >> doApplyEval [
 		
 							"empty variadic inputs absorb all ensuing values"
 							(slot isKindOf: MultiArgMorph) 
-								ifTrue: [ obj := ScratchListMorph on: argsList from: i to: argsList size]
+								ifTrue: [ obj := PhratchListMorph on: argsList from: i to: argsList size]
 								ifFalse: [
 									obj := argsList at: i.
 									(obj isKindOf: ReporterBlockMorph)
@@ -422,7 +422,7 @@ PhratchProcess >> doApplyEval [
 							ifTrue: [prm := prm evaluate ].
 						emptySlots do: [:slot|
 							(slot isKindOf: MultiArgMorph)
-								ifTrue: [slot implicitValue: (ScratchListMorph with: prm)]
+								ifTrue: [slot implicitValue: (PhratchListMorph with: prm)]
 								ifFalse: [slot implicitValue: prm]]]]]"]"].
 
 	scriptList ifNil: [scriptList := OrderedCollection new].
@@ -449,7 +449,7 @@ PhratchProcess >> doApplyEval [
 
 	(block selector beginsWith: 'doFork')
 		ifTrue: [
-			stage := block receiver ownerOrYourselfThatIsA: ScratchStageMorph.
+			stage := block receiver ownerOrYourselfThatIsA: PhratchStageMorph.
 			"self popStackFrame."
 			stage startProcessForSequence: scriptList]
 		ifFalse: [
@@ -516,7 +516,7 @@ PhratchProcess >> doBroadcastAndWait [
 				blockVarList ifNotNil: [blockVarList isEmpty ifFalse: [
 					vars := blockVarList last.
 					eventName := (vars getVar: arg variable) asString ]]].
-			stage := block receiver ownerOrYourselfThatIsA: ScratchStageMorph.
+			stage := block receiver ownerOrYourselfThatIsA: PhratchStageMorph.
 			procs := stage broadcastEventNamed: eventName with: 0]
 		ifFalse: [
 			procs := args first].
@@ -686,10 +686,10 @@ PhratchProcess >> doMakeNewList [
 	stackFrame arguments size < block argumentCount
 		ifTrue: [^ self evaluateNextArgument].
 
-	list := ScratchListMorph new.
+	list := PhratchListMorph new.
 	list listName: '' target: nil.
 	stackFrame arguments do: [:arg |	
-		list insertLine: (ScriptableScratchMorph new asListElement: arg) at: (list lineCount + 1) ].
+		list insertLine: (ScriptablePhratchMorph new asListElement: arg) at: (list lineCount + 1) ].
 	list updateCountMorph.
 	list fixLayout.
 
@@ -1000,7 +1000,7 @@ PhratchProcess >> evaluateCommandFor: aStageMorph [
 
 	((blockToDebug notNil and: [blockToDebug ~= self currentBlock]) or: [
 		self currentBlock = nextBlockToDebug]) ifTrue: [
-			((ScratchFrameMorph someInstance viewMode = #presentation) | doneWithDebugging) ifFalse: [
+			((PhratchFrameMorph someInstance viewMode = #presentation) | doneWithDebugging) ifFalse: [
 				self pause.
 				DebuggerFrameMorph new on: self]].
 
@@ -1207,13 +1207,13 @@ PhratchProcess >> isAtomic [
 	presenter notNil
 		ifTrue: [ stopButtonRect := presenter buttons fourth bounds ].
 		
-	frame := World findA: ScratchFrameMorph.	
+	frame := World findA: PhratchFrameMorph.	
 	frame notNil
 		ifTrue: [ stopButtonRect := (frame valueOfProperty: #stopAllButton) bounds].
 
 	(Sensor anyButtonPressed and: [stopButtonRect containsPoint: Sensor cursorPoint]) ifTrue: [
 		self stop.
-		ScratchFrameMorph allInstances do: [:sf| sf stopAll]].
+		PhratchFrameMorph allInstances do: [:sf| sf stopAll]].
 
 	((Character value: 27) = Sensor keyboardPeek) ifTrue: [
 			Sensor flushKeyboard.
@@ -1351,7 +1351,7 @@ PhratchProcess >> returnValueToParentFrame: anObject [
 	f ifNotNil: [f addArgument: obj].
 
 	((blockToDebug isKindOf: BlockMorph) and: [self currentBlock isKindOf: ReporterBlockMorph]) ifTrue: [
-			((ScratchFrameMorph someInstance viewMode = #presentation) | doneWithDebugging) ifFalse: [
+			((PhratchFrameMorph someInstance viewMode = #presentation) | doneWithDebugging) ifFalse: [
 				self pause. 
 				DebuggerFrameMorph new on: self returnValue: obj]].
 
@@ -1448,7 +1448,7 @@ PhratchProcess >> stop [
 	stackFrame ifNotNil: [stackFrame stopMIDI; stopMotors; stopTalkThinkAsk].
 	readyToYield := true.
 	readyToTerminate := true.
-	topBlock ifNotNil: [topBlock scratchProc: nil].
+	topBlock ifNotNil: [topBlock phratchProc: nil].
 
 ]
 

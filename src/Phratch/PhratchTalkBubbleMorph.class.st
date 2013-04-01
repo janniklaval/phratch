@@ -13,10 +13,10 @@ Class {
 { #category : #intialization }
 PhratchTalkBubbleMorph >> bePrompt: aBoolean [
 
-	self initFromForm: (ScratchFrameMorph skinAt: #promptBubbleFrame).
+	self initFromForm: (PhratchFrameMorph skinAt: #promptBubbleFrame).
 	aBoolean
-		ifTrue: [leftPointerForm := (ScratchFrameMorph skinAt: #promptBubblePointer)]
-		ifFalse: [leftPointerForm := (ScratchFrameMorph skinAt: #talkBubbleTalkPointer)].
+		ifTrue: [leftPointerForm := (PhratchFrameMorph skinAt: #promptBubblePointer)]
+		ifFalse: [leftPointerForm := (PhratchFrameMorph skinAt: #talkBubbleTalkPointer)].
 	rightPointerForm := leftPointerForm flipBy: #horizontal centerAt: leftPointerForm center.
 	self changed.
 
@@ -27,8 +27,8 @@ PhratchTalkBubbleMorph >> beThoughtBubble: aBoolean [
 	"If true, then be a thought bubble. Otherwise, be a talk bubble."
 
 	aBoolean
-		ifTrue: [leftPointerForm := (ScratchFrameMorph skinAt: #talkBubbleThinkPointer)]
-		ifFalse: [leftPointerForm := (ScratchFrameMorph skinAt: #talkBubbleTalkPointer)].
+		ifTrue: [leftPointerForm := (PhratchFrameMorph skinAt: #talkBubbleThinkPointer)]
+		ifFalse: [leftPointerForm := (PhratchFrameMorph skinAt: #talkBubbleTalkPointer)].
 	rightPointerForm := leftPointerForm flipBy: #horizontal centerAt: leftPointerForm center.
 
 ]
@@ -65,13 +65,13 @@ PhratchTalkBubbleMorph >> initialize [
 	"Initialize the forms for all my elements."
 
 	super initialize.
-	self initFromForm: (ScratchFrameMorph skinAt: #talkBubbleFrame).
+	self initFromForm: (PhratchFrameMorph skinAt: #talkBubbleFrame).
 	self beThoughtBubble: false.
 	pointLeft := false.
 
 	contentsMorph := MultilineStringMorph new
 		centerText: true;
-		font: (ScratchFrameMorph getFont: #TalkBubble).
+		font: (PhratchFrameMorph getFont: #TalkBubble).
 	contentsMorph
 		borderWidth: 0;
 		lock.

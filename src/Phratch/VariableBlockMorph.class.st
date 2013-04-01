@@ -288,7 +288,7 @@ VariableBlockMorph >> isSpecialForm: bool [
 	super isSpecialForm: bool.
 	isSpecialForm
 		ifTrue: [self color: VariableFrame new variableBlockColor]
-		ifFalse: [self color: (ScriptableScratchMorph blockColorFor: 'variables')].
+		ifFalse: [self color: (ScriptablePhratchMorph blockColorFor: 'variables')].
 
 ]
 
@@ -372,7 +372,7 @@ VariableBlockMorph >> receiver: anObject [
 VariableBlockMorph >> rename [
 
 	| blockVars objVars obj list choice | 
-	obj := self scratchObject.
+	obj := self phratchObject.
 	obj ifNil: [^#()].
 	blockVars := self scriptVars asSortedCollection asArray.
 	objVars := obj varNamesMenu asOrderedCollection.

@@ -43,16 +43,16 @@ KeyEventHatMorph >> initialize [
 	super initialize.
 	self removeAllMorphs.
 
-	parts := ScratchTranslator labelPartsFor: 'when %k key pressed'.
+	parts := PhratchTranslator labelPartsFor: 'when %k key pressed'.
 
 	s := PhratchStringMorph new
-		contents: parts first; font: (ScratchFrameMorph getFont: #Label);
+		contents: parts first; font: (PhratchFrameMorph getFont: #Label);
 		color: Color white.
 	self addMorphBack: s.
 
 	scriptNameMorph := ChoiceArgMorph new
 		getOptionsSelector: #keyNames;
-		options: ScriptableScratchMorph new keyNames;
+		options: ScriptablePhratchMorph new keyNames;
 		choice: 'space'.
 	self addMorphBack: scriptNameMorph.
 
@@ -77,6 +77,6 @@ KeyEventHatMorph >> respondsToKeyEvent: aMorphicKeyEvent [
 	evtAscii = Character enter asciiValue ifTrue: [
 		evtAscii := Character cr asciiValue].
 
-	^ evtAscii = (ScriptableScratchMorph new asciiFor: scriptNameMorph choice asString)
+	^ evtAscii = (ScriptablePhratchMorph new asciiFor: scriptNameMorph choice asString)
 
 ]

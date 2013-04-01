@@ -25,7 +25,7 @@ ReporterBlockMorph >> asLambda [
 
 	| lambda |
 	lambda := ReporterScriptBlockMorph new
-		receiver: ScriptableScratchMorph new;
+		receiver: ScriptablePhratchMorph new;
 		isSpecialForm: false;
 		minArgs: 1;
 		commandSpec: '%s';
@@ -544,7 +544,7 @@ ReporterBlockMorph >> lambdafied [
 
 	| lambda |
 	lambda := (ReporterScriptBlockMorph new
-		color: (ScriptableScratchMorph blockColorFor: 'operators');
+		color: (ScriptablePhratchMorph blockColorFor: 'operators');
 		receiver: receiver;
 		isSpecialForm: false;
 		minArgs: 1;
@@ -586,7 +586,7 @@ ReporterBlockMorph >> showLambdaValue [
 
 	[self start.
 	zombie := scratchProc.
-	scratchProc stepUntilDoneFor: (receiver ownerOrYourselfThatIsA: ScratchStageMorph).
+	scratchProc stepUntilDoneFor: (receiver ownerOrYourselfThatIsA: PhratchStageMorph).
 	msg := zombie answer ] ifError: [
 		gotError := true.
 		msg := 'Error!'].
@@ -602,7 +602,7 @@ ReporterBlockMorph >> showLambdaValue [
 	tooltip := (PhratchReporterToolTipMorph string: msg for: self)
 		left: self right;
 		bottom: self top.
-	ScratchTranslator isRTL ifTrue: [tooltip right: self left].
+	PhratchTranslator isRTL ifTrue: [tooltip right: self left].
 	gotError ifTrue: [tooltip messageColor: Color red darker].
 
 	w := self world.
@@ -641,7 +641,7 @@ ReporterBlockMorph >> showValue [
 	tooltip := (PhratchReporterToolTipMorph string: msg for: self)
 		left: self right;
 		bottom: self top.
-	ScratchTranslator isRTL ifTrue: [tooltip right: self left].
+	PhratchTranslator isRTL ifTrue: [tooltip right: self left].
 	gotError ifTrue: [tooltip messageColor: Color red darker].
 
 	w := self world.
@@ -698,7 +698,7 @@ ReporterBlockMorph >> toggleWatcher [
 	"Toggle between hiding and showing a watcher for this block."
 
 	| frame w palette |
-	(frame := self ownerOrYourselfThatIsA: ScratchFrameMorph) ifNil: [^ self].
+	(frame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNil: [^ self].
 	(w := frame watcherForBlock: self)
 		ifNil: [frame showWatcher: self createWatcher]
 		ifNotNil: [w delete].

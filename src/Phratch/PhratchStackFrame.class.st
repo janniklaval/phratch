@@ -198,6 +198,6 @@ PhratchStackFrame >> stopTalkThinkAsk [
 			expression receiver sayNothing].
 
 		#doAsk = expression selector ifTrue: [
-			(s := expression receiver ownerOrYourselfThatIsA: ScratchStageMorph) ifNotNil: [s stopAsks]]].
+			(s := expression receiver ownerOrYourselfThatIsA: PhratchStageMorph) ifNotNil: [s stopAsks]]].
 
 ]

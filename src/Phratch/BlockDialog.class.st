@@ -66,24 +66,24 @@ BlockDialog >> buildCategoryChooser [
 		other		list).
 
 	categoryChooser := ImageFrameMorph new.
-	categoryChooser initFromForm: (ScratchFrameMorph skinAt: #paintOptionsBackground).
+	categoryChooser initFromForm: (PhratchFrameMorph skinAt: #paintOptionsBackground).
 
 	"Create new buttons, keeping track of the maximum extent."
 	maxExtent := 75@0.
 	buttons := catList collect: [:cat |
-		label := (ScratchTranslator translationFor: cat asString) capitalized.
+		label := (PhratchTranslator translationFor: cat asString) capitalized.
 
 		(#(other list) includes: cat)
 			ifTrue:[
-				offForm := (ScratchFrameMorph skinAt: #variables).
-				onForm := (ScratchFrameMorph skinAt: #variablesPressed).
-				overForm := (ScratchFrameMorph skinAt: #variablesOver)]
+				offForm := (PhratchFrameMorph skinAt: #variables).
+				onForm := (PhratchFrameMorph skinAt: #variablesPressed).
+				overForm := (PhratchFrameMorph skinAt: #variablesOver)]
 			ifFalse: [
-				offForm := (ScratchFrameMorph skinAt: cat).
-				onForm := (ScratchFrameMorph skinAt: (cat, 'Pressed')).
-				overForm := (ScratchFrameMorph skinAt: (cat, 'Over'))].
+				offForm := (PhratchFrameMorph skinAt: cat).
+				onForm := (PhratchFrameMorph skinAt: (cat, 'Pressed')).
+				overForm := (PhratchFrameMorph skinAt: (cat, 'Over'))].
 
-		ScratchTranslator isRTL
+		PhratchTranslator isRTL
 			ifTrue:[
 				b := ResizableToggleButton2 new
 					offForm:	(offForm flipBy: #horizontal centerAt: offForm center)
@@ -95,14 +95,14 @@ BlockDialog >> buildCategoryChooser [
 					onForm:		onForm
 					overForm:	overForm].
 		b
-			label: label font: (ScratchFrameMorph getFont: #Category);
+			label: label font: (PhratchFrameMorph getFont: #Category);
 			setLabelColor: Color white;
 			target: self;
 			actionSelector: #category:;
 			arguments: (Array with: cat);
 			toggleButtonMode: true;
 			toggleMode: false.
-		ScratchTranslator isRTL
+		PhratchTranslator isRTL
 			ifTrue:[b rightJustifyInset: 10]
 			ifFalse:[b leftJustifyInset: 10].
 		maxExtent := maxExtent max: (b extent + (3 @ (-6))).
@@ -139,15 +139,15 @@ BlockDialog >> buildScopeRadioButtons [
 		vResizing: #shrinkWrap.
 
 	allSpritesRadioButton := ToggleButton
-		onForm: (ScratchFrameMorph skinAt: #radioButtonOn)
-		offForm: (ScratchFrameMorph skinAt: #radioButton).
+		onForm: (PhratchFrameMorph skinAt: #radioButtonOn)
+		offForm: (PhratchFrameMorph skinAt: #radioButton).
 	allSpritesRadioButton
 		on;
 		target: self;
 		actionSelector: #toggleSpriteSpecific.
 	label1 := PhratchStringMorph new
 		contents: ('For all sprites' localized);
-		font: (ScratchFrameMorph getFont: #NewVariableDialogBox).
+		font: (PhratchFrameMorph getFont: #NewVariableDialogBox).
 	scopeRadioButtons addMorphBack: allSpritesRadioButton.
 	scopeRadioButtons addMorphBack: (Morph new extent: (5@5); color: Color transparent).
 	scopeRadioButtons addMorphBack: label1.
@@ -156,12 +156,12 @@ BlockDialog >> buildScopeRadioButtons [
 	thisSpriteRadioButton := allSpritesRadioButton fullCopy off.
 	label2 := PhratchStringMorph new
 		contents: ('For this sprite only' localized);
-		font: (ScratchFrameMorph getFont: #NewVariableDialogBox).
+		font: (PhratchFrameMorph getFont: #NewVariableDialogBox).
 	scopeRadioButtons addMorphBack: thisSpriteRadioButton.
 	scopeRadioButtons addMorphBack: (Morph new extent: (5@5); color: Color transparent).
 	scopeRadioButtons addMorphBack: label2.
 
-	ScratchTranslator isRTL
+	PhratchTranslator isRTL
 		ifTrue: [scopeRadioButtons submorphs reversed do: [:m |
 			m delete.
 			scopeRadioButtons addMorphBack: m]].
@@ -284,7 +284,7 @@ BlockDialog >> disableTypeDeclaration [
 BlockDialog >> formTypeCommandOff [
 
 	^ (CommandBlockMorph new 
-			color: ((ScriptableScratchMorph blockColorFor: category asString) mixed: 0.2 with: Color veryLightGray); 
+			color: ((ScriptablePhratchMorph blockColorFor: category asString) mixed: 0.2 with: Color veryLightGray); 
 			commandSpec: 'command' localized) 
 		imageForm.
 
@@ -294,7 +294,7 @@ BlockDialog >> formTypeCommandOff [
 BlockDialog >> formTypeCommandOn [
 
 	^ (CommandBlockMorph new
-			color: (ScriptableScratchMorph blockColorFor: category asString); 
+			color: (ScriptablePhratchMorph blockColorFor: category asString); 
 			commandSpec: 'command' localized) 
 		imageForm.
 
@@ -304,7 +304,7 @@ BlockDialog >> formTypeCommandOn [
 BlockDialog >> formTypeCommandOver [
 
 	^ (CommandBlockMorph new 
-			color: ((ScriptableScratchMorph blockColorFor: category asString) mixed: 0.4 with: Color veryLightGray); 
+			color: ((ScriptablePhratchMorph blockColorFor: category asString) mixed: 0.4 with: Color veryLightGray); 
 			commandSpec: 'command' localized) 
 		imageForm.
 
@@ -315,7 +315,7 @@ BlockDialog >> formTypePredicateOff [
 
 	^ (ReporterBlockMorph new 
 			isBoolean: true; 
-			color: ((ScriptableScratchMorph blockColorFor: category asString) mixed: 0.2 with: Color veryLightGray); 
+			color: ((ScriptablePhratchMorph blockColorFor: category asString) mixed: 0.2 with: Color veryLightGray); 
 			commandSpec: 'predicate' localized) 
 		imageForm.
 
@@ -326,7 +326,7 @@ BlockDialog >> formTypePredicateOn [
 
 	^ (ReporterBlockMorph new 
 			isBoolean: true; 
-			color: (ScriptableScratchMorph blockColorFor: category asString); 
+			color: (ScriptablePhratchMorph blockColorFor: category asString); 
 			commandSpec: 'predicate' localized) 
 		imageForm.
 
@@ -337,7 +337,7 @@ BlockDialog >> formTypePredicateOver [
 
 	^ (ReporterBlockMorph new 
 			isBoolean: true; 
-			color: ((ScriptableScratchMorph blockColorFor: category asString) mixed: 0.4 with: Color veryLightGray); 
+			color: ((ScriptablePhratchMorph blockColorFor: category asString) mixed: 0.4 with: Color veryLightGray); 
 			commandSpec: 'predicate' localized) 
 		imageForm.
 ]
@@ -346,7 +346,7 @@ BlockDialog >> formTypePredicateOver [
 BlockDialog >> formTypeReporterOff [
 
 	^ (ReporterBlockMorph new 
-			color: ((ScriptableScratchMorph blockColorFor: category asString) mixed: 0.2 with: Color veryLightGray); 
+			color: ((ScriptablePhratchMorph blockColorFor: category asString) mixed: 0.2 with: Color veryLightGray); 
 			commandSpec: 'reporter' localized) 
 		imageForm.
 
@@ -355,7 +355,7 @@ BlockDialog >> formTypeReporterOff [
 { #category : #private }
 BlockDialog >> formTypeReporterOn [
 
-	^ (ReporterBlockMorph new color: (ScriptableScratchMorph blockColorFor: category asString); commandSpec: 'reporter' localized) imageForm.
+	^ (ReporterBlockMorph new color: (ScriptablePhratchMorph blockColorFor: category asString); commandSpec: 'reporter' localized) imageForm.
 
 ]
 
@@ -363,7 +363,7 @@ BlockDialog >> formTypeReporterOn [
 BlockDialog >> formTypeReporterOver [
 
 	^ (ReporterBlockMorph new 
-			color: ((ScriptableScratchMorph blockColorFor: category asString) mixed: 0.4 with: Color veryLightGray); 
+			color: ((ScriptablePhratchMorph blockColorFor: category asString) mixed: 0.4 with: Color veryLightGray); 
 			commandSpec: 'reporter' localized) 
 		imageForm.
 

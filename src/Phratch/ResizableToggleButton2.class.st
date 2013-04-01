@@ -258,7 +258,7 @@ ResizableToggleButton2 >> mouseEnter: evt [
 ResizableToggleButton2 >> mouseLeave: evt [
 
 	isOn ifFalse: [ over ifNotNil: [self off] ].
-	ScratchToolTipMorph clearToolTips.
+	PhratchToolTipMorph clearToolTips.
 
 ]
 
@@ -395,7 +395,7 @@ ResizableToggleButton2 >> presentHelpScreen [
 	"Answer the name of the help screen for this block, or nil if no help is available."
 
 	| fr |
-	fr := self ownerOrYourselfThatIsA: ScratchFrameMorph.
+	fr := self ownerOrYourselfThatIsA: PhratchFrameMorph.
 	fr
 		ifNil: [^ nil]
 		ifNotNil: [fr presentHelpScreen: self helpScreenName].
@@ -504,13 +504,13 @@ ResizableToggleButton2 >> updateSize [
 	"Set this button size based on the label size. Assume the label has already been set."
 
 	| trim contentsExtent |
-	trim := ScratchTranslator verticalTrimForFont: label font.
+	trim := PhratchTranslator verticalTrimForFont: label font.
 	contentsExtent := 0@0.
 	self submorphsDo: [: m |
 		(m isKindOf: ImageFrameMorph) ifFalse: [
 			contentsExtent := (contentsExtent x max: m width)@(contentsExtent y + m height)]].
 	self extent: contentsExtent + padding - (0@trim).
-	vOffset := ScratchTranslator centerOffsetForButtonWithFont: label font.
+	vOffset := PhratchTranslator centerOffsetForButtonWithFont: label font.
 	self updateLayout.
 
 ]

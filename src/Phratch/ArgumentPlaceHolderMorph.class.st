@@ -54,8 +54,8 @@ ArgumentPlaceHolderMorph >> appearInactive [
 ArgumentPlaceHolderMorph >> drawEmbeddedOn: aCanvas [
 	
 	| form |
-	form := (ScratchFrameMorph skinAt: #addItem) deepCopy.
-	form replaceColor: (form colorAt: 5@5) with: (ScriptableScratchMorph blockColorFor: 'variables') darker.
+	form := (PhratchFrameMorph skinAt: #addItem) deepCopy.
+	form replaceColor: (form colorAt: 5@5) with: (ScriptablePhratchMorph blockColorFor: 'variables') darker.
 	form replaceColor: (form colorAt: form center) with: Color white.
 	super drawOn: aCanvas.
 	aCanvas translucentImage: (form withEmbeddedOutlineColor: owner color width: 1) 
@@ -75,8 +75,8 @@ ArgumentPlaceHolderMorph >> drawOn: aCanvas [
 ArgumentPlaceHolderMorph >> drawRaisedOn: aCanvas [
 	
 	| form |
-	form := (ScratchFrameMorph skinAt: #addItem) deepCopy.
-	form replaceColor: (form colorAt: 5@5) with: (ScriptableScratchMorph blockColorFor: 'variables').
+	form := (PhratchFrameMorph skinAt: #addItem) deepCopy.
+	form replaceColor: (form colorAt: 5@5) with: (ScriptablePhratchMorph blockColorFor: 'variables').
 	form replaceColor: (form colorAt: form center) with: Color white.
 	super drawOn: aCanvas.
 	aCanvas translucentImage: (form withEmbeddedOutlineColor: owner color width: 1) 

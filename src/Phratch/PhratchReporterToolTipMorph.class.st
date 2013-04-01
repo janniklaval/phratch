@@ -1,6 +1,6 @@
 Class {
 	#name : #PhratchReporterToolTipMorph,
-	#superclass : #ScratchToolTipMorph,
+	#superclass : #PhratchToolTipMorph,
 	#category : #'Phratch-UI-Support'
 }
 
@@ -21,7 +21,7 @@ PhratchReporterToolTipMorph >> message: aString [
 
 	| verts |
 	super message: aString.
-	ScratchTranslator isRTL
+	PhratchTranslator isRTL
 		ifFalse: [verts := (Array
 			with: self bottomLeft + (2@6)
 			with: self bottomLeft + (5@0)
@@ -41,6 +41,6 @@ PhratchReporterToolTipMorph >> message: aString [
 { #category : #accessing }
 PhratchReporterToolTipMorph >> messageFont [
 
-	^ ScratchFrameMorph getFont: #ReporterToolTip
+	^ PhratchFrameMorph getFont: #ReporterToolTip
 
 ]

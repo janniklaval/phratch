@@ -27,7 +27,7 @@ Class {
 PhratchPresenterMorph >> beDoubleSize [
 
 	doubleSize := true.
-	ScriptableScratchMorph doubleSize: true.
+	ScriptablePhratchMorph doubleSize: true.
 
 ]
 
@@ -137,9 +137,9 @@ PhratchPresenterMorph >> initialize [
 		(stop				stopAll				'Stop everything')
 	) collect: [:spec |
 		button := ToggleButton
-			onForm: (ScratchFrameMorph skinAt: (spec first, 'ButtonBlackPressed'))
-			offForm: (ScratchFrameMorph skinAt: (spec first, 'ButtonBlack'))
-			overForm: (ScratchFrameMorph skinAt: (spec first, 'ButtonBlackPressed')).
+			onForm: (PhratchFrameMorph skinAt: (spec first, 'ButtonBlackPressed'))
+			offForm: (PhratchFrameMorph skinAt: (spec first, 'ButtonBlack'))
+			overForm: (PhratchFrameMorph skinAt: (spec first, 'ButtonBlackPressed')).
 		button
 			target: self;
 			actionSelector: spec second;
@@ -192,7 +192,7 @@ PhratchPresenterMorph >> mouseDown: evt [
 			clickWasHandled := true.
 			^ self].
 
-	(rootM isKindOf: ScratchSpriteMorph) ifTrue: [
+	(rootM isKindOf: PhratchSpriteMorph) ifTrue: [
 		rootM draggable
 			ifTrue: [
 				rootM holdSubsprites.
@@ -237,7 +237,7 @@ PhratchPresenterMorph >> mouseUp: evt [
 	self mouseMove: evt.
 
 	stage allMorphsDo: [:m | 
-		(m isKindOf: ScratchSpriteMorph) ifTrue: [
+		(m isKindOf: PhratchSpriteMorph) ifTrue: [
 			m releaseSubsprites.
 			m xpos: m xpos.
 			m ypos: m ypos ]].
@@ -278,7 +278,7 @@ PhratchPresenterMorph >> processWhenConditions [
 
 	| objList |
 	true ifTrue: [^ self].  "disabled"
-	objList := stage submorphs select: [:m | m isKindOf: ScriptableScratchMorph].
+	objList := stage submorphs select: [:m | m isKindOf: ScriptablePhratchMorph].
 	objList := objList copyWith: stage.
 	objList do: [:obj |
 		obj scripts do: [:hat |
@@ -303,9 +303,9 @@ PhratchPresenterMorph >> shoutGo [
 PhratchPresenterMorph >> showPause [
 
 	pauseButton
-		onForm: (ScratchFrameMorph skinAt: #pauseButtonBlackPressed)
-		offForm: (ScratchFrameMorph skinAt: #pauseButtonBlack)
-		overForm: (ScratchFrameMorph skinAt: #pauseButtonBlackPressed)
+		onForm: (PhratchFrameMorph skinAt: #pauseButtonBlackPressed)
+		offForm: (PhratchFrameMorph skinAt: #pauseButtonBlack)
+		overForm: (PhratchFrameMorph skinAt: #pauseButtonBlackPressed)
 
 ]
 
@@ -313,9 +313,9 @@ PhratchPresenterMorph >> showPause [
 PhratchPresenterMorph >> showPlay [
 
 	pauseButton
-		onForm: (ScratchFrameMorph skinAt: #playButtonBlackPressed)
-		offForm: (ScratchFrameMorph skinAt: #playButtonBlack)
-		overForm: (ScratchFrameMorph skinAt: #playButtonBlackPressed)
+		onForm: (PhratchFrameMorph skinAt: #playButtonBlackPressed)
+		offForm: (PhratchFrameMorph skinAt: #playButtonBlack)
+		overForm: (PhratchFrameMorph skinAt: #playButtonBlackPressed)
 
 ]
 
@@ -334,9 +334,9 @@ PhratchPresenterMorph >> step [
 		self position: 0@0.
 		^ self extent: screenExtent].
 
-	ScriptableScratchMorph scratchOrigin: stage center.
+	ScriptablePhratchMorph phratchOrigin: stage center.
 
-	stage scratchServer ifNotNil: [stage scratchServer stepServer].
+	stage phratchServer ifNotNil: [stage phratchServer stepServer].
 	self processWhenConditions.
 	self processKeyboardEvents.
 	stage stepProcesses.

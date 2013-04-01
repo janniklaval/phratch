@@ -10,20 +10,20 @@ AttributeArgMorph >> choice: aSymbol [
 
 	| frame palette block doLocalization label target |
 
-	(ScriptableScratchMorph new objectInterface keys includes: aSymbol)
+	(ScriptablePhratchMorph new objectInterface keys includes: aSymbol)
 		ifTrue: [^ self universalAttributeChoice: aSymbol].
 
-	frame := self ownerOrYourselfThatIsA: ScratchFrameMorph.
+	frame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
 	((#soundNames = getOptionsSelector) and:
-	 [aSymbol = ('record' localized, ScratchTranslator ellipsesSuffix)]) ifTrue: [
+	 [aSymbol = ('record' localized, PhratchTranslator ellipsesSuffix)]) ifTrue: [
 		frame ifNotNil: [^ frame newSound]].
 
 	((#sceneNames = getOptionsSelector) and:
-	 [aSymbol = ('record' localized, ScratchTranslator ellipsesSuffix)]) ifTrue: [
+	 [aSymbol = ('record' localized, PhratchTranslator ellipsesSuffix)]) ifTrue: [
 		frame ifNotNil: [^ frame workPane newScene]].
 
 	((#sceneNames = getOptionsSelector) and:
-	 [aSymbol = ('re-record' localized, ScratchTranslator ellipsesSuffix)]) ifTrue: [
+	 [aSymbol = ('re-record' localized, PhratchTranslator ellipsesSuffix)]) ifTrue: [
 		frame ifNotNil: [^ frame workPane rerecordScene]].
 
 	choice := label := aSymbol.
@@ -31,7 +31,7 @@ AttributeArgMorph >> choice: aSymbol [
 		label := ''].
 
 	target := self target.
-	((target isKindOf: ScriptableScratchMorph) and: [target allLocalBlockIds includes: aSymbol])
+	((target isKindOf: ScriptablePhratchMorph) and: [target allLocalBlockIds includes: aSymbol])
 		ifTrue: [
 			labelMorph isHidden: true.
 			self extent: (target lambda: aSymbol) imageForm extent + (14@2)]
@@ -94,7 +94,7 @@ AttributeArgMorph >> options [
 		ifFalse: [^ #()].
 
 	(target := (owner argumentAt: 2) evaluate) ifNil: [^ #()].
-	(target isKindOf: ScriptableScratchMorph) ifFalse: [^ #()].
+	(target isKindOf: ScriptablePhratchMorph) ifFalse: [^ #()].
 	target varNames size > 0
 		ifTrue: [list := target attributeNames, #(-), target varNames]
 		ifFalse: [list := target attributeNames].
@@ -258,7 +258,7 @@ AttributeArgMorph >> universalAttributeChoice: aSymbol [
 	"Update the toggle button when an argument is changed within a block."
 
 	| oi frame palette block label |
-	frame := self ownerOrYourselfThatIsA: ScratchFrameMorph.
+	frame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
 	oi := owner receiver objectInterface.
 
 	choice := aSymbol.

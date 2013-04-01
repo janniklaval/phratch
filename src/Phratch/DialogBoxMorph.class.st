@@ -77,7 +77,7 @@ DialogBoxMorph class >> inform: informationString [
 		withButtonsForYes: false no: false okay: true cancel: false.
 	dialogBox
 		message: informationString
-		font: (ScratchFrameMorph getFont: #DialogBoxMessage).
+		font: (PhratchFrameMorph getFont: #DialogBoxMessage).
 
 	^ dialogBox getUserResponse
 
@@ -109,9 +109,9 @@ DialogBoxMorph class >> inform: informationString withDetails: detailsString [
 	dialogBox := self new
 		withButtonsForYes: false no: false okay: true cancel: false.
 	dialogBox
-		message: (informationString localized, ScratchTranslator colonSuffix)
+		message: (informationString localized, PhratchTranslator colonSuffix)
 		details: detailsString
-		font: (ScratchFrameMorph getFont: #DialogBoxMessage).
+		font: (PhratchFrameMorph getFont: #DialogBoxMessage).
 
 	^ dialogBox getUserResponse
 
@@ -217,9 +217,9 @@ DialogBoxMorph >> buttonLabel: labelString action: actionSelector [
 	"(DialogBoxMorph new buttonLabel: 'Yes' action: #beep) openInWorld"
 
 	| onForm offForm button overForm |
-	onForm := ScratchFrameMorph skinAt: #dialogButtonFrameOver.
-	offForm := ScratchFrameMorph skinAt: #dialogButtonFrame.
-	overForm := ScratchFrameMorph skinAt: #dialogButtonFrame.
+	onForm := PhratchFrameMorph skinAt: #dialogButtonFrameOver.
+	offForm := PhratchFrameMorph skinAt: #dialogButtonFrame.
+	overForm := PhratchFrameMorph skinAt: #dialogButtonFrame.
 
 	button := ResizableToggleButton2 new
 		offForm: offForm
@@ -228,7 +228,7 @@ DialogBoxMorph >> buttonLabel: labelString action: actionSelector [
 
 	^ button
 		padding: 39@22;
-		label: labelString font: (ScratchFrameMorph getFont: #DialogBoxButton);
+		label: labelString font: (PhratchFrameMorph getFont: #DialogBoxButton);
 		target: self;
 		actionSelector: actionSelector;
 		setLabelColor: (Color gray: 0.15)
@@ -406,8 +406,8 @@ DialogBoxMorph >> initialize [
 	"Set the forms for all my UI elements, create a row to hold my buttons, and a column to hold my shortcut buttons."
 
 	super initialize.
-	self initFromForm: (ScratchFrameMorph skinAt: #dialogFrame).
-	self addNoShadowFrameFromForm: (ScratchFrameMorph skinAt: #dialogFrameNoShadow).
+	self initFromForm: (PhratchFrameMorph skinAt: #dialogFrame).
+	self addNoShadowFrameFromForm: (PhratchFrameMorph skinAt: #dialogFrameNoShadow).
 	done := false.
 	tabFields := OrderedCollection new.
 
@@ -443,7 +443,7 @@ DialogBoxMorph >> initialize [
 		vResizing: #shrinkWrap;
 		height: 32.
 
-	ScratchTranslator isRTL
+	PhratchTranslator isRTL
 		ifTrue: [fileInfoColumn centering: #bottomRight]
 		ifFalse: [fileInfoColumn centering: #topLeft].
 
@@ -480,7 +480,7 @@ DialogBoxMorph >> message: aMessage [
 
 	self
 		message: aMessage localized
-		font: (ScratchFrameMorph getFont: #DialogBoxMessage).
+		font: (PhratchFrameMorph getFont: #DialogBoxMessage).
 
 ]
 
@@ -589,18 +589,18 @@ DialogBoxMorph >> shortcutButtonLabel: labelString action: actionSelector icon: 
 	"(DialogBoxMorph new shortcutButtonLabel: 'Yes' action: #beep isCat: true) openInWorld"
 
 	| onForm offForm overForm button |
-	onForm := ScratchFrameMorph skinAt: #dialogButtonFrameOver.
-	offForm := ScratchFrameMorph skinAt: #dialogButtonFrame.
-	overForm := ScratchFrameMorph skinAt: #dialogButtonFrameOver.
+	onForm := PhratchFrameMorph skinAt: #dialogButtonFrameOver.
+	offForm := PhratchFrameMorph skinAt: #dialogButtonFrame.
+	overForm := PhratchFrameMorph skinAt: #dialogButtonFrameOver.
 
 	button := ResizableToggleButton2 new
 		offForm: offForm
 		onForm: onForm.
 
-	button addMorph: (ImageMorph new form: (ScratchFrameMorph skinAt: aSymbol)).
+	button addMorph: (ImageMorph new form: (PhratchFrameMorph skinAt: aSymbol)).
 
 	^ (button
-		label: labelString localized font: (ScratchFrameMorph getFont: #FolderShortcut);
+		label: labelString localized font: (PhratchFrameMorph getFont: #FolderShortcut);
 		target: self;
 		actionSelector: actionSelector;
 		setLabelColor: (Color gray: 0.15)).
@@ -646,7 +646,7 @@ DialogBoxMorph >> title: aString [
 	titleMorph := ShadowedStringMorph new
 		contents: aString localized
 		color: Color white
-		font: (ScratchFrameMorph getFont: #DialogBoxTitle)
+		font: (PhratchFrameMorph getFont: #DialogBoxTitle)
 		kern: 1.
 
 	titleBin
@@ -664,7 +664,7 @@ DialogBoxMorph >> title: aString [
 { #category : #interaction }
 DialogBoxMorph >> wantsToBeDroppedInto: aMorph [
 "I don't wanna be dropped into a Stage"
-	^ (aMorph isKindOf: ScratchStageMorph) not
+	^ (aMorph isKindOf: PhratchStageMorph) not
 ]
 
 { #category : #initialization }

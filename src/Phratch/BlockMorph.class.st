@@ -206,13 +206,13 @@ BlockMorph >> blockAttachPoints: aSet [
 	| nextB result |
 	result := #().
 	(self isKindOf: HatBlockMorph) ifFalse: [
-		ScratchTranslator isRTL
+		PhratchTranslator isRTL
 			ifTrue: [result := result copyWith: (self topRight -> self)]
 			ifFalse: [result := result copyWith: (self topLeft -> self)]].
 	nextB := self nextBlock.
 	nextB ifNil:[
 		self isStopOrForever ifFalse: [
-			ScratchTranslator isRTL
+			PhratchTranslator isRTL
 				ifTrue: [result := result copyWith: (self bottomRight -> self)]
 				ifFalse: [result := result copyWith: (self bottomLeft -> self)]]].
 
@@ -281,7 +281,7 @@ BlockMorph >> changed [
 BlockMorph >> clearProcess [
 	"Called on the top block of a running stack when all processes are stopped."
 
-	scratchProc ifNotNil: [self scratchProc: nil].
+	scratchProc ifNotNil: [self phratchProc: nil].
 
 ]
 
@@ -339,14 +339,14 @@ BlockMorph >> closestAttachTargetIn: newOwner [
 	bestDist := 10000.
 	attachPoints do: [:assoc |
 		targetP := assoc key.
-		ScratchTranslator isRTL
+		PhratchTranslator isRTL
 			ifTrue: [ref := self right]
 			ifFalse: [ref := self left].
 		((ref - targetP x) abs < xThresh)
 			ifTrue: [
 				(((self top - targetP y) abs < yThresh) or: [self nextBlock isNil and: [(self bottom - targetP y) abs < yThresh]])
 					ifTrue: [  "targetP is within sticking range"
-						ScratchTranslator isRTL
+						PhratchTranslator isRTL
 							ifTrue: [dist := (self topRight - targetP) r]
 							ifFalse: [dist := (self position - targetP) r].
 						dist < bestDist ifTrue: [
@@ -496,7 +496,7 @@ BlockMorph >> copyRecordingIn: aDict [
 { #category : #'event handling' }
 BlockMorph >> delete [
 	self topBlock stop.
-	ScratchFrameMorph putInClipboard: self.
+	PhratchFrameMorph putInClipboard: self.
 	super delete
 
 ]
@@ -513,7 +513,7 @@ BlockMorph >> disinheritAttribute [
 	(self respondsTo: #receiver) ifFalse: [
 		^ false].
 	rcv := self receiver.
-	(rcv isKindOf: ScriptableScratchMorph) 
+	(rcv isKindOf: ScriptablePhratchMorph) 
 		ifFalse: [^ false].
 	oi := rcv objectInterface.
 	oi keysDo: [:att |
@@ -584,7 +584,7 @@ BlockMorph >> drawBottomEdgeOn: aCanvas [
 BlockMorph >> drawFinalOn: aCanvas fromCanvas: c [
 
 	| flipped |
-	ScratchTranslator isRTL 
+	PhratchTranslator isRTL 
 		ifTrue: [flipped := c form flipBy: #horizontal centerAt: c form center.
 			aCanvas paintImage: flipped at: self topLeft]
 		ifFalse:[aCanvas paintImage: c form at: self topLeft].
@@ -956,12 +956,12 @@ BlockMorph >> handleTool: toolName hand: hand [
 							owner removeParameter: self.
 							^self]]].
 					self aboutToBeGrabbedBy: hand].
-				ScratchFrameMorph putInClipboard: self.
+				PhratchFrameMorph putInClipboard: self.
 				self delete.
 				(myOwner isKindOf: PhratchScriptsMorph) ifTrue: [myOwner step].
 				^ self]
 		ifFalse: [
-			sFrame := self ownerOrYourselfThatIsA: ScratchFrameMorph.
+			sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
 			sFrame ifNil: [^self].
 			((owner isKindOf: PhratchBlockPaletteMorph) and:
 			 [sFrame viewerPane currentCategory = #variables]) ifTrue: [
@@ -1024,7 +1024,7 @@ BlockMorph >> inheritAttribute [
 	(self respondsTo: #receiver) ifFalse: [
 		^ false].
 	rcv := self receiver.
-	(rcv isKindOf: ScriptableScratchMorph) 
+	(rcv isKindOf: ScriptablePhratchMorph) 
 		ifFalse: [^ false].
 	oi := rcv objectInterface.
 	oi keysDo: [:att |
@@ -1132,7 +1132,7 @@ BlockMorph >> isDeletedAttribute [
 	(self respondsTo: #receiver) ifFalse: [
 		^ false].
 	rcv := self receiver.
-	(rcv isKindOf: ScriptableScratchMorph) 
+	(rcv isKindOf: ScriptablePhratchMorph) 
 		ifFalse: [^ false].
 
 	((self isKindOf: VariableBlockMorph) 
@@ -1180,7 +1180,7 @@ BlockMorph >> isInheritableAttribute [
 	(self respondsTo: #receiver) ifFalse: [
 		^ false].
 	rcv := self receiver.
-	(rcv isKindOf: ScriptableScratchMorph) 
+	(rcv isKindOf: ScriptablePhratchMorph) 
 		ifFalse: [^ false].
 	rcv prototype ifNil: [
 		^ false].
@@ -1249,7 +1249,7 @@ BlockMorph >> justDroppedInto: newOwner event: evt [
 
 	owner ifNil:	[^self].
 
-	(frame := newOwner ownerOrYourselfThatIsA: ScratchFrameMorph)
+	(frame := newOwner ownerOrYourselfThatIsA: PhratchFrameMorph)
 		ifNotNil: [frame projectModified].
 
 	((self ownerOrYourselfThatIsA: PhratchViewerMorph) notNil) ifTrue: [
@@ -1263,7 +1263,7 @@ BlockMorph >> justDroppedInto: newOwner event: evt [
 		^ self].
 
 	"blocks cannot be dropped onto the stage"
-	(owner isKindOf: ScratchStageMorph) ifTrue: [
+	(owner isKindOf: PhratchStageMorph) ifTrue: [
 		^ evt hand rejectDropMorph: self event: evt].
 
 	"okay to drop blocks into the world during development"
@@ -1271,7 +1271,7 @@ BlockMorph >> justDroppedInto: newOwner event: evt [
 
 	((owner isKindOf: PhratchScriptsMorph) or:
 	 [(owner isKindOf: BlockMorph) or:
-	 [(owner isKindOf: ScratchStageMorph) and: [self isReporter]]]) ifFalse: [
+	 [(owner isKindOf: PhratchStageMorph) and: [self isReporter]]]) ifFalse: [
 		^ evt hand rejectDropMorph: self event: evt].
 
 	self isReporter ifTrue: [^ self handleReporterDrop].
@@ -1308,33 +1308,33 @@ BlockMorph >> justDroppedInto: newOwner event: evt [
 				self attachBlockNested: targetBlock. ^ self].
 			"for all other non-c-shaped blocks"
 			(bottomBlockUsed or:[((targetBlock owner isKindOf: BlockMorph) not) and: [(self isKindOf: CBlockMorph) not]]) ifTrue:[
-				ScratchTranslator isRTL
+				PhratchTranslator isRTL
 					ifTrue: [self bottomBlock position: (targetP x - self bottomBlock width) @ (targetP y - (self bottomBlock height - 4))]
 					ifFalse: [self bottomBlock position: targetP x @ (targetP y - (self bottomBlock height - 4))].
 				upperBlock := self bottomBlock owner.
 				[upperBlock isKindOf: BlockMorph] whileTrue: [
 					upperBlock nextBlock ifNotNil:[
-						ScratchTranslator isRTL
+						PhratchTranslator isRTL
 							ifTrue: [upperBlock position: (targetP x - upperBlock width) @ (upperBlock nextBlock position y - (upperBlock height - 4))]
 							ifFalse: [upperBlock position: targetP x @ (upperBlock nextBlock position y - (upperBlock height - 4))].
 						upperBlock := upperBlock owner]]].
 			((bottomBlockUsed not) and: [targetBlock owner isKindOf: BlockMorph]) ifTrue:[
-				ScratchTranslator isRTL
+				PhratchTranslator isRTL
 					ifTrue: [self position: (targetP x - self width) @ (targetP y - (self height - 4))]
 					ifFalse: [self position: targetP x @ (targetP y - (self height - 4))]].
 			(targetBlock owner isKindOf: BlockMorph) ifTrue:[
-				ScratchTranslator isRTL
+				PhratchTranslator isRTL
 					ifTrue: [self topBlock position: (targetP x - self topBlock width) @ targetP y]
 					ifFalse: [self topBlock position: targetP x @ targetP y].
 				targetBlock owner attachBlock: self topBlock].
-			ScratchTranslator isRTL
+			PhratchTranslator isRTL
 				ifTrue: [targetBlock position: (targetP x - targetBlock width) @ (self bottomBlock position y + self bottomBlock height + 4)]
 				ifFalse: [targetBlock position: targetP x @ (self bottomBlock position y + self bottomBlock height + 4)].
 			((bottomBlockUsed not) and: [((targetBlock owner isKindOf: BlockMorph) not) and: [(self isKindOf: CBlockMorph)]]) ifFalse:[
 				self bottomBlock attachBlock: targetBlock]]
 		ifFalse: [
 			self assert: [(self isKindOf: HatBlockMorph) not].  "I am not a HatBlockMorph"
-			ScratchTranslator isRTL
+			PhratchTranslator isRTL
 				ifTrue: [self position: (targetP - (self width @0))]
 				ifFalse: [self position: targetP].
 
@@ -1413,7 +1413,7 @@ BlockMorph >> newScriptOwner: newOwner [
 			rcvr := newOwner.
 			(((m isKindOf: VariableBlockMorph) | (m isKindOf: SetterBlockMorph)) and: 
 			[m isSpecialForm not]) ifTrue: [
-				(m receiver isKindOf: ScratchStageMorph) ifTrue: [rcvr := m receiver].
+				(m receiver isKindOf: PhratchStageMorph) ifTrue: [rcvr := m receiver].
 				newOwner ensureVariableExists: m variable.  "ensure that variable exists"
 				m color: rcvr variableBlockColor].
 			(((m isKindOf: VariableBlockMorph) | (m isKindOf: SetterBlockMorph)) and: 
@@ -1451,7 +1451,7 @@ for use in ScriptableScratchMorph ->> #definitionFor:
 			rcvr := newOwner.
 			(((m isKindOf: VariableBlockMorph) | (m isKindOf: SetterBlockMorph)) and: 
 			[m isSpecialForm not]) ifTrue: [
-				(m receiver isKindOf: ScratchStageMorph) ifTrue: [rcvr := m receiver].
+				(m receiver isKindOf: PhratchStageMorph) ifTrue: [rcvr := m receiver].
 				newOwner ensureVariableExists: m variable.  "ensure that variable exists"
 				m color: rcvr variableBlockColor].
 			(((m isKindOf: VariableBlockMorph) | (m isKindOf: SetterBlockMorph)) and: 
@@ -1510,12 +1510,30 @@ BlockMorph >> pauseProcess [
 
 ]
 
+{ #category : #processes }
+BlockMorph >> phratchProc [
+	"Answer my process or nil if I'm not currently the top of a running stack."
+
+	^ scratchProc
+
+]
+
+{ #category : #processes }
+BlockMorph >> phratchProc: aScratchProcess [
+
+	hadError == true ifTrue: [cachedFeedbackForm := nil].
+	hadError := false.
+	scratchProc := aScratchProcess.
+	self changed.
+
+]
+
 { #category : #accessing }
 BlockMorph >> presentHelpScreen [
 	"Answer the name of the help screen for this block, or nil if no help is available."
 
 	| fr |
-	fr := self ownerOrYourselfThatIsA: ScratchFrameMorph.
+	fr := self ownerOrYourselfThatIsA: PhratchFrameMorph.
 	fr
 		ifNil: [^ nil]
 		ifNotNil: [fr presentHelpScreen: self helpScreenName]
@@ -1633,24 +1651,6 @@ BlockMorph >> rootForGrabOf: aMorph [
 
 		ifTrue: [^ super rootForGrabOf: aMorph]
 		ifFalse: [^ self].
-
-]
-
-{ #category : #processes }
-BlockMorph >> scratchProc [
-	"Answer my process or nil if I'm not currently the top of a running stack."
-
-	^ scratchProc
-
-]
-
-{ #category : #processes }
-BlockMorph >> scratchProc: aScratchProcess [
-
-	hadError == true ifTrue: [cachedFeedbackForm := nil].
-	hadError := false.
-	scratchProc := aScratchProcess.
-	self changed.
 
 ]
 
@@ -1830,7 +1830,7 @@ BlockMorph >> updateCachedForm [
 	| c offset |
 	oldColor ifNotNil: [color := oldColor].
 	c := FormCanvas extent: self fullBounds extent depth: 32.
-	ScratchTranslator isRTL
+	PhratchTranslator isRTL
 		ifTrue: [
 			offset := scratchProc ifNil: [0@0] ifNotNil: [3@3].
 			c := c copyOffset: (self fullBounds topLeft + offset) negated]

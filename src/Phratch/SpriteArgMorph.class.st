@@ -34,7 +34,7 @@ SpriteArgMorph >> checkForDeletedMorph [
 	(morph isKindOf: Morph) ifFalse: [^ self].
 	morph owner ifNotNil: [^ self].
 
-	(morph isKindOf: ScratchStageMorph) ifTrue: [^ self].
+	(morph isKindOf: PhratchStageMorph) ifTrue: [^ self].
 
 	morph := nil.  "nil out reference to deleted sprite"
 
@@ -168,7 +168,7 @@ SpriteArgMorph >> initialize [
 	self color: Color white.
 
 	labelMorph := PhratchStringMorph new
-		font: (ScratchFrameMorph getFont: #Arg);
+		font: (PhratchFrameMorph getFont: #Arg);
 		forceUnicodeRendering: true;
 		color: Color white.
 	self addMorph: labelMorph.
@@ -201,14 +201,14 @@ SpriteArgMorph >> presentMenu [
 
 	| frame sel objList menu choice be |
 
-	(frame := self ownerOrYourselfThatIsA: ScratchFrameMorph) ifNil: [
+	(frame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNil: [
 		be := self ownerOrYourselfThatIsA: BlockEditorFrameMorph.
 		be ifNil: [^self].
-		(frame := be scratchFrame) ifNil: [^ self]].
+		(frame := be phratchFrame) ifNil: [^ self]].
 
 	(owner isKindOf: CommandBlockMorph) ifTrue: [sel := owner selector].
 
-	objList := frame scratchObjects.
+	objList := frame phratchObjects.
 	objList sort: [:obj1 :obj2 | obj1 objName asLowercase < obj2 objName asLowercase].
 
 	menu := MenuMorph new.
@@ -325,7 +325,7 @@ SpriteArgMorph >> updateLabel [
 	| s |
 	self checkForDeletedMorph.
 	s := ' '.
-	(morph isKindOf: ScriptableScratchMorph) ifTrue: [s := morph objName].
+	(morph isKindOf: ScriptablePhratchMorph) ifTrue: [s := morph objName].
 	(morph isKindOf: String) ifTrue: [
 		s := morph localized.
 		morph = #mouse ifTrue: [s := 'mouse-pointer' localized].

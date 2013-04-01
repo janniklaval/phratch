@@ -141,9 +141,9 @@ the ones marked by asterix (*) are represented by this class
 "
 	type := aSymbol.
 	#objSlot = type ifTrue: [
-		skin := ScratchFrameMorph skinAt: #objSlot].
+		skin := PhratchFrameMorph skinAt: #objSlot].
 	(#(reporterslot booleanslot objSlot) includes: type) ifFalse: [
-		skin := ScratchFrameMorph skinAt: ('type', type asString capitalized) asSymbol].
+		skin := PhratchFrameMorph skinAt: ('type', type asString capitalized) asSymbol].
 	self 
 		borderWidth: 0;
 		cornerStyle: #square;

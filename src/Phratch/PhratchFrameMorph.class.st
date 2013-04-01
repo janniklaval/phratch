@@ -5,7 +5,7 @@ I keep a list of Scratch processes (threads) and run each one to the its next st
 
 "
 Class {
-	#name : #ScratchFrameMorph,
+	#name : #PhratchFrameMorph,
 	#superclass : #Morph,
 	#instVars : [
 		'pauseButton',
@@ -68,7 +68,7 @@ Class {
 }
 
 { #category : #byob }
-ScratchFrameMorph class >> addSlotShapesToSkin [
+PhratchFrameMorph class >> addSlotShapesToSkin [
 
 	"ScratchFrameMorph addSlotShapesToSkin"
 	"ImageMorph new form: (ScratchFrameMorph skinAt: #typeCommand); openInWorld"
@@ -91,11 +91,11 @@ ScratchFrameMorph class >> addSlotShapesToSkin [
 	self skin at: #typeReporter put: (form withEmbeddedOutlineColor: Color darkGray width: 1).
 
 	"typeList"
-	block := ReporterBlockMorph new color: (ScriptableScratchMorph blockColorFor: 'list'); commandSpec: '%s'.
+	block := ReporterBlockMorph new color: (ScriptablePhratchMorph blockColorFor: 'list'); commandSpec: '%s'.
 	slot := block argMorphs first.
 	slot extent: 7 @ 4.
 	form := slot imageForm.
-	form replaceColor: (form colorAt: 2@2) withColor: (ScriptableScratchMorph blockColorFor: 'list').
+	form replaceColor: (form colorAt: 2@2) withColor: (ScriptablePhratchMorph blockColorFor: 'list').
 	halfList := slot extent + 1.
 	big := Form extent: halfList x @ (halfList y * 2) depth: 8.
 	(WarpBlt toForm: big)
@@ -120,14 +120,14 @@ ScratchFrameMorph class >> addSlotShapesToSkin [
 ]
 
 { #category : #'falta adaptar' }
-ScratchFrameMorph class >> buttonLabel: aString selector: aSymbolOrNil [
+PhratchFrameMorph class >> buttonLabel: aString selector: aSymbolOrNil [
 	"Answer a big button with the given label."
 
 	| button |
 	button := ResizableToggleButton2 new
-		offForm: (ScratchFrameMorph skinAt: #btn)
-			onForm: (ScratchFrameMorph skinAt: #btnPressed);
-		label: aString font: (ScratchFrameMorph getFont: #Button);
+		offForm: (PhratchFrameMorph skinAt: #btn)
+			onForm: (PhratchFrameMorph skinAt: #btnPressed);
+		label: aString font: (PhratchFrameMorph getFont: #Button);
 		actionSelector: aSymbolOrNil.
 
 	^ button
@@ -135,14 +135,14 @@ ScratchFrameMorph class >> buttonLabel: aString selector: aSymbolOrNil [
 ]
 
 { #category : #utilities }
-ScratchFrameMorph class >> cameraMode [
+PhratchFrameMorph class >> cameraMode [
 
 	^ #normal
 
 ]
 
 { #category : #utilities }
-ScratchFrameMorph class >> colorToTrack [
+PhratchFrameMorph class >> colorToTrack [
 
 	^ Color red
 
@@ -150,15 +150,15 @@ ScratchFrameMorph class >> colorToTrack [
 ]
 
 { #category : #utilities }
-ScratchFrameMorph class >> defaultSprite [
+PhratchFrameMorph class >> defaultSprite [
 "Return the default sprite if one was set, or the cat otherwise"
 
 	DefaultSprite
 		ifNotNil: [^ DefaultSprite]
-		ifNil: [^ ScratchSpriteMorph new
+		ifNil: [^ PhratchSpriteMorph new
 			addMediaItem: (ImageMedia new
 				mediaName: ('costume' localized, '1');
-				form: (ScratchFrameMorph skinAt: #defaultSpriteCostume));
+				form: (PhratchFrameMorph skinAt: #defaultSpriteCostume));
 "			addMediaItem: (ImageMedia new
 				mediaName: ('costume' localized, '2');
 				form: (ScratchFrameMorph skinAt: #defaultSpriteCostume2));
@@ -170,12 +170,12 @@ ScratchFrameMorph class >> defaultSprite [
 ]
 
 { #category : #byob }
-ScratchFrameMorph class >> disableSharing [
+PhratchFrameMorph class >> disableSharing [
 	AllowSharing := false
 ]
 
 { #category : #'scratch skin' }
-ScratchFrameMorph class >> getFont: aSymbol [
+PhratchFrameMorph class >> getFont: aSymbol [
 	"Get a font for a given purpose (specified by aSymbol) based on the current font setting."
 
 	^ self isXO
@@ -185,7 +185,7 @@ ScratchFrameMorph class >> getFont: aSymbol [
 ]
 
 { #category : #'scratch skin' }
-ScratchFrameMorph class >> initFonts [
+PhratchFrameMorph class >> initFonts [
 	"self initFonts"
 
 	| fontSpecs fonts fontsXO |
@@ -261,7 +261,7 @@ ScratchFrameMorph class >> initFonts [
 ]
 
 { #category : #'class initialization' }
-ScratchFrameMorph class >> initialize [
+PhratchFrameMorph class >> initialize [
 	"self initialize"
 
 	Clipboard := nil.
@@ -276,7 +276,7 @@ ScratchFrameMorph class >> initialize [
 ]
 
 { #category : #'scratch skin' }
-ScratchFrameMorph class >> isXO [
+PhratchFrameMorph class >> isXO [
 	"Return true if the current skin is XO."
 
 	^ "IsXO" false
@@ -284,7 +284,7 @@ ScratchFrameMorph class >> isXO [
 ]
 
 { #category : #'scratch skin' }
-ScratchFrameMorph class >> isXO: aBoolean [
+PhratchFrameMorph class >> isXO: aBoolean [
 	"Set the current skin style to #XO if the argument is true, normal otherwise."
 	"self isXO: true"
 	"self isXO: false"
@@ -297,14 +297,14 @@ ScratchFrameMorph class >> isXO: aBoolean [
 ]
 
 { #category : #utilities }
-ScratchFrameMorph class >> open [
+PhratchFrameMorph class >> open [
 "	InputEventSensor startUp."
 	"SoundPlayer initialize; shutDown; startUp. "
 	self new startup openInWorld
 ]
 
 { #category : #utilities }
-ScratchFrameMorph class >> palettePaneColor [
+PhratchFrameMorph class >> palettePaneColor [
 
 	| c |
 	c := Color r: 124 g: 128 b: 131 range: 255.
@@ -314,7 +314,7 @@ ScratchFrameMorph class >> palettePaneColor [
 ]
 
 { #category : #byob }
-ScratchFrameMorph class >> parseDownloadDatabase: fileName [
+PhratchFrameMorph class >> parseDownloadDatabase: fileName [
 	"Parse the HTML file for the Scratch download database."
 	"self parseDownloadDatabase: 'mlist.html'"
 	"To list downloads by date:
@@ -344,7 +344,7 @@ ScratchFrameMorph class >> parseDownloadDatabase: fileName [
 ]
 
 { #category : #utilities }
-ScratchFrameMorph class >> parseRecordFrom: lineStream [
+PhratchFrameMorph class >> parseRecordFrom: lineStream [
 	"An HTML table record from the given stream of lines."
 
 	| rec ln buf |
@@ -362,7 +362,7 @@ ScratchFrameMorph class >> parseRecordFrom: lineStream [
 ]
 
 { #category : #utilities }
-ScratchFrameMorph class >> patchWindowsVM: vmFileName quitMessage: aString [
+PhratchFrameMorph class >> patchWindowsVM: vmFileName quitMessage: aString [
 	"Modify the Squeak application (the .exe file) for Windows to display the given string when you quit. You must start with a copy of the original VM, not one that has already been modified. This file will be modified in place, so make sure you keep a copy of the original! The string is truncated to 27 characters since it must fit into the space of the original quit message."
 	"self patchWindowsVM: 'Scratch.exe' quitMessage: 'Want to quit Scratch now?'"
 
@@ -399,25 +399,32 @@ ScratchFrameMorph class >> patchWindowsVM: vmFileName quitMessage: aString [
 ]
 
 { #category : #utilities }
-ScratchFrameMorph class >> putInClipboard: anObject [
+PhratchFrameMorph class >> phratchServers [
+
+	^ ScratchServers
+
+]
+
+{ #category : #utilities }
+PhratchFrameMorph class >> putInClipboard: anObject [
 	
 	Clipboard := anObject.
 ]
 
 { #category : #utilities }
-ScratchFrameMorph class >> quitFromMenu [
+PhratchFrameMorph class >> quitFromMenu [
 	"The user is using the application menu to quit from Scratch. If there is an open Scratch window, ask the user about saving the project. Otherwise, confirm that the user really wants to quit."
 
 	| scratchWindow |
 	scratchWindow := World submorphs detect: [:m | (m isKindOf: self)] ifNone: [nil].
 	scratchWindow
 		ifNil: [World hands first quitSession]
-		ifNotNil: [scratchWindow quitScratch].
+		ifNotNil: [scratchWindow quitPhratch].
 
 ]
 
 { #category : #utilities }
-ScratchFrameMorph class >> readShareServerEntry [
+PhratchFrameMorph class >> readShareServerEntry [
 	"Check for a file containing a list of Scratch servers.
 	If this file is found and it includes an entry labled '*share*' then make that entry the server and path for 'Share' uploads. 
 	If this file includes an entry labeled *support* then make that entry the server and path for the 'Support' site link.
@@ -467,15 +474,15 @@ xxx"
 ]
 
 { #category : #'scratch skin' }
-ScratchFrameMorph class >> readSkin [
+PhratchFrameMorph class >> readSkin [
 	
 	^ ScratchSkin := 
-		ScratchFrameMorph readSkinFrom: 
+		PhratchFrameMorph readSkinFrom: 
 			(FileSystem workingDirectory / 'ScratchSkin')
 ]
 
 { #category : #'scratch skin' }
-ScratchFrameMorph class >> readSkinFrom: aDirectory [
+PhratchFrameMorph class >> readSkinFrom: aDirectory [
 	"Read the Forms for my skin from the given directory and store them in myskin dictionary."
 	"When in XO mode, entries in ScratchSkinXO override the corresponding entries in ScratchSkin."
 	"self readSkinFrom: (FileDirectory default directoryNamed: 'ScratchSkin')"
@@ -506,7 +513,7 @@ ScratchFrameMorph class >> readSkinFrom: aDirectory [
 ]
 
 { #category : #utilities }
-ScratchFrameMorph class >> scaledFormForPaintEditor: aForm [
+PhratchFrameMorph class >> scaledFormForPaintEditor: aForm [
 	"Answer either the given form or a copy of it scaled down to fit into the paint editor."
 	"This method supports a quick fix to the following problem: When a big image is loaded onto a sprite and then edited in the image editor, (a) you cannot edit offscreen pixels and (b) if you click 'OK' to accept the edits, the image will be cropped. This fix resizes the loaded image to fit into paint editor canvas to avoid these problems. In the longer term, we should fix the paint editor to allow editing images larger than the canvas size."
 
@@ -517,19 +524,12 @@ ScratchFrameMorph class >> scaledFormForPaintEditor: aForm [
 		ifTrue: [^ aForm].
 
 	scale := (maxExtent x / aForm width) min: (maxExtent y / aForm height).
-	^ ScratchPlugin scale: aForm by: scale
+	^ PhratchPlugin scale: aForm by: scale
 
 ]
 
 { #category : #utilities }
-ScratchFrameMorph class >> scratchServers [
-
-	^ ScratchServers
-
-]
-
-{ #category : #utilities }
-ScratchFrameMorph class >> scriptsPaneColor [
+PhratchFrameMorph class >> scriptsPaneColor [
 
 	| c |
 	c := Color r: 124 g: 128 b: 131 range: 255.
@@ -539,7 +539,7 @@ ScratchFrameMorph class >> scriptsPaneColor [
 ]
 
 { #category : #utilities }
-ScratchFrameMorph class >> setVisibleDrives: driveListString [
+PhratchFrameMorph class >> setVisibleDrives: driveListString [
 	"Set my set of visible drives. If the argument is nil, then all drives are made visible."
 
 	| in drive |
@@ -560,7 +560,7 @@ ScratchFrameMorph class >> setVisibleDrives: driveListString [
 ]
 
 { #category : #utilities }
-ScratchFrameMorph class >> shareServer [
+PhratchFrameMorph class >> shareServer [
 	"Answer the name of the Scratch project sharing server."
 
 	^ ShareServer
@@ -568,19 +568,19 @@ ScratchFrameMorph class >> shareServer [
 ]
 
 { #category : #'scratch skin' }
-ScratchFrameMorph class >> skin [
+PhratchFrameMorph class >> skin [
 	^ScratchSkin ifNil: [self readSkin]
 ]
 
 { #category : #'scratch skin' }
-ScratchFrameMorph class >> skinAt: aSymbolOrString [
+PhratchFrameMorph class >> skinAt: aSymbolOrString [
 
 	^ self skinAt: aSymbolOrString ifAbsent: [ScratchSkin error: 'key not found']
 
 ]
 
 { #category : #'scratch skin' }
-ScratchFrameMorph class >> skinAt: aSymbolOrString ifAbsent: aBlock [
+PhratchFrameMorph class >> skinAt: aSymbolOrString ifAbsent: aBlock [
 	"Answer the skin image with the given name. In XO mode, first check to see if an entry appears in ScratchSkinXO. If so, use it. Otherwise, use the image from the normal skin dictionary."
 
 	| k |
@@ -594,7 +594,7 @@ ScratchFrameMorph class >> skinAt: aSymbolOrString ifAbsent: aBlock [
 ]
 
 { #category : #utilities }
-ScratchFrameMorph class >> supportServer [
+PhratchFrameMorph class >> supportServer [
 	"Answer the name of the Scratch support site server."
 
 	^ SupportServer
@@ -602,7 +602,7 @@ ScratchFrameMorph class >> supportServer [
 ]
 
 { #category : #utilities }
-ScratchFrameMorph class >> supportServerPath [
+PhratchFrameMorph class >> supportServerPath [
 	"Answer the path of the Scratch support site server."
 
 	^ SupportServerPath
@@ -610,7 +610,7 @@ ScratchFrameMorph class >> supportServerPath [
 ]
 
 { #category : #'scratch skin' }
-ScratchFrameMorph class >> takeOverScreen: aBoolean [
+PhratchFrameMorph class >> takeOverScreen: aBoolean [
 	"self takeOverScreen: true"
 	"self takeOverScreen: false"
 
@@ -619,7 +619,7 @@ ScratchFrameMorph class >> takeOverScreen: aBoolean [
 ]
 
 { #category : #'as yet unclassified' }
-ScratchFrameMorph class >> updateSkinFrom: aDirectory [
+PhratchFrameMorph class >> updateSkinFrom: aDirectory [
 	"Read the Forms for my skin from the given directory and update them in myskin dictionary."
 	"When in XO mode, entries in ScratchSkinXO override the corresponding entries in ScratchSkin."
 	"self updateSkinFrom: (FileDirectory default directoryNamed: 'skinRestore')"
@@ -648,27 +648,27 @@ ScratchFrameMorph class >> updateSkinFrom: aDirectory [
 ]
 
 { #category : #utilities }
-ScratchFrameMorph class >> useErrorCatcher [
+PhratchFrameMorph class >> useErrorCatcher [
 
 	^ UseErrorCatcher
 
 ]
 
 { #category : #utilities }
-ScratchFrameMorph class >> vanity [
+PhratchFrameMorph class >> vanity [
 
 	^ 'BYOB ', self version, ' (C) Brian Harvey & Jens Mnig'
 ]
 
 { #category : #utilities }
-ScratchFrameMorph class >> version [
+PhratchFrameMorph class >> version [
 
 	^ Version
 
 ]
 
 { #category : #utilities }
-ScratchFrameMorph class >> version: aString [
+PhratchFrameMorph class >> version: aString [
 	"self version: '3.1.1 (', (Date today printFormat: #(1 2 3 $- 2 2)), ')'"
 	"self version: '1.0'"
 
@@ -678,14 +678,14 @@ ScratchFrameMorph class >> version: aString [
 ]
 
 { #category : #utilities }
-ScratchFrameMorph class >> versionDate [
+PhratchFrameMorph class >> versionDate [
 
 	^ VersionDate
 
 ]
 
 { #category : #utilities }
-ScratchFrameMorph class >> visibleDrives [
+PhratchFrameMorph class >> visibleDrives [
 	"For Win32. Answer a list of visible drive names or nil. If nil, then all drives are visble."
 
 	^ VisibleDrives
@@ -693,7 +693,7 @@ ScratchFrameMorph class >> visibleDrives [
 ]
 
 { #category : #utilities }
-ScratchFrameMorph class >> workpaneExtent [
+PhratchFrameMorph class >> workpaneExtent [
 	"Answer the extent of the work pane."
 
 	^ WorkpaneExtent
@@ -701,7 +701,7 @@ ScratchFrameMorph class >> workpaneExtent [
 ]
 
 { #category : #'menu/button actions' }
-ScratchFrameMorph >> aboutPhratch [
+PhratchFrameMorph >> aboutPhratch [
 
 	| dialogBox |
 	dialogBox := DialogBoxMorph new
@@ -730,21 +730,21 @@ for license, see license.txt in folder.
 
 Please report bugs to https://code.google.com/p/phratch/issues/list.
 '
-		font: (ScratchFrameMorph getFont: #AboutScratch).
+		font: (PhratchFrameMorph getFont: #AboutPhratch).
 
-	dialogBox setBalloonText: ((CommandBlockMorph new color: (ScriptableScratchMorph blockColorFor: 'control'); commandSpec: 'B Y %r B')) asLambda displayForm.
+	dialogBox setBalloonText: ((CommandBlockMorph new color: (ScriptablePhratchMorph blockColorFor: 'control'); commandSpec: 'B Y %r B')) asLambda displayForm.
 
 	dialogBox getUserResponse.
 
 ]
 
 { #category : #other }
-ScratchFrameMorph >> addAndView: aSpriteMorph [
+PhratchFrameMorph >> addAndView: aSpriteMorph [
 	"Add given morph to the work pane and view it."
 
 	| pos i p |
 	aSpriteMorph center: workPane center.
-	pos := self scratchObjects collect: [:o | o referencePosition].
+	pos := self phratchObjects collect: [:o | o referencePosition].
 	i := 0.
 	[pos includes: (p := (10 * i) asPoint)] whileTrue: [i := i + 1].
 	workPane addMorphFront: aSpriteMorph.
@@ -765,12 +765,12 @@ ScratchFrameMorph >> addAndView: aSpriteMorph [
 ]
 
 { #category : #byob }
-ScratchFrameMorph >> addBlockEditor: aBlockEditor [
+PhratchFrameMorph >> addBlockEditor: aBlockEditor [
 	blockEditors add: aBlockEditor
 ]
 
 { #category : #'menu/button actions' }
-ScratchFrameMorph >> addServerCommandsTo: menu [
+PhratchFrameMorph >> addServerCommandsTo: menu [
 	"Add Scratch server commands to the given menu."
 
 	| disable endCmd |
@@ -778,24 +778,24 @@ ScratchFrameMorph >> addServerCommandsTo: menu [
 	disable ifTrue: [^ self].
 
 	menu addLine.
-	(workPane scratchServer notNil and:
-	 [workPane scratchServer sessionInProgress])
+	(workPane phratchServer notNil and:
+	 [workPane phratchServer sessionInProgress])
 		ifTrue: [
 			menu add: 'Show IP Address' action: #showNetworkAddress.
-			endCmd := workPane scratchServer isHosting
+			endCmd := workPane phratchServer isHosting
 				ifTrue: ['Stop Hosting Mesh']
 				ifFalse: ['Leave Mesh'].
-			menu add: endCmd action: #exitScratchSession]
+			menu add: endCmd action: #exitPhratchSession]
 		ifFalse: [
-			menu add: 'Host Mesh' action: #startHostingScratchSession.
-			menu add: 'Join Mesh' action: #joinScratchSession].
+			menu add: 'Host Mesh' action: #startHostingPhratchSession.
+			menu add: 'Join Mesh' action: #joinPhratchSession].
 	^menu
 
 
 ]
 
 { #category : #'menu/button actions' }
-ScratchFrameMorph >> addShortcutButtonsTo: rowMorph [
+PhratchFrameMorph >> addShortcutButtonsTo: rowMorph [
 
 	| buttonSpecs b |
 
@@ -804,7 +804,7 @@ ScratchFrameMorph >> addShortcutButtonsTo: rowMorph [
 	buttonSpecs := #(
 		"name		tool tip				selector"
 		(language	'Set language'		languageMenu:)
-		(save		'Save this project'	saveScratchProjectNoDialog)
+		(save		'Save this project'	#savePhratchProjectNoDialog)
 "		(share		'Share this project'	share)"
 	).
 	AllowSharing ifFalse: [
@@ -812,9 +812,9 @@ ScratchFrameMorph >> addShortcutButtonsTo: rowMorph [
 
 	buttonSpecs do: [:spec |
 		b := ToggleButton
-			onForm: (ScratchFrameMorph skinAt: (spec at: 1), 'ButtonOver')
-			offForm: (ScratchFrameMorph skinAt: (spec at: 1), 'Button')
-			overForm: (ScratchFrameMorph skinAt: (spec at: 1), 'ButtonOver').
+			onForm: (PhratchFrameMorph skinAt: (spec at: 1), 'ButtonOver')
+			offForm: (PhratchFrameMorph skinAt: (spec at: 1), 'Button')
+			overForm: (PhratchFrameMorph skinAt: (spec at: 1), 'ButtonOver').
 		b
 			target: self;
 			actionSelector: (spec at: 3);
@@ -837,31 +837,31 @@ ScratchFrameMorph >> addShortcutButtonsTo: rowMorph [
 ]
 
 { #category : #'menu/button actions' }
-ScratchFrameMorph >> addSpriteMorph [
+PhratchFrameMorph >> addSpriteMorph [
 
 	| result f m el |
 	self world activeHand toolType: nil.
 	self paintingInProgress ifTrue: [^ Beeper beep].
 
-	result := ScratchFileChooserDialog chooseSpriteCostumeFor: self.
+	result := PhratchFileChooserDialog chooseSpriteCostumeFor: self.
 	result = #cancelled ifTrue: [^ self].
 	((result basename asLowercase endsWith: '.sprite') | (result basename asLowercase endsWith: '.ysp'))
 		ifTrue: [^ self importSpriteOrProject: result].
 
 	[f := Form fromFileNamed: result] ifError: [^ self].
-	el := ImageMedia new form: (ScratchFrameMorph scaledFormForPaintEditor: f).
-	m := ScratchSpriteMorph new soleCostume: el.
+	el := ImageMedia new form: (PhratchFrameMorph scaledFormForPaintEditor: f).
+	m := PhratchSpriteMorph new soleCostume: el.
 	el mediaName: (m unusedMediaNameFromBaseName: (result basename)).
 	self addAndView: m.
 
 ]
 
 { #category : #'falta adaptar' }
-ScratchFrameMorph >> allBlocksString [
+PhratchFrameMorph >> allBlocksString [
 
 	| s stacks |
 	s := WriteStream on: (String new: 10000).
-	((Array with: workPane), self scratchObjects) do: [:obj |
+	((Array with: workPane), self phratchObjects) do: [:obj |
 		stacks := (obj blocksBin isKindOf: Collection) ifFalse:[obj blocksBin submorphs select: [:m | m isKindOf: BlockMorph]].
 		stacks size > 0 ifTrue: [
 			s nextPutAll: 'All stacks for ', obj objName, ':'; cr; cr.
@@ -873,20 +873,20 @@ ScratchFrameMorph >> allBlocksString [
 ]
 
 { #category : #'falta adaptar' }
-ScratchFrameMorph >> allProjectMedia [
+PhratchFrameMorph >> allProjectMedia [
 	"Answer a collection of all media items in the current project."
 
 	| result |
 	result := OrderedCollection new.
 	(workPane submorphs copyWith: workPane) do: [:m |
-		(m isKindOf: ScriptableScratchMorph) ifTrue: [
+		(m isKindOf: ScriptablePhratchMorph) ifTrue: [
 			result addAll: m media]].
 	^ result
 
 ]
 
 { #category : #drawing }
-ScratchFrameMorph >> areasRemainingToFill: aRectangle [
+PhratchFrameMorph >> areasRemainingToFill: aRectangle [
 	"Drawing optimization. Since I completely fill my bounds with opaque pixels, this method tells Morphic that it isn't necessary to draw any morphs covered by me."
 	
 	^ aRectangle areasOutside: self bounds
@@ -894,14 +894,14 @@ ScratchFrameMorph >> areasRemainingToFill: aRectangle [
 ]
 
 { #category : #accessing }
-ScratchFrameMorph >> author [
+PhratchFrameMorph >> author [
 
 	^ author
 
 ]
 
 { #category : #accessing }
-ScratchFrameMorph >> author: aString [
+PhratchFrameMorph >> author: aString [
 	"This is the author used in notes and save as, which is different from the user name used when uploading to the website."
 
 	author := aString.
@@ -910,7 +910,7 @@ ScratchFrameMorph >> author: aString [
 ]
 
 { #category : #byob }
-ScratchFrameMorph >> blockContrastOff [
+PhratchFrameMorph >> blockContrastOff [
 
 	BlockMorph contrastOff.
 	self refreshBlocks.
@@ -918,7 +918,7 @@ ScratchFrameMorph >> blockContrastOff [
 ]
 
 { #category : #byob }
-ScratchFrameMorph >> blockContrastStrong [
+PhratchFrameMorph >> blockContrastStrong [
 
 	BlockMorph contrastStrong.
 	self refreshBlocks.
@@ -926,12 +926,12 @@ ScratchFrameMorph >> blockContrastStrong [
 ]
 
 { #category : #byob }
-ScratchFrameMorph >> blockEditors [
+PhratchFrameMorph >> blockEditors [
 	^blockEditors
 ]
 
 { #category : #'menu/button actions' }
-ScratchFrameMorph >> canonicalizeImagesQuality: qualityOrNil saveOriginal: saveFlag [
+PhratchFrameMorph >> canonicalizeImagesQuality: qualityOrNil saveOriginal: saveFlag [
 
 	| count unique match |
 	count := 0.
@@ -952,13 +952,13 @@ ScratchFrameMorph >> canonicalizeImagesQuality: qualityOrNil saveOriginal: saveF
 ]
 
 { #category : #'menu/button actions' }
-ScratchFrameMorph >> canonicalizeSoundsBits: bitsPerSample [
+PhratchFrameMorph >> canonicalizeSoundsBits: bitsPerSample [
 
 	^self canonicalizeSoundsBits: bitsPerSample saveOriginal: false
 ]
 
 { #category : #'menu/button actions' }
-ScratchFrameMorph >> canonicalizeSoundsBits: bitsPerSample saveOriginal: saveFlag [
+PhratchFrameMorph >> canonicalizeSoundsBits: bitsPerSample saveOriginal: saveFlag [
 
 	| count unique match |
 	count := 0.
@@ -984,16 +984,16 @@ ScratchFrameMorph >> canonicalizeSoundsBits: bitsPerSample saveOriginal: saveFla
 ]
 
 { #category : #byob }
-ScratchFrameMorph >> checkBoxLabelled: aString marked: aBool width: anInt [
+PhratchFrameMorph >> checkBoxLabelled: aString marked: aBool width: anInt [
 	"answer a form consisting of a checkbox and a label - used for the EDIT menu in BYOB"
 
 	| box label pic line cnts |
 	aBool
-		ifTrue: [pic := ScratchFrameMorph skinAt: #watcherButtonPressed]
-		ifFalse: [pic := ScratchFrameMorph skinAt: #watcherButton].
+		ifTrue: [pic := PhratchFrameMorph skinAt: #watcherButtonPressed]
+		ifFalse: [pic := PhratchFrameMorph skinAt: #watcherButton].
 	box := ImageMorph new form: pic. 
 	
-	ScratchTranslator useSqueakRendering
+	PhratchTranslator useSqueakRendering
 		ifTrue: [cnts := ' ', aString localized asMacRoman]
 		ifFalse: [cnts := ' ' asUTF8, aString localized].
 
@@ -1011,7 +1011,7 @@ ScratchFrameMorph >> checkBoxLabelled: aString marked: aBool width: anInt [
 ]
 
 { #category : #stepping }
-ScratchFrameMorph >> checkForWeDo [
+PhratchFrameMorph >> checkForWeDo [
 	"Check for WeDo, and show motor blocks if it is found."
 	"Note: Polling on Vista can take several hundred milliseconds, so reduce polling to just a few times per minute."
 "
@@ -1029,34 +1029,34 @@ ScratchFrameMorph >> checkForWeDo [
 ]
 
 { #category : #byob }
-ScratchFrameMorph >> clearAllVariables [
+PhratchFrameMorph >> clearAllVariables [
 
 	workPane clearAllVariables
 ]
 
 { #category : #'falta adaptar' }
-ScratchFrameMorph >> clearStage [
+PhratchFrameMorph >> clearStage [
 
 	self stopAll.
-	projectDirectory := ScratchFileChooserDialog getDefaultFolderForType: #project.
+	projectDirectory := PhratchFileChooserDialog getDefaultFolderForType: #project.
 	projectName := ''.
 	projectInfo := Dictionary new.
 
-	self installNewProject: ScratchStageMorph new.
+	self installNewProject: PhratchStageMorph new.
 	self initializeWatcherPositions.
 	justSaved := true.
 
 ]
 
 { #category : #byob }
-ScratchFrameMorph >> closeBlockEditor [
+PhratchFrameMorph >> closeBlockEditor [
 	blockEditors do:[:each | each yes "no"].
 	blockEditors := Set new.
 
 ]
 
 { #category : #'presentation mode' }
-ScratchFrameMorph >> closeDialogBoxes [
+PhratchFrameMorph >> closeDialogBoxes [
 	"Close all dialog boxes, including PaintEditors and SoundRecorders."
 
 	World submorphs do: [:m |
@@ -1067,7 +1067,7 @@ ScratchFrameMorph >> closeDialogBoxes [
 ]
 
 { #category : #'falta adaptar' }
-ScratchFrameMorph >> closeMediaEditorsAndDialogs [
+PhratchFrameMorph >> closeMediaEditorsAndDialogs [
 	"Close any open paint or sound editors, asking the user first to avoid losing edits. Answer true if all are closed."
 
 	| mList mHasCancel |
@@ -1116,7 +1116,7 @@ ScratchFrameMorph >> closeMediaEditorsAndDialogs [
 ]
 
 { #category : #'falta adaptar' }
-ScratchFrameMorph >> compressImages [
+PhratchFrameMorph >> compressImages [
 
 	| s q count |
 	s := StringDialog askWithCancel: 'JPEG Quality (10-100)?' initialAnswer: '70'.
@@ -1134,7 +1134,7 @@ ScratchFrameMorph >> compressImages [
 ]
 
 { #category : #uploading }
-ScratchFrameMorph >> compressMediaForUpload [
+PhratchFrameMorph >> compressMediaForUpload [
 	"Compress my media prior to uploading this project."
 
 	self canonicalizeSoundsBits: 4 saveOriginal: true.
@@ -1144,7 +1144,7 @@ ScratchFrameMorph >> compressMediaForUpload [
 ]
 
 { #category : #'menu/button actions' }
-ScratchFrameMorph >> compressSounds [
+PhratchFrameMorph >> compressSounds [
 
 	| menu bitsPerSample count |
 	menu := MenuMorph new title: 'Sound quality:'; defaultTarget: self.
@@ -1174,17 +1174,17 @@ ScratchFrameMorph >> compressSounds [
 ]
 
 { #category : #'tools (no longer used)' }
-ScratchFrameMorph >> copyTool [
+PhratchFrameMorph >> copyTool [
 
 	| hand cursorForm offset |
 	self paintingInProgress ifTrue: [^ Beeper beep].
 	hand := self world activeHand.
 	hand toolType: 'CopyTool'.
 
-	cursorForm := ScratchFrameMorph skinAt: #copyCursor.
+	cursorForm := PhratchFrameMorph skinAt: #copyCursor.
 	offset := 8@13.
 
-	ScratchFrameMorph isXO ifTrue: [
+	PhratchFrameMorph isXO ifTrue: [
 		cursorForm := cursorForm magnifyBy: 1.5.
 		offset := (offset * 1.5) rounded].
 
@@ -1193,15 +1193,15 @@ ScratchFrameMorph >> copyTool [
 ]
 
 { #category : #intialization }
-ScratchFrameMorph >> createBasicPanes [
+PhratchFrameMorph >> createBasicPanes [
 	"Create and add my palette (viewer), script editor, stage, and library panes."
 
-	topPane := ImageFrameMorph new initFromForm: (ScratchFrameMorph skinAt: 'topPane').
+	topPane := ImageFrameMorph new initFromForm: (PhratchFrameMorph skinAt: 'topPane').
 	viewerPane := PhratchViewerMorph new rebuildCategorySelectors.	
 	scriptsPane := PhratchScriptEditorMorph new.
-	stageFrame := ImageFrameMorph new initFromForm: (ScratchFrameMorph skinAt: 'stagePane').
-	titlePane := ImageFrameMorph new initFromForm: (ScratchFrameMorph skinAt: 'titlePane').
-	workPane := ScratchStageMorph new extent: WorkpaneExtent.
+	stageFrame := ImageFrameMorph new initFromForm: (PhratchFrameMorph skinAt: 'stagePane').
+	titlePane := ImageFrameMorph new initFromForm: (PhratchFrameMorph skinAt: 'titlePane').
+	workPane := PhratchStageMorph new extent: WorkpaneExtent.
 	libraryPane := PhratchLibraryMorph new.
 
 	"make panes sticky so clicking on them doesn't pick up entire frame"
@@ -1222,17 +1222,17 @@ ScratchFrameMorph >> createBasicPanes [
 ]
 
 { #category : #intialization }
-ScratchFrameMorph >> createLogo [
+PhratchFrameMorph >> createLogo [
 	"Create and the Scratch logo."
 
-	logoMorph := SketchMorph withForm: (ScratchFrameMorph skinAt: #scratchLogo).
+	logoMorph := SketchMorph withForm: (PhratchFrameMorph skinAt: #scratchLogo).
 	logoMorph position: topPane position + (12@8).
 	topPane addMorph: logoMorph.
 
 ]
 
 { #category : #intialization }
-ScratchFrameMorph >> createMenuPanel [
+PhratchFrameMorph >> createMenuPanel [
 	"Create and add a panel containing the menus and close button."
 
 	| menuSpecs m |
@@ -1268,12 +1268,12 @@ ScratchFrameMorph >> createMenuPanel [
 ]
 
 { #category : #intialization }
-ScratchFrameMorph >> createReadoutPane [
+PhratchFrameMorph >> createReadoutPane [
 	"Create and add my presentation mode button, new sprite buttongs, and mouse readout pane."
 
 	| xyReadout |
 
-	readoutPane := ImageFrameMorph new initFromForm: (ScratchFrameMorph skinAt: #mouseReadoutPane).
+	readoutPane := ImageFrameMorph new initFromForm: (PhratchFrameMorph skinAt: #mouseReadoutPane).
 	xyReadout := self makeXYReadout.
 	readoutPane	 addMorph: xyReadout.
 
@@ -1283,7 +1283,7 @@ ScratchFrameMorph >> createReadoutPane [
 ]
 
 { #category : #intialization }
-ScratchFrameMorph >> createStageButtonsPanel [
+PhratchFrameMorph >> createStageButtonsPanel [
 	"Create and add a panel containing the project title, green flag, and stop buttons."
 
 	| buttonSpecs bName button |
@@ -1297,7 +1297,7 @@ ScratchFrameMorph >> createStageButtonsPanel [
 	projectTitleMorph := PhratchStringMorph new
 		forceUnicodeRendering: true;
 		contents: '';
-		font: (ScratchFrameMorph getFont: #FrameMorphProjectTitle).
+		font: (PhratchFrameMorph getFont: #FrameMorphProjectTitle).
 	stageButtonsPanel
 		addMorphBack: projectTitleMorph;
 		addMorphBack: (AlignmentMorph newSpacer: Color transparent).
@@ -1312,9 +1312,9 @@ ScratchFrameMorph >> createStageButtonsPanel [
 	buttonSpecs do: [:spec |
 		bName := spec first.
 		button := ToggleButton
-			onForm: (ScratchFrameMorph skinAt: (bName, 'ButtonGrayPressed') asSymbol)
-			offForm: (ScratchFrameMorph skinAt: (bName, 'ButtonGray') asSymbol)
-			overForm: (ScratchFrameMorph skinAt: (bName, 'ButtonGrayPressed') asSymbol).
+			onForm: (PhratchFrameMorph skinAt: (bName, 'ButtonGrayPressed') asSymbol)
+			offForm: (PhratchFrameMorph skinAt: (bName, 'ButtonGray') asSymbol)
+			overForm: (PhratchFrameMorph skinAt: (bName, 'ButtonGrayPressed') asSymbol).
 		button
 			target: self;
 			actionSelector: (spec at: 2);
@@ -1336,7 +1336,7 @@ ScratchFrameMorph >> createStageButtonsPanel [
 ]
 
 { #category : #'falta adaptar' }
-ScratchFrameMorph >> createToolbar [
+PhratchFrameMorph >> createToolbar [
 	"Create and add the toolbar."
 
 	| buttonSpecs bName button |
@@ -1356,9 +1356,9 @@ ScratchFrameMorph >> createToolbar [
 	buttonSpecs do: [:spec |
 		bName := spec at: 1.
 		button := ToggleButton
-			onForm: (ScratchFrameMorph skinAt: (bName, 'ButtonPressed') asSymbol)
-			offForm: (ScratchFrameMorph skinAt: (bName, 'Button') asSymbol)
-			overForm: (ScratchFrameMorph skinAt: (bName, 'ButtonOver') asSymbol).
+			onForm: (PhratchFrameMorph skinAt: (bName, 'ButtonPressed') asSymbol)
+			offForm: (PhratchFrameMorph skinAt: (bName, 'Button') asSymbol)
+			overForm: (PhratchFrameMorph skinAt: (bName, 'ButtonOver') asSymbol).
 		button
 			target: self;
 			actionSelector: (spec at: 2);
@@ -1371,7 +1371,7 @@ ScratchFrameMorph >> createToolbar [
 ]
 
 { #category : #'falta adaptar' }
-ScratchFrameMorph >> createViewModeButtonsPanel [
+PhratchFrameMorph >> createViewModeButtonsPanel [
 
 	| specs bName button |
 	viewModeButtonsPanel := AlignmentMorph newRow
@@ -1388,9 +1388,9 @@ ScratchFrameMorph >> createViewModeButtonsPanel [
 	specs do: [:spec |
 		bName := spec first.
 		button := ToggleButton new
-			onForm: (ScratchFrameMorph skinAt: bName, 'ViewModeOn')
-			offForm: (ScratchFrameMorph skinAt: bName, 'ViewMode')
-			overForm: (ScratchFrameMorph skinAt: bName, 'ViewModeOver').
+			onForm: (PhratchFrameMorph skinAt: bName, 'ViewModeOn')
+			offForm: (PhratchFrameMorph skinAt: bName, 'ViewMode')
+			overForm: (PhratchFrameMorph skinAt: bName, 'ViewModeOver').
 		button
 			target: self;
 			actionSelector: (spec at: 2);
@@ -1406,17 +1406,17 @@ ScratchFrameMorph >> createViewModeButtonsPanel [
 ]
 
 { #category : #'tools (no longer used)' }
-ScratchFrameMorph >> cutTool [
+PhratchFrameMorph >> cutTool [
 
 	| hand cursorForm offset |
 	self paintingInProgress ifTrue: [^ Beeper beep].
 	hand := self world activeHand.
 	hand toolType: 'CutTool'.
 
-	cursorForm := ScratchFrameMorph skinAt: #cutCursor.
+	cursorForm := PhratchFrameMorph skinAt: #cutCursor.
 	offset := 8@8.
 
-	ScratchFrameMorph isXO ifTrue: [
+	PhratchFrameMorph isXO ifTrue: [
 		cursorForm := cursorForm magnifyBy: 1.5.
 		offset := (offset * 1.5) rounded].
 
@@ -1425,7 +1425,7 @@ ScratchFrameMorph >> cutTool [
 ]
 
 { #category : #other }
-ScratchFrameMorph >> delete [
+PhratchFrameMorph >> delete [
 
 	World activeHand toolType: nil.
 	super delete.
@@ -1433,7 +1433,7 @@ ScratchFrameMorph >> delete [
 ]
 
 { #category : #watchers }
-ScratchFrameMorph >> deleteWatchersForSprite: aSprite [
+PhratchFrameMorph >> deleteWatchersForSprite: aSprite [
 	"The given sprite is being deleted. Delete all watchers associated with it."
 
 	aSprite lists do: [:m | m delete].
@@ -1448,7 +1448,7 @@ ScratchFrameMorph >> deleteWatchersForSprite: aSprite [
 ]
 
 { #category : #watchers }
-ScratchFrameMorph >> deleteWatchersForVar: varName ofSprite: aSprite [
+PhratchFrameMorph >> deleteWatchersForVar: varName ofSprite: aSprite [
 	"The given variable is being deleted. Delete all watchers associated with it."
 
 	workPane submorphsDo: [:m |
@@ -1461,7 +1461,7 @@ ScratchFrameMorph >> deleteWatchersForVar: varName ofSprite: aSprite [
 ]
 
 { #category : #watchers }
-ScratchFrameMorph >> deletingWatcher [
+PhratchFrameMorph >> deletingWatcher [
 	"The given watcher is being removed from the stage; remember it's last position."
 
 	| palette w |
@@ -1481,7 +1481,7 @@ ScratchFrameMorph >> deletingWatcher [
 ]
 
 { #category : #buttonActions }
-ScratchFrameMorph >> developersMenu [
+PhratchFrameMorph >> developersMenu [
 	"Present the Scratch developer's menu."
 
 	| menu |
@@ -1507,14 +1507,14 @@ ScratchFrameMorph >> developersMenu [
 ]
 
 { #category : #drawing }
-ScratchFrameMorph >> drawOn: aCanvas [
+PhratchFrameMorph >> drawOn: aCanvas [
 	"Optimization: Don't draw myself at all since I am completely tiled."
 
 
 ]
 
 { #category : #byob }
-ScratchFrameMorph >> editBlockDefinition: aCustomBlockDefinition for: aScriptableScratchMorph [
+PhratchFrameMorph >> editBlockDefinition: aCustomBlockDefinition for: aScriptableScratchMorph [
 
 	| editor def id |
 	"for prototypal inheritance:"
@@ -1534,7 +1534,7 @@ ScratchFrameMorph >> editBlockDefinition: aCustomBlockDefinition for: aScriptabl
 ]
 
 { #category : #accessing }
-ScratchFrameMorph >> editMenu: aMenuTitleMorph [
+PhratchFrameMorph >> editMenu: aMenuTitleMorph [
 
 	| menu |
 
@@ -1548,7 +1548,7 @@ ScratchFrameMorph >> editMenu: aMenuTitleMorph [
 			toolTip: 'check to squeeze more computational steps into one display cycle' localized
 			action: #toggleTurboMode.
 
-	menu add: ScriptableScratchMorph keepOnStage not checkBoxString, 'Allow Sprites offstage' localized
+	menu add: ScriptablePhratchMorph keepOnStage not checkBoxString, 'Allow Sprites offstage' localized
 			toolTip: 'check to allow sprites to move offscreen' localized
 			action: #toggleKeepSpritesOnStage.
 
@@ -1602,29 +1602,29 @@ ScratchFrameMorph >> editMenu: aMenuTitleMorph [
 ]
 
 { #category : #'falta adaptar' }
-ScratchFrameMorph >> editNotes [
+PhratchFrameMorph >> editNotes [
 
 	(PhratchNotesDialog editNotesFor: self) getUserResponse.
 
 ]
 
 { #category : #'falta adaptar' }
-ScratchFrameMorph >> enableRemoteSensors [
+PhratchFrameMorph >> enableRemoteSensors [
 	"Start running the Scratch server, allowing Scratch and other applications to interact with this Scratch remotely."
 
 	| server |
-	workPane scratchServer ifNil: [
-		server := ScratchServer new userName: 'Scratch'.
+	workPane phratchServer ifNil: [
+		server := PhratchServer new userName: 'Scratch'.
 		server stage: workPane.
-		workPane scratchServer: server].
+		workPane phratchServer: server].
 
-	workPane scratchServer startHosting.
+	workPane phratchServer startHosting.
 	DialogBoxMorph inform: 'Remote sensor connections enabled' localized.
 
 ]
 
 { #category : #'view mode' }
-ScratchFrameMorph >> enterNormalMode [
+PhratchFrameMorph >> enterNormalMode [
 	"Go into normal (full-stage) mode."
 
 	(viewMode = #normal) ifTrue: [
@@ -1644,11 +1644,11 @@ ScratchFrameMorph >> enterNormalMode [
 ]
 
 { #category : #'falta adaptar' }
-ScratchFrameMorph >> enterPresentationMode [
+PhratchFrameMorph >> enterPresentationMode [
 	"Go into presentation mode."
 
 	| presenter |
-	ScratchPlugin pluginAvailable ifFalse: [
+	PhratchPlugin pluginAvailable ifFalse: [
 		self updateViewModeButtons.
 		^ Beeper beep].
 
@@ -1686,7 +1686,7 @@ ScratchFrameMorph >> enterPresentationMode [
 ]
 
 { #category : #'view mode' }
-ScratchFrameMorph >> enterQuarterMode [
+PhratchFrameMorph >> enterQuarterMode [
 	"Go into quarter stage mode."
 
 	(viewMode = #quarter) ifTrue: [
@@ -1706,15 +1706,25 @@ ScratchFrameMorph >> enterQuarterMode [
 ]
 
 { #category : #private }
-ScratchFrameMorph >> enterQuarterModeIfSmallScreen [
+PhratchFrameMorph >> enterQuarterModeIfSmallScreen [
 
 	(Display width >= 980) & (Display height >= 555) ifTrue: [^ self].
 	viewMode = #normal ifTrue: [self enterQuarterMode].
 
 ]
 
+{ #category : #'menu/button actions' }
+PhratchFrameMorph >> exitPhratchSession [
+	"Close all connections to remote collaborators."
+
+	workPane phratchServer ifNil: [^ self].
+	workPane phratchServer endPhratchSession.
+	workPane phratchServer: nil.
+
+]
+
 { #category : #'view mode' }
-ScratchFrameMorph >> exitPresentationMode [
+PhratchFrameMorph >> exitPresentationMode [
 	"Exit presentation mode."
 
 	quitFlag ifTrue: [^Smalltalk quitPrimitive].
@@ -1723,7 +1733,7 @@ ScratchFrameMorph >> exitPresentationMode [
 		Display fullScreenMode: false.
 		World restoreDisplay].
 
-	ScriptableScratchMorph doubleSize: false.
+	ScriptablePhratchMorph doubleSize: false.
 	self addMorphFront: workPane.
 	self fixLayout.
 	World addMorphFront: self.
@@ -1738,24 +1748,14 @@ ScratchFrameMorph >> exitPresentationMode [
 ]
 
 { #category : #'menu/button actions' }
-ScratchFrameMorph >> exitScratchSession [
-	"Close all connections to remote collaborators."
-
-	workPane scratchServer ifNil: [^ self].
-	workPane scratchServer endScratchSession.
-	workPane scratchServer: nil.
-
-]
-
-{ #category : #'menu/button actions' }
-ScratchFrameMorph >> exportSprite [
+PhratchFrameMorph >> exportSprite [
 
 	scriptsPane target exportObject.
 
 ]
 
 { #category : #geometry }
-ScratchFrameMorph >> extent: aPoint [
+PhratchFrameMorph >> extent: aPoint [
 	"Position all my submorphs whenever I get resized."
 
 	super extent: aPoint.
@@ -1764,12 +1764,12 @@ ScratchFrameMorph >> extent: aPoint [
 ]
 
 { #category : #'file read/write' }
-ScratchFrameMorph >> extractInfoFrom: aByteArray [
+PhratchFrameMorph >> extractInfoFrom: aByteArray [
 	"Answer a Scratch info dictionary from the given ByteArray. Answer an empty dictionary if it is an old project."
 
 	| s version |
 	s := ReadStream on: aByteArray.
-	version := ObjStream scratchFileVersionFrom: (s next: 10) asString.
+	version := ObjStream phratchFileVersionFrom: (s next: 10) asString.
 	(version = 1) | (version = 2)
 		ifTrue: [
 			s skip: 4.  "skip info header byte count"
@@ -1780,54 +1780,7 @@ ScratchFrameMorph >> extractInfoFrom: aByteArray [
 ]
 
 { #category : #'file read/write' }
-ScratchFrameMorph >> extractProjectFrom: aByteArray [
-	"Answer a Scratch project (i.e. a ScratchStageMorph possibly containing sprites) from the given ByteArray. Answer nil if the project cannot be unpacked."
-
-	| s version proj |
-
-	ObjStream initialize. "just to make sure this works in filed-in changesets, -Jens"
-
-	s := ReadStream on: aByteArray.
-	version := ObjStream scratchFileVersionFrom: (s next: 10) asString.
-	version = 0 ifTrue: [
-		ScriptableScratchMorph decodeAsByob.	"make sure we initialize every field - this breaks compatibility with Scratch-sprites. -Jens"
-		s position: 0.
-		[proj := ObjStream new readObjFrom: s showProgress: true] ifError: [
-		^ self extractScratchProjectFrom: aByteArray]].
-	(version = 1) | (version = 2) ifTrue: [
-		s skip: s uint32.  "skip header"
-		proj := ObjStream new readObjFrom: s showProgress: true].
-
-	proj class = ScratchStageMorph ifFalse: [
-		version > 2
-			ifTrue: [self error: 'Project created by a later version of Scratch']
-			ifFalse: [self error: 'Problem reading project.'].
-		^ nil].
-
-	ScriptableScratchMorph buildBlockSpecDictionary.
-
-	'initializing...' 
-		displayProgressAt: self center - (32@5)  "Sensor cursorPoint"
-		from: 0 to: ((proj allMorphs) select: [:m| m isKindOf: ScriptableScratchMorph]) size * 2
-		during: [:bar | | i | i := 0.
-
-	proj allMorphsDo: [:m |
-		(m isKindOf: ScriptableScratchMorph) ifTrue: [
-			 i := i + 1. bar value: i.
-			m convertTuplesToDefinitions]].
-
-	proj allMorphsDo: [:m |
-		(m isKindOf: ScriptableScratchMorph) ifTrue: [  "convert to new blocks" 
-			i := i + 1. bar value: i.
-			m convertStacksToTuples.
-			m convertTuplesToStacks]]].
-
-	^ proj
-
-]
-
-{ #category : #'file read/write' }
-ScratchFrameMorph >> extractScratchProjectFrom: aByteArray [
+PhratchFrameMorph >> extractPhratchProjectFrom: aByteArray [
 	"Answer a Scratch project (i.e. a ScratchStageMorph possibly containing sprites) from the given ByteArray. Answer nil if the project cannot be unpacked.
 
 Note: this is a compatibility force method for BYOB - jens"
@@ -1837,35 +1790,82 @@ Note: this is a compatibility force method for BYOB - jens"
 	ObjStream initialize. "just to make sure this works in filed-in changesets, -Jens"
 
 	s := ReadStream on: aByteArray.
-	version := ObjStream scratchFileVersionFrom: (s next: 10) asString.
+	version := ObjStream phratchFileVersionFrom: (s next: 10) asString.
 	version = 0 ifTrue: [
-		ScriptableScratchMorph decodeAsScratch.	"this is the forcing part. -Jens"
+		ScriptablePhratchMorph decodeAsScratch.	"this is the forcing part. -Jens"
 		s position: 0.
 		proj := ObjStream new readObjFrom: s showProgress: true].
 	(version = 1) | (version = 2) ifTrue: [
 		s skip: s uint32.  "skip header"
 		proj := ObjStream new readObjFrom: s showProgress: true].
 
-	proj class = ScratchStageMorph ifFalse: [
+	proj class = PhratchStageMorph ifFalse: [
 		version > 2
 			ifTrue: [self error: 'Project created by a later version of Scratch']
 			ifFalse: [self error: 'Problem reading project.'].
 		^ nil].
 
-	ScriptableScratchMorph buildBlockSpecDictionary.
+	ScriptablePhratchMorph buildBlockSpecDictionary.
 
 	'initializing...' 
 		displayProgressAt: self center - (32@5)  "Sensor cursorPoint"
-		from: 0 to: ((proj allMorphs) select: [:m| m isKindOf: ScriptableScratchMorph]) size * 2
+		from: 0 to: ((proj allMorphs) select: [:m| m isKindOf: ScriptablePhratchMorph]) size * 2
 		during: [:bar | | i | i := 0.
 
 	proj allMorphsDo: [:m |
-		(m isKindOf: ScriptableScratchMorph) ifTrue: [
+		(m isKindOf: ScriptablePhratchMorph) ifTrue: [
 			 i := i + 1. bar value: i.
 			m convertTuplesToDefinitions]].
 
 	proj allMorphsDo: [:m |
-		(m isKindOf: ScriptableScratchMorph) ifTrue: [  "convert to new blocks" 
+		(m isKindOf: ScriptablePhratchMorph) ifTrue: [  "convert to new blocks" 
+			i := i + 1. bar value: i.
+			m convertStacksToTuples.
+			m convertTuplesToStacks]]].
+
+	^ proj
+
+]
+
+{ #category : #'file read/write' }
+PhratchFrameMorph >> extractProjectFrom: aByteArray [
+	"Answer a Scratch project (i.e. a ScratchStageMorph possibly containing sprites) from the given ByteArray. Answer nil if the project cannot be unpacked."
+
+	| s version proj |
+
+	ObjStream initialize. "just to make sure this works in filed-in changesets, -Jens"
+
+	s := ReadStream on: aByteArray.
+	version := ObjStream phratchFileVersionFrom: (s next: 10) asString.
+	version = 0 ifTrue: [
+		ScriptablePhratchMorph decodeAsByob.	"make sure we initialize every field - this breaks compatibility with Scratch-sprites. -Jens"
+		s position: 0.
+		[proj := ObjStream new readObjFrom: s showProgress: true] ifError: [
+		^ self extractPhratchProjectFrom: aByteArray]].
+	(version = 1) | (version = 2) ifTrue: [
+		s skip: s uint32.  "skip header"
+		proj := ObjStream new readObjFrom: s showProgress: true].
+
+	proj class = PhratchStageMorph ifFalse: [
+		version > 2
+			ifTrue: [self error: 'Project created by a later version of Scratch']
+			ifFalse: [self error: 'Problem reading project.'].
+		^ nil].
+
+	ScriptablePhratchMorph buildBlockSpecDictionary.
+
+	'initializing...' 
+		displayProgressAt: self center - (32@5)  "Sensor cursorPoint"
+		from: 0 to: ((proj allMorphs) select: [:m| m isKindOf: ScriptablePhratchMorph]) size * 2
+		during: [:bar | | i | i := 0.
+
+	proj allMorphsDo: [:m |
+		(m isKindOf: ScriptablePhratchMorph) ifTrue: [
+			 i := i + 1. bar value: i.
+			m convertTuplesToDefinitions]].
+
+	proj allMorphsDo: [:m |
+		(m isKindOf: ScriptablePhratchMorph) ifTrue: [  "convert to new blocks" 
 			i := i + 1. bar value: i.
 			m convertStacksToTuples.
 			m convertTuplesToStacks]]].
@@ -1875,16 +1875,16 @@ Note: this is a compatibility force method for BYOB - jens"
 ]
 
 { #category : #'-- all --' }
-ScratchFrameMorph >> fileMenu: aMenuTitleMorph [
+PhratchFrameMorph >> fileMenu: aMenuTitleMorph [
 
 	| menu |
 	menu := MenuMorph new defaultTarget: self.
-	menu add: 'New' action: #newScratchProject.
-	menu add: 'Open' action: #openScratchProject.
-	menu add: 'Save' action: #saveScratchProjectNoDialog.
-	menu add: 'Save As' action: #saveScratchProject.
+	menu add: 'New' action: #newPhratchProject.
+	menu add: 'Open' action: #openPhratchProject.
+	menu add: 'Save' action: #savePhratchProjectNoDialog.
+	menu add: 'Save As' action: #savePhratchProject.
 	menu addLine.
-	menu add: 'Import Project' action: #importScratchProject.
+	menu add: 'Import Project' action: #importPhratchProject.
 	menu add: 'Export Sprite' action: #exportSprite.
 	menu addLine.
 	menu add: 'Project Notes' action: #editNotes.
@@ -1902,12 +1902,12 @@ ScratchFrameMorph >> fileMenu: aMenuTitleMorph [
 				menu add: 'Save Image in User Mode' action: #saveImageForEndUser]].
 
 	menu addLine.
-	menu add: 'Quit' action: #quitScratch.
+	menu add: 'Quit' action: #quitPhratch.
 	menu localize.
 	
 	#(2 4 5 6 7) do: [:n |
 		menu labels at: n put:
-			((menu labels at: n) contents copyFrom: 1 to: (menu labels at: n) contents size - 1), ScratchTranslator ellipsesSuffix].
+			((menu labels at: n) contents copyFrom: 1 to: (menu labels at: n) contents size - 1), PhratchTranslator ellipsesSuffix].
 
 	menu invokeAt: aMenuTitleMorph bottomLeft + (0@10) in: World.
 
@@ -1915,7 +1915,7 @@ ScratchFrameMorph >> fileMenu: aMenuTitleMorph [
 ]
 
 { #category : #'menu/button actions' }
-ScratchFrameMorph >> fillScreenOff [
+PhratchFrameMorph >> fillScreenOff [
 	"Stop filling the entire screen. Useful during development."
 
 
@@ -1935,7 +1935,7 @@ ScratchFrameMorph >> fillScreenOff [
 ]
 
 { #category : #'menu/button actions' }
-ScratchFrameMorph >> fillScreenOn [
+PhratchFrameMorph >> fillScreenOn [
 	"Start filling the entire screen and being sticky. Also configure a few other things for the end user such as turning off halos and the control menu (noviceMode) and making sure that error catching is enabled."
 
 	TakeOverScreen ifTrue: [
@@ -1959,7 +1959,7 @@ ScratchFrameMorph >> fillScreenOn [
 ]
 
 { #category : #'falta adaptar' }
-ScratchFrameMorph >> fixByteReversedSounds [
+PhratchFrameMorph >> fixByteReversedSounds [
 	"See if the current project contains any byte-reversed copies of one of the standard sounds. If it does, byte-reverse all sounds. This is a workaround for a bug in Scratch 1.0 that did not upload sounds in big-endian order."
 
 	| allSoundBuffers badMeowPrefix badPopPrefix foundBadSound |
@@ -1967,11 +1967,11 @@ ScratchFrameMorph >> fixByteReversedSounds [
 	self allProjectMedia do: [:media |
 		media isSound ifTrue: [
 			allSoundBuffers add: media sound samples]].
-	allSoundBuffers remove: ScriptableScratchMorph meowSound samples ifAbsent: [].
-	allSoundBuffers remove: ScriptableScratchMorph popSound samples ifAbsent: [].
+	allSoundBuffers remove: ScriptablePhratchMorph meowSound samples ifAbsent: [].
+	allSoundBuffers remove: ScriptablePhratchMorph popSound samples ifAbsent: [].
 
-	badMeowPrefix := ScriptableScratchMorph oldMeowPrefixReversed.
-	badPopPrefix := (ScriptableScratchMorph popSound samples copyFrom: 1 to: 100) reverseEndiannessStereo: false.
+	badMeowPrefix := ScriptablePhratchMorph oldMeowPrefixReversed.
+	badPopPrefix := (ScriptablePhratchMorph popSound samples copyFrom: 1 to: 100) reverseEndiannessStereo: false.
 	foundBadSound := false.
 	allSoundBuffers do: [:buf |
 		foundBadSound ifFalse: [
@@ -1985,7 +1985,7 @@ ScratchFrameMorph >> fixByteReversedSounds [
 ]
 
 { #category : #geometry }
-ScratchFrameMorph >> fixLayout [
+PhratchFrameMorph >> fixLayout [
 
 	| stageExtent xyReadout w |
 	stageExtent :=
@@ -2063,23 +2063,23 @@ ScratchFrameMorph >> fixLayout [
 ]
 
 { #category : #private }
-ScratchFrameMorph >> fixNestedBlocks [
+PhratchFrameMorph >> fixNestedBlocks [
 	"Not the best solution, I'm sure, but working"
 	
 	(workPane submorphs copyWith: workPane) do: [:m |
-		(m isKindOf: ScriptableScratchMorph) ifTrue: [
+		(m isKindOf: ScriptablePhratchMorph) ifTrue: [
 			m convertStacksToTuples]].
 
 	viewerPane rebuildCategorySelectors.
 
 	(workPane submorphs copyWith: workPane) do: [:m |
-		(m isKindOf: ScriptableScratchMorph) ifTrue: [
+		(m isKindOf: ScriptablePhratchMorph) ifTrue: [
 			m convertTuplesToStacks]].
 	self updatePanes.
 ]
 
 { #category : #private }
-ScratchFrameMorph >> fixProjectTitleMorphLayout [
+PhratchFrameMorph >> fixProjectTitleMorphLayout [
  
 	| s truncated eWidth w |
 
@@ -2087,9 +2087,9 @@ ScratchFrameMorph >> fixProjectTitleMorphLayout [
 		s :=  (self nameFromFileName: projectName).
 		"trim project name to fit, if necessary"
 		truncated := false.
-		eWidth := (ScratchTranslator stringExtent: '...' font: projectTitleMorph font) x.
+		eWidth := (PhratchTranslator stringExtent: '...' font: projectTitleMorph font) x.
 		w := titlePane width - 100 - eWidth.
-		[((ScratchTranslator stringExtent: s font: projectTitleMorph font) x) > w] whileTrue: [
+		[((PhratchTranslator stringExtent: s font: projectTitleMorph font) x) > w] whileTrue: [
 			truncated := true.
 			s := s copyFrom: 1 to: s size - 1].
 		truncated ifTrue: [s := s, '...'].
@@ -2098,7 +2098,7 @@ ScratchFrameMorph >> fixProjectTitleMorphLayout [
 ]
 
 { #category : #drawing }
-ScratchFrameMorph >> fullDrawOn: aCanvas [
+PhratchFrameMorph >> fullDrawOn: aCanvas [
 	"Draw my full Morphic structure on the given Canvas."
 	"Optimization: if damage is entirely contained in a given pane, draw only that pane."
 
@@ -2133,7 +2133,7 @@ ScratchFrameMorph >> fullDrawOn: aCanvas [
 ]
 
 { #category : #'falta adaptar' }
-ScratchFrameMorph >> getLoginName [
+PhratchFrameMorph >> getLoginName [
 	"Ask the user for their name name and record their answer in 'loginName'."
 
 	| s |
@@ -2147,19 +2147,19 @@ ScratchFrameMorph >> getLoginName [
 ]
 
 { #category : #'event handling' }
-ScratchFrameMorph >> handlesKeyboard: evt [
+PhratchFrameMorph >> handlesKeyboard: evt [
 	^ true
 ]
 
 { #category : #'event handling' }
-ScratchFrameMorph >> handlesMouseDown: evt [
+PhratchFrameMorph >> handlesMouseDown: evt [
 
 	^ true
 
 ]
 
 { #category : #'menu/button actions' }
-ScratchFrameMorph >> helpMenu: aMenuTitleMorph [
+PhratchFrameMorph >> helpMenu: aMenuTitleMorph [
 
 	| menu |
 	menu := MenuMorph new defaultTarget: self.
@@ -2176,13 +2176,13 @@ ScratchFrameMorph >> helpMenu: aMenuTitleMorph [
 
 	#(1 2 3 4 5) do: [:n |
 		menu labels at: n put:
-			((menu labels at: n) contents copyFrom: 1 to: (menu labels at: n) contents size - 1), ScratchTranslator ellipsesSuffix].
+			((menu labels at: n) contents copyFrom: 1 to: (menu labels at: n) contents size - 1), PhratchTranslator ellipsesSuffix].
 
 	menu invokeAt: aMenuTitleMorph bottomLeft + (0@10) in: World.
 ]
 
 { #category : #'menu/button actions' }
-ScratchFrameMorph >> hideMotorBlocks [
+PhratchFrameMorph >> hideMotorBlocks [
 
 	workPane showMotorBlocks: false.
 	viewerPane refresh.
@@ -2190,7 +2190,7 @@ ScratchFrameMorph >> hideMotorBlocks [
 ]
 
 { #category : #geometry }
-ScratchFrameMorph >> hidePalette: hidePalette [
+PhratchFrameMorph >> hidePalette: hidePalette [
 	"Hide or show the blocks palette."
 
 	hidePalette = viewerPane owner isNil ifTrue: [^ self].  "no change"
@@ -2199,12 +2199,12 @@ ScratchFrameMorph >> hidePalette: hidePalette [
 		ifTrue: [
 			viewerPane delete.
 			scriptsPane
-				initFrontFromForm: (ScratchFrameMorph skinAt: #blocksPaletteFrameTransparent2) topSectionHeight: 90;
+				initFrontFromForm: (PhratchFrameMorph skinAt: #blocksPaletteFrameTransparent2) topSectionHeight: 90;
 				middleBarLeftMargin: 5 rightMargin: 0]
 		ifFalse: [
 			self addMorph: viewerPane.
 			scriptsPane
-				initFrontFromForm: (ScratchFrameMorph skinAt: #scriptPaneFrameTransparent2) topSectionHeight: 90;
+				initFrontFromForm: (PhratchFrameMorph skinAt: #scriptPaneFrameTransparent2) topSectionHeight: 90;
 				middleBarLeftMargin: 0 rightMargin: 0].
 
 	scriptsPane color: (Color r: 149/255 g: 154/255 b: 159/255).
@@ -2212,7 +2212,7 @@ ScratchFrameMorph >> hidePalette: hidePalette [
 ]
 
 { #category : #'file read/write' }
-ScratchFrameMorph >> importScratchProject [
+PhratchFrameMorph >> importPhratchProject [
 	"Allow the user to select a project to open, then merge that project's sprites with the
 current project."
 
@@ -2220,7 +2220,7 @@ current project."
 	self closeMediaEditorsAndDialogs ifFalse: [^ self].
 	self stopAll.
 
-	response := ScratchFileChooserDialog
+	response := PhratchFileChooserDialog
 		chooseExistingFileType: #project
 		extensions: #(scratch sb ypr)
 		title: 'Import Project'.
@@ -2231,7 +2231,7 @@ current project."
 ]
 
 { #category : #'falta adaptar' }
-ScratchFrameMorph >> importSpriteOrProject: fileNameOrData [
+PhratchFrameMorph >> importSpriteOrProject: fileNameOrData [
 	"Read the sprite or project file and merge into the current project."
 
 	| data f importedStage defaultForm defaultSound oldName oldPosition |
@@ -2248,7 +2248,7 @@ ScratchFrameMorph >> importSpriteOrProject: fileNameOrData [
 	"fix references to old stage"
 	importedStage allMorphsDo: [:m |
 		(m isKindOf: WatcherMorph) ifTrue: [m mapReceiver: importedStage to: workPane].
-		(m isKindOf: ScriptableScratchMorph) ifTrue: [
+		(m isKindOf: ScriptablePhratchMorph) ifTrue: [
 			m blocksBin submorphs do: [:stack |
 				(stack isKindOf: BlockMorph) ifTrue: [
 					stack blockSequence do: [:b | b mapReceiver: importedStage to: workPane]]]]].
@@ -2289,7 +2289,7 @@ ScratchFrameMorph >> importSpriteOrProject: fileNameOrData [
 	importedStage position: workPane position.
 
 	importedStage submorphs do: [:m | 
-		(m isKindOf: ScratchSpriteMorph) ifTrue: [
+		(m isKindOf: PhratchSpriteMorph) ifTrue: [
 			"m objName: m  nextInstanceName".
 			workPane addMorphFront: m.
 			m startStepping.
@@ -2303,7 +2303,7 @@ ScratchFrameMorph >> importSpriteOrProject: fileNameOrData [
 ]
 
 { #category : #intialization }
-ScratchFrameMorph >> initialize [
+PhratchFrameMorph >> initialize [
 
 	super initialize.
 	fillScreenFlag := false.
@@ -2330,7 +2330,7 @@ ScratchFrameMorph >> initialize [
 ]
 
 { #category : #watchers }
-ScratchFrameMorph >> initializeWatcherPositions [
+PhratchFrameMorph >> initializeWatcherPositions [
 	"If any watchers are on the stage, store their position. The dictionary, which is created lazily, is formatted in the following way:
 	(<sprite or nil, depending on whether the block isSpriteSpecific>, <name of block>) ->
 		(<watcher or nil, depending on whether the watcher is showing on stage>,
@@ -2341,7 +2341,7 @@ ScratchFrameMorph >> initializeWatcherPositions [
  
 	| p |
 	watcherPositions := Dictionary new.
-	self scratchWatchers do: [:w |
+	self phratchWatchers do: [:w |
 		p := w position - workPane position.
 		watcherPositions
 			at: {w getAssociatedSprite. w selectorAndArg}
@@ -2350,20 +2350,20 @@ ScratchFrameMorph >> initializeWatcherPositions [
 ]
 
 { #category : #'file read/write' }
-ScratchFrameMorph >> installNewProject: newWorkpane [
+PhratchFrameMorph >> installNewProject: newWorkpane [
 	"Called after creating or reading a new project to clear the process scheduler, pick an object to view, clear the library thumbnails, and perform other housekeeping."
 
 	| viewTarget sb |
 	self stopAll.
 
-	newWorkpane class = ScratchStageMorph
+	newWorkpane class = PhratchStageMorph
 		ifFalse: [^ self inform: 'Incompatible Scratch file format'].
 
 	"self exitScratchSession."
-	workPane scratchServer ifNotNil: [
-		workPane scratchServer clearCaches.
-		workPane scratchServer stage: newWorkpane.
-		newWorkpane scratchServer: workPane scratchServer].
+	workPane phratchServer ifNotNil: [
+		workPane phratchServer clearCaches.
+		workPane phratchServer stage: newWorkpane.
+		newWorkpane phratchServer: workPane phratchServer].
 
 	newWorkpane isQuarterSize: workPane isQuarterSize.
 	newWorkpane bounds: workPane bounds.
@@ -2393,7 +2393,7 @@ ScratchFrameMorph >> installNewProject: newWorkpane [
 	workPane layoutChanged.
 
 	"reset timer"
-	ScriptableScratchMorph resetTimer.
+	ScriptablePhratchMorph resetTimer.
 
 	"pick an object view, or view the background if there is no other"
 	viewTarget := workPane.
@@ -2405,7 +2405,7 @@ ScratchFrameMorph >> installNewProject: newWorkpane [
 	"populate the sprites list if it is empty (backward compatability)"
 	workPane sprites isEmpty ifTrue: [
 		workPane submorphs do: [:m |
-			(m isKindOf: ScriptableScratchMorph) ifTrue: [workPane sprites addLast: m]]].
+			(m isKindOf: ScriptablePhratchMorph) ifTrue: [workPane sprites addLast: m]]].
 
 	scriptsPane tabPane currentTab: 'Scripts'.
 	libraryPane clearLibrary.
@@ -2421,7 +2421,7 @@ ScratchFrameMorph >> installNewProject: newWorkpane [
 	(projectInfo includesKey: 'penTrails') ifTrue: [
 		workPane penTrailsForm: (projectInfo at: 'penTrails')].
 
-	(projectInfo at: 'keepOnStage' ifAbsent: [true]) = ScriptableScratchMorph keepOnStage
+	(projectInfo at: 'keepOnStage' ifAbsent: [true]) = ScriptablePhratchMorph keepOnStage
 		ifFalse: [self toggleKeepSpritesOnStage].
 
 	Clipboard := nil.
@@ -2429,13 +2429,13 @@ ScratchFrameMorph >> installNewProject: newWorkpane [
 	Smalltalk garbageCollect.  "get rid of old sprite instances"
 
 	self world ifNotNil: [self world startSteppingSubmorphsOf: self].
-	ScriptableScratchMorph scratchOrigin: workPane center.
+	ScriptablePhratchMorph phratchOrigin: workPane center.
 	justSaved := true.
 
 ]
 
 { #category : #byob }
-ScratchFrameMorph >> isDevelopmentMode [
+PhratchFrameMorph >> isDevelopmentMode [
 
 	| args arg |
 
@@ -2453,44 +2453,44 @@ ScratchFrameMorph >> isDevelopmentMode [
 ]
 
 { #category : #byob }
-ScratchFrameMorph >> isTurbo [
+PhratchFrameMorph >> isTurbo [
 	^ PhratchProcess blockHighlightMSecs < 1
 ]
 
 { #category : #'menu/button actions' }
-ScratchFrameMorph >> joinScratchSession [
+PhratchFrameMorph >> joinPhratchSession [
 	"Join another Scratch user or a Scratch-compatible remote application."
 
 	| server addrString ok |
-	server := ScratchServer new.
+	server := PhratchServer new.
 	server stage: workPane.
-	workPane scratchServer: server.
+	workPane phratchServer: server.
 
 	addrString := StringDialog askWithCancel: 'IP address:'.
 	addrString size = 0 ifTrue: [^ self].
 
-	ok := workPane scratchServer joinSessionAt: addrString.
+	ok := workPane phratchServer joinSessionAt: addrString.
 	ok ifFalse: [DialogBoxMorph warn: 'Could not connect to ', addrString].
 
 ]
 
 { #category : #byob }
-ScratchFrameMorph >> keepSpritesOnStage: anInt [
+PhratchFrameMorph >> keepSpritesOnStage: anInt [
 	| bool |
 
 	bool := {false. true} at: anInt + 1.
-	ScriptableScratchMorph keepOnStage: bool
+	ScriptablePhratchMorph keepOnStage: bool
 ]
 
 { #category : #'event handling' }
-ScratchFrameMorph >> keyStroke: evt [
+PhratchFrameMorph >> keyStroke: evt [
 	|ch|
 	ch := evt keyValue.
 			evt commandKeyPressed ifTrue: [ch := ch \\ 32].	"map cmd/alt keys to control keys"
 			(ch = 3) | (ch = 13) ifTrue: [^ self pressGreenFlagButton].
-			ch = 15 ifTrue: [^ self openScratchProject].
-			ch = 17 ifTrue: [^ self quitScratch].
-			ch = 19 ifTrue: [^ self saveScratchProjectNoDialog].       
+			ch = 15 ifTrue: [^ self openPhratchProject].
+			ch = 17 ifTrue: [^ self quitPhratch].
+			ch = 19 ifTrue: [^ self savePhratchProjectNoDialog].       
 			ch = 27 ifTrue: [
 				TakeOverScreen ifTrue: [
 					Smalltalk fullScreenMode: false.
@@ -2501,20 +2501,20 @@ ScratchFrameMorph >> keyStroke: evt [
 ]
 
 { #category : #'menu/button actions' }
-ScratchFrameMorph >> languageMenu: aToggleButtonMorph [
+PhratchFrameMorph >> languageMenu: aToggleButtonMorph [
 	"Present a menu of possible languages for blocks."
 
 	| bullet menu choice |
 	
-	ScratchTranslator canRenderUnicode ifFalse: [
+	PhratchTranslator canRenderUnicode ifFalse: [
 		"try to find a Unicode plugin in case this is the first use after startup"
-		ScratchTranslator detectRenderPlugin].
+		PhratchTranslator detectRenderPlugin].
 
 "	bullet := UTF8 withAll: 'Ç¢ '."
 	bullet := UTF8 withAll: '*'.
 	menu := MenuMorph new defaultTarget: self.
-	ScratchTranslator languageNames do: [:lang |
-		((ScratchTranslator isoCodeForName: lang) = (ScratchTranslator currentLanguage))
+	PhratchTranslator languageNames do: [:lang |
+		((PhratchTranslator isoCodeForName: lang) = (PhratchTranslator currentLanguage))
 			ifTrue: [menu 
 						add: (bullet, ' ', lang asMacRoman, ' ', bullet)
 						target: self 
@@ -2528,19 +2528,19 @@ ScratchFrameMorph >> languageMenu: aToggleButtonMorph [
 	choice := menu invokeModalAt: aToggleButtonMorph bottomLeft + (0@10) in: World allowKeyboard: true. 
 
 	self stopAll.
-	self recordLanguage: (ScratchTranslator currentLanguage).
+	self recordLanguage: (PhratchTranslator currentLanguage).
 
 ]
 
 { #category : #'menu/button actions' }
-ScratchFrameMorph >> launchAllHelpScreens [
+PhratchFrameMorph >> launchAllHelpScreens [
 
 	self launchHelpFile: 'allscreens.html'
 
 ]
 
 { #category : #'menu/button actions' }
-ScratchFrameMorph >> launchHelpFile: aFilename [
+PhratchFrameMorph >> launchHelpFile: aFilename [
 
 	| helpDir subDir |
 	
@@ -2552,8 +2552,8 @@ ScratchFrameMorph >> launchHelpFile: aFilename [
 	"use the English subfolder by default if it exists"
 	(helpDir directoryNames includes: 'en') ifTrue: [subDir := helpDir / 'en'].
 	"use subfolder for the current language if it exists"
-	(helpDir directoryNames includes: ScratchTranslator currentLanguage) ifTrue: [
-		subDir := helpDir / ScratchTranslator currentLanguage].
+	(helpDir directoryNames includes: PhratchTranslator currentLanguage) ifTrue: [
+		subDir := helpDir / PhratchTranslator currentLanguage].
 	subDir ifNotNil: [helpDir := subDir].
 	(helpDir / aFilename) exists
 		ifTrue: [ 
@@ -2564,79 +2564,79 @@ ScratchFrameMorph >> launchHelpFile: aFilename [
 ]
 
 { #category : #'menu/button actions' }
-ScratchFrameMorph >> launchHelpPage [
+PhratchFrameMorph >> launchHelpPage [
 
 	self launchHelpFile: 'index.html'.
 
 ]
 
 { #category : #'menu/button actions' }
-ScratchFrameMorph >> launchScratchWebsite [
+PhratchFrameMorph >> launchPhratchWebsite [
 
 	self world displayWorldSafely.
-	Cursor wait showWhile: [ScratchPlugin primOpenURL: 'http://', ScratchFrameMorph shareServer].
+	Cursor wait showWhile: [PhratchPlugin primOpenURL: 'http://', PhratchFrameMorph shareServer].
 
 ]
 
 { #category : #'menu/button actions' }
-ScratchFrameMorph >> launchWebsite [
+PhratchFrameMorph >> launchWebsite [
 
 	self world displayWorldSafely.
-	Cursor wait showWhile: [ScratchPlugin primOpenURL: 'https://code.google.com/p/phratch/'].
+	Cursor wait showWhile: [PhratchPlugin primOpenURL: 'https://code.google.com/p/phratch/'].
 
 ]
 
 { #category : #accessing }
-ScratchFrameMorph >> libraryPane [
+PhratchFrameMorph >> libraryPane [
 
 	^ libraryPane
 
 ]
 
 { #category : #watchers }
-ScratchFrameMorph >> listWatchers [
+PhratchFrameMorph >> listWatchers [
 	"Answer a collection of all the list watchers in the work pane."
 
-	^ self workPane submorphs select: [:m | m isKindOf: ScratchListMorph]
+	^ self workPane submorphs select: [:m | m isKindOf: PhratchListMorph]
 
 ]
 
 { #category : #accessing }
-ScratchFrameMorph >> loginName [
+PhratchFrameMorph >> loginName [
 
 	^ loginName
 
 ]
 
 { #category : #accessing }
-ScratchFrameMorph >> loginName: aString [
+PhratchFrameMorph >> loginName: aString [
 
 	loginName := aString.
 
 ]
 
 { #category : #accessing }
-ScratchFrameMorph >> loginPassword [
+PhratchFrameMorph >> loginPassword [
 
 	^ loginPassword
 
 ]
 
 { #category : #accessing }
-ScratchFrameMorph >> loginPassword: aString [
+PhratchFrameMorph >> loginPassword: aString [
 
 	loginPassword := aString.
 
 ]
 
 { #category : #compiler }
-ScratchFrameMorph >> makeExe [
+PhratchFrameMorph >> makeExe [
 
 	| argStr delim |
 	justSaved ifFalse: [ 
-		self saveScratchProject ].
+		self savePhratchProject ].
 	delim := FileSystem disk delimiter asString.
-	argStr := (ScratchFileChooserDialog getLastFolderForType: #project) fullName
+	argStr := (PhratchFileChooserDialog getLastFolderForType: #project) fullName
 				, delim
 				, projectName.
 	Smalltalk os isWin32 ifTrue: [
@@ -2653,25 +2653,25 @@ ScratchFrameMorph >> makeExe [
 ]
 
 { #category : #intialization }
-ScratchFrameMorph >> makeXYReadout [
+PhratchFrameMorph >> makeXYReadout [
 	"Make and answer an x-y readout."
 
 	| normalFont boldFont panel spaceWidth labelX readoutX labelY readoutY |
-	normalFont := (ScratchFrameMorph getFont: #XYReadout).
-	boldFont := (ScratchFrameMorph getFont: #XYReadoutBold).
+	normalFont := (PhratchFrameMorph getFont: #XYReadout).
+	boldFont := (PhratchFrameMorph getFont: #XYReadoutBold).
 
-	(ScratchTranslator renderScale ~= 1) ifTrue: [
+	(PhratchTranslator renderScale ~= 1) ifTrue: [
 		"force fonts to be fixed size:"
 		normalFont := StrikeFont
 			osFontName: normalFont name
-			size: normalFont pointSize / ScratchTranslator renderScale asFloat.
+			size: normalFont pointSize / PhratchTranslator renderScale asFloat.
 		boldFont := StrikeFont
 			osFontName: boldFont name
-			size: boldFont pointSize / ScratchTranslator renderScale asFloat].
+			size: boldFont pointSize / PhratchTranslator renderScale asFloat].
 
 	panel := Morph new color: (Color r: 0.753 g: 0.764 b: 0.776).
 
-	ScratchTranslator isRTL
+	PhratchTranslator isRTL
 		ifTrue: [labelX := PhratchStringMorph new font: normalFont; contents: ':x' asUTF8]
 		ifFalse: [labelX := PhratchStringMorph new font: normalFont; contents: 'x:' asUTF8].
 	readoutX := UpdatingStringMorph new
@@ -2681,28 +2681,28 @@ ScratchFrameMorph >> makeXYReadout [
 		stepTime: 150;
 		growable: false.
 	readoutX width: (readoutX stringWidth: '-1000').
-	ScratchTranslator isRTL
+	PhratchTranslator isRTL
 		ifTrue: [labelY := labelX fullCopy contents: ':y' asUTF8]
 		ifFalse: [labelY := labelX fullCopy contents: 'y:' asUTF8].
 	readoutY := readoutX fullCopy getSelector: #mouseY.
 
 	spaceWidth := ((readoutX stringWidth: ' ') * 0.8) asInteger.
 
-	ScratchTranslator isRTL
+	PhratchTranslator isRTL
 		ifTrue: [readoutY rightJustify: true.
 			panel addMorph: (readoutY position: 0@0).
 			panel addMorph: (labelY position: ((readoutY topRight) + (spaceWidth@0))).]
 		ifFalse: [panel addMorph: (labelX position: 0@0).
 			panel addMorph: (readoutX position: ((labelX topRight) + (spaceWidth@0)))].
 
-	ScratchTranslator isRTL
+	PhratchTranslator isRTL
 		ifTrue: [readoutX rightJustify: true.
 			panel addMorph: (readoutX position: (labelY right@labelY top) + (spaceWidth@0)).
 			panel addMorph: (labelX position: ((readoutX topRight) + (spaceWidth@0)))]
 		ifFalse: [panel addMorph: (labelY position: (labelX right + readoutX width + 8)@(labelX top)).
 			panel addMorph: (readoutY position: ((labelY topRight) + (spaceWidth@0)))].
 	
-	ScratchTranslator isRTL
+	PhratchTranslator isRTL
 		ifTrue: [panel extent: ((labelX right) max: (labelY right))@(labelY bottom)]
 		ifFalse: [panel extent: ((readoutX right) max: (readoutY right))@(labelY bottom)].
 
@@ -2711,7 +2711,7 @@ ScratchFrameMorph >> makeXYReadout [
 ]
 
 { #category : #'event handling' }
-ScratchFrameMorph >> mouseDown: evt [
+PhratchFrameMorph >> mouseDown: evt [
 	"Revert to normal cursor."
 
 	evt hand toolType: nil.
@@ -2721,21 +2721,21 @@ ScratchFrameMorph >> mouseDown: evt [
 ]
 
 { #category : #other }
-ScratchFrameMorph >> mouseX [
+PhratchFrameMorph >> mouseX [
 
 	^ workPane mouseX
 
 ]
 
 { #category : #other }
-ScratchFrameMorph >> mouseY [
+PhratchFrameMorph >> mouseY [
 
 	^ workPane mouseY
 
 ]
 
 { #category : #'file read/write' }
-ScratchFrameMorph >> nameFromFileName: fileName [
+PhratchFrameMorph >> nameFromFileName: fileName [
 	"Return the given Scratch file name without the trailing .sb or .scratch or .ypr extension, if it has one. Ensure the the result is UTF8."
 
 	| s |
@@ -2752,7 +2752,7 @@ ScratchFrameMorph >> nameFromFileName: fileName [
 ]
 
 { #category : #buttonActions }
-ScratchFrameMorph >> newScratchProject [
+PhratchFrameMorph >> newPhratchProject [
 	"Make a new, blank Scratch project."
 
 	| response newProject sprite |
@@ -2763,21 +2763,21 @@ ScratchFrameMorph >> newScratchProject [
 		"ask the user if they want to save the current project"
 		response := DialogBoxMorph askWithCancel: 'Save the current project?'.
 		response = #cancelled ifTrue: [^ self].
-		response ifTrue: [self saveScratchProjectNoDialog.
+		response ifTrue: [self savePhratchProjectNoDialog.
 			justSaved ifFalse: [^ self]]].
 
-	projectDirectory := ScratchFileChooserDialog getDefaultFolderForType: #project.
+	projectDirectory := PhratchFileChooserDialog getDefaultFolderForType: #project.
 	projectName := ''.
 	projectInfo := Dictionary new.
 
-	newProject := ScratchStageMorph new.
-	sprite := ScratchFrameMorph defaultSprite fullCopy.
+	newProject := PhratchStageMorph new.
+	sprite := PhratchFrameMorph defaultSprite fullCopy.
 	sprite position: (240@180) - sprite extent.
 	newProject addMorph: sprite.
 	self installNewProject: newProject.
 	sprite installGlobalBlocks.
 
-	ScriptableScratchMorph decodeAsByob. "remember we created this project in byob and not in Scratch"
+	ScriptablePhratchMorph decodeAsByob. "remember we created this project in byob and not in Scratch"
 
 	self initializeWatcherPositions.
 	blockEditors := Set new.
@@ -2786,7 +2786,7 @@ ScratchFrameMorph >> newScratchProject [
 ]
 
 { #category : #other }
-ScratchFrameMorph >> newSound [
+PhratchFrameMorph >> newSound [
 	"Open the dialog to record a new sound."
 
 	scriptsPane tabPane currentTab: 'Sounds'.
@@ -2794,7 +2794,7 @@ ScratchFrameMorph >> newSound [
 ]
 
 { #category : #private }
-ScratchFrameMorph >> nextSurpriseCostumeName [
+PhratchFrameMorph >> nextSurpriseCostumeName [
 	"Answer a surprise costume name or nil if there are no costumes."
 	"Details: Shuffle the list of available costume names and return them one at a time. When there are none left, generate a new shuffle. This avoids repeats."
 
@@ -2820,7 +2820,7 @@ ScratchFrameMorph >> nextSurpriseCostumeName [
 ]
 
 { #category : #'tools (no longer used)' }
-ScratchFrameMorph >> normalTool [
+PhratchFrameMorph >> normalTool [
 
 	self paintingInProgress ifTrue: [^ Beeper beep].
 	self world activeHand toolType: nil.
@@ -2828,7 +2828,7 @@ ScratchFrameMorph >> normalTool [
 ]
 
 { #category : #byob }
-ScratchFrameMorph >> notEditingBlock [
+PhratchFrameMorph >> notEditingBlock [
 	blockEditors size = 0 ifTrue: [^true].
 	(DialogBoxMorph ask: 'Close open block editor(s)?') ifFalse: [^false].
 	blockEditors do:[:each | each no].
@@ -2837,7 +2837,7 @@ ScratchFrameMorph >> notEditingBlock [
 ]
 
 { #category : #byob }
-ScratchFrameMorph >> notEditingBlockDefinition: aCustomBlockDefinition [
+PhratchFrameMorph >> notEditingBlockDefinition: aCustomBlockDefinition [
 	| editor |
 	blockEditors size = 0 ifTrue: [^true].
 	editor := blockEditors detect: [:each | 
@@ -2849,7 +2849,7 @@ ScratchFrameMorph >> notEditingBlockDefinition: aCustomBlockDefinition [
 ]
 
 { #category : #'menu/button actions' }
-ScratchFrameMorph >> open: aFileName [ 
+PhratchFrameMorph >> open: aFileName [ 
 	OSPlatform isMacOS ifTrue: [  
 		^ OSProcess command: ('open "', aFileName, '"').
 	].
@@ -2862,13 +2862,13 @@ ScratchFrameMorph >> open: aFileName [
 ]
 
 { #category : #byob }
-ScratchFrameMorph >> openBYOBManual [
+PhratchFrameMorph >> openBYOBManual [
 
 	self open: (((FileSystem workingDirectory / 'Manual' / 'BYOBManual.pdf') fullName))
 ]
 
 { #category : #other }
-ScratchFrameMorph >> openMIDI [
+PhratchFrameMorph >> openMIDI [
 	"Prompt the user to select a MIDI port number, then open it."
 
 	workPane openMIDI.
@@ -2876,7 +2876,7 @@ ScratchFrameMorph >> openMIDI [
 ]
 
 { #category : #'falta adaptar' }
-ScratchFrameMorph >> openScratchDroppedProjectNamed: fName [
+PhratchFrameMorph >> openPhratchDroppedProjectNamed: fName [
 	"Open a Scratch project with the given name that was dropped on the Scratch window."
 
 	| response |
@@ -2887,14 +2887,14 @@ ScratchFrameMorph >> openScratchDroppedProjectNamed: fName [
 		"ask the user if they want to save the current project"
 		response := DialogBoxMorph askWithCancel: 'Save the current project?'.
 		response = #cancelled ifTrue: [^ self].
-		response ifTrue: [self saveScratchProjectNoDialog]].
+		response ifTrue: [self savePhratchProjectNoDialog]].
 
-	self openScratchProjectNamed: fName.
+	self openPhratchProjectNamed: fName.
 
 ]
 
 { #category : #'file read/write' }
-ScratchFrameMorph >> openScratchProject [
+PhratchFrameMorph >> openPhratchProject [
 	"Allow the user to select a project to open, then open that project."
 
 	| response newProj |
@@ -2904,24 +2904,24 @@ ScratchFrameMorph >> openScratchProject [
 		"ask the user if they want to save the current project"
 		response := DialogBoxMorph askWithCancel: 'Save the current project?'.
 		response = #cancelled ifTrue: [^ self].
-		response ifTrue: [self saveScratchProjectNoDialog]].
+		response ifTrue: [self savePhratchProjectNoDialog]].
 
-	response := ScratchFileChooserDialog openScratchFileFor: self.
+	response := PhratchFileChooserDialog openPhratchFileFor: self.
 	response = #cancelled ifTrue: [^ self].
 
 	(response isKindOf: FileReference) ifTrue: [  "read the contents of a local file"
-		^ self openScratchProjectNamed: response].
+		^ self openPhratchProjectNamed: response].
 
 	(response isKindOf: ByteArray) ifTrue: [
 		[projectInfo := self extractInfoFrom: response] ifError: [projectInfo := Dictionary new].
 		[newProj := self extractProjectFrom: response] ifError: [^ self].
 		self installNewProject: newProj.
-		projectDirectory := ScratchFileChooserDialog getDefaultFolderForType: #project].
+		projectDirectory := PhratchFileChooserDialog getDefaultFolderForType: #project].
 
 ]
 
 { #category : #'falta adaptar' }
-ScratchFrameMorph >> openScratchProjectNamed: fName [
+PhratchFrameMorph >> openPhratchProjectNamed: fName [
 	"Open a Scratch project with the given name."
 
 	| f projData newProj dir fn|
@@ -2940,7 +2940,7 @@ ScratchFrameMorph >> openScratchProjectNamed: fName [
 
 	dir := (fn) parent.
 	projectDirectory := dir.
-	ScratchFileChooserDialog setLastFolderTo: projectDirectory forType: #project.
+	PhratchFileChooserDialog setLastFolderTo: projectDirectory forType: #project.
 	projectName := ( fn) basename.
 
 	self installNewProject: newProj.
@@ -2950,17 +2950,17 @@ ScratchFrameMorph >> openScratchProjectNamed: fName [
 ]
 
 { #category : #'menu/button actions' }
-ScratchFrameMorph >> paintSpriteMorph [
+PhratchFrameMorph >> paintSpriteMorph [
 
 	| m |
-	m := ScratchSpriteMorph new soleCostume: ImageMedia new.
+	m := PhratchSpriteMorph new soleCostume: ImageMedia new.
 	self addAndView: m.
 	m editDrawingOldCostumeName: m costume mediaName deleteOnCancel: true.
 
 ]
 
 { #category : #accessing }
-ScratchFrameMorph >> paintingInProgress [
+PhratchFrameMorph >> paintingInProgress [
 	"Answer true if the paint editor is in use."
 
 	^ paintingInProgress
@@ -2968,14 +2968,30 @@ ScratchFrameMorph >> paintingInProgress [
 ]
 
 { #category : #accessing }
-ScratchFrameMorph >> paintingInProgress: aBoolean [
+PhratchFrameMorph >> paintingInProgress: aBoolean [
 
 	paintingInProgress := aBoolean.
 
 ]
 
 { #category : #'falta adaptar' }
-ScratchFrameMorph >> presentHelpScreen: aStringOrNil [
+PhratchFrameMorph >> phratchObjects [
+	"Answer a collection of all the scratch objects in the work pane."
+
+	^ self workPane submorphs select: [:m | m isKindOf: ScriptablePhratchMorph]
+
+]
+
+{ #category : #watchers }
+PhratchFrameMorph >> phratchWatchers [
+	"Answer a collection of all the scratch watchers in the work pane."
+
+	^ self workPane submorphs select: [:m | m isKindOf: WatcherMorph]
+
+]
+
+{ #category : #'falta adaptar' }
+PhratchFrameMorph >> presentHelpScreen: aStringOrNil [
 	"Look for a help screen with the given name in the 'Help' folder. If found, present it to the user."
 
 	| helpDir subDir fileNames helpFileName helpForm |
@@ -2987,8 +3003,8 @@ ScratchFrameMorph >> presentHelpScreen: aStringOrNil [
 	"use the English subfolder by default if it exists"
 	(helpDir / 'en') exists ifTrue: [subDir := helpDir / 'en'].
 	"use subfolder for the current language if it exists"
-	(helpDir / ScratchTranslator currentLanguage) exists ifTrue: [
-		subDir := helpDir / ScratchTranslator currentLanguage].
+	(helpDir / PhratchTranslator currentLanguage) exists ifTrue: [
+		subDir := helpDir / PhratchTranslator currentLanguage].
 	subDir ifNotNil: [helpDir := subDir].
 
 	fileNames := helpDir fileNames collect: [:s | s asLowercase].
@@ -3010,7 +3026,7 @@ ScratchFrameMorph >> presentHelpScreen: aStringOrNil [
 ]
 
 { #category : #'menu/button actions' }
-ScratchFrameMorph >> pressGreenFlagButton [
+PhratchFrameMorph >> pressGreenFlagButton [
 	"Simulate pressing the green flag button when enter key is pressed."
 
 	flagButton on.
@@ -3024,18 +3040,18 @@ ScratchFrameMorph >> pressGreenFlagButton [
 ]
 
 { #category : #'falta adaptar' }
-ScratchFrameMorph >> printTupleElement: el on: s [
+PhratchFrameMorph >> printTupleElement: el on: s [
 
 	(el isKindOf: Array) ifTrue: [self printTupleList: el on: s. ^ self].
 	(el isKindOf: Symbol) ifTrue: [s nextPutAll: el. ^ self].
 	(el isKindOf: String) ifTrue: [s nextPut: $". s nextPutAll: el. s nextPut: $". ^ self].
-	(el isKindOf: ScriptableScratchMorph) ifTrue: [s nextPutAll: el objName. ^ self].
+	(el isKindOf: ScriptablePhratchMorph) ifTrue: [s nextPutAll: el objName. ^ self].
 	s nextPutAll: el printString.
 
 ]
 
 { #category : #uploading }
-ScratchFrameMorph >> printTupleList: anArray on: s [
+PhratchFrameMorph >> printTupleList: anArray on: s [
 
 	s nextPut: $(.
 	1 to: anArray size do: [:i |
@@ -3046,7 +3062,7 @@ ScratchFrameMorph >> printTupleList: anArray on: s [
 ]
 
 { #category : #stepping }
-ScratchFrameMorph >> processDroppedFiles [
+PhratchFrameMorph >> processDroppedFiles [
 	"Process any files that have been dropped onto me."
 
 	| droppedFiles m dropPoint fName |
@@ -3059,7 +3075,7 @@ ScratchFrameMorph >> processDroppedFiles [
 		file close.
 		fName := file fullName.
 		((fName asLowercase endsWith: '.scratch') | (fName asLowercase endsWith: '.sb') | (fName asLowercase endsWith: '.ypr'))
-			ifTrue: [self openScratchDroppedProjectNamed: fName]
+			ifTrue: [self openPhratchDroppedProjectNamed: fName]
 			ifFalse: [
 				((fName asLowercase endsWith: '.sprite') | (fName asLowercase endsWith: '.ysp'))
 					ifTrue: [self importSpriteOrProject: fName]
@@ -3068,7 +3084,7 @@ ScratchFrameMorph >> processDroppedFiles [
 ]
 
 { #category : #stepping }
-ScratchFrameMorph >> processKeyboardEvents [
+PhratchFrameMorph >> processKeyboardEvents [
 
 	| evt ch |
 	World hands do: [:h |
@@ -3076,9 +3092,9 @@ ScratchFrameMorph >> processKeyboardEvents [
 			ch := evt keyValue.
 			evt commandKeyPressed ifTrue: [ch := ch \\ 32].	"map cmd/alt keys to control keys"
 			(ch = 3) | (ch = 13) ifTrue: [^ self pressGreenFlagButton].
-			ch = 15 ifTrue: [^ self openScratchProject].
-			ch = 17 ifTrue: [^ self quitScratch].
-			ch = 19 ifTrue: [^ self saveScratchProjectNoDialog].
+			ch = 15 ifTrue: [^ self openPhratchProject].
+			ch = 17 ifTrue: [^ self quitPhratch].
+			ch = 19 ifTrue: [^ self savePhratchProjectNoDialog].
 			ch = 27 ifTrue: [
 				TakeOverScreen ifTrue: [
 					Smalltalk fullScreenMode: false.
@@ -3090,19 +3106,19 @@ ScratchFrameMorph >> processKeyboardEvents [
 ]
 
 { #category : #startup }
-ScratchFrameMorph >> processSettingsFile [
+PhratchFrameMorph >> processSettingsFile [
 	"Process settings from the Scratch.ini file."
 
 	| lang settings k |
 	self class setVisibleDrives: nil.
 	lang := nil.
 	AllowSharing := true.
-	ScratchFileChooserDialog clearFolderCache. "clear homeDir and last folder cache"
+	PhratchFileChooserDialog clearFolderCache. "clear homeDir and last folder cache"
 	settings := self readSettingsFile.
 	settings associationsDo: [:assoc |
 		k := assoc key.
 		k = 'language' ifTrue: [lang := assoc value].
-		k = 'home' ifTrue: [ScratchFileChooserDialog setHomeDir: assoc value].
+		k = 'home' ifTrue: [PhratchFileChooserDialog setHomeDir: assoc value].
 		k = 'visibledrives' ifTrue: [self class setVisibleDrives: assoc value].
 		k = 'share' ifTrue: [(assoc value) = '0' ifTrue: [AllowSharing := false]].
 "		k = 'proxyserver' ifTrue: [ScratchUploadProgressDialog proxyServer: assoc value].
@@ -3114,18 +3130,18 @@ ScratchFrameMorph >> processSettingsFile [
 		k = 'translucentdragging' ifTrue: [assoc value = '0' ifTrue: [HandMorph translucentWhenDragging: false] ifFalse: [HandMorph translucentWhenDragging: true]].
 ].
 
-	lang ifNil: [lang := ScratchTranslator guessLanguage].
+	lang ifNil: [lang := PhratchTranslator guessLanguage].
 	self setLanguage: lang.
 
 ]
 
 { #category : #'falta adaptar' }
-ScratchFrameMorph >> processWhenConditions [
+PhratchFrameMorph >> processWhenConditions [
 	"Trigger any 'when <condition>' hats."
 
 	| objList |
 	true ifTrue: [^ self].  "disabled"
-	objList := workPane submorphs select: [:m | m isKindOf: ScriptableScratchMorph].
+	objList := workPane submorphs select: [:m | m isKindOf: ScriptablePhratchMorph].
 	objList := objList copyWith: workPane.
 	objList do: [:obj |
 		obj scripts do: [:hat |
@@ -3136,14 +3152,14 @@ ScratchFrameMorph >> processWhenConditions [
 ]
 
 { #category : #accessing }
-ScratchFrameMorph >> projectComment [
+PhratchFrameMorph >> projectComment [
 
 	^ projectInfo at: 'comment' ifAbsent: ['']
 
 ]
 
 { #category : #'view mode' }
-ScratchFrameMorph >> projectComment: aString [
+PhratchFrameMorph >> projectComment: aString [
 
 	aString = DefaultNotes ifTrue: [
 		projectInfo removeKey: 'comment' ifAbsent: [].
@@ -3154,7 +3170,7 @@ ScratchFrameMorph >> projectComment: aString [
 ]
 
 { #category : #accessing }
-ScratchFrameMorph >> projectCommentOrTemplate [
+PhratchFrameMorph >> projectCommentOrTemplate [
 
 	| s |
 	s := projectInfo at: 'comment' ifAbsent: [''].
@@ -3164,7 +3180,7 @@ ScratchFrameMorph >> projectCommentOrTemplate [
 ]
 
 { #category : #other }
-ScratchFrameMorph >> projectDirectory [
+PhratchFrameMorph >> projectDirectory [
 
 	projectDirectory ifNil: [^ FileSystem workingDirectory].
 	^ projectDirectory
@@ -3172,7 +3188,7 @@ ScratchFrameMorph >> projectDirectory [
 ]
 
 { #category : #accessing }
-ScratchFrameMorph >> projectInfo [
+PhratchFrameMorph >> projectInfo [
 	"Answer the project info dictionary."
 
 	^ projectInfo
@@ -3180,24 +3196,24 @@ ScratchFrameMorph >> projectInfo [
 ]
 
 { #category : #private }
-ScratchFrameMorph >> projectIsEmpty [
+PhratchFrameMorph >> projectIsEmpty [
 	"Answer true if the current project has no scripts, no variables, no special costumes or sounds, and at most a single sprite."
 
 	| allScriptables defaultCostumes defaultSnds |
 	"at most one sprite in workpane?"
 	workPane submorphs size > 1 ifTrue: [^ false].
 	workPane submorphs size = 1 ifTrue: [
-		(workPane submorphs first isKindOf: ScratchSpriteMorph) ifFalse: [^ false]].
+		(workPane submorphs first isKindOf: PhratchSpriteMorph) ifFalse: [^ false]].
 
 	allScriptables := workPane submorphs copyWith: workPane.
 	defaultCostumes := Set
-		with: ScriptableScratchMorph defaultBackgroundForm.
+		with: ScriptablePhratchMorph defaultBackgroundForm.
 	defaultSnds := Set
-		with: ScriptableScratchMorph popSound
-		with: ScriptableScratchMorph meowSound.
+		with: ScriptablePhratchMorph popSound
+		with: ScriptablePhratchMorph meowSound.
 
-	ScratchFrameMorph defaultSprite ifNotNil: [
-		ScratchFrameMorph defaultSprite media do: [:media |
+	PhratchFrameMorph defaultSprite ifNotNil: [
+		PhratchFrameMorph defaultSprite media do: [:media |
 			media isImage ifTrue: [defaultCostumes add: media form].
 			media isSound ifTrue: [defaultSnds add: media sound]]].
 
@@ -3214,7 +3230,7 @@ ScratchFrameMorph >> projectIsEmpty [
 ]
 
 { #category : #other }
-ScratchFrameMorph >> projectModified [
+PhratchFrameMorph >> projectModified [
 	"Record that the current project has changed since it was last saved."
 
 	justSaved := false.
@@ -3222,14 +3238,14 @@ ScratchFrameMorph >> projectModified [
 ]
 
 { #category : #accessing }
-ScratchFrameMorph >> projectName [
+PhratchFrameMorph >> projectName [
 
 	^ self nameFromFileName: projectName
 
 ]
 
 { #category : #accessing }
-ScratchFrameMorph >> projectName: aString [
+PhratchFrameMorph >> projectName: aString [
 
 	projectName := aString.
 	projectTitleMorph contents: aString.
@@ -3238,13 +3254,13 @@ ScratchFrameMorph >> projectName: aString [
 ]
 
 { #category : #byob }
-ScratchFrameMorph >> purgeBlockEditors [
+PhratchFrameMorph >> purgeBlockEditors [
 	blockEditors := blockEditors reject: [:each | 
 		each isInWorld not]
 ]
 
 { #category : #'menu/button actions' }
-ScratchFrameMorph >> quitScratch [
+PhratchFrameMorph >> quitPhratch [
 	"Quit from Scratch. Ask the user if they want to save, first."
 
 	| response |
@@ -3255,7 +3271,7 @@ ScratchFrameMorph >> quitScratch [
 		response := PhratchCloseDialog new getUserResponse.
 		response = #cancelled ifTrue: [^ self].
 		response ifTrue: [
-			self saveScratchProjectNoDialog.
+			self savePhratchProjectNoDialog.
 			justSaved ifFalse: [^ self]]].
 
 	Smalltalk snapshot: false andQuit: true.
@@ -3263,7 +3279,7 @@ ScratchFrameMorph >> quitScratch [
 ]
 
 { #category : #byob }
-ScratchFrameMorph >> randomProjectName [
+PhratchFrameMorph >> randomProjectName [
 	| dir projects |
 "	dir := ScratchFileChooserDialog getDefaultFolderForType: #project."
 
@@ -3280,7 +3296,7 @@ ScratchFrameMorph >> randomProjectName [
 ]
 
 { #category : #startup }
-ScratchFrameMorph >> readDefaultNotes [
+PhratchFrameMorph >> readDefaultNotes [
 	"If there is a file named 'defaultNotes.txt' in the Scratch folder, read it in."
 
 	| dir |
@@ -3292,7 +3308,7 @@ ScratchFrameMorph >> readDefaultNotes [
 ]
 
 { #category : #startup }
-ScratchFrameMorph >> readSettingsFile [
+PhratchFrameMorph >> readSettingsFile [
 	"Read my settings file and answer a Dictionary of settings."
 	"ScratchFrameMorph new readSettingsFile"
 
@@ -3313,7 +3329,7 @@ ScratchFrameMorph >> readSettingsFile [
 ]
 
 { #category : #private }
-ScratchFrameMorph >> rebuildUIForNewLanguage [
+PhratchFrameMorph >> rebuildUIForNewLanguage [
 	"Rebuild my UI after the language or font has been changed."
 
 	World fullRepaintNeeded.
@@ -3328,7 +3344,7 @@ ScratchFrameMorph >> rebuildUIForNewLanguage [
 ]
 
 { #category : #byob }
-ScratchFrameMorph >> recordBlockContrast: anInteger [
+PhratchFrameMorph >> recordBlockContrast: anInteger [
 	"Record my language in the settings file."
 	"ScratchFrameMorph new recordLanguage: 'English'"
 
@@ -3349,7 +3365,7 @@ ScratchFrameMorph >> recordBlockContrast: anInteger [
 ]
 
 { #category : #byob }
-ScratchFrameMorph >> recordKeepOnStage: anInteger [
+PhratchFrameMorph >> recordKeepOnStage: anInteger [
 	"Record a setting in the settings file."
 
 	| fName f sz settings all |
@@ -3369,7 +3385,7 @@ ScratchFrameMorph >> recordKeepOnStage: anInteger [
 ]
 
 { #category : #private }
-ScratchFrameMorph >> recordLanguage: aString [
+PhratchFrameMorph >> recordLanguage: aString [
 	"Record my language in the settings file."
 	"ScratchFrameMorph new recordLanguage: 'English'"
 
@@ -3390,7 +3406,7 @@ ScratchFrameMorph >> recordLanguage: aString [
 ]
 
 { #category : #byob }
-ScratchFrameMorph >> recordScopeContrast: anInteger [
+PhratchFrameMorph >> recordScopeContrast: anInteger [
 	"Record a setting in the settings file."
 
 	| fName f sz settings all |
@@ -3410,7 +3426,7 @@ ScratchFrameMorph >> recordScopeContrast: anInteger [
 ]
 
 { #category : #byob }
-ScratchFrameMorph >> recordThreadSafeMode: anInteger [
+PhratchFrameMorph >> recordThreadSafeMode: anInteger [
 	"Record a setting in the settings file."
 
 	| fName f sz settings all |
@@ -3430,7 +3446,7 @@ ScratchFrameMorph >> recordThreadSafeMode: anInteger [
 ]
 
 { #category : #byob }
-ScratchFrameMorph >> recordTranslucentDragging: anInteger [
+PhratchFrameMorph >> recordTranslucentDragging: anInteger [
 	"Record a setting in the settings file."
 
 	| fName f sz settings all |
@@ -3450,25 +3466,25 @@ ScratchFrameMorph >> recordTranslucentDragging: anInteger [
 ]
 
 { #category : #byob }
-ScratchFrameMorph >> refreshBlocks [
+PhratchFrameMorph >> refreshBlocks [
 
 	'updating...' 
 		displayProgressAt: self center - (32@5)  "Sensor cursorPoint"
-		from: 0 to: ((workPane allMorphs) select: [:m| m isKindOf: ScriptableScratchMorph]) size * 3
+		from: 0 to: ((workPane allMorphs) select: [:m| m isKindOf: ScriptablePhratchMorph]) size * 3
 		during: [:bar | | i | i := 0.
 
 	(workPane submorphs copyWith: workPane) do: [:m |
-	(m isKindOf: ScriptableScratchMorph) ifTrue: [
+	(m isKindOf: ScriptablePhratchMorph) ifTrue: [
 		i := i + 1. bar value: i.
 		m convertStacksToTuples]].
 
 	workPane allMorphsDo: [:m |
-		(m isKindOf: ScriptableScratchMorph) ifTrue: [
+		(m isKindOf: ScriptablePhratchMorph) ifTrue: [
 			i := i + 1. bar value: i.
 			m convertTuplesToDefinitions]].
 
 	(workPane submorphs copyWith: workPane) do: [:m |
-		(m isKindOf: ScriptableScratchMorph) ifTrue: [
+		(m isKindOf: ScriptablePhratchMorph) ifTrue: [
 			i := i + 1. bar value: i.
 			m convertTuplesToStacks]].
 	self updatePanes.
@@ -3480,12 +3496,12 @@ ScratchFrameMorph >> refreshBlocks [
 ]
 
 { #category : #byob }
-ScratchFrameMorph >> removeBlockEditor: aBlockEditor [
+PhratchFrameMorph >> removeBlockEditor: aBlockEditor [
 	blockEditors remove: aBlockEditor
 ]
 
 { #category : #uploading }
-ScratchFrameMorph >> removeLastHistoryEntry [
+PhratchFrameMorph >> removeLastHistoryEntry [
 	"Remove the last entry in the project history. This is done if an upload attempt fails or is cancelled."
 
 	| lines s |
@@ -3501,32 +3517,32 @@ ScratchFrameMorph >> removeLastHistoryEntry [
 ]
 
 { #category : #'menu/button actions' }
-ScratchFrameMorph >> renderingMenu [
+PhratchFrameMorph >> renderingMenu [
 
-	ScratchTranslator renderingMenu.
+	PhratchTranslator renderingMenu.
 
 ]
 
 { #category : #'menu/button actions' }
-ScratchFrameMorph >> resaveAllProjects [
+PhratchFrameMorph >> resaveAllProjects [
 	"Resave all the projects in the given directory (to recompress them)."
 
 	| dir |
-	dir := ScratchFileChooserDialog chooseFolder: FileSystem workingDirectory.
+	dir := PhratchFileChooserDialog chooseFolder: FileSystem workingDirectory.
 	dir = #cancelled ifTrue: [^ self].
 
 	dir allFileNamesDo: [:fn |
 		((fn asLowercase endsWith: '.sb') and:
 		 [(fn endsWith: '-2.sb') not]) ifTrue: [
-			self openScratchProjectNamed: fn.
+			self openPhratchProjectNamed: fn.
 			World doOneCycleNoInput.
 "			projectName := (fn copyFrom: 1 to: fn size - 3), '-3.sb'."
-			self writeScratchProject]].
+			self writePhratchProject]].
 
 ]
 
 { #category : #uploading }
-ScratchFrameMorph >> revertToUncompressedMedia [
+PhratchFrameMorph >> revertToUncompressedMedia [
 	"Revert to uncomprssed media after uploading this project."
 
 	self allProjectMedia do: [:m | m revertToUncompressed].
@@ -3534,19 +3550,19 @@ ScratchFrameMorph >> revertToUncompressedMedia [
 ]
 
 { #category : #'menu/button actions' }
-ScratchFrameMorph >> saveImageForEndUser [
+PhratchFrameMorph >> saveImageForEndUser [
 
 	(self confirm: '
 Close non-Scratch windows and save this
 image in end-user (fillScreen) mode?') ifFalse: [^ self].
 
-	ScratchFrameMorph isXO ifTrue: [PhratchPreferences useLargeFonts].
+	PhratchFrameMorph isXO ifTrue: [PhratchPreferences useLargeFonts].
 
 	self setLanguage: 'en'.
 
 	self enterNormalMode.
 	self blockContrastStrong.
-	ScriptableScratchMorph keepOnStage: true.
+	ScriptablePhratchMorph keepOnStage: true.
 	self recordKeepOnStage: 1. 
 	EventHatMorph threadSafeMode: false.
 	self recordThreadSafeMode: 0.
@@ -3567,17 +3583,17 @@ image in end-user (fillScreen) mode?') ifFalse: [^ self].
 ]
 
 { #category : #'file read/write' }
-ScratchFrameMorph >> saveScratchProject [
+PhratchFrameMorph >> savePhratchProject [
 
 	| fName result |
 	self closeMediaEditorsAndDialogs ifFalse: [^ self].
 	self stopAll.
 
-	fName := ScratchFileChooserDialog saveScratchFileFor: self.
+	fName := PhratchFileChooserDialog savePhratchFileFor: self.
 	(fName size = 0 or: [fName = #cancelled]) ifTrue: [^ self].
 
-	[(result := ScratchFileChooserDialog confirmFileOverwriteIfExisting: fName) = false] whileTrue: [
-		fName := ScratchFileChooserDialog saveScratchFileFor: self.
+	[(result := PhratchFileChooserDialog confirmFileOverwriteIfExisting: fName) = false] whileTrue: [
+		fName := PhratchFileChooserDialog savePhratchFileFor: self.
 		(fName size = 0 or: [fName = #cancelled]) ifTrue: [^ self]].
 	(result = #cancelled) ifTrue: [^ self].
 
@@ -3599,12 +3615,12 @@ ScratchFrameMorph >> saveScratchProject [
 
 	projectInfo at: 'author' put: author.
 	self updateHistoryProjectName: projectName op: 'save'.
-	self writeScratchProject.
+	self writePhratchProject.
 
 ]
 
 { #category : #'file read/write' }
-ScratchFrameMorph >> saveScratchProjectNoDialog [
+PhratchFrameMorph >> savePhratchProjectNoDialog [
 
 	| fName dir |
 	self closeMediaEditorsAndDialogs ifFalse: [^ self].
@@ -3612,10 +3628,10 @@ ScratchFrameMorph >> saveScratchProjectNoDialog [
 	projectName ifNil: [projectName := ''].
 	fName := self nameFromFileName: projectName.
 
-	dir := ScratchFileChooserDialog getLastFolderForType: #project.
+	dir := PhratchFileChooserDialog getLastFolderForType: #project.
 "	(fName size = 0 | (dir fileExists: fName , '.sb') not) ifTrue: [^ self saveScratchProject]."
-	(fName size = 0 | (dir asFileReference / fName , 'ypr') exists not) ifTrue: [^ self saveScratchProject].
-	ScratchFileChooserDialog lastFolderIsSampleProjectsFolder ifTrue:  [^ self saveScratchProject].
+	(fName size = 0 | (dir asFileReference / fName , 'ypr') exists not) ifTrue: [^ self savePhratchProject].
+	PhratchFileChooserDialog lastFolderIsSampleProjectsFolder ifTrue:  [^ self savePhratchProject].
 
 "
 	(ScriptableScratchMorph currentEncoding = #scratch) ifTrue: [
@@ -3632,39 +3648,23 @@ ScratchFrameMorph >> saveScratchProjectNoDialog [
 	projectDirectory := dir.
 
 	self updateHistoryProjectName: projectName op: 'save'.
-	self writeScratchProject.
-
-]
-
-{ #category : #'falta adaptar' }
-ScratchFrameMorph >> scratchObjects [
-	"Answer a collection of all the scratch objects in the work pane."
-
-	^ self workPane submorphs select: [:m | m isKindOf: ScriptableScratchMorph]
-
-]
-
-{ #category : #watchers }
-ScratchFrameMorph >> scratchWatchers [
-	"Answer a collection of all the scratch watchers in the work pane."
-
-	^ self workPane submorphs select: [:m | m isKindOf: WatcherMorph]
+	self writePhratchProject.
 
 ]
 
 { #category : #accessing }
-ScratchFrameMorph >> scriptsPane [
+PhratchFrameMorph >> scriptsPane [
 
 	^ scriptsPane
 
 ]
 
 { #category : #'falta adaptar' }
-ScratchFrameMorph >> scriptsStringForUpload [
+PhratchFrameMorph >> scriptsStringForUpload [
 
 	| s scripts |
 	s := WriteStream on: (String new: 10000).
-	((Array with: workPane), self scratchObjects) do: [:obj |
+	((Array with: workPane), self phratchObjects) do: [:obj |
 		scripts := obj blocksBin submorphs select: [:m | m isKindOf: HatBlockMorph].
 		scripts size > 0 ifTrue: [
 			s nextPutAll: 'Scripts for ', obj objName, ':'; cr; cr.
@@ -3675,7 +3675,7 @@ ScratchFrameMorph >> scriptsStringForUpload [
 ]
 
 { #category : #'falta adaptar' }
-ScratchFrameMorph >> setDefaultSprite [
+PhratchFrameMorph >> setDefaultSprite [
 	"Look for default sprite in Media directory. If none found, use the DefaultCatSprite"
 
 	| d f data importedProject fName |
@@ -3683,7 +3683,7 @@ ScratchFrameMorph >> setDefaultSprite [
 	DefaultSprite := nil.
 
 	"if dfault.ysp exists, use that"
-	d := ScratchFileChooserDialog getDefaultFolderForType: #costume.
+	d := PhratchFileChooserDialog getDefaultFolderForType: #costume.
 	(d / 'default.sprite') exists ifTrue: [
 		f := (FileStream readOnlyFileNamed: (d / 'default.sprite') fullName) binary.
 		f ifNotNil: [
@@ -3701,24 +3701,24 @@ ScratchFrameMorph >> setDefaultSprite [
 							updateLocalId: eachDef id withSpec: eachDef userSpec]]].
 "
 			importedProject submorphs do: [:m |
-				(m isKindOf: ScratchSpriteMorph) ifTrue: [DefaultSprite := m].
+				(m isKindOf: PhratchSpriteMorph) ifTrue: [DefaultSprite := m].
 				^ self]]].
 
 	"if default image exists, use the image and add 'pop' sound"
 	#(gif png jpg bmp) do: [:e |
 		fName := 'default.', e.
 		(d / fName) asFileReference exists ifTrue: [
-			DefaultSprite := ScratchSpriteMorph new
+			DefaultSprite := PhratchSpriteMorph new
 				importMedia: (d / fName) fullName;
 				addMediaItem: (SoundMedia new
 					mediaName: 'pop' localized;
-					sound: ScratchSpriteMorph popSound).
+					sound: PhratchSpriteMorph popSound).
 			^ self]].
 
 ]
 
 { #category : #private }
-ScratchFrameMorph >> setLanguage: aString [
+PhratchFrameMorph >> setLanguage: aString [
 	"Set my language and update my blocks."
 
 	| tempJustSaved |
@@ -3727,20 +3727,20 @@ ScratchFrameMorph >> setLanguage: aString [
 
 	'updating...' 
 		displayProgressAt: self center - (32@5)  "Sensor cursorPoint"
-		from: 0 to: ((workPane allMorphs) select: [:m| m isKindOf: ScriptableScratchMorph]) size * 2
+		from: 0 to: ((workPane allMorphs) select: [:m| m isKindOf: ScriptablePhratchMorph]) size * 2
 		during: [:bar | | i | i := 0.
 
 	tempJustSaved := justSaved.
 	(workPane submorphs copyWith: workPane) do: [:m |
-		(m isKindOf: ScriptableScratchMorph) ifTrue: [
+		(m isKindOf: ScriptablePhratchMorph) ifTrue: [
 			i := i + 1. bar value: i.
 			m convertStacksToTuples]].
 
-	ScratchTranslator setLanguage: (ScratchTranslator isoCodeForName: aString).
+	PhratchTranslator setLanguage: (PhratchTranslator isoCodeForName: aString).
 	viewerPane rebuildCategorySelectors.
 
 	(workPane submorphs copyWith: workPane) do: [:m |
-		(m isKindOf: ScriptableScratchMorph) ifTrue: [
+		(m isKindOf: ScriptablePhratchMorph) ifTrue: [
 			i := i + 1. bar value: i.
 			m convertTuplesToStacks]].
 	self updatePanes.
@@ -3753,7 +3753,7 @@ ScratchFrameMorph >> setLanguage: aString [
 ]
 
 { #category : #'menu/button actions' }
-ScratchFrameMorph >> setSingleStepping [
+PhratchFrameMorph >> setSingleStepping [
 	"Ask whether script should be single-stepped."
 
 	| menu mSecs |
@@ -3778,7 +3778,7 @@ ScratchFrameMorph >> setSingleStepping [
 ]
 
 { #category : #'menu/button actions' }
-ScratchFrameMorph >> shareMenu: aMenuTitleMorph [
+PhratchFrameMorph >> shareMenu: aMenuTitleMorph [
 
 	| menu stage |
 	menu := MenuMorph new defaultTarget: self.
@@ -3788,8 +3788,8 @@ ScratchFrameMorph >> shareMenu: aMenuTitleMorph [
 
 	stage := workPane.
 	stage ifNotNil: [
-		(stage scratchServer notNil and: 
-		[stage scratchServer sessionInProgress])
+		(stage phratchServer notNil and: 
+		[stage phratchServer sessionInProgress])
 			ifTrue: [
 				menu add: 'share this sprite' action: #shareSprite ]].
 
@@ -3797,7 +3797,7 @@ ScratchFrameMorph >> shareMenu: aMenuTitleMorph [
 
 	#(1) do: [:n |
 		menu labels at: n put:
-			((menu labels at: n) contents copyFrom: 1 to: (menu labels at: n) contents size - 1), ScratchTranslator ellipsesSuffix].
+			((menu labels at: n) contents copyFrom: 1 to: (menu labels at: n) contents size - 1), PhratchTranslator ellipsesSuffix].
 
 	menu invokeAt: (aMenuTitleMorph bottomLeft + (0@10)) in: World.
 
@@ -3805,14 +3805,14 @@ ScratchFrameMorph >> shareMenu: aMenuTitleMorph [
 ]
 
 { #category : #byob }
-ScratchFrameMorph >> shareSprite [
+PhratchFrameMorph >> shareSprite [
 
 	scriptsPane target shareObject.
 
 ]
 
 { #category : #'menu/button actions' }
-ScratchFrameMorph >> shoutGo [
+PhratchFrameMorph >> shoutGo [
 	"Broadcasts the start event to all objects and processes."
 
 	self stopAll.
@@ -3825,7 +3825,7 @@ ScratchFrameMorph >> shoutGo [
 ]
 
 { #category : #'menu/button actions' }
-ScratchFrameMorph >> showMotorBlocks [
+PhratchFrameMorph >> showMotorBlocks [
 
 	workPane showMotorBlocks: true.
 	viewerPane currentCategory: 'motion'.
@@ -3833,7 +3833,7 @@ ScratchFrameMorph >> showMotorBlocks [
 ]
 
 { #category : #'menu/button actions' }
-ScratchFrameMorph >> showNetworkAddress [
+PhratchFrameMorph >> showNetworkAddress [
 	"Display my IP address. This is a temporary feature to allow connected multiple Scratch computers in a peer-to-peer configuration without the help of a presence server."
 
 	| localAddr wanAddr msg |
@@ -3851,27 +3851,27 @@ ScratchFrameMorph >> showNetworkAddress [
 ]
 
 { #category : #byob }
-ScratchFrameMorph >> showPause [
+PhratchFrameMorph >> showPause [
 
 	pauseButton
-		onForm: (ScratchFrameMorph skinAt: #pauseButtonGrayPressed)
-		offForm: (ScratchFrameMorph skinAt: #pauseButtonGray)
-		overForm: (ScratchFrameMorph skinAt: #pauseButtonGrayPressed)
+		onForm: (PhratchFrameMorph skinAt: #pauseButtonGrayPressed)
+		offForm: (PhratchFrameMorph skinAt: #pauseButtonGray)
+		overForm: (PhratchFrameMorph skinAt: #pauseButtonGrayPressed)
 
 ]
 
 { #category : #byob }
-ScratchFrameMorph >> showPlay [
+PhratchFrameMorph >> showPlay [
 
 	pauseButton
-		onForm: (ScratchFrameMorph skinAt: #playButtonGrayPressed)
-		offForm: (ScratchFrameMorph skinAt: #playButtonGray)
-		overForm: (ScratchFrameMorph skinAt: #playButtonGrayPressed)
+		onForm: (PhratchFrameMorph skinAt: #playButtonGrayPressed)
+		offForm: (PhratchFrameMorph skinAt: #playButtonGray)
+		overForm: (PhratchFrameMorph skinAt: #playButtonGrayPressed)
 
 ]
 
 { #category : #'menu/button actions' }
-ScratchFrameMorph >> showSensorBoard [
+PhratchFrameMorph >> showSensorBoard [
 
 	| sb |
 	sb := workPane sensorBoard.
@@ -3883,7 +3883,7 @@ ScratchFrameMorph >> showSensorBoard [
 ]
 
 { #category : #watchers }
-ScratchFrameMorph >> showWatcher: watcher [
+PhratchFrameMorph >> showWatcher: watcher [
 	"Show the given watcher. Reuse it's old position if it was showing before. Otherwise, find a new position for it."
 
 	| rec style range |
@@ -3914,39 +3914,39 @@ ScratchFrameMorph >> showWatcher: watcher [
 ]
 
 { #category : #'scat-additions' }
-ScratchFrameMorph >> stageMorph [
+PhratchFrameMorph >> stageMorph [
 "Horrid? Yes! But working!"
-	 ^ self submorphs detect: [:each | each isKindOf: ScratchStageMorph]
+	 ^ self submorphs detect: [:each | each isKindOf: PhratchStageMorph]
 ]
 
 { #category : #'menu/button actions' }
-ScratchFrameMorph >> startHostingScratchSession [
+PhratchFrameMorph >> startHostingPhratchSession [
 	"Start running the Scratch server, allowing Scratch and other applications to interact with this Scratch remotely."
 
 	| server |
-	workPane scratchServer ifNil: [
-		server := ScratchServer new.
+	workPane phratchServer ifNil: [
+		server := PhratchServer new.
 		server stage: workPane.
-		workPane scratchServer: server].
+		workPane phratchServer: server].
 
-	workPane scratchServer startHosting.
+	workPane phratchServer startHosting.
 	self showNetworkAddress.
 
 ]
 
 { #category : #startup }
-ScratchFrameMorph >> startup [
+PhratchFrameMorph >> startup [
 
 	| startupFileNames fileName arg presentationMode |
 "
 	HostSystemMenus startUp.
 	HostSystemMenus menuBarControler reviseHostMenus.
 "
-	ScriptableScratchMorph randomInit.
-	ScratchTranslator detectRenderPlugin.
-	ScratchTranslator importLanguagesList.
+	ScriptablePhratchMorph randomInit.
+	PhratchTranslator detectRenderPlugin.
+	PhratchTranslator importLanguagesList.
 
-	ScratchFrameMorph readShareServerEntry.
+	PhratchFrameMorph readShareServerEntry.
 	BlockMorph contrastStrong.
 	self keepSpritesOnStage: 1.
 	EventHatMorph threadSafeMode: false.
@@ -3974,7 +3974,7 @@ ScratchFrameMorph >> startup [
 	2 to: 10 do: [:i |
 		arg := Smalltalk vm getSystemAttribute: i.
 		(arg notNil and: [arg size > 0]) ifTrue: [
-			startupFileNames addLast: (ScratchPlugin primShortToLongPath: arg)]].
+			startupFileNames addLast: (PhratchPlugin primShortToLongPath: arg)]].
 
 	startupFileNames do: [:n |
 		(n asLowercase = 'presentation') ifTrue: [
@@ -3998,26 +3998,26 @@ ScratchFrameMorph >> startup [
 		ifNone: [presentationMode ifTrue: [self randomProjectName]]. "this is BYOB's screensaver feature -jens"
 	fileName ifNotNil: [
 		presentationMode ifTrue: [Display fillColor: Color black].
-		self openScratchProjectNamed: fileName.
+		self openPhratchProjectNamed: fileName.
 		presentationMode ifTrue: [self enterPresentationMode; shoutGo].
 		^ self].
 
 	viewerPane currentCategory: 'motion'.
 	self setDefaultSprite.
-	self newScratchProject.
+	self newPhratchProject.
 
 	fileName := startupFileNames
 		detect: [:fn | (fn asLowercase endsWith: '.sprite') or: [fn asLowercase endsWith: '.ysp']]
 		ifNone: [^ self].
 
 	"open a .sprite file"
-	workPane submorphs do: [:m | (m isKindOf: ScratchSpriteMorph) ifTrue: [m deleteSprite]].
+	workPane submorphs do: [:m | (m isKindOf: PhratchSpriteMorph) ifTrue: [m deleteSprite]].
 	self importSpriteOrProject: fileName.
 
 ]
 
 { #category : #stepping }
-ScratchFrameMorph >> step [
+PhratchFrameMorph >> step [
 	"Run each process until it gives up control, then filter out any processes that have terminated."
 
 	| screenExtent oldJustSaved |
@@ -4034,7 +4034,7 @@ ScratchFrameMorph >> step [
 			^ self]]." "simplify at the moment"
 
 	workPane ifNotNil: [
-		ScriptableScratchMorph scratchOrigin: workPane center.
+		ScriptablePhratchMorph phratchOrigin: workPane center.
 		viewerPane target isNil 
 			ifTrue: [workPane viewBlocksAndScripts]
 			ifFalse: [viewerPane target isInWorld ifFalse: [workPane viewBlocksAndScriptsQuickly]]].
@@ -4057,7 +4057,7 @@ ScratchFrameMorph >> step [
 ]
 
 { #category : #stepping }
-ScratchFrameMorph >> stepTime [
+PhratchFrameMorph >> stepTime [
 	"Every screen update cycle."
 
 	^ 0
@@ -4065,7 +4065,7 @@ ScratchFrameMorph >> stepTime [
 ]
 
 { #category : #'menu/button actions' }
-ScratchFrameMorph >> stopAll [
+PhratchFrameMorph >> stopAll [
 	"Tell my workPane to stop everything."
 
 	| oldJustSaved |
@@ -4077,11 +4077,11 @@ ScratchFrameMorph >> stopAll [
 ]
 
 { #category : #'file read/write' }
-ScratchFrameMorph >> storeProjectInfoOn: aBinaryStream [
+PhratchFrameMorph >> storeProjectInfoOn: aBinaryStream [
 
 	| s |
 	projectInfo at: 'thumbnail' put: workPane thumbnailForm.
-	projectInfo at: 'keepOnStage' put: ScriptableScratchMorph keepOnStage.
+	projectInfo at: 'keepOnStage' put: ScriptablePhratchMorph keepOnStage.
 
 	s := WriteStream on: (ByteArray new: 100000).
 	ObjStream new storeObj: projectInfo on: s.
@@ -4093,7 +4093,7 @@ ScratchFrameMorph >> storeProjectInfoOn: aBinaryStream [
 ]
 
 { #category : #'menu/button actions' }
-ScratchFrameMorph >> surpriseSpriteMorph [
+PhratchFrameMorph >> surpriseSpriteMorph [
 
 	| fileName f el m e |
 	self world activeHand toolType: nil.
@@ -4101,11 +4101,11 @@ ScratchFrameMorph >> surpriseSpriteMorph [
 
 	fileName := self nextSurpriseCostumeName.
 	fileName ifNil: [
-		^ self addAndView: ScratchFrameMorph defaultSprite fullCopy].
+		^ self addAndView: PhratchFrameMorph defaultSprite fullCopy].
 
 	[f := Form fromFileNamed: fileName] ifError: [^ self].
-	el := ImageMedia new form: (ScratchFrameMorph scaledFormForPaintEditor: f).
-	m := ScratchSpriteMorph new soleCostume: el.
+	el := ImageMedia new form: (PhratchFrameMorph scaledFormForPaintEditor: f).
+	m := PhratchSpriteMorph new soleCostume: el.
 
 	el mediaName: (m unusedMediaNameFromBaseName: fileName asFileReference  base).
 	self addAndView: m.
@@ -4116,24 +4116,24 @@ ScratchFrameMorph >> surpriseSpriteMorph [
 ]
 
 { #category : #'menu/button actions' }
-ScratchFrameMorph >> toggleErrorCatcher [
+PhratchFrameMorph >> toggleErrorCatcher [
 
 	UseErrorCatcher := UseErrorCatcher not.
 
 ]
 
 { #category : #byob }
-ScratchFrameMorph >> toggleKeepSpritesOnStage [
+PhratchFrameMorph >> toggleKeepSpritesOnStage [
 	| choice |
-	ScriptableScratchMorph keepOnStage: ScriptableScratchMorph keepOnStage not.
-	ScriptableScratchMorph keepOnStage
+	ScriptablePhratchMorph keepOnStage: ScriptablePhratchMorph keepOnStage not.
+	ScriptablePhratchMorph keepOnStage
 		ifTrue: [choice := 1]
 		ifFalse: [choice := 0].
 	self recordKeepOnStage: choice
 ]
 
 { #category : #byob }
-ScratchFrameMorph >> togglePause [
+PhratchFrameMorph >> togglePause [
 	workPane togglePause.
 	workPane isPaused
 		ifTrue: [self showPlay]
@@ -4142,7 +4142,7 @@ ScratchFrameMorph >> togglePause [
 ]
 
 { #category : #byob }
-ScratchFrameMorph >> toggleScopeContrast [
+PhratchFrameMorph >> toggleScopeContrast [
 	| choice |
 	VariableFrame scopeContrast: VariableFrame scopeContrast not.
 	VariableFrame scopeContrast
@@ -4153,7 +4153,7 @@ ScratchFrameMorph >> toggleScopeContrast [
 ]
 
 { #category : #byob }
-ScratchFrameMorph >> toggleShowMotorBlocks [
+PhratchFrameMorph >> toggleShowMotorBlocks [
 
 	workPane showMotorBlocks
 		ifTrue: [self hideMotorBlocks]
@@ -4161,7 +4161,7 @@ ScratchFrameMorph >> toggleShowMotorBlocks [
 ]
 
 { #category : #'menu/button actions' }
-ScratchFrameMorph >> toggleSingleStepping [
+PhratchFrameMorph >> toggleSingleStepping [
 	"Toggle single stepping."
 
 	PhratchProcess blockHighlightMSecs <= 1
@@ -4171,7 +4171,7 @@ ScratchFrameMorph >> toggleSingleStepping [
 ]
 
 { #category : #byob }
-ScratchFrameMorph >> toggleThreadSafeMode [
+PhratchFrameMorph >> toggleThreadSafeMode [
 	| choice |
 	EventHatMorph threadSafeMode: EventHatMorph threadSafeMode not.
 	EventHatMorph threadSafeMode
@@ -4181,7 +4181,7 @@ ScratchFrameMorph >> toggleThreadSafeMode [
 ]
 
 { #category : #byob }
-ScratchFrameMorph >> toggleTranslucentDragging [
+PhratchFrameMorph >> toggleTranslucentDragging [
 	| choice |
 	HandMorph translucentWhenDragging: HandMorph translucentWhenDragging not.
 	HandMorph translucentWhenDragging
@@ -4191,7 +4191,7 @@ ScratchFrameMorph >> toggleTranslucentDragging [
 ]
 
 { #category : #byob }
-ScratchFrameMorph >> toggleTurboMode [
+PhratchFrameMorph >> toggleTurboMode [
 
 	self isTurbo ifTrue: [
 		^ PhratchProcess blockHighlightMSecs: 1].
@@ -4199,7 +4199,7 @@ ScratchFrameMorph >> toggleTurboMode [
 ]
 
 { #category : #byob }
-ScratchFrameMorph >> toggleZebraColoring [
+PhratchFrameMorph >> toggleZebraColoring [
 
 	BlockMorph contrast = #off
 		ifTrue: [self blockContrastStrong]
@@ -4207,14 +4207,14 @@ ScratchFrameMorph >> toggleZebraColoring [
 ]
 
 { #category : #byob }
-ScratchFrameMorph >> undoLastDrop [
+PhratchFrameMorph >> undoLastDrop [
 
 	scriptsPane currentCategory: 'Scripts'.
 	scriptsPane target blocksBin undoLastDrop
 ]
 
 { #category : #'tools (no longer used)' }
-ScratchFrameMorph >> undoTool [
+PhratchFrameMorph >> undoTool [
 
 	| m newOwner oldName |
 	self paintingInProgress ifTrue: [^ Beeper beep].
@@ -4232,7 +4232,7 @@ ScratchFrameMorph >> undoTool [
 			"update 'variables' category if it is showing"
 			viewerPane currentCategory: 'variables']].
 
-	(m isKindOf: ScratchSpriteMorph) ifTrue: [  "sprite; add to stage"
+	(m isKindOf: PhratchSpriteMorph) ifTrue: [  "sprite; add to stage"
 		m filterReset; show.
 		m objName: Clipboard objName.
 		Clipboard := nil.
@@ -4248,7 +4248,7 @@ ScratchFrameMorph >> undoTool [
 ]
 
 { #category : #'menu/button actions' }
-ScratchFrameMorph >> uniqueSummaryFileName [
+PhratchFrameMorph >> uniqueSummaryFileName [
 
 	| baseName fileName n |
 
@@ -4267,13 +4267,13 @@ ScratchFrameMorph >> uniqueSummaryFileName [
 ]
 
 { #category : #byob }
-ScratchFrameMorph >> unloadAllUnusedCustomBlocks [
+PhratchFrameMorph >> unloadAllUnusedCustomBlocks [
 
 	workPane unloadAllUnusedCustomBlocks
 ]
 
 { #category : #'falta adaptar' }
-ScratchFrameMorph >> unusedNameStartingWith: prefix [
+PhratchFrameMorph >> unusedNameStartingWith: prefix [
 	"Answer an unused file or directory name in this directory starting with the given prefix and ending with one or more digits."
 	"FileDirectory default unusedNameStartingWith: 'tmp'"
 
@@ -4288,7 +4288,7 @@ ScratchFrameMorph >> unusedNameStartingWith: prefix [
 ]
 
 { #category : #watchers }
-ScratchFrameMorph >> unusedPositionForWatcher [
+PhratchFrameMorph >> unusedPositionForWatcher [
 	"Return an unused watcher position on the stage."
 
 	| watchers positions rowH x y newX |
@@ -4316,7 +4316,7 @@ ScratchFrameMorph >> unusedPositionForWatcher [
 ]
 
 { #category : #'file read/write' }
-ScratchFrameMorph >> updateHistoryProjectName: projName op: operation [
+PhratchFrameMorph >> updateHistoryProjectName: projName op: operation [
 	"The given user is about to save or upload a project with the given name. Update the project history. operation is a string specifying the operation."
 
 	| timestamp tab history platform osVersion |
@@ -4334,7 +4334,7 @@ ScratchFrameMorph >> updateHistoryProjectName: projName op: operation [
 
 	"record other data"
 	projectInfo at: 'scratch-version' put: Version.
-	projectInfo at: 'language' put: ScratchTranslator currentLanguage.
+	projectInfo at: 'language' put: PhratchTranslator currentLanguage.
 
 	platform := OSPlatform platformName.
 	platform ifNil: [platform := 'unknown'].
@@ -4346,8 +4346,8 @@ ScratchFrameMorph >> updateHistoryProjectName: projName op: operation [
 	osVersion ifNil: [osVersion := 'unknown'].
 	projectInfo at: 'os-version' put: osVersion.
 
-	(workPane scratchServer notNil and:
-	 [workPane scratchServer isHosting])
+	(workPane phratchServer notNil and:
+	 [workPane phratchServer isHosting])
 		ifTrue: [projectInfo at: 'isHosting' put: true]
 		ifFalse: [projectInfo removeKey: 'isHosting' ifAbsent: []].
 
@@ -4363,7 +4363,7 @@ ScratchFrameMorph >> updateHistoryProjectName: projName op: operation [
 ]
 
 { #category : #'file read/write' }
-ScratchFrameMorph >> updateLastHistoryEntryIfNeeded [
+PhratchFrameMorph >> updateLastHistoryEntryIfNeeded [
 	"If the the last entry in this project's history is an old-sytle entry (i.e. one that does not include the project name and author) update it."
 
 	| lines lastLine oldAuthor tab s |
@@ -4384,7 +4384,7 @@ ScratchFrameMorph >> updateLastHistoryEntryIfNeeded [
 ]
 
 { #category : #other }
-ScratchFrameMorph >> updateMediaCategoryFor: anObject [
+PhratchFrameMorph >> updateMediaCategoryFor: anObject [
 	"Update the media viewer for the given object's media category. Do nothing if the media category of the given object is not being viewed."
 
 	scriptsPane target = anObject ifTrue: [
@@ -4396,7 +4396,7 @@ ScratchFrameMorph >> updateMediaCategoryFor: anObject [
 ]
 
 { #category : #private }
-ScratchFrameMorph >> updatePanes [
+PhratchFrameMorph >> updatePanes [
 
 	| p |
 	menuPanel delete.
@@ -4429,7 +4429,7 @@ ScratchFrameMorph >> updatePanes [
 
 	libraryPane clearLibrary.
 
-	self scratchWatchers do: [:w | w languageChanged].
+	self phratchWatchers do: [:w | w languageChanged].
 	self listWatchers do: [:w | w fixLayoutForNewLanguage].
 
 	World startSteppingSubmorphsOf: self.
@@ -4440,18 +4440,18 @@ ScratchFrameMorph >> updatePanes [
 ]
 
 { #category : #'falta adaptar' }
-ScratchFrameMorph >> updatePenPositions [
+PhratchFrameMorph >> updatePenPositions [
 	"Update the pen positions of my sprites when going between normal and presentation mode."
 
 	| stage |
 	stage := self workPane.
-	ScriptableScratchMorph scratchOrigin: stage center.
+	ScriptablePhratchMorph phratchOrigin: stage center.
 	stage submorphsDo: [:m | stage updatePenPositionFor: m].
 
 ]
 
 { #category : #private }
-ScratchFrameMorph >> updateProjectName [
+PhratchFrameMorph >> updateProjectName [
 	"Update the project name display in the Scratch title bar."
 
 	| s |
@@ -4461,14 +4461,14 @@ ScratchFrameMorph >> updateProjectName [
 	projectTitleMorph contents size > 0
 		ifTrue: [s := projectTitleMorph contents, '- BYOB']
 		ifFalse: [s := 'BYOB ', Version].
-	ScratchPlugin primSetWindowTitle: s.
+	PhratchPlugin primSetWindowTitle: s.
 
 	self fixLayout.
 
 ]
 
 { #category : #'falta adaptar' }
-ScratchFrameMorph >> updateToolButtons [
+PhratchFrameMorph >> updateToolButtons [
 	"Update the highlighting of my tool buttons."
 
 	| toolButtons currentTool |
@@ -4487,7 +4487,7 @@ ScratchFrameMorph >> updateToolButtons [
 ]
 
 { #category : #'view mode' }
-ScratchFrameMorph >> updateViewModeButtons [
+PhratchFrameMorph >> updateViewModeButtons [
 
 	viewModeButtons do: [:b | b off].
 	viewModeButtons do: [:b |
@@ -4501,7 +4501,7 @@ ScratchFrameMorph >> updateViewModeButtons [
 ]
 
 { #category : #other }
-ScratchFrameMorph >> view: aMorph tab: t category: c [
+PhratchFrameMorph >> view: aMorph tab: t category: c [
 	"Add given morph to the work pane and view it."
 
 	scriptsPane target: aMorph.
@@ -4513,30 +4513,30 @@ ScratchFrameMorph >> view: aMorph tab: t category: c [
 ]
 
 { #category : #accessing }
-ScratchFrameMorph >> viewMode [
+PhratchFrameMorph >> viewMode [
 
 	^ viewMode
 
 ]
 
 { #category : #accessing }
-ScratchFrameMorph >> viewerPane [
+PhratchFrameMorph >> viewerPane [
 
 	^ viewerPane
 
 ]
 
 { #category : #'falta adaptar' }
-ScratchFrameMorph >> wantsDroppedMorph: aMorph event: evt [
+PhratchFrameMorph >> wantsDroppedMorph: aMorph event: evt [
 
 	^ (aMorph isKindOf: BlockMorph) or: [
-	  	(aMorph isKindOf: ScriptableScratchMorph) or: [
+	  	(aMorph isKindOf: ScriptablePhratchMorph) or: [
 			(aMorph isKindOf: PhratchCommentMorph)]].
 
 ]
 
 { #category : #'event handling' }
-ScratchFrameMorph >> wantsKeyboardFocusFor: aSubmorph [
+PhratchFrameMorph >> wantsKeyboardFocusFor: aSubmorph [
 	"Don't allow shift-click edit and select in random label strings."
 
 	^ false
@@ -4544,7 +4544,7 @@ ScratchFrameMorph >> wantsKeyboardFocusFor: aSubmorph [
 ]
 
 { #category : #watchers }
-ScratchFrameMorph >> watcherForBlock: aBlockMorph [
+PhratchFrameMorph >> watcherForBlock: aBlockMorph [
 	"Answer a watcher for the given block if there is one currently showing on the stage."
 
 	| pair |
@@ -4558,7 +4558,7 @@ ScratchFrameMorph >> watcherForBlock: aBlockMorph [
 ]
 
 { #category : #watchers }
-ScratchFrameMorph >> watcherShowingFor: sprite selectorAndArg: selectorAndArg [
+PhratchFrameMorph >> watcherShowingFor: sprite selectorAndArg: selectorAndArg [
 	"Answer true if a watcher for the given sprite, selector, and argument is currently showing on the stage."
 
 	| sel arg listM pair |
@@ -4576,37 +4576,37 @@ ScratchFrameMorph >> watcherShowingFor: sprite selectorAndArg: selectorAndArg [
 ]
 
 { #category : #accessing }
-ScratchFrameMorph >> workPane [
+PhratchFrameMorph >> workPane [
 
 	^ workPane
 
 ]
 
 { #category : #accessing }
-ScratchFrameMorph >> workPane: aWorkPane [
+PhratchFrameMorph >> workPane: aWorkPane [
 
 	workPane := aWorkPane 
 
 ]
 
 { #category : #'menu/button actions' }
-ScratchFrameMorph >> writeMultipleSummaries [
+PhratchFrameMorph >> writeMultipleSummaries [
 	"Write the summary for all Scratch projects in a given folder."
 
 	| dir |
-	dir := ScratchFileChooserDialog chooseFolder: (FileSystem workingDirectory fullName).
+	dir := PhratchFileChooserDialog chooseFolder: (FileSystem workingDirectory fullName).
 	dir = #cancelled ifTrue: [^ self].
 
 	(dir) files do: [:fn |
 		(fn basename endsWith: '.scratch') | (fn basename endsWith: '.sb')  | (fn basename endsWith: '.ypr') ifTrue: [
-			self openScratchProjectNamed: fn.
+			self openPhratchProjectNamed: fn.
 			"World doOneCycleNoInput."
 			self writeSummaryFile: fn]].
 
 ]
 
 { #category : #'file read/write' }
-ScratchFrameMorph >> writeScratchProject [
+PhratchFrameMorph >> writePhratchProject [
 	"Write this Scratch project to the file named projectFile in the project directory. Called by saveScratchProject."
 
 	| oldScriptsTarget oldTab oldViewerCategory oldPosition saveError out |
@@ -4630,21 +4630,21 @@ ScratchFrameMorph >> writeScratchProject [
 	workPane delete; position: 0@0.
 	self updatePenPositions.
 
-	ScriptableScratchMorph buildBlockSpecDictionary.
+	ScriptablePhratchMorph buildBlockSpecDictionary.
 
 
 
 	'saving...' 
 		displayProgressAt: self center - (32@5)  "Sensor cursorPoint"
-		from: 0 to: ((workPane allMorphs) select: [:m| m isKindOf: ScriptableScratchMorph]) size * 2
+		from: 0 to: ((workPane allMorphs) select: [:m| m isKindOf: ScriptablePhratchMorph]) size * 2
 		during: [:bar | | i | i := 0.
 
 	workPane allMorphsDo: [:m |
-		(m isKindOf: ScriptableScratchMorph) ifTrue: [
+		(m isKindOf: ScriptablePhratchMorph) ifTrue: [
 			i := i + 1. bar value: i.
-			(m isKindOf: ScratchSpriteMorph)
+			(m isKindOf: PhratchSpriteMorph)
 				ifTrue: [m cacheRefPos].
-			(m blocksBin isKindOf: ScratchSpriteMorph) ifTrue: [  m blocksBin allMorphsDo: [:b |
+			(m blocksBin isKindOf: PhratchSpriteMorph) ifTrue: [  m blocksBin allMorphsDo: [:b |
 				(b isKindOf: BlockMorph) ifTrue: [b stop]]].
 			m convertStacksToTuples]].
 
@@ -4667,7 +4667,7 @@ ScratchFrameMorph >> writeScratchProject [
 		saveError := err].
 
 	workPane allMorphsDo: [:m |
-		(m isKindOf: ScriptableScratchMorph) ifTrue: [
+		(m isKindOf: ScriptablePhratchMorph) ifTrue: [
 			i := i + 1. bar value: i.
 			m convertTuplesToStacks]]].
 
@@ -4677,7 +4677,7 @@ ScratchFrameMorph >> writeScratchProject [
 	scriptsPane tabPane currentTab: oldTab.
 	viewerPane currentCategory: oldViewerCategory.
 	self updatePenPositions.
-	ScriptableScratchMorph decodeAsByob. "remember that we save this project in BYOB format"
+	ScriptablePhratchMorph decodeAsByob. "remember that we save this project in BYOB format"
 
 	saveError
 		ifNil: [
@@ -4694,7 +4694,7 @@ ScratchFrameMorph >> writeScratchProject [
 ]
 
 { #category : #'falta adaptar' }
-ScratchFrameMorph >> writeScratchProjectOn: aStream [
+PhratchFrameMorph >> writePhratchProjectOn: aStream [
 	"Write this Scratch project in a serialized form on the given stream."
 
 	| oldScriptsTarget oldTab oldViewerCategory oldPosition storeError |
@@ -4711,9 +4711,9 @@ ScratchFrameMorph >> writeScratchProjectOn: aStream [
 	workPane delete; position: 0@0.
 	self updatePenPositions.
 
-	ScriptableScratchMorph buildBlockSpecDictionary.
+	ScriptablePhratchMorph buildBlockSpecDictionary.
 	workPane allMorphsDo: [:m |
-		(m isKindOf: ScriptableScratchMorph) ifTrue: [
+		(m isKindOf: ScriptablePhratchMorph) ifTrue: [
 			m blocksBin allMorphsDo: [:b |
 				(b isKindOf: BlockMorph) ifTrue: [b stop]].
 			m convertStacksToTuples]].
@@ -4725,7 +4725,7 @@ ScratchFrameMorph >> writeScratchProjectOn: aStream [
 	] ifError: [:err :rcvr | storeError := err].
 
 	workPane allMorphsDo: [:m |
-		(m isKindOf: ScriptableScratchMorph) ifTrue: [
+		(m isKindOf: ScriptablePhratchMorph) ifTrue: [
 			m convertTuplesToStacks]].
 
 	self addMorph: (workPane position: oldPosition).
@@ -4740,7 +4740,7 @@ ScratchFrameMorph >> writeScratchProjectOn: aStream [
 ]
 
 { #category : #'menu/button actions' }
-ScratchFrameMorph >> writeSummaryFile [
+PhratchFrameMorph >> writeSummaryFile [
 	"Write a summary of this project to a file."
 
 	self writeSummaryFile: self projectDirectory.
@@ -4748,7 +4748,7 @@ ScratchFrameMorph >> writeSummaryFile [
 ]
 
 { #category : #'menu/button actions' }
-ScratchFrameMorph >> writeSummaryFile: fullFile [
+PhratchFrameMorph >> writeSummaryFile: fullFile [
 	"Write a summary of this project to a file."
 
 	| s sprites f fName fullFileName |
@@ -4772,7 +4772,7 @@ ScratchFrameMorph >> writeSummaryFile: fullFile [
 	self writeSummaryTotalsOn: s.
 	s nextPutAll: '--------'; crlf.
 	workPane printSummaryOn: s.
-	sprites := workPane submorphs select: [:m | m isKindOf: ScratchSpriteMorph].
+	sprites := workPane submorphs select: [:m | m isKindOf: PhratchSpriteMorph].
 	sprites do: [:m |
 		s skip: -2.  "remove last crlf"
 		s nextPutAll: '--------'; crlf.
@@ -4784,7 +4784,7 @@ ScratchFrameMorph >> writeSummaryFile: fullFile [
 	fName := fullFileName.
 	fullFileName size = 0
 		ifTrue: [
-			fName := ScratchFileChooserDialog
+			fName := PhratchFileChooserDialog
 				chooseNewFileDefault: self uniqueSummaryFileName
 				title: 'File Name?'
 				type: #projectSummary.
@@ -4800,11 +4800,11 @@ ScratchFrameMorph >> writeSummaryFile: fullFile [
 ]
 
 { #category : #'menu/button actions' }
-ScratchFrameMorph >> writeSummaryTotalsOn: aStream [
+PhratchFrameMorph >> writeSummaryTotalsOn: aStream [
 	"Write the totals for this project on the given stream."
 
 	| sprites uniqueCostumes uniqueSounds stackCount |
-	sprites := workPane submorphs select: [:m | m isKindOf: ScriptableScratchMorph].
+	sprites := workPane submorphs select: [:m | m isKindOf: ScriptablePhratchMorph].
 	sprites := sprites asArray copyWith: workPane.
 	uniqueCostumes := IdentitySet new: 100.
 	uniqueSounds := IdentitySet new: 100.
@@ -4824,17 +4824,17 @@ ScratchFrameMorph >> writeSummaryTotalsOn: aStream [
 ]
 
 { #category : #'tools (no longer used)' }
-ScratchFrameMorph >> zoomInTool [
+PhratchFrameMorph >> zoomInTool [
 
 	| hand cursorForm offset |
 	self paintingInProgress ifTrue: [^ Beeper beep].
 	hand := self world activeHand.
 	hand toolType: 'ZoomInTool'.
 
-	cursorForm := ScratchFrameMorph skinAt: #zoomInCursor.
+	cursorForm := PhratchFrameMorph skinAt: #zoomInCursor.
 	offset := 8@8.
 
-	ScratchFrameMorph isXO ifTrue: [
+	PhratchFrameMorph isXO ifTrue: [
 		cursorForm := cursorForm magnifyBy: 1.5.
 		offset := (offset * 1.5) rounded].
 
@@ -4843,17 +4843,17 @@ ScratchFrameMorph >> zoomInTool [
 ]
 
 { #category : #'tools (no longer used)' }
-ScratchFrameMorph >> zoomOutTool [
+PhratchFrameMorph >> zoomOutTool [
 
 	| hand cursorForm offset |
 	self paintingInProgress ifTrue: [^ Beeper beep].
 	hand := self world activeHand.
 	hand toolType: 'ZoomOutTool'.
 
-	cursorForm := ScratchFrameMorph skinAt: #zoomOutCursor.
+	cursorForm := PhratchFrameMorph skinAt: #zoomOutCursor.
 	offset := 8@8.
 
-	ScratchFrameMorph isXO ifTrue: [
+	PhratchFrameMorph isXO ifTrue: [
 		cursorForm := cursorForm magnifyBy: 1.5.
 		offset := (offset * 1.5) rounded].
 

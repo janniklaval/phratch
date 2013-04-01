@@ -120,9 +120,9 @@ ThumbnailCache >> thumbnailFromSpriteData: aByteArray [
 	| s version proj sprite scriptCount f scale thumbF spriteBlock p label labelForm |
 	s := ReadStream on: aByteArray.
 
-	version := ObjStream scratchFileVersionFrom: (s next: 10) asString.
+	version := ObjStream phratchFileVersionFrom: (s next: 10) asString.
 	version = 0 ifTrue: [
-		ScriptableScratchMorph decodeAsByob.	"make sure we initialize every field - this breaks compatibility with Scratch-sprites. -Jens". 
+		ScriptablePhratchMorph decodeAsByob.	"make sure we initialize every field - this breaks compatibility with Scratch-sprites. -Jens". 
 
 		s position: 0.
 		proj := ObjStream new readObjFrom: s showProgress: false].
@@ -130,19 +130,19 @@ ThumbnailCache >> thumbnailFromSpriteData: aByteArray [
 		s skip: s uint32.  "skip header"
 		proj := ObjStream new readObjFrom: s showProgress: false].
 
-	proj class = ScratchStageMorph ifFalse: [^ nil].
-	sprite := proj submorphs detect: [:m | m isKindOf: ScriptableScratchMorph] ifNone: [^ nil].
+	proj class = PhratchStageMorph ifFalse: [^ nil].
+	sprite := proj submorphs detect: [:m | m isKindOf: ScriptablePhratchMorph] ifNone: [^ nil].
 	f := sprite costumeForm asFormOfDepth: 16.
 	scale := (56.0 / f width) min: (42.0 / f height).
 	f := f magnifyBy: scale.
 	thumbF := Form extent: 80@60 depth: 16.
 	f displayOn: thumbF at: ((thumbF width - f width) // 2) @ 0 rule: Form paint.
-	spriteBlock := ScratchFrameMorph skinAt: #spriteBlock.
+	spriteBlock := PhratchFrameMorph skinAt: #spriteBlock.
 	p := ((thumbF width - spriteBlock width) // 2) @ (thumbF height - spriteBlock height).
 	spriteBlock displayOn: thumbF at: p rule: Form paint.
 
 	scriptCount := self scriptCountFor: sprite.
-	label := 'Scripts' localized, ScratchTranslator colonSuffix, ' ', scriptCount printString.
+	label := 'Scripts' localized, PhratchTranslator colonSuffix, ' ', scriptCount printString.
 	scriptCount = 0 ifTrue: [label := 'no scripts' localized].
 	scriptCount = 1 ifTrue: [label := '1 script' localized].
 	labelForm := (StringMorph contents: label font: (StrikeFont fontName: 'Verdana' size: 10)) imageForm.
@@ -162,7 +162,7 @@ ThumbnailCache >> updateThumbnails [
 
 	fList size > 0 ifTrue: [
 		n := 0.
-		('Updating thumbnails' localized, ScratchTranslator ellipsesSuffix)
+		('Updating thumbnails' localized, PhratchTranslator ellipsesSuffix)
 			displayProgressAt: Display center
 			from: 0 to: fList size
 			during: [:bar |

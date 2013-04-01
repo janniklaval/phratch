@@ -194,7 +194,7 @@ SoundMedia >> initialize [
 
 	super initialize.
 	mediaName := 'pop' localized.
-	originalSound := ScriptableScratchMorph popSound.
+	originalSound := ScriptablePhratchMorph popSound.
 	volume := 100.
 	balance := 50.
 
@@ -205,10 +205,10 @@ SoundMedia >> isBuiltInSound [
 	"Answer true if my sound is one of the Scratch builtin sounds."
 
 	((mediaName = 'pop') and:
-	 [originalSound samples size = ScriptableScratchMorph popSound samples size])
+	 [originalSound samples size = ScriptablePhratchMorph popSound samples size])
 		ifTrue: [^ true].
 	((mediaName = 'meow') and:
-	 [originalSound samples size = ScriptableScratchMorph meowSound samples size])
+	 [originalSound samples size = ScriptablePhratchMorph meowSound samples size])
 		ifTrue: [^ true].
 
 	^ false
@@ -463,8 +463,8 @@ SoundMedia >> thumbnailFormExtent: extent [
 	"Answer a Form of the given extent containing a thumbnail of me containing the sound icon."
 
 	| offForm onForm f icon |
-	offForm := ScratchFrameMorph skinAt: #scratchSound.
-	onForm := ScratchFrameMorph skinAt: #scratchSoundOn.
+	offForm := PhratchFrameMorph skinAt: #scratchSound.
+	onForm := PhratchFrameMorph skinAt: #scratchSoundOn.
 	f := (ColorForm extent: extent depth: 8).
 	playingSound
 		ifNil: [icon := offForm]

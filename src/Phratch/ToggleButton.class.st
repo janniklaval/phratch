@@ -279,7 +279,7 @@ ToggleButton >> mouseEnter: evt [
 { #category : #'event handling' }
 ToggleButton >> mouseLeave: evt [
 
-	ScratchToolTipMorph clearToolTips.
+	PhratchToolTipMorph clearToolTips.
 	isDisabled ifTrue: [^ self].
 
 	overForm ifNotNil: [

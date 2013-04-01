@@ -41,7 +41,7 @@ PhratchBlockPaletteMorph >> fixLayout [
 
 	| offset r |
 	owner ifNil: [^ self].
-	ScratchTranslator isRTL ifTrue:[
+	PhratchTranslator isRTL ifTrue:[
 		self submorphs do: [:m |
 			(m isKindOf: BlockMorph) ifTrue: [
 				m canBecomeWatcher
@@ -119,8 +119,8 @@ PhratchBlockPaletteMorph >> wantsDroppedMorph: aMorph event: evt [
 	 [aMorph isKindOf: PhratchCommentMorph]]])
 		ifTrue: [^ true].
 
-	(aMorph isKindOf: ScratchSpriteMorph) ifTrue: [
-		f := self ownerOrYourselfThatIsA: ScratchFrameMorph.
+	(aMorph isKindOf: PhratchSpriteMorph) ifTrue: [
+		f := self ownerOrYourselfThatIsA: PhratchFrameMorph.
 		f viewerPane pageViewer contents = self ifTrue: [^ true]].
 
 	^ false

@@ -57,7 +57,7 @@ DividedImageFrameMorph >> initFrontFromForm: aForm topSectionHeight: aNumber [
 	topSectionHeight := aNumber.
 	leftMargin := 0.
 	rightMargin := 0.
-	middleBarForm := ScratchFrameMorph skinAt: #dividedImageFrameBar.
+	middleBarForm := PhratchFrameMorph skinAt: #dividedImageFrameBar.
 
 	w := (middleBarForm width // 2) + 2.
 	h := middleBarForm height.

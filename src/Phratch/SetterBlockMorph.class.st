@@ -100,7 +100,7 @@ SetterBlockMorph >> contrastColor [
 	| newColor |
 	isSpecialForm
 		ifTrue: [newColor := VariableFrame variableBlockColor]
-		ifFalse: [newColor := (ScriptableScratchMorph blockColorFor: 'variables')].
+		ifFalse: [newColor := (ScriptablePhratchMorph blockColorFor: 'variables')].
 	color = newColor ifFalse: [
 		self color: newColor ].
 
@@ -115,11 +115,11 @@ SetterBlockMorph >> determineIfSpecialForm [
 
 	isSpecialForm := (self scriptVars includes: self variable).
 	isSpecialForm ifFalse: [
-		receiver := self scratchObject ]. 
+		receiver := self phratchObject ]. 
 
 	isSpecialForm
 		ifTrue: [self color: VariableFrame variableBlockColor]
-		ifFalse: [self color: (ScriptableScratchMorph blockColorFor: 'variables')].
+		ifFalse: [self color: (ScriptablePhratchMorph blockColorFor: 'variables')].
 
 
 ]
@@ -158,7 +158,7 @@ SetterBlockMorph >> initChangerForVar: varName [
 	(var isKindOf: Array) ifTrue: [
 		var := receiver blockFromTuple: var receiver: receiver].
 
-	self commandSpec: (ScratchTranslator translationFor: 'change %v by %s').
+	self commandSpec: (PhratchTranslator translationFor: 'change %v by %s').
 	argPermutation := CommandBlockMorph argPermutationForSpec: 'set %v to %s' withTranslation: commandSpec.
 	self selector: #changeVar:by:.
 	self variable: var.
@@ -184,7 +184,7 @@ SetterBlockMorph >> initSetterForVar: varName [
 	(var isKindOf: Array) ifTrue: [
 		var := receiver blockFromTuple: var receiver: receiver].
 	
-	self commandSpec: (ScratchTranslator translationFor: 'set %v to %s').
+	self commandSpec: (PhratchTranslator translationFor: 'set %v to %s').
 	argPermutation := CommandBlockMorph argPermutationForSpec: 'set %v to %s' withTranslation: commandSpec.
 	self selector: #setVar:to:.
 	self variable: var.
@@ -207,7 +207,7 @@ SetterBlockMorph >> labelMorphFor: aString [
 	s := aString.
 	commandSpec isUnicode ifTrue: [s := UTF8 withAll: s].
 	self variable isUnicode ifTrue: [s := UTF8 withAll: s].
-	^ (PhratchStringMorph contents: s font: (ScratchFrameMorph getFont: #Label))
+	^ (PhratchStringMorph contents: s font: (PhratchFrameMorph getFont: #Label))
 		color: self labelColor
 
 ]

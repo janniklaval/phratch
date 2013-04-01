@@ -43,9 +43,9 @@ PhratchScriptEditorMorph >> addDeleteButton [
 	self deleteDeleteButton.
 
 	deleteButton := ToggleButton
-		onForm: (ScratchFrameMorph skinAt: #deleteSprite)
-		offForm: (ScratchFrameMorph skinAt: #deleteSprite)
-		overForm: (ScratchFrameMorph skinAt: #deleteSprite).
+		onForm: (PhratchFrameMorph skinAt: #deleteSprite)
+		offForm: (PhratchFrameMorph skinAt: #deleteSprite)
+		overForm: (PhratchFrameMorph skinAt: #deleteSprite).
 
 	deleteButton
 		target: self;
@@ -66,8 +66,8 @@ PhratchScriptEditorMorph >> addLockButton [
 	self deleteLockButton.
 
 	lockButton := ToggleButton
-		onForm: (ScratchFrameMorph skinAt: #locked)
-		offForm: (ScratchFrameMorph skinAt: #unlocked).
+		onForm: (PhratchFrameMorph skinAt: #locked)
+		offForm: (PhratchFrameMorph skinAt: #unlocked).
 
 	lockButton
 		target: self;
@@ -86,8 +86,8 @@ PhratchScriptEditorMorph >> addLockButton [
 PhratchScriptEditorMorph >> addNameBox [
 
 	nameMorph := UpdatingStringFieldMorph new
-		font: (ScratchFrameMorph getFont: #UpdatingStringField);
-		rightJustify: ScratchTranslator isRTL;
+		font: (PhratchFrameMorph getFont: #UpdatingStringField);
+		rightJustify: PhratchTranslator isRTL;
 		acceptWhenFocusLost: true;
 		position: thumbnailMorph topRight + (17@(thumbnailMorph height * 0.12)).
 
@@ -108,17 +108,17 @@ PhratchScriptEditorMorph >> addReadouts [
 
 	#(('x' xpos) ('y' ypos)('direction' heading)) do: [:spec |
 
-		(ScratchTranslator isRTL and: [(spec at: 1) = 'x' or: [(spec at: 1) = 'y']])
+		(PhratchTranslator isRTL and: [(spec at: 1) = 'x' or: [(spec at: 1) = 'y']])
 			ifTrue: [s := (':', spec first) asUTF8]
-			ifFalse: [s := (spec first localized, ScratchTranslator colonSuffix)].
+			ifFalse: [s := (spec first localized, PhratchTranslator colonSuffix)].
 
 		label := PhratchStringMorph new
 			contents: s;
-			font: (ScratchFrameMorph getFont: #XYReadout);
+			font: (PhratchFrameMorph getFont: #XYReadout);
 			position: x@y.
 
 		readout := (UpdatingStringMorph on: self target selector: spec second)
-			font: (ScratchFrameMorph getFont: #XYReadoutBold);
+			font: (PhratchFrameMorph getFont: #XYReadoutBold);
 			forceUnicodeRendering: true;
 			color: (Color gray: 0.2);
 			contents: '-000';  "this sets the readout size"
@@ -126,7 +126,7 @@ PhratchScriptEditorMorph >> addReadouts [
 			stepTime: 100;
 			position: (label right + 4)@y.
 
-		ScratchTranslator isRTL ifTrue:[
+		PhratchTranslator isRTL ifTrue:[
 			readout rightJustify: true].
 
 		self addMorph: label; addMorph: readout.
@@ -135,7 +135,7 @@ PhratchScriptEditorMorph >> addReadouts [
 		readout startStepping.
 		x := readout right + 2].
 
-	ScratchTranslator isRTL ifTrue: [
+	PhratchTranslator isRTL ifTrue: [
 		readoutMorphs reversed do: [: m |
 			readoutMorphs remove: m.
 			readoutMorphs add: m]].
@@ -169,9 +169,9 @@ PhratchScriptEditorMorph >> addRotationButtons [
 	specs do: [:pair |
 		style := pair first.
 		button := ToggleButton
-			onForm: (ScratchFrameMorph skinAt: ('rotStyle', style, 'On'))
-			offForm: (ScratchFrameMorph skinAt: ('rotStyle', style))
-			overForm: (ScratchFrameMorph skinAt: ('rotStyle', style, 'Over')).
+			onForm: (PhratchFrameMorph skinAt: ('rotStyle', style, 'On'))
+			offForm: (PhratchFrameMorph skinAt: ('rotStyle', style))
+			overForm: (PhratchFrameMorph skinAt: ('rotStyle', style, 'Over')).
 		button
 			target: self;
 			arguments: (Array with: style);
@@ -270,8 +270,8 @@ PhratchScriptEditorMorph >> createTabPane [
 		color: Color transparent;
 		targetPane: self.
 
-	tabOnForm := (ScratchFrameMorph skinAt: #tabOn).
-	tabOffForm := (ScratchFrameMorph skinAt: #tabOff).
+	tabOnForm := (PhratchFrameMorph skinAt: #tabOn).
+	tabOffForm := (PhratchFrameMorph skinAt: #tabOff).
 
 	"add the tabs"
 	#(Scripts Costumes Sounds) do: [:spec |
@@ -314,7 +314,7 @@ PhratchScriptEditorMorph >> currentCategory: aString [
 	currentCategory = 'Sounds' ifTrue: [
 		pageViewerMorph contents: (self target soundsPage: xOffset)].
 
-	pageViewerMorph contents color: ScratchFrameMorph scriptsPaneColor.
+	pageViewerMorph contents color: PhratchFrameMorph scriptsPaneColor.
 
 	self world ifNotNil: [self world startSteppingSubmorphsOf: pageViewerMorph contents].
 
@@ -463,10 +463,10 @@ PhratchScriptEditorMorph >> fullDrawOn: aCanvas [
 PhratchScriptEditorMorph >> getTabTop [
 	"Used by ScratchFrameMorph when creating the tab pane. This returns the y position of where the top of the tabs should align. This situation is unfortunate (tabs should probaby be part of ScratchScriptEditorMorph), but we'll fix it later."
 
-	ScratchFrameMorph isXO ifTrue: [^ thumbnailMorph bottom + 20].
+	PhratchFrameMorph isXO ifTrue: [^ thumbnailMorph bottom + 20].
 	(readoutMorphs size > 0)
 		ifTrue: [^ (readoutMorphs at: 1) bottom + 6]
-		ifFalse: [^ nameMorph bottom + 5 + (ScratchTranslator stringExtent: '0' font: (ScratchFrameMorph getFont: #XYReadoutBold)) y + 6].
+		ifFalse: [^ nameMorph bottom + 5 + (PhratchTranslator stringExtent: '0' font: (PhratchFrameMorph getFont: #XYReadoutBold)) y + 6].
 
 ]
 
@@ -486,7 +486,7 @@ PhratchScriptEditorMorph >> initialize [
 
 	super initialize.
 	self
-		initFrontFromForm: (ScratchFrameMorph skinAt: #scriptPaneFrameTransparent2)
+		initFrontFromForm: (PhratchFrameMorph skinAt: #scriptPaneFrameTransparent2)
 		topSectionHeight: 90.
 	self color: (Color r: (149/255) g: (154/255) b: (159/255)).
 
@@ -497,7 +497,7 @@ PhratchScriptEditorMorph >> initialize [
 
 	pageViewerMorph := ScrollFrameMorph2 new
 		growthFraction: 0.1;
-		color: ScratchFrameMorph scriptsPaneColor.
+		color: PhratchFrameMorph scriptsPaneColor.
 	self addMorph: (pageViewerMorph position: (self left @ (self top + topSectionHeight))).
 
 	rotationButtons := #().
@@ -527,7 +527,7 @@ PhratchScriptEditorMorph >> saveScriptsToImage [
 
 	saveForm := pageViewerMorph contents screenshot.
 
-	fName := ScratchFileChooserDialog
+	fName := PhratchFileChooserDialog
 		chooseNewFileDefault: ''
 		title: 'Save Scripts Snapshot'
 		type: #scriptsSnapshot.
@@ -586,9 +586,9 @@ PhratchScriptEditorMorph >> showOrHideReadouts [
 	nameMorph
 		font: nameMorph font;
 		width: nameMorph height * 4;
-		rightJustify: ScratchTranslator isRTL.
+		rightJustify: PhratchTranslator isRTL.
 
-	(self target isKindOf: ScratchSpriteMorph) ifTrue: [
+	(self target isKindOf: PhratchSpriteMorph) ifTrue: [
 		self addRotationButtons; addLockButton; addReadouts.
 		World ifNotNil: [World startSteppingSubmorphsOf: self]].
 
@@ -638,7 +638,7 @@ PhratchScriptEditorMorph >> target: aScratchObjectOrNil [
 		nameMorph target: nil; contents: 'no object '.
 		pageViewerMorph contents: (Morph new color: Color red).
 
-		(sFrame := self ownerOrYourselfThatIsA: ScratchFrameMorph) ifNotNil: [
+		(sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNotNil: [
 			sFrame viewerPane target: nil].
 
 		self showOrHideReadouts.
@@ -646,7 +646,7 @@ PhratchScriptEditorMorph >> target: aScratchObjectOrNil [
 
 	thumbnailMorph target: aScratchObjectOrNil.
 
-	nameSel := (aScratchObjectOrNil isKindOf: ScratchStageMorph)
+	nameSel := (aScratchObjectOrNil isKindOf: PhratchStageMorph)
 		ifTrue: [nil]
 		ifFalse: [#objName:].
 	nameMorph
@@ -707,7 +707,7 @@ PhratchScriptEditorMorph >> updateRotationButtonHighlight [
 	"Highlight the appropriate rotation style button. Do nothing if my target is not a sprite."
 
 	| style sym |
-	(self target isKindOf: ScratchSpriteMorph) ifFalse: [^ self].
+	(self target isKindOf: PhratchSpriteMorph) ifFalse: [^ self].
 
 	style := self target rotationStyle.
 	style = #normal ifTrue: [sym := #Smooth].

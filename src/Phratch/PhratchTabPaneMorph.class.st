@@ -51,7 +51,7 @@ PhratchTabPaneMorph >> currentTab: aString [
 	currentTab := aString.
 	self targetPane ifNil: [^ self].
 
-	(targetPane target isKindOf: ScratchStageMorph)
+	(targetPane target isKindOf: PhratchStageMorph)
 		ifTrue: [self setLabelForTab: 'Costumes' to: 'Backgrounds' localized]
 		ifFalse: [self setLabelForTab: 'Costumes' to: 'Costumes' localized].
 
@@ -85,7 +85,7 @@ PhratchTabPaneMorph >> initialize [
 	self color: Color red.
 	self extent: 100@1.
 	
-	barFormSource := ScratchFrameMorph skinAt: #dividedImageFrameBar.
+	barFormSource := PhratchFrameMorph skinAt: #dividedImageFrameBar.
 	barForm := barFormSource copy: (((barFormSource width // 2) @ 0) extent: (1 @ barFormSource height))
 
 ]
@@ -127,9 +127,9 @@ PhratchTabPaneMorph >> tab: aResizableToggleButton2 label: aString [
 
 	| label |
 	aResizableToggleButton2
-		label: aString font: (ScratchFrameMorph getFont: #Tab).
+		label: aString font: (PhratchFrameMorph getFont: #Tab).
 
-	ScratchTranslator renderWithSqueak ifFalse: [
+	PhratchTranslator renderWithSqueak ifFalse: [
 		aResizableToggleButton2 forceUnicodeRendering: true].
 
 	"account for the size of the tab skin."

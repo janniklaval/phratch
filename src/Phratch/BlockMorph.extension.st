@@ -84,7 +84,7 @@ BlockMorph >> disinheritAttribute [
 	(self respondsTo: #receiver) ifFalse: [
 		^ false].
 	rcv := self receiver.
-	(rcv isKindOf: ScriptableScratchMorph) 
+	(rcv isKindOf: ScriptablePhratchMorph) 
 		ifFalse: [^ false].
 	oi := rcv objectInterface.
 	oi keysDo: [:att |
@@ -150,7 +150,7 @@ BlockMorph >> inheritAttribute [
 	(self respondsTo: #receiver) ifFalse: [
 		^ false].
 	rcv := self receiver.
-	(rcv isKindOf: ScriptableScratchMorph) 
+	(rcv isKindOf: ScriptablePhratchMorph) 
 		ifFalse: [^ false].
 	oi := rcv objectInterface.
 	oi keysDo: [:att |
@@ -198,7 +198,7 @@ BlockMorph >> isDeletedAttribute [
 	(self respondsTo: #receiver) ifFalse: [
 		^ false].
 	rcv := self receiver.
-	(rcv isKindOf: ScriptableScratchMorph) 
+	(rcv isKindOf: ScriptablePhratchMorph) 
 		ifFalse: [^ false].
 
 	((self isKindOf: VariableBlockMorph) 
@@ -231,7 +231,7 @@ BlockMorph >> isInheritableAttribute [
 	(self respondsTo: #receiver) ifFalse: [
 		^ false].
 	rcv := self receiver.
-	(rcv isKindOf: ScriptableScratchMorph) 
+	(rcv isKindOf: ScriptablePhratchMorph) 
 		ifFalse: [^ false].
 	rcv prototype ifNil: [
 		^ false].

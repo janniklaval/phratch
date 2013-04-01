@@ -106,11 +106,11 @@ BlockEditorFrameMorph >> buildAtomicityToggle [
 
 	atomicityToggle ifNotNil: [atomicityToggle delete].
 
-	labelFont := (ScratchFrameMorph getFont: #UploadTagLabel).
+	labelFont := (PhratchFrameMorph getFont: #UploadTagLabel).
 
 	atomicityToggle := ToggleButton
-		onForm: (ScratchFrameMorph skinAt: #watcherButtonPressed)
-		offForm: (ScratchFrameMorph skinAt: #watcherButton).
+		onForm: (PhratchFrameMorph skinAt: #watcherButtonPressed)
+		offForm: (PhratchFrameMorph skinAt: #watcherButton).
 
 	atomicityToggle
 		target: self;
@@ -145,7 +145,7 @@ BlockEditorFrameMorph >> buildScript [
 { #category : #'as yet unclassified' }
 BlockEditorFrameMorph >> cascade [
 	| sf match findMatch |
-	sf := self scratchFrame.
+	sf := self phratchFrame.
 	sf purgeBlockEditors.
 	findMatch := [ match := sf blockEditors detect: [:editor |
 		editor ~= self and: [
@@ -297,7 +297,7 @@ BlockEditorFrameMorph >> initialize [
 
 	sl := ScrollFrameMorph2 new
 		growthFraction: 0.0;
-		color: ScratchFrameMorph scriptsPaneColor.
+		color: PhratchFrameMorph scriptsPaneColor.
 
 	bin := PhratchScriptsMorph new.
 	sl contents: bin.
@@ -406,6 +406,11 @@ BlockEditorFrameMorph >> mouseUp: evt [
 ]
 
 { #category : #'as yet unclassified' }
+BlockEditorFrameMorph >> phratchFrame [
+	^receiver ownerOrYourselfThatIsA: PhratchFrameMorph
+]
+
+{ #category : #'as yet unclassified' }
 BlockEditorFrameMorph >> position: aPoint [
 
 	super position: aPoint.
@@ -419,11 +424,6 @@ BlockEditorFrameMorph >> receiver: aScriptableScratchMorph [
 { #category : #'as yet unclassified' }
 BlockEditorFrameMorph >> rememberUserDimensions [
 	self class setUserPos: self position size: self extent
-]
-
-{ #category : #'as yet unclassified' }
-BlockEditorFrameMorph >> scratchFrame [
-	^receiver ownerOrYourselfThatIsA: ScratchFrameMorph
 ]
 
 { #category : #'as yet unclassified' }
@@ -500,7 +500,7 @@ BlockEditorFrameMorph >> yes [
 	#none = definition type ifFalse: [
 		definition answer: answerField argument ].
 
-	stage := receiver ownerOrYourselfThatIsA: ScratchStageMorph.
+	stage := receiver ownerOrYourselfThatIsA: PhratchStageMorph.
 	receiver
 		updateCustomBlockDefinitionId: definition id with: definition;
 		updateLocalId: definition id withSpec: definition userSpec.
@@ -512,7 +512,7 @@ BlockEditorFrameMorph >> yes [
 					updateCustomBlockDefinitionId: definition id with: definition;
 					updateOnlyLocalId: definition id withSpec: definition userSpec]].	
 
-	sf := receiver ownerOrYourselfThatIsA: ScratchFrameMorph.
+	sf := receiver ownerOrYourselfThatIsA: PhratchFrameMorph.
 	sf viewerPane categoryChanged: 'variables'.
 	#none = definition category ifFalse: [
 		sf viewerPane categoryChanged: definition category asString ].

@@ -73,7 +73,7 @@ ScrollFrameMorph2 >> extent: aPoint [
 	hScrollbar owner = self
 		ifTrue: [h := h - hbarInset]
 		ifFalse: [h := h - scrollBarEndInset].
-	ScratchTranslator isRTL
+	PhratchTranslator isRTL
 		ifTrue: [vScrollbar position: (inner left + 9)@(inner top + scrollBarStartInset)]
 		ifFalse: [vScrollbar position: (inner right - vbarInset)@(inner top + scrollBarStartInset)].
 	vScrollbar height: h.

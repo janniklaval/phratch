@@ -37,7 +37,7 @@ PhratchFilePicker >> addDriveShortcuts: menu [
 	"Include drives"
 	menu addLine.
 	drives := (FileSystem disk root) directories.
-	(visible := ScratchFrameMorph visibleDrives) ifNotNil: [
+	(visible := PhratchFrameMorph visibleDrives) ifNotNil: [
 		drives := drives select: [:drive | visible includes: drive asUppercase]].
 		drives := drives do: [:drive |
 			menu add: drive printString
@@ -57,10 +57,10 @@ PhratchFilePicker >> buildButtons [
 		vResizing: #rigid;
 		centering: #center;
 		color: Color transparent.
-	directoryBarArrowMorph := ImageMorph new form: (ScratchFrameMorph skinAt: #directoryBarArrow).
+	directoryBarArrowMorph := ImageMorph new form: (PhratchFrameMorph skinAt: #directoryBarArrow).
 	directoryBarMorph := ResizableToggleButton2 new
-		offForm: (ScratchFrameMorph skinAt: #directoryBar)
-		onForm: (ScratchFrameMorph skinAt: #directoryBar);
+		offForm: (PhratchFrameMorph skinAt: #directoryBar)
+		onForm: (PhratchFrameMorph skinAt: #directoryBar);
 		padding: 3@5.
 	directoryBarMorph
 		target: self;
@@ -71,8 +71,8 @@ PhratchFilePicker >> buildButtons [
 		addMorphBack: directoryBarMorph.
 
 	b := ToggleButton
-		onForm: (ScratchFrameMorph skinAt: #parentDirectoryButtonOn)
-		offForm: (ScratchFrameMorph skinAt: #parentDirectoryButton).
+		onForm: (PhratchFrameMorph skinAt: #parentDirectoryButtonOn)
+		offForm: (PhratchFrameMorph skinAt: #parentDirectoryButton).
 	b
 		target: self;
 		actionSelector: #showParentDirectory;
@@ -83,8 +83,8 @@ PhratchFilePicker >> buildButtons [
 		addMorphBack: (b position: self position + (252@16)).
 
 	f := ToggleButton
-		onForm: (ScratchFrameMorph skinAt: #newFolderIconSelected)
-		offForm: (ScratchFrameMorph skinAt: #newFolderIcon).
+		onForm: (PhratchFrameMorph skinAt: #newFolderIconSelected)
+		offForm: (PhratchFrameMorph skinAt: #newFolderIcon).
 	f
 		target: self;
 		actionSelector: #newDirectory;
@@ -95,7 +95,7 @@ PhratchFilePicker >> buildButtons [
 		addMorphBack: (f position: self position + (274@16)).
 
 	directoryBarMorph
-		label: "(UTF8 withAll: '<directory>')"'<directory>' font: (ScratchFrameMorph getFont: #FilePickerDirectoryName);
+		label: "(UTF8 withAll: '<directory>')"'<directory>' font: (PhratchFrameMorph getFont: #FilePickerDirectoryName);
 		leftJustifyInset: 9.
 
 	self addMorphFront: (directoryBarArrowMorph position: self topLeft + ((b left - 32)@((50 - directoryBarArrowMorph height) // 2))).
@@ -138,12 +138,12 @@ PhratchFilePicker >> changeSelectionIndexBy: anInteger [
 			^ self]].
 
 	entries first highlight: true.
-	scratchInfoClient ifNotNil: [self reportScratchProjectInfo].
+	scratchInfoClient ifNotNil: [self reportPhratchProjectInfo].
 
 ]
 
 { #category : #private }
-PhratchFilePicker >> checkForScratchInfoFetchDone [
+PhratchFilePicker >> checkForPhratchInfoFetchDone [
 	"Try to retrieve info for the currently selected Scratch project and, if successful, report it to our client."
 	"Details: The fetcher is allowed to keep running even after the info dictionary is retrieved. Thus if the user decides to open this project, we'll have a head start on fetching it."
 
@@ -153,15 +153,15 @@ PhratchFilePicker >> checkForScratchInfoFetchDone [
 	data := scratchProjectFetcher bodyData.
 	data size >= 14 ifTrue: [
 		s := ReadStream on: data.
-		version := ObjStream scratchFileVersionFrom: (s next: 10) asString.
+		version := ObjStream phratchFileVersionFrom: (s next: 10) asString.
 		(version = 1) | (version = 2)
 			ifTrue: [
 				infoSize := s uint32.
 				infoSize <= (s size - s position) ifTrue: [
 					infoDict := [ObjStream new readObjFrom: s] ifError: [Dictionary new].
-					scratchInfoClient scratchInfo: infoDict]]
+					scratchInfoClient phratchInfo: infoDict]]
 			ifFalse: [
-				scratchInfoClient scratchInfo: Dictionary new]].
+				scratchInfoClient phratchInfo: Dictionary new]].
 
 
 ]
@@ -200,14 +200,14 @@ PhratchFilePicker >> currentDirectory: aDirectoryOrString [
 
 	"trim directory name to fit button, if necessary"
 	truncated := false.
-	eWidth := (ScratchTranslator stringExtent: '...' font: directoryBarMorph label font) x.
+	eWidth := (PhratchTranslator stringExtent: '...' font: directoryBarMorph label font) x.
 	w := 190 - eWidth.
-	[((ScratchTranslator stringExtent: s font: directoryBarMorph label font) x) > w] whileTrue: [
+	[((PhratchTranslator stringExtent: s font: directoryBarMorph label font) x) > w] whileTrue: [
 		truncated := true.
 		s := s copyFrom: 1 to: s size - 1].
 	truncated ifTrue: [s := s, '...'].
 	s = '/' ifTrue: [s := 'Computer'].
-	directoryBarMorph label: (String  withAll: s) font: (ScratchFrameMorph getFont: #FilePickerDirectoryName).
+	directoryBarMorph label: (String  withAll: s) font: (PhratchFrameMorph getFont: #FilePickerDirectoryName).
 	directoryBarMorph
 		width: contentsPaneMorph width - 160.
 	directoryBarArrowMorph right: directoryBarMorph right - 9.
@@ -268,7 +268,7 @@ PhratchFilePicker >> directoryMenu [
 
 	"if opening a Scratch project, allow access to servers"
 	scratchInfoClient ifNotNil: [
-		serverEntries := ScratchFrameMorph scratchServers.
+		serverEntries := PhratchFrameMorph phratchServers.
 		(serverEntries notNil and:[serverEntries size > 0]) ifTrue: [
 			menu addLine.
 			serverEntries do: [:entry | entry1:= entry.
@@ -409,7 +409,7 @@ PhratchFilePicker >> getLocalDirectoryContents [
 	allNames := allNames reject: [:n |
 		ext := (currentDir / n) extension asLowercase.
 		#(app dll exe ini image changes) includes: ext].
-	allNames := allNames reject: [:n | ScratchPlugin isHidden: (currentDir / n) fullName].	"suppress hidden files/folders on Win32"
+	allNames := allNames reject: [:n | PhratchPlugin isHidden: (currentDir / n) fullName].	"suppress hidden files/folders on Win32"
 
 	currentDir fullName = FileSystem workingDirectory fullName ifTrue: [
 		allNames := allNames reject: [:fn |
@@ -431,7 +431,7 @@ PhratchFilePicker >> getLocalDirectoryNames [
 
 	| dirNames visible |
 	dirNames := currentDir directoryNames.
-	(visible := ScratchFrameMorph visibleDrives) ifNil: [^ dirNames].
+	(visible := PhratchFrameMorph visibleDrives) ifNil: [^ dirNames].
 
 	OSPlatform isMacOSX
 		ifTrue: [currentDir pathName = '/Volumes' ifFalse: [^ dirNames]]
@@ -442,7 +442,7 @@ PhratchFilePicker >> getLocalDirectoryNames [
 ]
 
 { #category : #private }
-PhratchFilePicker >> getScratchInfoFromFile [
+PhratchFilePicker >> getPhratchInfoFromFile [
 	"Answer the project info dictionary for the currently selected file. Answer the empty dictionary if no file is selected or if the file does not include a project info dictionary (e.g. if it is in an older Scratch file format)."
 
 	| result fullName f version buf |
@@ -454,7 +454,7 @@ PhratchFilePicker >> getScratchInfoFromFile [
 	[f := (FileStream readOnlyFileNamed: fullName) binary] ifError: [^ result].
 
 	[
-		version := ObjStream scratchFileVersionFrom: (f next: 10) asString.
+		version := ObjStream phratchFileVersionFrom: (f next: 10) asString.
 		(version = 1) | (version = 2) ifTrue: [
 			buf := f next: f uint32.
 			result := ((ObjStream new readObjFrom: (ReadStream on: buf)) associations collect: [:each | each value] ) asDictionary ].
@@ -477,7 +477,7 @@ PhratchFilePicker >> highlightAndScrollToEntry: e [
 
 	e highlight: true.
 	contentsPaneMorph scrollSubmorphIntoView: e.
-	scratchInfoClient ifNotNil: [self reportScratchProjectInfo].
+	scratchInfoClient ifNotNil: [self reportPhratchProjectInfo].
 
 ]
 
@@ -493,7 +493,7 @@ PhratchFilePicker >> highlightEntryAt: aPoint [
 				ifTrue: [secondClick := m isHighlit. m highlight: true]
 				ifFalse: [m highlight: false]]].
 
-	scratchInfoClient ifNotNil: [self reportScratchProjectInfo].
+	scratchInfoClient ifNotNil: [self reportPhratchProjectInfo].
 
 	^ secondClick
 
@@ -503,7 +503,7 @@ PhratchFilePicker >> highlightEntryAt: aPoint [
 PhratchFilePicker >> initialize [
 
 	super initialize.
-	self initFromForm: (ScratchFrameMorph skinAt: #filePickerFrame).
+	self initFromForm: (PhratchFrameMorph skinAt: #filePickerFrame).
 	fetchInProgress := false.
 	showThumbnails := false.
 	finalSelection := false.
@@ -555,9 +555,9 @@ PhratchFilePicker >> keyStroke: evt [
 	((ch = 10) | (ch = 13)) ifTrue: [  "cr, lf, or enter key"
 		(entry := self selectedEntryOrNil) ifNil: [^ self].
 		(entry entryIsDirectory and:
-		 [(owner isKindOf: ScratchFileChooserDialog)])
+		 [(owner isKindOf: PhratchFileChooserDialog)])
 			ifTrue: [self currentDirectory: (currentDir directoryNamed: entry entryName)]
-			ifFalse: [(self ownerOrYourselfThatIsA: ScratchFileChooserDialog) yes].
+			ifFalse: [(self ownerOrYourselfThatIsA: PhratchFileChooserDialog) yes].
 		^ self].
 
 	(ch = 28) ifTrue: [^ self changeSelectionIndexBy: -1].	"left"
@@ -635,7 +635,7 @@ PhratchFilePicker >> mouseMove: evt [
 	(self highlightEntryAt: evt cursorPoint)
 		ifFalse: [isDoubleClick := false].
 
-	scratchInfoClient ifNotNil: [self reportScratchProjectInfo].
+	scratchInfoClient ifNotNil: [self reportPhratchProjectInfo].
 
 ]
 
@@ -674,7 +674,7 @@ PhratchFilePicker >> mouseUp: evt [
 			self startPlayingSound: (currentDir / entry entryName) fullName]].
 
 	finalSelection := isDoubleClick.
-	finalSelection ifTrue: [(self ownerOrYourselfThatIsA: ScratchFileChooserDialog) yes].
+	finalSelection ifTrue: [(self ownerOrYourselfThatIsA: PhratchFileChooserDialog) yes].
 ]
 
 { #category : #private }
@@ -682,7 +682,7 @@ PhratchFilePicker >> navigationForbidden [
 	"Answer true if navigating the file hierarch is forbidden because there is a visibledrives entry in the Scratch.ini file."
 
 	| thisDrive pathParts |
-	ScratchFrameMorph visibleDrives ifNil: [^ false].
+	PhratchFrameMorph visibleDrives ifNil: [^ false].
 
 	thisDrive := ''.
 	pathParts := (currentDir) path.
@@ -691,7 +691,7 @@ PhratchFilePicker >> navigationForbidden [
 		((thisDrive = 'volumes') and: [pathParts size > 1]) ifTrue: [
 			thisDrive := pathParts second asUppercase]].
 
-	(ScratchFrameMorph visibleDrives includes: thisDrive) ifTrue: [^ false].
+	(PhratchFrameMorph visibleDrives includes: thisDrive) ifTrue: [^ false].
 
 	Beeper beep.
 	^ true
@@ -708,6 +708,14 @@ PhratchFilePicker >> newDirectory [
 	[(self currentDirectory / name) createDirectory] ifError: [:err :rcvr |
 		^ DialogBoxMorph warn: 'Could not create folder.'].
 	self currentDirectory: self currentDirectory.
+
+]
+
+{ #category : #accessing }
+PhratchFilePicker >> phratchInfoClient: anObject [
+	"Set the object to be informed when a Scratch project file with an info dictionary is selected. The client will be sent the message #scratchInfo: once each time such a file is selected, allowing the project thumbnail and other project information to be displayed."
+
+	scratchInfoClient := anObject.
 
 ]
 
@@ -734,7 +742,7 @@ PhratchFilePicker >> projectFetcher [
 ]
 
 { #category : #private }
-PhratchFilePicker >> reportScratchProjectInfo [
+PhratchFilePicker >> reportPhratchProjectInfo [
 	"Try to retrieve info for the currently selected Scratch project and, if successful, report it to our client."
 
 	| fullPath |
@@ -744,10 +752,10 @@ PhratchFilePicker >> reportScratchProjectInfo [
 		scratchProjectFetcher stopDownload.
 		scratchProjectFetcher := nil].
 
-	self selectedFile ifNil: [scratchInfoClient scratchInfo: nil. ^ self].
+	self selectedFile ifNil: [scratchInfoClient phratchInfo: nil. ^ self].
 
 	(currentDir isKindOf: AbstractFileReference ) ifTrue: [
-		^ scratchInfoClient scratchInfo: self getScratchInfoFromFile].
+		^ scratchInfoClient phratchInfo: self getPhratchInfoFromFile].
 
 	"directory is on a server: start a fetcher to get the project info"
 	fullPath := currentDir / self selectedFile, '.scratch'.
@@ -761,15 +769,7 @@ PhratchFilePicker >> reportScratchProjectInfo [
 			fromServer: currentDir serverName].
 
 	(Delay forMilliseconds: 50) wait.
-	self checkForScratchInfoFetchDone.
-
-]
-
-{ #category : #accessing }
-PhratchFilePicker >> scratchInfoClient: anObject [
-	"Set the object to be informed when a Scratch project file with an info dictionary is selected. The client will be sent the message #scratchInfo: once each time such a file is selected, allowing the project thumbnail and other project information to be displayed."
-
-	scratchInfoClient := anObject.
+	self checkForPhratchInfoFetchDone.
 
 ]
 
@@ -884,7 +884,7 @@ PhratchFilePicker >> step [
 			fetchInProgress := false]].
 
 	scratchProjectFetcher ifNotNil: [
-		self checkForScratchInfoFetchDone].
+		self checkForPhratchInfoFetchDone].
 
 ]
 

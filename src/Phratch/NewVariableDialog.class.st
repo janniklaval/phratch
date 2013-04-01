@@ -59,15 +59,15 @@ NewVariableDialog >> initialize [
 		vResizing: #shrinkWrap.
 
 	allSpritesRadioButton := ToggleButton
-		onForm: (ScratchFrameMorph skinAt: #radioButtonOn)
-		offForm: (ScratchFrameMorph skinAt: #radioButton).
+		onForm: (PhratchFrameMorph skinAt: #radioButtonOn)
+		offForm: (PhratchFrameMorph skinAt: #radioButton).
 	allSpritesRadioButton
 		on;
 		target: self;
 		actionSelector: #toggleSpriteSpecific.
 	label1 := PhratchStringMorph new
 		contents: ('For all sprites' localized);
-		font: (ScratchFrameMorph getFont: #NewVariableDialogBox).
+		font: (PhratchFrameMorph getFont: #NewVariableDialogBox).
 	radioButtons addMorphBack: allSpritesRadioButton.
 	radioButtons addMorphBack: (Morph new extent: (5@5); color: Color transparent).
 	radioButtons addMorphBack: label1.
@@ -76,12 +76,12 @@ NewVariableDialog >> initialize [
 	thisSpriteRadioButton := allSpritesRadioButton fullCopy off.
 	label2 := PhratchStringMorph new
 		contents: ('For this sprite only' localized);
-		font: (ScratchFrameMorph getFont: #NewVariableDialogBox).
+		font: (PhratchFrameMorph getFont: #NewVariableDialogBox).
 	radioButtons addMorphBack: thisSpriteRadioButton.
 	radioButtons addMorphBack: (Morph new extent: (5@5); color: Color transparent).
 	radioButtons addMorphBack: label2.
 
-	ScratchTranslator isRTL
+	PhratchTranslator isRTL
 		ifTrue: [radioButtons submorphs reversed do: [:m |
 			m delete.
 			radioButtons addMorphBack: m]].

@@ -59,7 +59,7 @@ ListContentsBlockMorph >> toggleWatcher [
 	listMorph := receiver listNamed: commandSpec ifNone: [^ self].
 	listMorph value owner
 		ifNil: [
-			(stage := receiver ownerOrYourselfThatIsA: ScratchStageMorph) ifNil: [^ self].
+			(stage := receiver ownerOrYourselfThatIsA: PhratchStageMorph) ifNil: [^ self].
 			stage addMorph: listMorph.
 			(stage bounds containsPoint: listMorph topLeft) ifFalse: [
 				listMorph position: stage topLeft + 10].
@@ -69,7 +69,7 @@ ListContentsBlockMorph >> toggleWatcher [
 		ifNotNil: [
 			listMorph delete].
 
-	(frame := self ownerOrYourselfThatIsA: ScratchFrameMorph) ifNil: [^ self].				
+	(frame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNil: [^ self].				
 	palette := self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph.
 	palette ifNotNil: [palette updateWatcherButtonsForFrame: frame].
 

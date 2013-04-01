@@ -83,7 +83,7 @@ SensorBoardMorph >> addReadoutLabeled: aString [
 	row addMorphBack: (AlignmentMorph new color: column color; extent: 10@1; hResizing: #spaceFill).  "spacer"
 	box := WatcherReadoutFrameMorph new
 		extent: 42@14;
-		color: (ScriptableScratchMorph blockColorFor: 'sensing').
+		color: (ScriptablePhratchMorph blockColorFor: 'sensing').
 	readout := PhratchStringMorph contents: '0' font: (StrikeFont fontName: 'VerdanaBold' size: 10).
 	readout color: Color white.
 	box addMorph: readout.
@@ -215,7 +215,7 @@ SensorBoardMorph >> isScriptable [
 SensorBoardMorph >> justDroppedInto: newOwner event: evt [
 	"Only allow embedding into the stage; otherwise, float (i.e. be a submorph of the world)."
 
-	(newOwner isKindOf: ScratchStageMorph) ifFalse: [ "only embed in the work pane"
+	(newOwner isKindOf: PhratchStageMorph) ifFalse: [ "only embed in the work pane"
 		self world addMorph: self].
 
 
@@ -229,7 +229,7 @@ SensorBoardMorph >> mouseDown: evt [
 
 	evt hand toolType = 'CutTool' ifTrue: [
 		evt shiftPressed ifFalse: [evt hand toolType: nil].
-		ScratchFrameMorph putInClipboard: self.
+		PhratchFrameMorph putInClipboard: self.
 		^ self delete].
 
 	evt hand waitForClicksOrDrag: self event: evt.
@@ -252,7 +252,7 @@ SensorBoardMorph >> openPort: aString [
 	baudRate := useGoGoProtocol ifTrue: [9600] ifFalse: [38400].
 	self closePort.
 	portName := aString.
-	ScratchPlugin serialPortOpsAvailable
+	PhratchPlugin serialPortOpsAvailable
 		ifTrue: [
 			port := SerialPort2 new openPortNamed: portName baud: baudRate.
 			port isOpen ifFalse: [port := nil. ^ false].
@@ -297,7 +297,7 @@ SensorBoardMorph >> portIsOpen [
 SensorBoardMorph >> portNames [
 	"Answer a collection of possible port names for the Scratch sensor board. Filter out modems and PDA cradles."
 
-	ScratchPlugin serialPortOpsAvailable ifFalse: [
+	PhratchPlugin serialPortOpsAvailable ifFalse: [
 		^ (1 to: 32) collect: [:i | 'COM', i printString]].
 
 	^ SerialPort2 portNames reject: [:n |
@@ -378,7 +378,7 @@ SensorBoardMorph >> processIncomingData [
 	msecsSinceLastPoll < 20 ifTrue: [^ self].
 
 	buf := port readByteArray.
-	buf do: [:b | self processScratchByte: b].
+	buf do: [:b | self processPhratchByte: b].
 
 	port nextPut: 1.	"send a ScratchBoard V4 poll byte"
 	lastPollMSecs := Time millisecondClockValue.
@@ -387,7 +387,7 @@ SensorBoardMorph >> processIncomingData [
 ]
 
 { #category : #private }
-SensorBoardMorph >> processScratchByte: aByte [
+SensorBoardMorph >> processPhratchByte: aByte [
 	"Process one byte of the incoming data stream from a Scratch sensor board."
 	"Sensor messages are two bytes with the following format:
 		Byte1: <1><sensor number (4 bits)><sensor value high bits (3 bits)>
@@ -452,7 +452,7 @@ SensorBoardMorph >> rightButtonMenu [
 				ifTrue: [menu add: 'stop reporting raw data' action: #toggleRawMode]
 				ifFalse: [menu add: 'report raw data' action: #toggleRawMode].
 			useGoGoProtocol
-				ifTrue: [menu add: 'use Scratch board' action: #useScratchboardProtocol]
+				ifTrue: [menu add: 'use Scratch board' action: #usePhratchboardProtocol]
 				ifFalse: [menu add: 'use GoGo board' action: #useGoGoProtocol]]
 		ifFalse: [
 			menu add: 'select serial/USB port' action: #selectPort.
@@ -774,7 +774,7 @@ SensorBoardMorph >> useGoGoProtocol [
 ]
 
 { #category : #'serial port' }
-SensorBoardMorph >> useScratchboardProtocol [
+SensorBoardMorph >> usePhratchboardProtocol [
 
 	self stopReadingData.
 	useGoGoProtocol := false.

@@ -23,7 +23,7 @@ HatBlockMorph >> blockAttachPoints: aSet [
 	| nextB |
 	nextB := self nextBlock.
 	nextB
-		ifNil: [ScratchTranslator isRTL
+		ifNil: [PhratchTranslator isRTL
 			ifTrue: [aSet add: (self bottomRight -> self)]
 			ifFalse: [aSet add: (self bottomLeft -> self)]]
 		ifNotNil: [nextB blockAttachPoints: aSet].
@@ -36,7 +36,7 @@ HatBlockMorph >> click: evt [
 	evt hand toolType = 'CutTool' ifTrue: [
 		evt shiftPressed ifFalse: [evt hand toolType: nil].
 		(owner isKindOf: PhratchBlockPaletteMorph) ifTrue: [^ self].  "ignore if in palette"
-		ScratchFrameMorph putInClipboard: self.
+		PhratchFrameMorph putInClipboard: self.
 		^ self stop; delete].
 
 	super click: evt.
@@ -115,23 +115,23 @@ HatBlockMorph >> fixBlockLayout [
 	oldExtent := self extent.
 	oldPos := self position.
 
-	ScratchTranslator isRTL
+	PhratchTranslator isRTL
 		ifTrue: [x := self right - 8]
 		ifFalse: [x := self left + 8].
 	centerY := self top + 25.
 	self nonControlFlowSubmorphs do: [:m |
 		(m isKindOf: ArgMorph) ifTrue: [m fixArgLayout].
-		ScratchTranslator isRTL
+		PhratchTranslator isRTL
 			ifTrue: [m position: (x - m width)@(centerY - (m height // 2)). 
 				x := x - m width - 5]
 			ifFalse: [m position: x@(centerY - (m height // 2)). 
 				x := x + m width + 5]].
-	ScratchTranslator isRTL
+	PhratchTranslator isRTL
 		ifTrue: [x := x - 4.
 			self width: ((self right - x) max: self hatTopForm width)]
 		ifFalse: [x + x + 4.
 			self width: ((x - self left) max: self hatTopForm width)].
-	ScratchTranslator isRTL ifTrue: [
+	PhratchTranslator isRTL ifTrue: [
 		self left: oldPos x + (oldExtent x - self width)].
 
 	nonBlockSubmorphs := self submorphs select: [:m |
@@ -139,7 +139,7 @@ HatBlockMorph >> fixBlockLayout [
 	self height: self hatTopForm height + (nonBlockSubmorphs inject: CBlockBracketThickness into: [:h :m | h max: (m height + 8)]).
 
 	(nextB := self nextBlock) ifNotNil: [
-		ScratchTranslator isRTL
+		PhratchTranslator isRTL
 			ifTrue: [nextB right: self right]
 			ifFalse: [nextB left: self left].
 		nextB top: self bottom - 4.
@@ -150,7 +150,7 @@ HatBlockMorph >> fixBlockLayout [
 { #category : #private }
 HatBlockMorph >> hatTopForm [
 
-	^ ScratchFrameMorph skinAt: #hatBlockTop
+	^ PhratchFrameMorph skinAt: #hatBlockTop
 
 ]
 
@@ -184,7 +184,7 @@ HatBlockMorph >> initialize [
 
 	scriptNameMorph := PhratchStringMorph new
 		contents: 'script';
-		font: (ScratchFrameMorph getFont: #Label);
+		font: (PhratchFrameMorph getFont: #Label);
 		forceUnicodeRendering: true;
 		color: Color white.
 	self addMorph: scriptNameMorph.
@@ -263,7 +263,7 @@ HatBlockMorph >> start [
 	self stop.
 	scratchProc ifNil: [
 		scriptOwner ifNil: [^ self].
-		(stage := self receiver ownerOrYourselfThatIsA: ScratchStageMorph) ifNil: [^ self].
+		(stage := self receiver ownerOrYourselfThatIsA: PhratchStageMorph) ifNil: [^ self].
 		scratchProc := stage startProcessFor: self.
 		self changed].
 

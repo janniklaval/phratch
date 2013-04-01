@@ -192,7 +192,7 @@ ScrollingStringMorph >> copy [
 ScrollingStringMorph >> copySelection [
 	"Record the current selection in the clipboard."
 
-	ScratchTranslator unicodeClipboardPut: self currentSelection.
+	PhratchTranslator unicodeClipboardPut: self currentSelection.
 
 ]
 
@@ -386,7 +386,7 @@ ScrollingStringMorph >> drawCursor: charIndex line: lineIndex on: aCanvas [
 		ifTrue: [pair := #(0 0)]
 		ifFalse: [pair := (renderer xRangesFor: line) at: (charIndex within: 1 and: line size)].
 
-	ScratchTranslator isRTL
+	PhratchTranslator isRTL
 		ifTrue: [x := charIndex > line size ifTrue: [pair min] ifFalse: [pair max]]
 		ifFalse: [x := charIndex > line size ifTrue: [pair max] ifFalse: [pair min]].
 
@@ -482,7 +482,7 @@ ScrollingStringMorph >> drawString: aString at: aPoint on: aCanvas [
 	s isUnicode ifTrue: [
 		bgColor := color.
 		bgColor isTransparent ifTrue: [bgColor := self backgroundColor].
-		f := ScratchTranslator
+		f := PhratchTranslator
 			formFor: s
 			font: self font
 			fgColor: textColor
@@ -620,7 +620,7 @@ ScrollingStringMorph >> font: aFont [
 
 	font := aFont.
 	renderer := PhratchStringMorph new font: aFont.
-	lineHeight := renderer stringHeight: ScratchTranslator renderHintString, 'Ag'.
+	lineHeight := renderer stringHeight: PhratchTranslator renderHintString, 'Ag'.
 	lineHeight = 0 ifTrue: [lineHeight := 10].  "workaround for possible bug in stringHeight:"
 	layoutNeeded := true.
 
@@ -1020,7 +1020,7 @@ ScrollingStringMorph >> offsetForLine: lineIndex [
 
 	| top w |
 	top := self textInset y + (lineHeight * (lineIndex - firstVisibleLine)).
-	ScratchTranslator isRTL
+	PhratchTranslator isRTL
 		ifTrue: [
 			w := renderer stringWidth: (lines at: lineIndex).
 			^ (self width - (self textInset x + w + scrollbar width)) @ top]
@@ -1033,7 +1033,7 @@ ScrollingStringMorph >> paste [
 	"Paste the last cut or copied text over the current selection."
 
 	| s |
-	s := ScratchTranslator unicodeClipboard..
+	s := PhratchTranslator unicodeClipboard..
 	s size = 0 ifTrue: [^ self].
 
 	self deleteSelection.

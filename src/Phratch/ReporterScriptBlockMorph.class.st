@@ -179,17 +179,17 @@ ReporterScriptBlockMorph >> optimized [
 	| newBlock reportBlock sel body a rcv |
 
 	rcv := self receiver.
-	rcv ifNil: [rcv := ScriptableScratchMorph new].
+	rcv ifNil: [rcv := ScriptablePhratchMorph new].
 	(#(function #autoBlock) includes: selector)
 		ifTrue: [sel := #procedure]
 		ifFalse: [sel := #procedureWithArgs].
 	newBlock := rcv blockFromSpec: (rcv wholeBlockSpecForSelector: sel) 
-							color: (ScriptableScratchMorph blockColorFor: 'operators').
+							color: (ScriptablePhratchMorph blockColorFor: 'operators').
 
 	newBlock isAtomic: (isAtomic or: [self isKindOf: OSlotMorph]).
 
 	reportBlock := rcv blockFromSpec: (rcv wholeBlockSpecForSelector: #doAnswer) 
-							color: (ScriptableScratchMorph blockColorFor: 'control').
+							color: (ScriptablePhratchMorph blockColorFor: 'control').
 
 	body := self body.
 	body ifNotNil:[

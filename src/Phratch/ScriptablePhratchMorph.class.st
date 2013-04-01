@@ -10,7 +10,7 @@ Scriptable morphs:
 
 "
 Class {
-	#name : #ScriptableScratchMorph,
+	#name : #ScriptablePhratchMorph,
 	#superclass : #Morph,
 	#instVars : [
 		'flags',
@@ -53,7 +53,7 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-ScriptableScratchMorph class >> DoIt [
+ScriptablePhratchMorph class >> DoIt [
 	| menu |
 	menu := MenuMorphNG new defaultTarget: self.
 	#(#('Acoustic Bass Drum' 35 ) #('Bass Drum 1' 36 ) #('Side Stick' 37 ) #('Acoustic Snare' 38 ) #('Hand Clap' 39 ) #('Electric Snare' 40 ) #('Low Floor Tom' 41 ) #('Closed Hi-Hat' 42 ) #('High Floor Tom' 43 ) #('Pedal Hi-Hat' 44 ) #('Low Tom' 45 ) #('Open Hi-Hat' 46 ) #('Low-Mid Tom' 47 ) #('Hi-Mid Tom' 48 ) #('Crash Cymbal 1' 49 ) #('High Tom' 50 ) #('Ride Cymbal 1' 51 ) #('Chinese Cymbal' 52 ) #('Ride Bell' 53 ) #('Tambourine' 54 ) #('Splash Cymbal' 55 ) #('Cowbell' 56 ) #('Crash Cymbal 2' 57 ) #('Vibraslap' 58 ) #('Ride Cymbal 2' 59 ) #('Hi Bongo' 60 ) #('Low Bongo' 61 ) #('Mute Hi Conga' 62 ) #('Open Hi Conga' 63 ) #('Low Conga' 64 ) #('High Timbale' 65 ) #('Low Timbale' 66 ) #('High Agogo' 67 ) #('Low Agogo' 68 ) #('Cabasa' 69 ) #('Maracas' 70 ) #('Short Whistle' 71 ) #('Long Whistle' 72 ) #('Short Guiro' 73 ) #('Long Guiro' 74 ) #('Claves' 75 ) #('Hi Wood Block' 76 ) #('Low Wood Block' 77 ) #('Mute Cuica' 78 ) #('Open Cuica' 79 ) #('Mute Triangle' 80 ) #('Open Triangle' 81 ) )
@@ -63,14 +63,14 @@ ScriptableScratchMorph class >> DoIt [
 ]
 
 { #category : #'block specs' }
-ScriptableScratchMorph class >> blockColorDict [
+ScriptablePhratchMorph class >> blockColorDict [
 
 	^ BlockColorDict
 
 ]
 
 { #category : #'block specs' }
-ScriptableScratchMorph class >> blockColorFor: aCategory [
+ScriptablePhratchMorph class >> blockColorFor: aCategory [
 	"Answer the block color for the given category."
 
 	'control' = aCategory ifTrue: [^ (Color h: 41 s: 0.85 v: 0.9)].
@@ -90,7 +90,7 @@ ScriptableScratchMorph class >> blockColorFor: aCategory [
 ]
 
 { #category : #'block specs' }
-ScriptableScratchMorph class >> blockSpecDict [
+ScriptablePhratchMorph class >> blockSpecDict [
 	"Answer my block specification dictionary."
 
 	BlockSpecDict ifNil: [self buildBlockSpecDictionary].
@@ -100,7 +100,7 @@ ScriptableScratchMorph class >> blockSpecDict [
 ]
 
 { #category : #'block specs' }
-ScriptableScratchMorph class >> blockSpecs [
+ScriptablePhratchMorph class >> blockSpecs [
 	"Answer a collection of block specifications for the blocks that are common to all objects. Block specificatons (Arrays) are interspersed with category names (Strings). A block specification is an Array of the form: (<block spec string> <block type> <selector> [optional initial argument values]).
 
 	Explanation of flags:
@@ -252,17 +252,17 @@ ScriptableScratchMorph class >> blockSpecs [
 ]
 
 { #category : #'translation support' }
-ScriptableScratchMorph class >> blockSpecsArrayForTranslation [
+ScriptablePhratchMorph class >> blockSpecsArrayForTranslation [
 	"Answer an array that lists all the blocks and categories to be used as a guide to block translation."
 	"self blockSpecDictForTranslation"
 
 	| blocks all obsolete currentSpecs |
 	currentSpecs := Set new.
-	ScratchSpriteMorph new blockCategories sort collect: [:cat |
-		blocks :=  (ScratchSpriteMorph new blocksFor: cat)
+	PhratchSpriteMorph new blockCategories sort collect: [:cat |
+		blocks :=  (PhratchSpriteMorph new blocksFor: cat)
 			select: [:b | b isKindOf: CommandBlockMorph].
 		all := blocks collect: [:b | b commandSpec].
-		obsolete := ScriptableScratchMorph obsoleteBlockSpecs collect: [:o | o first].
+		obsolete := ScriptablePhratchMorph obsoleteBlockSpecs collect: [:o | o first].
 		all :=  all select: [:p | (obsolete indexOf: p) = 0].
 		(cat beginsWith: 'obsolete') ifFalse:[currentSpecs add: cat].
 		currentSpecs addAll: all].
@@ -272,19 +272,19 @@ ScriptableScratchMorph class >> blockSpecsArrayForTranslation [
 ]
 
 { #category : #'translation support' }
-ScriptableScratchMorph class >> blockSpecsForTranslation [
+ScriptablePhratchMorph class >> blockSpecsForTranslation [
 	"Answer a collection blocks for translation. Obsolete blocks are removed."
 
 	| allSpecs |
 	allSpecs := Set new.
-	(ScriptableScratchMorph blockSpecs,
-	 ScratchSpriteMorph blockSpecs,
-	 ScratchStageMorph blockSpecs) do: [:el |
+	(ScriptablePhratchMorph blockSpecs,
+	 PhratchSpriteMorph blockSpecs,
+	 PhratchStageMorph blockSpecs) do: [:el |
 		(el isKindOf: Array)
 			ifTrue: [allSpecs add: el first]
 			ifFalse: [((el beginsWith: 'obsolete') or:[#('-' '~') includes: el])
 				ifFalse:[allSpecs add: el]]].
-	ScriptableScratchMorph obsoleteBlockSpecs do: [:el |
+	ScriptablePhratchMorph obsoleteBlockSpecs do: [:el |
 		(el isKindOf: Array) ifTrue: [allSpecs remove: el first ifAbsent: []]].
 	allSpecs
 		add: 'else';
@@ -296,14 +296,14 @@ ScriptableScratchMorph class >> blockSpecsForTranslation [
 ]
 
 { #category : #'translation support' }
-ScriptableScratchMorph class >> blockSpecsStringForTranslation [
+ScriptablePhratchMorph class >> blockSpecsStringForTranslation [
 	"Answer a String that lists all the blocks and categories to be used as a guide to block translation."
 
 	| out blocks pairs key |
 	out := WriteStream on: (String new: 10000).
-	ScratchSpriteMorph new blockCategories sort collect: [:cat |
+	PhratchSpriteMorph new blockCategories sort collect: [:cat |
 		out nextPutAll: '-	', cat; cr.
-		blocks :=  (ScratchSpriteMorph new blocksFor: cat)
+		blocks :=  (PhratchSpriteMorph new blocksFor: cat)
 			select: [:b | b isKindOf: CommandBlockMorph].
 		pairs := blocks collect: [:b |
 			key := b selector collect: [:ch | ch = $: ifTrue: [$_] ifFalse: [ch]].
@@ -315,7 +315,7 @@ ScriptableScratchMorph class >> blockSpecsStringForTranslation [
 ]
 
 { #category : #'block specs' }
-ScriptableScratchMorph class >> buildBlockSpecDictionary [
+ScriptablePhratchMorph class >> buildBlockSpecDictionary [
 	"self buildBlockSpecDictionary"
 
 	| blockColor sel |
@@ -338,26 +338,26 @@ ScriptableScratchMorph class >> buildBlockSpecDictionary [
 ]
 
 { #category : #'byob legacy support' }
-ScriptableScratchMorph class >> currentEncoding [
+ScriptablePhratchMorph class >> currentEncoding [
 		^ObjEncoding ifNil: [^#scratch ]
 ]
 
 { #category : #'byob legacy support' }
-ScriptableScratchMorph class >> decodeAsByob [
+ScriptablePhratchMorph class >> decodeAsByob [
 		ObjEncoding := #byob 
 ]
 
 { #category : #'byob legacy support' }
-ScriptableScratchMorph class >> decodeAsScratch [
+ScriptablePhratchMorph class >> decodeAsScratch [
 		ObjEncoding := #scratch 
 ]
 
 { #category : #'forms/sounds/icons' }
-ScriptableScratchMorph class >> defaultBackgroundForm [
+ScriptablePhratchMorph class >> defaultBackgroundForm [
 
 	(DefaultBackgroundForm isNil or:
-	 [DefaultBackgroundForm extent ~= ScratchFrameMorph workpaneExtent]) ifTrue: [
-		DefaultBackgroundForm := (Form extent: ScratchFrameMorph workpaneExtent depth: 1).
+	 [DefaultBackgroundForm extent ~= PhratchFrameMorph workpaneExtent]) ifTrue: [
+		DefaultBackgroundForm := (Form extent: PhratchFrameMorph workpaneExtent depth: 1).
 		DefaultBackgroundForm fillWhite].
 
 	^ DefaultBackgroundForm
@@ -365,19 +365,19 @@ ScriptableScratchMorph class >> defaultBackgroundForm [
 ]
 
 { #category : #byob }
-ScriptableScratchMorph class >> doMakeNewList [
+ScriptablePhratchMorph class >> doMakeNewList [
 	^nil
 ]
 
 { #category : #other }
-ScriptableScratchMorph class >> doubleSize: aBoolean [
+ScriptablePhratchMorph class >> doubleSize: aBoolean [
 
 	DoubleSize := aBoolean.
 
 ]
 
 { #category : #other }
-ScriptableScratchMorph class >> fromUser [
+ScriptablePhratchMorph class >> fromUser [
 	"Go into a mode asking the user to select an instance of me, displaying a crossHair cursor while in this mode. The mode ends with the next mouse click. If the click is over an instance of me, return it. Otherwise, return nil. Keep running the world while waiting for the mouse click."
 
 	| result p m mList |
@@ -387,7 +387,7 @@ ScriptableScratchMorph class >> fromUser [
 		[Sensor anyButtonPressed] whileFalse: [World doOneCycleNoInput].
 		p := Sensor cursorPoint.
 		m := (World rootMorphsAt: p) first.
-		(m isKindOf: ScratchFrameMorph) ifTrue: [
+		(m isKindOf: PhratchFrameMorph) ifTrue: [
 			mList := m workPane rootMorphsAt: p.
 			mList size > 0 ifTrue: [
 				m := (m workPane rootMorphsAt: p) first]].
@@ -398,7 +398,7 @@ ScriptableScratchMorph class >> fromUser [
 ]
 
 { #category : #'class initialization' }
-ScriptableScratchMorph class >> initialize [
+ScriptablePhratchMorph class >> initialize [
 	"self initialize"
 
 	Experimental := false.
@@ -411,11 +411,11 @@ ScriptableScratchMorph class >> initialize [
 ]
 
 { #category : #other }
-ScriptableScratchMorph class >> isSpriteSpecificTarget: anObject selector: selector [
+ScriptablePhratchMorph class >> isSpriteSpecificTarget: anObject selector: selector [
 	"I determine whether the given selector is specific to a particular Sprite. ."
 
 	| i |
-	(anObject isKindOf: ScratchSpriteMorph) ifFalse: [^ false].
+	(anObject isKindOf: PhratchSpriteMorph) ifFalse: [^ false].
 	i := selector asString
 		findAnySubStr: #('answer' 'key' 'Loud' 'mouse' 'sensor' 'soundLevel' 'tempo' 'timer')
 		startingAt: 1.
@@ -424,25 +424,25 @@ ScriptableScratchMorph class >> isSpriteSpecificTarget: anObject selector: selec
 ]
 
 { #category : #byob }
-ScriptableScratchMorph class >> keepOnStage [
+ScriptablePhratchMorph class >> keepOnStage [
 
 	^KeepOnStage ifNil: [true ]
 ]
 
 { #category : #byob }
-ScriptableScratchMorph class >> keepOnStage: aBool [
+ScriptablePhratchMorph class >> keepOnStage: aBool [
 	KeepOnStage := aBool
 ]
 
 { #category : #'block specs' }
-ScriptableScratchMorph class >> listBlockColor [
+ScriptablePhratchMorph class >> listBlockColor [
 
 	^ ListBlockColor
 
 ]
 
 { #category : #'forms/sounds/icons' }
-ScriptableScratchMorph class >> meowSound [
+ScriptablePhratchMorph class >> meowSound [
 	"MeowSound := SampledSound fromFileNamed: ((FileDirectory default directoryNamed: 'ScratchSkin') fullNameFor: 'kitten.wav')"
 
 	^ MeowSound ifNil: [MeowSound := SampledSound fromFileNamed: (((FileSystem workingDirectory / 'ScratchSkin') / 'Kitten.wav') fullName)]
@@ -450,7 +450,7 @@ ScriptableScratchMorph class >> meowSound [
 ]
 
 { #category : #'block specs' }
-ScriptableScratchMorph class >> obsoleteBlockSpecs [
+ScriptablePhratchMorph class >> obsoleteBlockSpecs [
 	"Answer a list of specifications for the graphic filter blocks."
 
 	^ #(
@@ -508,43 +508,43 @@ ScriptableScratchMorph class >> obsoleteBlockSpecs [
 ]
 
 { #category : #'forms/sounds/icons' }
-ScriptableScratchMorph class >> oldMeowPrefixReversed [
+ScriptablePhratchMorph class >> oldMeowPrefixReversed [
 
 	^ OldMeowPrefixReversed
 
 ]
 
-{ #category : #'forms/sounds/icons' }
-ScriptableScratchMorph class >> popSound [
-
-	^ PopSound ifNil: [PopSound := SampledSound fromFileNamed: ((FileSystem workingDirectory / 'ScratchSkin'/ 'Pop.wav') fullName)]
-
-]
-
 { #category : #other }
-ScriptableScratchMorph class >> randomInit [
-
-	RandomGen initialize.
-
-]
-
-{ #category : #other }
-ScriptableScratchMorph class >> resetTimer [
-
-	TimerStartMSecs := Time millisecondClockValue.
-
-]
-
-{ #category : #other }
-ScriptableScratchMorph class >> scratchOrigin: aPoint [
+ScriptablePhratchMorph class >> phratchOrigin: aPoint [
 	"Set the origin for the Scratch coordinate system."
 
 	ScratchOrigin := aPoint.
 
 ]
 
+{ #category : #'forms/sounds/icons' }
+ScriptablePhratchMorph class >> popSound [
+
+	^ PopSound ifNil: [PopSound := SampledSound fromFileNamed: ((FileSystem workingDirectory / 'ScratchSkin'/ 'Pop.wav') fullName)]
+
+]
+
 { #category : #other }
-ScriptableScratchMorph class >> soundRecorder [
+ScriptablePhratchMorph class >> randomInit [
+
+	RandomGen initialize.
+
+]
+
+{ #category : #other }
+ScriptablePhratchMorph class >> resetTimer [
+
+	TimerStartMSecs := Time millisecondClockValue.
+
+]
+
+{ #category : #other }
+ScriptablePhratchMorph class >> soundRecorder [
 	"Return the shared Scratch SoundRecorder. Create and start it, if necessary."
 
 	Recorder ifNil: [
@@ -556,7 +556,7 @@ ScriptableScratchMorph class >> soundRecorder [
 ]
 
 { #category : #other }
-ScriptableScratchMorph class >> stopSoundRecorder [
+ScriptablePhratchMorph class >> stopSoundRecorder [
 	"Stop the shared sound recorder."
 	"self stopSoundRecorder"
 
@@ -566,7 +566,7 @@ ScriptableScratchMorph class >> stopSoundRecorder [
 ]
 
 { #category : #scripts }
-ScriptableScratchMorph >> addComment: aScratchCommentMorph [
+ScriptablePhratchMorph >> addComment: aPhratchCommentMorph [
 	"Aligns the newly added script below the lowest script in the pane."
 
 	| y bottom |
@@ -575,16 +575,16 @@ ScriptableScratchMorph >> addComment: aScratchCommentMorph [
 		bottom :=  (m fullBounds bottom) - (blocksBin position y).
 		(bottom > y) ifTrue: 
 			[y := bottom]].
-	aScratchCommentMorph position: blocksBin position + (20@(y+10)).
+	aPhratchCommentMorph position: blocksBin position + (20@(y+10)).
 
-	blocksBin addMorph: aScratchCommentMorph.
+	blocksBin addMorph: aPhratchCommentMorph.
 
 ]
 
 { #category : #byob }
-ScriptableScratchMorph >> addCustomBlock [
+ScriptablePhratchMorph >> addCustomBlock [
 	|ans def sf|
-	(sf := self ownerOrYourselfThatIsA: ScratchFrameMorph) ifNil: [^self].
+	(sf := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNil: [^self].
 	BlockDialog isOpen ifTrue: [^ self].
 	ans := BlockDialog ask: 'Make a block' localized.
 	(ans = #cancelled) ifTrue: [^self ].
@@ -612,10 +612,10 @@ ScriptableScratchMorph >> addCustomBlock [
 ]
 
 { #category : #byob }
-ScriptableScratchMorph >> addCustomBlocksTo: page y: startY [
+ScriptablePhratchMorph >> addCustomBlocksTo: page y: startY [
 
 	| addButton  x y b cdefs inherited all |
-	addButton := ScratchFrameMorph
+	addButton := PhratchFrameMorph
 		buttonLabel: 'Make a block' localized
 		selector: #addCustomBlock.
 
@@ -643,7 +643,7 @@ ScriptableScratchMorph >> addCustomBlocksTo: page y: startY [
 ]
 
 { #category : #blocks }
-ScriptableScratchMorph >> addEventNamesTo: aSet [
+ScriptablePhratchMorph >> addEventNamesTo: aSet [
 	"Add the names of all events implemented by this morph, excluding keyboard events. Suppress duplicates (ignoring case differences)."
 
 	| allCustomBlockMorphs |
@@ -661,16 +661,16 @@ ScriptableScratchMorph >> addEventNamesTo: aSet [
 ]
 
 { #category : #blocks }
-ScriptableScratchMorph >> addGenericListBlocksTo: page y: startY [
+ScriptablePhratchMorph >> addGenericListBlocksTo: page y: startY [
 	"Add the generic list blocks to the given page starting at the given y offset."
 
 	| addButton deleteButton x y hasLists stage listMaker |
-	addButton := ScratchFrameMorph
+	addButton := PhratchFrameMorph
 		buttonLabel: 'Make a list' localized
 		selector: #addList.
-	(self isKindOf: ScratchStageMorph) ifTrue: [addButton actionSelector: #addGlobalList].
+	(self isKindOf: PhratchStageMorph) ifTrue: [addButton actionSelector: #addGlobalList].
 
-	deleteButton := ScratchFrameMorph
+	deleteButton := PhratchFrameMorph
 		buttonLabel: 'Delete a list' localized
 		selector: #deleteList.
 
@@ -680,7 +680,7 @@ ScriptableScratchMorph >> addGenericListBlocksTo: page y: startY [
 	y := addButton bottom + 3.
 
 	hasLists := self listVarNames size > 0.
-	(stage := self ownerOrYourselfThatIsA: ScratchStageMorph) ifNotNil: [
+	(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNotNil: [
 		stage listVarNames size > 0 ifTrue: [hasLists := true]].
 	hasLists ifTrue: [
 
@@ -708,17 +708,17 @@ ScriptableScratchMorph >> addGenericListBlocksTo: page y: startY [
 				(blockOrSym = #~) ifTrue: [y := y + 5].  "insert a half space"
 				(blockOrSym = #=) ifTrue: [
 					y := y + 7.
-					page addMorph: ((ImageMorph new form: (ScratchFrameMorph skinAt: #connector)) position: x@y).
+					page addMorph: ((ImageMorph new form: (PhratchFrameMorph skinAt: #connector)) position: x@y).
 					y := y + 20]]  "insert a line"
 			ifFalse: [
 				y := self createBlock: blockOrSym atPosition: x@y onPage: page.
-				page submorphs last color: ScriptableScratchMorph listBlockColor]].
+				page submorphs last color: ScriptablePhratchMorph listBlockColor]].
 	^y
 
 ]
 
 { #category : #blocks }
-ScriptableScratchMorph >> addGenericVariableBlocksTo: page x: x y: startY [
+ScriptablePhratchMorph >> addGenericVariableBlocksTo: page x: x y: startY [
 	"Add the generic variable blocks to the given page starting at the given y offset. Answer the new y."
 
 	| y vName stage block varBlocks |
@@ -726,7 +726,7 @@ ScriptableScratchMorph >> addGenericVariableBlocksTo: page x: x y: startY [
 
 	"pick a default variable name"
 	vName := nil.
-	stage := self ownerOrYourselfThatIsA: ScratchStageMorph.
+	stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
 	(stage notNil and: [stage varNames size > 0])
 		ifTrue: [
 			vName := stage varNames first]
@@ -772,7 +772,7 @@ ScriptableScratchMorph >> addGenericVariableBlocksTo: page x: x y: startY [
 				(blockOrSym = #~) ifTrue: [y := y + 5].  "insert a half space"
 				(blockOrSym = #=) ifTrue: [
 					y := y + 7.
-					page addMorph: ((ImageMorph new form: (ScratchFrameMorph skinAt: #connector)) position: x@y).
+					page addMorph: ((ImageMorph new form: (PhratchFrameMorph skinAt: #connector)) position: x@y).
 					y := y + 20]]  "insert a line"
 			ifFalse: [
 				blockOrSym color: ((blockOrSym isKindOf: VariableDeclarationBlockMorph)
@@ -794,10 +794,10 @@ ScriptableScratchMorph >> addGenericVariableBlocksTo: page x: x y: startY [
 ]
 
 { #category : #'list ops' }
-ScriptableScratchMorph >> addGlobalList [
+ScriptablePhratchMorph >> addGlobalList [
 
 	| sFrame listName |
-	(sFrame := self ownerOrYourselfThatIsA: ScratchFrameMorph) ifNil: [^ Beeper beep].
+	(sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNil: [^ Beeper beep].
 
 	listName := StringDialog ask: 'List name?'.
 	listName size = 0 ifTrue: [^ self].
@@ -807,11 +807,11 @@ ScriptableScratchMorph >> addGlobalList [
 ]
 
 { #category : #variables }
-ScriptableScratchMorph >> addGlobalVariable [
+ScriptablePhratchMorph >> addGlobalVariable [
 	"Ask the user for a variable name, then add a background (global) variable of that name."
 
 	| sFrame varName |
-	(sFrame := self ownerOrYourselfThatIsA: ScratchFrameMorph) ifNil: [^ Beeper beep].
+	(sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNil: [^ Beeper beep].
 
 	varName := StringDialog ask: 'Variable name?'.
 	varName size = 0 ifTrue: [^ self].
@@ -828,10 +828,10 @@ ScriptableScratchMorph >> addGlobalVariable [
 ]
 
 { #category : #'list ops' }
-ScriptableScratchMorph >> addList [
+ScriptablePhratchMorph >> addList [
 
 	| sFrame result listName |
-	(sFrame := self ownerOrYourselfThatIsA: ScratchFrameMorph) ifNil: [^ Beeper beep].
+	(sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNil: [^ Beeper beep].
 
 	result := NewVariableDialog ask: 'List name?'.
 	result = #cancelled ifTrue: [^ self].
@@ -844,16 +844,16 @@ ScriptableScratchMorph >> addList [
 ]
 
 { #category : #blocks }
-ScriptableScratchMorph >> addListReportersTo: page x: x y: startY [
+ScriptablePhratchMorph >> addListReportersTo: page x: x y: startY [
 	"Add the list block reporters to the given page starting at the given y offset. Answer the new y."
 
 	| y stage b watcherButton yOffset line line2 |
 	y := startY.
-	stage := self ownerOrYourselfThatIsA: ScratchStageMorph.
+	stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
 	(stage notNil and: [stage ~= self]) ifTrue: [
 		stage listVarNames do: [:listVarName |
 			b := ListContentsBlockMorph new
-				color: ScriptableScratchMorph listBlockColor;
+				color: ScriptablePhratchMorph listBlockColor;
 				receiver: stage blockReceiver;
 				commandSpec: listVarName;
 				selector: #listNamed:.
@@ -880,7 +880,7 @@ ScriptableScratchMorph >> addListReportersTo: page x: x y: startY [
 
 	self listVarNames do: [:listVarName |
 		b := ListContentsBlockMorph new
-			color: ScriptableScratchMorph listBlockColor;
+			color: ScriptablePhratchMorph listBlockColor;
 			receiver: self blockReceiver;
 			commandSpec: listVarName;
 			selector: #listNamed:.
@@ -895,17 +895,17 @@ ScriptableScratchMorph >> addListReportersTo: page x: x y: startY [
 ]
 
 { #category : #media }
-ScriptableScratchMorph >> addMediaItem: aScratchMedia [
+ScriptablePhratchMorph >> addMediaItem: aPhratchMedia [
 	"Add the given media item to my media."
 
-	aScratchMedia mediaName: (self unusedMediaNameFromBaseName: aScratchMedia mediaName).
-	media addLast: aScratchMedia.
-	aScratchMedia isSound ifFalse: [self lookLike: aScratchMedia mediaName].
+	aPhratchMedia mediaName: (self unusedMediaNameFromBaseName: aPhratchMedia mediaName).
+	media addLast: aPhratchMedia.
+	aPhratchMedia isSound ifFalse: [self lookLike: aPhratchMedia mediaName].
 	self updateMediaCategory.
 ]
 
 { #category : #scripts }
-ScriptableScratchMorph >> addStack: aBlockStack [
+ScriptablePhratchMorph >> addStack: aBlockStack [
 	"Aligns the newly added script below the lowest script in the pane."
 
 	| y bottom |
@@ -922,11 +922,11 @@ ScriptableScratchMorph >> addStack: aBlockStack [
 ]
 
 { #category : #byob }
-ScriptableScratchMorph >> addVariable [
+ScriptablePhratchMorph >> addVariable [
 	"Ask the user for a variable name, then add a user variable of that name. This version is for sprites and supports the option of making the variable specific to the sprite (i.e. local)."
 
 	| sFrame result varName varOwner w |
-	(sFrame := self ownerOrYourselfThatIsA: ScratchFrameMorph) ifNil: [^ Beeper beep].
+	(sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNil: [^ Beeper beep].
 
 	result := NewVariableDialog ask: 'Variable name?'.
 	result = #cancelled ifTrue: [^ self].
@@ -942,13 +942,13 @@ ScriptableScratchMorph >> addVariable [
 	self addWatcherForNewVariable: varName withScope: varOwner.
 
 	w := sFrame watcherForBlock: (VariableBlockMorph new receiver: self; commandSpec: varName; yourself).
-	w ifNotNil: [w setCategoryColor: (ScriptableScratchMorph blockColorFor: 'variables')].
+	w ifNotNil: [w setCategoryColor: (ScriptablePhratchMorph blockColorFor: 'variables')].
 
 
 ]
 
 { #category : #variables }
-ScriptableScratchMorph >> addVariable: varName [
+ScriptablePhratchMorph >> addVariable: varName [
 	"Add a new user variable with the given name to this object. Do nothing if the variable already exists or is built in."
 
 	(vars includesKey: varName asString) ifFalse: [
@@ -958,7 +958,7 @@ ScriptableScratchMorph >> addVariable: varName [
 ]
 
 { #category : #variables }
-ScriptableScratchMorph >> addVariable: varName value: anObject [
+ScriptablePhratchMorph >> addVariable: varName value: anObject [
 	"Add a new user variable with the given name to this object. Do nothing if the variable already exists or is built in."
 
 	(vars includesKey: varName asString) ifFalse: [
@@ -968,13 +968,13 @@ ScriptableScratchMorph >> addVariable: varName value: anObject [
 ]
 
 { #category : #blocks }
-ScriptableScratchMorph >> addVariableReportersTo: page x: x y: startY [
+ScriptablePhratchMorph >> addVariableReportersTo: page x: x y: startY [
 	"Add the list block reporters to the given page starting at the given y offset. Answer the new y."
 
 	| y stage b watcherButton yOffset line line2 |
 	y := startY.
 
-	stage := self ownerOrYourselfThatIsA: ScratchStageMorph.
+	stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
 	(stage notNil and: [stage ~= self]) ifTrue: [
 		stage varNames do: [:vName |
 			b := VariableBlockMorph new
@@ -1018,11 +1018,11 @@ ScriptableScratchMorph >> addVariableReportersTo: page x: x y: startY [
 ]
 
 { #category : #variables }
-ScriptableScratchMorph >> addWatcherForNewVariable: varName withScope: spriteOrStage [
+ScriptablePhratchMorph >> addWatcherForNewVariable: varName withScope: spriteOrStage [
 	"Add a watcher on the stage once a variable has been created."
 
 	| sFrame |
-	(sFrame := self ownerOrYourselfThatIsA: ScratchFrameMorph) ifNil: [^ self].
+	(sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNil: [^ self].
 	sFrame viewerPane pageViewer submorphs do: [:s | 
 		(s isKindOf: PhratchBlockPaletteMorph) ifTrue: [
 			s submorphs do: [:block | 
@@ -1035,10 +1035,10 @@ ScriptableScratchMorph >> addWatcherForNewVariable: varName withScope: spriteOrS
 ]
 
 { #category : #byob }
-ScriptableScratchMorph >> allInstancesOf: aCustomBlockId [
+ScriptablePhratchMorph >> allInstancesOf: aCustomBlockId [
 
 	| objects stage all |
-	(self isKindOf: ScratchStageMorph)
+	(self isKindOf: PhratchStageMorph)
 		ifTrue: [stage := self]
 		ifFalse: [stage := self owner].
 	objects := {stage}, stage sprites.
@@ -1049,7 +1049,7 @@ ScriptableScratchMorph >> allInstancesOf: aCustomBlockId [
 ]
 
 { #category : #'byob OOP' }
-ScriptableScratchMorph >> allLocalBlockIds [
+ScriptablePhratchMorph >> allLocalBlockIds [
 
 	| ownIds inheritedIds |
 	ownIds := self blockIds.
@@ -1061,7 +1061,7 @@ ScriptableScratchMorph >> allLocalBlockIds [
 ]
 
 { #category : #'motor ops' }
-ScriptableScratchMorph >> allMotorsOff [
+ScriptablePhratchMorph >> allMotorsOff [
 	"Turn all motors off."
 
 	self motorOff: ' '.
@@ -1069,7 +1069,7 @@ ScriptableScratchMorph >> allMotorsOff [
 ]
 
 { #category : #'motor ops' }
-ScriptableScratchMorph >> allMotorsOn [
+ScriptablePhratchMorph >> allMotorsOn [
 	"Turn all motors off."
 
 	self motorOn: ' '.
@@ -1077,16 +1077,16 @@ ScriptableScratchMorph >> allMotorsOn [
 ]
 
 { #category : #'BYOB object interface' }
-ScriptableScratchMorph >> allSprites [
+ScriptablePhratchMorph >> allSprites [
 
 	| stage |
-	stage := self ownerOrYourselfThatIsA: ScratchStageMorph.
-	stage ifNil: [^ ScratchListMorph new].
-	^ ScratchListMorph on: stage sprites
+	stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
+	stage ifNil: [^ PhratchListMorph new].
+	^ PhratchListMorph on: stage sprites
 ]
 
 { #category : #variables }
-ScriptableScratchMorph >> allVarNames [
+ScriptablePhratchMorph >> allVarNames [
 	"Answer a set of all variable and list variable names."
 
 	| allNames |
@@ -1098,18 +1098,18 @@ ScriptableScratchMorph >> allVarNames [
 ]
 
 { #category : #'sensing ops' }
-ScriptableScratchMorph >> answer [
+ScriptablePhratchMorph >> answer [
 
 	^ PhratchPrompterMorph lastAnswer
 
 ]
 
 { #category : #'list ops' }
-ScriptableScratchMorph >> append: anObject toList: listName [
+ScriptablePhratchMorph >> append: anObject toList: listName [
 
 	| list |
 
-	(listName isKindOf: ScratchListMorph)
+	(listName isKindOf: PhratchListMorph)
 		ifTrue: [list := listName]
 		ifFalse: [list := self listNamed: listName ifNone: [^ 0]].
 	list insertLine: (self asListElement: anObject) at: (list lineCount + 1)
@@ -1118,12 +1118,12 @@ ScriptableScratchMorph >> append: anObject toList: listName [
 ]
 
 { #category : #'list ops' }
-ScriptableScratchMorph >> asListElement: anObject [
+ScriptablePhratchMorph >> asListElement: anObject [
 	"Answer the given object converted to an object suitable for storing in a list."
 
-	(anObject isKindOf: ScriptableScratchMorph) ifTrue: [^ anObject].
+	(anObject isKindOf: ScriptablePhratchMorph) ifTrue: [^ anObject].
 	(anObject isKindOf: BlockMorph) ifTrue: [^ anObject].
-	(anObject isKindOf: ScratchListMorph) ifTrue: [^ anObject].
+	(anObject isKindOf: PhratchListMorph) ifTrue: [^ anObject].
 	(anObject isKindOf: String) ifTrue: [^ anObject].
 	anObject isUnicode ifTrue: [^ anObject].
 	(anObject isKindOf: Character) ifTrue: [^ anObject asString].
@@ -1142,7 +1142,7 @@ ScriptableScratchMorph >> asListElement: anObject [
 ]
 
 { #category : #byob }
-ScriptableScratchMorph >> asciiCodeOf: aString [
+ScriptablePhratchMorph >> asciiCodeOf: aString [
 
 	| str |
 	str := aString asMacRoman.
@@ -1152,7 +1152,7 @@ ScriptableScratchMorph >> asciiCodeOf: aString [
 ]
 
 { #category : #'sensing ops' }
-ScriptableScratchMorph >> asciiFor: keyName [
+ScriptablePhratchMorph >> asciiFor: keyName [
 
 	| localizedKey |
 	keyName size = 1 ifTrue: [^ keyName first asciiValue].
@@ -1176,7 +1176,7 @@ ScriptableScratchMorph >> asciiFor: keyName [
 ]
 
 { #category : #byob }
-ScriptableScratchMorph >> asciiLetter: anInteger [
+ScriptablePhratchMorph >> asciiLetter: anInteger [
 
 	| code |
 	code := anInteger asNumberNoError.
@@ -1192,26 +1192,26 @@ ScriptableScratchMorph >> asciiLetter: anInteger [
 ]
 
 { #category : #'BYOB OOP message passing' }
-ScriptableScratchMorph >> attribute: attr of: anObject [
+ScriptablePhratchMorph >> attribute: attr of: anObject [
 	"Answer the variable or built-in attribute value for the given sprite. Answer zero if the given sprite does not have a built-in attribute or variable of the given name."
 
 	| aSpriteOrStage |
 	aSpriteOrStage := self coerceSpriteArg: anObject.
 
-	(aSpriteOrStage isKindOf: ScriptableScratchMorph) ifFalse: [^ 0].
+	(aSpriteOrStage isKindOf: ScriptablePhratchMorph) ifFalse: [^ 0].
 	^ aSpriteOrStage attribute: attr
 
 ]
 
 { #category : #'sensing ops' }
-ScriptableScratchMorph >> attributeNames [
+ScriptablePhratchMorph >> attributeNames [
 
 	^ vars keys
 
 ]
 
 { #category : #blocks }
-ScriptableScratchMorph >> blockCategories [
+ScriptablePhratchMorph >> blockCategories [
 	"Answer a list of block categories."
 
 	^ (self class blockSpecs select: [:el |
@@ -1220,13 +1220,13 @@ ScriptableScratchMorph >> blockCategories [
 ]
 
 { #category : #byob }
-ScriptableScratchMorph >> blockDefinition: anOrderedList [
+ScriptablePhratchMorph >> blockDefinition: anOrderedList [
 	customBlocks := anOrderedList
 
 ]
 
 { #category : #'BYOB OOP message passing' }
-ScriptableScratchMorph >> blockForSelector: aSymbol [
+ScriptablePhratchMorph >> blockForSelector: aSymbol [
 	"Answer a block for the give selector or nil"
 
 	| cat |
@@ -1245,7 +1245,7 @@ ScriptableScratchMorph >> blockForSelector: aSymbol [
 ]
 
 { #category : #blocks }
-ScriptableScratchMorph >> blockFromOldFormTuple: tuple receiver: scriptOwner [
+ScriptablePhratchMorph >> blockFromOldFormTuple: tuple receiver: scriptOwner [
 	"Answer a new block for the given tuple."
 
 	| k spec blockColor block argCount arg argBlock userSpec csp |
@@ -1258,7 +1258,7 @@ ScriptableScratchMorph >> blockFromOldFormTuple: tuple receiver: scriptOwner [
 
 	#listNamed: = k ifTrue: [
 		^ ListContentsBlockMorph new
-			color: ScriptableScratchMorph listBlockColor;
+			color: ScriptablePhratchMorph listBlockColor;
 			receiver: scriptOwner;
 			commandSpec: tuple second;
 			selector: #listNamed:].
@@ -1299,7 +1299,7 @@ ScriptableScratchMorph >> blockFromOldFormTuple: tuple receiver: scriptOwner [
 
 	#doMakeNewList = k ifTrue: [
 		block := MultiArgReporterBlockMorph new
-			color: ScriptableScratchMorph listBlockColor;
+			color: ScriptablePhratchMorph listBlockColor;
 			receiver: scriptOwner;
 			isSpecialForm: true;
 			selector: #doMakeNewList.
@@ -1321,7 +1321,7 @@ ScriptableScratchMorph >> blockFromOldFormTuple: tuple receiver: scriptOwner [
 
 	(#(doCallBlockWithArgs doReport) includes: k) ifTrue: [
 		block := MultiArgReporterBlockMorph new
-			color: (ScriptableScratchMorph blockColorFor: 'control');
+			color: (ScriptablePhratchMorph blockColorFor: 'control');
 			receiver: scriptOwner;
 			isSpecialForm: true;
 			minArgs: 1;
@@ -1343,7 +1343,7 @@ ScriptableScratchMorph >> blockFromOldFormTuple: tuple receiver: scriptOwner [
 
 	(#(function functionWithArgs) includes: k) ifTrue: [
 		block := ReporterScriptBlockMorph new
-			color: (ScriptableScratchMorph blockColorFor: 'operators');
+			color: (ScriptablePhratchMorph blockColorFor: 'operators');
 			receiver: scriptOwner;
 			isSpecialForm: false;
 			minArgs: 1;
@@ -1402,7 +1402,7 @@ ScriptableScratchMorph >> blockFromOldFormTuple: tuple receiver: scriptOwner [
 	(block isKindOf: CommandBlockMorph) ifTrue: [
 		argCount := block argumentCount min: tuple size - 1.
 		1 to: argCount do: [:i |
-			((#(+ - / * =) includes: block selector) and: [ScratchTranslator isRTLMath]) "RTLMath operators are RTL"
+			((#(+ - / * =) includes: block selector) and: [PhratchTranslator isRTLMath]) "RTLMath operators are RTL"
 				ifTrue: [arg := tuple at: ((argCount + 1) - (i - 1))]
 				ifFalse: [arg := tuple at: i + 1].
 			(arg isKindOf: Array)
@@ -1433,11 +1433,11 @@ ScriptableScratchMorph >> blockFromOldFormTuple: tuple receiver: scriptOwner [
 ]
 
 { #category : #'list ops' }
-ScriptableScratchMorph >> blockFromSpec: spec color: blockColor [
+ScriptablePhratchMorph >> blockFromSpec: spec color: blockColor [
 	"Create a block from the given block specification. Answer nil if I don't implement the block spec selector."
 
 	| blockLabelSpec blockType selector defaultArgs block rcvr argPermutation |
-	blockLabelSpec := ScratchTranslator translationFor: (spec at: 1).
+	blockLabelSpec := PhratchTranslator translationFor: (spec at: 1).
 	argPermutation := CommandBlockMorph argPermutationForSpec: (spec at: 1) withTranslation: blockLabelSpec.
 	blockType := spec at: 2.
 	selector := (spec at: 3) asSymbol.
@@ -1481,9 +1481,9 @@ ScriptableScratchMorph >> blockFromSpec: spec color: blockColor [
 			ifTrue: [block isSpecialForm: true].
 	(blockType includes: $t) ifTrue: [block isTimed: true].
 
-	(ScriptableScratchMorph isSpriteSpecificTarget: self selector: selector)
+	(ScriptablePhratchMorph isSpriteSpecificTarget: self selector: selector)
 		ifTrue: [rcvr := self]
-		ifFalse: [rcvr := self ownerOrYourselfThatIsA: ScratchStageMorph].
+		ifFalse: [rcvr := self ownerOrYourselfThatIsA: PhratchStageMorph].
 
 	^ block
 		argPermutation: argPermutation;
@@ -1496,7 +1496,7 @@ ScriptableScratchMorph >> blockFromSpec: spec color: blockColor [
 ]
 
 { #category : #blocks }
-ScriptableScratchMorph >> blockFromTuple: tuple receiver: scriptOwner [
+ScriptablePhratchMorph >> blockFromTuple: tuple receiver: scriptOwner [
 	"Answer a new block for the given tuple."
 
 	| k rcvr spec blockColor block argCount arg argBlock userSpec csp def |
@@ -1505,7 +1505,7 @@ ScriptableScratchMorph >> blockFromTuple: tuple receiver: scriptOwner [
 		^self blockFromOldFormTuple: tuple receiver: scriptOwner ].
 
 	'Stage' = tuple second 
-		ifTrue: [ rcvr := self ownerOrYourselfThatIsA: ScratchStageMorph ]
+		ifTrue: [ rcvr := self ownerOrYourselfThatIsA: PhratchStageMorph ]
 		ifFalse: [(tuple second isKindOf: VariableFrame) 
 			ifFalse: [ rcvr := self coerceSpriteArg: tuple second ]].
 	rcvr ifNil: [ rcvr := scriptOwner].
@@ -1520,7 +1520,7 @@ ScriptableScratchMorph >> blockFromTuple: tuple receiver: scriptOwner [
 
 	#listNamed: = k ifTrue: [
 		^ ListContentsBlockMorph new
-			color: ScriptableScratchMorph listBlockColor;
+			color: ScriptablePhratchMorph listBlockColor;
 			receiver: rcvr;
 			commandSpec: tuple fourth;
 			selector: #listNamed:].
@@ -1595,14 +1595,14 @@ ScriptableScratchMorph >> blockFromTuple: tuple receiver: scriptOwner [
 					argBlock := self blockFromTuple: arg receiver: scriptOwner.
 					block replaceArgMorph: (block argumentAt: i) by: argBlock]
 				ifFalse: [ "argument is a value"
-					(arg isKindOf: ScratchListMorph)
+					(arg isKindOf: PhratchListMorph)
 						ifTrue: [arg convertBlockTuplesToStacksFor: self].
 					(block argumentAt: i) defaultValue: arg]].
 		^block].
 
 	#doMakeNewList = k ifTrue: [
 		block := MultiArgReporterBlockMorph new
-			color: ScriptableScratchMorph listBlockColor;
+			color: ScriptablePhratchMorph listBlockColor;
 			receiver: rcvr;
 			isSpecialForm: true;
 			selector: #doMakeNewList.
@@ -1624,7 +1624,7 @@ ScriptableScratchMorph >> blockFromTuple: tuple receiver: scriptOwner [
 
 	(#(doCallBlockWithArgs doReport doCallBlockWithArgList) includes: k) ifTrue: [
 		block := MultiArgReporterBlockMorph new
-			color: (ScriptableScratchMorph blockColorFor: 'control');
+			color: (ScriptablePhratchMorph blockColorFor: 'control');
 			receiver: rcvr;
 			isSpecialForm: true;
 			minArgs: 1;
@@ -1649,7 +1649,7 @@ ScriptableScratchMorph >> blockFromTuple: tuple receiver: scriptOwner [
 
 	(#(function functionWithArgs) includes: k) ifTrue: [
 		block := ReporterScriptBlockMorph new
-			color: (ScriptableScratchMorph blockColorFor: 'operators');
+			color: (ScriptablePhratchMorph blockColorFor: 'operators');
 			receiver: rcvr;
 			isSpecialForm: false;
 			minArgs: 1;
@@ -1807,7 +1807,7 @@ ScriptableScratchMorph >> blockFromTuple: tuple receiver: scriptOwner [
 			^block].
 
 		1 to: argCount do: [:i |
-			((#(+ - / * =) includes: block selector) and: [ScratchTranslator isRTLMath]) "RTLMath operators are RTL"
+			((#(+ - / * =) includes: block selector) and: [PhratchTranslator isRTLMath]) "RTLMath operators are RTL"
 				ifTrue: [arg := tuple at: ((argCount + 3) - (i - 1))]
 				ifFalse: [arg := tuple at: i + 3].
 			(arg isKindOf: Array)
@@ -1816,7 +1816,7 @@ ScriptableScratchMorph >> blockFromTuple: tuple receiver: scriptOwner [
 					argBlock := self blockFromTuple: arg receiver: scriptOwner.
 					block replaceArgMorph: (block argumentAt: i) by: argBlock]
 				ifFalse: [  "argument is a value"
-					(arg isKindOf: ScratchListMorph)
+					(arg isKindOf: PhratchListMorph)
 						ifTrue: [arg convertBlockTuplesToStacksFor: self].
 					(block argumentAt: i) defaultValue: arg]].
 
@@ -1840,14 +1840,14 @@ ScriptableScratchMorph >> blockFromTuple: tuple receiver: scriptOwner [
 ]
 
 { #category : #byob }
-ScriptableScratchMorph >> blockIds [
+ScriptablePhratchMorph >> blockIds [
 	customBlocks ifNil: [customBlocks := OrderedCollection new].
 	^ (customBlocks select: [:eachDef | eachDef isGlobal not ])
 		collect: [:eachDef | eachDef id]
 ]
 
 { #category : #'BYOB OOP message passing' }
-ScriptableScratchMorph >> blockLike: aBlockMorph [
+ScriptablePhratchMorph >> blockLike: aBlockMorph [
 
 	aBlockMorph selector = #doCustomBlock
 		ifTrue: [^ self lambda: aBlockMorph id].
@@ -1856,7 +1856,7 @@ ScriptableScratchMorph >> blockLike: aBlockMorph [
 ]
 
 { #category : #blocks }
-ScriptableScratchMorph >> blockReceiver [
+ScriptablePhratchMorph >> blockReceiver [
 	"Answer the object that is the receiver of my blocks. By default that is myself, but subclasses may re-direct block operations to another object."
 
 	^ self
@@ -1864,7 +1864,7 @@ ScriptableScratchMorph >> blockReceiver [
 ]
 
 { #category : #blocks }
-ScriptableScratchMorph >> blockSpecForSelector: aSymbol [
+ScriptablePhratchMorph >> blockSpecForSelector: aSymbol [
 	"Answer a block specification string (in English) for the give selector or nil if there is no spec that has the given selector."
 
 	self class blockSpecs do: [:spec |
@@ -1876,7 +1876,7 @@ ScriptableScratchMorph >> blockSpecForSelector: aSymbol [
 ]
 
 { #category : #blocks }
-ScriptableScratchMorph >> blockVariableBlockFromTuple: tuple receiver: scriptOwner [
+ScriptablePhratchMorph >> blockVariableBlockFromTuple: tuple receiver: scriptOwner [
 	"Answer a new block for the given variable reference tuple."
 
 	| varName rcvr selector block arg argBlock |
@@ -1904,7 +1904,7 @@ ScriptableScratchMorph >> blockVariableBlockFromTuple: tuple receiver: scriptOwn
 			ifFalse: [ rcvr := rcvr definitionFor: (CustomBlockDefinition idFromSpec: (tuple at: 6))]. 
 
 		block := SetterBlockMorph new
-			color: (ScriptableScratchMorph blockColorFor: 'variables').
+			color: (ScriptablePhratchMorph blockColorFor: 'variables').
 
 		(#(setVar:to: setBlockVar:to:) includes: selector)
 			ifTrue: [block initSetterForVar: varName]
@@ -1931,7 +1931,7 @@ ScriptableScratchMorph >> blockVariableBlockFromTuple: tuple receiver: scriptOwn
 ]
 
 { #category : #blocks }
-ScriptableScratchMorph >> blockVariableBlockFromTupleOldForm: tuple receiver: scriptOwner [
+ScriptablePhratchMorph >> blockVariableBlockFromTupleOldForm: tuple receiver: scriptOwner [
 	"Answer a new block for the given variable reference tuple."
 
 	| varName rcvr selector block arg argBlock |
@@ -1957,7 +1957,7 @@ ScriptableScratchMorph >> blockVariableBlockFromTupleOldForm: tuple receiver: sc
 
 		block := SetterBlockMorph new
 			receiver: rcvr;
-			color: (ScriptableScratchMorph blockColorFor: 'variables').
+			color: (ScriptablePhratchMorph blockColorFor: 'variables').
 
 		(#(setVar:to: setBlockVar:to:) includes: selector)
 			ifTrue: [block initSetterForVar: varName]
@@ -1982,7 +1982,7 @@ ScriptableScratchMorph >> blockVariableBlockFromTupleOldForm: tuple receiver: sc
 ]
 
 { #category : #blocks }
-ScriptableScratchMorph >> blockWithID: id [
+ScriptablePhratchMorph >> blockWithID: id [
 
 	| topBlockList blockList|
 
@@ -1996,14 +1996,14 @@ ScriptableScratchMorph >> blockWithID: id [
 ]
 
 { #category : #blocks }
-ScriptableScratchMorph >> blocksBin [
+ScriptablePhratchMorph >> blocksBin [
 
 	^ blocksBin
 
 ]
 
 { #category : #blocks }
-ScriptableScratchMorph >> blocksFor: aCategory [
+ScriptablePhratchMorph >> blocksFor: aCategory [
 	"Answer a collection of blocks for the given category. Mixed with the blocks are dash and tilde symbols (#- and #~) indicating where full and half spaces should be inserted when laying out the blocks."
 
 	| blockColor blocksList category b cdefs inherited all |
@@ -2042,7 +2042,7 @@ ScriptableScratchMorph >> blocksFor: aCategory [
 ]
 
 { #category : #'BYOB attributes' }
-ScriptableScratchMorph >> blurEffect [
+ScriptablePhratchMorph >> blurEffect [
 
 	| att |
 	att := #blur.
@@ -2054,14 +2054,14 @@ ScriptableScratchMorph >> blurEffect [
 ]
 
 { #category : #'BYOB attributes' }
-ScriptableScratchMorph >> blurEffect: aNumber [
+ScriptablePhratchMorph >> blurEffect: aNumber [
 
 	self undeleteAttribute: #blur.
 	self passiveBlurEffect: aNumber
 ]
 
 { #category : #'BYOB attributes' }
-ScriptableScratchMorph >> brightnessEffect [
+ScriptablePhratchMorph >> brightnessEffect [
 
 	| att |
 	att := #brightness.
@@ -2073,14 +2073,14 @@ ScriptableScratchMorph >> brightnessEffect [
 ]
 
 { #category : #'BYOB attributes' }
-ScriptableScratchMorph >> brightnessEffect: aNumber [
+ScriptablePhratchMorph >> brightnessEffect: aNumber [
 
 	self undeleteAttribute: #brightness.
 	self passiveBrightnessEffect: aNumber
 ]
 
 { #category : #'other ops' }
-ScriptableScratchMorph >> broadcast: name [
+ScriptablePhratchMorph >> broadcast: name [
 	"Broadcast the given event name with zero as its argument."
 
 	self broadcast: name withArgument: 0.
@@ -2088,17 +2088,17 @@ ScriptableScratchMorph >> broadcast: name [
 ]
 
 { #category : #'other ops' }
-ScriptableScratchMorph >> broadcast: name withArgument: arg [
+ScriptablePhratchMorph >> broadcast: name withArgument: arg [
 	"Broadcast the given event with the given argument."
 
 	| stage |
-	(stage := self ownerOrYourselfThatIsA: ScratchStageMorph) ifNotNil: [
+	(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNotNil: [
 		stage broadcastEventNamed: name asString with: arg].
 
 ]
 
 { #category : #'byob easter egg fun' }
-ScriptableScratchMorph >> callMe [
+ScriptablePhratchMorph >> callMe [
 
 	^ (ReporterBlockMorph new
 		color: Color random;
@@ -2109,13 +2109,13 @@ ScriptableScratchMorph >> callMe [
 ]
 
 { #category : #'byob easter egg fun' }
-ScriptableScratchMorph >> callMeWith: anArg [
+ScriptablePhratchMorph >> callMeWith: anArg [
 
 	((anArg isKindOf: String) and: [anArg isEmpty not])
 		ifFalse: [^ 'call me with ''please'', please!'].
 
 	anArg asLowercase = 'please' ifTrue: [
-		(self isKindOf: ScratchStageMorph) ifTrue: [
+		(self isKindOf: PhratchStageMorph) ifTrue: [
 			^'first drag me from the stage into a sprite, then call me again!'].
 
 		^ (CommandBlockMorph new
@@ -2131,7 +2131,7 @@ ScriptableScratchMorph >> callMeWith: anArg [
 ]
 
 { #category : #'looks ops' }
-ScriptableScratchMorph >> changeCostumeIndexBy: aNumber [
+ScriptablePhratchMorph >> changeCostumeIndexBy: aNumber [
 	"Change my costume index by the given amount."
 
 	self costumeIndex: self costumeIndex + aNumber.
@@ -2139,7 +2139,7 @@ ScriptableScratchMorph >> changeCostumeIndexBy: aNumber [
 ]
 
 { #category : #'looks ops' }
-ScriptableScratchMorph >> changeGraphicEffect: effect by: aNumber [
+ScriptablePhratchMorph >> changeGraphicEffect: effect by: aNumber [
 	"Change the given graphic effect by the given value."
 
 
@@ -2186,26 +2186,26 @@ ScriptableScratchMorph >> changeGraphicEffect: effect by: aNumber [
 ]
 
 { #category : #'sound ops' }
-ScriptableScratchMorph >> changeTempoBy: aNumber [
+ScriptablePhratchMorph >> changeTempoBy: aNumber [
 
 	self setTempoTo: self tempo + aNumber.
 
 ]
 
 { #category : #variables }
-ScriptableScratchMorph >> changeVar: varName by: increment [
+ScriptablePhratchMorph >> changeVar: varName by: increment [
 	"Change the value of the given variable of this object by the given amount."
 
 	| stage n frame w |
 
 	(vars includesKey: varName asString) ifFalse: [
-		stage := self ownerOrYourselfThatIsA: ScratchStageMorph.
+		stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
 		(stage notNil and: [stage ~= self]) 
 			ifTrue: [stage changeVar: varName by: increment].
 		(self prototype notNil and: [self prototype varNames includes: varName])
 			ifTrue: [
 				vars at: varName put: (self getVar: varName) + increment asNumberNoError.
-			frame := self scratchFrame.
+			frame := self phratchFrame.
 			frame ifNil: [^ self].
 			frame viewerPane categoryChanged: 'variables'.
 			w := frame watcherForBlock: (VariableBlockMorph new 
@@ -2213,7 +2213,7 @@ ScriptableScratchMorph >> changeVar: varName by: increment [
 					commandSpec: varName; 
 					yourself).
 			w ifNotNil: [
-				w setCategoryColor: (ScriptableScratchMorph blockColorFor: 'variables') ]].
+				w setCategoryColor: (ScriptablePhratchMorph blockColorFor: 'variables') ]].
 		^ self].
 
 	n := vars at: varName asString ifAbsent: [^ self].
@@ -2222,20 +2222,20 @@ ScriptableScratchMorph >> changeVar: varName by: increment [
 ]
 
 { #category : #'looks ops' }
-ScriptableScratchMorph >> changeVisibilityBy: delta [
+ScriptablePhratchMorph >> changeVisibilityBy: delta [
 	"Obsolete. Do nothing."
 
 ]
 
 { #category : #'sound ops' }
-ScriptableScratchMorph >> changeVolumeBy: aNumber [
+ScriptablePhratchMorph >> changeVolumeBy: aNumber [
 
 	self setVolumeTo: volume + aNumber.
 
 ]
 
 { #category : #'as yet unclassified' }
-ScriptableScratchMorph >> changed [
+ScriptablePhratchMorph >> changed [
 	"Report that the area occupied by this morph should be redrawn."
 
 	self invalidRect: self fullBounds.
@@ -2243,7 +2243,7 @@ ScriptableScratchMorph >> changed [
 ]
 
 { #category : #private }
-ScriptableScratchMorph >> clearMediaAndCostume [
+ScriptablePhratchMorph >> clearMediaAndCostume [
 	"Private! Used when exporting an empty stage."
 
 	media := OrderedCollection new.
@@ -2252,7 +2252,7 @@ ScriptableScratchMorph >> clearMediaAndCostume [
 ]
 
 { #category : #byob }
-ScriptableScratchMorph >> clearVariables [
+ScriptablePhratchMorph >> clearVariables [
 
 	self varNames do: [:vn |
 		self setVar: vn to: 0].
@@ -2262,7 +2262,7 @@ ScriptableScratchMorph >> clearVariables [
 ]
 
 { #category : #'event handling' }
-ScriptableScratchMorph >> click: evt [
+ScriptablePhratchMorph >> click: evt [
 	"Start or stop all my clickable scripts."
 
 	| h clickEvt |
@@ -2277,26 +2277,26 @@ ScriptableScratchMorph >> click: evt [
 ]
 
 { #category : #byob }
-ScriptableScratchMorph >> closeBlockEditor [
+ScriptablePhratchMorph >> closeBlockEditor [
 	| sf |
-	sf := self ownerOrYourselfThatIsA: ScratchFrameMorph.
+	sf := self ownerOrYourselfThatIsA: PhratchFrameMorph.
 	sf ifNil: [^self].
 	^sf closeBlockEditor
 ]
 
 { #category : #'sensing ops' }
-ScriptableScratchMorph >> coerceSpriteArg: anObject [
+ScriptablePhratchMorph >> coerceSpriteArg: anObject [
 	"Coerce the given object to a sprite reference if necessary. If it is a Symbol (e.g. #mouse), just return it. If it is a String, try to find a Sprite with that name. If it is a Number, coerce it to a string and look for a Sprite with a matching name."
 
 	| s targetName |
-	(anObject isKindOf: ScriptableScratchMorph) ifTrue: [^ anObject].
+	(anObject isKindOf: ScriptablePhratchMorph) ifTrue: [^ anObject].
 	(anObject isKindOf: Symbol) ifTrue: [^ anObject].
 
 	targetName := anObject isNumber ifTrue: [anObject printString] ifFalse: [anObject].
 
-	(s := self ownerOrYourselfThatIsA: ScratchStageMorph) ifNil: [^ nil].
+	(s := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNil: [^ nil].
 	s submorphsDo: [:m |
-		((m isKindOf: ScriptableScratchMorph) and:
+		((m isKindOf: ScriptablePhratchMorph) and:
 		 [targetName = m objName])
 			ifTrue: [^ m]].
 
@@ -2306,7 +2306,7 @@ ScriptableScratchMorph >> coerceSpriteArg: anObject [
 ]
 
 { #category : #'BYOB attributes' }
-ScriptableScratchMorph >> colorEffect [
+ScriptablePhratchMorph >> colorEffect [
 
 	| att |
 	att := #color.
@@ -2318,7 +2318,7 @@ ScriptableScratchMorph >> colorEffect [
 ]
 
 { #category : #'BYOB attributes' }
-ScriptableScratchMorph >> colorEffect: aNumber [
+ScriptablePhratchMorph >> colorEffect: aNumber [
 
 	self undeleteAttribute: #color.
 	self passiveColorEffect: aNumber
@@ -2326,14 +2326,14 @@ ScriptableScratchMorph >> colorEffect: aNumber [
 ]
 
 { #category : #'BYOB attributes' }
-ScriptableScratchMorph >> comeToFront [
+ScriptablePhratchMorph >> comeToFront [
 
 	super comeToFront.
 	self setLayerTo: 1
 ]
 
 { #category : #'other ops' }
-ScriptableScratchMorph >> computeFunction: functionName of: aNumber [
+ScriptablePhratchMorph >> computeFunction: functionName of: aNumber [
 	"Return the result of computing the given mathematical function on the given number."
 
 	'abs' = functionName ifTrue: [^ aNumber abs].
@@ -2355,7 +2355,7 @@ ScriptableScratchMorph >> computeFunction: functionName of: aNumber [
 ]
 
 { #category : #'string ops' }
-ScriptableScratchMorph >> concatenate: arg1 with: arg2 [
+ScriptablePhratchMorph >> concatenate: arg1 with: arg2 [
 	"Concatenate two strings. Arguments are converted to strings."
 
 	^ arg1 asString asUTF8, arg2 asString asUTF8
@@ -2363,7 +2363,7 @@ ScriptableScratchMorph >> concatenate: arg1 with: arg2 [
 ]
 
 { #category : #'list ops' }
-ScriptableScratchMorph >> contentsOfList: listName [
+ScriptablePhratchMorph >> contentsOfList: listName [
 
 	| list |
 	list := self listNamed: listName ifNone: [^ ''].
@@ -2372,7 +2372,7 @@ ScriptableScratchMorph >> contentsOfList: listName [
 ]
 
 { #category : #byob }
-ScriptableScratchMorph >> convertListVarReferencesToTuples [
+ScriptablePhratchMorph >> convertListVarReferencesToTuples [
 
 	"format conventions:
 
@@ -2409,20 +2409,20 @@ ScriptableScratchMorph >> convertListVarReferencesToTuples [
 		obj := self getVar: varName.
 
 		(obj isKindOf: BlockMorph) ifTrue: [
-			(obj receiver isKindOf: ScriptableScratchMorph)
-				ifTrue: [(obj receiver isKindOf: ScratchStageMorph)
+			(obj receiver isKindOf: ScriptablePhratchMorph)
+				ifTrue: [(obj receiver isKindOf: PhratchStageMorph)
 					ifTrue: [rcvr := 'Stage']
 					ifFalse: [rcvr := obj receiver objName]]
 				ifFalse: [ rcvr := '' ].
 			vars at: varName put: (Array with: #block with: rcvr with: obj tupleSequence) ].
 
-		(obj isKindOf: ScratchListMorph) ifTrue: [
+		(obj isKindOf: PhratchListMorph) ifTrue: [
 			ref := obj asReferenceTuple. 
 			(ref first = #variableList) & ({objName. 'Stage'} includes: ref second ) & (ref third = varName)
 				ifTrue: [obj convertStacksToTuples]
 				ifFalse: [ vars at: varName put: ref]].
 
-		(obj isKindOf: ScriptableScratchMorph) ifTrue: [
+		(obj isKindOf: ScriptablePhratchMorph) ifTrue: [
 			ref := obj asReferenceTuple. 
 			vars at: varName put: ref]].
 
@@ -2430,7 +2430,7 @@ ScriptableScratchMorph >> convertListVarReferencesToTuples [
 ]
 
 { #category : #blocks }
-ScriptableScratchMorph >> convertStacksToTuples [
+ScriptablePhratchMorph >> convertStacksToTuples [
 	"Convert my blocks bin from a morph containing block stack into a collection of (<point>, <tuple>) pairs the represent the same stacks in compact, language-independent form."
 
 	| stacks blocks comments |
@@ -2468,7 +2468,7 @@ ScriptableScratchMorph >> convertStacksToTuples [
 ]
 
 { #category : #byob }
-ScriptableScratchMorph >> convertTuplesToDefinitions [
+ScriptablePhratchMorph >> convertTuplesToDefinitions [
 
 	customBlocks ifNil: [^ self].
 	customBlocks do: [:eachDef |
@@ -2483,7 +2483,7 @@ ScriptableScratchMorph >> convertTuplesToDefinitions [
 ]
 
 { #category : #blocks }
-ScriptableScratchMorph >> convertTuplesToStacks [
+ScriptablePhratchMorph >> convertTuplesToStacks [
 	"Convert my blocks bin from a collection of (<point>, <tuple>) pairs into a morph containing a number of block stacks."
 
 	| tuplesList stack |
@@ -2509,7 +2509,7 @@ ScriptableScratchMorph >> convertTuplesToStacks [
 ]
 
 { #category : #byob }
-ScriptableScratchMorph >> convertVarTuplesToListReferences [
+ScriptablePhratchMorph >> convertVarTuplesToListReferences [
 
 	"format conventions:
 
@@ -2545,11 +2545,11 @@ ScriptableScratchMorph >> convertVarTuplesToListReferences [
 	self varNames do: [:varName |
 		obj := self getVar: varName.
 	
-		(obj isKindOf: ScratchListMorph) ifTrue: [
+		(obj isKindOf: PhratchListMorph) ifTrue: [
 			obj convertTuplesToStacks ].
 
 		(obj isKindOf: Array) ifTrue: [
-			stage := self ownerOrYourselfThatIsA: ScratchStageMorph.
+			stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
 			obj second = 'Stage'
 				ifTrue: [rcvr := stage ]
 				ifFalse: [rcvr := stage coerceSpriteArg: obj second ].
@@ -2575,7 +2575,7 @@ ScriptableScratchMorph >> convertVarTuplesToListReferences [
 ]
 
 { #category : #byob }
-ScriptableScratchMorph >> copyBlockDefinitionsFor: aSprite [
+ScriptablePhratchMorph >> copyBlockDefinitionsFor: aSprite [
 	"Answer a deep copy of my custom block definition list"
 
 	|result|
@@ -2591,7 +2591,7 @@ ScriptableScratchMorph >> copyBlockDefinitionsFor: aSprite [
 ]
 
 { #category : #private }
-ScriptableScratchMorph >> copyForExport [
+ScriptablePhratchMorph >> copyForExport [
 	"Answer a copy of me for exporting."
 
 	| objToExport |
@@ -2603,14 +2603,14 @@ ScriptableScratchMorph >> copyForExport [
 ]
 
 { #category : #private }
-ScriptableScratchMorph >> copyListsFor: aSprite [
+ScriptablePhratchMorph >> copyListsFor: aSprite [
 	"Answer a deep copy of my list variables dictionary."
 
 	| result oldList copiedList |
 	result := lists species new.
 	lists associationsDo: [:assoc |
 		oldList := assoc value.
-		copiedList := ScratchListMorph new
+		copiedList := PhratchListMorph new
 			listName: oldList listName target: aSprite;
 			newContents: oldList listContents.
 		result at: assoc key put: copiedList].
@@ -2620,15 +2620,15 @@ ScriptableScratchMorph >> copyListsFor: aSprite [
 ]
 
 { #category : #byob }
-ScriptableScratchMorph >> copyOfList: aList [
+ScriptablePhratchMorph >> copyOfList: aList [
 
-	aList ifNil: [^ ScratchListMorph on: #()].
-	^ ScratchListMorph on: aList asArray
+	aList ifNil: [^ PhratchListMorph on: #()].
+	^ PhratchListMorph on: aList asArray
 
 ]
 
 { #category : #private }
-ScriptableScratchMorph >> copyRecordingIn: dict [
+ScriptablePhratchMorph >> copyRecordingIn: dict [
 	"Copy my fields and scripts."
 
 	| newCopy newBlocksBin |
@@ -2646,7 +2646,7 @@ ScriptableScratchMorph >> copyRecordingIn: dict [
 	newCopy lookLike: costume mediaName.
 
 	"for nested sprites:"
-	(self isKindOf: ScratchSpriteMorph) ifTrue: [
+	(self isKindOf: PhratchSpriteMorph) ifTrue: [
 		newCopy refPos: self referencePosition.
 		newCopy privateSubsprites: (self subsprites collect: [:sub |
 			(sub copyRecordingIn: dict)
@@ -2657,14 +2657,14 @@ ScriptableScratchMorph >> copyRecordingIn: dict [
 ]
 
 { #category : #accessing }
-ScriptableScratchMorph >> costume [
+ScriptablePhratchMorph >> costume [
 
 	^ costume
 
 ]
 
 { #category : #accessing }
-ScriptableScratchMorph >> costumeChangeMSecs [
+ScriptablePhratchMorph >> costumeChangeMSecs [
 	"Answer the time of the last costume change. Whenever a costume change (or a filter change) occurs, this value is updated from the current millisecond clock. This value is used to optimize redrawing of thumbnails--if costumeChangeMSecs hasn't changed since the last time the thumbnail was updated we don't need to compute a new thumbnail."
 
 	^ costumeChangeMSecs
@@ -2672,7 +2672,7 @@ ScriptableScratchMorph >> costumeChangeMSecs [
 ]
 
 { #category : #private }
-ScriptableScratchMorph >> costumeChanged [
+ScriptablePhratchMorph >> costumeChanged [
 
 	costumeChangeMSecs := Time millisecondClockValue.
 	filterPack ifNotNil: [filterPack clearFilterCaches].
@@ -2682,7 +2682,7 @@ ScriptableScratchMorph >> costumeChanged [
 ]
 
 { #category : #accessing }
-ScriptableScratchMorph >> costumeForm [
+ScriptablePhratchMorph >> costumeForm [
 	"Answer my current costume form, without filtering, rotation or scaling. If my costume is a movie or animation, answer the appropriate frame."
 
 	^ costume compositeForm
@@ -2690,14 +2690,14 @@ ScriptableScratchMorph >> costumeForm [
 ]
 
 { #category : #'looks ops' }
-ScriptableScratchMorph >> costumeFromName: aString [
+ScriptablePhratchMorph >> costumeFromName: aString [
 	"If there is a costume by the given name, return it. Otherwise, return nil."
 
 	| cameraCostume |
 	((aString = '*** camera ***') and:
 	 [CameraPlugin cameraIsAvailable]) ifTrue: [
 		cameraCostume := CameraMedia new.
-		(self class = ScratchStageMorph) ifTrue: [cameraCostume frameExtent: self extent].
+		(self class = PhratchStageMorph) ifTrue: [cameraCostume frameExtent: self extent].
 		^ cameraCostume].
 
 	^ media
@@ -2707,7 +2707,7 @@ ScriptableScratchMorph >> costumeFromName: aString [
 ]
 
 { #category : #'looks ops' }
-ScriptableScratchMorph >> costumeIndex [
+ScriptablePhratchMorph >> costumeIndex [
 	"Answer the index of my current costume."
 
 	| att |
@@ -2722,7 +2722,7 @@ ScriptableScratchMorph >> costumeIndex [
 ]
 
 { #category : #'looks ops' }
-ScriptableScratchMorph >> costumeIndex: aNumber [
+ScriptablePhratchMorph >> costumeIndex: aNumber [
 	"Set my costume to the costume at the given index modulo my total number of costumes. Costumes are numbered starting at 1."
 
 	| cList i newC |
@@ -2735,7 +2735,7 @@ ScriptableScratchMorph >> costumeIndex: aNumber [
 ]
 
 { #category : #'looks ops' }
-ScriptableScratchMorph >> costumeNameFromNumber: aNumber [
+ScriptablePhratchMorph >> costumeNameFromNumber: aNumber [
 	"Return a costume name for the given number--rounded and modulo the number of costumes."
 
 	| costumeList i |
@@ -2748,7 +2748,7 @@ ScriptableScratchMorph >> costumeNameFromNumber: aNumber [
 ]
 
 { #category : #media }
-ScriptableScratchMorph >> costumeNames [
+ScriptablePhratchMorph >> costumeNames [
 	"Answer a list of my costume (costume = non-sound media object) names."
 
 	| result nm |
@@ -2766,47 +2766,47 @@ ScriptableScratchMorph >> costumeNames [
 ]
 
 { #category : #'BYOB attributes' }
-ScriptableScratchMorph >> costumes [
+ScriptablePhratchMorph >> costumes [
 	"this will at some future time answer first class costumes,
 	for now it's just the costume names"
 
-	^ ScratchListMorph on: ((media select: [:m | 
+	^ PhratchListMorph on: ((media select: [:m | 
 		m isSound not]) collect: [:c | c mediaName])
 ]
 
 { #category : #blocks }
-ScriptableScratchMorph >> costumesPage: xOffset [
+ScriptablePhratchMorph >> costumesPage: xOffset [
 	"Answer a morph containing thumbnails of my costumes."
 
 	| bin label m y images n recBut impBut photoBut maxHeight xMargin yMargin separator |
 	xMargin := 15.
 	yMargin := 15.
 
-	bin := PhratchBlockPaletteMorph new color: ScratchFrameMorph scriptsPaneColor.
+	bin := PhratchBlockPaletteMorph new color: PhratchFrameMorph scriptsPaneColor.
 
-	(self isKindOf: ScratchStageMorph)
+	(self isKindOf: PhratchStageMorph)
 		ifTrue: [label := 'New background:' localized]
 		ifFalse: [label := 'New costume:' localized].
 	m := PhratchStringMorph
 		contents: label
-		font: (ScratchFrameMorph getFont: #CostumesPage).
+		font: (PhratchFrameMorph getFont: #CostumesPage).
 	m color: Color white.
 	bin addMorph: m.
 
-	recBut := ScratchFrameMorph buttonLabel: 'Paint' localized selector: #drawNewCostume.
+	recBut := PhratchFrameMorph buttonLabel: 'Paint' localized selector: #drawNewCostume.
 	recBut target: self.
 	bin addMorph: recBut.
 
-	impBut := ScratchFrameMorph buttonLabel: 'Import' localized selector: #importImage.
+	impBut := PhratchFrameMorph buttonLabel: 'Import' localized selector: #importImage.
 	impBut target: self.
 	bin addMorph: impBut.
 
-	photoBut := ScratchFrameMorph buttonLabel: 'Camera' localized selector: #takePhoto.
+	photoBut := PhratchFrameMorph buttonLabel: 'Camera' localized selector: #takePhoto.
 	photoBut target: self.
 	bin addMorph: photoBut.
 
 	maxHeight := (m height max: (impBut height max: (recBut height max: photoBut height))).
-	ScratchTranslator isRTL
+	PhratchTranslator isRTL
 		ifTrue: [
 			photoBut position: xMargin@(yMargin + ((maxHeight - photoBut height) / 2)).
 			impBut position: (photoBut right + 4)@(yMargin + ((maxHeight - impBut height) / 2)).
@@ -2818,7 +2818,7 @@ ScriptableScratchMorph >> costumesPage: xOffset [
 			impBut position: (recBut right + 4)@(yMargin + ((maxHeight - impBut height) / 2)).
 			photoBut position: (impBut right + 4)@(yMargin + ((maxHeight - impBut height) / 2))].
 
-	separator := TiledImageMorph new tileForm: (ScratchFrameMorph skinAt: #costumeSeparatorTile).
+	separator := TiledImageMorph new tileForm: (PhratchFrameMorph skinAt: #costumeSeparatorTile).
 	bin addMorph: (separator position: (xOffset + 17)@(yMargin + maxHeight + 5)).
 
 	y := yMargin + maxHeight + 9.
@@ -2826,7 +2826,7 @@ ScriptableScratchMorph >> costumesPage: xOffset [
 	images := media select: [:item | item isImage].
 	images do: [:item |
 		m := MediaItemMorph new.
-		m scratchObj: self media: item; position: xOffset@y.
+		m phratchObj: self media: item; position: xOffset@y.
 		m setNumber: (n := n + 1).
 		item = costume ifTrue: [m highlight: true].
 		bin addMorph: m.
@@ -2841,7 +2841,7 @@ ScriptableScratchMorph >> costumesPage: xOffset [
 ]
 
 { #category : #blocks }
-ScriptableScratchMorph >> createBlock: block atPosition: pos onPage: page [
+ScriptablePhratchMorph >> createBlock: block atPosition: pos onPage: page [
 	"Creates a block on the given page. If the block is one that can become a watcher, then a toggle button is created as well."
 
 	| x y changingX toggleButton yOffset frame |
@@ -2872,7 +2872,7 @@ ScriptableScratchMorph >> createBlock: block atPosition: pos onPage: page [
 	block fixBlockLayout; position: changingX@y.
 	page addMorphBack: block.
 	block canBecomeWatcher ifTrue: [
-		frame := self ownerOrYourselfThatIsA: ScratchFrameMorph.
+		frame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
 		page updateWatcherButtonsForFrame: frame].
 
 	((block respondsTo: #selector) and: [block selector = #newList:]) ifTrue: [
@@ -2883,7 +2883,7 @@ ScriptableScratchMorph >> createBlock: block atPosition: pos onPage: page [
 ]
 
 { #category : #'list ops' }
-ScriptableScratchMorph >> createListNamed: listName [
+ScriptablePhratchMorph >> createListNamed: listName [
 
 	| list stage n |
 	(self variableNameInUse: listName) ifTrue: [
@@ -2891,22 +2891,22 @@ ScriptableScratchMorph >> createListNamed: listName [
 		DialogBoxMorph warn: 'That variable name is already in use'.
 		^ self].
 
-	lists at: listName put: (list := ScratchListMorph new listName: listName target: self).
-	(stage := self ownerOrYourselfThatIsA: ScratchStageMorph) ifNotNil: [
-		n := (stage submorphs select: [:m | m isKindOf: ScratchListMorph]) size.
+	lists at: listName put: (list := PhratchListMorph new listName: listName target: self).
+	(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNotNil: [
+		n := (stage submorphs select: [:m | m isKindOf: PhratchListMorph]) size.
 		stage addMorph: (list position: stage topRight - ((list width + 10)@0) + (0@(10+(20*n)))).
 		list startStepping].
 
 ]
 
 { #category : #blocks }
-ScriptableScratchMorph >> createToggleButtonFor: block [
+ScriptablePhratchMorph >> createToggleButtonFor: block [
 	"Create the toggle button for each variable that could be viewed on the stage."
 
 	| toggleButton |
 	toggleButton := ToggleButton
-		onForm: (ScratchFrameMorph skinAt: #watcherButtonPressed)
-		offForm: (ScratchFrameMorph skinAt: #watcherButton).
+		onForm: (PhratchFrameMorph skinAt: #watcherButtonPressed)
+		offForm: (PhratchFrameMorph skinAt: #watcherButton).
 
 	toggleButton
 		target: block;
@@ -2919,12 +2919,12 @@ ScriptableScratchMorph >> createToggleButtonFor: block [
 ]
 
 { #category : #byob }
-ScriptableScratchMorph >> customBlocks [
+ScriptablePhratchMorph >> customBlocks [
 	^ customBlocks
 ]
 
 { #category : #byob }
-ScriptableScratchMorph >> customBlocksContaining: aBlock [
+ScriptablePhratchMorph >> customBlocksContaining: aBlock [
 	"for error feedback"
 	| def |
 	customBlocks ifNil: [^Array empty].
@@ -2936,12 +2936,12 @@ ScriptableScratchMorph >> customBlocksContaining: aBlock [
 ]
 
 { #category : #blocks }
-ScriptableScratchMorph >> defaultArgsFor: blockSpec [
+ScriptablePhratchMorph >> defaultArgsFor: blockSpec [
 	"Answer the default argument for the given block specification."
 
 	| defaultArgs stage sel currentSize list |
 	defaultArgs := blockSpec copyFrom: 4 to: blockSpec size.  "may be empty"
-	stage := self ownerOrYourselfThatIsA: ScratchStageMorph.
+	stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
 
 	sel := (blockSpec at: 3) asSymbol.
 	#gotoX:y: = sel ifTrue: [
@@ -2959,14 +2959,14 @@ ScriptableScratchMorph >> defaultArgsFor: blockSpec [
 		defaultArgs := Array with: 'reverse' localized with: 'this way' localized with: 'that way'].
 
 	#setSizeTo: = sel ifTrue: [
-		(self isKindOf: ScratchStageMorph) ifTrue: [ 	"no size ops for stage -jens"
+		(self isKindOf: PhratchStageMorph) ifTrue: [ 	"no size ops for stage -jens"
 			^Array with: 100].
 		currentSize := (100.0 * (self scalePoint x max: self scalePoint y)) rounded.
 		defaultArgs := Array with: currentSize].
 
 	#getAttribute:of: = sel ifTrue: [
-		(stage := self ownerOrYourselfThatIsA: ScratchStageMorph) ifNotNil: [
-			list := stage submorphs select: [:m | m isKindOf: ScratchSpriteMorph].
+		(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNotNil: [
+			list := stage submorphs select: [:m | m isKindOf: PhratchSpriteMorph].
 			list sort: [:s1 :s2 | s1 objName asLowercase < s2 objName asLowercase].
 			list size > 0
 				ifTrue: [defaultArgs := Array with: 'x position' with: list first]
@@ -3037,7 +3037,7 @@ ScriptableScratchMorph >> defaultArgsFor: blockSpec [
 ]
 
 { #category : #media }
-ScriptableScratchMorph >> defaultImageMedia [
+ScriptablePhratchMorph >> defaultImageMedia [
 	"Placeholder image media."
 
 	^ ImageMedia new
@@ -3047,12 +3047,12 @@ ScriptableScratchMorph >> defaultImageMedia [
 ]
 
 { #category : #'list ops' }
-ScriptableScratchMorph >> defaultListName [
+ScriptablePhratchMorph >> defaultListName [
 
 	| stage |
 	lists size > 0 ifTrue: [^ lists keys asArray sort first].
 
-	(stage := self ownerOrYourselfThatIsA: ScratchStageMorph) ifNotNil: [
+	(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNotNil: [
 		stage lists size > 0 ifTrue: [^ stage lists keys asArray sort first]].
 
 	^ ''
@@ -3060,7 +3060,7 @@ ScriptableScratchMorph >> defaultListName [
 ]
 
 { #category : #byob }
-ScriptableScratchMorph >> definitionFor: anId [
+ScriptablePhratchMorph >> definitionFor: anId [
 
 	| all inherited def |
 	inherited := self inheritedBlocks.
@@ -3075,7 +3075,7 @@ ScriptableScratchMorph >> definitionFor: anId [
 ]
 
 { #category : #'BYOB object interface' }
-ScriptableScratchMorph >> deleteAttribute: aSymbol [
+ScriptablePhratchMorph >> deleteAttribute: aSymbol [
 
 	| cat sf oi block w |
 	self prototype ifNil: [
@@ -3098,7 +3098,7 @@ ScriptableScratchMorph >> deleteAttribute: aSymbol [
 
 	"update palette"
 
-	sf := self scratchFrame.
+	sf := self phratchFrame.
 	sf ifNil: [^ self].
 	cat := (oi at: aSymbol) first.
 	sf viewerPane categoryChanged: cat.
@@ -3115,7 +3115,7 @@ ScriptableScratchMorph >> deleteAttribute: aSymbol [
 ]
 
 { #category : #'BYOB object interface' }
-ScriptableScratchMorph >> deleteAttributes: aCollection [
+ScriptablePhratchMorph >> deleteAttributes: aCollection [
 
 	"use this when duplicating a sprite"
 
@@ -3125,14 +3125,14 @@ ScriptableScratchMorph >> deleteAttributes: aCollection [
 ]
 
 { #category : #byob }
-ScriptableScratchMorph >> deleteDefinitionId: id [
+ScriptablePhratchMorph >> deleteDefinitionId: id [
 
 	| stage def |
 	def := self definitionFor: id.
 	def isGlobal  ifFalse: [
 		^ self deleteLocalDefinitionId: id].
 
-	stage := self ownerOrYourselfThatIsA: ScratchStageMorph.
+	stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
 	stage ifNil: [^ self deleteLocalDefinitionId: id].
 
 	stage sprites, {stage} do: [:obj |
@@ -3141,7 +3141,7 @@ ScriptableScratchMorph >> deleteDefinitionId: id [
 ]
 
 { #category : #'list ops' }
-ScriptableScratchMorph >> deleteLine: lineNum ofList: listName [
+ScriptablePhratchMorph >> deleteLine: lineNum ofList: listName [
 
 	| list |
 	list := self listNamed: listName ifNone: [^ self].
@@ -3151,11 +3151,11 @@ ScriptableScratchMorph >> deleteLine: lineNum ofList: listName [
 ]
 
 { #category : #'list ops' }
-ScriptableScratchMorph >> deleteList [
+ScriptablePhratchMorph >> deleteList [
 	"Ask the user which list variable to delete, then remove it."
 
 	| sFrame stage menu choice |
-	sFrame := self ownerOrYourselfThatIsA: ScratchFrameMorph.
+	sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
 	sFrame ifNil: [^ self].
 
 	stage := sFrame workPane.
@@ -3179,15 +3179,15 @@ ScriptableScratchMorph >> deleteList [
 ]
 
 { #category : #'list ops' }
-ScriptableScratchMorph >> deleteList: listName [
+ScriptablePhratchMorph >> deleteList: listName [
 	"Delete the list variable with the given name. Do nothing if the variable doesn't exist."
 
 	| stage |
-	stage := self ownerOrYourselfThatIsA: ScratchStageMorph.
+	stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
 	lists removeKey: listName asString ifAbsent: [].
 	(self prototype notNil and: [self prototype lists includesKey: listName]) ifFalse: [ 
 	stage submorphs do: [:m |
-		((m isKindOf: ScratchListMorph) and: 
+		((m isKindOf: PhratchListMorph) and: 
 		[(m listName = listName) and: 
 		[m target = self]])
 			ifTrue: [m delete]]].
@@ -3195,9 +3195,9 @@ ScriptableScratchMorph >> deleteList: listName [
 ]
 
 { #category : #byob }
-ScriptableScratchMorph >> deleteLocalDefinitionId: id [
+ScriptablePhratchMorph >> deleteLocalDefinitionId: id [
 	| affected sf def cat |
-	sf := self ownerOrYourselfThatIsA: ScratchFrameMorph.
+	sf := self ownerOrYourselfThatIsA: PhratchFrameMorph.
 	sf ifNil: [^self].
 	sf notEditingBlock ifFalse: [^self].
 	affected := self instancesOf: id.
@@ -3215,7 +3215,7 @@ ScriptableScratchMorph >> deleteLocalDefinitionId: id [
 ]
 
 { #category : #media }
-ScriptableScratchMorph >> deleteMedia: itemToDelete [
+ScriptablePhratchMorph >> deleteMedia: itemToDelete [
 	"Delete the given media item."
 
 	| oldIndex costumesBefore costumesAfter newCostume |
@@ -3249,16 +3249,16 @@ ScriptableScratchMorph >> deleteMedia: itemToDelete [
 ]
 
 { #category : #'BYOB object interface' }
-ScriptableScratchMorph >> deleteObject: anObject [
+ScriptablePhratchMorph >> deleteObject: anObject [
 
 	| oi obj att block sel rcv |
-	(anObject isKindOf: ScratchSpriteMorph)
+	(anObject isKindOf: PhratchSpriteMorph)
 		ifTrue: [^ self deleteSprite: anObject].
 
 	(anObject isKindOf: CommandScriptBlockMorph) ifTrue: [
 		oi := self objectInterface.
 		obj := anObject receiver.
-		(obj isKindOf: ScratchSpriteMorph) ifFalse: [
+		(obj isKindOf: PhratchSpriteMorph) ifFalse: [
 			^ self error: 'cannot delete attributes of non-Sprites'].
 		block := anObject body argMorphs first.
 
@@ -3279,11 +3279,11 @@ ScriptableScratchMorph >> deleteObject: anObject [
 ]
 
 { #category : #private }
-ScriptableScratchMorph >> deleteSprite [
+ScriptablePhratchMorph >> deleteSprite [
 	"Delete the sprite and all watchers that are associated with it."
 
 	| frame sprites i presenter instances |
-	frame := self ownerOrYourselfThatIsA: ScratchFrameMorph. 
+	frame := self ownerOrYourselfThatIsA: PhratchFrameMorph. 
 	frame ifNil: [
 		presenter := World findA: PhratchPresenterMorph.
 		presenter ifNil: [^ self delete].
@@ -3312,7 +3312,7 @@ ScriptableScratchMorph >> deleteSprite [
 ]
 
 { #category : #'byob OOP' }
-ScriptableScratchMorph >> deleteSprite: aSprite [
+ScriptablePhratchMorph >> deleteSprite: aSprite [
 	aSprite deleteSpriteQuickly.
 
 	"now the deleted sprite has to be removed from all variables
@@ -3320,11 +3320,11 @@ ScriptableScratchMorph >> deleteSprite: aSprite [
 ]
 
 { #category : #'byob OOP' }
-ScriptableScratchMorph >> deleteSpriteQuickly [
+ScriptablePhratchMorph >> deleteSpriteQuickly [
 	"Delete the sprite and all watchers that are associated with it."
 
 	| frame sprites presenter instances |
-	frame := self ownerOrYourselfThatIsA: ScratchFrameMorph. 
+	frame := self ownerOrYourselfThatIsA: PhratchFrameMorph. 
 	frame ifNil: [
 		presenter := World findA: PhratchPresenterMorph.
 		presenter ifNil: [^ self delete].
@@ -3357,11 +3357,11 @@ ScriptableScratchMorph >> deleteSpriteQuickly [
 ]
 
 { #category : #variables }
-ScriptableScratchMorph >> deleteVariable [
+ScriptablePhratchMorph >> deleteVariable [
 	"Ask the user which user variable to delete, then remove it."
 
 	| sFrame stage menu choice |
-	sFrame := self ownerOrYourselfThatIsA: ScratchFrameMorph.
+	sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
 	sFrame ifNil: [^ self].
 
 	stage := sFrame workPane.
@@ -3385,36 +3385,36 @@ ScriptableScratchMorph >> deleteVariable [
 ]
 
 { #category : #variables }
-ScriptableScratchMorph >> deleteVariable: varName [
+ScriptablePhratchMorph >> deleteVariable: varName [
 	"Delete the variable with the given name. Do nothing if the variable doesn't exist."
 
 	| frame w |
-	frame := self scratchFrame.
+	frame := self phratchFrame.
 	frame ifNotNil: [
 		(self prototype notNil and: [self prototype varNames includes: varName]) ifFalse: [
 			frame deleteWatchersForVar: varName ofSprite: self]].
 	vars removeKey: varName asString ifAbsent: [^ self].
 	frame viewerPane categoryChanged: 'variables'.
 	w := frame watcherForBlock: (VariableBlockMorph new receiver: self; commandSpec: varName; yourself).
-	w ifNotNil: [w setCategoryColor: (ScriptableScratchMorph blockColorFor: 'variables') twiceLighter].
+	w ifNotNil: [w setCategoryColor: (ScriptablePhratchMorph blockColorFor: 'variables') twiceLighter].
 	self isClone: false.
 
 ]
 
 { #category : #'BYOB object interface' }
-ScriptableScratchMorph >> deletedAttributes [
+ScriptablePhratchMorph >> deletedAttributes [
 	^ deletedAttributes ifNil: [ 
 		deletedAttributes := Set new]
 ]
 
 { #category : #variables }
-ScriptableScratchMorph >> desparatelyGetVar: varName from: aVarBlockMorph [
+ScriptablePhratchMorph >> desparatelyGetVar: varName from: aVarBlockMorph [
 
 	| anotherReceiver |
-	anotherReceiver := aVarBlockMorph scratchObject.
+	anotherReceiver := aVarBlockMorph phratchObject.
 	anotherReceiver ifNil: [^ 0].
 	(anotherReceiver varNames includes: varName)	ifFalse: [
-		anotherReceiver := anotherReceiver ownerOrYourselfThatIsA: ScratchStageMorph.
+		anotherReceiver := anotherReceiver ownerOrYourselfThatIsA: PhratchStageMorph.
 		anotherReceiver ifNil: [^ 0].
 		(anotherReceiver varNames includes: varName) ifFalse: [
 			^ 0]].
@@ -3424,7 +3424,7 @@ ScriptableScratchMorph >> desparatelyGetVar: varName from: aVarBlockMorph [
 ]
 
 { #category : #'event handling' }
-ScriptableScratchMorph >> doubleClick: evt [
+ScriptablePhratchMorph >> doubleClick: evt [
 	"Show my viewer and script editor."
 	
 	| hand |
@@ -3437,7 +3437,7 @@ ScriptableScratchMorph >> doubleClick: evt [
 ]
 
 { #category : #media }
-ScriptableScratchMorph >> drawNewCostume [
+ScriptablePhratchMorph >> drawNewCostume [
 
 	| oldCostumeName newName newImage |
 	oldCostumeName := costume mediaName.
@@ -3456,11 +3456,11 @@ ScriptableScratchMorph >> drawNewCostume [
 ]
 
 { #category : #'sound ops' }
-ScriptableScratchMorph >> drum: midiKey duration: beats elapsed: elapsedMSecs from: aNotePlayer [
+ScriptablePhratchMorph >> drum: midiKey duration: beats elapsed: elapsedMSecs from: aNotePlayer [
 
 	| stage player |
 	aNotePlayer ifNil: [  "first call, start playing the drum"
-		(stage := self ownerOrYourselfThatIsA: ScratchStageMorph) ifNil: [^ PhratchNotePlayer new].
+		(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNil: [^ PhratchNotePlayer new].
 		(player := stage notePlayerFor: self) ifNil: [^ PhratchNotePlayer new].
 		^ player copy drumOn: midiKey].
 
@@ -3469,13 +3469,13 @@ ScriptableScratchMorph >> drum: midiKey duration: beats elapsed: elapsedMSecs fr
 ]
 
 { #category : #scripts }
-ScriptableScratchMorph >> duplicate [
+ScriptablePhratchMorph >> duplicate [
 
 	| newSprite s |
 	newSprite := self duplicateNoAttach.
 	self world activeHand attachMorph: newSprite.
 
-	((s := self ownerOrYourselfThatIsA: ScratchStageMorph) notNil and:
+	((s := self ownerOrYourselfThatIsA: PhratchStageMorph) notNil and:
 	 [s isQuarterSize]) ifTrue: [
 		self world activeHand drawHalfSize: true].
 
@@ -3484,7 +3484,7 @@ ScriptableScratchMorph >> duplicate [
 ]
 
 { #category : #media }
-ScriptableScratchMorph >> duplicateMedia: itemToDuplicate [
+ScriptablePhratchMorph >> duplicateMedia: itemToDuplicate [
 	"Duplicate the given media item."
 
 	| dup |
@@ -3504,7 +3504,7 @@ ScriptableScratchMorph >> duplicateMedia: itemToDuplicate [
 ]
 
 { #category : #'right button menu' }
-ScriptableScratchMorph >> duplicateNoAttach [
+ScriptablePhratchMorph >> duplicateNoAttach [
 	"Duplicate this sprite, but do not attach to the hand."
 
 	| newSprite frame |
@@ -3512,7 +3512,7 @@ ScriptableScratchMorph >> duplicateNoAttach [
 	newSprite undeleteAllAttributes.
 	newSprite unhinge; unhingeAll; initializeNodes.
 	newSprite position: (newSprite position + 20).
-	frame := self ownerOrYourselfThatIsA: ScratchFrameMorph.
+	frame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
 	frame ifNotNil: [
 		frame workPane addMorphFront: newSprite.
 		frame workPane sprites addLast: newSprite].
@@ -3521,7 +3521,7 @@ ScriptableScratchMorph >> duplicateNoAttach [
 ]
 
 { #category : #'right button menu' }
-ScriptableScratchMorph >> editDrawing [
+ScriptablePhratchMorph >> editDrawing [
 	"Edit my current form with the paint editor."
 
 	self editDrawingOldCostumeName: nil deleteOnCancel: false.
@@ -3529,12 +3529,12 @@ ScriptableScratchMorph >> editDrawing [
 ]
 
 { #category : #'right button menu' }
-ScriptableScratchMorph >> editDrawingOldCostumeName: oldCostumeName deleteOnCancel: aBoolean [
+ScriptablePhratchMorph >> editDrawingOldCostumeName: oldCostumeName deleteOnCancel: aBoolean [
 	"Edit my original form with the paint editor."
 
 	| sFrame paintEditor |
 	costume isMovie ifTrue: [^ Beeper beep].
-	(sFrame := self ownerOrYourselfThatIsA: ScratchFrameMorph)
+	(sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph)
 		ifNotNil: [
 			sFrame paintingInProgress ifTrue: [^ Beeper beep].
 			sFrame stopAll.
@@ -3543,7 +3543,7 @@ ScriptableScratchMorph >> editDrawingOldCostumeName: oldCostumeName deleteOnCanc
 	paintEditor := PaintFrame new.
 	paintEditor
 		withStartingObject: self;
-		scratchFrame: sFrame;
+		phratchFrame: sFrame;
 		oldCostumeName: oldCostumeName deleteOnCancel: aBoolean.
 
 	oldCostumeName ifNotNil: [
@@ -3559,10 +3559,10 @@ ScriptableScratchMorph >> editDrawingOldCostumeName: oldCostumeName deleteOnCanc
 ]
 
 { #category : #byob }
-ScriptableScratchMorph >> editScriptId: id [
+ScriptablePhratchMorph >> editScriptId: id [
 	|sf def|
 
-	sf := self ownerOrYourselfThatIsA: ScratchFrameMorph.
+	sf := self ownerOrYourselfThatIsA: PhratchFrameMorph.
 "	sf ifNil: [^self]."
 	def := self definitionFor: id.
 "	def ifNil: [^self]."
@@ -3570,13 +3570,13 @@ ScriptableScratchMorph >> editScriptId: id [
 ]
 
 { #category : #byob }
-ScriptableScratchMorph >> editSpecId: id [
+ScriptablePhratchMorph >> editSpecId: id [
 	"let the user change the category (color) of a custom block"
 
 	| stage ans def sf bd oldCat inst newType |
-	sf := self ownerOrYourselfThatIsA: ScratchFrameMorph.
+	sf := self ownerOrYourselfThatIsA: PhratchFrameMorph.
 	sf ifNil: [^self].
-	stage := self ownerOrYourselfThatIsA: ScratchStageMorph.
+	stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
 	def := self definitionFor: id.
 	newType := def type.
 
@@ -3649,7 +3649,7 @@ ScriptableScratchMorph >> editSpecId: id [
 ]
 
 { #category : #media }
-ScriptableScratchMorph >> editedForm: aForm textBox: aMultilineTextMorph [
+ScriptablePhratchMorph >> editedForm: aForm textBox: aMultilineTextMorph [
 
 	| newImage |
 	(costume isKindOf: ImageMedia) ifFalse: [
@@ -3672,7 +3672,7 @@ ScriptableScratchMorph >> editedForm: aForm textBox: aMultilineTextMorph [
 ]
 
 { #category : #byob }
-ScriptableScratchMorph >> ensureCustomBlockExists: aBlockDef [
+ScriptablePhratchMorph >> ensureCustomBlockExists: aBlockDef [
 
 	| def bod |
  	aBlockDef ifNil: [^ self].
@@ -3684,11 +3684,11 @@ ScriptableScratchMorph >> ensureCustomBlockExists: aBlockDef [
 ]
 
 { #category : #byob }
-ScriptableScratchMorph >> ensureCustomBlockExists: aBlockDef global: bool [
+ScriptablePhratchMorph >> ensureCustomBlockExists: aBlockDef global: bool [
 
 	| stage |
 
-	stage := self ownerOrYourselfThatIsA: ScratchStageMorph.
+	stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
 
 	(bool = false or: [stage isNil]) ifTrue: [
 		^ self ensureCustomBlockExists: aBlockDef].
@@ -3699,7 +3699,7 @@ ScriptableScratchMorph >> ensureCustomBlockExists: aBlockDef global: bool [
 ]
 
 { #category : #variables }
-ScriptableScratchMorph >> ensureListExists: listName [
+ScriptablePhratchMorph >> ensureListExists: listName [
 	"If a list with the given name is not visible to this object, make one."
 
 	| stage |
@@ -3707,20 +3707,20 @@ ScriptableScratchMorph >> ensureListExists: listName [
 	listName = '' ifTrue: [^ self].
 
 	(lists includesKey: listName) ifTrue: [^ self].
-	(stage := self ownerOrYourselfThatIsA: ScratchStageMorph) ifNotNil: [
+	(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNotNil: [
 		(stage listVarNames includes: listName) ifTrue: [^ self]].
 	(self prototype notNil and: [self prototype listVarNames includes: listName])
 		ifTrue: [^ self].
 
 
 	"list not found; create it"
-	lists at: listName put: (ScratchListMorph new listName: listName target: self).
+	lists at: listName put: (PhratchListMorph new listName: listName target: self).
 
 
 ]
 
 { #category : #byob }
-ScriptableScratchMorph >> ensureOwnBlockExists: aBlockDef [
+ScriptablePhratchMorph >> ensureOwnBlockExists: aBlockDef [
 
 	| def bod defId |
 
@@ -3738,7 +3738,7 @@ ScriptableScratchMorph >> ensureOwnBlockExists: aBlockDef [
 ]
 
 { #category : #variables }
-ScriptableScratchMorph >> ensureVariableExists: varName [
+ScriptablePhratchMorph >> ensureVariableExists: varName [
 	"Make sure that the variable with the given name is visible to this object. Do nothing if the variable already exists."
 
 	| stage vn |
@@ -3751,7 +3751,7 @@ ScriptableScratchMorph >> ensureVariableExists: varName [
 	vn = '' ifTrue: [^ self].
 
 	(vars includesKey: vn) ifTrue: [^ self].
-	(stage := self ownerOrYourselfThatIsA: ScratchStageMorph) ifNotNil: [
+	(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNotNil: [
 		(stage varNames includes: vn) ifTrue: [^ self]].
 	(self prototype notNil and: [self prototype varNames includes: vn])
 		ifTrue: [^ self].
@@ -3762,7 +3762,7 @@ ScriptableScratchMorph >> ensureVariableExists: varName [
 ]
 
 { #category : #'other ops' }
-ScriptableScratchMorph >> eventReceived: event [
+ScriptablePhratchMorph >> eventReceived: event [
 	"Start all non-running stacks with an EventHat matching the given events and answer a collection of the new processes. If a process is already running for a given stack, don't start a new one."
 
 	| targetScripts newProcs |
@@ -3791,7 +3791,7 @@ ScriptableScratchMorph >> eventReceived: event [
 ]
 
 { #category : #byob }
-ScriptableScratchMorph >> existsBlockId: id [
+ScriptablePhratchMorph >> existsBlockId: id [
 
 	customBlocks ifNil: [customBlocks := OrderedCollection new].
 	customBlocks detect: [:def|
@@ -3800,14 +3800,14 @@ ScriptableScratchMorph >> existsBlockId: id [
 ]
 
 { #category : #byob }
-ScriptableScratchMorph >> existsBlockId: id global: bool [
+ScriptablePhratchMorph >> existsBlockId: id global: bool [
 
 	| stage |
 
 	bool ifTrue: [
 		^self existsBlockId: id].
 
-	stage := self ownerOrYourselfThatIsA: ScratchStageMorph.
+	stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
 	stage ifNil: [^ self existsBlockId: id].
 
 	stage sprites, {stage} do: [:obj |
@@ -3820,11 +3820,11 @@ ScriptableScratchMorph >> existsBlockId: id global: bool [
 ]
 
 { #category : #'right button menu' }
-ScriptableScratchMorph >> exportObject [
+ScriptablePhratchMorph >> exportObject [
 
 	| fName dir f objToExport |
 
-	fName := ScratchFileChooserDialog
+	fName := PhratchFileChooserDialog
 		chooseNewFileDefault: objName
 		title: 'Export Sprite'
 		type: #sprite.
@@ -3859,7 +3859,7 @@ ScriptableScratchMorph >> exportObject [
 ]
 
 { #category : #'looks ops' }
-ScriptableScratchMorph >> filterReset [
+ScriptablePhratchMorph >> filterReset [
 
 	filterPack := nil.
 	self transparency: 0.
@@ -3877,12 +3877,12 @@ ScriptableScratchMorph >> filterReset [
 ]
 
 { #category : #accessing }
-ScriptableScratchMorph >> filteredForm [
+ScriptablePhratchMorph >> filteredForm [
 
 	filterPack ifNil: [^ self rotatedForm].
 
 	filterPack filtersActive ifTrue: [  "filter parameters have changed; apply filters"
-		ScratchFrameMorph useErrorCatcher
+		PhratchFrameMorph useErrorCatcher
 			ifTrue: [[filterPack applyFiltersTo: self rotatedForm]
 						ifError: [filterPack := nil. ^ self rotatedForm]]
 			ifFalse: [filterPack applyFiltersTo: self rotatedForm]].
@@ -3891,7 +3891,7 @@ ScriptableScratchMorph >> filteredForm [
 ]
 
 { #category : #'BYOB attributes' }
-ScriptableScratchMorph >> fisheyeEffect [
+ScriptablePhratchMorph >> fisheyeEffect [
 
 	| att |
 	att := #fisheye.
@@ -3903,14 +3903,14 @@ ScriptableScratchMorph >> fisheyeEffect [
 ]
 
 { #category : #'BYOB attributes' }
-ScriptableScratchMorph >> fisheyeEffect: aNumber [
+ScriptablePhratchMorph >> fisheyeEffect: aNumber [
 
 	self undeleteAttribute: #fisheye.
 	self passiveFisheyeEffect: aNumber
 ]
 
 { #category : #accessing }
-ScriptableScratchMorph >> form [
+ScriptablePhratchMorph >> form [
 	"Answer my current costume form, without filtering, rotation, or scaling."
 
 	^ self costumeForm
@@ -3918,7 +3918,7 @@ ScriptableScratchMorph >> form [
 ]
 
 { #category : #accessing }
-ScriptableScratchMorph >> form: aForm [
+ScriptablePhratchMorph >> form: aForm [
 
 	costume := (ImageMedia new form: aForm).
 	costume mediaName: (self unusedMediaNameFromBaseName: 'costume').
@@ -3932,7 +3932,7 @@ ScriptableScratchMorph >> form: aForm [
 ]
 
 { #category : #'BYOB object interface' }
-ScriptableScratchMorph >> get: anObject [
+ScriptablePhratchMorph >> get: anObject [
 
 	| oi sel obj att block |
 
@@ -3949,7 +3949,7 @@ ScriptableScratchMorph >> get: anObject [
 		
 	(anObject isKindOf: CommandScriptBlockMorph) ifTrue: [
 		obj := anObject receiver.
-		(obj isKindOf: ScriptableScratchMorph) ifFalse: [
+		(obj isKindOf: ScriptablePhratchMorph) ifFalse: [
 			^ self error: 'cannot get attributes of non-Sprites/Stage'].
 		block := anObject body argMorphs first.
 		att := oi keys detect: [:key |
@@ -3961,7 +3961,7 @@ ScriptableScratchMorph >> get: anObject [
 ]
 
 { #category : #'sensing ops' }
-ScriptableScratchMorph >> getAttribute: attr [
+ScriptablePhratchMorph >> getAttribute: attr [
 	"Answer the value of my variable or built-in attribute with the given name. Answer zero if I have no attribute or variable with the given name."
 
 	(vars includesKey: attr) ifTrue: [^ vars at: attr].
@@ -3970,12 +3970,12 @@ ScriptableScratchMorph >> getAttribute: attr [
 ]
 
 { #category : #'sensing ops' }
-ScriptableScratchMorph >> getAttribute: attr of: anObject [
+ScriptablePhratchMorph >> getAttribute: attr of: anObject [
 	"Answer the variable or built-in attribute value for the given sprite. Answer zero if the given sprite does not have a built-in attribute or variable of the given name."
 
 	| aSpriteOrStage |
 	aSpriteOrStage := self coerceSpriteArg: anObject.
-	(aSpriteOrStage isKindOf: ScriptableScratchMorph) ifFalse: [^ 0].
+	(aSpriteOrStage isKindOf: ScriptablePhratchMorph) ifFalse: [^ 0].
 "	^ aSpriteOrStage getAttribute: attr asString"
 	^ aSpriteOrStage attribute: attr
 
@@ -3983,16 +3983,16 @@ ScriptableScratchMorph >> getAttribute: attr of: anObject [
 ]
 
 { #category : #byob }
-ScriptableScratchMorph >> getFalse [
+ScriptablePhratchMorph >> getFalse [
 	^false
 ]
 
 { #category : #'list ops' }
-ScriptableScratchMorph >> getLine: lineNum ofList: listName [
+ScriptablePhratchMorph >> getLine: lineNum ofList: listName [
 
 	| list |
 
-	(listName isKindOf: ScratchListMorph)
+	(listName isKindOf: PhratchListMorph)
 		ifTrue: [list := listName ]
 		ifFalse: [ list := self listNamed: listName ifNone: [^ '']].
 	^ list lineAt: (self lineNum: lineNum forList: list)
@@ -4000,44 +4000,44 @@ ScriptableScratchMorph >> getLine: lineNum ofList: listName [
 ]
 
 { #category : #'byob OOP' }
-ScriptableScratchMorph >> getObject: anObject [
+ScriptablePhratchMorph >> getObject: anObject [
 	^ anObject
 ]
 
 { #category : #'byob OOP' }
-ScriptableScratchMorph >> getSpawnOf: anObject [
+ScriptablePhratchMorph >> getSpawnOf: anObject [
 	^ anObject spawn
 ]
 
 { #category : #byob }
-ScriptableScratchMorph >> getTrue [
+ScriptablePhratchMorph >> getTrue [
 	^true
 ]
 
 { #category : #variables }
-ScriptableScratchMorph >> getVar: varName [
+ScriptablePhratchMorph >> getVar: varName [
 	"Answer the value of the given user variable of this object, or 0 if the variable has been deleted."
 
 	| stage |
 	(vars includesKey: varName)
-		ifFalse: [ stage := (self ownerOrYourselfThatIsA: ScratchStageMorph).
+		ifFalse: [ stage := (self ownerOrYourselfThatIsA: PhratchStageMorph).
 			stage ifNotNil: [	^ stage vars at: varName asString ifAbsent: [
 				(self prototype notNil and: [self prototype varNames includes: varName])
 					ifTrue:[^self prototype getVar: varName]
-					ifFalse: [^self scratchObject getVar: varName]]].
+					ifFalse: [^self phratchObject getVar: varName]]].
 			(self prototype notNil and: [self prototype varNames includes: varName])
 					ifTrue:[^self prototype getVar: varName]
-					ifFalse: [^self scratchObject getVar: varName]].
+					ifFalse: [^self phratchObject getVar: varName]].
 	^ vars at: varName asString ifAbsent: [0]
 
 ]
 
 { #category : #variables }
-ScriptableScratchMorph >> getVar: varName block: aVariableBlockMorph [
+ScriptablePhratchMorph >> getVar: varName block: aVariableBlockMorph [
 	"Answer the value of the given user variable of this object, or 0 if the variable has been deleted."
 
 	(vars includesKey: varName)
-		ifFalse: [ ^ (self ownerOrYourselfThatIsA: ScratchStageMorph) vars at: varName asString ifAbsent: [
+		ifFalse: [ ^ (self ownerOrYourselfThatIsA: PhratchStageMorph) vars at: varName asString ifAbsent: [
 			(self prototype notNil and: [self prototype varNames includes: varName])
 				ifTrue:[self prototype getVar: varName]
 				ifFalse: [^ self desparatelyGetVar: varName from: aVariableBlockMorph]]].
@@ -4046,13 +4046,13 @@ ScriptableScratchMorph >> getVar: varName block: aVariableBlockMorph [
 ]
 
 { #category : #'BYOB OOP message passing' }
-ScriptableScratchMorph >> getVarOrListNamed: varName [
+ScriptablePhratchMorph >> getVarOrListNamed: varName [
 
 	| value |
 
 	"first let's try to find a variable"
 	(vars includesKey: varName)
-		ifFalse: [ value := (self ownerOrYourselfThatIsA: ScratchStageMorph) vars at: varName asString ifAbsent: [
+		ifFalse: [ value := (self ownerOrYourselfThatIsA: PhratchStageMorph) vars at: varName asString ifAbsent: [
 			(self prototype notNil and: [self prototype varNames includes: varName])
 				ifTrue:[self prototype getVar: varName]
 				ifFalse: [nil]]]
@@ -4070,7 +4070,7 @@ ScriptableScratchMorph >> getVarOrListNamed: varName [
 ]
 
 { #category : #'looks ops' }
-ScriptableScratchMorph >> graphicEffectNames [
+ScriptablePhratchMorph >> graphicEffectNames [
 	"Answer a collection of graphic effect names."
 
 	^ #(
@@ -4085,17 +4085,17 @@ ScriptableScratchMorph >> graphicEffectNames [
 ]
 
 { #category : #'event handling' }
-ScriptableScratchMorph >> handleTool: toolName hand: hand [
+ScriptablePhratchMorph >> handleTool: toolName hand: hand [
 
 	| scaleFactor |
 	toolName = 'CopyTool' ifTrue: [
 		Sensor shiftPressed ifFalse: [hand toolType: nil].
-		(self isKindOf: ScratchStageMorph) ifFalse: [
+		(self isKindOf: PhratchStageMorph) ifFalse: [
 			^ self duplicate]].
 
 	toolName = 'CutTool' ifTrue: [
 		Sensor shiftPressed ifFalse: [hand toolType: nil].
-		(self isKindOf: ScratchStageMorph) ifFalse: [
+		(self isKindOf: PhratchStageMorph) ifFalse: [
 			^ self undoableDeleteSprite]].
 
 	"exit now if I am not scalable"
@@ -4111,19 +4111,19 @@ ScriptableScratchMorph >> handleTool: toolName hand: hand [
 ]
 
 { #category : #media }
-ScriptableScratchMorph >> handlesDropShadowInHand [
+ScriptablePhratchMorph >> handlesDropShadowInHand [
 	^ true
 ]
 
 { #category : #'event handling' }
-ScriptableScratchMorph >> handlesMouseDown: evt [
+ScriptablePhratchMorph >> handlesMouseDown: evt [
 
 	^ self isVisible
 
 ]
 
 { #category : #blocks }
-ScriptableScratchMorph >> hatBlockFromTuple: tuple receiver: scriptOwner [
+ScriptablePhratchMorph >> hatBlockFromTuple: tuple receiver: scriptOwner [
 	"Answer a new block for the given variable reference tuple."
 
 	| blockClass block eventName arg |
@@ -4153,7 +4153,7 @@ ScriptableScratchMorph >> hatBlockFromTuple: tuple receiver: scriptOwner [
 ]
 
 { #category : #blocks }
-ScriptableScratchMorph >> hatBlockFromTupleOldForm: tuple receiver: scriptOwner [
+ScriptablePhratchMorph >> hatBlockFromTupleOldForm: tuple receiver: scriptOwner [
 	"Answer a new block for the given variable reference tuple."
 
 	| blockClass block eventName arg |
@@ -4179,12 +4179,12 @@ ScriptableScratchMorph >> hatBlockFromTupleOldForm: tuple receiver: scriptOwner 
 ]
 
 { #category : #blocks }
-ScriptableScratchMorph >> hatBlockType: blockType [
+ScriptablePhratchMorph >> hatBlockType: blockType [
 
 	| stage evtName |
 	'E' = blockType ifTrue: [
 		evtName := ''.
-		(stage := self ownerOrYourselfThatIsA: ScratchStageMorph)
+		(stage := self ownerOrYourselfThatIsA: PhratchStageMorph)
 			ifNotNil: [evtName := stage defaultEventName].
 		^ EventHatMorph new scriptOwner: self; eventName: evtName].
 
@@ -4196,20 +4196,20 @@ ScriptableScratchMorph >> hatBlockType: blockType [
 ]
 
 { #category : #variables }
-ScriptableScratchMorph >> hideVariable: varName [
+ScriptablePhratchMorph >> hideVariable: varName [
 	"Hide the watcher(s) for the given variable. If the receiver is a sprite and both it and and the stage have the given variable, hide both. Do nothing if the variable does not exist or is already hidden."
 
 	| stage |
 	self showOrHideVariable: varName show: false.
 
-	stage := self ownerOrYourselfThatIsA: ScratchStageMorph.
+	stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
 	stage ~= self ifTrue: [stage showOrHideVariable: varName show: false].
 
 
 ]
 
 { #category : #'sensing ops' }
-ScriptableScratchMorph >> hookupBooleanSensorNames [
+ScriptablePhratchMorph >> hookupBooleanSensorNames [
 
 	^ #(
 		'button pressed'
@@ -4219,7 +4219,7 @@ ScriptableScratchMorph >> hookupBooleanSensorNames [
 ]
 
 { #category : #'sensing ops' }
-ScriptableScratchMorph >> hookupSensorNames [
+ScriptablePhratchMorph >> hookupSensorNames [
 
 	| sensorNames stage virtualSensors |
 	sensorNames := #(
@@ -4231,18 +4231,18 @@ ScriptableScratchMorph >> hookupSensorNames [
 
 	sensorNames := sensorNames, #('-' 'tilt' 'distance'). "WeDo sensors"
 
-	(stage := self ownerOrYourselfThatIsA: ScratchStageMorph) ifNotNil: [
-		stage scratchServer ifNotNil: [
-			virtualSensors := stage scratchServer sensorNames.
+	(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNotNil: [
+		stage phratchServer ifNotNil: [
+			virtualSensors := stage phratchServer sensorNames.
 			virtualSensors size > 0 ifTrue: [
-				^ sensorNames, {'-'}, stage scratchServer sensorNames]]].
+				^ sensorNames, {'-'}, stage phratchServer sensorNames]]].
 
 	^ sensorNames
 
 ]
 
 { #category : #'sensing ops' }
-ScriptableScratchMorph >> hookupSensorNumber [
+ScriptablePhratchMorph >> hookupSensorNumber [
 	"Backwards compatibility for old blocks."
 
 	^ (1 to: 8) collect: [:n | n printString]
@@ -4250,7 +4250,7 @@ ScriptableScratchMorph >> hookupSensorNumber [
 ]
 
 { #category : #accessing }
-ScriptableScratchMorph >> imageForm [
+ScriptablePhratchMorph >> imageForm [
 	"Answer a Form showing myself for the purpose of generating a thumbnail."
 
 	^ self filteredForm copy offset: 0@0
@@ -4258,14 +4258,14 @@ ScriptableScratchMorph >> imageForm [
 ]
 
 { #category : #media }
-ScriptableScratchMorph >> importImage [
+ScriptablePhratchMorph >> importImage [
 	"Import a new image from a file and add it to my media (concatenating the name if it is greater than 16 characters long). If the file is an animated gif, import all frames of the gif as separate costumes."
 
 	| title result el ext fList isFirst newName type |
-	(self isKindOf: ScratchStageMorph)
+	(self isKindOf: PhratchStageMorph)
 		ifTrue: [type := #background. title := 'Import Background']
 		ifFalse: [type := #costume. title := 'Import Costume'].
-	result := ScratchFileChooserDialog
+	result := PhratchFileChooserDialog
 		chooseImageFileType: type
 		title: title.
 	result = #cancelled ifTrue: [^ self].
@@ -4279,7 +4279,7 @@ ScriptableScratchMorph >> importImage [
 
 	isFirst := true.
 	fList do: [:f |
-		el := ImageMedia new form: (ScratchFrameMorph scaledFormForPaintEditor: f).
+		el := ImageMedia new form: (PhratchFrameMorph scaledFormForPaintEditor: f).
 		newName := self mediaNameFromFileName: result default: 'costume'.
 		el mediaName: (self unusedMediaNameFromBaseName: (UTF8 withAll: newName)).
 		media addLast: el.
@@ -4292,7 +4292,7 @@ ScriptableScratchMorph >> importImage [
 ]
 
 { #category : #media }
-ScriptableScratchMorph >> importMedia: fileName [
+ScriptablePhratchMorph >> importMedia: fileName [
 	"Import a new image from a file and add it to my media."
 
 	|  extensionLoc elList baseName fList isFirst |
@@ -4315,7 +4315,7 @@ ScriptableScratchMorph >> importMedia: fileName [
 			ifFalse: 
 				[[fList addLast: (Form fromFileNamed: fileName)] ifError: [^ self]].
 		fList do: [:f | 
-			elList addLast: (ImageMedia new form: (ScratchFrameMorph scaledFormForPaintEditor: f))]].
+			elList addLast: (ImageMedia new form: (PhratchFrameMorph scaledFormForPaintEditor: f))]].
 
 	elList isEmpty ifTrue: [^ self].  "unknown file type; ignore"
 
@@ -4340,11 +4340,11 @@ ScriptableScratchMorph >> importMedia: fileName [
 ]
 
 { #category : #media }
-ScriptableScratchMorph >> importSound [
+ScriptablePhratchMorph >> importSound [
 	"Import a new sound from a file and add it to my media."
 
 	| result el newName |
-	result := ScratchFileChooserDialog
+	result := PhratchFileChooserDialog
 		chooseExistingFileType: #sound
 		extensions: #(aif aiff au wav mp3)
 		title: 'Import Sound'.
@@ -4367,14 +4367,14 @@ ScriptableScratchMorph >> importSound [
 ]
 
 { #category : #accessing }
-ScriptableScratchMorph >> inPresentationMode [
+ScriptablePhratchMorph >> inPresentationMode [
 
 	^ (self ownerOrYourselfThatIsA: OffscreenWorldMorph) notNil
 
 ]
 
 { #category : #'sensing ops' }
-ScriptableScratchMorph >> indexForSensorName: sensorName [
+ScriptablePhratchMorph >> indexForSensorName: sensorName [
 	"Answer the index for the given sensor name."
 
 	sensorName startsWithDigit ifTrue: [^ sensorName asNumberNoError].
@@ -4393,7 +4393,7 @@ ScriptableScratchMorph >> indexForSensorName: sensorName [
 ]
 
 { #category : #'BYOB attributes' }
-ScriptableScratchMorph >> inheritCostumesNow [
+ScriptablePhratchMorph >> inheritCostumesNow [
 
 	| att idx |
 	att := #costumes.
@@ -4415,7 +4415,7 @@ ScriptableScratchMorph >> inheritCostumesNow [
 ]
 
 { #category : #'BYOB attributes' }
-ScriptableScratchMorph >> inheritSoundsNow [
+ScriptablePhratchMorph >> inheritSoundsNow [
 
 	| att |
 	att := #sounds.
@@ -4435,7 +4435,7 @@ ScriptableScratchMorph >> inheritSoundsNow [
 ]
 
 { #category : #'byob OOP' }
-ScriptableScratchMorph >> inheritedBlockIds [
+ScriptablePhratchMorph >> inheritedBlockIds [
 
 	| ownIds inheritedIds |
 	self prototype ifNil: [^ #()].
@@ -4447,14 +4447,14 @@ ScriptableScratchMorph >> inheritedBlockIds [
 ]
 
 { #category : #'byob OOP' }
-ScriptableScratchMorph >> inheritedBlocks [
+ScriptablePhratchMorph >> inheritedBlocks [
 
 	^ self inheritedBlockIds collect: [:id | 
 		self prototype definitionFor: id ]
 ]
 
 { #category : #'object i/o' }
-ScriptableScratchMorph >> initFieldsFrom: anObjStream version: classVersion [
+ScriptablePhratchMorph >> initFieldsFrom: anObjStream version: classVersion [
 
 	| fields |
 
@@ -4485,7 +4485,7 @@ ScriptableScratchMorph >> initFieldsFrom: anObjStream version: classVersion [
 ]
 
 { #category : #initialization }
-ScriptableScratchMorph >> initialize [
+ScriptablePhratchMorph >> initialize [
 
 	super initialize.
 	temporaryVariables := VariableFrame new. 
@@ -4505,7 +4505,7 @@ ScriptableScratchMorph >> initialize [
 ]
 
 { #category : #'byob OOP' }
-ScriptableScratchMorph >> initializeVarsAndLists [
+ScriptablePhratchMorph >> initializeVarsAndLists [
 	"used when spawning (cloning)"
 
 	vars := Dictionary new.
@@ -4513,7 +4513,7 @@ ScriptableScratchMorph >> initializeVarsAndLists [
 ]
 
 { #category : #'list ops' }
-ScriptableScratchMorph >> insert: anObject at: lineNum ofList: listName [
+ScriptablePhratchMorph >> insert: anObject at: lineNum ofList: listName [
 
 	| list i |
 	list := self listNamed: listName ifNone: [^ self].
@@ -4525,7 +4525,7 @@ ScriptableScratchMorph >> insert: anObject at: lineNum ofList: listName [
 ]
 
 { #category : #media }
-ScriptableScratchMorph >> insertMedia: aScratchMedia before: targetOrNil [
+ScriptablePhratchMorph >> insertMedia: aScratchMedia before: targetOrNil [
 	"Shuffle my media list so that the given media item comes immediately before the target media item, or at the end of the list if targetScratchMedia is nil. Do nothing if the given item is the same as the target item."
 
 	| mediaItem |
@@ -4555,16 +4555,16 @@ ScriptableScratchMorph >> insertMedia: aScratchMedia before: targetOrNil [
 ]
 
 { #category : #'debug and other' }
-ScriptableScratchMorph >> inspect: anObject [
+ScriptablePhratchMorph >> inspect: anObject [
 	anObject inspect
 ]
 
 { #category : #byob }
-ScriptableScratchMorph >> installGlobalBlocks [
+ScriptablePhratchMorph >> installGlobalBlocks [
 
 	| stage |
 
-	stage := self ownerOrYourselfThatIsA: ScratchStageMorph.	
+	stage := self ownerOrYourselfThatIsA: PhratchStageMorph.	
 	stage ifNil: [^ self].
 	"add imported global custom block definitions"
 
@@ -4588,24 +4588,24 @@ ScriptableScratchMorph >> installGlobalBlocks [
 ]
 
 { #category : #'byob OOP' }
-ScriptableScratchMorph >> instances [
+ScriptablePhratchMorph >> instances [
 
 	| stage |
-	stage := self ownerOrYourselfThatIsA: ScratchStageMorph.
+	stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
 	stage ifNil: [^ #()].
 	^ stage sprites select: [:each |
 		each prototype = self ]
 ]
 
 { #category : #byob }
-ScriptableScratchMorph >> instancesOf: aCustomBlockId [
+ScriptablePhratchMorph >> instancesOf: aCustomBlockId [
 
 	| sf ans visible invisible blx |
 	invisible := self invisibleInstancesOf: aCustomBlockId.
 	visible := blocksBin allMorphs select: [ :m|
 		((m isKindOf: CustomCommandBlockMorph) or:[
 			m isKindOf: CustomReporterBlockMorph]) and: [m id = aCustomBlockId]].
-	sf := self ownerOrYourselfThatIsA: ScratchFrameMorph.
+	sf := self ownerOrYourselfThatIsA: PhratchFrameMorph.
 	sf ifNotNil: [
 		sf blockEditors do: [:be |
 			blx := be allBlocksFor: aCustomBlockId.
@@ -4617,7 +4617,7 @@ ScriptableScratchMorph >> instancesOf: aCustomBlockId [
 ]
 
 { #category : #private }
-ScriptableScratchMorph >> interpretStringAsNumberIfPossible: anObject [
+ScriptablePhratchMorph >> interpretStringAsNumberIfPossible: anObject [
 	"If the argument is a string that can be interpreted as a number, such as '123', then return it's value as a number. Otherwise, return the original object."
 
 	| s digits hasDigit |
@@ -4644,7 +4644,7 @@ ScriptableScratchMorph >> interpretStringAsNumberIfPossible: anObject [
 ]
 
 { #category : #byob }
-ScriptableScratchMorph >> invisibleInstancesOf: aCustomBlockId [
+ScriptablePhratchMorph >> invisibleInstancesOf: aCustomBlockId [
 
 	| ans |
 	ans := Set new.
@@ -4667,26 +4667,26 @@ ScriptableScratchMorph >> invisibleInstancesOf: aCustomBlockId [
 ]
 
 { #category : #accessing }
-ScriptableScratchMorph >> isClone [
+ScriptablePhratchMorph >> isClone [
 
 	^ false
 
 ]
 
 { #category : #accessing }
-ScriptableScratchMorph >> isClone: aBoolean [
+ScriptablePhratchMorph >> isClone: aBoolean [
 	"Ignored here. Overridden by my subclasses."
 ]
 
 { #category : #accessing }
-ScriptableScratchMorph >> isColorable [
+ScriptablePhratchMorph >> isColorable [
 
 	^ false
 
 ]
 
 { #category : #'BYOB attributes' }
-ScriptableScratchMorph >> isHidden [
+ScriptablePhratchMorph >> isHidden [
 
 	| att |
 	att := #isHidden.
@@ -4700,17 +4700,17 @@ ScriptableScratchMorph >> isHidden [
 ]
 
 { #category : #'sensing ops' }
-ScriptableScratchMorph >> isLoud [
+ScriptablePhratchMorph >> isLoud [
 
 	^ self class soundRecorder meterLevel > 30
 
 ]
 
 { #category : #byob }
-ScriptableScratchMorph >> isObject: object type: type [
+ScriptablePhratchMorph >> isObject: object type: type [
 
 	'object' "localized" = type ifTrue: [
-		^ object isKindOf: ScriptableScratchMorph].
+		^ object isKindOf: ScriptablePhratchMorph].
 
 	'number' "localized" = type ifTrue: [
 		object isNumber ifTrue: [^true].
@@ -4734,7 +4734,7 @@ ScriptableScratchMorph >> isObject: object type: type [
 		^ object isKindOf: Boolean].
 
 	'list' "localized" = type ifTrue: [
-		^ object isKindOf: ScratchListMorph]. 
+		^ object isKindOf: PhratchListMorph]. 
 
 	'command' "localized" = type ifTrue: [
 		(object isKindOf: LambdaBlockMorph) ifFalse: [^ false].
@@ -4756,7 +4756,7 @@ ScriptableScratchMorph >> isObject: object type: type [
 ]
 
 { #category : #accessing }
-ScriptableScratchMorph >> isScriptable [
+ScriptablePhratchMorph >> isScriptable [
 	"I am a scriptable Scratch object."
 
 	^ true
@@ -4764,25 +4764,25 @@ ScriptableScratchMorph >> isScriptable [
 ]
 
 { #category : #accessing }
-ScriptableScratchMorph >> isSprite [
+ScriptablePhratchMorph >> isSprite [
 
 	^ false
 
 ]
 
 { #category : #accessing }
-ScriptableScratchMorph >> isVisible [
+ScriptablePhratchMorph >> isVisible [
 
 	^ self isHidden not and: [visibility > 0]
 
 ]
 
 { #category : #'dropping/grabbing' }
-ScriptableScratchMorph >> justDroppedInto: newOwner event: evt [
+ScriptablePhratchMorph >> justDroppedInto: newOwner event: evt [
 	"If I'm dropped into any submorph of a ScratchFrameMorph, reject the drop unless it is onto the work pane. For developers, accept drops into other morphs (e.g. the World). Otherwise, reject the drop."
 
 	| sFrame |
-	(sFrame := newOwner ownerOrYourselfThatIsA: ScratchFrameMorph) ifNotNil: [
+	(sFrame := newOwner ownerOrYourselfThatIsA: PhratchFrameMorph) ifNotNil: [
 		newOwner = sFrame viewerPane pageViewer contents ifTrue: [
 			self undoableDeleteSprite.
 			sFrame libraryPane step.
@@ -4796,7 +4796,7 @@ ScriptableScratchMorph >> justDroppedInto: newOwner event: evt [
 ]
 
 { #category : #'sensing ops' }
-ScriptableScratchMorph >> keyNames [
+ScriptablePhratchMorph >> keyNames [
 	"Key names for 'key pressed' block menu. Must keep this list in sync with asciiFor:."
 
 	^ #('up arrow' 'down arrow' 'right arrow' 'left arrow' 'space'),
@@ -4806,7 +4806,7 @@ ScriptableScratchMorph >> keyNames [
 ]
 
 { #category : #'sensing ops' }
-ScriptableScratchMorph >> keyPressed: keyName [
+ScriptablePhratchMorph >> keyPressed: keyName [
 
 	| ch |
 	ch := self asciiFor: keyName.
@@ -4823,7 +4823,7 @@ ScriptableScratchMorph >> keyPressed: keyName [
 ]
 
 { #category : #byob }
-ScriptableScratchMorph >> lambda: aCustomBlockId [
+ScriptablePhratchMorph >> lambda: aCustomBlockId [
 
 	"used for the getAttribute block menu"
 
@@ -4851,7 +4851,7 @@ ScriptableScratchMorph >> lambda: aCustomBlockId [
 ]
 
 { #category : #'BYOB attributes' }
-ScriptableScratchMorph >> layer [
+ScriptablePhratchMorph >> layer [
 
 	| att |
 	att := #layer.
@@ -4863,7 +4863,7 @@ ScriptableScratchMorph >> layer [
 ]
 
 { #category : #media }
-ScriptableScratchMorph >> layer: aNumber [
+ScriptablePhratchMorph >> layer: aNumber [
 
 	| n submorphsMinusMe newSubmorphs |
 	owner ifNil: [^ 1].
@@ -4878,7 +4878,7 @@ ScriptableScratchMorph >> layer: aNumber [
 ]
 
 { #category : #'string ops' }
-ScriptableScratchMorph >> letter: index of: anObject [
+ScriptablePhratchMorph >> letter: index of: anObject [
 	"Answer the ith letter of the given string. Answer the empty string if the index is out of bounds."
 
 	| s i |
@@ -4895,7 +4895,7 @@ ScriptableScratchMorph >> letter: index of: anObject [
 ]
 
 { #category : #'string ops' }
-ScriptableScratchMorph >> letterNum: letterNum of: aString [
+ScriptablePhratchMorph >> letterNum: letterNum of: aString [
 	"Answer the ith letter of the given string. Answer the empty string if the index is out of bounds."
 
 	| s |
@@ -4915,7 +4915,7 @@ ScriptableScratchMorph >> letterNum: letterNum of: aString [
 ]
 
 { #category : #'list ops' }
-ScriptableScratchMorph >> lineCountOfList: listName [
+ScriptablePhratchMorph >> lineCountOfList: listName [
 
 	| list |
 	list := self listNamed: listName ifNone: [^ 0].
@@ -4924,7 +4924,7 @@ ScriptableScratchMorph >> lineCountOfList: listName [
 ]
 
 { #category : #'list ops' }
-ScriptableScratchMorph >> lineNum: lineNum forList: list [
+ScriptablePhratchMorph >> lineNum: lineNum forList: list [
 
 	| s |
 	lineNum isNumber ifTrue: [^ lineNum asInteger].
@@ -4943,7 +4943,7 @@ ScriptableScratchMorph >> lineNum: lineNum forList: list [
 ]
 
 { #category : #'list ops' }
-ScriptableScratchMorph >> list: listName contains: anObject [
+ScriptablePhratchMorph >> list: listName contains: anObject [
 
 	| list |
 	list := self listNamed: listName ifNone: [^ false].
@@ -4952,7 +4952,7 @@ ScriptableScratchMorph >> list: listName contains: anObject [
 ]
 
 { #category : #'list ops' }
-ScriptableScratchMorph >> listIndexForDeleteMenu [
+ScriptablePhratchMorph >> listIndexForDeleteMenu [
 
 	| menu |
 	menu := MenuMorphNG new defaultTarget: self.
@@ -4965,7 +4965,7 @@ ScriptableScratchMorph >> listIndexForDeleteMenu [
 ]
 
 { #category : #'list ops' }
-ScriptableScratchMorph >> listIndexMenu [
+ScriptablePhratchMorph >> listIndexMenu [
 
 	| menu |
 	menu := MenuMorphNG new defaultTarget: self.
@@ -4976,21 +4976,21 @@ ScriptableScratchMorph >> listIndexMenu [
 ]
 
 { #category : #'list ops' }
-ScriptableScratchMorph >> listNamed: aString [
+ScriptablePhratchMorph >> listNamed: aString [
 
 	^ self listNamed: aString ifNone: [nil]
 ]
 
 { #category : #'list ops' }
-ScriptableScratchMorph >> listNamed: aString ifNone: aBlock [
+ScriptablePhratchMorph >> listNamed: aString ifNone: aBlock [
 	"Answer a list with the given name. First check the local list variables, otherwise check the global list variables and the prototype. If there is no list variable with the given name, return the result of evaluating the given block."
 
 	| result stage |
-	(aString isKindOf: ScratchListMorph)
+	(aString isKindOf: PhratchListMorph)
 		ifTrue: [^aString ].
 	(result := lists at: aString ifAbsent: [nil]) ifNotNil: [^ result].
 
-	(stage := self ownerOrYourselfThatIsA: ScratchStageMorph) ifNotNil: [
+	(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNotNil: [
 		(result := stage lists at: aString ifAbsent: [nil]) ifNotNil: [^ result]].
 
 	self prototype ifNotNil: [^ self prototype listNamed: aString ifNone: aBlock].
@@ -5002,12 +5002,12 @@ ScriptableScratchMorph >> listNamed: aString ifNone: aBlock [
 ]
 
 { #category : #'list ops' }
-ScriptableScratchMorph >> listVarMenu [
+ScriptablePhratchMorph >> listVarMenu [
 	"Answer a menu for selecting a list variables."
 
 	| result stage |
 	result := #().
-	((stage := self ownerOrYourselfThatIsA: ScratchStageMorph) notNil & (stage ~= self)) ifTrue: [
+	((stage := self ownerOrYourselfThatIsA: PhratchStageMorph) notNil & (stage ~= self)) ifTrue: [
 		result := stage listVarNames].
 
 	self listVarNames size > 0 ifTrue: [
@@ -5021,7 +5021,7 @@ ScriptableScratchMorph >> listVarMenu [
 ]
 
 { #category : #'list ops' }
-ScriptableScratchMorph >> listVarNames [
+ScriptablePhratchMorph >> listVarNames [
 	"Answer a list of list variable names."
 
 	| lst |
@@ -5035,14 +5035,14 @@ ScriptableScratchMorph >> listVarNames [
 ]
 
 { #category : #'list ops' }
-ScriptableScratchMorph >> lists [
+ScriptablePhratchMorph >> lists [
 
 	^ lists
 
 ]
 
 { #category : #byob }
-ScriptableScratchMorph >> localBlocks [
+ScriptablePhratchMorph >> localBlocks [
 
 	^ self inheritedBlocks, (customBlocks ifNil: [#()]) select: [:eachDef | 
 		eachDef isGlobal not].
@@ -5050,7 +5050,7 @@ ScriptableScratchMorph >> localBlocks [
 ]
 
 { #category : #'looks ops' }
-ScriptableScratchMorph >> lookLike: costumeNameOrIndex [
+ScriptablePhratchMorph >> lookLike: costumeNameOrIndex [
 	"Change to the costume indicated by the given name, index, or boolean. Noop if there is no costume of the given name in my library."
 	"Note: Costumes can have names that look like numbers, but those numbers have nothing to do with the index of the costume. So, we first try interpreting the argument as a name. If that fails, we try interpreting it as a costume index number."
 
@@ -5078,7 +5078,7 @@ ScriptableScratchMorph >> lookLike: costumeNameOrIndex [
 	newCostume ifNil: [^ self].  "should not happen..."
 
 	costume := newCostume.
-	(self isKindOf: ScratchSpriteMorph) ifTrue: [
+	(self isKindOf: PhratchSpriteMorph) ifTrue: [
 		self setSizeTo: self scale ].		"adjust the size if it is really huge or tiny.-jens"
 	costume resumePlaying.
 	self costumeChanged.
@@ -5088,7 +5088,7 @@ ScriptableScratchMorph >> lookLike: costumeNameOrIndex [
 ]
 
 { #category : #'right button menu' }
-ScriptableScratchMorph >> makeVisible [
+ScriptablePhratchMorph >> makeVisible [
 	"Make sure that I am entirely on the screen and visible."
 
 	self isHidden ifTrue: [self isHidden: false].
@@ -5104,7 +5104,7 @@ ScriptableScratchMorph >> makeVisible [
 ]
 
 { #category : #'other ops' }
-ScriptableScratchMorph >> mathFunctionNames [
+ScriptablePhratchMorph >> mathFunctionNames [
 	"Answer a collection of math function names."
 
 	^ #(
@@ -5124,14 +5124,14 @@ ScriptableScratchMorph >> mathFunctionNames [
 ]
 
 { #category : #accessing }
-ScriptableScratchMorph >> media [
+ScriptablePhratchMorph >> media [
 
 	^ media
 
 ]
 
 { #category : #media }
-ScriptableScratchMorph >> mediaNameFromFileName: fileName default: defaultName [
+ScriptablePhratchMorph >> mediaNameFromFileName: fileName default: defaultName [
 	"Answer a name for the given media item. If the existing name is '$$squeak$$' then the media was copied via windows drag-and-drop; use the given default name instead."
 
 	| result |
@@ -5143,7 +5143,7 @@ ScriptableScratchMorph >> mediaNameFromFileName: fileName default: defaultName [
 ]
 
 { #category : #'sound ops' }
-ScriptableScratchMorph >> midiDrumMenu [
+ScriptablePhratchMorph >> midiDrumMenu [
 	"Provides a drop-down menu for setting the drum number."
 
 	| menu |
@@ -5205,18 +5205,18 @@ ScriptableScratchMorph >> midiDrumMenu [
 ]
 
 { #category : #'sound ops' }
-ScriptableScratchMorph >> midiInstrument: aNumber [
+ScriptablePhratchMorph >> midiInstrument: aNumber [
 	"Old 'set instrument to _' block. Set the MIDI instrument used for note sounds."
 
 	| stage player |
-	(stage := self ownerOrYourselfThatIsA: ScratchStageMorph) ifNil: [^ self].
+	(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNil: [^ self].
 	(player := stage notePlayerFor: self) ifNotNil: [
 		player instrument: aNumber].
 
 ]
 
 { #category : #'sound ops' }
-ScriptableScratchMorph >> midiInstrumentMenu [
+ScriptablePhratchMorph >> midiInstrumentMenu [
 	"Provides a drop-down menu for setting the instrument number."
 
 	| menu |
@@ -5359,7 +5359,7 @@ ScriptableScratchMorph >> midiInstrumentMenu [
 ]
 
 { #category : #'sound ops' }
-ScriptableScratchMorph >> midiNoteMenu [
+ScriptablePhratchMorph >> midiNoteMenu [
 	"Provides a drop-down menu for setting the note number."
 
 	| menu midiKey noteName |
@@ -5380,7 +5380,7 @@ ScriptableScratchMorph >> midiNoteMenu [
 ]
 
 { #category : #'BYOB attributes' }
-ScriptableScratchMorph >> mosaicEffect [
+ScriptablePhratchMorph >> mosaicEffect [
 
 	| att |
 	att := #mosaic.
@@ -5392,14 +5392,14 @@ ScriptableScratchMorph >> mosaicEffect [
 ]
 
 { #category : #'BYOB attributes' }
-ScriptableScratchMorph >> mosaicEffect: aNumber [
+ScriptablePhratchMorph >> mosaicEffect: aNumber [
 
 	self undeleteAttribute: #mosaic.
 	self passiveMosaicEffect: aNumber
 ]
 
 { #category : #'motor ops' }
-ScriptableScratchMorph >> motor: motorName direction: directionName [
+ScriptablePhratchMorph >> motor: motorName direction: directionName [
 	"Set the direction of the given motor."
 
 	| dir |
@@ -5417,7 +5417,7 @@ ScriptableScratchMorph >> motor: motorName direction: directionName [
 ]
 
 { #category : #'motor ops' }
-ScriptableScratchMorph >> motor: motorName power: power [
+ScriptablePhratchMorph >> motor: motorName power: power [
 	"Set the power level of the given motor (0-100)."
 
 	'A' = motorName ifTrue: [WeDoPlugin motorAPower: power].
@@ -5429,7 +5429,7 @@ ScriptableScratchMorph >> motor: motorName power: power [
 ]
 
 { #category : #'motor ops' }
-ScriptableScratchMorph >> motorDirection [
+ScriptablePhratchMorph >> motorDirection [
 
 	^ {
 		'this way'.
@@ -5440,14 +5440,14 @@ ScriptableScratchMorph >> motorDirection [
 ]
 
 { #category : #'motor ops' }
-ScriptableScratchMorph >> motorNames [
+ScriptablePhratchMorph >> motorNames [
 
 	^ #(' ' A B)
 
 ]
 
 { #category : #'motor ops' }
-ScriptableScratchMorph >> motorOff: motorName [
+ScriptablePhratchMorph >> motorOff: motorName [
 	"Turn the given motor off."
 
 	'A' = motorName ifTrue: [WeDoPlugin motorAOn: false].
@@ -5459,7 +5459,7 @@ ScriptableScratchMorph >> motorOff: motorName [
 ]
 
 { #category : #'motor ops' }
-ScriptableScratchMorph >> motorOn: motorName [
+ScriptablePhratchMorph >> motorOn: motorName [
 	"Turn the given motor on."
 
 	'A' = motorName ifTrue: [WeDoPlugin motorAOn: true].
@@ -5471,7 +5471,7 @@ ScriptableScratchMorph >> motorOn: motorName [
 ]
 
 { #category : #'motor ops' }
-ScriptableScratchMorph >> motorOn: motorName duration: secs elapsed: elapsedMSecs from: motorID [
+ScriptablePhratchMorph >> motorOn: motorName duration: secs elapsed: elapsedMSecs from: motorID [
 	"Turn the given motor on for the given number of seconds."
 
 	motorID ifNil: [  "first call, start motor"
@@ -5483,7 +5483,7 @@ ScriptableScratchMorph >> motorOn: motorName duration: secs elapsed: elapsedMSec
 ]
 
 { #category : #'motor ops' }
-ScriptableScratchMorph >> motorOnFor: secs elapsed: elapsedMSecs from: motorID [
+ScriptablePhratchMorph >> motorOnFor: secs elapsed: elapsedMSecs from: motorID [
 	"Turn all motors on for the given number of seconds."
 
 	motorID ifNil: [  "first call, start motor"
@@ -5495,7 +5495,7 @@ ScriptableScratchMorph >> motorOnFor: secs elapsed: elapsedMSecs from: motorID [
 ]
 
 { #category : #'event handling' }
-ScriptableScratchMorph >> mouseDown: evt [
+ScriptablePhratchMorph >> mouseDown: evt [
 	"Handle a mouse click. Left button either drags or performs click action. Right button brings up a menu."
 
 	evt hand newKeyboardFocus: nil.
@@ -5504,7 +5504,7 @@ ScriptableScratchMorph >> mouseDown: evt [
 		self handleTool: evt hand toolType hand: evt hand.
 		^ self].
 
-	(owner isKindOf: ScratchStageMorph) ifFalse: [^ super mouseDown: evt].
+	(owner isKindOf: PhratchStageMorph) ifFalse: [^ super mouseDown: evt].
 
 	evt rightButtonPressed
 		ifTrue: [Sensor waitNoButton. ^ self rightButtonMenu]
@@ -5512,27 +5512,27 @@ ScriptableScratchMorph >> mouseDown: evt [
 ]
 
 { #category : #'event handling' }
-ScriptableScratchMorph >> mouseHold: evt [
+ScriptablePhratchMorph >> mouseHold: evt [
 
 	self rightButtonMenu.
 
 ]
 
 { #category : #'sensing ops' }
-ScriptableScratchMorph >> mousePressed [
+ScriptablePhratchMorph >> mousePressed [
 
 	^ Sensor redButtonPressed
 
 ]
 
 { #category : #'sensing ops' }
-ScriptableScratchMorph >> mouseX [
+ScriptablePhratchMorph >> mouseX [
 
 	| s centerX |
 	DoubleSize ifTrue: [^ (Sensor lastMousePosition x - ScratchOrigin x) // 2].
 
 	self inPresentationMode ifFalse: [
-		s := self ownerOrYourselfThatIsA: ScratchStageMorph.
+		s := self ownerOrYourselfThatIsA: PhratchStageMorph.
 		(s notNil and: [s isQuarterSize]) ifTrue: [
 			centerX := s left + (s width // 4).
 			^ 2 * (Sensor lastMousePosition x - centerX)]].
@@ -5542,13 +5542,13 @@ ScriptableScratchMorph >> mouseX [
 ]
 
 { #category : #'sensing ops' }
-ScriptableScratchMorph >> mouseY [
+ScriptablePhratchMorph >> mouseY [
 
 	| s centerY |
 	DoubleSize ifTrue: [^ (Sensor lastMousePosition y - ScratchOrigin y) negated // 2].
 
 	self inPresentationMode ifFalse: [
-		s := self ownerOrYourselfThatIsA: ScratchStageMorph.
+		s := self ownerOrYourselfThatIsA: PhratchStageMorph.
 		(s notNil and: [s isQuarterSize]) ifTrue: [
 			centerY := s top + (s height // 4).
 			^ -2 * (Sensor lastMousePosition y - centerY)]].
@@ -5558,7 +5558,7 @@ ScriptableScratchMorph >> mouseY [
 ]
 
 { #category : #'other ops' }
-ScriptableScratchMorph >> mwait: duration elapsed: elapsed from: ignored [
+ScriptablePhratchMorph >> mwait: duration elapsed: elapsed from: ignored [
 	"Do nothing; just wait for the time interval to elapse."
 
 	^ nil
@@ -5566,7 +5566,7 @@ ScriptableScratchMorph >> mwait: duration elapsed: elapsed from: ignored [
 ]
 
 { #category : #byob }
-ScriptableScratchMorph >> newCustomBlockFor: aDefinition [
+ScriptablePhratchMorph >> newCustomBlockFor: aDefinition [
 
 	| b |
 
@@ -5584,12 +5584,12 @@ ScriptableScratchMorph >> newCustomBlockFor: aDefinition [
 ]
 
 { #category : #byob }
-ScriptableScratchMorph >> newList: aScratchListMorph [
+ScriptablePhratchMorph >> newList: aScratchListMorph [
 	^aScratchListMorph
 ]
 
 { #category : #'looks ops' }
-ScriptableScratchMorph >> nextCostume [
+ScriptablePhratchMorph >> nextCostume [
 	"Show the next costume in my costumes list."
 
 	self lookLike: self costumeIndex + 1.
@@ -5600,17 +5600,17 @@ ScriptableScratchMorph >> nextCostume [
 ]
 
 { #category : #private }
-ScriptableScratchMorph >> nextInstanceName [
+ScriptablePhratchMorph >> nextInstanceName [
 	"Answer a name for a new instance. For sprites, an attempt is made to create a unique name of the form 'spriteN'."
 
 	| stage lastN digits |
-	self = ScratchStageMorph ifTrue: [^ 'Stage' localized].
+	self = PhratchStageMorph ifTrue: [^ 'Stage' localized].
 
-	(stage := self ownerOrYourselfThatIsA: ScratchStageMorph) ifNil: [^ 'Sprite' localized asUTF8, 1 printString].
+	(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNil: [^ 'Sprite' localized asUTF8, 1 printString].
 	lastN := 0.
 	stage sprites ifNotNil: [
 		stage sprites do: [:m |
-			(m isKindOf: ScratchSpriteMorph) ifTrue: [
+			(m isKindOf: PhratchSpriteMorph) ifTrue: [
 				digits := m objName trailingDigits.
 				((digits size > 0) and: [m objName beginsWith: ('Sprite' localized)])
 					ifTrue: [lastN := lastN max: digits asNumber]]]].
@@ -5620,19 +5620,19 @@ ScriptableScratchMorph >> nextInstanceName [
 ]
 
 { #category : #byob }
-ScriptableScratchMorph >> notEditingBlock [
+ScriptablePhratchMorph >> notEditingBlock [
 	| sf |
-	sf := self ownerOrYourselfThatIsA: ScratchFrameMorph.
+	sf := self ownerOrYourselfThatIsA: PhratchFrameMorph.
 	sf ifNil: [^true].
 	^sf notEditingBlock
 ]
 
 { #category : #'sound ops' }
-ScriptableScratchMorph >> noteOn: midiKey duration: beats elapsed: elapsedMSecs from: aNotePlayer [
+ScriptablePhratchMorph >> noteOn: midiKey duration: beats elapsed: elapsedMSecs from: aNotePlayer [
 
 	| stage player |
 	aNotePlayer ifNil: [  "first call, start playing the note"
-		(stage := self ownerOrYourselfThatIsA: ScratchStageMorph) ifNil: [^ PhratchNotePlayer new].
+		(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNil: [^ PhratchNotePlayer new].
 		(player := stage notePlayerFor: self) ifNil: [^ PhratchNotePlayer new].
 		^ player copy noteOn: midiKey].
 
@@ -5641,11 +5641,11 @@ ScriptableScratchMorph >> noteOn: midiKey duration: beats elapsed: elapsedMSecs 
 ]
 
 { #category : #'sound ops' }
-ScriptableScratchMorph >> noteSelector [
+ScriptablePhratchMorph >> noteSelector [
 	"Returns an instance of a ScratchNoteSelector for selecting notes. This object behaves like a CustomMenu."
 
 	| stageMorph notePlayer |
-	stageMorph := (self ownerOrYourselfThatIsA: ScratchStageMorph).
+	stageMorph := (self ownerOrYourselfThatIsA: PhratchStageMorph).
 	stageMorph ifNil: [^ self midiNoteMenu].
 	notePlayer := stageMorph notePlayerFor: self.
 	notePlayer ifNil: [^ self midiNoteMenu].
@@ -5655,21 +5655,21 @@ ScriptableScratchMorph >> noteSelector [
 ]
 
 { #category : #'sound ops' }
-ScriptableScratchMorph >> numberInParens: aNumber [
+ScriptablePhratchMorph >> numberInParens: aNumber [
 
 	^ '(' , aNumber printString, ') '
 
 ]
 
 { #category : #accessing }
-ScriptableScratchMorph >> objName [
+ScriptablePhratchMorph >> objName [
 
 	^ objName
 
 ]
 
 { #category : #accessing }
-ScriptableScratchMorph >> objName: aString [
+ScriptablePhratchMorph >> objName: aString [
 
 	"don't allow renaming a sprite to use a name already in use"
 	(self spriteNameInUse: aString) ifTrue: [^ self].
@@ -5679,7 +5679,7 @@ ScriptableScratchMorph >> objName: aString [
 ]
 
 { #category : #'BYOB object interface' }
-ScriptableScratchMorph >> objectInterface [
+ScriptablePhratchMorph >> objectInterface [
 
 	^ 
 	{	"attribute					category		getter				setter				menu string			inheritable"
@@ -5726,7 +5726,7 @@ ScriptableScratchMorph >> objectInterface [
 ]
 
 { #category : #media }
-ScriptableScratchMorph >> onlyCostume: aForm [
+ScriptablePhratchMorph >> onlyCostume: aForm [
 	"Remove all my costumes, then make a new costume using the given Form."
 
 	| el |
@@ -5741,35 +5741,35 @@ ScriptableScratchMorph >> onlyCostume: aForm [
 ]
 
 { #category : #'BYOB attributes' }
-ScriptableScratchMorph >> passiveBlurEffect: aNumber [
+ScriptablePhratchMorph >> passiveBlurEffect: aNumber [
 
 	self privateSetGraphicEffect: 'blur' to: aNumber asNumberNoError.
 	self propagate: #blur
 ]
 
 { #category : #'BYOB attributes' }
-ScriptableScratchMorph >> passiveBrightnessEffect: aNumber [
+ScriptablePhratchMorph >> passiveBrightnessEffect: aNumber [
 
 	self privateSetGraphicEffect: 'brightness' to: aNumber asNumberNoError.
 	self propagate: #brightness
 ]
 
 { #category : #'BYOB attributes' }
-ScriptableScratchMorph >> passiveColorEffect: aNumber [
+ScriptablePhratchMorph >> passiveColorEffect: aNumber [
 
 	self privateSetGraphicEffect: 'color' to: aNumber asNumberNoError.
 	self propagate: #color
 ]
 
 { #category : #'BYOB attributes' }
-ScriptableScratchMorph >> passiveFisheyeEffect: aNumber [
+ScriptablePhratchMorph >> passiveFisheyeEffect: aNumber [
 
 	self privateSetGraphicEffect: 'fisheye' to: aNumber asNumberNoError.
 	self propagate: #fisheye
 ]
 
 { #category : #'BYOB attributes' }
-ScriptableScratchMorph >> passiveMosaicEffect: aNumber [
+ScriptablePhratchMorph >> passiveMosaicEffect: aNumber [
 
 	self privateSetGraphicEffect: 'mosaic' to: aNumber asNumberNoError.
 	self propagate: #mosaic
@@ -5777,14 +5777,14 @@ ScriptableScratchMorph >> passiveMosaicEffect: aNumber [
 ]
 
 { #category : #'BYOB attributes' }
-ScriptableScratchMorph >> passivePixelateEffect: aNumber [
+ScriptablePhratchMorph >> passivePixelateEffect: aNumber [
 
 	self privateSetGraphicEffect: 'pixelate' to: aNumber asNumberNoError.
 	self propagate: #pixelate
 ]
 
 { #category : #'BYOB attributes' }
-ScriptableScratchMorph >> passiveSetHideFlagTo: aBool [
+ScriptablePhratchMorph >> passiveSetHideFlagTo: aBool [
 
 	(aBool isKindOf: Boolean) 
 		ifFalse: [^ self error: 'expecting a Boolean'].
@@ -5794,7 +5794,7 @@ ScriptableScratchMorph >> passiveSetHideFlagTo: aBool [
 ]
 
 { #category : #'BYOB attributes' }
-ScriptableScratchMorph >> passiveSetLayerTo: aNumber [
+ScriptablePhratchMorph >> passiveSetLayerTo: aNumber [
 
 	self layer: aNumber asNumberNoError truncated.
 	self spread.
@@ -5802,11 +5802,11 @@ ScriptableScratchMorph >> passiveSetLayerTo: aNumber [
 ]
 
 { #category : #'byob OOP' }
-ScriptableScratchMorph >> passiveSetVolumeTo: aNumber [
+ScriptablePhratchMorph >> passiveSetVolumeTo: aNumber [
 
 	| stage player |
 	volume := aNumber asNumberNoError within: 0 and: 100.
-	(stage := self ownerOrYourselfThatIsA: ScratchStageMorph) ifNotNil: [
+	(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNotNil: [
 		(player := stage notePlayerFor: self) ifNotNil: [
 			player volume: volume]].
 
@@ -5819,29 +5819,42 @@ ScriptableScratchMorph >> passiveSetVolumeTo: aNumber [
 ]
 
 { #category : #'BYOB attributes' }
-ScriptableScratchMorph >> passiveTransparencyEffect: aNumber [
+ScriptablePhratchMorph >> passiveTransparencyEffect: aNumber [
 
 	self privateSetGraphicEffect: 'transparency' to: aNumber asNumberNoError.
 	self propagate: #ghost
 ]
 
 { #category : #'BYOB attributes' }
-ScriptableScratchMorph >> passiveWhirlEffect: aNumber [
+ScriptablePhratchMorph >> passiveWhirlEffect: aNumber [
 
 	self privateSetGraphicEffect: 'whirl' to: aNumber asNumberNoError.
 	self propagate: #whirl
 ]
 
 { #category : #'looks ops' }
-ScriptableScratchMorph >> penDown [
+ScriptablePhratchMorph >> penDown [
 	"Overriden by sprites."
 
 	^ false
 
 ]
 
+{ #category : #scripts }
+ScriptablePhratchMorph >> phratchFrame [
+
+	| frame w |
+	frame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
+	frame ifNil: [
+		(w := self ownerOrYourselfThatIsA: OffscreenWorldMorph) ifNil: [^ nil].
+		frame := w frame].
+	^ frame
+
+
+]
+
 { #category : #'BYOB attributes' }
-ScriptableScratchMorph >> pixelateEffect [
+ScriptablePhratchMorph >> pixelateEffect [
 
 	| att |
 	att := #pixelate.
@@ -5853,14 +5866,14 @@ ScriptableScratchMorph >> pixelateEffect [
 ]
 
 { #category : #'BYOB attributes' }
-ScriptableScratchMorph >> pixelateEffect: aNumber [
+ScriptablePhratchMorph >> pixelateEffect: aNumber [
 
 	self undeleteAttribute: #pixelate.
 	self passivePixelateEffect: aNumber
 ]
 
 { #category : #'sound ops' }
-ScriptableScratchMorph >> playMidi: fileName [
+ScriptablePhratchMorph >> playMidi: fileName [
 	"Play the midi file with the given name."
 
 	| fname score player |
@@ -5874,7 +5887,7 @@ ScriptableScratchMorph >> playMidi: fileName [
 ]
 
 { #category : #'sound ops' }
-ScriptableScratchMorph >> playSound: soundName [
+ScriptablePhratchMorph >> playSound: soundName [
 
 	| snd |
 	snd := self soundNamed: soundName ifAbsent: [^ self].
@@ -5883,17 +5896,17 @@ ScriptableScratchMorph >> playSound: soundName [
 ]
 
 { #category : #'BYOB attributes' }
-ScriptableScratchMorph >> pointillizeEffect [
+ScriptablePhratchMorph >> pointillizeEffect [
 	^ [filterPack pointillizeSize] ifError: [0]
 ]
 
 { #category : #'BYOB attributes' }
-ScriptableScratchMorph >> pointillizeEffect: aNumber [
+ScriptablePhratchMorph >> pointillizeEffect: aNumber [
 	self setGraphicEffect: 'pointillize' to: aNumber
 ]
 
 { #category : #scripts }
-ScriptableScratchMorph >> prepareForExport [
+ScriptablePhratchMorph >> prepareForExport [
 	self blocksBin allMorphsDo: [:m |
 		(m isKindOf: BlockMorph) ifTrue: [m stop].
 		(m isKindOf: SpriteArgMorph) ifTrue: [m clearMorphReference]].
@@ -5909,14 +5922,14 @@ ScriptableScratchMorph >> prepareForExport [
 
 	self convertStacksToTuples.
 
-	(self isKindOf: ScratchSpriteMorph) ifTrue: [
+	(self isKindOf: PhratchSpriteMorph) ifTrue: [
 		self subsprites do: [:sub |
 			sub prepareForExport ]]
 
 ]
 
 { #category : #private }
-ScriptableScratchMorph >> printSummaryOn: aStream [
+ScriptablePhratchMorph >> printSummaryOn: aStream [
 
 	| costumes snds stacks hats otherStacks |
 	aStream nextPutAll: 'Sprite: ', self objName; crlf.
@@ -5949,7 +5962,7 @@ ScriptableScratchMorph >> printSummaryOn: aStream [
 ]
 
 { #category : #'BYOB attributes' }
-ScriptableScratchMorph >> privateSetGraphicEffect: effect to: aNumber [
+ScriptablePhratchMorph >> privateSetGraphicEffect: effect to: aNumber [
 	"Set the given graphic effect to the given value."
 
 	filterPack ifNil: [filterPack := FilterPack new].
@@ -5972,22 +5985,22 @@ ScriptableScratchMorph >> privateSetGraphicEffect: effect to: aNumber [
 ]
 
 { #category : #private }
-ScriptableScratchMorph >> projectDirectory [
+ScriptablePhratchMorph >> projectDirectory [
 	"Answer the directory containing this Scratch project or the default directory."
 
 	| frame |
-	(frame := self ownerOrYourselfThatIsA: ScratchFrameMorph) ifNil: [^ FileSystem workingDirectory].
+	(frame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNil: [^ FileSystem workingDirectory].
 	^ frame projectDirectory
 
 ]
 
 { #category : #'sensing ops' }
-ScriptableScratchMorph >> promptForInput: questionString [
+ScriptablePhratchMorph >> promptForInput: questionString [
 
 	| s prompter |
-	(s := self ownerOrYourselfThatIsA: ScratchStageMorph) ifNil: [^ self].
+	(s := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNil: [^ self].
 	prompter := PhratchPrompterMorph new.
-	((self isKindOf: ScratchStageMorph) | (self isHidden))
+	((self isKindOf: PhratchStageMorph) | (self isHidden))
 		ifTrue: [
 			prompter question: questionString]
 		ifFalse: [
@@ -6008,10 +6021,10 @@ ScriptableScratchMorph >> promptForInput: questionString [
 ]
 
 { #category : #'sensing ops' }
-ScriptableScratchMorph >> promptInProgress [
+ScriptablePhratchMorph >> promptInProgress [
 
 	| s |
-	(s := self ownerOrYourselfThatIsA: ScratchStageMorph) ifNil: [^ false].
+	(s := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNil: [^ false].
 	s submorphsDo: [:m |
 		(m isKindOf: PhratchPrompterMorph) ifTrue: [^ true]].
 	^ false
@@ -6019,7 +6032,7 @@ ScriptableScratchMorph >> promptInProgress [
 ]
 
 { #category : #'byob OOP' }
-ScriptableScratchMorph >> propagate [
+ScriptablePhratchMorph >> propagate [
 	"private - apply the method calling me to all subsprites"
 
 	| sel args instances |
@@ -6036,7 +6049,7 @@ ScriptableScratchMorph >> propagate [
 ]
 
 { #category : #'byob OOP' }
-ScriptableScratchMorph >> propagate: attributeName [
+ScriptablePhratchMorph >> propagate: attributeName [
 	"private - apply the method calling me to all subsprites"
 
 	| sel args instances |
@@ -6054,28 +6067,28 @@ ScriptableScratchMorph >> propagate: attributeName [
 ]
 
 { #category : #'BYOB attributes' }
-ScriptableScratchMorph >> propagateCostumes [
+ScriptablePhratchMorph >> propagateCostumes [
 
 	self instances do: [:child |
 		child inheritCostumesNow]
 ]
 
 { #category : #'BYOB attributes' }
-ScriptableScratchMorph >> propagateSounds [
+ScriptablePhratchMorph >> propagateSounds [
 
 	self instances do: [:child |
 		child inheritSoundsNow]
 ]
 
 { #category : #'byob OOP' }
-ScriptableScratchMorph >> prototype [
-	(self isKindOf: ScratchSpriteMorph)
+ScriptablePhratchMorph >> prototype [
+	(self isKindOf: PhratchSpriteMorph)
 		ifTrue: [^ self prototype]
 		ifFalse: [^ nil]
 ]
 
 { #category : #byob }
-ScriptableScratchMorph >> purgeVarsAndLists [
+ScriptablePhratchMorph >> purgeVarsAndLists [
 
 	vars keysDo: [:each |
 		((vars at: each) isKindOf: BlockMorph)
@@ -6090,7 +6103,7 @@ ScriptableScratchMorph >> purgeVarsAndLists [
 ]
 
 { #category : #'other ops' }
-ScriptableScratchMorph >> randomFrom: start to: stop [
+ScriptablePhratchMorph >> randomFrom: start to: stop [
 	"Answer a random number within the given range. If both min and max are integers, the result is rounded to the nearest integer."
 
 	| min max result |
@@ -6105,10 +6118,10 @@ ScriptableScratchMorph >> randomFrom: start to: stop [
 ]
 
 { #category : #media }
-ScriptableScratchMorph >> recordSound [
+ScriptablePhratchMorph >> recordSound [
 
 	| frame |
-	frame := self ownerOrYourselfThatIsA: ScratchFrameMorph.
+	frame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
 	frame ifNil: [^ Beeper beep].
 	frame stopAll.
 	World submorphs do: [:m |
@@ -6120,22 +6133,22 @@ ScriptableScratchMorph >> recordSound [
 ]
 
 { #category : #'dropping/grabbing' }
-ScriptableScratchMorph >> rejectDropEvent: evt [
+ScriptablePhratchMorph >> rejectDropEvent: evt [
 	"Reject being dropped by the given event."
 
-	(self owner isKindOf: ScratchStageMorph)
+	(self owner isKindOf: PhratchStageMorph)
 		ifFalse: [ ^ evt hand rejectDropMorph: self event: evt ]
 		ifTrue: [ ^ false ]
 ]
 
 { #category : #accessing }
-ScriptableScratchMorph >> renewFilterPack [
+ScriptablePhratchMorph >> renewFilterPack [
 
 	filterPack := FilterPack new.
 ]
 
 { #category : #'sound ops' }
-ScriptableScratchMorph >> rest: duration elapsed: elapsed from: ignored [
+ScriptablePhratchMorph >> rest: duration elapsed: elapsed from: ignored [
 	"Do nothing; just wait for the time interval to elapse."
 
 	^ nil
@@ -6143,7 +6156,7 @@ ScriptableScratchMorph >> rest: duration elapsed: elapsed from: ignored [
 ]
 
 { #category : #media }
-ScriptableScratchMorph >> revertToCostume: oldCostumeName [
+ScriptablePhratchMorph >> revertToCostume: oldCostumeName [
 	"Sent by the paint editor if editing of a newly-created costume is cancelled. Delete the new costume and revert to the old costume with the given name."
 
 	| newlyCreatedCostume |
@@ -6158,7 +6171,7 @@ ScriptableScratchMorph >> revertToCostume: oldCostumeName [
 ]
 
 { #category : #'sound ops' }
-ScriptableScratchMorph >> rewindSound: soundName [
+ScriptablePhratchMorph >> rewindSound: soundName [
 	"Rewind the given sound."
 
 	| snd |
@@ -6168,13 +6181,13 @@ ScriptableScratchMorph >> rewindSound: soundName [
 ]
 
 { #category : #'right button menu' }
-ScriptableScratchMorph >> rightButtonMenu [
+ScriptablePhratchMorph >> rightButtonMenu [
 	"This default implementation does nothing."
 
 ]
 
 { #category : #accessing }
-ScriptableScratchMorph >> rotatedForm [
+ScriptablePhratchMorph >> rotatedForm [
 	"By default, just return my costume form. Sprites override this method to do rotation."
 
 	^ self costumeForm
@@ -6183,7 +6196,7 @@ ScriptableScratchMorph >> rotatedForm [
 ]
 
 { #category : #accessing }
-ScriptableScratchMorph >> rotationCenter: aPoint [
+ScriptablePhratchMorph >> rotationCenter: aPoint [
 	"Set my costume's rotation center."
 
 	costume rotationCenter: aPoint.
@@ -6192,25 +6205,25 @@ ScriptableScratchMorph >> rotationCenter: aPoint [
 ]
 
 { #category : #'byob easter egg fun' }
-ScriptableScratchMorph >> runMeWith: arg [
+ScriptablePhratchMorph >> runMeWith: arg [
 
-	(self isKindOf: ScratchSpriteMorph) ifTrue: [
+	(self isKindOf: PhratchSpriteMorph) ifTrue: [
 		((arg isKindOf: String) and: [arg isEmpty not]) ifFalse: [^ self say: 'Run me with your name!'].
 		^self say: 'Hi, ', arg, '! Nice talking to you :-) Congratulations for figuring out this little riddle. You are now a certified lambdaist!']
 ]
 
 { #category : #'BYOB attributes' }
-ScriptableScratchMorph >> saturationEffect [
+ScriptablePhratchMorph >> saturationEffect [
 	^ [filterPack saturationShift] ifError: [0]
 ]
 
 { #category : #'BYOB attributes' }
-ScriptableScratchMorph >> saturationEffect: aNumber [
+ScriptablePhratchMorph >> saturationEffect: aNumber [
 	self setGraphicEffect: 'saturation' to: aNumber
 ]
 
 { #category : #media }
-ScriptableScratchMorph >> savePhoto: aForm [
+ScriptablePhratchMorph >> savePhoto: aForm [
 
 	| n |
 	n := self unusedMediaNameFromBaseName: 'costume' localized, '1'.
@@ -6224,7 +6237,7 @@ ScriptableScratchMorph >> savePhoto: aForm [
 ]
 
 { #category : #media }
-ScriptableScratchMorph >> saveSound: aSampledSound name: baseName [
+ScriptablePhratchMorph >> saveSound: aSampledSound name: baseName [
 
 	| sndItem |
 	sndItem := SoundMedia new.
@@ -6240,33 +6253,20 @@ ScriptableScratchMorph >> saveSound: aSampledSound name: baseName [
 ]
 
 { #category : #'looks ops' }
-ScriptableScratchMorph >> sayNothing [
+ScriptablePhratchMorph >> sayNothing [
 	"Default behavior does nothing. Overridden in ScratchSpriteMorph."
 
 ]
 
 { #category : #'looks ops' }
-ScriptableScratchMorph >> sceneNames [
+ScriptablePhratchMorph >> sceneNames [
 
-	^ (self ownerOrYourselfThatIsA: ScratchStageMorph) sceneNames
-
-]
-
-{ #category : #scripts }
-ScriptableScratchMorph >> scratchFrame [
-
-	| frame w |
-	frame := self ownerOrYourselfThatIsA: ScratchFrameMorph.
-	frame ifNil: [
-		(w := self ownerOrYourselfThatIsA: OffscreenWorldMorph) ifNil: [^ nil].
-		frame := w frame].
-	^ frame
-
+	^ (self ownerOrYourselfThatIsA: PhratchStageMorph) sceneNames
 
 ]
 
 { #category : #scripts }
-ScriptableScratchMorph >> scripts [
+ScriptablePhratchMorph >> scripts [
 	"Answer my scripts, a collection of HatBlockMorphs."
 
 	(blocksBin isKindOf: Morph) ifFalse: [^ blocksBin].
@@ -6275,7 +6275,7 @@ ScriptableScratchMorph >> scripts [
 ]
 
 { #category : #blocks }
-ScriptableScratchMorph >> scriptsAsTuples: tuples [
+ScriptablePhratchMorph >> scriptsAsTuples: tuples [
 
 	blocksBin := tuples asArray.
 	self convertTuplesToStacks.
@@ -6283,13 +6283,13 @@ ScriptableScratchMorph >> scriptsAsTuples: tuples [
 ]
 
 { #category : #'sensing ops' }
-ScriptableScratchMorph >> sensor: sensorName [
+ScriptablePhratchMorph >> sensor: sensorName [
 	"Answer the value of the given sensor, or zero if the sensorboard is not available."
 
 	| stage v sb |
-	(stage := self ownerThatIsA: ScratchStageMorph) ifNil: [^ 0].
-	stage scratchServer ifNotNil: [
-		v := stage scratchServer sensorValueFor: sensorName.
+	(stage := self ownerThatIsA: PhratchStageMorph) ifNil: [^ 0].
+	stage phratchServer ifNotNil: [
+		v := stage phratchServer sensorValueFor: sensorName.
 		v ifNotNil: [^ v]].
 
 	'tilt' = sensorName ifTrue: [^ WeDoPlugin tilt].
@@ -6302,11 +6302,11 @@ ScriptableScratchMorph >> sensor: sensorName [
 ]
 
 { #category : #'sensing ops' }
-ScriptableScratchMorph >> sensorPressed: sensorName [
+ScriptablePhratchMorph >> sensorPressed: sensorName [
 	"Answer true if a button connected to the given input of the sensor board is pressed. That is, if the sensor value is less than 10. Answer false if the sensor board cannot be opened."
 
 	| stage sb |
-	(stage := self ownerOrYourselfThatIsA: ScratchStageMorph) ifNil: [^ false].
+	(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNil: [^ false].
 	sb := stage sensorBoard.
 	sb tryToOpenPort ifFalse: [^ false].  "could not open"
 	^ (sb sensor: (self indexForSensorName: sensorName)) < 10
@@ -6314,7 +6314,7 @@ ScriptableScratchMorph >> sensorPressed: sensorName [
 ]
 
 { #category : #networking }
-ScriptableScratchMorph >> serialized [
+ScriptablePhratchMorph >> serialized [
 	"Answer a ByteArray containing this Scratch object in serialized form."
 
 	| s objToExport |
@@ -6329,7 +6329,7 @@ ScriptableScratchMorph >> serialized [
 ]
 
 { #category : #'BYOB object interface' }
-ScriptableScratchMorph >> set: anObject to: aValue [
+ScriptablePhratchMorph >> set: anObject to: aValue [
 
 	| oi sel obj att block arg |
 
@@ -6346,7 +6346,7 @@ ScriptableScratchMorph >> set: anObject to: aValue [
 
 	(anObject isKindOf: CommandScriptBlockMorph) ifTrue: [
 		obj := anObject receiver.
-		(obj isKindOf: ScriptableScratchMorph) ifFalse: [
+		(obj isKindOf: ScriptablePhratchMorph) ifFalse: [
 			^ self error: 'cannot get attributes of non-Sprites/Stage'].
 		block := anObject body argMorphs first.
 		(block isKindOf: VariableBlockMorph) ifTrue: [
@@ -6367,7 +6367,7 @@ ScriptableScratchMorph >> set: anObject to: aValue [
 ]
 
 { #category : #'looks ops' }
-ScriptableScratchMorph >> setGraphicEffect: effect to: aNumber [
+ScriptablePhratchMorph >> setGraphicEffect: effect to: aNumber [
 	"Set the given graphic effect to the given value."
 
 	'blur' = effect ifTrue: [self blurEffect: aNumber].
@@ -6385,18 +6385,18 @@ ScriptableScratchMorph >> setGraphicEffect: effect to: aNumber [
 ]
 
 { #category : #'BYOB attributes' }
-ScriptableScratchMorph >> setHideFlagTo: aBool [
+ScriptablePhratchMorph >> setHideFlagTo: aBool [
 
 	self undeleteAttribute: #isHidden.
 	self passiveSetHideFlagTo: aBool
 ]
 
 { #category : #'sound ops' }
-ScriptableScratchMorph >> setInstrument: aNumber [
+ScriptablePhratchMorph >> setInstrument: aNumber [
 	"New 'set instrument to _' block. Set the instrument used for note sounds. Testing in beta but reverted."
 
 	| stage map n player |
-	(stage := self ownerOrYourselfThatIsA: ScratchStageMorph) ifNil: [^ self].
+	(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNil: [^ self].
 	map := #(1 30 25 35).
 	n := aNumber asNumberNoError asInteger.
 	(n between: 1 and: map size)
@@ -6408,7 +6408,7 @@ ScriptableScratchMorph >> setInstrument: aNumber [
 ]
 
 { #category : #'sound ops' }
-ScriptableScratchMorph >> setInstrumentMenu [
+ScriptablePhratchMorph >> setInstrumentMenu [
 	"Provides a drop-down menu for setting the instrument number."
 
 	"| menu |
@@ -6427,14 +6427,14 @@ ScriptableScratchMorph >> setInstrumentMenu [
 ]
 
 { #category : #'BYOB attributes' }
-ScriptableScratchMorph >> setLayerTo: aNumber [
+ScriptablePhratchMorph >> setLayerTo: aNumber [
 
 	self undeleteAttribute: #layer.
 	self passiveSetLayerTo: aNumber
 ]
 
 { #category : #'list ops' }
-ScriptableScratchMorph >> setLine: lineNum ofList: listName to: anObject [
+ScriptablePhratchMorph >> setLine: lineNum ofList: listName to: anObject [
 
 	| list |
 	list := self listNamed: listName ifNone: [^ ''].
@@ -6443,7 +6443,7 @@ ScriptableScratchMorph >> setLine: lineNum ofList: listName to: anObject [
 ]
 
 { #category : #media }
-ScriptableScratchMorph >> setMedia: mediaCollection [
+ScriptablePhratchMorph >> setMedia: mediaCollection [
 	"Set my media to the given collection when copying."
 
 	media := mediaCollection.
@@ -6451,7 +6451,7 @@ ScriptableScratchMorph >> setMedia: mediaCollection [
 ]
 
 { #category : #'motor ops' }
-ScriptableScratchMorph >> setMotorDirection: directionName [
+ScriptablePhratchMorph >> setMotorDirection: directionName [
 
 	self motor: ' ' direction: directionName.
 
@@ -6459,16 +6459,16 @@ ScriptableScratchMorph >> setMotorDirection: directionName [
 ]
 
 { #category : #'sound ops' }
-ScriptableScratchMorph >> setTempoTo: aNumber [
+ScriptablePhratchMorph >> setTempoTo: aNumber [
 
 	| stage |
-	(stage := self ownerOrYourselfThatIsA: ScratchStageMorph) ifNil: [^ self].
+	(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNil: [^ self].
 	stage setTempoTo: aNumber.
 
 ]
 
 { #category : #variables }
-ScriptableScratchMorph >> setVar: varName to: newValue [
+ScriptablePhratchMorph >> setVar: varName to: newValue [
 	"Set the value of the given variable of this object to the given value."
 
 	| vName stage sf w |
@@ -6482,7 +6482,7 @@ ScriptableScratchMorph >> setVar: varName to: newValue [
 		(self prototype notNil and: [self prototype varNames includes: varName])
 			ifTrue: [
 				vars at: vName put: newValue.
-				sf := self ownerOrYourselfThatIsA: ScratchFrameMorph.
+				sf := self ownerOrYourselfThatIsA: PhratchFrameMorph.
 				sf ifNil: [^ self].
 				sf viewerPane categoryChanged: #variables.
 				w := sf watcherForBlock: (VariableBlockMorph new 
@@ -6490,9 +6490,9 @@ ScriptableScratchMorph >> setVar: varName to: newValue [
 						commandSpec: varName; 
 						yourself).
 				w ifNotNil: [
-				w setCategoryColor: (ScriptableScratchMorph blockColorFor: 'variables').
+				w setCategoryColor: (ScriptablePhratchMorph blockColorFor: 'variables').
 				^ self]].
-			stage := self ownerOrYourselfThatIsA: ScratchStageMorph.
+			stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
 		(stage notNil and: [stage ~= self]) 
 			ifTrue: [stage setVar: varName to: newValue].
 		^ self ].
@@ -6502,13 +6502,13 @@ ScriptableScratchMorph >> setVar: varName to: newValue [
 ]
 
 { #category : #'looks ops' }
-ScriptableScratchMorph >> setVisibilityTo: percent [
+ScriptablePhratchMorph >> setVisibilityTo: percent [
 	"Obsolete. Do nothing."
 
 ]
 
 { #category : #'sound ops' }
-ScriptableScratchMorph >> setVolumeTo: aNumber [
+ScriptablePhratchMorph >> setVolumeTo: aNumber [
 
 	self undeleteAttribute: #volume.
 	self passiveSetVolumeTo: aNumber
@@ -6516,23 +6516,23 @@ ScriptableScratchMorph >> setVolumeTo: aNumber [
 ]
 
 { #category : #networking }
-ScriptableScratchMorph >> shareObject [
+ScriptablePhratchMorph >> shareObject [
 	"send this object to all peers"
 
 	| server |
-	server := (self ownerOrYourselfThatIsA: ScratchStageMorph) scratchServer.
+	server := (self ownerOrYourselfThatIsA: PhratchStageMorph) phratchServer.
 	server ifNil: [^self].
 	server sendSprite: self
 
 ]
 
 { #category : #variables }
-ScriptableScratchMorph >> showOrHideVariable: varName show: showFlag [
+ScriptablePhratchMorph >> showOrHideVariable: varName show: showFlag [
 	"Show the watcher for the given variable. Do nothing if the variable does not exist or is already showing."
 
 	| frame w b palette |
 	(self varNames includes: varName) ifFalse: [^ self].
-	frame := self ownerOrYourselfThatIsA: ScratchFrameMorph.
+	frame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
 	frame ifNil: [
 		(w := self ownerOrYourselfThatIsA: OffscreenWorldMorph) ifNil: [^ self].
 		frame := w frame].
@@ -6549,20 +6549,20 @@ ScriptableScratchMorph >> showOrHideVariable: varName show: showFlag [
 ]
 
 { #category : #variables }
-ScriptableScratchMorph >> showVariable: varName [
+ScriptablePhratchMorph >> showVariable: varName [
 	"Show the watcher(s) for the given variable. If the receiver is a sprite and both it and and the stage have the given variable, show both. Do nothing if the variable does not exist or is already showing."
 
 	| stage |
 	self showOrHideVariable: varName show: true.
 
-	stage := self ownerOrYourselfThatIsA: ScratchStageMorph.
+	stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
 	stage ~= self ifTrue: [stage showOrHideVariable: varName show: true].
 
 
 ]
 
 { #category : #media }
-ScriptableScratchMorph >> soleCostume: imageMedia [
+ScriptablePhratchMorph >> soleCostume: imageMedia [
 	"Make the given image my only costume."
 
 	media := media select: [:item | item isImage not].
@@ -6571,7 +6571,7 @@ ScriptableScratchMorph >> soleCostume: imageMedia [
 ]
 
 { #category : #'sound ops' }
-ScriptableScratchMorph >> soundFromIndex: aNumber [
+ScriptablePhratchMorph >> soundFromIndex: aNumber [
 	"Return a sound for the given number--rounded and modulo the number of costumes. Return nil if there are not sounds."
 
 	| soundList i |
@@ -6584,14 +6584,14 @@ ScriptableScratchMorph >> soundFromIndex: aNumber [
 ]
 
 { #category : #'sensing ops' }
-ScriptableScratchMorph >> soundLevel [
+ScriptablePhratchMorph >> soundLevel [
 
 	^ self class soundRecorder meterLevel
 
 ]
 
 { #category : #'sound ops' }
-ScriptableScratchMorph >> soundNamed: soundNameOrIndex ifAbsent: absentBlock [
+ScriptablePhratchMorph >> soundNamed: soundNameOrIndex ifAbsent: absentBlock [
 	"Return a SoundMedia with the given name (ignoring case differences) or index. If there is none, return the result of evaluating the given block."
 
 	| snd i |
@@ -6618,7 +6618,7 @@ ScriptableScratchMorph >> soundNamed: soundNameOrIndex ifAbsent: absentBlock [
 ]
 
 { #category : #media }
-ScriptableScratchMorph >> soundNames [
+ScriptablePhratchMorph >> soundNames [
 	"Answer a list of my sound names. Suppress duplicates (ignoring case differences)."
 
 	| result nm |
@@ -6629,22 +6629,22 @@ ScriptableScratchMorph >> soundNames [
 			(result anySatisfy: [:s | s caseInsensitiveEqual: nm])
 				ifFalse: [result add: nm]]].
 	result addLast: '-'.
-	result addLast: 'record' localized, ScratchTranslator ellipsesSuffix.
+	result addLast: 'record' localized, PhratchTranslator ellipsesSuffix.
 	^ result asArray
 
 ]
 
 { #category : #'BYOB attributes' }
-ScriptableScratchMorph >> sounds [
+ScriptablePhratchMorph >> sounds [
 	"this will at some future time answer first class sounds,
 	for now it's just the sound names"
 
-	^ ScratchListMorph on: ((media select: [:m | 
+	^ PhratchListMorph on: ((media select: [:m | 
 		m isSound]) collect: [:c | c mediaName])
 ]
 
 { #category : #blocks }
-ScriptableScratchMorph >> soundsPage: xOffset [
+ScriptablePhratchMorph >> soundsPage: xOffset [
 	"Answer a morph containing thumbnails of my sounds."
 
 	| bin m y sounds n recBut impBut maxHeight yMargin xMargin separator |
@@ -6655,20 +6655,20 @@ ScriptableScratchMorph >> soundsPage: xOffset [
 
 	m := PhratchStringMorph
 		contents: 'New sound:' localized
-		font: (ScratchFrameMorph getFont: #SoundsPage).
+		font: (PhratchFrameMorph getFont: #SoundsPage).
 	m color: Color white.
 	bin addMorph: m.
 
-	recBut := ScratchFrameMorph buttonLabel: 'Record' localized selector: #recordSound.
+	recBut := PhratchFrameMorph buttonLabel: 'Record' localized selector: #recordSound.
 	recBut target: self.
 	bin addMorph: recBut.
 
-	impBut := ScratchFrameMorph buttonLabel: 'Import' localized selector: #importSound.
+	impBut := PhratchFrameMorph buttonLabel: 'Import' localized selector: #importSound.
 	impBut target: self.
 	bin addMorph: impBut.
 
 	maxHeight := (m height max: (impBut height max: recBut height)).
-	ScratchTranslator isRTL
+	PhratchTranslator isRTL
 		ifTrue: [impBut position: xMargin@(yMargin + ((maxHeight - impBut height) / 2)).
 			recBut position: (impBut right + 4)@(yMargin + ((maxHeight - recBut height) / 2)).
 			m position: (recBut right + 4)@(yMargin + ((maxHeight - m height) / 2))]
@@ -6676,7 +6676,7 @@ ScriptableScratchMorph >> soundsPage: xOffset [
 			recBut position: (m right + 4)@(yMargin + ((maxHeight - recBut height) / 2)).
 			impBut position: (recBut right + 4)@(yMargin + ((maxHeight - impBut height) / 2))].
 
-	separator := TiledImageMorph new tileForm: (ScratchFrameMorph skinAt: #costumeSeparatorTile).
+	separator := TiledImageMorph new tileForm: (PhratchFrameMorph skinAt: #costumeSeparatorTile).
 	bin addMorph: (separator position: (xOffset + 17)@(yMargin + maxHeight + 5)).
 
 	n := 0.
@@ -6684,7 +6684,7 @@ ScriptableScratchMorph >> soundsPage: xOffset [
 	sounds := media select: [:item | item isSound].
 	sounds do: [:item |
 		m := MediaItemMorph new.
-		m scratchObj: self media: item; position: xOffset@y.
+		m phratchObj: self media: item; position: xOffset@y.
 		m setNumber: (n := n + 1).
 		bin addMorph: m.
 		y := y + m height - 1].
@@ -6698,18 +6698,18 @@ ScriptableScratchMorph >> soundsPage: xOffset [
 ]
 
 { #category : #nesting }
-ScriptableScratchMorph >> spread [
+ScriptablePhratchMorph >> spread [
 	"overridden by my subclasses. Default is to do nothing"
 ]
 
 { #category : #private }
-ScriptableScratchMorph >> spriteNameInUse: aString [
+ScriptablePhratchMorph >> spriteNameInUse: aString [
 
 	| s |
-	(s := self ownerOrYourselfThatIsA: ScratchStageMorph) ifNotNil: [
+	(s := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNotNil: [
 		s submorphs do: [:m |
 			m == self ifFalse: [
-				((m isKindOf: ScriptableScratchMorph) and:
+				((m isKindOf: ScriptablePhratchMorph) and:
 				 [m objName caseInsensitiveEqual: aString]) ifTrue: [
 					^ true]]]].
 
@@ -6718,7 +6718,7 @@ ScriptableScratchMorph >> spriteNameInUse: aString [
 ]
 
 { #category : #blocks }
-ScriptableScratchMorph >> stackFromTupleList: tupleList receiver: scriptOwner [
+ScriptablePhratchMorph >> stackFromTupleList: tupleList receiver: scriptOwner [
 	"Answer a new block stack from the given sequence of tuples."
 	"self stackFromTupleList: #() receiver: nil"
 
@@ -6736,7 +6736,7 @@ ScriptableScratchMorph >> stackFromTupleList: tupleList receiver: scriptOwner [
 ]
 
 { #category : #'event handling' }
-ScriptableScratchMorph >> startDrag: evt [
+ScriptablePhratchMorph >> startDrag: evt [
 	"This is a drag gesture; pick me up."
 
 	| rootForGrab |
@@ -6748,7 +6748,7 @@ ScriptableScratchMorph >> startDrag: evt [
 ]
 
 { #category : #'motor ops' }
-ScriptableScratchMorph >> startMotorPower: power [
+ScriptablePhratchMorph >> startMotorPower: power [
 
 	self motor: ' ' power: power.
 	self motorOn: ' '.
@@ -6756,50 +6756,50 @@ ScriptableScratchMorph >> startMotorPower: power [
 ]
 
 { #category : #stepping }
-ScriptableScratchMorph >> step [
+ScriptablePhratchMorph >> step [
 
 	costume mediaStep ifTrue: [self costumeChanged].
 
 ]
 
 { #category : #stepping }
-ScriptableScratchMorph >> stepTime [
+ScriptablePhratchMorph >> stepTime [
 
 	^ 0
 
 ]
 
 { #category : #'other ops' }
-ScriptableScratchMorph >> stopAll [
+ScriptablePhratchMorph >> stopAll [
 	"Stop everything!"
 
 	| stage |
-	stage := self ownerOrYourselfThatIsA: ScratchStageMorph.
+	stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
 	stage ifNotNil: [stage stopAll].
 
 ]
 
 { #category : #byob }
-ScriptableScratchMorph >> stopAllScriptsFor: eventName [
+ScriptablePhratchMorph >> stopAllScriptsFor: eventName [
 
 	| stage |
-	(stage := self ownerOrYourselfThatIsA: ScratchStageMorph) ifNotNil: [
+	(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNotNil: [
 		stage stopAllScriptsFor: eventName].
 
 ]
 
 { #category : #'other ops' }
-ScriptableScratchMorph >> stopAllSounds [
+ScriptablePhratchMorph >> stopAllSounds [
 	"Stop all sounds and MIDI notes/drums."
 
 	| stage |
-	stage := self ownerOrYourselfThatIsA: ScratchStageMorph.
+	stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
 	stage ifNotNil: [stage stopAllSounds].
 
 ]
 
 { #category : #private }
-ScriptableScratchMorph >> stopPlaying [
+ScriptablePhratchMorph >> stopPlaying [
 	"Stop playing all movies and sounds."
 
 	| firstCostume |
@@ -6815,7 +6815,7 @@ ScriptableScratchMorph >> stopPlaying [
 ]
 
 { #category : #byob }
-ScriptableScratchMorph >> stopScriptsFor: eventName [
+ScriptablePhratchMorph >> stopScriptsFor: eventName [
 	"Stop all my running stacks with an EventHat matching the given event name."
 
 	((eventName = 'Scratch-KeyPressedEvent') | (eventName = 'Scratch-MouseClickEvent'))
@@ -6825,7 +6825,7 @@ ScriptableScratchMorph >> stopScriptsFor: eventName [
 ]
 
 { #category : #'object i/o' }
-ScriptableScratchMorph >> storeFieldsOn: anObjStream [
+ScriptablePhratchMorph >> storeFieldsOn: anObjStream [
 
 	| oldBlockBinOwner |
 	super storeFieldsOn: anObjStream.
@@ -6850,7 +6850,7 @@ ScriptableScratchMorph >> storeFieldsOn: anObjStream [
 ]
 
 { #category : #'string ops' }
-ScriptableScratchMorph >> stringLength: anObject [
+ScriptablePhratchMorph >> stringLength: anObject [
 
 	anObject isUnicode
 		ifTrue: [^ anObject asUTF32 size]
@@ -6859,7 +6859,7 @@ ScriptableScratchMorph >> stringLength: anObject [
 ]
 
 { #category : #media }
-ScriptableScratchMorph >> takePhoto [
+ScriptablePhratchMorph >> takePhoto [
 	"Take a photo."
 
 	PhratchCameraDialog new
@@ -6870,22 +6870,22 @@ ScriptableScratchMorph >> takePhoto [
 ]
 
 { #category : #'sound ops' }
-ScriptableScratchMorph >> tempo [
+ScriptablePhratchMorph >> tempo [
 
 	| stage |
-	(stage := self ownerOrYourselfThatIsA: ScratchStageMorph) ifNil: [^ 60].
+	(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNil: [^ 60].
 	^ stage tempo
 
 ]
 
 { #category : #'byob OOP' }
-ScriptableScratchMorph >> thumbnailImageForm [
+ScriptablePhratchMorph >> thumbnailImageForm [
 
 	^ self imageForm toThumbnail: 50@50 borderWidth: 0 borderColor: Color transparent
 ]
 
 { #category : #'sensing ops' }
-ScriptableScratchMorph >> timer [
+ScriptablePhratchMorph >> timer [
 
 	| now |
 	now := Time millisecondClockValue.
@@ -6896,14 +6896,14 @@ ScriptableScratchMorph >> timer [
 ]
 
 { #category : #'sensing ops' }
-ScriptableScratchMorph >> timerReset [
+ScriptablePhratchMorph >> timerReset [
 
 	TimerStartMSecs := Time millisecondClockValue.
 
 ]
 
 { #category : #'looks ops' }
-ScriptableScratchMorph >> transparency [
+ScriptablePhratchMorph >> transparency [
 	"Answer my transparency. 0 is opaque; 100 is transparent."
 
 	^ 100 - self visibility
@@ -6911,7 +6911,7 @@ ScriptableScratchMorph >> transparency [
 ]
 
 { #category : #'looks ops' }
-ScriptableScratchMorph >> transparency: aNumber [
+ScriptablePhratchMorph >> transparency: aNumber [
 	"Set my transparency. 0 is opaque; 100 is transparent."
 
 	self visibility: (100 - aNumber abs).
@@ -6919,7 +6919,7 @@ ScriptableScratchMorph >> transparency: aNumber [
 ]
 
 { #category : #'BYOB attributes' }
-ScriptableScratchMorph >> transparencyEffect [
+ScriptablePhratchMorph >> transparencyEffect [
 
 	| att |
 	att := #ghost.
@@ -6931,27 +6931,27 @@ ScriptableScratchMorph >> transparencyEffect [
 ]
 
 { #category : #'BYOB attributes' }
-ScriptableScratchMorph >> transparencyEffect: aNumber [
+ScriptablePhratchMorph >> transparencyEffect: aNumber [
 
 	self undeleteAttribute: #ghost.
 	self passiveTransparencyEffect: aNumber
 ]
 
 { #category : #'BYOB object interface' }
-ScriptableScratchMorph >> undeleteAllAttributes [
+ScriptablePhratchMorph >> undeleteAllAttributes [
 
 	deletedAttributes := nil
 ]
 
 { #category : #'BYOB object interface' }
-ScriptableScratchMorph >> undeleteAllBlocks [
+ScriptablePhratchMorph >> undeleteAllBlocks [
 
 	self inheritedBlocks do: [:eachDef |
 		self ensureOwnBlockExists: eachDef]
 ]
 
 { #category : #'byob OOP' }
-ScriptableScratchMorph >> undeleteAllVariables [
+ScriptablePhratchMorph >> undeleteAllVariables [
 	"... and lists"
 
 	self varNames do: [:vn |
@@ -6962,7 +6962,7 @@ ScriptableScratchMorph >> undeleteAllVariables [
 ]
 
 { #category : #'BYOB object interface' }
-ScriptableScratchMorph >> undeleteAttribute: aSymbol [
+ScriptablePhratchMorph >> undeleteAttribute: aSymbol [
 
 	| oi sf cat block w |
 	deletedAttributes ifNil: [
@@ -6972,7 +6972,7 @@ ScriptableScratchMorph >> undeleteAttribute: aSymbol [
 	"update palette"
 	
 	oi := self objectInterface.
-	sf := self scratchFrame.
+	sf := self phratchFrame.
 	sf ifNil: [^ self].
 	cat := (oi at: aSymbol) first.
 	sf viewerPane categoryChanged: cat.
@@ -6987,18 +6987,18 @@ ScriptableScratchMorph >> undeleteAttribute: aSymbol [
 ]
 
 { #category : #private }
-ScriptableScratchMorph >> undoableDeleteSprite [
+ScriptablePhratchMorph >> undoableDeleteSprite [
 	"Delete the sprite and store it in the clipboard in case of an undo."
 
 	self notEditingBlock ifFalse: [^self].
 	self unhinge; unhingeAll.
-	ScratchFrameMorph putInClipboard: self.
+	PhratchFrameMorph putInClipboard: self.
 	self deleteSprite.
 
 ]
 
 { #category : #byob }
-ScriptableScratchMorph >> unloadUnusedCustomBlocks [
+ScriptablePhratchMorph >> unloadUnusedCustomBlocks [
 
 	customBlocks ifNil: [^ self].
 	customBlocks do: [:block |
@@ -7007,14 +7007,14 @@ ScriptableScratchMorph >> unloadUnusedCustomBlocks [
 ]
 
 { #category : #media }
-ScriptableScratchMorph >> unusedMediaNameFromBaseName: baseName [
+ScriptablePhratchMorph >> unusedMediaNameFromBaseName: baseName [
 	"Answer an unused name for a new media item with the given base name. Strip off the file extension, if any."
 
 	^ self unusedMediaNameFromBaseName: baseName forMedia: nil
 ]
 
 { #category : #media }
-ScriptableScratchMorph >> unusedMediaNameFromBaseName: baseName forMedia: aMedia [
+ScriptablePhratchMorph >> unusedMediaNameFromBaseName: baseName forMedia: aMedia [
 	"Answer an unused name for a new media item with the given base name. Strip off the file extension, if any.  med is the sound or costume media which is currently being renamed."
 
 	| nm i existingNames greatestNum |
@@ -7054,7 +7054,7 @@ ScriptableScratchMorph >> unusedMediaNameFromBaseName: baseName forMedia: aMedia
 ]
 
 { #category : #byob }
-ScriptableScratchMorph >> updateCustomBlockDefinitionId: id with: newDef [
+ScriptablePhratchMorph >> updateCustomBlockDefinitionId: id with: newDef [
 
 	| oldDef |
 
@@ -7068,12 +7068,12 @@ ScriptableScratchMorph >> updateCustomBlockDefinitionId: id with: newDef [
 ]
 
 { #category : #byob }
-ScriptableScratchMorph >> updateLocalId: id withSpec: newUserSpec [
+ScriptablePhratchMorph >> updateLocalId: id withSpec: newUserSpec [
 
 	"a userSpec has been changed by way of drag'n'drop"
 
 	| def affected sf |
-	sf := self ownerOrYourselfThatIsA: ScratchFrameMorph.
+	sf := self ownerOrYourselfThatIsA: PhratchFrameMorph.
 	sf ifNil: [^self].
 	affected := self instancesOf: id.
 	def := self definitionFor: id. 
@@ -7102,11 +7102,11 @@ ScriptableScratchMorph >> updateLocalId: id withSpec: newUserSpec [
 ]
 
 { #category : #private }
-ScriptableScratchMorph >> updateMediaCategory [
+ScriptablePhratchMorph >> updateMediaCategory [
 	"Update the media category in the viewer, if it is showing."
 
 	| sFrame |
-	sFrame := self ownerOrYourselfThatIsA: ScratchFrameMorph.
+	sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
 	sFrame ifNotNil: [
 		sFrame projectModified.
 		sFrame updateMediaCategoryFor: self.
@@ -7116,13 +7116,13 @@ ScriptableScratchMorph >> updateMediaCategory [
 ]
 
 { #category : #byob }
-ScriptableScratchMorph >> updateOnlyLocalId: id withSpec: newUserSpec [
+ScriptablePhratchMorph >> updateOnlyLocalId: id withSpec: newUserSpec [
 
 	"a userSpec has been changed by way of drag'n'drop
 	don't update block editors"
 
 	| def affected sf |
-	sf := self ownerOrYourselfThatIsA: ScratchFrameMorph.
+	sf := self ownerOrYourselfThatIsA: PhratchFrameMorph.
 	sf ifNil: [^self].
 	affected := self instancesOf: id.
 	def := self definitionFor: id. 
@@ -7143,7 +7143,7 @@ ScriptableScratchMorph >> updateOnlyLocalId: id withSpec: newUserSpec [
 ]
 
 { #category : #variables }
-ScriptableScratchMorph >> varNames [
+ScriptablePhratchMorph >> varNames [
 	"Answer a list of variable names."
 
 	| lst |
@@ -7156,12 +7156,12 @@ self haltOnce.
 ]
 
 { #category : #variables }
-ScriptableScratchMorph >> varNamesMenu [
+ScriptablePhratchMorph >> varNamesMenu [
 	"Answer a list of variable names."
 
 	| varList stage |
 	varList := #().
-	(stage := self ownerOrYourselfThatIsA: ScratchStageMorph) ifNotNil: [varList := stage varNames].
+	(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNotNil: [varList := stage varNames].
 	self == stage ifFalse: [
 		varList size > 0 ifTrue: [varList := varList copyWith: #-].
 		varList := varList, self varNames].
@@ -7170,7 +7170,7 @@ ScriptableScratchMorph >> varNamesMenu [
 ]
 
 { #category : #variables }
-ScriptableScratchMorph >> variableBlockColor [
+ScriptablePhratchMorph >> variableBlockColor [
 
 	^ Color h: 25 s: 0.88 v: 0.95
 
@@ -7178,7 +7178,7 @@ ScriptableScratchMorph >> variableBlockColor [
 ]
 
 { #category : #blocks }
-ScriptableScratchMorph >> variableBlockFromTuple: tuple receiver: scriptOwner [
+ScriptablePhratchMorph >> variableBlockFromTuple: tuple receiver: scriptOwner [
 	"Answer a new block for the given variable reference tuple."
 
 	| varName rcvr bg selector block arg argBlock |
@@ -7191,7 +7191,7 @@ ScriptableScratchMorph >> variableBlockFromTuple: tuple receiver: scriptOwner [
 	(varName isKindOf: Array) ifFalse: [
 		varName = '' ifFalse: [
 			(scriptOwner varNames includes: varName) ifFalse: [
-				bg := scriptOwner ownerOrYourselfThatIsA: ScratchStageMorph.
+				bg := scriptOwner ownerOrYourselfThatIsA: PhratchStageMorph.
 				bg
 					ifNil: [scriptOwner addVariable: varName]
 					ifNotNil: [
@@ -7232,7 +7232,7 @@ ScriptableScratchMorph >> variableBlockFromTuple: tuple receiver: scriptOwner [
 ]
 
 { #category : #blocks }
-ScriptableScratchMorph >> variableBlockFromTupleOldForm: tuple receiver: scriptOwner [
+ScriptablePhratchMorph >> variableBlockFromTupleOldForm: tuple receiver: scriptOwner [
 	"Answer a new block for the given variable reference tuple."
 
 	| varName rcvr bg selector block arg argBlock |
@@ -7240,7 +7240,7 @@ ScriptableScratchMorph >> variableBlockFromTupleOldForm: tuple receiver: scriptO
 	varName := tuple at: 2.
 	rcvr := scriptOwner.
 	(scriptOwner varNames includes: varName) ifFalse: [
-		bg := scriptOwner ownerOrYourselfThatIsA: ScratchStageMorph.
+		bg := scriptOwner ownerOrYourselfThatIsA: PhratchStageMorph.
 		bg
 			ifNil: [scriptOwner addVariable: varName]
 			ifNotNil: [
@@ -7280,7 +7280,7 @@ ScriptableScratchMorph >> variableBlockFromTupleOldForm: tuple receiver: scriptO
 ]
 
 { #category : #variables }
-ScriptableScratchMorph >> variableNameInUse: varName [
+ScriptablePhratchMorph >> variableNameInUse: varName [
 	"Answer true if the given variable name in the receiver would conflict with an existing variable or list. For example, if the receiver is the Stage and the given variable name is used by any sprite."
 
 	| stage |
@@ -7288,11 +7288,11 @@ ScriptableScratchMorph >> variableNameInUse: varName [
 
 	self isSprite
 		ifTrue: [
-			(stage := self ownerOrYourselfThatIsA: ScratchStageMorph) ifNil: [^ false].
+			(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNil: [^ false].
 			^ stage allVarNames includes: varName]
 		ifFalse: [
 			submorphs do: [:m |
-				(m isKindOf: ScratchSpriteMorph) ifTrue: [
+				(m isKindOf: PhratchSpriteMorph) ifTrue: [
 					(m allVarNames includes: varName) ifTrue: [^ true]]]].
 
 	^ false
@@ -7300,7 +7300,7 @@ ScriptableScratchMorph >> variableNameInUse: varName [
 ]
 
 { #category : #blocks }
-ScriptableScratchMorph >> variablesPage [
+ScriptablePhratchMorph >> variablesPage [
 	"Answer a morph containing my variables."
 
 	| page addButton deleteButton hasVars stage x y maxX |
@@ -7308,12 +7308,12 @@ ScriptableScratchMorph >> variablesPage [
 		color: (Color r: 0.8 g: 0.8 b: 1.0);
 		borderWidth: 0.
 
-	addButton := ScratchFrameMorph
+	addButton := PhratchFrameMorph
 		buttonLabel: 'Make a variable' localized
 		selector: #addGlobalVariable.
-	(self isKindOf: ScratchSpriteMorph) ifTrue: [addButton actionSelector: #addVariable].
+	(self isKindOf: PhratchSpriteMorph) ifTrue: [addButton actionSelector: #addVariable].
 
-	deleteButton := ScratchFrameMorph
+	deleteButton := PhratchFrameMorph
 		buttonLabel: 'Delete a variable' localized
 		selector: #deleteVariable.
 
@@ -7322,7 +7322,7 @@ ScriptableScratchMorph >> variablesPage [
 	y := addButton bottom + 3.
 
 	hasVars := self varNames size > 0.
-	(stage := self ownerOrYourselfThatIsA: ScratchStageMorph) ifNotNil: [
+	(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNotNil: [
 		stage varNames size > 0 ifTrue: [hasVars := true]].
 
 	hasVars ifTrue: [
@@ -7335,7 +7335,7 @@ ScriptableScratchMorph >> variablesPage [
 	y := self addGenericVariableBlocksTo: page x: x y: y.
 
 	y := self addGenericListBlocksTo: page y: y.
-	page updateWatcherButtonsForFrame: (self ownerOrYourselfThatIsA: ScratchFrameMorph).
+	page updateWatcherButtonsForFrame: (self ownerOrYourselfThatIsA: PhratchFrameMorph).
 
 	self addCustomBlocksTo: page y: y.
 
@@ -7346,12 +7346,12 @@ ScriptableScratchMorph >> variablesPage [
 ]
 
 { #category : #byob }
-ScriptableScratchMorph >> vars [
+ScriptablePhratchMorph >> vars [
 	^vars
 ]
 
 { #category : #private }
-ScriptableScratchMorph >> vars: varsDict blocksBin: aBlocksBin [
+ScriptablePhratchMorph >> vars: varsDict blocksBin: aBlocksBin [
 	"Private! Set my variables and blocks bin. Used by copyRecordingIn:."
 
 	vars := varsDict.
@@ -7360,7 +7360,7 @@ ScriptableScratchMorph >> vars: varsDict blocksBin: aBlocksBin [
 ]
 
 { #category : #private }
-ScriptableScratchMorph >> vars: varsDict lists: listsDict blocksBin: aBlocksBin [
+ScriptablePhratchMorph >> vars: varsDict lists: listsDict blocksBin: aBlocksBin [
 	"Private! Set my variables and blocks bin. Used by copyRecordingIn:."
 
 	vars := varsDict.
@@ -7370,12 +7370,12 @@ ScriptableScratchMorph >> vars: varsDict lists: listsDict blocksBin: aBlocksBin 
 ]
 
 { #category : #blocks }
-ScriptableScratchMorph >> viewBlocksAndScripts [
+ScriptablePhratchMorph >> viewBlocksAndScripts [
 
 	| sFrame editor viewer tabs |
 	self isClone ifTrue: [^ self].
 
-	(sFrame := self ownerOrYourselfThatIsA: ScratchFrameMorph) ifNil: [^ self].
+	(sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNil: [^ self].
 	editor := sFrame scriptsPane.
 	viewer := sFrame viewerPane.
 	tabs := sFrame scriptsPane tabPane.
@@ -7387,12 +7387,12 @@ ScriptableScratchMorph >> viewBlocksAndScripts [
 ]
 
 { #category : #byob }
-ScriptableScratchMorph >> viewBlocksAndScriptsQuickly [
+ScriptablePhratchMorph >> viewBlocksAndScriptsQuickly [
 
 	| sFrame viewer tabs |
 	self isClone ifTrue: [^ self].
 
-	(sFrame := self ownerOrYourselfThatIsA: ScratchFrameMorph) ifNil: [^ self].
+	(sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNil: [^ self].
 	viewer := sFrame viewerPane.
 	tabs := sFrame scriptsPane tabPane.
 	sFrame view: self tab: tabs currentTab category: viewer currentCategory.
@@ -7405,7 +7405,7 @@ ScriptableScratchMorph >> viewBlocksAndScriptsQuickly [
 ]
 
 { #category : #blocks }
-ScriptableScratchMorph >> viewerPageForCategory: aCategoryName [
+ScriptablePhratchMorph >> viewerPageForCategory: aCategoryName [
 	"Answer a morph containing blocks for the given category for use in the given ScratchViewer."
 
 	| bin x y |
@@ -7423,7 +7423,7 @@ ScriptableScratchMorph >> viewerPageForCategory: aCategoryName [
 				(blockOrSym = #~) ifTrue: [y := y + 5].  "insert a half space"
 				(blockOrSym = #=) ifTrue: [
 					y := y + 7.
-					bin addMorph: ((ImageMorph new form: (ScratchFrameMorph skinAt: #connector)) position: x@y).
+					bin addMorph: ((ImageMorph new form: (PhratchFrameMorph skinAt: #connector)) position: x@y).
 					y := y + 20]]  "insert a line"
 			ifFalse: [
 				y := self createBlock: blockOrSym atPosition: x@y onPage: bin]].
@@ -7433,23 +7433,23 @@ ScriptableScratchMorph >> viewerPageForCategory: aCategoryName [
 ]
 
 { #category : #blocks }
-ScriptableScratchMorph >> viewerPageForMotion [
+ScriptablePhratchMorph >> viewerPageForMotion [
 	"Answer a morph containing mtion blocks for the given category for use in the given ScratchViewer."
 
 	| bin isStage addMotorBlocks s font x y m |
 	bin := PhratchBlockPaletteMorph new.
 
-	(self isKindOf: ScratchStageMorph)
+	(self isKindOf: PhratchStageMorph)
 		ifTrue: [
 			isStage := true.
 			addMotorBlocks := self showMotorBlocks]
 		ifFalse: [
 			isStage := false.
-			s := self ownerOrYourselfThatIsA: ScratchStageMorph.
+			s := self ownerOrYourselfThatIsA: PhratchStageMorph.
 			addMotorBlocks := s notNil and: [s showMotorBlocks]].
 
 	(isStage & addMotorBlocks not) ifTrue: [
-		font := (ScratchFrameMorph getFont: #ViewerPage).
+		font := (PhratchFrameMorph getFont: #ViewerPage).
 		x := 20.
 		y := 12.
 		m := PhratchStringMorph contents: 'Stage selected:' localized font: font.
@@ -7467,7 +7467,7 @@ ScriptableScratchMorph >> viewerPageForMotion [
 				(blockOrSym = #~) ifTrue: [y := y + 5].  "insert a half space"
 				(blockOrSym = #=) ifTrue: [
 					y := y + 7.
-					bin addMorph: ((ImageMorph new form: (ScratchFrameMorph skinAt: #connector)) position: x@y).
+					bin addMorph: ((ImageMorph new form: (PhratchFrameMorph skinAt: #connector)) position: x@y).
 					y := y + 20]]  "insert a line"
 			ifFalse: [
 				y := self createBlock: blockOrSym atPosition: x@y onPage: bin]].
@@ -7476,7 +7476,7 @@ ScriptableScratchMorph >> viewerPageForMotion [
 
 	isStage ifFalse: [
 		y := y + 7.
-		bin addMorph: ((ImageMorph new form: (ScratchFrameMorph skinAt: #connector)) position: x@y).
+		bin addMorph: ((ImageMorph new form: (PhratchFrameMorph skinAt: #connector)) position: x@y).
 		y := y + 20].
 
 	(self blocksFor: 'motor') do: [:blockOrSym |
@@ -7492,7 +7492,7 @@ ScriptableScratchMorph >> viewerPageForMotion [
 ]
 
 { #category : #blocks }
-ScriptableScratchMorph >> viewerPageForSensing [
+ScriptablePhratchMorph >> viewerPageForSensing [
 	"Answer a morph containing mtion blocks for the given category for use in the given ScratchViewer."
 
 	| bin x y |
@@ -7506,7 +7506,7 @@ ScriptableScratchMorph >> viewerPageForSensing [
 				(blockOrSym = #~) ifTrue: [y := y + 5].  "insert a half space"
 				(blockOrSym = #=) ifTrue: [
 					y := y + 7.
-					bin addMorph: ((ImageMorph new form: (ScratchFrameMorph skinAt: #connector)) position: x@y).
+					bin addMorph: ((ImageMorph new form: (PhratchFrameMorph skinAt: #connector)) position: x@y).
 					y := y + 20]]  "insert a line"
 			ifFalse: [
 				y := self createBlock: blockOrSym atPosition: x@y onPage: bin]].
@@ -7516,7 +7516,7 @@ ScriptableScratchMorph >> viewerPageForSensing [
 ]
 
 { #category : #'looks ops' }
-ScriptableScratchMorph >> visibility [
+ScriptablePhratchMorph >> visibility [
 	"Answer my visibility. 0 is invisible. 100 is fully opaque."
 
 	^ visibility
@@ -7524,7 +7524,7 @@ ScriptableScratchMorph >> visibility [
 ]
 
 { #category : #'looks ops' }
-ScriptableScratchMorph >> visibility: aNumber [
+ScriptablePhratchMorph >> visibility: aNumber [
 	"Set my visibility. 0 is invisible. 100 is fully opaque."
 
 	visibility := (aNumber max: 0) min: 100.
@@ -7533,7 +7533,7 @@ ScriptableScratchMorph >> visibility: aNumber [
 ]
 
 { #category : #'sound ops' }
-ScriptableScratchMorph >> volume [
+ScriptablePhratchMorph >> volume [
 
 	| att |
 	att := #volume.
@@ -7546,7 +7546,7 @@ ScriptableScratchMorph >> volume [
 ]
 
 { #category : #'other ops' }
-ScriptableScratchMorph >> wait: duration elapsed: elapsed from: ignored [
+ScriptablePhratchMorph >> wait: duration elapsed: elapsed from: ignored [
 	"Do nothing; just wait for the time interval to elapse."
 
 	^ nil
@@ -7554,17 +7554,17 @@ ScriptableScratchMorph >> wait: duration elapsed: elapsed from: ignored [
 ]
 
 { #category : #'BYOB attributes' }
-ScriptableScratchMorph >> waterRippleEffect [
+ScriptablePhratchMorph >> waterRippleEffect [
 	^ [filterPack waterRippleRate] ifError: [0]
 ]
 
 { #category : #'BYOB attributes' }
-ScriptableScratchMorph >> waterRippleEffect: aNumber [
+ScriptablePhratchMorph >> waterRippleEffect: aNumber [
 	self setGraphicEffect: 'water ripple' to: aNumber
 ]
 
 { #category : #'BYOB attributes' }
-ScriptableScratchMorph >> whirlEffect [
+ScriptablePhratchMorph >> whirlEffect [
 
 	| att |
 	att := #whirl.
@@ -7576,14 +7576,14 @@ ScriptableScratchMorph >> whirlEffect [
 ]
 
 { #category : #'BYOB attributes' }
-ScriptableScratchMorph >> whirlEffect: aNumber [
+ScriptablePhratchMorph >> whirlEffect: aNumber [
 
 	self undeleteAttribute: #whirl.
 	self passiveWhirlEffect: aNumber
 ]
 
 { #category : #blocks }
-ScriptableScratchMorph >> wholeBlockSpecForSelector: aSymbol [
+ScriptablePhratchMorph >> wholeBlockSpecForSelector: aSymbol [
 	"Answer a block specification string (in English) for the give selector or nil if there is no spec that has the given selector."
 
 	self class blockSpecs do: [:spec |
@@ -7595,7 +7595,7 @@ ScriptableScratchMorph >> wholeBlockSpecForSelector: aSymbol [
 ]
 
 { #category : #private }
-ScriptableScratchMorph >> zoomRectFrom: startRect to: finalRect [
+ScriptablePhratchMorph >> zoomRectFrom: startRect to: finalRect [
 
 	| steps r p1 p2 |
 	steps := 8.

@@ -59,9 +59,9 @@ PaintPalette >> addToolbarButtons [
 		bName := spec at: 1.
 		bTip := spec at: 2.
 		b := ToggleButton new
-			onForm: (ScratchFrameMorph skinAt: (bName, 'ToolButtonPressed'))
-			offForm: (ScratchFrameMorph skinAt: (bName, 'ToolButton'))
-			overForm: (ScratchFrameMorph skinAt: (bName, 'ToolButtonOver'));
+			onForm: (PhratchFrameMorph skinAt: (bName, 'ToolButtonPressed'))
+			offForm: (PhratchFrameMorph skinAt: (bName, 'ToolButton'))
+			overForm: (PhratchFrameMorph skinAt: (bName, 'ToolButtonOver'));
 			target: self;
 			isMomentary: false;
 			toggleMode: false;
@@ -84,9 +84,9 @@ PaintPalette >> addToolbarButtons [
 		bName := spec at: 1.
 		bTip := spec at: 2.
 		b := ToggleButton new
-			onForm: (ScratchFrameMorph skinAt: (bName, 'ToolButtonPressed'))
-			offForm: (ScratchFrameMorph skinAt: (bName, 'ToolButton'))
-			overForm: (ScratchFrameMorph skinAt: (bName, 'ToolButtonOver'));
+			onForm: (PhratchFrameMorph skinAt: (bName, 'ToolButtonPressed'))
+			offForm: (PhratchFrameMorph skinAt: (bName, 'ToolButton'))
+			overForm: (PhratchFrameMorph skinAt: (bName, 'ToolButtonOver'));
 			target: self;
 			isMomentary: false;
 			toggleMode: false;
@@ -233,7 +233,7 @@ PaintPalette >> createColorSwitcher [
 { #category : #initialization }
 PaintPalette >> createOptionsPane [
 
-	optionsPane := ImageFrameMorph new initFromForm: (ScratchFrameMorph skinAt: #paintOptionsBackground).
+	optionsPane := ImageFrameMorph new initFromForm: (PhratchFrameMorph skinAt: #paintOptionsBackground).
 	optionsPane extent: 232@44.
 	self addMorphBack: optionsPane.
 
@@ -539,7 +539,7 @@ PaintPalette >> updateOptionsPane [
 			ifTrue: [colorToUse := Color transparent]
 			ifFalse: [colorToUse := self color1].
 		brushSizeMorph addMorphBack: (Morph new extent: 2@5; color: Color transparent).
-		brushSizeMorph addMorphBack: (ImageMorph new form: (ScratchFrameMorph skinAt: #downArrow)).
+		brushSizeMorph addMorphBack: (ImageMorph new form: (PhratchFrameMorph skinAt: #downArrow)).
 		brushSizeMorph addMorphBack: (Morph new extent: 4@5; color: Color transparent).
 		brushThumbnail := Morph new
 			extent: 30@30;
@@ -557,8 +557,8 @@ PaintPalette >> updateOptionsPane [
 			addMorphBack: brushSizeMorph].
 
 	(#(oval rect) includes: self mode) ifTrue: [
-		b := ToggleButton onForm: (ScratchFrameMorph skinAt: #paintOptionsButtonPressed)
-					 offForm: (ScratchFrameMorph skinAt: #paintOptionsButton).
+		b := ToggleButton onForm: (PhratchFrameMorph skinAt: #paintOptionsButtonPressed)
+					 offForm: (PhratchFrameMorph skinAt: #paintOptionsButton).
 		b
 			target: self;
 			actionSelector: #shapeFilling:;
@@ -574,8 +574,8 @@ PaintPalette >> updateOptionsPane [
 		b addMorph: formMorph.
 		options addMorphBack: b.
 		options addMorphBack: (Morph new extent: 5@2; color: Color transparent).
-		b := ToggleButton onForm: (ScratchFrameMorph skinAt: #paintOptionsButtonPressed)
-					 offForm: (ScratchFrameMorph skinAt: #paintOptionsButton).
+		b := ToggleButton onForm: (PhratchFrameMorph skinAt: #paintOptionsButtonPressed)
+					 offForm: (PhratchFrameMorph skinAt: #paintOptionsButton).
 		b
 			target: self;
 			actionSelector: #shapeFilling:;
@@ -600,8 +600,8 @@ PaintPalette >> updateOptionsPane [
 		hResizing: #shrinkWrap.
 		spacer := Morph new extent: 5@5; color: Color transparent.
 		#(color hGradient vGradient rGradient) do: [:style |
-			b := ToggleButton onForm: (ScratchFrameMorph skinAt: #paintOptionsButtonPressed)
-					 offForm: (ScratchFrameMorph skinAt: #paintOptionsButton).
+			b := ToggleButton onForm: (PhratchFrameMorph skinAt: #paintOptionsButtonPressed)
+					 offForm: (PhratchFrameMorph skinAt: #paintOptionsButton).
 			b
 				target: self;
 				actionSelector: #paintBucketFillStyle:;
@@ -627,12 +627,12 @@ PaintPalette >> updateOptionsPane [
 	#text = self mode ifTrue: [
 		font := (StrikeFont fontName: 'VerdanaBold' size: 11).
 		fName := canvasMorph canvasTextBox font name.
-		textFontMenu := ImageMorph new form: (ScratchFrameMorph skinAt: #textFontMenu).
+		textFontMenu := ImageMorph new form: (PhratchFrameMorph skinAt: #textFontMenu).
 		textFontMorph := PhratchStringMorph new font: font.
 		textFontMorph contents: (textFontMorph stringWithEllipses: fName limitedToWidth: 109).
 		textFontMenu addMorph: textFontMorph.
 		textFontMorph position: 8@3.
-		textSizeMenu := ImageMorph new form: (ScratchFrameMorph skinAt: #textSizeMenu).
+		textSizeMenu := ImageMorph new form: (PhratchFrameMorph skinAt: #textSizeMenu).
 		textSizeMorph := PhratchStringMorph contents: canvasMorph canvasTextBox font pointSize asString font: font.
 		textSizeMenu addMorph: textSizeMorph.
 		textSizeMorph position: 9@3.

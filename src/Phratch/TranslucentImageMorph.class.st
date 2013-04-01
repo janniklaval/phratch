@@ -102,7 +102,7 @@ TranslucentImageMorph >> initialize [
 { #category : #'as yet unclassified' }
 TranslucentImageMorph >> mouseLeave: evt [
 
-	ScratchToolTipMorph clearToolTips.
+	PhratchToolTipMorph clearToolTips.
 
 ]
 

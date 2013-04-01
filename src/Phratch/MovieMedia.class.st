@@ -73,7 +73,7 @@ MovieMedia >> basicLoadFile: fullName [
 			ifFalse: [  "audio only"
 				msecsPerFrame := 10000.
 				origForm := (Form extent: 32@24 depth: 4) fillColor: Color blue.
-				sndIcon := ScratchFrameMorph skinAt: #scratchSound.
+				sndIcon := PhratchFrameMorph skinAt: #scratchSound.
 				sndIcon displayOn: origForm at: (origForm extent - sndIcon extent) // 2.
 				sound ifNil: ["no audio either! close the file"
 					movieFile closeFile.
@@ -544,7 +544,7 @@ MovieMedia >> thumbnailFormExtent: extent [
 		^ f].
 
 	movieFile hasAudio ifTrue: [
-		icon := ScratchFrameMorph skinAt: #scratchSound.
+		icon := PhratchFrameMorph skinAt: #scratchSound.
 		icon displayOn: f at: (f extent - icon extent) // 2 rule: Form paint].
 
 	^ f

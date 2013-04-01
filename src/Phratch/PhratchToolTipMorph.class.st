@@ -1,5 +1,5 @@
 Class {
-	#name : #ScratchToolTipMorph,
+	#name : #PhratchToolTipMorph,
 	#superclass : #RectangleMorph,
 	#instVars : [
 		'target',
@@ -10,17 +10,17 @@ Class {
 }
 
 { #category : #utilities }
-ScratchToolTipMorph class >> clearToolTips [
+PhratchToolTipMorph class >> clearToolTips [
 	"Delete all tooltip morphs from the world."
 
 	World ifNil: [^ self].
 	World submorphsDo: [:m |
-		(m isKindOf: ScratchToolTipMorph) ifTrue: [m delete]].
+		(m isKindOf: PhratchToolTipMorph) ifTrue: [m delete]].
 
 ]
 
 { #category : #'instance creation' }
-ScratchToolTipMorph class >> string: str for: morph [
+PhratchToolTipMorph class >> string: str for: morph [
 
 	^ self new
 		message: str;
@@ -32,14 +32,14 @@ ScratchToolTipMorph class >> string: str for: morph [
 ]
 
 { #category : #accessing }
-ScratchToolTipMorph >> initialCursorPoint: aPoint [
+PhratchToolTipMorph >> initialCursorPoint: aPoint [
 
 	initialCursorPoint := aPoint.
 
 ]
 
 { #category : #accessing }
-ScratchToolTipMorph >> message: aString [
+PhratchToolTipMorph >> message: aString [
 
 	| str |
 	(aString isKindOf: Form)
@@ -58,7 +58,7 @@ ScratchToolTipMorph >> message: aString [
 ]
 
 { #category : #accessing }
-ScratchToolTipMorph >> messageColor: aColor [
+PhratchToolTipMorph >> messageColor: aColor [
 
 	message color: aColor.
 
@@ -66,14 +66,14 @@ ScratchToolTipMorph >> messageColor: aColor [
 ]
 
 { #category : #accessing }
-ScratchToolTipMorph >> messageFont [
+PhratchToolTipMorph >> messageFont [
 
-	^ ScratchFrameMorph getFont: #ToolTip
+	^ PhratchFrameMorph getFont: #ToolTip
 
 ]
 
 { #category : #stepping }
-ScratchToolTipMorph >> step [
+PhratchToolTipMorph >> step [
 
 	initialCursorPoint ifNotNil: [
 		(Sensor lastMousePosition - initialCursorPoint) r > 80 ifTrue: [
@@ -83,14 +83,14 @@ ScratchToolTipMorph >> step [
 ]
 
 { #category : #stepping }
-ScratchToolTipMorph >> stepTime [
+PhratchToolTipMorph >> stepTime [
 
 	^ 200
 
 ]
 
 { #category : #accessing }
-ScratchToolTipMorph >> target: aMorph [
+PhratchToolTipMorph >> target: aMorph [
 
 	target := aMorph.
 

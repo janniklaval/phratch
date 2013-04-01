@@ -154,7 +154,7 @@ MultiArgReporterBlockMorph >> evaluate [
 	"Evalue this block with the given argument list."
 
 	self start.
-	scratchProc stepUntilDoneFor: (receiver ownerOrYourselfThatIsA: ScratchStageMorph).
+	scratchProc stepUntilDoneFor: (receiver ownerOrYourselfThatIsA: PhratchStageMorph).
 	^scratchProc answer	
 ]
 
@@ -163,7 +163,7 @@ MultiArgReporterBlockMorph >> evaluateWithArgs: rawArgs [
 	"Evalue this block with the given argument list."
 
 	self start.
-	scratchProc stepUntilDoneFor: (receiver ownerOrYourselfThatIsA: ScratchStageMorph).
+	scratchProc stepUntilDoneFor: (receiver ownerOrYourselfThatIsA: PhratchStageMorph).
 	^scratchProc answer	
 ]
 
@@ -383,7 +383,7 @@ MultiArgReporterBlockMorph >> showValue [
 	gotError := false.
 
 	[self start.
-	scratchProc stepUntilDoneFor: (receiver ownerOrYourselfThatIsA: ScratchStageMorph).
+	scratchProc stepUntilDoneFor: (receiver ownerOrYourselfThatIsA: PhratchStageMorph).
 	msg := scratchProc answer] ifError: [
 		gotError := true.
 		msg := 'Error!'].
@@ -399,7 +399,7 @@ MultiArgReporterBlockMorph >> showValue [
 	tooltip := (PhratchReporterToolTipMorph string: msg for: self)
 		left: self right;
 		bottom: self top.
-	ScratchTranslator isRTL ifTrue: [tooltip right: self left].
+	PhratchTranslator isRTL ifTrue: [tooltip right: self left].
 	gotError ifTrue: [tooltip messageColor: Color red darker].
 
 	w := self world.

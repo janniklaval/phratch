@@ -55,12 +55,12 @@ EventHatMorph >> forStartEvent [
 	super initialize.
 	self removeAllMorphs.
 
-	parts := ScratchTranslator labelPartsFor: 'when %m clicked'.
+	parts := PhratchTranslator labelPartsFor: 'when %m clicked'.
 
-	s := PhratchStringMorph new contents: parts first; font: (ScratchFrameMorph getFont: #Label); color: Color white.
+	s := PhratchStringMorph new contents: parts first; font: (PhratchFrameMorph getFont: #Label); color: Color white.
 	self addMorphBack: s.
 
-	m := ImageMorph new form: (ScratchFrameMorph skinAt: #goButton).
+	m := ImageMorph new form: (PhratchFrameMorph skinAt: #goButton).
 	self addMorphBack: m.
 
 	s := s fullCopy contents: parts second.
@@ -104,10 +104,10 @@ EventHatMorph >> initialize [
 	super initialize.
 	self removeAllMorphs.
 
-	parts := ScratchTranslator labelPartsFor: 'when I receive %e'.
+	parts := PhratchTranslator labelPartsFor: 'when I receive %e'.
 
 	parts first size > 0 ifTrue: [
-		label := PhratchStringMorph contents: parts first font: (ScratchFrameMorph getFont: #Label).
+		label := PhratchStringMorph contents: parts first font: (PhratchFrameMorph getFont: #Label).
 		label color: Color white.
 		self addMorphBack: label].
 
@@ -115,7 +115,7 @@ EventHatMorph >> initialize [
 	self addMorphBack: scriptNameMorph.
 
 	parts second size > 0 ifTrue: [
-		label := (PhratchStringMorph contents: parts second font: (ScratchFrameMorph getFont: #Label)) color: Color white.
+		label := (PhratchStringMorph contents: parts second font: (PhratchFrameMorph getFont: #Label)) color: Color white.
 		self addMorphBack: label].
 
 ]
@@ -155,7 +155,7 @@ EventHatMorph >> startForEvent: aScratchEvent [
 	self hasRunningProcess ifTrue: [^ nil].  "don't re-trigger if running"
 
 	scriptOwner ifNil: [^ nil].
-	(stage := scriptOwner ownerOrYourselfThatIsA: ScratchStageMorph) ifNil: [^ nil].
+	(stage := scriptOwner ownerOrYourselfThatIsA: PhratchStageMorph) ifNil: [^ nil].
 	scratchProc := stage startProcessFor: self.
 	self changed.
 	^ scratchProc

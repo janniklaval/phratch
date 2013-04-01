@@ -1,6 +1,6 @@
 Class {
 	#name : #BYOBListWatcherMorph,
-	#superclass : #ScratchListMorph,
+	#superclass : #PhratchListMorph,
 	#instVars : [
 		'list',
 		'lastUpdated',
@@ -30,23 +30,23 @@ BYOBListWatcherMorph >> createCell: anObject [
 	(anObject isKindOf: String)
 		ifFalse: [txt := anObject printString].
 
-	font := ScratchFrameMorph getFont: #Watcher.
+	font := PhratchFrameMorph getFont: #Watcher.
 	readout := ListMultilineStringMorph new
 		borderWidth: 0;
 		color: Color transparent;
 		textColor: Color white;
 		growWithText: true;
 		contents: txt font: font.
-	readout height: ((ScratchTranslator stringExtent: 'A' font: font) y) + 6.
-	ScratchTranslator isRTL
+	readout height: ((PhratchTranslator stringExtent: 'A' font: font) y) + 6.
+	PhratchTranslator isRTL
 		ifTrue: [numberRight := self right - 5]
 		ifFalse: [numberRight := self left + self largestIndexWidth + 6].
-	ScratchTranslator isRTL
+	PhratchTranslator isRTL
 		ifTrue: [readout width: self right - self left - self largestIndexWidth - 33]
 		ifFalse: [readout width: self right - numberRight - 25].
 
 	cell := WatcherReadoutFrameMorph new
-		color: ScriptableScratchMorph listBlockColor;
+		color: ScriptablePhratchMorph listBlockColor;
 		extent: readout extent + 3;
 		addMorphBack: readout.
 
@@ -110,7 +110,7 @@ BYOBListWatcherMorph >> insertLine: aString at: aNumber [
 { #category : #'dropping/grabbing' }
 BYOBListWatcherMorph >> justDroppedInto: aMorph event: evt [
 
-	(aMorph isKindOf: ScratchStageMorph) ifTrue: [
+	(aMorph isKindOf: PhratchStageMorph) ifTrue: [
 		super justDroppedInto: aMorph event: evt.
 		self world ifNotNil: [self world startSteppingSubmorphsOf: self].
 		^ self].

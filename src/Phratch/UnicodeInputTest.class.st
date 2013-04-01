@@ -22,7 +22,7 @@ UnicodeInputTest >> drawOn: aCanvas [
 	self drawString: 'keyValue: ', key printString at: self topLeft + (10@7) on: aCanvas.
 	self drawString: 'unicodeChar: ', uchar printString at: self topLeft + (10@30) on: aCanvas.
 
-	f := ScratchTranslator
+	f := PhratchTranslator
 		formFor: (UTF32 with: uchar)
 		font: (StrikeFont fontName: 'VerdanaBold' size: 24)
 		fgColor: Color black

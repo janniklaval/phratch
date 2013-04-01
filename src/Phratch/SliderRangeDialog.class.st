@@ -85,12 +85,12 @@ SliderRangeDialog >> initialize [
 	minLabel := PhratchStringMorph new
 		contents: 'Min:' localized;
 		forceUnicodeRendering: true;
-		font: (ScratchFrameMorph getFont: #StringDialogTypeIn).
+		font: (PhratchFrameMorph getFont: #StringDialogTypeIn).
 	maxLabel := minLabel fullCopy contents: 'Max:' localized.
 
 	minMorph := StringFieldMorph new
 		client: self;
-		font: (ScratchFrameMorph getFont: #StringDialogTypeIn);
+		font: (PhratchFrameMorph getFont: #StringDialogTypeIn);
 		color: Color transparent;
 		width: (40 max: ((maxLabel stringWidth: '100') + 9)).
 	maxMorph := minMorph fullCopy.
@@ -110,7 +110,7 @@ SliderRangeDialog >> initialize [
 	radioButtons addMorphBack: maxLabel.
 	radioButtons addMorphBack: (Morph new extent: (5@5); color: Color transparent).
 	radioButtons addMorphBack: maxMorph.
-	ScratchTranslator isRTL
+	PhratchTranslator isRTL
 		ifTrue: [radioButtons submorphs reversed do: [:m |
 			m delete.
 			radioButtons addMorphBack: m]].

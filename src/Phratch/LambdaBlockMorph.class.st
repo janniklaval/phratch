@@ -55,11 +55,11 @@ LambdaBlockMorph >> checkBoxLabelled: aString marked: aBool width: anInt [
 
 	| box label pic line cnts |
 	aBool
-		ifTrue: [pic := ScratchFrameMorph skinAt: #watcherButtonPressed]
-		ifFalse: [pic := ScratchFrameMorph skinAt: #watcherButton].
+		ifTrue: [pic := PhratchFrameMorph skinAt: #watcherButtonPressed]
+		ifFalse: [pic := PhratchFrameMorph skinAt: #watcherButton].
 	box := ImageMorph new form: pic. 
 	
-	ScratchTranslator useSqueakRendering
+	PhratchTranslator useSqueakRendering
 		ifTrue: [cnts := ' ', aString localized asMacRoman]
 		ifFalse: [cnts := ' ' asUTF8, aString localized].
 
@@ -119,7 +119,7 @@ LambdaBlockMorph >> displayForm [
 	block := self displayBlock.
 	block allMorphs do: [:m |
 		(m isKindOf: BlockMorph) ifTrue: [m fixBlockLayout ]].
-	^ block imageForm withOutlineColor: ScratchFrameMorph scriptsPaneColor width: 4
+	^ block imageForm withOutlineColor: PhratchFrameMorph scriptsPaneColor width: 4
 ]
 
 { #category : #'as yet unclassified' }
@@ -422,7 +422,7 @@ LambdaBlockMorph >> showValue [
 	tooltip := (PhratchReporterToolTipMorph string: self morphToShow imageForm for: self)
 		left: self right;
 		bottom: self top.
-	ScratchTranslator isRTL ifTrue: [tooltip right: self left].
+	PhratchTranslator isRTL ifTrue: [tooltip right: self left].
 
 	w := self world.
 	w addMorphFront: tooltip.

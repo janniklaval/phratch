@@ -116,8 +116,8 @@ BlockLabelFragmentDialog >> buildSlotTypeChoices [
 	picture label typeChooser picSize lineWidth typeLabel typeFont bg titleClr labelClr labelSingle
 	labelMultiple labelExternalized temp onForm offForm|
 
-	onForm :=  ScratchFrameMorph skinAt: #radioButtonOn.
-	offForm := ScratchFrameMorph skinAt: #radioButton.
+	onForm :=  PhratchFrameMorph skinAt: #radioButtonOn.
+	offForm := PhratchFrameMorph skinAt: #radioButton.
 "
 	onForm :=  ScratchFrameMorph skinAt: #watcherButtonPressed.
 	offForm := ScratchFrameMorph skinAt: #watcherButton.
@@ -128,14 +128,14 @@ BlockLabelFragmentDialog >> buildSlotTypeChoices [
 	labelClr := Color white.
 
 	typeChooser := ImageFrameMorph new.
-	bg := (ScratchFrameMorph skinAt:  #paintOptionsBackground) deepCopy.
-	bg replaceColor: (bg colorAt: bg center) with: ScratchFrameMorph palettePaneColor.
+	bg := (PhratchFrameMorph skinAt:  #paintOptionsBackground) deepCopy.
+	bg replaceColor: (bg colorAt: bg center) with: PhratchFrameMorph palettePaneColor.
 	typeChooser initFromForm: bg.
 	typeChooser extent: (lineWidth + 20) * 3 @ (picSize y * 9).
 
-	typeFont := ScratchFrameMorph getFont: #FilePickerEntry.
+	typeFont := PhratchFrameMorph getFont: #FilePickerEntry.
 
-	typeLabel := ((PhratchStringMorph contents: 'Input type/Shape of slot:' localized font: (ScratchFrameMorph getFont: #Label))
+	typeLabel := ((PhratchStringMorph contents: 'Input type/Shape of slot:' localized font: (PhratchFrameMorph getFont: #Label))
 		color: titleClr;
 		position: typeChooser position + (15@14);
 		yourself).
@@ -432,7 +432,7 @@ BlockLabelFragmentDialog >> buildSlotTypeChoices [
 
 "+++++++++++++++++++++++++++"
 
-	divBar := ImageMorph new form: (ScratchFrameMorph skinAt: #connector).
+	divBar := ImageMorph new form: (PhratchFrameMorph skinAt: #connector).
 	divBar 
 		top: lineLoop bottom + 5;
 		left: "lineReporter left "typeChooser left + (typeChooser width - (divBar width * 3) // 3).
@@ -448,8 +448,8 @@ BlockLabelFragmentDialog >> buildSlotTypeChoices [
 
 
 	singleRadioButton := ToggleButton
-		onForm: (ScratchFrameMorph skinAt: #radioButtonOn)
-		offForm: (ScratchFrameMorph skinAt: #radioButton).
+		onForm: (PhratchFrameMorph skinAt: #radioButtonOn)
+		offForm: (PhratchFrameMorph skinAt: #radioButton).
 	singleRadioButton
 		on;
 		target: self;
@@ -457,13 +457,13 @@ BlockLabelFragmentDialog >> buildSlotTypeChoices [
 		position: lineLoop left @ (divBar bottom + 9).
 	typeChooser addMorph: singleRadioButton.	
 
-	labelSingle := ((PhratchStringMorph contents: 'Single input.' localized font: (ScratchFrameMorph getFont: #Label))
+	labelSingle := ((PhratchStringMorph contents: 'Single input.' localized font: (PhratchFrameMorph getFont: #Label))
 		color: titleClr;
 		position: singleRadioButton topRight + (4@0);
 		yourself).
 	typeChooser addMorph: labelSingle.
 
-	defaultLabel := ((PhratchStringMorph contents: 'Default value:' localized font: (ScratchFrameMorph getFont: #Label))
+	defaultLabel := ((PhratchStringMorph contents: 'Default value:' localized font: (PhratchFrameMorph getFont: #Label))
 		color: titleClr;
 		position: labelSingle topRight + (10@0);
 		yourself).
@@ -485,8 +485,8 @@ BlockLabelFragmentDialog >> buildSlotTypeChoices [
 	slotShapesGroup := typeChooser.
 
 	multipleRadioButton := ToggleButton
-		onForm: (ScratchFrameMorph skinAt: #radioButtonOn)
-		offForm: (ScratchFrameMorph skinAt: #radioButton).
+		onForm: (PhratchFrameMorph skinAt: #radioButtonOn)
+		offForm: (PhratchFrameMorph skinAt: #radioButton).
 	multipleRadioButton
 		off;
 		target: self;
@@ -494,15 +494,15 @@ BlockLabelFragmentDialog >> buildSlotTypeChoices [
 		position: singleRadioButton bottomLeft + (0@6).
 	typeChooser addMorph: multipleRadioButton.	
 
-	labelMultiple := ((PhratchStringMorph contents: 'Multiple inputs (value is list of inputs)' localized font: (ScratchFrameMorph getFont: #Label))
+	labelMultiple := ((PhratchStringMorph contents: 'Multiple inputs (value is list of inputs)' localized font: (PhratchFrameMorph getFont: #Label))
 		color: titleClr;
 		position: multipleRadioButton topRight + (4@0);
 		yourself).
 	typeChooser addMorph: labelMultiple.
 
 	externalizedRadioButton := ToggleButton
-		onForm: (ScratchFrameMorph skinAt: #radioButtonOn)
-		offForm: (ScratchFrameMorph skinAt: #radioButton).
+		onForm: (PhratchFrameMorph skinAt: #radioButtonOn)
+		offForm: (PhratchFrameMorph skinAt: #radioButton).
 	externalizedRadioButton
 		off;
 		target: self;
@@ -510,7 +510,7 @@ BlockLabelFragmentDialog >> buildSlotTypeChoices [
 		position: multipleRadioButton bottomLeft + (0@6).
 	typeChooser addMorph: externalizedRadioButton.	
 
-	labelExternalized := ((PhratchStringMorph contents: 'Make internal variable visible to caller' localized font: (ScratchFrameMorph getFont: #Label))
+	labelExternalized := ((PhratchStringMorph contents: 'Make internal variable visible to caller' localized font: (PhratchFrameMorph getFont: #Label))
 		color: titleClr;
 		position: externalizedRadioButton topRight + (4@0);
 		yourself).
@@ -530,8 +530,8 @@ BlockLabelFragmentDialog >> buildWidgets [
 		vResizing: #shrinkWrap.
 
 	textRadioButton := ToggleButton
-		onForm: (ScratchFrameMorph skinAt: #radioButtonOn)
-		offForm: (ScratchFrameMorph skinAt: #radioButton).
+		onForm: (PhratchFrameMorph skinAt: #radioButtonOn)
+		offForm: (PhratchFrameMorph skinAt: #radioButton).
 	textRadioButton
 		on;
 		target: self;
@@ -553,7 +553,7 @@ BlockLabelFragmentDialog >> buildWidgets [
 	fragmentRadioButtons addMorphBack: (Morph new extent: (15@5); color: Color transparent).
 
 	slotShapeButton := IconicButton new
-		labelGraphic: (ScratchFrameMorph skinAt: #arrowOpenComment) borderWidth: 0;
+		labelGraphic: (PhratchFrameMorph skinAt: #arrowOpenComment) borderWidth: 0;
 		actionSelector: #toggleExpand;
 		target: self;
 		actWhen: #buttonDown.
@@ -652,8 +652,8 @@ BlockLabelFragmentDialog >> initialize [
 { #category : #drawing }
 BlockLabelFragmentDialog >> inputButtonForm [
 	| bg block |
-	block := VariableBlockMorph new commandSpec: 'Input name' localized; color: (ScriptableScratchMorph blockColorFor: 'variables').
-	bg := LabelFragmentBlockMorph new commandSpec: '%i'; color: (ScriptableScratchMorph blockColorFor: category asString).
+	block := VariableBlockMorph new commandSpec: 'Input name' localized; color: (ScriptablePhratchMorph blockColorFor: 'variables').
+	bg := LabelFragmentBlockMorph new commandSpec: '%i'; color: (ScriptablePhratchMorph blockColorFor: category asString).
 	bg replaceArgMorph: bg argMorphs first by: block.
 	^bg imageForm
 ]
@@ -664,7 +664,7 @@ BlockLabelFragmentDialog >> labelButtonForm [
 	| block |
 
 	block := LabelFragmentBlockMorph new 
-		color: (ScriptableScratchMorph blockColorFor: category asString);
+		color: (ScriptablePhratchMorph blockColorFor: category asString);
 		commandSpec: 'Title text' localized.
 
 	^block imageForm
@@ -725,7 +725,7 @@ BlockLabelFragmentDialog >> slotShapeFormFor: type size: aPoint [
 		at: #object put: '%1'.
 
 	block := LabelFragmentBlockMorph new
-		color: (ScriptableScratchMorph blockColorFor: category asString); 
+		color: (ScriptablePhratchMorph blockColorFor: category asString); 
 		commandSpec: '_', (specs at: type), '_'.
 
 	(#(predicate boolean unevaluatedBoolean reporter typeInReporter command text loop reporterSlot) includes: type) ifTrue: [
@@ -751,8 +751,8 @@ BlockLabelFragmentDialog >> toggleExpand [
 	isCollapsed := isCollapsed not.
 
 	isCollapsed
-		ifTrue: [slotShapeButton labelGraphic: (ScratchFrameMorph skinAt: #arrowClosedComment) ]
-		ifFalse: [slotShapeButton labelGraphic: (ScratchFrameMorph skinAt: #arrowOpenComment)].
+		ifTrue: [slotShapeButton labelGraphic: (PhratchFrameMorph skinAt: #arrowClosedComment) ]
+		ifFalse: [slotShapeButton labelGraphic: (PhratchFrameMorph skinAt: #arrowOpenComment)].
 
 	mainColumn submorphsDo: [: m |
 		((m = messageLineMorphs) not) ifTrue: [m delete]].

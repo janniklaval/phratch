@@ -88,9 +88,9 @@ PaintFrame >> addButtons [
 	fileButtons addMorphBack: b.
 
 	b := ResizableToggleButton2 new
-		offForm: (ScratchFrameMorph skinAt: #paintUtilityButton)
-			onForm: (ScratchFrameMorph skinAt: #paintUtilityButtonPressed);
-		label: 'Clear' localized font: (ScratchFrameMorph getFont: #PaintUtilityButton);
+		offForm: (PhratchFrameMorph skinAt: #paintUtilityButton)
+			onForm: (PhratchFrameMorph skinAt: #paintUtilityButtonPressed);
+		label: 'Clear' localized font: (PhratchFrameMorph getFont: #PaintUtilityButton);
 		target: canvasMorph;
 		actionSelector: #eraseAll;
 		setProperty: #balloonText toValue: 'Clear canvas' localized.
@@ -123,22 +123,22 @@ PaintFrame >> addColorChoosers [
 	"color picker is somewhat slow to create, so cache one and copy it"
 	(ColorPicker isNil or:
 	 [ColorPicker extent ~= (112@108)]) ifTrue: [
-		ColorPicker := PaintColorPicker new initFromForm: (ScratchFrameMorph skinAt: #paintCanvasFrame);
+		ColorPicker := PaintColorPicker new initFromForm: (PhratchFrameMorph skinAt: #paintCanvasFrame);
 			selector: #color1:;
 			selector2: #color2:;
 			extent: 120@108].
 	colorPicker := ColorPicker fullCopy target: canvasMorph palette.
 
 	SquareColorPicker ifNil: [
-		SquareColorPicker := PaintColorSquarePicker new initFromForm: (ScratchFrameMorph skinAt: #paintCanvasFrame);
+		SquareColorPicker := PaintColorSquarePicker new initFromForm: (PhratchFrameMorph skinAt: #paintCanvasFrame);
 			selector: #color1:;
 			selector2: #color2:;
 			extent: 120@108].
 	colorSquarePicker := SquareColorPicker fullCopy target: canvasMorph palette.
 
 	colorPickerButton := ToggleButton
-		onForm: (ScratchFrameMorph skinAt: #squareColorSquare)
-		offForm: (ScratchFrameMorph skinAt: #colorSquare).
+		onForm: (PhratchFrameMorph skinAt: #squareColorSquare)
+		offForm: (PhratchFrameMorph skinAt: #colorSquare).
 	colorPickerButton
 		color: Color transparent;
 		target: self;
@@ -164,7 +164,7 @@ PaintFrame >> addScrollbarsAndBevel [
 			selector: #scrollFractionY:).
 	self addMorphBack: (
 		canvasFrame := ImageFrameMorph new
-			initFromForm: (ScratchFrameMorph skinAt: #paintCanvasFrame);
+			initFromForm: (PhratchFrameMorph skinAt: #paintCanvasFrame);
 			extent: canvasMorph extent + (8@8)).
 
 ]
@@ -182,15 +182,15 @@ PaintFrame >> addSetRotationCenterButton [
 
 	"make components"
 	setRotationCenterButton := ToggleButton
-		onForm: (ScratchFrameMorph skinAt: #paintSetRotCenterButtonPressed)
-		offForm: (ScratchFrameMorph skinAt: #paintSetRotCenterButton).
+		onForm: (PhratchFrameMorph skinAt: #paintSetRotCenterButtonPressed)
+		offForm: (PhratchFrameMorph skinAt: #paintSetRotCenterButton).
 	setRotationCenterButton
 		target: paletteMorph;
 		actionSelector: #toggleRotationPoint;
 		setProperty: #balloonText toValue: 'Position the cross-hair to set the rotation center' localized.
 	spacer := Morph new extent: 6@3; color: Color transparent.
 	setRotationLabel := PhratchStringMorph contents: 'Set costume center' localized.
-	font := (ScratchFrameMorph getFont: #PaintSetRotationCenter).
+	font := (PhratchFrameMorph getFont: #PaintSetRotationCenter).
 	setRotationLabel font: font; color: Color gray darker.
 
 	"add components"
@@ -234,9 +234,9 @@ PaintFrame >> addTransformButtons [
 				transformButtons addMorphBack: (Morph new extent: 3@10; color: Color transparent)]
 			ifFalse: [
 				b := ToggleButton new
-					onForm: (ScratchFrameMorph skinAt: ((n at: 1), 'ButtonPressed'))
-						offForm: (ScratchFrameMorph skinAt: ((n at: 1), 'Button'))
-						overForm: (ScratchFrameMorph skinAt: ((n at: 1), 'Button'));
+					onForm: (PhratchFrameMorph skinAt: ((n at: 1), 'ButtonPressed'))
+						offForm: (PhratchFrameMorph skinAt: ((n at: 1), 'Button'))
+						overForm: (PhratchFrameMorph skinAt: ((n at: 1), 'Button'));
 					target: canvasMorph;
 					isMomentary: true;
 					toggleMode: false;
@@ -314,7 +314,7 @@ PaintFrame >> export [
 		textBox drawTextOn: (FormCanvas on: form)].
 
 	fName := ''.
-	fName := ScratchFileChooserDialog
+	fName := PhratchFileChooserDialog
 		chooseNewFileDefault: fName
 		title: 'File Name?'
 		type: #costume.
@@ -394,7 +394,7 @@ PaintFrame >> initialize [
 	super initialize.
 	self addMorph: (
 		canvasMorph := PaintCanvas new
-			extent: ScratchFrameMorph workpaneExtent;
+			extent: PhratchFrameMorph workpaneExtent;
 			editForm: ((Form extent: PaintCanvas canvasExtent depth: 32) fillColor: Color transparent)).
 	buttonRow ifNotNil: [
 		buttonRow delete.
@@ -426,10 +426,10 @@ PaintFrame >> justDroppedInto: aMorph event: evt [
 PaintFrame >> makeButtonLabel: aString selector: sel [
 
 	| font |
-	font := (ScratchFrameMorph getFont: #PaintUtilityButton).
+	font := (PhratchFrameMorph getFont: #PaintUtilityButton).
 	^ ResizableToggleButton2 new
-		offForm: (ScratchFrameMorph skinAt: #paintUtilityButton)
-			onForm: (ScratchFrameMorph skinAt: #paintUtilityButtonPressed);
+		offForm: (PhratchFrameMorph skinAt: #paintUtilityButton)
+			onForm: (PhratchFrameMorph skinAt: #paintUtilityButtonPressed);
 		label: aString localized font: font;
 		target: canvasMorph;
 		actionSelector: sel
@@ -448,8 +448,8 @@ PaintFrame >> makeZoomBar [
 
 	#(out in) do: [:n |
 		b := ToggleButton
-			onForm: (ScratchFrameMorph skinAt: ('paintZoom', n asString capitalized, 'Button'))
-			offForm: (ScratchFrameMorph skinAt: ('paintZoom', n asString capitalized, 'Button')).
+			onForm: (PhratchFrameMorph skinAt: ('paintZoom', n asString capitalized, 'Button'))
+			offForm: (PhratchFrameMorph skinAt: ('paintZoom', n asString capitalized, 'Button')).
 		b
 			target: self;
 			actionSelector: #scaleCanvas:;
@@ -461,8 +461,8 @@ PaintFrame >> makeZoomBar [
 		#out = n ifTrue: [
 			#(1 2 4 8 16) do: [:scale |
 				t := ToggleButton
-					onForm: (ScratchFrameMorph skinAt: ('zoom', scale asString, 'ButtonPressed'))
-					offForm: (ScratchFrameMorph skinAt: ('zoom', scale asString, 'Button')).
+					onForm: (PhratchFrameMorph skinAt: ('zoom', scale asString, 'ButtonPressed'))
+					offForm: (PhratchFrameMorph skinAt: ('zoom', scale asString, 'Button')).
 				t
 					target: self;
 					actionSelector: #scaleCanvas:;
@@ -490,9 +490,9 @@ PaintFrame >> newFormTextBoxAndRegPoint [
 		fitContents.
 	textBox contents isEmpty ifTrue: [textBox := nil].
 
-	(originalObject isKindOf: ScratchStageMorph)
+	(originalObject isKindOf: PhratchStageMorph)
 		ifTrue: [
-			r := 0@0 extent: ScratchFrameMorph workpaneExtent.
+			r := 0@0 extent: PhratchFrameMorph workpaneExtent.
 			newForm := Form extent: r extent depth: 32.
 			newForm fillWhite.
 			canvasMorph canvasForm
@@ -534,6 +534,13 @@ PaintFrame >> originalObject [
 	^ originalObject
 ]
 
+{ #category : #'entry points' }
+PaintFrame >> phratchFrame: aScratchFrameMorph [
+
+	scratchFrame := aScratchFrameMorph.
+
+]
+
 { #category : #other }
 PaintFrame >> presentColorPicker [
 
@@ -558,13 +565,6 @@ PaintFrame >> scaleCanvas: aNumberOrSymbol [
 			b arguments first = numToScale ifTrue: [b on] ifFalse: [b off]]].
 
 	canvasMorph scale: numToScale.
-
-]
-
-{ #category : #'entry points' }
-PaintFrame >> scratchFrame: aScratchFrameMorph [
-
-	scratchFrame := aScratchFrameMorph.
 
 ]
 
@@ -603,11 +603,11 @@ PaintFrame >> withStartingObject: anObject [
 				editForm: costume form
 				regPoint: costume rotationCenter
 				textBox: costume textBox
-				isStage: (anObject isKindOf: ScratchStageMorph)]
+				isStage: (anObject isKindOf: PhratchStageMorph)]
 		ifFalse: [  "editing a non-Scratch object"
 			canvasMorph editForm: anObject form].
 
-	(anObject isKindOf: ScratchStageMorph)
+	(anObject isKindOf: PhratchStageMorph)
 		ifTrue: [self scaleCanvas: 1]
 		ifFalse: [self scaleCanvas: 2].
 	World activeHand newKeyboardFocus: canvasMorph.

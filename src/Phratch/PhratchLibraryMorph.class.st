@@ -25,7 +25,7 @@ PhratchLibraryMorph >> addThumbnailFor: aMorph [
 	newThumbnail := LibraryItemMorph new.
 	newThumbnail extent: itemExtent thumbWidth: thumbWidth.
 	newThumbnail  target: aMorph.
-	(newThumbnail target isKindOf: ScratchStageMorph)
+	(newThumbnail target isKindOf: PhratchStageMorph)
 		ifTrue: [stagePane addMorph: newThumbnail]
 		ifFalse: [scrollPane contents addMorphBack: newThumbnail].
 	newThumbnail step.
@@ -41,7 +41,7 @@ PhratchLibraryMorph >> buildPanes [
 		color: Color transparent;
 		position: self position + (7@0).
 
-	bin := ScratchSpriteLibraryMorph new
+	bin := PhratchSpriteLibraryMorph new
 		color: Color transparent;
 		borderWidth: 0.
 
@@ -54,7 +54,7 @@ PhratchLibraryMorph >> buildPanes [
 		color: Color gray;
 		position: self position.
 	spriteLabel := self buildSpriteLabel.
-	buttonPane := self makeNewSpriteButtons: (self ownerOrYourselfThatIsA: ScratchFrameMorph).
+	buttonPane := self makeNewSpriteButtons: (self ownerOrYourselfThatIsA: PhratchFrameMorph).
 
 	self addMorph: spritePane.
 	self addMorph: spriteLabel.
@@ -68,7 +68,7 @@ PhratchLibraryMorph >> buildPanes [
 PhratchLibraryMorph >> buildSpriteLabel [
 
 	^ PhratchStringMorph new
-		font: (ScratchFrameMorph getFont: #Tab);
+		font: (PhratchFrameMorph getFont: #Tab);
 		color: Color white;
 		contents: 'New sprite:' localized
 
@@ -86,7 +86,7 @@ PhratchLibraryMorph >> clearLibrary [
 	spriteLabel delete.
 	spriteLabel := self buildSpriteLabel.
 
-	sFrame := self ownerOrYourselfThatIsA: ScratchFrameMorph.
+	sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
 	(sFrame isNil or:
 	 [sFrame viewMode = #normal]) ifTrue: [
 		self addMorph: spriteLabel].
@@ -108,7 +108,7 @@ PhratchLibraryMorph >> doesNotUnderstand: aMessage [
 		tn target objName = aMessage selector] ifNone: [nil].
 	sel ifNil: [	^ super doesNotUnderstand: aMessage].
 
-	frame := self ownerOrYourselfThatIsA: ScratchFrameMorph.
+	frame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
 	frame ifNil: [^ self].
 
 	sel select.
@@ -145,7 +145,7 @@ PhratchLibraryMorph >> extent: aRectangle [
 	scrollPane isNil | stagePane isNil ifTrue: [^ self].
 	
 	thumbWidth := 50.
-	nameHeight := (ScratchTranslator stringExtent: ('Sprite1' localized) font: (ScratchFrameMorph getFont: #LibraryItemName)) y.
+	nameHeight := (PhratchTranslator stringExtent: ('Sprite1' localized) font: (PhratchFrameMorph getFont: #LibraryItemName)) y.
 	itemExtent := 54@(54 + nameHeight).
 
 	stagePane width: itemExtent x + 0.
@@ -166,7 +166,7 @@ PhratchLibraryMorph >> fixLayout [
 	spritePane height: topSectionHeight.
 
 	spriteLabel position: (self left + 15)@(self top + (topSectionHeight // 2) - (spriteLabel height // 2) + 3).
-	sFrame := self ownerOrYourselfThatIsA: ScratchFrameMorph.
+	sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
 	(sFrame isNil or: [sFrame viewMode = #normal])
 		ifTrue: [buttonPane position: (spriteLabel right + 10)@(self top + (topSectionHeight // 2) - (buttonPane height // 2) + 3)]
 		ifFalse: [buttonPane position: (self left + 12)@(self top + (topSectionHeight // 2) - (buttonPane height // 2) + 3)].
@@ -183,14 +183,14 @@ PhratchLibraryMorph >> fixLayout [
 	stagePane position: stagePane left @ (self top + topSectionHeight + 3).
 
 	libPane := scrollPane contents.
-	ScratchTranslator isRTL
+	PhratchTranslator isRTL
 		ifTrue: [x := libPane left + 30]
 		ifFalse: [x := libPane left + 8].
 	y := libPane top + 7.
 	rMargin := x + scrollPane width - 5.
 	libPane submorphs do: [:m |
 		(x + m width) > rMargin ifTrue: [
-			ScratchTranslator isRTL
+			PhratchTranslator isRTL
 				ifTrue: [x := libPane left + 30]
 				ifFalse: [x := libPane left + 8].
 			y := y + m height].
@@ -209,7 +209,7 @@ PhratchLibraryMorph >> initialize [
 	super initialize.
 	self buildPanes.
 	self
-		initFrontFromForm: (ScratchFrameMorph skinAt: 'spriteLibraryPaneFrameTransparent2')
+		initFrontFromForm: (PhratchFrameMorph skinAt: 'spriteLibraryPaneFrameTransparent2')
 		topSectionHeight: ((spriteLabel height + 10) max: 40).
 	self middleBarLeftMargin: 0 rightMargin: 6.
 	self extent: 200@100.
@@ -232,8 +232,8 @@ PhratchLibraryMorph >> makeNewSpriteButtons: aScratchFrameMorph [
 
 	buttons := buttonSpecs collect: [:spec |
 		button := ToggleButton new
-			onForm: (ScratchFrameMorph skinAt: (spec at: 1))
-			offForm: (ScratchFrameMorph skinAt: (spec at: 1)).
+			onForm: (PhratchFrameMorph skinAt: (spec at: 1))
+			offForm: (PhratchFrameMorph skinAt: (spec at: 1)).
 
 		button
 			target: aScratchFrameMorph;
@@ -241,7 +241,7 @@ PhratchLibraryMorph >> makeNewSpriteButtons: aScratchFrameMorph [
 			setProperty: #balloonText toValue: (spec at: 3) localized.
 		button].
 
-	butonExtent := ScratchFrameMorph isXO ifTrue: [37@27] ifFalse: [37@27].
+	butonExtent := PhratchFrameMorph isXO ifTrue: [37@27] ifFalse: [37@27].
 	x := 0.
 	buttons do: [:b |
 		b extent: butonExtent.
@@ -275,7 +275,7 @@ PhratchLibraryMorph >> step [
 
 	| sFrame workPane morphsWithThumbnails doLayout workPaneObjects |
 	
-	(sFrame := self ownerOrYourselfThatIsA: ScratchFrameMorph) ifNil: [^ self].
+	(sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNil: [^ self].
 	sFrame paintingInProgress
 		ifTrue: [^ self]
 		ifFalse: [scrollPane owner ifNil: [self addMorph: scrollPane]].
@@ -301,7 +301,7 @@ PhratchLibraryMorph >> step [
 
 	"add thumbnails for any new objects"
 	workPaneObjects := workPane sprites select: [:s |
-		(s isKindOf: ScriptableScratchMorph) and: [s isScriptable & s isClone not]].
+		(s isKindOf: ScriptablePhratchMorph) and: [s isScriptable & s isClone not]].
 	workPaneObjects do: [:m |
 		(morphsWithThumbnails includes: m) ifFalse: [
 			self addThumbnailFor: m.
@@ -335,7 +335,7 @@ PhratchLibraryMorph >> unhighlightAll [
 PhratchLibraryMorph >> updateHighlight [
 
 	| sFrame viewedObj |
-	(sFrame := self ownerOrYourselfThatIsA: ScratchFrameMorph) ifNil: [^ self].
+	(sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNil: [^ self].
 	viewedObj := sFrame viewerPane target.
 
 	scrollPane contents submorphs do: [:m | 

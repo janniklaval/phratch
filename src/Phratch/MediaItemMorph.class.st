@@ -36,9 +36,9 @@ MediaItemMorph class >> initialize [
 	"Should run the Phratch installation first"
 	PhratchInstaller beginInstall.
 
-	ScratchFrameMorph readSkinFrom: (FileSystem workingDirectory /  'ScratchSkin').
-	SoundIcon := (ScratchFrameMorph skinAt: #scratchSound).
-	SoundIconOn := (ScratchFrameMorph skinAt: #scratchSoundOn).
+	PhratchFrameMorph readSkinFrom: (FileSystem workingDirectory /  'ScratchSkin').
+	SoundIcon := (PhratchFrameMorph skinAt: #scratchSound).
+	SoundIconOn := (PhratchFrameMorph skinAt: #scratchSoundOn).
 
 ]
 
@@ -47,16 +47,16 @@ MediaItemMorph >> addPlayButton [
 
 	| h |
 	playButton := ResizableToggleButton2 new
-		offForm: (ScratchFrameMorph skinAt: #btn)
-		onForm: (ScratchFrameMorph skinAt: #btnPressed).
+		offForm: (PhratchFrameMorph skinAt: #btn)
+		onForm: (PhratchFrameMorph skinAt: #btnPressed).
 
 	playButton
-		icon: (ScratchFrameMorph skinAt: #scratchSoundPlay);
+		icon: (PhratchFrameMorph skinAt: #phratchSoundPlay);
 		target: self;
 		actionSelector: #startPreviewSound;
 		toggleMode: false.
 
-	h := (ScratchFrameMorph buttonLabel: 'Copy' localized selector: #duplicateMedia) height.
+	h := (PhratchFrameMorph buttonLabel: 'Copy' localized selector: #duplicateMedia) height.
 	h := h max: 21.
 	playButton extent: (1.3 * h) rounded@h.
 
@@ -69,16 +69,16 @@ MediaItemMorph >> addStopButton [
 
 	| h |
 	stopButton := ResizableToggleButton2 new
-		offForm: (ScratchFrameMorph skinAt: #btn)
-		onForm: (ScratchFrameMorph skinAt: #btnPressed).
+		offForm: (PhratchFrameMorph skinAt: #btn)
+		onForm: (PhratchFrameMorph skinAt: #btnPressed).
 
 	stopButton
-		icon: (ScratchFrameMorph skinAt: #scratchSoundStop);
+		icon: (PhratchFrameMorph skinAt: #phratchSoundStop);
 		target: self;
 		actionSelector: #stopPreviewSound;
 		toggleMode: false.
 
-	h := (ScratchFrameMorph buttonLabel: 'Copy' localized selector: #duplicateMedia) height.
+	h := (PhratchFrameMorph buttonLabel: 'Copy' localized selector: #duplicateMedia) height.
 	h := h max: 21.
 	stopButton extent: h@h.
 
@@ -96,8 +96,8 @@ MediaItemMorph >> buildRightSideMorph [
 
 	nameMorph := UpdatingStringFieldMorph new
 		acceptWhenFocusLost: true;
-		font: (ScratchFrameMorph getFont: #UpdatingStringField);
-		rightJustify: ScratchTranslator isRTL;
+		font: (PhratchFrameMorph getFont: #UpdatingStringField);
+		rightJustify: PhratchTranslator isRTL;
 		getSelector: #mediaName;
 		putSelector: #mediaName:;
 		position: (0@0);
@@ -107,7 +107,7 @@ MediaItemMorph >> buildRightSideMorph [
 	rightMorph addMorphBack: nameMorph.
 
 	infoMorph := (PhratchStringMorph contents: (media infoString))
-		font: (ScratchFrameMorph getFont: #MediaItemInfo);
+		font: (PhratchFrameMorph getFont: #MediaItemInfo);
 		position: nameMorph left + 2 @ (nameMorph bottom).
 	rightMorph addMorph: infoMorph.
 
@@ -137,7 +137,7 @@ MediaItemMorph >> buildRightSideMorph [
 	deleteButton position: (nameMorph right - deleteButton width)@(infoMorph bottom + 6).
 
 	soundSizeMorph := (PhratchStringMorph contents: '')
-		font: (ScratchFrameMorph getFont: #MediaItemInfo);
+		font: (PhratchFrameMorph getFont: #MediaItemInfo);
 		position: nameMorph right @ nameMorph bottom.
 	rightMorph addMorph: soundSizeMorph.
 
@@ -156,7 +156,7 @@ MediaItemMorph >> buildSubmorphs [
 	self buildRightSideMorph.
 
 	numberMorph := (PhratchStringMorph contents: '345')
-		font: (ScratchFrameMorph getFont: #MediaItemInfo);
+		font: (PhratchFrameMorph getFont: #MediaItemInfo);
 		color: Color white;
 		position: topRightInset.
 	self addMorph: numberMorph.
@@ -171,14 +171,14 @@ MediaItemMorph >> buildSubmorphs [
 	thumbnailMorph position: numberMorph topRight + highlightPadding.
 
 	highlightMorph := ImageFrameMorph new
-		initFromForm: (ScratchFrameMorph skinAt: #costumeSelected).
+		initFromForm: (PhratchFrameMorph skinAt: #costumeSelected).
 	highlightMorph extent: thumbnailMorph extent + (highlightPadding * 2).
 
 	self addMorph: rightMorph.
 	rightMorph position: thumbnailMorph topRight + ((highlightPadding x + 10)@highlightPadding y negated).
 	rightMorph extent: rightMorph extent x@(rightMorph extent y max: highlightMorph extent y).
 
-	separator := TiledImageMorph new tileForm: (ScratchFrameMorph skinAt: #costumeSeparatorTile).
+	separator := TiledImageMorph new tileForm: (PhratchFrameMorph skinAt: #costumeSeparatorTile).
 	self addMorph: separator.
 	separator
 		position: (numberMorph left)@(rightMorph bottom + 5);
@@ -220,7 +220,7 @@ MediaItemMorph >> configureForDragging [
 { #category : #'menu/button ops' }
 MediaItemMorph >> deleteMedia [
 
-	ScratchFrameMorph putInClipboard: self configureForDragging.
+	PhratchFrameMorph putInClipboard: self configureForDragging.
 	scratchObj deleteMedia: media.
 
 ]
@@ -260,7 +260,7 @@ MediaItemMorph >> editMedia [
 MediaItemMorph >> editSound [
 
 	| sFrame workPane editor |
-	sFrame := self ownerOrYourselfThatIsA: ScratchFrameMorph.
+	sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
 	sFrame ifNil: [^ self].
 	workPane := sFrame workPane.
 
@@ -277,17 +277,17 @@ MediaItemMorph >> exportMedia [
 
 	| result title type |
 	media isMovie ifTrue: [^ self].
-	(self scratchObj isKindOf: ScratchStageMorph) ifTrue: 
+	(self phratchObj isKindOf: PhratchStageMorph) ifTrue: 
 		[type := #background. title := 'Export Background'].
-	(self scratchObj isKindOf: ScratchSpriteMorph) ifTrue: 
+	(self phratchObj isKindOf: PhratchSpriteMorph) ifTrue: 
 		[type := #costume. title := 'Export Costume'].
 	media isSound ifTrue: [type := #sound. title := 'Export Sound'].
-	result := ScratchFileChooserDialog
+	result := PhratchFileChooserDialog
 		chooseNewFileDefault: media mediaName
 		title: title
 		type: type.
 	result = #cancelled ifTrue: [^ self].
-	result size > 0 ifTrue: [media exportFilename: result for: self scratchObj].
+	result size > 0 ifTrue: [media exportFilename: result for: self phratchObj].
 
 ]
 
@@ -295,7 +295,7 @@ MediaItemMorph >> exportMedia [
 MediaItemMorph >> getCopyButton [
 
 	| b |
-	b := ScratchFrameMorph buttonLabel: 'Copy' localized selector: #duplicateMedia.
+	b := PhratchFrameMorph buttonLabel: 'Copy' localized selector: #duplicateMedia.
 	b target: self.
 	^ b
 
@@ -306,13 +306,13 @@ MediaItemMorph >> getDeleteButton [
 
 	| b |
 	b := ToggleButton
-		onForm: (ScratchFrameMorph skinAt: #deleteCircleButtonPressed)
-		offForm: (ScratchFrameMorph skinAt: #deleteCircleButton).
+		onForm: (PhratchFrameMorph skinAt: #deleteCircleButtonPressed)
+		offForm: (PhratchFrameMorph skinAt: #deleteCircleButton).
 	b
 		actionSelector: #deleteMedia;
 		toggleMode: false.
 
-	media isImage ifTrue: [(scratchObj isKindOf: ScratchStageMorph)
+	media isImage ifTrue: [(scratchObj isKindOf: PhratchStageMorph)
 		ifTrue: [b setBalloonText: 'Delete this background' localized]
 		ifFalse: [b setBalloonText: 'Delete this costume' localized]].
 	media isSound ifTrue: [b setBalloonText: 'Delete this sound' localized].
@@ -325,7 +325,7 @@ MediaItemMorph >> getDeleteButton [
 MediaItemMorph >> getEditButton [
 
 	| b |
-	b := ScratchFrameMorph buttonLabel: 'Edit' localized selector: #editMedia.
+	b := PhratchFrameMorph buttonLabel: 'Edit' localized selector: #editMedia.
 	b target: self.
 	^ b
 
@@ -341,7 +341,7 @@ MediaItemMorph >> handleTool: toolName hand: hand [
 	toolName = 'CutTool' ifTrue: [
 		Sensor shiftPressed ifFalse: [hand toolType: nil].
 		self delete.
-		ScratchFrameMorph putInClipboard: self configureForDragging.
+		PhratchFrameMorph putInClipboard: self configureForDragging.
 		^ self deleteMedia].
 
 ]
@@ -417,10 +417,10 @@ MediaItemMorph >> mediaName: name [
 
 	| newName sFrame |
 	newName := name.
-	newName := self scratchObj unusedMediaNameFromBaseName: newName forMedia: self media.
+	newName := self phratchObj unusedMediaNameFromBaseName: newName forMedia: self media.
 	media mediaName: newName.
 	nameMorph contents: newName.
-	(sFrame := self ownerOrYourselfThatIsA: ScratchFrameMorph) ifNotNil: [
+	(sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNotNil: [
 		sFrame viewerPane refresh].
 
 ]
@@ -448,6 +448,22 @@ MediaItemMorph >> mouseHold: evt [
 
 ]
 
+{ #category : #accessing }
+MediaItemMorph >> phratchObj [
+
+	^ scratchObj 
+
+]
+
+{ #category : #accessing }
+MediaItemMorph >> phratchObj: anObject media: aScratchMedia [
+
+	media := aScratchMedia.
+	scratchObj := anObject.
+	self buildSubmorphs.
+
+]
+
 { #category : #printing }
 MediaItemMorph >> printOn: aStream [
 
@@ -467,22 +483,6 @@ MediaItemMorph >> rightButtonMenu [
 	media isSound ifTrue: [
 		menu add: 'export this sound' action: #exportMedia].
 	menu localize; popUpInWorld.
-
-]
-
-{ #category : #accessing }
-MediaItemMorph >> scratchObj [
-
-	^ scratchObj 
-
-]
-
-{ #category : #accessing }
-MediaItemMorph >> scratchObj: anObject media: aScratchMedia [
-
-	media := aScratchMedia.
-	scratchObj := anObject.
-	self buildSubmorphs.
 
 ]
 
@@ -549,9 +549,9 @@ MediaItemMorph >> turnIntoNewSprite [
 	"Create a new sprite from this costume and delete the costume from previos sprite."
 
 	| m frame |
-	frame := self ownerOrYourselfThatIsA: ScratchFrameMorph.
+	frame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
 	frame ifNil: [^ self].
-	m := ScratchSpriteMorph new soleCostume: self media deepCopy.
+	m := PhratchSpriteMorph new soleCostume: self media deepCopy.
 	frame addAndView: m.
 	self deleteMedia.
 

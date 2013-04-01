@@ -8,7 +8,7 @@ You can also use me to select an existing or create a new file or folder. Some e
 
 "
 Class {
-	#name : #ScratchFileChooserDialog,
+	#name : #PhratchFileChooserDialog,
 	#superclass : #DialogBoxMorph,
 	#instVars : [
 		'scratchFrame',
@@ -34,10 +34,10 @@ Class {
 }
 
 { #category : #'instance creation' }
-ScratchFileChooserDialog class >> chooseExistingFileType: type extensions: anArrayOrNil title: titleString [
+PhratchFileChooserDialog class >> chooseExistingFileType: type extensions: anArrayOrNil title: titleString [
 
 	| m |
-	ScratchFileChooserDialog deleteDuplicates.
+	PhratchFileChooserDialog deleteDuplicates.
 	m := self new
 		createFileChooserLayout: false;
 		type: type;
@@ -49,10 +49,10 @@ ScratchFileChooserDialog class >> chooseExistingFileType: type extensions: anArr
 ]
 
 { #category : #'instance creation' }
-ScratchFileChooserDialog class >> chooseFolder: aDirectory [
+PhratchFileChooserDialog class >> chooseFolder: aDirectory [
 
 	| m |
-	ScratchFileChooserDialog deleteDuplicates.
+	PhratchFileChooserDialog deleteDuplicates.
 	m := self new
 		createFileChooserLayout: false;
 		choosingFolder: true;
@@ -65,11 +65,11 @@ ScratchFileChooserDialog class >> chooseFolder: aDirectory [
 ]
 
 { #category : #'instance creation' }
-ScratchFileChooserDialog class >> chooseImageFileType: type title: aString [
+PhratchFileChooserDialog class >> chooseImageFileType: type title: aString [
 	"ScratchFileChooserDialog chooseImageFileType: #costume title: 'Costume'"
 
 	| m |
-	ScratchFileChooserDialog deleteDuplicates.
+	PhratchFileChooserDialog deleteDuplicates.
 	m := self new
 		createFileChooserLayout: false;
 		showThumbnails: true;
@@ -87,10 +87,10 @@ ScratchFileChooserDialog class >> chooseImageFileType: type title: aString [
 ]
 
 { #category : #'instance creation' }
-ScratchFileChooserDialog class >> chooseNewFileDefault: defaultName title: titleString type: type [
+PhratchFileChooserDialog class >> chooseNewFileDefault: defaultName title: titleString type: type [
 
 	| m |
-	ScratchFileChooserDialog deleteDuplicates.
+	PhratchFileChooserDialog deleteDuplicates.
 	m := self new
 		createFileChooserLayout: true;
 		type: type;
@@ -103,18 +103,18 @@ ScratchFileChooserDialog class >> chooseNewFileDefault: defaultName title: title
 ]
 
 { #category : #'instance creation' }
-ScratchFileChooserDialog class >> chooseSpriteCostumeFor: aScratchFrameMorph [
+PhratchFileChooserDialog class >> chooseSpriteCostumeFor: aScratchFrameMorph [
 	"ScratchFileChooserDialog chooseSpriteCostumeFor: nil"
 
 	| m |
-	ScratchFileChooserDialog deleteDuplicates.
+	PhratchFileChooserDialog deleteDuplicates.
 	m := self new
 		createFileChooserLayout: false;
 		title: 'New Sprite';
 		showThumbnails: true;
 		type: #costume;
 		extensions: #(gif jpeg jpg bmp png sprite ysp);
-		scratchFrame: aScratchFrameMorph;
+		phratchFrame: aScratchFrameMorph;
 		listExtent: 550@300.
 
 	^ m getUserResponse
@@ -122,7 +122,7 @@ ScratchFileChooserDialog class >> chooseSpriteCostumeFor: aScratchFrameMorph [
 ]
 
 { #category : #'class initialization' }
-ScratchFileChooserDialog class >> clearFolderCache [
+PhratchFileChooserDialog class >> clearFolderCache [
 	"Clear all folder caches."
 	"ScratchFileChooserDialog clearFolderCache"
 
@@ -132,7 +132,7 @@ ScratchFileChooserDialog class >> clearFolderCache [
 ]
 
 { #category : #utilities }
-ScratchFileChooserDialog class >> confirmFileOverwriteIfExisting: aFilename [
+PhratchFileChooserDialog class >> confirmFileOverwriteIfExisting: aFilename [
 	"If the given file exists, ask the user if they want to overwrite it or pick a different file name."
 
 	| response fName |
@@ -149,19 +149,19 @@ ScratchFileChooserDialog class >> confirmFileOverwriteIfExisting: aFilename [
 ]
 
 { #category : #'instance creation' }
-ScratchFileChooserDialog class >> deleteDuplicates [
+PhratchFileChooserDialog class >> deleteDuplicates [
 	"If another file chooser dialog box is already opened, delete it"
 
 	World submorphs do: [:i | 
-		(i isKindOf: ScratchFileChooserDialog) ifTrue: [i delete]].
+		(i isKindOf: PhratchFileChooserDialog) ifTrue: [i delete]].
 
 ]
 
 { #category : #accessing }
-ScratchFileChooserDialog class >> getDefaultFolderForType: type [
+PhratchFileChooserDialog class >> getDefaultFolderForType: type [
 
 	| mediaDir |
-	(type = #project) ifTrue: [^ self userScratchProjectsDir].
+	(type = #project) ifTrue: [^ self userPhratchProjectsDir].
 
 	(FileSystem workingDirectory / 'Media') exists ifTrue: [
 		mediaDir := FileSystem workingDirectory / 'Media'.
@@ -180,7 +180,7 @@ ScratchFileChooserDialog class >> getDefaultFolderForType: type [
 ]
 
 { #category : #accessing }
-ScratchFileChooserDialog class >> getLastFolderForType: type [
+PhratchFileChooserDialog class >> getLastFolderForType: type [
 	"Return the last used folder for the given type. If this is the first time the type has been used, return the default folder for that type."
 
 	| dir |
@@ -188,12 +188,12 @@ ScratchFileChooserDialog class >> getLastFolderForType: type [
 	dir ifNotNil: [
 		dir asFileReference exists ifTrue: [^ dir]].
 
-	^ ScratchFileChooserDialog getDefaultFolderForType: type
+	^ PhratchFileChooserDialog getDefaultFolderForType: type
 
 ]
 
 { #category : #accessing }
-ScratchFileChooserDialog class >> homeDir [
+PhratchFileChooserDialog class >> homeDir [
 	"Return the home directory for this user. By default, this is either provided by the OS via primGetFolderPath: but it can be overridden by adding a 'homedir=path' entry to the Scratch.ini folder."
 
 	| homeDir |
@@ -209,14 +209,14 @@ ScratchFileChooserDialog class >> homeDir [
 ]
 
 { #category : #'class initialization' }
-ScratchFileChooserDialog class >> initialize [
+PhratchFileChooserDialog class >> initialize [
 
 	self clearFolderCache.
 
 ]
 
 { #category : #accessing }
-ScratchFileChooserDialog class >> lastFolderIsSampleProjectsFolder [
+PhratchFileChooserDialog class >> lastFolderIsSampleProjectsFolder [
 	"Return true if the last projects folder is the sample projects folder."
 
 	| lastDirPath sampleProjectDirPath |
@@ -228,7 +228,7 @@ ScratchFileChooserDialog class >> lastFolderIsSampleProjectsFolder [
 ]
 
 { #category : #'instance creation' }
-ScratchFileChooserDialog class >> openPhratchFileFor: aScratchFrameMorph [
+PhratchFileChooserDialog class >> openPhratchFileFor: aScratchFrameMorph [
 	"Choose a Scratch project file for reading. Answer:
 		nil, if no file is selected
 		the full file name, if a local file is selected
@@ -237,41 +237,9 @@ ScratchFileChooserDialog class >> openPhratchFileFor: aScratchFrameMorph [
 	"ScratchFileChooserDialog openScratchFileFor: nil"
 
 	| m response s |
-	ScratchFileChooserDialog deleteDuplicates.
+	PhratchFileChooserDialog deleteDuplicates.
 	m := self new
 		createPhratchFileChooserFor: aScratchFrameMorph saving: false;
-		type: #project.
-
-	response := m getUserResponse.
-	response = #cancelled ifTrue: [^ nil].
-
-	(response isKindOf: FileReference) ifTrue: [^ response].  "answer the full name of a local file"
-
-	"get contents of a remote file, giving the user the option of aborting"
-"	self assert: [response isKindOf: HTTPFetcher]."
-"	self waitForCompletionOrCancelOfFetch: response.
-	response succeeded ifFalse: [response stopDownload. ^ nil].
-
-	s := (response path ) last.
-	aScratchFrameMorph projectName: (aScratchFrameMorph nameFromFileName: s).
-
-	^ response bodyData"
-
-]
-
-{ #category : #'instance creation' }
-ScratchFileChooserDialog class >> openScratchFileFor: aScratchFrameMorph [
-	"Choose a Scratch project file for reading. Answer:
-		nil, if no file is selected
-		the full file name, if a local file is selected
-		a ByteArray containing the project data, if a remote file is selected.
-	As the user selects files in the file picker, preview the project thumbnail and info string for the selected project. If the file 'servers.txt' is found in the Scratch folder, then allow browsing and selecting of Scratch projects on a remote HTTP server."
-	"ScratchFileChooserDialog openScratchFileFor: nil"
-
-	| m response s |
-	ScratchFileChooserDialog deleteDuplicates.
-	m := self new
-		createScratchFileChooserFor: aScratchFrameMorph saving: false;
 		type: #project.
 
 	response := m getUserResponse.
@@ -292,13 +260,13 @@ ScratchFileChooserDialog class >> openScratchFileFor: aScratchFrameMorph [
 ]
 
 { #category : #utilities }
-ScratchFileChooserDialog class >> replaceAsteriskWithUserName: aString [
+PhratchFileChooserDialog class >> replaceAsteriskWithUserName: aString [
 	"If the given string includes an asterisk, replace it with the name of the current user. Otherwise, return the string."
 	"self replaceAsteriskWithUserName: '/Users/*/Documents'"
 
 	| i home delimiter userName |
 	(i := aString indexOf: $*) = 0 ifTrue: [^ aString].
-	home := ScratchPlugin primGetFolderPathOrNil: 1.
+	home := PhratchPlugin primGetFolderPathOrNil: 1.
 	home ifNil: [^ aString].
 	delimiter := FileSystem disk delimiter asString.
 	userName := (home findTokens: delimiter) last.
@@ -307,14 +275,14 @@ ScratchFileChooserDialog class >> replaceAsteriskWithUserName: aString [
 ]
 
 { #category : #'instance creation' }
-ScratchFileChooserDialog class >> saveScratchFileFor: aScratchFrameMorph [
+PhratchFileChooserDialog class >> savePhratchFileFor: aScratchFrameMorph [
 	"Choose a file for saving the current Scratch project file. Display the thumbnail and info string for the current project and allow the info string to be edited. Answer the full name of the file in which to save the project or #cancelled if the operation is cancelled."
 	"ScratchFileChooserDialog saveScratchFileFor: nil"
 
 	| m result |
-	ScratchFileChooserDialog deleteDuplicates.
+	PhratchFileChooserDialog deleteDuplicates.
 	m := self new
-		createScratchFileChooserFor: aScratchFrameMorph saving: true;
+		createPhratchFileChooserFor: aScratchFrameMorph saving: true;
 		type: #project;
 		redirectSavesToSampleFolder.
 
@@ -328,7 +296,7 @@ ScratchFileChooserDialog class >> saveScratchFileFor: aScratchFrameMorph [
 ]
 
 { #category : #accessing }
-ScratchFileChooserDialog class >> setHomeDir: aStringOrNil [
+PhratchFileChooserDialog class >> setHomeDir: aStringOrNil [
 	"Set the home directory for this user. If the user name contains an asterisk, replace it with the name of logged in user."
 	"self setHomeDir: '/Users/*/Documents'"
 
@@ -342,7 +310,7 @@ ScratchFileChooserDialog class >> setHomeDir: aStringOrNil [
 ]
 
 { #category : #accessing }
-ScratchFileChooserDialog class >> setLastFolderTo: dir forType: type [
+PhratchFileChooserDialog class >> setLastFolderTo: dir forType: type [
 	"Remember the given dir as the last folder used for the given type of file."
 
 	(dir isKindOf: PhratchServerDirectory) ifTrue: [^ self].
@@ -352,7 +320,7 @@ ScratchFileChooserDialog class >> setLastFolderTo: dir forType: type [
 ]
 
 { #category : #accessing }
-ScratchFileChooserDialog class >> userScratchProjectsDir [
+PhratchFileChooserDialog class >> userPhratchProjectsDir [
 	"Return the path to the user's 'Scratch' project folder, usually located inside the user's 'Documents' folder. If the folder does not already exists, attempt to create it. If the .ini file specifies an alternate home directory, create the folder there. If the directory can't be created, return the user's home folder."
 
 	| scratchFolderName homeDir |
@@ -371,7 +339,7 @@ ScratchFileChooserDialog class >> userScratchProjectsDir [
 ]
 
 { #category : #utilities }
-ScratchFileChooserDialog class >> waitForCompletionOrCancelOfFetch: anHTTPFetcher [
+PhratchFileChooserDialog class >> waitForCompletionOrCancelOfFetch: anHTTPFetcher [
 	"Put up dialog box until the given fetch completes, fails, or is cancelled by the user."
 	"self waitForCompletionOrCancelOfFetch: nil"
 
@@ -403,7 +371,7 @@ ScratchFileChooserDialog class >> waitForCompletionOrCancelOfFetch: anHTTPFetche
 ]
 
 { #category : #initialization }
-ScratchFileChooserDialog >> addShortcutButtons [
+PhratchFileChooserDialog >> addShortcutButtons [
 	"Add shortcut buttons for my type to the shortcutColumn."
 
 	| spacer |
@@ -421,11 +389,11 @@ ScratchFileChooserDialog >> addShortcutButtons [
 
 	#background = self type ifTrue: [
 		shortcutColumn addMorphBack:
-			(self shortcutButtonLabel: 'Backgrounds' action: #scratchBackgrounds icon: #folderCatIcon)].
+			(self shortcutButtonLabel: 'Backgrounds' action: #phratchBackgrounds icon: #folderCatIcon)].
 
 	#costume = self type ifTrue: [
 		shortcutColumn addMorphBack:
-			(self shortcutButtonLabel: 'Costumes' action: #scratchCostumes icon: #folderCatIcon)].
+			(self shortcutButtonLabel: 'Costumes' action: #phratchCostumes icon: #folderCatIcon)].
 
 	#project = self type ifTrue: [
 		shortcutColumn addMorphBack:
@@ -436,20 +404,20 @@ ScratchFileChooserDialog >> addShortcutButtons [
 
 	#sound = self type ifTrue: [
 		shortcutColumn addMorphBack:
-			(self shortcutButtonLabel: 'Sounds' action: #scratchSounds icon: #folderCatIcon)].
+			(self shortcutButtonLabel: 'Sounds' action: #phratchSounds icon: #folderCatIcon)].
 
 
 ]
 
 { #category : #accessing }
-ScratchFileChooserDialog >> choosingFolder: aBoolean [
+PhratchFileChooserDialog >> choosingFolder: aBoolean [
 
 	choosingFolder := aBoolean.
 
 ]
 
 { #category : #accessing }
-ScratchFileChooserDialog >> createFileChooserLayout: allowNewFile [
+PhratchFileChooserDialog >> createFileChooserLayout: allowNewFile [
 	"Create the file chooser dialog box."
 
 	list := PhratchFilePicker new.
@@ -464,9 +432,9 @@ ScratchFileChooserDialog >> createFileChooserLayout: allowNewFile [
 		newFileTitle := PhratchStringMorph new
 			contents: 'New Filename:' localized, ' ';
 			color: (Color gray: 0.3);
-			font: (ScratchFrameMorph getFont: #FileChooserNewFileTitle).
+			font: (PhratchFrameMorph getFont: #FileChooserNewFileTitle).
 		newFileName := StringFieldMorph new
-			font: (ScratchFrameMorph getFont: #FileChooserNewFilename);
+			font: (PhratchFrameMorph getFont: #FileChooserNewFilename);
 			color: (Color r: (211/255) g: (214/255) b: (216/255));
 			width: 180.
 		newTitleBin
@@ -474,7 +442,7 @@ ScratchFileChooserDialog >> createFileChooserLayout: allowNewFile [
 			addMorphBack: (Morph new extent: (5@5); color: Color transparent);
 			addMorphBack: newFileName;
 			addMorphBack: (AlignmentMorph newSpacer: Color transparent).
-			ScratchTranslator isRTL
+			PhratchTranslator isRTL
 		ifTrue: [newTitleBin submorphs reversed do: [:m |
 			m delete.
 			newTitleBin addMorphBack: m]]].
@@ -491,125 +459,7 @@ ScratchFileChooserDialog >> createFileChooserLayout: allowNewFile [
 ]
 
 { #category : #initialization }
-ScratchFileChooserDialog >> createPhratchFileChooserFor: aScratchFrameMorph saving: savingFlag [
-	"Create a Scratch file chooser dialog box with a project thumbnail and info box."
-
-	| labelFont contentsFont commentFont thumbnailHolder |
-	scratchFrame := aScratchFrameMorph.
-	readingScratchFile := savingFlag not.
-
-"	list := ScratchFilePicker new extensions: #(scratch sb sct)."
-	list := PhratchFilePicker new extensions: #(sct).
-	self removeAllMorphs.
-	bottomSpacer delete.
-	bottomSpacer := nil.
-	mainColumn addMorphBack:   list.
-
-	savingFlag ifFalse: [
-		self title: 'Open Project'.
-		list scratchInfoClient: self].
-
-	labelFont := (ScratchFrameMorph getFont: #FileChooserLabel).
-	"contentsFont := (ScratchFrameMorph getFont: #FileChooserContents)."
-	commentFont := (StrikeFont fontName: 'Arial' size: 12). 
-
-	savingFlag ifTrue: [
-		self title: 'Save Project'.
-		newFileTitle := StringMorph contents: ('New Filename:' localized, ' ') font: labelFont.
-		newFileTitle color: (Color gray: 0.3).
-		newFileName := StringFieldMorph new
-			contents: scratchFrame projectName;
-			client: self;
-			font: (StrikeFont fontName: 'Verdara' size: 12);
-			color: (Color r: (211/255) g: (214/255) b: (216/255));
-			width: 180.
-		tabFields add: newFileName.
-		newTitleBin
-			addMorphFront:    (Morph new extent: (5@5); color: Color transparent);
-			addMorphBack: newFileTitle;
-			addMorphBack: (Morph new extent: (5@5); color: Color transparent);
-			addMorphBack: newFileName;
-			addMorphBack: (AlignmentMorph newSpacer: Color transparent).
-		ScratchTranslator isRTL
-			ifTrue: [newTitleBin submorphs reversed do: [:m |
-				m delete.
-				newTitleBin addMorphBack: m]]].
-	mainColumn
-		addMorphFront:    (Morph new extent: (5@9); color: Color transparent);
-		addMorphFront:   newTitleBin.
-
-	thumbnailHolder := AlignmentMorph newColumn
-	  cellPositioning: #topCenter;
-		wrapCentering: #center ;
-		hResizing: #shrinkWrap;
-	      vResizing: #shrinkWrap; 
-		color: Color transparent.
-	thumbnailFrameMorph := ImageFrameMorph new
-		initFromForm: (ScratchFrameMorph skinAt: #dialogThumbnailFrame).
-	thumbnailFrameMorph extent: (170@130).
-	"thumbnailFrameMorph 
-		wrapCentering: #center;
-		hResizing: #spaceFill;
-	 	  vResizing: #shrinkWrap."
-	thumbnailHolder addMorph: thumbnailFrameMorph.
-	fileInfoColumn
-		addMorphFront:    thumbnailHolder;
-		addMorphBack: (Morph new extent: (5@120); color: Color transparent). "spacer"
-	thumbnailMorph := ImageMorph new form: (Form extent: 160@120 depth: 1).
-	thumbnailFrameMorph addMorphFront: (thumbnailMorph position: ((thumbnailFrameMorph position) + (5@5))).
-
-	authorLabelMorph := StringMorph contents: 'Project author:' localized font: labelFont.
-	authorLabelMorph color: (Color gray: 0.3).
-	fileInfoColumn addMorphBack:       authorLabelMorph.
-	savingFlag
-		ifTrue: [authorMorph := StringFieldMorph new
-			useStringFieldFrame;
-			contents: '';
-			font: (StrikeFont fontName: 'Arial' size: 12) .
-			tabFields add: authorMorph]
-		ifFalse: [fileInfoColumn addMorphBack: (Morph new extent: (5@6); color: Color transparent). "spacer"
-			authorMorph := StringFieldMorph new
-				color: Color transparent;
-				borderWidth: 0;
-				contents: '';
-				isEditable: false;
-				font: contentsFont].
-	fileInfoColumn
-		addMorphBack: authorMorph;
-		addMorphBack: (Morph new extent: (5@6); color: Color transparent). "spacer"
-
-	commentLabelMorph := StringMorph contents: 'About this project:' localized font: labelFont.
-	commentLabelMorph color: authorLabelMorph color.
-	fileInfoColumn addMorphBack: commentLabelMorph.
-	commentMorph := ScrollingStringMorph new
-		borderWidth: 0;
-		contents: '';
-		font: commentFont;
-		extent: (210@110).
-	savingFlag
-		ifTrue: [commentMorph backForm: (ScratchFrameMorph skinAt: #stringFieldFrame).
-			tabFields add: commentMorph]
-		ifFalse: [commentMorph isEditable: false].
-	fileInfoColumn addMorphBack: commentMorph.
-
-	fileInfoColumn addMorphBack: buttonRow.
-	self
-		addMorphBack: shortcutColumn;
-		addMorphBack: mainColumn;
-		addMorphBack: fileInfoColumn.
-
-	savingFlag ifTrue: [
-		self scratchInfo: scratchFrame projectInfo.
-		thumbnailMorph form: scratchFrame workPane thumbnailForm.
-		"default author field to login name if known; else author"
-		(aScratchFrameMorph loginName size > 0)
-			ifTrue: [authorMorph contents: aScratchFrameMorph loginName]
-			ifFalse: [authorMorph contents: aScratchFrameMorph author]].
-
-]
-
-{ #category : #initialization }
-ScratchFileChooserDialog >> createScratchFileChooserFor: aScratchFrameMorph saving: savingFlag [
+PhratchFileChooserDialog >> createPhratchFileChooserFor: aScratchFrameMorph saving: savingFlag [
 	"Create a Scratch file chooser dialog box with a project thumbnail and info box."
 
 	| labelFont contentsFont commentFont thumbnailHolder dumm |
@@ -624,11 +474,11 @@ ScratchFileChooserDialog >> createScratchFileChooserFor: aScratchFrameMorph savi
 
 	savingFlag ifFalse: [
 		self title: 'Open Project'.
-		list scratchInfoClient: self].
+		list phratchInfoClient: self].
 
-	labelFont := (ScratchFrameMorph getFont: #FileChooserLabel).
-	contentsFont := (ScratchFrameMorph getFont: #FileChooserContents).
-	commentFont := (ScratchFrameMorph getFont: #FileChooserComment).
+	labelFont := (PhratchFrameMorph getFont: #FileChooserLabel).
+	contentsFont := (PhratchFrameMorph getFont: #FileChooserContents).
+	commentFont := (PhratchFrameMorph getFont: #FileChooserComment).
 
 	savingFlag ifTrue: [
 		self title: 'Save Project'.
@@ -646,7 +496,7 @@ ScratchFileChooserDialog >> createScratchFileChooserFor: aScratchFrameMorph savi
 			addMorphBack: (Morph new extent: (5@5); color: Color transparent);
 			addMorphBack: newFileName;
 			addMorphBack: (AlignmentMorph newSpacer: Color transparent).
-		ScratchTranslator isRTL
+		PhratchTranslator isRTL
 			ifTrue: [newTitleBin submorphs reversed do: [:m |
 				m delete.
 				newTitleBin addMorphBack: m]]].
@@ -660,7 +510,7 @@ ScratchFileChooserDialog >> createScratchFileChooserFor: aScratchFrameMorph savi
 		vResizing: #shrinkWrap;
 		color: Color transparent.
 	thumbnailFrameMorph := ImageFrameMorph new
-		initFromForm: (ScratchFrameMorph skinAt: #dialogThumbnailFrame).
+		initFromForm: (PhratchFrameMorph skinAt: #dialogThumbnailFrame).
 	thumbnailFrameMorph extent: (170@130).
 	thumbnailHolder addMorph: thumbnailFrameMorph.
 	dumm := Morph new extent: (210@130); color: Color transparent. "hack SPFA"
@@ -700,7 +550,7 @@ ScratchFileChooserDialog >> createScratchFileChooserFor: aScratchFrameMorph savi
 		font: commentFont;
 		extent: (210@110).
 	savingFlag
-		ifTrue: [commentMorph backForm: (ScratchFrameMorph skinAt: #stringFieldFrame).
+		ifTrue: [commentMorph backForm: (PhratchFrameMorph skinAt: #stringFieldFrame).
 			tabFields add: commentMorph]
 		ifFalse: [commentMorph isEditable: false].
 	fileInfoColumn addMorphBack: commentMorph.
@@ -712,7 +562,7 @@ ScratchFileChooserDialog >> createScratchFileChooserFor: aScratchFrameMorph savi
 		addMorphBack: fileInfoColumn.
 
 	savingFlag ifTrue: [
-		self scratchInfo: scratchFrame projectInfo.
+		self phratchInfo: scratchFrame projectInfo.
 		thumbnailMorph form: scratchFrame workPane thumbnailForm.
 		"default author field to login name if known; else author"
 		(aScratchFrameMorph loginName size > 0)
@@ -722,7 +572,7 @@ ScratchFileChooserDialog >> createScratchFileChooserFor: aScratchFrameMorph savi
 ]
 
 { #category : #accessing }
-ScratchFileChooserDialog >> defaultName: aString [
+PhratchFileChooserDialog >> defaultName: aString [
 	"Set the default file name."
 
 	newFileName ifNotNil: [newFileName contents: aString].
@@ -730,7 +580,7 @@ ScratchFileChooserDialog >> defaultName: aString [
 ]
 
 { #category : #other }
-ScratchFileChooserDialog >> delete [
+PhratchFileChooserDialog >> delete [
 
 	super delete.
 	(list isKindOf: PhratchFilePicker) ifTrue: [list stopPlayingSound].
@@ -738,14 +588,14 @@ ScratchFileChooserDialog >> delete [
 ]
 
 { #category : #accessing }
-ScratchFileChooserDialog >> extensions: anArray [
+PhratchFileChooserDialog >> extensions: anArray [
 
 	list extensions: anArray.
 
 ]
 
 { #category : #initialization }
-ScratchFileChooserDialog >> getUserResponse [
+PhratchFileChooserDialog >> getUserResponse [
 	"Wait for the user to respond, then answer the full path name of the chosen file or #cancelled if the user cancels the operation. If opening a remote file for reading, answer a HTTPFetcher on the remote file."
 	"Details: This is invoked synchronously from the caller. In order to keep processing inputs and updating the screen while waiting for the user to respond, this method has its own version of the World's event loop."
 
@@ -777,7 +627,7 @@ ScratchFileChooserDialog >> getUserResponse [
 ]
 
 { #category : #interaction }
-ScratchFileChooserDialog >> getUserResponseForFolder [
+PhratchFileChooserDialog >> getUserResponseForFolder [
 	"Wait for the user to respond, then answer the full path name of the chosen directory or #cancelled if the user cancels the operation. To make a FileDirectory from the response string use the method: FileDirectory on: <reponse>."
 	"Details: This is invoked synchronously from the caller. In order to keep processing inputs and updating the screen while waiting for the user to respond, this method has its own version of the World's event loop."
 
@@ -802,7 +652,7 @@ ScratchFileChooserDialog >> getUserResponseForFolder [
 ]
 
 { #category : #interaction }
-ScratchFileChooserDialog >> getUserResponseForNewFile [
+PhratchFileChooserDialog >> getUserResponseForNewFile [
 	"Wait for the user to respond, then answer the full path name of the new file or #cancelled if the user cancels the operation."
 	"Details: This is invoked synchronously from the caller. In order to keep processing inputs and updating the screen while waiting for the user to respond, this method has its own version of the World's event loop."
 
@@ -837,7 +687,7 @@ ScratchFileChooserDialog >> getUserResponseForNewFile [
 ]
 
 { #category : #initialization }
-ScratchFileChooserDialog >> initialize [
+PhratchFileChooserDialog >> initialize [
 	"Create the file chooser dialog box"
 
 	super initialize.
@@ -856,13 +706,13 @@ ScratchFileChooserDialog >> initialize [
 ]
 
 { #category : #shortcuts }
-ScratchFileChooserDialog >> labelForHomeFolder [
+PhratchFileChooserDialog >> labelForHomeFolder [
 	"Answer the name to use for the home folder. This is the user name unless the home folder location has been overridden by an entry in the Scratch.ini file."
 
 	| home delimiter |
 	UserHomeFolder notNil ifTrue: [^ 'Home' localized].
 
-	home := ScratchPlugin primGetFolderPathOrNil: 1.
+	home := PhratchPlugin primGetFolderPathOrNil: 1.
 	home ifNil: [^ 'Home' localized].
 	delimiter := FileSystem disk delimiter asString.
 
@@ -871,7 +721,7 @@ ScratchFileChooserDialog >> labelForHomeFolder [
 ]
 
 { #category : #accessing }
-ScratchFileChooserDialog >> listExtent: anExtent [
+PhratchFileChooserDialog >> listExtent: anExtent [
 	
 	list extent: anExtent.
 	self changed.
@@ -879,13 +729,13 @@ ScratchFileChooserDialog >> listExtent: anExtent [
 ]
 
 { #category : #shortcuts }
-ScratchFileChooserDialog >> myComp [
+PhratchFileChooserDialog >> myComp [
 	"My Computer button was pressed."
 	list currentDirectory: FileSystem root.
 ]
 
 { #category : #shortcuts }
-ScratchFileChooserDialog >> myDesktop [
+PhratchFileChooserDialog >> myDesktop [
 	"My desktop button was pressed."
 
 	list currentDirectory: (FileLocator desktop asFileReference)
@@ -893,60 +743,42 @@ ScratchFileChooserDialog >> myDesktop [
 ]
 
 { #category : #shortcuts }
-ScratchFileChooserDialog >> myHome [
+PhratchFileChooserDialog >> myHome [
 	"My Home button was pressed."
 
 	list currentDirectory: self class homeDir asFileReference.
 
 ]
 
-{ #category : #accessing }
-ScratchFileChooserDialog >> redirectSavesToSampleFolder [
-	"Check to see if we are about to save into the Sample projects directory. If so, change the default location to the user's project folder."
-
-	(ScratchFileChooserDialog lastFolderIsSampleProjectsFolder) ifTrue: [
-		self setDirectory: ScratchFileChooserDialog userScratchProjectsDir].
-
-]
-
 { #category : #shortcuts }
-ScratchFileChooserDialog >> sampleProjects [
-	"Sample Projects button was pressed."
-	(FileSystem workingDirectory / 'Projects') exists ifTrue: [
-		list currentDirectory:
-			(FileSystem workingDirectory / 'Projects')].
-
-]
-
-{ #category : #shortcuts }
-ScratchFileChooserDialog >> scratchBackgrounds [
+PhratchFileChooserDialog >> phratchBackgrounds [
 	"Scratch Backgrounds button was pressed."
 
 	| backgrounds |
-	backgrounds := ScratchFileChooserDialog getDefaultFolderForType: #background.
+	backgrounds := PhratchFileChooserDialog getDefaultFolderForType: #background.
 	backgrounds ifNotNil: [list currentDirectory: backgrounds].
 
 ]
 
 { #category : #shortcuts }
-ScratchFileChooserDialog >> scratchCostumes [
+PhratchFileChooserDialog >> phratchCostumes [
 	"Scratch Costumes button was pressed."
 
 	| costumes |
-	costumes := ScratchFileChooserDialog getDefaultFolderForType: #costume.
+	costumes := PhratchFileChooserDialog getDefaultFolderForType: #costume.
 	costumes ifNotNil: [list currentDirectory: costumes].
 
 ]
 
 { #category : #accessing }
-ScratchFileChooserDialog >> scratchFrame: aScratchFrameMorph [
+PhratchFileChooserDialog >> phratchFrame: aScratchFrameMorph [
 
 	scratchFrame := aScratchFrameMorph.
 
 ]
 
 { #category : #other }
-ScratchFileChooserDialog >> scratchInfo: infoDict [
+PhratchFileChooserDialog >> phratchInfo: infoDict [
 	"Update the Scratch project thumbnail and info display."
 
 	| s |
@@ -977,30 +809,48 @@ ScratchFileChooserDialog >> scratchInfo: infoDict [
 ]
 
 { #category : #shortcuts }
-ScratchFileChooserDialog >> scratchSounds [
+PhratchFileChooserDialog >> phratchSounds [
 	"Scratch Sounds button was pressed."
 
 	| sounds |
-	sounds := ScratchFileChooserDialog getDefaultFolderForType: #sound.
+	sounds := PhratchFileChooserDialog getDefaultFolderForType: #sound.
 	sounds ifNotNil: [list currentDirectory: sounds].
 
 ]
 
 { #category : #accessing }
-ScratchFileChooserDialog >> setDirectory: anObject [
+PhratchFileChooserDialog >> redirectSavesToSampleFolder [
+	"Check to see if we are about to save into the Sample projects directory. If so, change the default location to the user's project folder."
+
+	(PhratchFileChooserDialog lastFolderIsSampleProjectsFolder) ifTrue: [
+		self setDirectory: PhratchFileChooserDialog userPhratchProjectsDir].
+
+]
+
+{ #category : #shortcuts }
+PhratchFileChooserDialog >> sampleProjects [
+	"Sample Projects button was pressed."
+	(FileSystem workingDirectory / 'Projects') exists ifTrue: [
+		list currentDirectory:
+			(FileSystem workingDirectory / 'Projects')].
+
+]
+
+{ #category : #accessing }
+PhratchFileChooserDialog >> setDirectory: anObject [
 	"Set the currently selected directory. The argument may be either a FileDirectory or a string."
 	list currentDirectory: (anObject asFileReference)
 ]
 
 { #category : #accessing }
-ScratchFileChooserDialog >> showThumbnails: aBoolean [
+PhratchFileChooserDialog >> showThumbnails: aBoolean [
 
 	list showThumbnails: aBoolean.
 
 ]
 
 { #category : #accessing }
-ScratchFileChooserDialog >> type [
+PhratchFileChooserDialog >> type [
 	"Return the type of thing being opened/saved in the file dialog box, in order to include the appropriate shortcuts.  Possible types include
 	#costume
 	#background
@@ -1014,7 +864,7 @@ ScratchFileChooserDialog >> type [
 ]
 
 { #category : #accessing }
-ScratchFileChooserDialog >> type: t [
+PhratchFileChooserDialog >> type: t [
 	"Set the type of thing being opened/saved in the file dialog box, in order to include the appropriate shortcuts.  Then add relevant shortcut buttons and set the directory. Types include:
 	#background
 	#costume
@@ -1028,20 +878,20 @@ ScratchFileChooserDialog >> type: t [
 
 	type := t.
 	self addShortcutButtons.
-	self setDirectory: (ScratchFileChooserDialog getLastFolderForType: type).
+	self setDirectory: (PhratchFileChooserDialog getLastFolderForType: type).
 
 ]
 
 { #category : #shortcuts }
-ScratchFileChooserDialog >> userProjects [
+PhratchFileChooserDialog >> userProjects [
 	"My Projects button was pressed."
 
-	list currentDirectory: self class userScratchProjectsDir.
+	list currentDirectory: self class userPhratchProjectsDir.
 
 ]
 
 { #category : #interaction }
-ScratchFileChooserDialog >> yes [
+PhratchFileChooserDialog >> yes [
 	"Yes button was pressed."
 
 	| entry |
@@ -1051,7 +901,7 @@ ScratchFileChooserDialog >> yes [
 			self setDirectory: (list currentDirectory / entry entryName).
 			choosingFolder ifTrue: [super yes].
 			^ self]].
-	ScratchFileChooserDialog setLastFolderTo: list currentDirectory forType: self type.
+	PhratchFileChooserDialog setLastFolderTo: list currentDirectory forType: self type.
 	^ super yes
 
 ]

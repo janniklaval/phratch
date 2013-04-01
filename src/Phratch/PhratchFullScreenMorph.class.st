@@ -1,6 +1,6 @@
 Class {
 	#name : #PhratchFullScreenMorph,
-	#superclass : #ScratchFrameMorph,
+	#superclass : #PhratchFrameMorph,
 	#category : #'Phratch-UI-Panes'
 }
 

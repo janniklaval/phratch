@@ -35,15 +35,15 @@ PhratchSoundRecorderDialogMorph >> buttonType: type action: actionSelector [
 	"Answer a new button with the given type and selector. The button target will be me and it will use custom forms."
 
 	| onForm offForm overForm disabledForm |
-	onForm := ScratchFrameMorph skinAt: ('record', type, 'ButtonPressed').
-	offForm := ScratchFrameMorph skinAt: ('record', type, 'Button').
-	overForm := ScratchFrameMorph skinAt: ('record', type, 'ButtonOver').
-	disabledForm := ScratchFrameMorph skinAt: ('record', type, 'ButtonDisabled').
+	onForm := PhratchFrameMorph skinAt: ('record', type, 'ButtonPressed').
+	offForm := PhratchFrameMorph skinAt: ('record', type, 'Button').
+	overForm := PhratchFrameMorph skinAt: ('record', type, 'ButtonOver').
+	disabledForm := PhratchFrameMorph skinAt: ('record', type, 'ButtonDisabled').
 
 	^ ToggleButton new
 		isMomentary: false;
 		onForm: onForm offForm: offForm overForm: overForm disabledForm: disabledForm;
-		label: '' font: (ScratchFrameMorph getFont: #SoundRecorderButton);
+		label: '' font: (PhratchFrameMorph getFont: #SoundRecorderButton);
 		target: self;
 		actionSelector: actionSelector.
 
@@ -109,7 +109,7 @@ PhratchSoundRecorderDialogMorph >> initialize [
 	self makeRecordMeter.
 	self makeRecordTimer.
 
-	recorder := ScriptableScratchMorph soundRecorder stopRecording.
+	recorder := ScriptablePhratchMorph soundRecorder stopRecording.
 	recorder recordLevel: 0.5.
 	savedMeterLevels := OrderedCollection new.
 	curStep := 1.
@@ -152,9 +152,9 @@ PhratchSoundRecorderDialogMorph >> makeModeButtonsPane [
 { #category : #initialization }
 PhratchSoundRecorderDialogMorph >> makeRecordMeter [
 
-	recorderBackgroundLeft := (ScratchFrameMorph skinAt: #recorderBackgroundLeft).
-	recorderBackgroundCenter := (ScratchFrameMorph skinAt: #recorderBackgroundCenter).
-	recorderBackgroundRight := (ScratchFrameMorph skinAt: #recorderBackgroundRight).
+	recorderBackgroundLeft := (PhratchFrameMorph skinAt: #recorderBackgroundLeft).
+	recorderBackgroundCenter := (PhratchFrameMorph skinAt: #recorderBackgroundCenter).
+	recorderBackgroundRight := (PhratchFrameMorph skinAt: #recorderBackgroundRight).
 
 	recordMeter := PhratchRecordMeter new.
 	mainColumn
@@ -169,7 +169,7 @@ PhratchSoundRecorderDialogMorph >> makeRecordTimer [
 	"timer"
 	timerMorph := PhratchStringMorph  "morph to display the duration"
 		contents: (self convertToMmss: 0)
-		font: (ScratchFrameMorph getFont: #SoundRecorderTimer).
+		font: (PhratchFrameMorph getFont: #SoundRecorderTimer).
 	timerMorph color: Color darkGray.
 	fileInfoColumn
 		addMorphBack: (Morph new extent: (5@5); color: Color transparent);

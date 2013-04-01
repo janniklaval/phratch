@@ -13,9 +13,9 @@ Class {
 PhratchCameraDialog >> cameraButton [
 
 	| onForm offForm button overForm |
-	onForm := ScratchFrameMorph skinAt: #dialogButtonFrameOver.
-	offForm := ScratchFrameMorph skinAt: #dialogButtonFrame.
-	overForm := ScratchFrameMorph skinAt: #dialogButtonFrame.
+	onForm := PhratchFrameMorph skinAt: #dialogButtonFrameOver.
+	offForm := PhratchFrameMorph skinAt: #dialogButtonFrame.
+	overForm := PhratchFrameMorph skinAt: #dialogButtonFrame.
 
 	button := ResizableToggleButton2 new
 		offForm: offForm
@@ -24,7 +24,7 @@ PhratchCameraDialog >> cameraButton [
 
 	^ button
 		padding: 39@22;
-		icon: (ScratchFrameMorph skinAt: #camera);
+		icon: (PhratchFrameMorph skinAt: #camera);
 		target: self;
 		actionSelector: #savePhoto;
 		setLabelColor: (Color gray: 0.15)

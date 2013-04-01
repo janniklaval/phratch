@@ -75,7 +75,7 @@ PhratchServerV1 >> addOutgoingTo: ipAddressString [
 	| addr sock ok |
 	addr := NetNameResolver addressForName: ipAddressString timeout: 5.
 	sock := MessageSocket new.
-	ok := sock connectTo: addr port: ScratchServer portNumber waitSecs: 5.
+	ok := sock connectTo: addr port: PhratchServer portNumber waitSecs: 5.
 	ok ifFalse: [sock destroy. ^ false].
 
 	sock sendMessage: 'add-peer ', userName.

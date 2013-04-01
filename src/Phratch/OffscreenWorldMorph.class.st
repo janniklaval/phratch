@@ -48,7 +48,7 @@ OffscreenWorldMorph >> incrRedrawDouble: doubleFlag [
 				screenR := p extent: 2 * f extent.
 				(Display boundingBox containsRect: screenR) ifTrue: [
 					[
-						ScratchPlugin
+						PhratchPlugin
 							primDouble: f bits w: f width h: f height
 							into: Display bits w: Display width h: Display height
 							x: screenR left y: screenR top.

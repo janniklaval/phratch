@@ -31,7 +31,7 @@ WatcherMorph >> buildReadout [
 		floatPrecision: 0.1;
 		stepTime: 100.
 	readout
-		font: (ScratchFrameMorph getFont: #Watcher);
+		font: (PhratchFrameMorph getFont: #Watcher);
 		forceUnicodeRendering: true;
 		color: Color white;
 		kern: 1.
@@ -44,7 +44,7 @@ WatcherMorph >> click: evt [
 
 	evt hand toolType = 'CutTool' ifTrue: [
 		evt shiftPressed ifFalse: [evt hand toolType: nil].
-		ScratchFrameMorph putInClipboard: self.
+		PhratchFrameMorph putInClipboard: self.
 		self aboutToBeGrabbedBy: evt hand.
 		self delete].
 
@@ -75,7 +75,7 @@ WatcherMorph >> convertFromOldWatcher [
 	selector = #getVar:
 		ifTrue: [self setCategoryColor: target variableBlockColor]
 		ifFalse: [
-			c := ScriptableScratchMorph blockColorDict at: selector ifAbsent: [nil].
+			c := ScriptablePhratchMorph blockColorDict at: selector ifAbsent: [nil].
 			c ifNotNil: [self setCategoryColor: c]].
 
 	o addMorph: self.
@@ -100,7 +100,7 @@ WatcherMorph >> copyRecordingIn: dict [
 WatcherMorph >> delete [
 
 	super delete.
-	ScratchFrameMorph allInstancesDo: [:frame | frame deletingWatcher].
+	PhratchFrameMorph allInstancesDo: [:frame | frame deletingWatcher].
 
 ]
 
@@ -108,7 +108,7 @@ WatcherMorph >> delete [
 WatcherMorph >> doubleClick: evt [
 	"Toggle slider/large readout view if I'm in the work pane."
 
-	(self owner isKindOf: ScratchStageMorph) ifFalse: [^ self].  "ignore if not on stage"
+	(self owner isKindOf: PhratchStageMorph) ifFalse: [^ self].  "ignore if not on stage"
 
 	scratchSlider ifNotNil: [^ self showLargeReadout]. "slider -> large readout"
 	isLarge ifTrue: [^ self showSmallReadout].  "large readout -> small readout"
@@ -219,7 +219,7 @@ WatcherMorph >> initialize [
 
 	super initialize.
 	titleMorph := PhratchStringMorph contents: '???'.
-	titleMorph font: (ScratchFrameMorph getFont: #Watcher).
+	titleMorph font: (PhratchFrameMorph getFont: #Watcher).
 	readout := readoutFrame := scratchSlider := nil.
 	lastTargetName := nil.
 	isSpriteSpecific := true.
@@ -276,7 +276,7 @@ WatcherMorph >> isVariableWatcher [
 { #category : #'dropping/grabbing' }
 WatcherMorph >> justDroppedInto: aMorph event: evt [
 
-	(aMorph isKindOf: ScratchStageMorph) ifTrue: [
+	(aMorph isKindOf: PhratchStageMorph) ifTrue: [
 		super justDroppedInto: aMorph event: evt.
 		self world ifNotNil: [self world startSteppingSubmorphsOf: self].
 		^ self].
@@ -295,11 +295,11 @@ WatcherMorph >> languageChanged [
 	lastTargetName := nil.
 	self updateTargetName.
 	readout target: readout target.  "forces contents to update"
-	titleMorph extent: (ScratchTranslator stringExtent: titleMorph contents font: titleMorph font).
+	titleMorph extent: (PhratchTranslator stringExtent: titleMorph contents font: titleMorph font).
 	(readout contents isKindOf: Form) ifTrue: [
 		readout extent: readout contents extent + (10 @ 10).
 		^self ].
-	readout extent: (ScratchTranslator stringExtent: readout contents font: readout font).
+	readout extent: (PhratchTranslator stringExtent: readout contents font: readout font).
 
 ]
 
@@ -307,7 +307,7 @@ WatcherMorph >> languageChanged [
 WatcherMorph >> layoutForViewer [
 
 	watcher removeAllMorphs.
-	ScratchTranslator isRTL
+	PhratchTranslator isRTL
 		ifTrue: [watcher
 			addMorphBack: (Morph new color: color; extent: 2@0);
 			addMorphBack: readoutFrame;
@@ -391,7 +391,7 @@ WatcherMorph >> replace: argStr with: translatedArg in: s [
 WatcherMorph >> rightButtonMenu [
 
 	| menu hasSlider |
-	(self ownerOrYourselfThatIsA: ScratchStageMorph) ifNil: [^ self].
+	(self ownerOrYourselfThatIsA: PhratchStageMorph) ifNil: [^ self].
 
 	menu := MenuMorph new defaultTarget: self.
 	hasSlider := self isVariableWatcher and: [scratchSlider notNil].
@@ -466,7 +466,7 @@ WatcherMorph >> showLargeReadout [
 	self hideSlider.
 
 	isLarge := true.
-	readout font: (ScratchFrameMorph getFont: #WatcherLarge).
+	readout font: (PhratchFrameMorph getFont: #WatcherLarge).
 	readoutFrame
 		borderColor: (Color gray: 3);
 		fixLayout.
@@ -508,7 +508,7 @@ WatcherMorph >> showSmallReadout [
 	self hideSlider.
 
 	isLarge := false.
-	readout font: (ScratchFrameMorph getFont: #Watcher).
+	readout font: (PhratchFrameMorph getFont: #Watcher).
 	readoutFrame
 		borderColor: Color white;
 		fixLayout.
@@ -609,7 +609,7 @@ WatcherMorph >> target: anObject selector: selector parameter: parameter [
 		getSelector: selector asSymbol;
 		parameter: parameter.
 
-	isSpriteSpecific := ScriptableScratchMorph isSpriteSpecificTarget: anObject selector: selector.
+	isSpriteSpecific := ScriptablePhratchMorph isSpriteSpecificTarget: anObject selector: selector.
 
 ]
 
@@ -625,14 +625,14 @@ WatcherMorph >> translatedName [
 	spec := readout target blockSpecForSelector: sel.
 	spec ifNil: [^ sel].
 
-	result := ScratchTranslator translationFor: spec.
+	result := PhratchTranslator translationFor: spec.
 	param := readout parameter.
 	param ifNil: [param := ''].
 
 	#sensor: = sel ifTrue: [
-		result := self replace: '%H' with: (ScratchTranslator translationFor: param) in: result].
+		result := self replace: '%H' with: (PhratchTranslator translationFor: param) in: result].
 	#sensorPressed: = sel ifTrue: [
-		result := self replace: '%h' with: (ScratchTranslator translationFor: param) in: result].
+		result := self replace: '%h' with: (PhratchTranslator translationFor: param) in: result].
 
 	^ result
 

@@ -94,7 +94,7 @@ AttributeArgMorph >> universalAttributeChoice: aSymbol [
 	"Update the toggle button when an argument is changed within a block."
 
 	| oi frame palette block label |
-	frame := self ownerOrYourselfThatIsA: ScratchFrameMorph.
+	frame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
 	oi := owner receiver objectInterface.
 
 	choice := aSymbol.

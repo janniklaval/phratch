@@ -73,17 +73,17 @@ ChoiceArgMorph >> choice: aSymbol [
 	"Update the toggle button when an argument is changed within a block."
 
 	| frame palette block doLocalization label |
-	frame := self ownerOrYourselfThatIsA: ScratchFrameMorph.
+	frame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
 	((#soundNames = getOptionsSelector) and:
-	 [aSymbol = ('record' localized, ScratchTranslator ellipsesSuffix)]) ifTrue: [
+	 [aSymbol = ('record' localized, PhratchTranslator ellipsesSuffix)]) ifTrue: [
 		frame ifNotNil: [^ frame newSound]].
 
 	((#sceneNames = getOptionsSelector) and:
-	 [aSymbol = ('record' localized, ScratchTranslator ellipsesSuffix)]) ifTrue: [
+	 [aSymbol = ('record' localized, PhratchTranslator ellipsesSuffix)]) ifTrue: [
 		frame ifNotNil: [^ frame workPane newScene]].
 
 	((#sceneNames = getOptionsSelector) and:
-	 [aSymbol = ('re-record' localized, ScratchTranslator ellipsesSuffix)]) ifTrue: [
+	 [aSymbol = ('re-record' localized, PhratchTranslator ellipsesSuffix)]) ifTrue: [
 		frame ifNotNil: [^ frame workPane rerecordScene]].
 
 	choice := label := aSymbol.
@@ -201,7 +201,7 @@ ChoiceArgMorph >> initialize [
 	self borderWidth: 1.
 	self color: Color brown.
 	labelMorph := PhratchStringMorph new
-		font: (ScratchFrameMorph getFont: #Arg);
+		font: (PhratchFrameMorph getFont: #Arg);
 		forceUnicodeRendering: true;
 		color: Color white.
 	self addMorph: labelMorph.
@@ -266,7 +266,7 @@ ChoiceArgMorph >> presentMenu [
 			ifFalse: [
 				doLocalization & sym isUnicode not
 					ifTrue: [ option := sym localized asUTF8]
-					ifFalse: [ ScratchTranslator useSqueakRendering & doLocalization
+					ifFalse: [ PhratchTranslator useSqueakRendering & doLocalization
 						ifTrue: [ option := sym asMacRoman localized]
 						ifFalse: [option := sym localized]].
 
@@ -311,17 +311,17 @@ ChoiceArgMorph >> privateSetChoice: aSymbol [
 	"Update the toggle button when an argument is changed within a block."
 
 	| frame palette block doLocalization label |
-	frame := self ownerOrYourselfThatIsA: ScratchFrameMorph.
+	frame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
 	((#soundNames = getOptionsSelector) and:
-	 [aSymbol = ('record' localized, ScratchTranslator ellipsesSuffix)]) ifTrue: [
+	 [aSymbol = ('record' localized, PhratchTranslator ellipsesSuffix)]) ifTrue: [
 		frame ifNotNil: [^ frame newSound]].
 
 	((#sceneNames = getOptionsSelector) and:
-	 [aSymbol = ('record' localized, ScratchTranslator ellipsesSuffix)]) ifTrue: [
+	 [aSymbol = ('record' localized, PhratchTranslator ellipsesSuffix)]) ifTrue: [
 		frame ifNotNil: [^ frame workPane newScene]].
 
 	((#sceneNames = getOptionsSelector) and:
-	 [aSymbol = ('re-record' localized, ScratchTranslator ellipsesSuffix)]) ifTrue: [
+	 [aSymbol = ('re-record' localized, PhratchTranslator ellipsesSuffix)]) ifTrue: [
 		frame ifNotNil: [^ frame workPane rerecordScene]].
 
 	choice := label := aSymbol.

@@ -194,7 +194,7 @@ StringFieldMorph >> copySelection [
 		copyFrom: self leftSelection + 1 
 		to: self rightSelection.
 	s size = 0 ifTrue: [^ self].
-	ScratchTranslator unicodeClipboardPut: s.
+	PhratchTranslator unicodeClipboardPut: s.
 
 ]
 
@@ -387,9 +387,9 @@ StringFieldMorph >> font [
 StringFieldMorph >> font: aFont [
 
 	stringMorph font: aFont.
-	stringMorph height: (stringMorph stringHeight: ScratchTranslator renderHintString asUTF8).
+	stringMorph height: (stringMorph stringHeight: PhratchTranslator renderHintString asUTF8).
 	self height: stringMorph height + (2 * borderWidth) + heightPadding.
-	insetY := (self height // 2) - borderWidth - (ScratchTranslator centerOffsetForButtonWithFont: aFont).
+	insetY := (self height // 2) - borderWidth - (PhratchTranslator centerOffsetForButtonWithFont: aFont).
 	insetY := insetY max: 1.
 	self borderWidth: borderWidth.  "re-position string"
 
@@ -403,7 +403,7 @@ StringFieldMorph >> forExpressionArg [
 	borderWidth := 0.
 	insetX := 0.
 	heightPadding := 2.
-	self font: (ScratchFrameMorph getFont: #Arg).
+	self font: (PhratchFrameMorph getFont: #Arg).
 
 ]
 
@@ -449,7 +449,7 @@ StringFieldMorph >> initialize [
 	selectionColor := (Color r: 0.353 g: 0.607 b: 0.788).
 	selectionStart := selectionEnd := 0.
 	self recordUndoState.
-	self rightJustify: ScratchTranslator isRTL.
+	self rightJustify: PhratchTranslator isRTL.
 
 	self borderInset; useNoFrame.
 	self width: 100.
@@ -727,7 +727,7 @@ StringFieldMorph >> paste [
 	"Paste the last cut or copy over the current selection."
 
 	| strToInsert str newStr |
-	strToInsert := ScratchTranslator unicodeClipboard.
+	strToInsert := PhratchTranslator unicodeClipboard.
 	strToInsert size = 0 ifTrue: [^ self].
 
 	self recordUndoState.
@@ -910,7 +910,7 @@ StringFieldMorph >> useNoFrame [
 { #category : #initialization }
 StringFieldMorph >> useStringFieldFrame [
 
-	frame := ImageFrameMorph new initFromForm: (ScratchFrameMorph skinAt: #stringFieldFrame).
+	frame := ImageFrameMorph new initFromForm: (PhratchFrameMorph skinAt: #stringFieldFrame).
 	insetX := 3.
 	heightPadding := 9.
 	borderWidth := 5.
@@ -921,7 +921,7 @@ StringFieldMorph >> useStringFieldFrame [
 { #category : #initialization }
 StringFieldMorph >> useTypeinFrame [
 
-	frame := ImageFrameMorph new initFromForm: (ScratchFrameMorph skinAt: #typein).
+	frame := ImageFrameMorph new initFromForm: (PhratchFrameMorph skinAt: #typein).
 	insetX := 2.
 	heightPadding := 5.
 	borderWidth := 2.

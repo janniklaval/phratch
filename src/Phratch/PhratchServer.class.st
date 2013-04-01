@@ -53,7 +53,7 @@ Scratch outputs these commands when broadcasts or global variable changes occur.
 
 "
 Class {
-	#name : #ScratchServer,
+	#name : #PhratchServer,
 	#superclass : #Object,
 	#instVars : [
 		'stage',
@@ -73,7 +73,7 @@ Class {
 }
 
 { #category : #utilities }
-ScratchServer class >> getIPAddressFromServer [
+PhratchServer class >> getIPAddressFromServer [
 	"Attempt to get my IP address from the AddressServer in bounded time. Returns nil if unsuccessful."
 	"[self getIPAddressFromServer] msecs"
 
@@ -95,14 +95,14 @@ ScratchServer class >> getIPAddressFromServer [
 ]
 
 { #category : #utilities }
-ScratchServer class >> portNumber [
+PhratchServer class >> portNumber [
 	"Answer the port number for the Scratch server."
 
 	^ 42001
 ]
 
 { #category : #'private-server' }
-ScratchServer >> acceptNewConnections [
+PhratchServer >> acceptNewConnections [
 	"Accept new connections, if any. Also process any newly connected outgoing sockets."
 
 	| newSock |
@@ -115,7 +115,7 @@ ScratchServer >> acceptNewConnections [
 ]
 
 { #category : #'private-variables' }
-ScratchServer >> broadcastMessageFor: aString [
+PhratchServer >> broadcastMessageFor: aString [
 	"Answer a message to broadcast the given string."
 
 	| msg |
@@ -128,14 +128,14 @@ ScratchServer >> broadcastMessageFor: aString [
 ]
 
 { #category : #accessing }
-ScratchServer >> broadcastsSeen [
+PhratchServer >> broadcastsSeen [
 
 	^ broadcastCache asArray sort
 
 ]
 
 { #category : #'server control' }
-ScratchServer >> clearCaches [
+PhratchServer >> clearCaches [
 
 	broadcastCache := broadcastCache species new.
 	sensors := sensors species new.
@@ -145,7 +145,7 @@ ScratchServer >> clearCaches [
 ]
 
 { #category : #'private-incoming commands' }
-ScratchServer >> dispatch: aString from: requestSock [
+PhratchServer >> dispatch: aString from: requestSock [
 	"Dispatch an incoming command from a remote Scratch."
 
 	| cmd op |
@@ -183,7 +183,7 @@ ScratchServer >> dispatch: aString from: requestSock [
 ]
 
 { #category : #'private-incoming commands' }
-ScratchServer >> doBroadcast: cmd from: requestSocket [
+PhratchServer >> doBroadcast: cmd from: requestSocket [
 	"Handle a broadcast command: broadcast <event-name>"
 
 	| evtName |
@@ -196,7 +196,7 @@ ScratchServer >> doBroadcast: cmd from: requestSocket [
 ]
 
 { #category : #'private-incoming commands' }
-ScratchServer >> doPeerName: cmd from: requestSock [
+PhratchServer >> doPeerName: cmd from: requestSock [
 	"Handle a peer-name command: peer-name <peerName>"
 
 	| peerName |
@@ -209,7 +209,7 @@ ScratchServer >> doPeerName: cmd from: requestSock [
 ]
 
 { #category : #'private-incoming commands' }
-ScratchServer >> doSendVars: cmd from: requestSock [
+PhratchServer >> doSendVars: cmd from: requestSock [
 	"Handle a variable send request: send-vars"
 
 	"force all my global variables to be re-transmitted"
@@ -218,7 +218,7 @@ ScratchServer >> doSendVars: cmd from: requestSock [
 ]
 
 { #category : #'private-incoming commands' }
-ScratchServer >> doSensorUpdate: cmd from: requestSocket [
+PhratchServer >> doSensorUpdate: cmd from: requestSocket [
 	"Handle a sensor update command: sensor-update [<sensor-name> <sensor-value>]"
 
 	| i sName sValue |
@@ -233,20 +233,20 @@ ScratchServer >> doSensorUpdate: cmd from: requestSocket [
 ]
 
 { #category : #'private-incoming commands' }
-ScratchServer >> doSprite: cmd from: requestSock [
+PhratchServer >> doSprite: cmd from: requestSock [
 	"Handle a sprite command: sprite <senderName> <spriteData>"
 
 	| sf spriteData|
 	cmd size = 3 ifFalse: [^ self].
 	((spriteData := cmd at: 3) isKindOf: ByteArray) ifFalse: [^ self].
-	sf := stage ownerOrYourselfThatIsA: ScratchFrameMorph.
+	sf := stage ownerOrYourselfThatIsA: PhratchFrameMorph.
 	sf ifNil: [^self].
 	sf importSpriteOrProject: spriteData
 
 ]
 
 { #category : #S4A }
-ScratchServer >> doVarsUpdate: cmd from: requestSock [
+PhratchServer >> doVarsUpdate: cmd from: requestSock [
     "Handle a sensor update command: vars-update [<vars-name> <vars-value>]"
 
     | i sName sValue |
@@ -261,7 +261,7 @@ ScratchServer >> doVarsUpdate: cmd from: requestSock [
 ]
 
 { #category : #'server control' }
-ScratchServer >> endScratchSession [
+PhratchServer >> endPhratchSession [
 	"Close all sockets. If I am hosting, this will end the session for everyone. If I am only a client, then I will leave the session but the session itself can continue to exist."
 
 	self shutdownServer.
@@ -270,7 +270,7 @@ ScratchServer >> endScratchSession [
 ]
 
 { #category : #initialization }
-ScratchServer >> initialize [
+PhratchServer >> initialize [
 
 	userName := 'anonymous'.
 	peerSockets :=  OrderedCollection new.
@@ -284,7 +284,7 @@ ScratchServer >> initialize [
 ]
 
 { #category : #'server control' }
-ScratchServer >> isHosting [
+PhratchServer >> isHosting [
 	"Answer true if this is the host of a Scratch session."
 
 	^ serverSocket notNil
@@ -292,13 +292,13 @@ ScratchServer >> isHosting [
 ]
 
 { #category : #'server control' }
-ScratchServer >> joinSessionAt: ipAddressString [
+PhratchServer >> joinSessionAt: ipAddressString [
 	"Add an outgoing connection to the given address. Fail if a connection cannot be made in bounded amount of time. Answer true if the connection was added successfully."
 
 	| addr sock ok |
 	addr := NetNameResolver addressForName: ipAddressString timeout: 5.
 	sock := MessageSocket new.
-	ok := sock connectTo: addr port: ScratchServer portNumber waitSecs: 5.
+	ok := sock connectTo: addr port: PhratchServer portNumber waitSecs: 5.
 	ok ifFalse: [sock destroy. ^ false].
 
 	sock sendMessage: 'peer-name ', userName.
@@ -308,13 +308,13 @@ ScratchServer >> joinSessionAt: ipAddressString [
 ]
 
 { #category : #S4A }
-ScratchServer >> listComands [
+PhratchServer >> listComands [
 ^(stage allEventNames 
 	inject:'broadcast ' into: [:sum :each | sum,'"', (each asMacRoman),'"',' ']  )
 ]
 
 { #category : #'private-incoming commands' }
-ScratchServer >> opcodeFrom: aString [
+PhratchServer >> opcodeFrom: aString [
 	"Answer the command opcode for the given message. The opcode is the unquoted string at the beginning of the message up to the first whitespace character."
 
 	| i |
@@ -327,7 +327,7 @@ ScratchServer >> opcodeFrom: aString [
 ]
 
 { #category : #'private-command parsing' }
-ScratchServer >> parse: aString [
+PhratchServer >> parse: aString [
 	"ScratchServer new parse: 'test abc 1 -1 .01 -.01 true false'"
 
 	| out token |
@@ -341,7 +341,7 @@ ScratchServer >> parse: aString [
 ]
 
 { #category : #'private-command parsing' }
-ScratchServer >> parseMixedMsg: aString [
+PhratchServer >> parseMixedMsg: aString [
 	"answer an Array containting both textual and binary information:
 	op <senderName> <binaryData>"
 
@@ -356,7 +356,7 @@ ScratchServer >> parseMixedMsg: aString [
 ]
 
 { #category : #'private-incoming commands' }
-ScratchServer >> processCommandFrom: requestSock [
+PhratchServer >> processCommandFrom: requestSock [
 	"Handle a command from the given socket. Do nothing if there are no messages."
 
 	| msg |
@@ -368,7 +368,7 @@ ScratchServer >> processCommandFrom: requestSock [
 ]
 
 { #category : #'private-server' }
-ScratchServer >> processIncomingBroadcasts [
+PhratchServer >> processIncomingBroadcasts [
 	"NOTE: Broadcast events are added to the outgoingBroadcasts queue as a side-effect of re-broadcasting them locally. To avoid having broadcasts bounce from peer to peer forever, the outgoingBroadcasts queue is cleard after incoming commands have been processed."
 
 	stage ifNotNil: [
@@ -381,7 +381,7 @@ ScratchServer >> processIncomingBroadcasts [
 ]
 
 { #category : #'private-server' }
-ScratchServer >> processIncomingCommands [
+PhratchServer >> processIncomingCommands [
 	"Process incoming commands from my peers."
 
 	peerSockets copy do: [:sock |
@@ -398,7 +398,7 @@ ScratchServer >> processIncomingCommands [
 ]
 
 { #category : #'private-server' }
-ScratchServer >> processUDPCommands [
+PhratchServer >> processUDPCommands [
 	"Process incoming UDP commands."
 
 	| buf n msg |
@@ -414,7 +414,7 @@ ScratchServer >> processUDPCommands [
 ]
 
 { #category : #'private-variables' }
-ScratchServer >> putString: aString on: aStream [
+PhratchServer >> putString: aString on: aStream [
 	"Append the given string to the given stream. Double any embedded double-quote characters."
 
 	aStream nextPut: $".
@@ -426,7 +426,7 @@ ScratchServer >> putString: aString on: aStream [
 ]
 
 { #category : #'private-server' }
-ScratchServer >> queueBroadcast: aString [
+PhratchServer >> queueBroadcast: aString [
 	"Queue the given broadcast event to be sent to my peers."
 
 	self sessionInProgress ifFalse: [^ self].
@@ -441,7 +441,7 @@ ScratchServer >> queueBroadcast: aString [
 ]
 
 { #category : #'private-command parsing' }
-ScratchServer >> readNext [
+PhratchServer >> readNext [
 	"Read the next command line token from 'in' or nil if there are not more tokens. A token is a quoted string, a number, a boolean, or an unquoted string with no embedded whitespace. Strings that start with a digit or minus sign must be quoted to avoid being treated as an integer."
 
 	| ch s |
@@ -463,7 +463,7 @@ ScratchServer >> readNext [
 ]
 
 { #category : #'private-command parsing' }
-ScratchServer >> readNumber [
+PhratchServer >> readNumber [
 
 	| orig s sign |
 	s := self readString.
@@ -479,7 +479,7 @@ ScratchServer >> readNumber [
 ]
 
 { #category : #'private-command parsing' }
-ScratchServer >> readQuotedString [
+PhratchServer >> readQuotedString [
 
 	| result ch |
 	result := WriteStream on: String new.
@@ -497,7 +497,7 @@ ScratchServer >> readQuotedString [
 ]
 
 { #category : #'private-command parsing' }
-ScratchServer >> readString [
+PhratchServer >> readString [
 
 	| result ch |
 	result := WriteStream on: String new.
@@ -511,7 +511,7 @@ ScratchServer >> readString [
 ]
 
 { #category : #'private-variables' }
-ScratchServer >> recordVariableValues [
+PhratchServer >> recordVariableValues [
 	"Record the current values of my global variables."
 
 	lastSentValues := Dictionary new.
@@ -522,7 +522,7 @@ ScratchServer >> recordVariableValues [
 ]
 
 { #category : #'private-incoming commands' }
-ScratchServer >> resend: msgString toPeersExcept: requestSocket [
+PhratchServer >> resend: msgString toPeersExcept: requestSocket [
 	"Handle a broadcast command: broadcast <event-name>"
 
 	peerSockets do: [:sock |
@@ -531,7 +531,7 @@ ScratchServer >> resend: msgString toPeersExcept: requestSocket [
 ]
 
 { #category : #'private-variables' }
-ScratchServer >> resendAllVars [
+PhratchServer >> resendAllVars [
 	"Force all my global variables to be re-transmitted."
 
 	lastSentValues := lastSentValues species new.
@@ -539,7 +539,7 @@ ScratchServer >> resendAllVars [
 ]
 
 { #category : #'private-server' }
-ScratchServer >> sendOutgoingCommands [
+PhratchServer >> sendOutgoingCommands [
 	"Send broadcasts and variable updates to my peers."
 
 	| varUpdateMsg |
@@ -563,7 +563,7 @@ ScratchServer >> sendOutgoingCommands [
 ]
 
 { #category : #'private-sprites' }
-ScratchServer >> sendSprite: aScratchSpriteMorph [
+PhratchServer >> sendSprite: aScratchSpriteMorph [
 	"send the given sprite to all peers"
 
 	| msg |
@@ -579,7 +579,7 @@ ScratchServer >> sendSprite: aScratchSpriteMorph [
 ]
 
 { #category : #accessing }
-ScratchServer >> sensorNames [
+PhratchServer >> sensorNames [
 
 	^ sensors keys asArray sort
 
@@ -587,7 +587,7 @@ ScratchServer >> sensorNames [
 ]
 
 { #category : #accessing }
-ScratchServer >> sensorValueFor: sensorName [
+PhratchServer >> sensorValueFor: sensorName [
 	"Answer the value for the given virtual sensor or nil if the given sensor name is not found."
 
 	^ sensors at: sensorName ifAbsent: [nil]
@@ -596,7 +596,7 @@ ScratchServer >> sensorValueFor: sensorName [
 ]
 
 { #category : #'server control' }
-ScratchServer >> sessionInProgress [
+PhratchServer >> sessionInProgress [
 	"Answer true if this Scratch server has any external connections."
 
 	^ (peerSockets size > 0) | (serverSocket notNil)
@@ -605,7 +605,7 @@ ScratchServer >> sessionInProgress [
 ]
 
 { #category : #'server control' }
-ScratchServer >> shutdownServer [
+PhratchServer >> shutdownServer [
 	"Destroy all open sockets."
 
 	serverSocket ifNotNil: [
@@ -627,7 +627,7 @@ ScratchServer >> shutdownServer [
 ]
 
 { #category : #'private-variables' }
-ScratchServer >> someVariableHasChanged [
+PhratchServer >> someVariableHasChanged [
 	"Answer true if a global variable has changed since I last sent variable updates to my peers."
 
 	| lastVal |
@@ -643,7 +643,7 @@ ScratchServer >> someVariableHasChanged [
 ]
 
 { #category : #'private-sprites' }
-ScratchServer >> spriteMessageFor: aScratchSpriteMorph [
+PhratchServer >> spriteMessageFor: aScratchSpriteMorph [
 	"answer a valid msg for the given sprite: sprite <senderName><crlf><binaryData>"
 
 	|msg|
@@ -658,14 +658,14 @@ ScratchServer >> spriteMessageFor: aScratchSpriteMorph [
 ]
 
 { #category : #accessing }
-ScratchServer >> stage: aScratchStageMorph [
+PhratchServer >> stage: aScratchStageMorph [
 
 	stage := aScratchStageMorph.
 
 ]
 
 { #category : #'server control' }
-ScratchServer >> startHosting [
+PhratchServer >> startHosting [
 	"Open a socket on my port and start accepting connections."
 
 	Socket initializeNetwork.
@@ -679,7 +679,7 @@ ScratchServer >> startHosting [
 ]
 
 { #category : #'server control' }
-ScratchServer >> stepServer [
+PhratchServer >> stepServer [
 	"Do one server step."
 	"Note: processIncomingCommands clears outgoingBroadcasts, so do sendOutgoingCommands first."
 
@@ -693,21 +693,21 @@ ScratchServer >> stepServer [
 ]
 
 { #category : #accessing }
-ScratchServer >> userName [
+PhratchServer >> userName [
 
 	^ userName
 
 ]
 
 { #category : #accessing }
-ScratchServer >> userName: aString [
+PhratchServer >> userName: aString [
 
 	userName := aString.
 
 ]
 
 { #category : #'private-variables' }
-ScratchServer >> variableUpdateMessage [
+PhratchServer >> variableUpdateMessage [
 	"Answer a variable update message for all variables whose values have not already been sent."
 
 	| msg currentValue lastValue v |

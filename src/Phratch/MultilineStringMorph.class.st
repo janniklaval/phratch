@@ -186,7 +186,7 @@ MultilineStringMorph >> copy [
 MultilineStringMorph >> copySelection [
 	"Record the current selection in the clipboard."
 
-	ScratchTranslator unicodeClipboardPut: self currentSelection.
+	PhratchTranslator unicodeClipboardPut: self currentSelection.
 
 ]
 
@@ -364,7 +364,7 @@ MultilineStringMorph >> drawCursor: charIndex line: lineIndex on: aCanvas [
 		ifTrue: [pair := #(0 0)]
 		ifFalse: [pair := (renderer xRangesFor: line) at: (charIndex within: 1 and: line size)].
 
-	ScratchTranslator isRTL
+	PhratchTranslator isRTL
 		ifTrue: [x := charIndex > line size ifTrue: [pair min] ifFalse: [pair max]]
 		ifFalse: [x := charIndex > line size ifTrue: [pair max] ifFalse: [pair min]].
 
@@ -462,7 +462,7 @@ MultilineStringMorph >> drawString: aString at: aPoint on: aCanvas [
 			bgColor := self backgroundColor.
 			(suppressAntiAliasing and: [bgColor = textColor])
 				ifTrue: [bgColor := textColor negated]].
-		f := ScratchTranslator
+		f := PhratchTranslator
 			formFor: s
 			font: self font
 			fgColor: textColor
@@ -491,7 +491,7 @@ MultilineStringMorph >> drawTextOn: aCanvas [
 	y := self insetY.
 	centerText ifNil: [centerText := false].
 	lines do: [:s |
-		ScratchTranslator isRTL
+		PhratchTranslator isRTL
 			ifTrue: [x := self width - hInset - (renderer stringWidth: s)]
 			ifFalse: [x := hInset].
 		centerText ifTrue: [
@@ -584,7 +584,7 @@ MultilineStringMorph >> font: aFont [
 
 	font := aFont.
 	renderer := PhratchStringMorph new font: aFont.
-	lineHeight := renderer stringHeight: ScratchTranslator renderHintString, 'Ag'.
+	lineHeight := renderer stringHeight: PhratchTranslator renderHintString, 'Ag'.
 	self wordWrapAll.
 
 ]
@@ -970,7 +970,7 @@ MultilineStringMorph >> offsetForLine: lineIndex [
 
 	| top |
 	top := self insetY + (lineHeight * (lineIndex - 1)).
-	ScratchTranslator isRTL
+	PhratchTranslator isRTL
 		ifTrue: [^ (self width - (self insetX + (renderer stringWidth: (lines at: lineIndex)))) @ top]
 		ifFalse: [^ self insetX @ top].
 
@@ -981,7 +981,7 @@ MultilineStringMorph >> paste [
 	"Paste the last cut or copied text over the current selection."
 
 	| s |
-	s := ScratchTranslator unicodeClipboard..
+	s := PhratchTranslator unicodeClipboard..
 	s size = 0 ifTrue: [^ self].
 
 	self deleteSelection.

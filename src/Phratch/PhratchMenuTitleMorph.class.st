@@ -61,7 +61,7 @@ PhratchMenuTitleMorph >> initialize [
 
 	super initialize.
 	self
-		font: (ScratchFrameMorph getFont: #MenuTitle);
+		font: (PhratchFrameMorph getFont: #MenuTitle);
 		forceUnicodeRendering: true;
 		color: self normalColor.
 

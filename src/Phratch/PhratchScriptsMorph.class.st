@@ -35,7 +35,7 @@ PhratchScriptsMorph >> cleanUp [
 		owner hScrollPixels: 0.
 		owner vScrollPixels: 0].
 	sortedBlocks do: [:s |
-		ScratchTranslator isRTL
+		PhratchTranslator isRTL
 			ifTrue: [(owner isKindOf: ScrollFrameMorph2)
 				ifTrue: [s position: (owner left + owner visibleExtent x - s width - 29)@(self top + y)]
 				ifFalse: [s position: (self right - s width - 20)@(self top + y)]]
@@ -65,7 +65,7 @@ PhratchScriptsMorph >> drawOn: aCanvas [
 		aCanvas fillRectangle: self bounds color: Color transparent.
 		^ self].
 
-	patchF := ScratchFrameMorph skinAt: #scriptsPaneTexture ifAbsent: [
+	patchF := PhratchFrameMorph skinAt: #scriptsPaneTexture ifAbsent: [
 		aCanvas fillRectangle: self bounds color: color.
 		^ self].
 
@@ -122,7 +122,7 @@ PhratchScriptsMorph >> makeNewBlock [
 	| be sf |
 	be := self ownerOrYourselfThatIsA: BlockEditorFrameMorph.
 	be ifNil: [^self].
-	sf := be scratchFrame.
+	sf := be phratchFrame.
 	sf ifNil: [^self].
 	sf scriptsPane target addCustomBlock
 
@@ -235,7 +235,7 @@ PhratchScriptsMorph >> saveScriptsToImage [
 
 	saveForm := self screenshot.
 
-	fName := ScratchFileChooserDialog
+	fName := PhratchFileChooserDialog
 		chooseNewFileDefault: ''
 		title: 'Save Scripts Snapshot'
 		type: #scriptsSnapshot.
@@ -395,7 +395,7 @@ PhratchScriptsMorph >> step [
 	feedbackMorph borderColor: feedbackColor; color: feedbackColor.
 
 	"subtract the attachment point x from the width so that the feedback in CBlock won't stick out"
-	ScratchTranslator isRTL
+	PhratchTranslator isRTL
 		ifTrue: [feedbackMorph extent: (targetP x - targetBlock left)@5.
 			self addMorphFront: (feedbackMorph position: targetP - (feedbackMorph width@0))]
 		ifFalse: [feedbackMorph extent: (targetBlock right - targetP x)@5.

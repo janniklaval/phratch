@@ -56,8 +56,8 @@ LibraryItemMorph >> areasRemainingToFill: aRectangle [
 LibraryItemMorph >> buildRotationToggleMorph [
 
 	| x y onForm offForm |
-	onForm := ((ScratchFrameMorph skinAt: #rotStyleSmooth) magnifyBy: 0.9).
-	offForm := ((ScratchFrameMorph skinAt: #rotStyleNone) magnifyBy: 0.9).
+	onForm := ((PhratchFrameMorph skinAt: #rotStyleSmooth) magnifyBy: 0.9).
+	offForm := ((PhratchFrameMorph skinAt: #rotStyleNone) magnifyBy: 0.9).
 	rotationToggleMorph := ToggleButton
 							onForm: onForm
 							offForm: offForm.
@@ -81,7 +81,7 @@ LibraryItemMorph >> buildSubmorphs [
 	self addMorph: thumbnailMorph.
 
 	nameMorph := StringMorph new
-		font: (ScratchFrameMorph getFont: #LibraryItemName);
+		font: (PhratchFrameMorph getFont: #LibraryItemName);
 		position: 0 @ (thumbnailMorph bottom -2).
 	self addMorph: nameMorph.
 
@@ -104,7 +104,7 @@ LibraryItemMorph >> childrenMenu [
 	| menu library frame |
 	library := self ownerOrYourselfThatIsA: PhratchLibraryMorph.
 	library ifNil: [^ self].
-	frame := self ownerOrYourselfThatIsA: ScratchFrameMorph.
+	frame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
 	frame ifNil: [^ self].
 
 	menu := MenuMorphNG new defaultTarget: self.
@@ -158,9 +158,9 @@ LibraryItemMorph >> extent: aRectangle thumbWidth: w [
 	self target: nil.
 	isSelected := nil.
 	rolloverOn := false.
-	highlightForm := ImageFrameMorph new initFromForm: (ScratchFrameMorph skinAt: #librarySelected).
+	highlightForm := ImageFrameMorph new initFromForm: (PhratchFrameMorph skinAt: #librarySelected).
 	highlightForm extent: self extent.
-	rolloverForm := ImageFrameMorph new initFromForm: (ScratchFrameMorph skinAt: #libraryRollover).
+	rolloverForm := ImageFrameMorph new initFromForm: (PhratchFrameMorph skinAt: #libraryRollover).
 	rolloverForm extent: self extent.
 	currentForm := nil.
 	self highlight: false.
@@ -216,8 +216,8 @@ LibraryItemMorph >> justDroppedInto: aMorph event: evt [
 	
 	| targets |
 
-	((self target isKindOf: ScratchSpriteMorph) and: [
-	(aMorph isKindOf: ScratchStageMorph)]) ifTrue: [
+	((self target isKindOf: PhratchSpriteMorph) and: [
+	(aMorph isKindOf: PhratchStageMorph)]) ifTrue: [
 		targets := aMorph sprites select: [:each| 
 			each containsPoint: aMorph adjustedCursorPoint ].
 		targets size > 0
@@ -233,7 +233,7 @@ true ifTrue: [^ self].
 		^ self target undoableDeleteSprite].
 
 	"blocks cannot be dropped onto the stage"
-	(owner isKindOf: ScratchStageMorph) ifTrue: [
+	(owner isKindOf: PhratchStageMorph) ifTrue: [
 		^ evt hand rejectDropMorph: self event: evt].
 
 ]
@@ -247,14 +247,14 @@ LibraryItemMorph >> mouseDown: evt [
 	(evt hand toolType = 'CutTool') & (evt rightButtonPressed not) ifTrue: [
 		evt shiftPressed ifFalse: [evt hand toolType: nil].
 		(target notNil and:
-		 [(target isKindOf: ScratchStageMorph) not]) ifTrue: [
+		 [(target isKindOf: PhratchStageMorph) not]) ifTrue: [
 			self target undoableDeleteSprite].
 		^ self].
 	
 	(evt hand toolType = 'CopyTool') & (evt rightButtonPressed not) ifTrue: [
 		evt shiftPressed ifFalse: [evt hand toolType: nil].
 		(target notNil and:
-		 [(target isKindOf: ScratchStageMorph) not]) ifTrue: [
+		 [(target isKindOf: PhratchStageMorph) not]) ifTrue: [
 			duplicate := self target duplicate.
 			self world activeHand
 				attachMorph: duplicate;
@@ -266,13 +266,13 @@ LibraryItemMorph >> mouseDown: evt [
 		evt rightButtonPressed
 			ifTrue: [
 				Sensor waitNoButton. 
-				(target isKindOf: ScratchStageMorph) 
+				(target isKindOf: PhratchStageMorph) 
 					ifTrue: [^ self stageMenu]
 					ifFalse: [^ self rightButtonMenu]]
 			ifFalse:	[
 				target closeBlockEditor.
 				self select.
-				frame := self ownerOrYourselfThatIsA: ScratchFrameMorph.
+				frame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
 				"Set the viewerPane target to my target so I stay highlighted while I am being dragged. This is sort of a hack because my target is not actually being viewed until the mouseUp: command is called."
 				frame viewerPane target: self target.
 				evt hand waitForClicksOrDrag: self event: evt]].
@@ -311,7 +311,7 @@ LibraryItemMorph >> mouseEnterDragging: evt [
 { #category : #'event handling' }
 LibraryItemMorph >> mouseHold: evt [
 
-	(target isKindOf: ScratchStageMorph) ifFalse: [self rightButtonMenu].
+	(target isKindOf: PhratchStageMorph) ifFalse: [self rightButtonMenu].
 
 ]
 
@@ -335,7 +335,7 @@ LibraryItemMorph >> mouseUp: evt [
 	"View my target if it is not already beeing viewed."
 
 	| frame |
-	frame := self ownerOrYourselfThatIsA: ScratchFrameMorph.
+	frame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
 	frame ifNil: [^ self].
 	self target ifNil: [^ self]. "deleted"
 
@@ -362,17 +362,17 @@ LibraryItemMorph >> rightButtonMenu [
 	menu add: 'show' action: #makeVisible.
 	menu add: 'export this sprite' action: #exportObject.
 
-	stage := self target ownerOrYourselfThatIsA: ScratchStageMorph.
+	stage := self target ownerOrYourselfThatIsA: PhratchStageMorph.
 	stage ifNotNil: [
-		(stage scratchServer notNil and: 
-		[stage scratchServer sessionInProgress])
+		(stage phratchServer notNil and: 
+		[stage phratchServer sessionInProgress])
 			ifTrue: [
 				menu add: 'share this sprite' action: #shareObject ]].
 
 	menu addLine.
 	menu add: 'duplicate' action: #duplicateNoAttach.
 	menu add: 'delete' action: #undoableDeleteSprite.
-	(self target isKindOf: ScratchSpriteMorph) ifTrue: [
+	(self target isKindOf: PhratchSpriteMorph) ifTrue: [
 		menu addLine.
 		menu add: 'clone' action: #spawn.
 		menu add: 'parent...' action: #choosePrototype.
@@ -405,7 +405,7 @@ LibraryItemMorph >> stageMenu [
 	| menu library frame |
 	library := self ownerOrYourselfThatIsA: PhratchLibraryMorph.
 	library ifNil: [^ self].
-	frame := self ownerOrYourselfThatIsA: ScratchFrameMorph.
+	frame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
 	frame ifNil: [^ self].
 
 	menu := MenuMorphNG  new defaultTarget: self.
@@ -423,7 +423,7 @@ LibraryItemMorph >> stageMenu [
 { #category : #'event handling' }
 LibraryItemMorph >> startDrag: evt [
 
-	(self target isKindOf: ScratchStageMorph) ifTrue: [^ self]. "cannot drag stage thumbnail"
+	(self target isKindOf: PhratchStageMorph) ifTrue: [^ self]. "cannot drag stage thumbnail"
 
 	(self ownerOrYourselfThatIsA: PhratchLibraryMorph)
 		ifNil: [evt hand grabMorph: self]
@@ -437,7 +437,7 @@ LibraryItemMorph >> step [
 
 	| changeTime stage frame |
 	target ifNil: [
-		(frame := (self ownerOrYourselfThatIsA: ScratchFrameMorph)) ifNotNil: [
+		(frame := (self ownerOrYourselfThatIsA: PhratchFrameMorph)) ifNotNil: [
 			(stage := frame workPane) ifNotNil: [
 				stage updateSpritesList]].
 		^ self].
@@ -469,7 +469,7 @@ LibraryItemMorph >> target: aMorph [
 { #category : #private }
 LibraryItemMorph >> toggleRotationRule [
 
-	(self target isKindOf: ScratchStageMorph)
+	(self target isKindOf: PhratchStageMorph)
 		ifTrue: [^ self].
 	self target toggleRotationRule.
 	self updateRotationToggleMorph
@@ -483,7 +483,7 @@ LibraryItemMorph >> truncatedLabel [
 
 	nameMorph contents = target objName ifFalse: [
 		n := target objName.
-		ellipses := ScratchTranslator ellipsesSuffix asUTF32.
+		ellipses := PhratchTranslator ellipsesSuffix asUTF32.
 		1 to: n size do: [:i |
 			s := n copyFrom: 1 to: i.
 			w := nameMorph stringWidth: (s asUTF32, ellipses).
@@ -499,7 +499,7 @@ LibraryItemMorph >> updateNameAndInfo [
 
 	| w y txt |
 
-	txt := ((target objName asUTF8, ' (' asUTF8, 'Scripts' localized, ScratchTranslator colonSuffix, ' ' asUTF8, target scripts size printString asUTF8,')' asUTF8) asUTF8).
+	txt := ((target objName asUTF8, ' (' asUTF8, 'Scripts' localized, PhratchTranslator colonSuffix, ' ' asUTF8, target scripts size printString asUTF8,')' asUTF8) asUTF8).
 
 	target prototype ifNotNil: [
 		txt := (txt, ' kind of: ' asUTF8, target prototype objName asUTF8) asUTF8].
@@ -509,7 +509,7 @@ LibraryItemMorph >> updateNameAndInfo [
 		toValue: txt.
 
 	nameMorph ifNotNil:[
-		(target isKindOf: ScriptableScratchMorph) ifFalse: [
+		(target isKindOf: ScriptablePhratchMorph) ifFalse: [
 			nameMorph contents: '<no object>'.
 			scriptCountMorph contents: ''.
 			^ self].
@@ -523,7 +523,7 @@ LibraryItemMorph >> updateNameAndInfo [
 		target scripts size > 0
 			ifTrue: [
 				w > 0 ifTrue: [w := w + 2].
-				scriptCountMorph contents: 'Scripts' localized, ScratchTranslator colonSuffix, ' ', target scripts size printString.
+				scriptCountMorph contents: 'Scripts' localized, PhratchTranslator colonSuffix, ' ', target scripts size printString.
 				w := w + scriptCountMorph width + 2]
 			ifFalse: [
 				scriptCountMorph contents: ''].
@@ -541,7 +541,7 @@ LibraryItemMorph >> updateRotationToggleMorph [
 	rotationToggleMorph ifNil: [
 		self buildRotationToggleMorph ].
 	(self target isNil
-		or: [(self target isKindOf: ScratchStageMorph)
+		or: [(self target isKindOf: PhratchStageMorph)
 		or: [self target ownerSprite isNil]])
 		ifTrue: [
 			rotationToggleMorph isHidden: true.
@@ -572,13 +572,13 @@ LibraryItemMorph >> updateThumbnail [
 
 	smallSize := (form height // 3) @ (form height // 3).
 
-	((target isKindOf: ScratchSpriteMorph) and: [target hasSubsprites]) ifTrue: [
+	((target isKindOf: PhratchSpriteMorph) and: [target hasSubsprites]) ifTrue: [
 		1 to: (target subsprites size min: 3) do: [:idx|
 			subs := ((target subsprites at: idx) imageForm asFormOfDepth: 16) toThumbnail: smallSize borderWidth: 0 borderColor: Color transparent.
 			subs displayOn: form at: (form width - (subs width*idx)) @ (form height - subs height) ]].
 
 
-	anchor := ((target isKindOf: ScratchSpriteMorph) and: [target ownerSprite notNil]).
+	anchor := ((target isKindOf: PhratchSpriteMorph) and: [target ownerSprite notNil]).
 
 	f := target imageForm asFormOfDepth: 16.
 	((f width <= form width) & (f height <= form height)) ifTrue: [

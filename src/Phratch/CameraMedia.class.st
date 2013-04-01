@@ -18,7 +18,7 @@ CameraMedia >> colorTrackStep [
 	p := VideoSensorPlugin
 		trackColorIn: frameForm bits
 		width: frameForm width
-		rgb: ScratchFrameMorph colorToTrack asPackedRGB
+		rgb: PhratchFrameMorph colorToTrack asPackedRGB
 		threshold: 50.
 	p ifNil: [p := frameForm extent // 2].
 
@@ -122,8 +122,8 @@ CameraMedia >> mediaStep [
 	n := CameraPlugin getFrameForCamera: cameraNum into: frameForm bits.
 	n = 0 ifTrue: [^ false].  "no new frame"
 
-	ScratchFrameMorph cameraMode = #motion ifTrue: [self motionStep].
-	ScratchFrameMorph cameraMode = #colorTrack ifTrue: [self colorTrackStep].
+	PhratchFrameMorph cameraMode = #motion ifTrue: [self motionStep].
+	PhratchFrameMorph cameraMode = #colorTrack ifTrue: [self colorTrackStep].
 
 	^ n ~~ 0
 

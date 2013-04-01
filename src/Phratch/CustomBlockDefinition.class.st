@@ -22,7 +22,7 @@ Class {
 CustomBlockDefinition class >> idFromSpec: aUserSpecOrCommandSpec [
 
 	|cmd out|
-	cmd := ScratchServer new parse: aUserSpecOrCommandSpec.
+	cmd := PhratchServer new parse: aUserSpecOrCommandSpec.
 	out := WriteStream on: String new.
 	cmd do: [:each|
 		(each asString beginsWith: '%')
@@ -109,7 +109,7 @@ CustomBlockDefinition >> answerBlock [
 CustomBlockDefinition >> blockColor [
 	#none = category
 		ifTrue: [^ Color lightGray]
-		ifFalse: [^ ScriptableScratchMorph blockColorFor: category]
+		ifFalse: [^ ScriptablePhratchMorph blockColorFor: category]
 ]
 
 { #category : #accessing }
@@ -176,7 +176,7 @@ CustomBlockDefinition >> commandSpec [
 CustomBlockDefinition >> commandSpecFrom: aUserSpec [
 
 	|cmd out pname ptype|
-	cmd := ScratchServer new parse: aUserSpec.
+	cmd := PhratchServer new parse: aUserSpec.
 	out := WriteStream on: String new. 
 	cmd do: [:each|
 		(each asString beginsWith: '%')
@@ -423,7 +423,7 @@ CustomBlockDefinition >> parameterNames [
 CustomBlockDefinition >> parameterNamesInSpec: aString [
 
 	| cmd out |
-	cmd := ScratchServer new parse: aString asMacRoman.
+	cmd := PhratchServer new parse: aString asMacRoman.
 	out := OrderedCollection new.
 	cmd do: [:each|
 		(each asString beginsWith: '%')

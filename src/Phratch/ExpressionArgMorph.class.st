@@ -124,7 +124,7 @@ ExpressionArgMorph >> fixArgLayout [
 					self extent: labelMorph extent + (2 @ 0).
 					xInset := 3]].
 
-	ScratchTranslator isRTL
+	PhratchTranslator isRTL
 		ifTrue: [labelMorph position: (self right - (xInset + labelMorph width)) @ top]
 		ifFalse: [labelMorph position: (self left + xInset) @ top].
 
@@ -161,7 +161,7 @@ ExpressionArgMorph >> initialize [
 	labelMorph := StringFieldMorph new
 		forExpressionArg;
 		doResizing: true;
-		font: (ScratchFrameMorph getFont: #Arg);
+		font: (PhratchFrameMorph getFont: #Arg);
 		color: Color transparent.
 	self addMorph: labelMorph.
 	self numExpression: '10'.

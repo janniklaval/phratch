@@ -204,7 +204,7 @@ CustomCommandBlockMorph >> addLabelToNonTemplate [
 			ifFalse: [ 
 				((eachArg isKindOf: ExpressionArgMorph) and: [eachArg isNumberExpression])
 					ifTrue: [eachArg defaultValue: eachValue "asNumberNoError"]
-					ifFalse: [ (eachValue isKindOf: ScratchListMorph)
+					ifFalse: [ (eachValue isKindOf: PhratchListMorph)
 						ifTrue: [eachArg defaultValue: eachValue]
 						ifFalse: [eachArg defaultValue: eachValue asString]]]]]
 
@@ -446,7 +446,7 @@ CustomCommandBlockMorph >> labelMorphFor: aString [
 
 	s := aString.
 	commandSpec isUnicode ifTrue: [s := UTF8 withAll: s].
-	^ (BlockLabelFragmentMorph contents: s font: (ScratchFrameMorph getFont: #Label))
+	^ (BlockLabelFragmentMorph contents: s font: (PhratchFrameMorph getFont: #Label))
 		color: self labelColor;
 		updateFragment;
 		yourself
@@ -725,7 +725,7 @@ CustomCommandBlockMorph >> updateSpecWithDnDSpec [
 	5. 	update every instance of the definition if it is global
 	6.	update the definition's userSpec -> update every instance of the definition"
 
-	stage := receiver ownerOrYourselfThatIsA: ScratchStageMorph.
+	stage := receiver ownerOrYourselfThatIsA: PhratchStageMorph.
 
 	def isGlobal not | stage isNil
 		ifTrue: [
@@ -769,7 +769,7 @@ CustomCommandBlockMorph >> updateSpecWithDnDSpec [
 
 	"8.	update the Scratch Window"
 
-	sf := receiver ownerOrYourselfThatIsA: ScratchFrameMorph.
+	sf := receiver ownerOrYourselfThatIsA: PhratchFrameMorph.
 	sf viewerPane categoryChanged: 'variables'.
 	#none = def category ifFalse: [
 		sf viewerPane categoryChanged: def category asString ]
@@ -789,7 +789,7 @@ CustomCommandBlockMorph >> userSpec: aString [
 	isTemplate ifTrue: [self removeVariableTemplates].
 	cat := self category.
 	cat ifNotNil: [
-		self color: (ScriptableScratchMorph blockColorFor: cat asString) ].
+		self color: (ScriptablePhratchMorph blockColorFor: cat asString) ].
 	def := receiver definitionFor: self id.
 	def ifNil: [^ self].
 	self commandSpec: def commandSpec.

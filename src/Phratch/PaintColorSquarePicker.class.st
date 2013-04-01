@@ -56,7 +56,7 @@ PaintColorSquarePicker >> createColorSwatches [
 	swatch extent: 12@12.
 
 	transparentSwatch := IconicButton new
-		labelGraphic: (ScratchFrameMorph skinAt: #transparentSwatch);
+		labelGraphic: (PhratchFrameMorph skinAt: #transparentSwatch);
 		borderWidth: 1;
 		borderColor: (Color r: 0.505 g: 0.505 b: 0.505);
 		target: self;
