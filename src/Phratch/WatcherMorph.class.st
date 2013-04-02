@@ -9,7 +9,6 @@ Class {
 		'titleMorph',
 		'readout',
 		'readoutFrame',
-		'scratchSlider',
 		'watcher',
 		'lastTargetName',
 		'isSpriteSpecific',
@@ -17,7 +16,8 @@ Class {
 		'lastPosition',
 		'sliderMin',
 		'sliderMax',
-		'unused'
+		'unused',
+		'phratchSlider'
 	],
 	#category : #'Phratch-UI-Watchers'
 }
@@ -62,7 +62,7 @@ WatcherMorph >> convertFromOldWatcher [
 	(selector = #getUserVar:) ifTrue: [selector := #getVar:].  "update selector"
 	param := readout parameter.
 	wasLarge := readoutFrame isLarge.
-	showSlider := scratchSlider notNil.
+	showSlider := phratchSlider notNil.
 	oldRange := self sliderRange.
 
 	self delete; removeAllMorphs; initialize.
@@ -110,7 +110,7 @@ WatcherMorph >> doubleClick: evt [
 
 	(self owner isKindOf: PhratchStageMorph) ifFalse: [^ self].  "ignore if not on stage"
 
-	scratchSlider ifNotNil: [^ self showLargeReadout]. "slider -> large readout"
+	phratchSlider ifNotNil: [^ self showLargeReadout]. "slider -> large readout"
 	isLarge ifTrue: [^ self showSmallReadout].  "large readout -> small readout"
 	self isVariableWatcher
 		ifTrue: [self showSlider]  "small readout -> slider"
@@ -172,11 +172,11 @@ WatcherMorph >> handlesMouseDown: evt [
 { #category : #'right button menu' }
 WatcherMorph >> hideSlider [
 
-	scratchSlider ifNotNil: [
-		sliderMin := scratchSlider minVal.
-		sliderMax := scratchSlider maxVal.
-		scratchSlider delete.
-		scratchSlider := nil].
+	phratchSlider ifNotNil: [
+		sliderMin := phratchSlider minVal.
+		sliderMax := phratchSlider maxVal.
+		phratchSlider delete.
+		phratchSlider := nil].
 
 ]
 
@@ -188,7 +188,7 @@ WatcherMorph >> initFieldsFrom: anObjStream version: classVersion [
 		titleMorph
 		readout
 		readoutFrame
-		scratchSlider
+		phratchSlider
 		watcher) from: anObjStream.
 	watcher ifNotNil: [watcher useRoundedCorners].
 	classVersion = 1 ifTrue: [^ self].
@@ -220,7 +220,7 @@ WatcherMorph >> initialize [
 	super initialize.
 	titleMorph := PhratchStringMorph contents: '???'.
 	titleMorph font: (PhratchFrameMorph getFont: #Watcher).
-	readout := readoutFrame := scratchSlider := nil.
+	readout := readoutFrame := phratchSlider := nil.
 	lastTargetName := nil.
 	isSpriteSpecific := true.
 	isLarge := false.
@@ -327,7 +327,7 @@ WatcherMorph >> layoutForViewer [
 WatcherMorph >> layoutStyle [
 	"Return a symbol indicating my current layout type: small, slider, large."
 
-	scratchSlider notNil ifTrue: [^ #slider].
+	phratchSlider notNil ifTrue: [^ #slider].
 	^ self isLarge ifTrue: [#large] ifFalse: [#small]
 
 ]
@@ -394,7 +394,7 @@ WatcherMorph >> rightButtonMenu [
 	(self ownerOrYourselfThatIsA: PhratchStageMorph) ifNil: [^ self].
 
 	menu := MenuMorph new defaultTarget: self.
-	hasSlider := self isVariableWatcher and: [scratchSlider notNil].
+	hasSlider := self isVariableWatcher and: [phratchSlider notNil].
 
 	hasSlider not & isLarge not
 		ifTrue: [menu add: '* ' asUTF8, 'normal readout' localized,' *'	action: #showSmallReadout]
@@ -405,7 +405,7 @@ WatcherMorph >> rightButtonMenu [
 		ifFalse: [menu add: '  ' asUTF8, 'large readout' localized			action: #showLargeReadout].
 
 	self isVariableWatcher ifTrue: [
-		scratchSlider
+		phratchSlider
 			ifNil: [menu add: '  ' asUTF8, 'slider' localized action: #showSlider]
 			ifNotNil: [
 				menu add: '* ' asUTF8, 'slider' localized,' *' action: #showSlider.
@@ -451,8 +451,8 @@ WatcherMorph >> setSliderMinAndMax [
 
 	sliderMin := newRange first.
 	sliderMax := newRange last.
-	scratchSlider ifNotNil: [
-		scratchSlider
+	phratchSlider ifNotNil: [
+		phratchSlider
 			minVal: sliderMin;
 			maxVal: sliderMax;
 			truncate: (sliderMin isInteger & sliderMax isInteger);
@@ -485,7 +485,7 @@ WatcherMorph >> showSlider [
 	self hideSlider.
 	self showSmallReadout.
 
-	scratchSlider := WatcherSliderMorph new
+	phratchSlider := WatcherSliderMorph new
 		target: readout target;
 		actionSelector: #setVar:to:;
 		arguments: (Array with: self getVariable);
@@ -496,9 +496,9 @@ WatcherMorph >> showSlider [
 		height: 10;
 		width: self width - 12.
 
-	self addMorphBack: scratchSlider.
-	self world ifNotNil: [self world startSteppingSubmorphsOf: scratchSlider].
-	scratchSlider updateSliderPosition.
+	self addMorphBack: phratchSlider.
+	self world ifNotNil: [self world startSteppingSubmorphsOf: phratchSlider].
+	phratchSlider updateSliderPosition.
 
 ]
 
@@ -553,10 +553,10 @@ WatcherMorph >> step [
 
 	self updateTargetName.
 	readoutFrame ifNotNil: [readoutFrame fixLayout].
-	scratchSlider ifNotNil: [
-		(World activeHand hasMouseFocus: scratchSlider) ifFalse: [
-			scratchSlider width: self width - 12.
-			scratchSlider updateSliderPosition]].
+	phratchSlider ifNotNil: [
+		(World activeHand hasMouseFocus: phratchSlider) ifFalse: [
+			phratchSlider width: self width - 12.
+			phratchSlider updateSliderPosition]].
 
 ]
 
@@ -575,7 +575,7 @@ WatcherMorph >> storeFieldsOn: anObjStream [
 		titleMorph
 		readout
 		readoutFrame
-		scratchSlider
+		phratchSlider
 		watcher
 		isSpriteSpecific
 		unused

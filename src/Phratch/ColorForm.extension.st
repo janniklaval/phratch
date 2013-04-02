@@ -1,7 +1,7 @@
 Extension { #name : #ColorForm }
 
 { #category : #'*Phratch-Extensions' }
-ColorForm >> hibernateForScratch [
+ColorForm >> hibernateForPhratch [
 	"Make myself take up less space. See comment in Form>hibernate."
 
 	super hibernate.

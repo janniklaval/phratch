@@ -118,10 +118,7 @@ BlockLabelFragmentDialog >> buildSlotTypeChoices [
 
 	onForm :=  PhratchFrameMorph skinAt: #radioButtonOn.
 	offForm := PhratchFrameMorph skinAt: #radioButton.
-"
-	onForm :=  ScratchFrameMorph skinAt: #watcherButtonPressed.
-	offForm := ScratchFrameMorph skinAt: #watcherButton.
-"
+
 	picSize := 45@25.
 	lineWidth := 155 "125".
 	titleClr := Color gray muchLighter.

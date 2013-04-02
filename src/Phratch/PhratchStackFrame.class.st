@@ -78,10 +78,10 @@ PhratchStackFrame >> parentFrame [
 ]
 
 { #category : #accessing }
-PhratchStackFrame >> parentFrame: aScratchStackFrame [
+PhratchStackFrame >> parentFrame: aPhratchStackFrame [
 	"Sets this frame's parent frame."
 
-	parentFrame := aScratchStackFrame.
+	parentFrame := aPhratchStackFrame.
 
 ]
 

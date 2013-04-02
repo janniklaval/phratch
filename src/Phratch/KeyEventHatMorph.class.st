@@ -32,7 +32,7 @@ KeyEventHatMorph >> choice: aString [
 { #category : #other }
 KeyEventHatMorph >> eventName [
 
-	^ 'Scratch-KeyPressedEvent'
+	^ 'Phratch-KeyPressedEvent'
 
 ]
 

@@ -455,7 +455,6 @@ LowResPlugin class >> testFileName: aString [
 	"self testFileName: 'hammy.jpg'"
 	"self testFileName: 'JohnMugShotBW.jpg'"
 	"self testFileName: 'Draco.jpg'"
-	"self testFileName: 'Scratch.bmp'"
 
 	TestFileName := aString.
 

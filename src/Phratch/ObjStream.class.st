@@ -187,8 +187,7 @@ ObjStream class >> initialize [
 
 { #category : #testing }
 ObjStream class >> phratchFileVersionFrom: aString [
-	"Answer the Scratch file version number from the given string. If the string is of the form: 'ScratchVxx', were xx is a two-digit integer, answer the value of xx. Otherwise, answer 0."
-	"self scratchFileVersionFrom: 'ScratchV01'"
+	"Answer the Phratch file version number from the given string. If the string is of the form: 'ScratchVxx', were xx is a two-digit integer, answer the value of xx. Otherwise, answer 0."
 
 	"changed for the BYOB-prototype -Jens"
 
@@ -204,7 +203,7 @@ ObjStream class >> phratchFileVersionFrom: aString [
 
 { #category : #testing }
 ObjStream class >> phratchObjectsFrom: aFileName [
-	"Read a Scratch project from the file with the given name and answer the objects array."
+	"Read a Phratch project from the file with the given name and answer the objects array."
 
 	| f version objects |
 	f := (FileStream readOnlyFileNamed: aFileName) binary.
@@ -233,8 +232,8 @@ ObjStream class >> serializeAndDeserialize: anObject [
 
 { #category : #testing }
 ObjStream class >> tallyPhratchObjectsFrom: aDirectory [
-	"Tally the object class ID's for all Scratch projects in the given directory into the given array."
-	"self tallyScratchObjectsFrom: FileDirectory default"
+	"Tally the object class ID's for all Phratch projects in the given directory into the given array."
+	"self tallyPhratchObjectsFrom: FileDirectory default"
 
 	| classIDCounts objTable id result count cName |
 	classIDCounts := Array new: 256 withAll: 0.
@@ -257,7 +256,7 @@ ObjStream class >> tallyPhratchObjectsFrom: aDirectory [
 
 { #category : #testing }
 ObjStream class >> tallyPhratchObjectsFromFile: aFileName [
-	"Read the Scratch project from the file with the given name and tally it's object class IDs."
+	"Read the Phratch project from the file with the given name and tally it's object class IDs."
 
 	| classIDCounts objTable id result count cName |
 	classIDCounts := Array new: 256 withAll: 0.
@@ -336,7 +335,7 @@ ObjStream class >> userClasses [
 		(149		CBlockMorph)
 		"(150	MethodCallBlockMorph)"
 		(151		HatBlockMorph)
-		"(152	ScratchButtonMorph)"
+		"(152	PhratchButtonMorph)"
 		(153		#PhratchScriptsMorph)
 		(154		#PhratchSliderMorph)
 		(155		WatcherMorph)
@@ -831,7 +830,7 @@ ObjStream >> putFloat: anObject id: classID [
 ObjStream >> putForm: anObject id: classID [
 
 	firstPass ifFalse: [stream nextPut: classID].
-	anObject hibernateForScratch.
+	anObject hibernateForPhratch.
 	self putField: anObject width.
 	self putField: anObject height.
 	self putField: anObject depth.

@@ -96,7 +96,7 @@ PhratchServer class >> getIPAddressFromServer [
 
 { #category : #utilities }
 PhratchServer class >> portNumber [
-	"Answer the port number for the Scratch server."
+	"Answer the port number for the Phratch server."
 
 	^ 42001
 ]
@@ -146,11 +146,11 @@ PhratchServer >> clearCaches [
 
 { #category : #'private-incoming commands' }
 PhratchServer >> dispatch: aString from: requestSock [
-	"Dispatch an incoming command from a remote Scratch."
+	"Dispatch an incoming command from a remote Phratch."
 
 	| cmd op |
 	aString size = 0 ifTrue: [
-		requestSock sendMessage: 'version "ScratchServer 2.0 alpha"'.
+		requestSock sendMessage: 'version "PhratchServer 0.1 alpha"'.
 		^ self].
 
 	op := self opcodeFrom: aString.
@@ -285,7 +285,7 @@ PhratchServer >> initialize [
 
 { #category : #'server control' }
 PhratchServer >> isHosting [
-	"Answer true if this is the host of a Scratch session."
+	"Answer true if this is the host of a Phratch session."
 
 	^ serverSocket notNil
 
@@ -328,7 +328,7 @@ PhratchServer >> opcodeFrom: aString [
 
 { #category : #'private-command parsing' }
 PhratchServer >> parse: aString [
-	"ScratchServer new parse: 'test abc 1 -1 .01 -.01 true false'"
+	"PhratchServer new parse: 'test abc 1 -1 .01 -.01 true false'"
 
 	| out token |
 	in := ReadStream on: aString asString.
@@ -431,9 +431,9 @@ PhratchServer >> queueBroadcast: aString [
 
 	self sessionInProgress ifFalse: [^ self].
 
-	(#(	'Scratch-KeyPressedEvent'
-		'Scratch-MouseClickEvent'
-		'Scratch-StartClicked'
+	(#(	'Phratch-KeyPressedEvent'
+		'Phratch-MouseClickEvent'
+		'Phratch-StartClicked'
 	) includes: aString) ifTrue: [^ self].
 
 	outgoingBroadcasts add: aString.
@@ -563,11 +563,11 @@ PhratchServer >> sendOutgoingCommands [
 ]
 
 { #category : #'private-sprites' }
-PhratchServer >> sendSprite: aScratchSpriteMorph [
+PhratchServer >> sendSprite: aPhratchSpriteMorph [
 	"send the given sprite to all peers"
 
 	| msg |
-	msg := self spriteMessageFor: aScratchSpriteMorph.
+	msg := self spriteMessageFor: aPhratchSpriteMorph.
 	peerSockets copy do: [:sock |
 		sock isConnected
 			ifTrue: [
@@ -597,7 +597,7 @@ PhratchServer >> sensorValueFor: sensorName [
 
 { #category : #'server control' }
 PhratchServer >> sessionInProgress [
-	"Answer true if this Scratch server has any external connections."
+	"Answer true if this Phratch server has any external connections."
 
 	^ (peerSockets size > 0) | (serverSocket notNil)
 
@@ -643,7 +643,7 @@ PhratchServer >> someVariableHasChanged [
 ]
 
 { #category : #'private-sprites' }
-PhratchServer >> spriteMessageFor: aScratchSpriteMorph [
+PhratchServer >> spriteMessageFor: aPhratchSpriteMorph [
 	"answer a valid msg for the given sprite: sprite <senderName><crlf><binaryData>"
 
 	|msg|
@@ -652,15 +652,15 @@ PhratchServer >> spriteMessageFor: aScratchSpriteMorph [
 		nextPutString: 'sprite ';
 		nextPutString: userName;
 		nextPutString: String crlf;
-		nextPutAll: aScratchSpriteMorph serialized.
+		nextPutAll: aPhratchSpriteMorph serialized.
 	^msg contents 
 		
 ]
 
 { #category : #accessing }
-PhratchServer >> stage: aScratchStageMorph [
+PhratchServer >> stage: aPhratchStageMorph [
 
-	stage := aScratchStageMorph.
+	stage := aPhratchStageMorph.
 
 ]
 

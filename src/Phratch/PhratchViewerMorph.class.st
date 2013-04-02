@@ -185,12 +185,12 @@ PhratchViewerMorph >> target [
 ]
 
 { #category : #accessing }
-PhratchViewerMorph >> target: aScratchObject [
+PhratchViewerMorph >> target: aPhratchObject [
 	"Start viewing the given object, if not object, return an empty viewer."
 
 	| categories |
-	target := aScratchObject.
-	aScratchObject ifNil: [
+	target := aPhratchObject.
+	aPhratchObject ifNil: [
 		^ self currentCategory: 'none'].
 
 	"keep the same category selected if possible"

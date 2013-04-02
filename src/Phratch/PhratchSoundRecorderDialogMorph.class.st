@@ -19,13 +19,13 @@ Class {
 }
 
 { #category : #'instance creation' }
-PhratchSoundRecorderDialogMorph class >> forClient: aScriptableScratchMorph [
+PhratchSoundRecorderDialogMorph class >> forClient: aScriptablePhratchMorph [
 	"SoundRecorderDialogMorph forClient: "
 
 	| dialog |
 	dialog := super new
 		withButtonsForYes: false no: false okay: true cancel: true;
-		client: aScriptableScratchMorph;
+		client: aScriptablePhratchMorph;
 		title: 'Sound Recorder'.
 	^ dialog getUserResponse
 ]

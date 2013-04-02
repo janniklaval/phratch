@@ -17,7 +17,6 @@ ReporterScriptBlockMorph >> addItem [
 		isSpecialForm: true;
 		receiver: initialFrame;	
 		selector: #getVar:;
-"		color: (ScriptableScratchMorph blockColorFor: 'variables');"
 		commandSpec: pname.
 	(self isKindOf: CommandScriptBlockMorph)
 		ifTrue: [ self replaceArgMorph: (self argumentAt: pos) by: varBlock ]
@@ -40,7 +39,6 @@ ReporterScriptBlockMorph >> addRemove [
 		isSpecialForm: true;
 		receiver: nil;	
 		selector: #getBlockVar:;
-"		color: (ScriptableScratchMorph blockColorFor: 'variables');"
 		commandSpec: '#', pos printString.
 	(self isKindOf: CommandScriptBlockMorph)
 		ifTrue: [ self replaceArgMorph: (self argumentAt: pos) by: varBlock ]

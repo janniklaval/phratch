@@ -20,9 +20,9 @@ OffscreenWorldMorph >> frame [
 ]
 
 { #category : #accessing }
-OffscreenWorldMorph >> frame: aScratchFrameMorph [
+OffscreenWorldMorph >> frame: aPhratchFrameMorph [
 
-	frame := aScratchFrameMorph.
+	frame := aPhratchFrameMorph.
 
 ]
 

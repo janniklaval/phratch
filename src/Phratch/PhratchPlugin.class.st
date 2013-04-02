@@ -474,7 +474,7 @@ PhratchPlugin class >> primGetFolderPath: anInteger [
 		3	documents
 		4	my pictures
 		5	my music.
-	Return the path for the Scratch folder if the primitive fails."
+	Return the path for the Phratch folder if the primitive fails."
 	"self primGetFolderPath: 1"
 
 	<primitive: 'primitiveGetFolderPath' module: #PhratchPlugin>
@@ -572,7 +572,7 @@ PhratchPlugin class >> primSetUnicodePasteBuffer: aByteArray [
 
 { #category : #'OS utilities' }
 PhratchPlugin class >> primSetWindowTitle: aString [
-	"Set the title of the Scratch window to the given string. Do nothing if the primitive fails."
+	"Set the title of the Phratch window to the given string. Do nothing if the primitive fails."
 	"self primSetWindowTitle: 'hello!'"
 
 	<primitive: 'primitiveSetWindowTitle' module: #PhratchPlugin>
@@ -1862,7 +1862,7 @@ PhratchPlugin >> primitiveSetUnicodePasteBuffer [
 
 { #category : #'os functions' }
 PhratchPlugin >> primitiveSetWindowTitle [
-	"Set the title of the Scratch window."
+	"Set the title of the Phratch window."
 
 	| titleStr src titleOop count |
 	self export: true.

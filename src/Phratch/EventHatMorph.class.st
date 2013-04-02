@@ -67,7 +67,7 @@ EventHatMorph >> forStartEvent [
 	self addMorphBack: s.
 
 	"create scriptNameMorph but don't add it"
-	scriptNameMorph := EventTitleMorph new eventName: 'Scratch-StartClicked'.
+	scriptNameMorph := EventTitleMorph new eventName: 'Phratch-StartClicked'.
 
 	self fixBlockLayout.
 
@@ -89,7 +89,7 @@ EventHatMorph >> helpScreenName [
 
 	(self isKindOf: MouseClickEventHatMorph) ifTrue: [^ 'mouseclickHat'].
 	(self isKindOf: KeyEventHatMorph) ifTrue: [^ 'keyHat'].
-	self eventName = 'Scratch-StartClicked'
+	self eventName = 'Phratch-StartClicked'
 		ifTrue: [^ 'startHat']
 		ifFalse: [^ 'broadcastHat'].
 
@@ -131,7 +131,7 @@ EventHatMorph >> printHatNameOn: aStream [
 
 	| evtName |
 	evtName := self eventName.
-	evtName = 'Scratch-StartClicked'
+	evtName = 'Phratch-StartClicked'
 		ifTrue: [aStream nextPutAll: 'when green flag clicked']
 		ifFalse: [aStream nextPutAll: 'when I receive "', evtName, '"'].
 	aStream cr.
@@ -140,7 +140,7 @@ EventHatMorph >> printHatNameOn: aStream [
 ]
 
 { #category : #other }
-EventHatMorph >> startForEvent: aScratchEvent [
+EventHatMorph >> startForEvent: aPhratchEvent [
 	"Starts a process for this event hat triggered by the given event. Answer the process that was started or nil if no new process was started."
 	"Details: The current policy is to stop and re-start the script for all events except key-pressed. Key-pressed events are just ignored if the script for that event is already running."
 
@@ -149,15 +149,15 @@ EventHatMorph >> startForEvent: aScratchEvent [
 	" +++++++++ change the rule to 'ignore' by Dan Garcia's request for the Berkeley CS10 course   -jens ++++++++++++++++++++"
 
 	self class threadSafeMode ifFalse: [
-	(aScratchEvent name = 'Scratch-KeyPressedEvent') ifFalse: [
-		scratchProc ifNotNil: [self stop]]].  "non-key events stop currently running process, if any"
+	(aPhratchEvent name = 'Phratch-KeyPressedEvent') ifFalse: [
+		phratchProc ifNotNil: [self stop]]].  "non-key events stop currently running process, if any"
 
 	self hasRunningProcess ifTrue: [^ nil].  "don't re-trigger if running"
 
 	scriptOwner ifNil: [^ nil].
 	(stage := scriptOwner ownerOrYourselfThatIsA: PhratchStageMorph) ifNil: [^ nil].
-	scratchProc := stage startProcessFor: self.
+	phratchProc := stage startProcessFor: self.
 	self changed.
-	^ scratchProc
+	^ phratchProc
 
 ]

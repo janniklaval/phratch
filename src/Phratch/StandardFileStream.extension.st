@@ -1,7 +1,7 @@
 Extension { #name : #StandardFileStream }
 
 { #category : #'*Phratch-Extensions' }
-StandardFileStream class >> newScratchFileNamed: fileName [
+StandardFileStream class >> newPhratchFileNamed: fileName [
 	"Create a new file with the given name, and answer a stream opened for writing on that file. If the file already exists, ask the user what to do."
 
 	| dir localName choice newName fullName result ext |
@@ -33,5 +33,5 @@ StandardFileStream class >> newScratchFileNamed: fileName [
 			(ext size > 0 and: [(newName endsWith: ext) not]) ifTrue: [
 				fullName := fullName, '.', ext].
 
-			^ self newScratchFileNamed: fullName].
+			^ self newPhratchFileNamed: fullName].
 ]

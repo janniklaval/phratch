@@ -43,10 +43,10 @@ Class {
 		'MeowSound',
 		'ObjEncoding',
 		'OldMeowPrefixReversed',
+		'PhratchOrigin',
 		'PopSound',
 		'RandomGen',
 		'Recorder',
-		'ScratchOrigin',
 		'TimerStartMSecs'
 	],
 	#category : #'Phratch-Objects'
@@ -402,7 +402,7 @@ ScriptablePhratchMorph class >> initialize [
 	"self initialize"
 
 	Experimental := false.
-	ScratchOrigin := 0@0.
+	PhratchOrigin := 0@0.
 	RandomGen := Random new.
 	TimerStartMSecs := Time millisecondClockValue.
 	ListBlockColor := Color h: 18 s: 0.92 v: 0.85.
@@ -443,7 +443,6 @@ ScriptablePhratchMorph class >> listBlockColor [
 
 { #category : #'forms/sounds/icons' }
 ScriptablePhratchMorph class >> meowSound [
-	"MeowSound := SampledSound fromFileNamed: ((FileDirectory default directoryNamed: 'ScratchSkin') fullNameFor: 'kitten.wav')"
 
 	^ MeowSound ifNil: [MeowSound := SampledSound fromFileNamed: (((FileSystem workingDirectory / 'ScratchSkin') / 'Kitten.wav') fullName)]
 
@@ -516,9 +515,9 @@ ScriptablePhratchMorph class >> oldMeowPrefixReversed [
 
 { #category : #other }
 ScriptablePhratchMorph class >> phratchOrigin: aPoint [
-	"Set the origin for the Scratch coordinate system."
+	"Set the origin for the Phratch coordinate system."
 
-	ScratchOrigin := aPoint.
+	PhratchOrigin := aPoint.
 
 ]
 
@@ -545,7 +544,7 @@ ScriptablePhratchMorph class >> resetTimer [
 
 { #category : #other }
 ScriptablePhratchMorph class >> soundRecorder [
-	"Return the shared Scratch SoundRecorder. Create and start it, if necessary."
+	"Return the shared SoundRecorder. Create and start it, if necessary."
 
 	Recorder ifNil: [
 		Recorder := SoundRecorder new.
@@ -664,7 +663,7 @@ ScriptablePhratchMorph >> addEventNamesTo: aSet [
 ScriptablePhratchMorph >> addGenericListBlocksTo: page y: startY [
 	"Add the generic list blocks to the given page starting at the given y offset."
 
-	| addButton deleteButton x y hasLists stage listMaker |
+	| addButton deleteButton x y hasLists stage |
 	addButton := PhratchFrameMorph
 		buttonLabel: 'Make a list' localized
 		selector: #addList.
@@ -689,17 +688,6 @@ ScriptablePhratchMorph >> addGenericListBlocksTo: page y: startY [
 
 		y := (self addListReportersTo: page x: x y: y) + 10 ].
 
-	"
-	listMaker := MultiArgReporterBlockMorph new
-			color: ScriptableScratchMorph listBlockColor;
-			receiver: (self ownerThatIsA: ScratchStageMorph);
-			isSpecialForm: true;
-			commandSpec: 'list %s';
-			selector: #doMakeNewList.
-
-	page addMorph: (listMaker position: x @ y).
-	y := y + listMaker height + 3.
-	"
 
 	(self blocksFor: 'list') do: [:blockOrSym |
 		(blockOrSym = #-) | (blockOrSym = #~) | (blockOrSym = #=)
@@ -1368,7 +1356,7 @@ ScriptablePhratchMorph >> blockFromOldFormTuple: tuple receiver: scriptOwner [
 		(block isKindOf: WhenHatBlockMorph) ifTrue: [block color: Color red].
 		^ block].
 
-	#scratchComment = k ifTrue: [
+	#phratchComment = k ifTrue: [
 		block := PhratchCommentMorph new.
 		tuple size > 1 ifTrue: [block commentMorph contents: (tuple at: 2)].
 		tuple size > 2 ifTrue: [(tuple at: 3) ifFalse: [block toggleShowing]].
@@ -1704,7 +1692,7 @@ ScriptablePhratchMorph >> blockFromTuple: tuple receiver: scriptOwner [
 		(block isKindOf: WhenHatBlockMorph) ifTrue: [block color: Color red].
 		^ block].
 
-	#scratchComment = k ifTrue: [
+	#phratchComment = k ifTrue: [
 		block := PhratchCommentMorph new.
 		tuple size > 3 ifTrue: [block commentMorph contents: (tuple at: 4)].
 		tuple size > 4 ifTrue: [(tuple at: 5) ifFalse: [block toggleShowing]].
@@ -1891,7 +1879,6 @@ ScriptablePhratchMorph >> blockVariableBlockFromTuple: tuple receiver: scriptOwn
 			ifTrue: [ rcvr := (tuple at: 5) convertTuplesToStacks ]
 			ifFalse: [ rcvr := VariableFrame new "definitionFor: (CustomBlockDefinition idFromSpec: (tuple at: 5))" ]. 
 		^VariableBlockMorph new
-"			color: (ScriptableScratchMorph blockColorFor: 'variables');"
 			receiver: rcvr;
 			selector: #getVar:;
 			commandSpec: varName;
@@ -1943,7 +1930,6 @@ ScriptablePhratchMorph >> blockVariableBlockFromTupleOldForm: tuple receiver: sc
 			ifTrue: [ rcvr := tuple third convertTuplesToStacks ]
 			ifFalse: [ rcvr := rcvr definitionFor: (CustomBlockDefinition idFromSpec: tuple third) ]. 
 		^ VariableBlockMorph new
-"			color: (ScriptableScratchMorph blockColorFor: 'variables');"
 			receiver: rcvr;
 			selector: #getVar:;
 			commandSpec: varName;
@@ -2270,7 +2256,7 @@ ScriptablePhratchMorph >> click: evt [
 	h toolType ifNotNil: [^ self handleTool: h toolType hand: h].
 
 	clickEvt := PhratchEvent new
-		name: 'Scratch-MouseClickEvent'
+		name: 'Phratch-MouseClickEvent'
 		argument: 0.
 	self eventReceived: clickEvt.
 
@@ -3767,13 +3753,13 @@ ScriptablePhratchMorph >> eventReceived: event [
 
 	| targetScripts newProcs |
 	targetScripts := #().
-	event name = 'Scratch-KeyPressedEvent'
+	event name = 'Phratch-KeyPressedEvent'
 		ifTrue: [
 			targetScripts := self scripts select: [:s |
 				(s class == KeyEventHatMorph) and:
 				 [s respondsToKeyEvent: event argument]]]
 		ifFalse: [
-			event name = 'Scratch-MouseClickEvent'
+			event name = 'Phratch-MouseClickEvent'
 				ifTrue: [
 					self isHidden not ifTrue: [
 						targetScripts := self scripts select: [:s |
@@ -4136,7 +4122,7 @@ ScriptablePhratchMorph >> hatBlockFromTuple: tuple receiver: scriptOwner [
 
 	blockClass = EventHatMorph ifTrue: [
 		eventName := tuple at: 4.
-		eventName = 'Scratch-StartClicked'
+		eventName = 'Phratch-StartClicked'
 			ifTrue: [block forStartEvent; scriptOwner: scriptOwner]
 			ifFalse: [block eventName: eventName]].
 
@@ -4162,7 +4148,7 @@ ScriptablePhratchMorph >> hatBlockFromTupleOldForm: tuple receiver: scriptOwner 
 
 	blockClass = EventHatMorph ifTrue: [
 		eventName := tuple at: 2.
-		eventName = 'Scratch-StartClicked'
+		eventName = 'Phratch-StartClicked'
 			ifTrue: [block forStartEvent; scriptOwner: scriptOwner]
 			ifFalse: [block eventName: eventName]].
 
@@ -4525,14 +4511,14 @@ ScriptablePhratchMorph >> insert: anObject at: lineNum ofList: listName [
 ]
 
 { #category : #media }
-ScriptablePhratchMorph >> insertMedia: aScratchMedia before: targetOrNil [
-	"Shuffle my media list so that the given media item comes immediately before the target media item, or at the end of the list if targetScratchMedia is nil. Do nothing if the given item is the same as the target item."
+ScriptablePhratchMorph >> insertMedia: aPhratchMedia before: targetOrNil [
+	"Shuffle my media list so that the given media item comes immediately before the target media item, or at the end of the list if targetPhratchMedia is nil. Do nothing if the given item is the same as the target item."
 
 	| mediaItem |
-	aScratchMedia == targetOrNil ifTrue: [^ self].
+	aPhratchMedia == targetOrNil ifTrue: [^ self].
 
-	mediaItem := aScratchMedia.
-	(media includes: aScratchMedia) ifFalse: [
+	mediaItem := aPhratchMedia.
+	(media includes: aPhratchMedia) ifFalse: [
 		"dropping an undeleted media item"
 		mediaItem := mediaItem copy.
 		mediaItem mediaName: (self unusedMediaNameFromBaseName: mediaItem mediaName).
@@ -4544,7 +4530,7 @@ ScriptablePhratchMorph >> insertMedia: aScratchMedia before: targetOrNil [
 		ifNotNil: [media add: mediaItem before: targetOrNil].
 	self updateMediaCategory.
 
-	aScratchMedia isSound 
+	aPhratchMedia isSound 
 		ifTrue: [
 			self undeleteAttribute: #sounds.
 			self propagateSounds]
@@ -4628,7 +4614,7 @@ ScriptablePhratchMorph >> interpretStringAsNumberIfPossible: anObject [
 		ifTrue: [s := ReadStream on: anObject asByteArray]
 		ifFalse: [s := ReadStream on: anObject].
 
-	"see if the string can be parsed as a Scratch number:"
+	"see if the string can be parsed as a Phratch number:"
 	digits := '0123456789' asByteArray.
 	hasDigit := false.
 	(s atEnd not and: [s peek = $- asciiValue]) ifTrue: [s next].
@@ -4757,7 +4743,7 @@ ScriptablePhratchMorph >> isObject: object type: type [
 
 { #category : #accessing }
 ScriptablePhratchMorph >> isScriptable [
-	"I am a scriptable Scratch object."
+	"I am a scriptable Phratch object."
 
 	^ true
 
@@ -4779,7 +4765,7 @@ ScriptablePhratchMorph >> isVisible [
 
 { #category : #'dropping/grabbing' }
 ScriptablePhratchMorph >> justDroppedInto: newOwner event: evt [
-	"If I'm dropped into any submorph of a ScratchFrameMorph, reject the drop unless it is onto the work pane. For developers, accept drops into other morphs (e.g. the World). Otherwise, reject the drop."
+	"If I'm dropped into any submorph of a PhratchFrameMorph, reject the drop unless it is onto the work pane. For developers, accept drops into other morphs (e.g. the World). Otherwise, reject the drop."
 
 	| sFrame |
 	(sFrame := newOwner ownerOrYourselfThatIsA: PhratchFrameMorph) ifNotNil: [
@@ -5529,7 +5515,7 @@ ScriptablePhratchMorph >> mousePressed [
 ScriptablePhratchMorph >> mouseX [
 
 	| s centerX |
-	DoubleSize ifTrue: [^ (Sensor lastMousePosition x - ScratchOrigin x) // 2].
+	DoubleSize ifTrue: [^ (Sensor lastMousePosition x - PhratchOrigin x) // 2].
 
 	self inPresentationMode ifFalse: [
 		s := self ownerOrYourselfThatIsA: PhratchStageMorph.
@@ -5537,7 +5523,7 @@ ScriptablePhratchMorph >> mouseX [
 			centerX := s left + (s width // 4).
 			^ 2 * (Sensor lastMousePosition x - centerX)]].
 
-	^ Sensor lastMousePosition x - ScratchOrigin x
+	^ Sensor lastMousePosition x - PhratchOrigin x
 
 ]
 
@@ -5545,7 +5531,7 @@ ScriptablePhratchMorph >> mouseX [
 ScriptablePhratchMorph >> mouseY [
 
 	| s centerY |
-	DoubleSize ifTrue: [^ (Sensor lastMousePosition y - ScratchOrigin y) negated // 2].
+	DoubleSize ifTrue: [^ (Sensor lastMousePosition y - PhratchOrigin y) negated // 2].
 
 	self inPresentationMode ifFalse: [
 		s := self ownerOrYourselfThatIsA: PhratchStageMorph.
@@ -5553,7 +5539,7 @@ ScriptablePhratchMorph >> mouseY [
 			centerY := s top + (s height // 4).
 			^ -2 * (Sensor lastMousePosition y - centerY)]].
 
-	^ (Sensor lastMousePosition y - ScratchOrigin y) negated
+	^ (Sensor lastMousePosition y - PhratchOrigin y) negated
 
 ]
 
@@ -5584,8 +5570,8 @@ ScriptablePhratchMorph >> newCustomBlockFor: aDefinition [
 ]
 
 { #category : #byob }
-ScriptablePhratchMorph >> newList: aScratchListMorph [
-	^aScratchListMorph
+ScriptablePhratchMorph >> newList: aPhratchListMorph [
+	^aPhratchListMorph
 ]
 
 { #category : #'looks ops' }
@@ -5642,7 +5628,7 @@ ScriptablePhratchMorph >> noteOn: midiKey duration: beats elapsed: elapsedMSecs 
 
 { #category : #'sound ops' }
 ScriptablePhratchMorph >> noteSelector [
-	"Returns an instance of a ScratchNoteSelector for selecting notes. This object behaves like a CustomMenu."
+	"Returns an instance of a PhratchNoteSelector for selecting notes. This object behaves like a CustomMenu."
 
 	| stageMorph notePlayer |
 	stageMorph := (self ownerOrYourselfThatIsA: PhratchStageMorph).
@@ -5986,7 +5972,7 @@ ScriptablePhratchMorph >> privateSetGraphicEffect: effect to: aNumber [
 
 { #category : #private }
 ScriptablePhratchMorph >> projectDirectory [
-	"Answer the directory containing this Scratch project or the default directory."
+	"Answer the directory containing this Phratch project or the default directory."
 
 	| frame |
 	(frame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNil: [^ FileSystem workingDirectory].
@@ -6096,7 +6082,7 @@ ScriptablePhratchMorph >> purgeVarsAndLists [
 
 "
 	vars keysDo: [:each |
-		(((vars at: each) isKindOf: ScratchListMorph) or: [(vars at: each) isKindOf: BlockMorph ])
+		(((vars at: each) isKindOf: PhratchListMorph) or: [(vars at: each) isKindOf: BlockMorph ])
 			ifTrue: [vars at: each put: '']].
 
 "
@@ -6254,7 +6240,7 @@ ScriptablePhratchMorph >> saveSound: aSampledSound name: baseName [
 
 { #category : #'looks ops' }
 ScriptablePhratchMorph >> sayNothing [
-	"Default behavior does nothing. Overridden in ScratchSpriteMorph."
+	"Default behavior does nothing. Overridden in PhratchSpriteMorph."
 
 ]
 
@@ -6315,7 +6301,7 @@ ScriptablePhratchMorph >> sensorPressed: sensorName [
 
 { #category : #networking }
 ScriptablePhratchMorph >> serialized [
-	"Answer a ByteArray containing this Scratch object in serialized form."
+	"Answer a ByteArray containing this Phratch object in serialized form."
 
 	| s objToExport |
 	s := WriteStream on: (ByteArray new: 100000).
@@ -6818,7 +6804,7 @@ ScriptablePhratchMorph >> stopPlaying [
 ScriptablePhratchMorph >> stopScriptsFor: eventName [
 	"Stop all my running stacks with an EventHat matching the given event name."
 
-	((eventName = 'Scratch-KeyPressedEvent') | (eventName = 'Scratch-MouseClickEvent'))
+	((eventName = 'Phratch-KeyPressedEvent') | (eventName = 'Phratch-MouseClickEvent'))
 		ifFalse: [ self scripts do: [:s |
 			((s class == EventHatMorph) and: [s eventName caseInsensitiveEqual: eventName])
 				ifTrue: [s stop]]]
@@ -7406,7 +7392,7 @@ ScriptablePhratchMorph >> viewBlocksAndScriptsQuickly [
 
 { #category : #blocks }
 ScriptablePhratchMorph >> viewerPageForCategory: aCategoryName [
-	"Answer a morph containing blocks for the given category for use in the given ScratchViewer."
+	"Answer a morph containing blocks for the given category for use in the given PhratchViewer."
 
 	| bin x y |
 	aCategoryName = 'variables' ifTrue: [^ self variablesPage].
@@ -7434,7 +7420,7 @@ ScriptablePhratchMorph >> viewerPageForCategory: aCategoryName [
 
 { #category : #blocks }
 ScriptablePhratchMorph >> viewerPageForMotion [
-	"Answer a morph containing mtion blocks for the given category for use in the given ScratchViewer."
+	"Answer a morph containing mtion blocks for the given category for use in the given PhratchViewer."
 
 	| bin isStage addMotorBlocks s font x y m |
 	bin := PhratchBlockPaletteMorph new.
@@ -7493,7 +7479,7 @@ ScriptablePhratchMorph >> viewerPageForMotion [
 
 { #category : #blocks }
 ScriptablePhratchMorph >> viewerPageForSensing [
-	"Answer a morph containing mtion blocks for the given category for use in the given ScratchViewer."
+	"Answer a morph containing mtion blocks for the given category for use in the given PhratchViewer."
 
 	| bin x y |
 	bin := PhratchBlockPaletteMorph new.

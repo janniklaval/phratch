@@ -1713,7 +1713,7 @@ PhratchSpriteMorph >> refPos: aPoint [
 PhratchSpriteMorph >> referencePosition [
 
 	| p s |
-	p := (bounds origin + offsetWhenRotated) - ScratchOrigin.
+	p := (bounds origin + offsetWhenRotated) - PhratchOrigin.
 
 	"adjust when in Hand in quartersize mode:"
 	((owner isKindOf: HandMorph) and:
@@ -1739,7 +1739,7 @@ PhratchSpriteMorph >> referencePosition: aPoint [
 	newY isInfinite ifTrue: [newY := newY sign * 10000].
 
 	p := newX @ newY negated.
-	self position: ScratchOrigin + (p - offsetWhenRotated).
+	self position: PhratchOrigin + (p - offsetWhenRotated).
 	self keepOnScreen.
 
 ]
@@ -2118,7 +2118,7 @@ PhratchSpriteMorph >> spawn [
 
 	| stage child |
 "
-	(frame := self ownerOrYourselfThatIsA: ScratchFrameMorph) ifNil: [^ nil].
+	(frame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNil: [^ nil].
 "
 	stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
 	stage ifNil: [^ self].

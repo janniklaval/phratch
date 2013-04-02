@@ -95,7 +95,7 @@ Form >> fillRadialFromXColorBlock: colorBlock center: aPoint [
 ]
 
 { #category : #'*Phratch' }
-Form >> hibernateForScratch [
+Form >> hibernateForPhratch [
 
 	self hibernate
 ]
@@ -465,7 +465,7 @@ Form >> writeBMPFileNamed: fName [
 	rowBytes := ((depth min: 24) * width + 31 // 32) * 4.
 	biSizeImage := height * rowBytes.
 
- 	f := StandardFileStream newScratchFileNamed: fileName.
+ 	f := StandardFileStream newPhratchFileNamed: fileName.
 	f ifNil: [^ self].
 	f binary.
 

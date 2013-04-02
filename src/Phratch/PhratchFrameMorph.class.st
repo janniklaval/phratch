@@ -50,9 +50,9 @@ Class {
 		'Fonts',
 		'FontsXO',
 		'IsXO',
-		'ScratchServers',
-		'ScratchSkin',
-		'ScratchSkinXO',
+		'PhratchServers',
+		'PhratchSkin',
+		'PhratchSkinXO',
 		'ShareServer',
 		'ShareServerPath',
 		'SupportServer',
@@ -70,8 +70,8 @@ Class {
 { #category : #byob }
 PhratchFrameMorph class >> addSlotShapesToSkin [
 
-	"ScratchFrameMorph addSlotShapesToSkin"
-	"ImageMorph new form: (ScratchFrameMorph skinAt: #typeCommand); openInWorld"
+	"PhratchFrameMorph addSlotShapesToSkin"
+	"ImageMorph new form: (PhratchFrameMorph skinAt: #typeCommand); openInWorld"
 
 	| block form big slot halfList |
 
@@ -159,12 +159,6 @@ PhratchFrameMorph class >> defaultSprite [
 			addMediaItem: (ImageMedia new
 				mediaName: ('costume' localized, '1');
 				form: (PhratchFrameMorph skinAt: #defaultSpriteCostume));
-"			addMediaItem: (ImageMedia new
-				mediaName: ('costume' localized, '2');
-				form: (ScratchFrameMorph skinAt: #defaultSpriteCostume2));
-			addMediaItem: (SoundMedia new
-				mediaName: 'meow' localized;
-				sound: ScratchSpriteMorph meowSound); "
 			lookLike: ('costume' localized, '1')].
 
 ]
@@ -315,7 +309,7 @@ PhratchFrameMorph class >> palettePaneColor [
 
 { #category : #byob }
 PhratchFrameMorph class >> parseDownloadDatabase: fileName [
-	"Parse the HTML file for the Scratch download database."
+	"Parse the HTML file for the Phratch download database."
 	"self parseDownloadDatabase: 'mlist.html'"
 	"To list downloads by date:
 		(db collect: [:r | r first upTo: Character space]) asBag sortedElements"
@@ -364,7 +358,6 @@ PhratchFrameMorph class >> parseRecordFrom: lineStream [
 { #category : #utilities }
 PhratchFrameMorph class >> patchWindowsVM: vmFileName quitMessage: aString [
 	"Modify the Squeak application (the .exe file) for Windows to display the given string when you quit. You must start with a copy of the original VM, not one that has already been modified. This file will be modified in place, so make sure you keep a copy of the original! The string is truncated to 27 characters since it must fit into the space of the original quit message."
-	"self patchWindowsVM: 'Scratch.exe' quitMessage: 'Want to quit Scratch now?'"
 
 	| orig firstOrigByte replacement f found startPos |
 	orig := 'Quit Squeak without saving?' asByteArray.
@@ -401,7 +394,7 @@ PhratchFrameMorph class >> patchWindowsVM: vmFileName quitMessage: aString [
 { #category : #utilities }
 PhratchFrameMorph class >> phratchServers [
 
-	^ ScratchServers
+	^ PhratchServers
 
 ]
 
@@ -413,22 +406,22 @@ PhratchFrameMorph class >> putInClipboard: anObject [
 
 { #category : #utilities }
 PhratchFrameMorph class >> quitFromMenu [
-	"The user is using the application menu to quit from Scratch. If there is an open Scratch window, ask the user about saving the project. Otherwise, confirm that the user really wants to quit."
+	"The user is using the application menu to quit from Phratch. If there is an open Phratch window, ask the user about saving the project. Otherwise, confirm that the user really wants to quit."
 
-	| scratchWindow |
-	scratchWindow := World submorphs detect: [:m | (m isKindOf: self)] ifNone: [nil].
-	scratchWindow
+	| phratchWindow |
+	phratchWindow := World submorphs detect: [:m | (m isKindOf: self)] ifNone: [nil].
+	phratchWindow
 		ifNil: [World hands first quitSession]
-		ifNotNil: [scratchWindow quitPhratch].
+		ifNotNil: [phratchWindow quitPhratch].
 
 ]
 
 { #category : #utilities }
 PhratchFrameMorph class >> readShareServerEntry [
-	"Check for a file containing a list of Scratch servers.
+	"Check for a file containing a list of Phratch servers.
 	If this file is found and it includes an entry labled '*share*' then make that entry the server and path for 'Share' uploads. 
 	If this file includes an entry labeled *support* then make that entry the server and path for the 'Support' site link.
-	This is meant to be done once when Scratch is first started. Other entries in this file used to appear as Scratch servers in the Scratch project open dialog."
+	This is meant to be done once when Phratch is first started. Other entries in this file used to appear as Phratch servers in the Phratch project open dialog."
 	"self readShareServerEntry"
 
 	| s zentry entryList servers key shareExists |
@@ -437,7 +430,7 @@ PhratchFrameMorph class >> readShareServerEntry [
 	ShareServerPath := '/services/upload'.
 	SupportServer := ShareServer.
 	SupportServerPath := '/support'.
-	ScratchServers := #(
+	PhratchServers := #(
 "xxx
 		('LTC Scratch Server'		'ltc.smm.org'			'/scratch/')
 		('MIT Scratch Server'		'web.media.mit.edu'		'/~jmaloney/mit_scratch/')
@@ -453,9 +446,9 @@ xxx"
 	servers do: [:entry |
 		entry size >= 3 ifTrue: [
 			key := entry first asLowercase.
-			ScratchServers := ScratchServers reject: [:e | e first asLowercase = key].
-			ScratchServers := ScratchServers copyWith: entry]].
-	ScratchServers sort: [:e1 :e2 | (e1 first compare: e2 first) <= 2].
+			PhratchServers := PhratchServers reject: [:e | e first asLowercase = key].
+			PhratchServers := PhratchServers copyWith: entry]].
+	PhratchServers sort: [:e1 :e2 | (e1 first compare: e2 first) <= 2].
 
 	shareExists := true.
 	"if there is a file *share* entry, it overrides the default Share server"
@@ -476,7 +469,7 @@ xxx"
 { #category : #'scratch skin' }
 PhratchFrameMorph class >> readSkin [
 	
-	^ ScratchSkin := 
+	^ PhratchSkin := 
 		PhratchFrameMorph readSkinFrom: 
 			(FileSystem workingDirectory / 'ScratchSkin')
 ]
@@ -502,14 +495,14 @@ PhratchFrameMorph class >> readSkinFrom: aDirectory [
 				ifTrue: [xoDict at: (fn1 copyFrom: 1 to: fn1 size - 3) asSymbol put: img]
 				ifFalse: [dict at: fn1 asSymbol put: img]].
 			].
-	ScratchSkin := dict.
-	ScratchSkinXO := xoDict.
+	PhratchSkin := dict.
+	PhratchSkinXO := xoDict.
 
-	img := ScratchSkin at: #scriptsPaneTexture ifAbsent: [nil].
+	img := PhratchSkin at: #scriptsPaneTexture ifAbsent: [nil].
 	(img notNil and: [img depth ~= 32]) ifTrue: [
-		ScratchSkin at: #scriptsPaneTexture put: (img asFormOfDepth: 32)].
+		PhratchSkin at: #scriptsPaneTexture put: (img asFormOfDepth: 32)].
 
-	^ ScratchSkin
+	^ PhratchSkin
 ]
 
 { #category : #utilities }
@@ -561,7 +554,7 @@ PhratchFrameMorph class >> setVisibleDrives: driveListString [
 
 { #category : #utilities }
 PhratchFrameMorph class >> shareServer [
-	"Answer the name of the Scratch project sharing server."
+	"Answer the name of the Phratch project sharing server."
 
 	^ ShareServer
 
@@ -569,13 +562,13 @@ PhratchFrameMorph class >> shareServer [
 
 { #category : #'scratch skin' }
 PhratchFrameMorph class >> skin [
-	^ScratchSkin ifNil: [self readSkin]
+	^PhratchSkin ifNil: [self readSkin]
 ]
 
 { #category : #'scratch skin' }
 PhratchFrameMorph class >> skinAt: aSymbolOrString [
 
-	^ self skinAt: aSymbolOrString ifAbsent: [ScratchSkin error: 'key not found']
+	^ self skinAt: aSymbolOrString ifAbsent: [PhratchSkin error: 'key not found']
 
 ]
 
@@ -587,7 +580,7 @@ PhratchFrameMorph class >> skinAt: aSymbolOrString ifAbsent: aBlock [
 	k := aSymbolOrString asSymbol.
 	self isXO ifTrue: [
 		k = #scriptsPaneTexture ifTrue: [^ aBlock value].
-		(ScratchSkinXO includesKey: k) ifTrue: [^ ScratchSkinXO at: k]].
+		(PhratchSkinXO includesKey: k) ifTrue: [^ PhratchSkinXO at: k]].
 
 	^ self skin at: k ifAbsent: aBlock
 
@@ -595,7 +588,7 @@ PhratchFrameMorph class >> skinAt: aSymbolOrString ifAbsent: aBlock [
 
 { #category : #utilities }
 PhratchFrameMorph class >> supportServer [
-	"Answer the name of the Scratch support site server."
+	"Answer the name of the Phratch support site server."
 
 	^ SupportServer
 
@@ -603,7 +596,7 @@ PhratchFrameMorph class >> supportServer [
 
 { #category : #utilities }
 PhratchFrameMorph class >> supportServerPath [
-	"Answer the path of the Scratch support site server."
+	"Answer the path of the Phratch support site server."
 
 	^ SupportServerPath
 
@@ -621,7 +614,7 @@ PhratchFrameMorph class >> takeOverScreen: aBoolean [
 { #category : #'as yet unclassified' }
 PhratchFrameMorph class >> updateSkinFrom: aDirectory [
 	"Read the Forms for my skin from the given directory and update them in myskin dictionary."
-	"When in XO mode, entries in ScratchSkinXO override the corresponding entries in ScratchSkin."
+	"When in XO mode, entries in SkinXO override the corresponding entries in Skin."
 	"self updateSkinFrom: (FileDirectory default directoryNamed: 'skinRestore')"
 
 	| dict img i xoDict |
@@ -638,8 +631,8 @@ PhratchFrameMorph class >> updateSkinFrom: aDirectory [
 			(fn1 asLowercase endsWith: '_xo')
 				ifTrue: [xoDict at: (fn1 copyFrom: 1 to: fn1 size - 3) asSymbol put: img]
 				ifFalse: [dict at: fn1 asSymbol put: img]]].
-	dict keys do: [:key| Transcript cr; show: key. ScratchSkin at: key put: (dict at: key)].
-	xoDict keys do: [:key| ScratchSkinXO at: key put: (xoDict at: key)].
+	dict keys do: [:key| Transcript cr; show: key. PhratchSkin at: key put: (dict at: key)].
+	xoDict keys do: [:key| PhratchSkinXO at: key put: (xoDict at: key)].
 
 	img := self skin at: #scriptsPaneTexture ifAbsent: [nil].
 	(img notNil and: [img depth ~= 32]) ifTrue: [
@@ -771,7 +764,7 @@ PhratchFrameMorph >> addBlockEditor: aBlockEditor [
 
 { #category : #'menu/button actions' }
 PhratchFrameMorph >> addServerCommandsTo: menu [
-	"Add Scratch server commands to the given menu."
+	"Add Phratch server commands to the given menu."
 
 	| disable endCmd |
 	disable := false.  "make this true to disable this feature"
@@ -1223,7 +1216,7 @@ PhratchFrameMorph >> createBasicPanes [
 
 { #category : #intialization }
 PhratchFrameMorph >> createLogo [
-	"Create and the Scratch logo."
+	"Create and the Phratch logo."
 
 	logoMorph := SketchMorph withForm: (PhratchFrameMorph skinAt: #scratchLogo).
 	logoMorph position: topPane position + (12@8).
@@ -1482,7 +1475,7 @@ PhratchFrameMorph >> deletingWatcher [
 
 { #category : #buttonActions }
 PhratchFrameMorph >> developersMenu [
-	"Present the Scratch developer's menu."
+	"Present the Phratch developer's menu."
 
 	| menu |
 
@@ -1514,19 +1507,19 @@ PhratchFrameMorph >> drawOn: aCanvas [
 ]
 
 { #category : #byob }
-PhratchFrameMorph >> editBlockDefinition: aCustomBlockDefinition for: aScriptableScratchMorph [
+PhratchFrameMorph >> editBlockDefinition: aCustomBlockDefinition for: aScriptablePhratchMorph [
 
 	| editor def id |
 	"for prototypal inheritance:"
 	id := aCustomBlockDefinition id.
-	aScriptableScratchMorph ensureOwnBlockExists: aCustomBlockDefinition.
-	def := aScriptableScratchMorph customBlocks detect: [:eachDef | eachDef id = id]
+	aScriptablePhratchMorph ensureOwnBlockExists: aCustomBlockDefinition.
+	def := aScriptablePhratchMorph customBlocks detect: [:eachDef | eachDef id = id]
 		ifNone: [^ self ].
 	(self notEditingBlockDefinition: def) ifFalse: [^self].
 	def fixBlockVarReporters.
 	editor 	:= BlockEditorFrameMorph new
 		withButtonsForYes: false no: false okay: true cancel: true;
-		receiver: aScriptableScratchMorph;
+		receiver: aScriptablePhratchMorph;
 		definition: def.
 	blockEditors add: editor.
 	editor getUserResponse.
@@ -1594,7 +1587,7 @@ PhratchFrameMorph >> editMenu: aMenuTitleMorph [
 "
 	#(3 4 7 8) do: [:n |
 		menu labels at: n put:
-			((menu labels at: n) copyFrom: 1 to: (menu labels at: n) size - 1), ScratchTranslator ellipsesSuffix].
+			((menu labels at: n) copyFrom: 1 to: (menu labels at: n) size - 1), PhratchTranslator ellipsesSuffix].
 "
 	menu popUpAt: aMenuTitleMorph bottomLeft + (0@10) 
 		forHand: World primaryHand in: World.
@@ -1610,11 +1603,11 @@ PhratchFrameMorph >> editNotes [
 
 { #category : #'falta adaptar' }
 PhratchFrameMorph >> enableRemoteSensors [
-	"Start running the Scratch server, allowing Scratch and other applications to interact with this Scratch remotely."
+	"Start running the Phratch server, allowing Phratch and other applications to interact with this Phratch remotely."
 
 	| server |
 	workPane phratchServer ifNil: [
-		server := PhratchServer new userName: 'Scratch'.
+		server := PhratchServer new userName: 'Phratch'.
 		server stage: workPane.
 		workPane phratchServer: server].
 
@@ -1765,7 +1758,7 @@ PhratchFrameMorph >> extent: aPoint [
 
 { #category : #'file read/write' }
 PhratchFrameMorph >> extractInfoFrom: aByteArray [
-	"Answer a Scratch info dictionary from the given ByteArray. Answer an empty dictionary if it is an old project."
+	"Answer a Phratch info dictionary from the given ByteArray. Answer an empty dictionary if it is an old project."
 
 	| s version |
 	s := ReadStream on: aByteArray.
@@ -1781,7 +1774,7 @@ PhratchFrameMorph >> extractInfoFrom: aByteArray [
 
 { #category : #'file read/write' }
 PhratchFrameMorph >> extractPhratchProjectFrom: aByteArray [
-	"Answer a Scratch project (i.e. a ScratchStageMorph possibly containing sprites) from the given ByteArray. Answer nil if the project cannot be unpacked.
+	"Answer a Phratch project (i.e. a PhratchStageMorph possibly containing sprites) from the given ByteArray. Answer nil if the project cannot be unpacked.
 
 Note: this is a compatibility force method for BYOB - jens"
 
@@ -1829,7 +1822,7 @@ Note: this is a compatibility force method for BYOB - jens"
 
 { #category : #'file read/write' }
 PhratchFrameMorph >> extractProjectFrom: aByteArray [
-	"Answer a Scratch project (i.e. a ScratchStageMorph possibly containing sprites) from the given ByteArray. Answer nil if the project cannot be unpacked."
+	"Answer a Phratch project (i.e. a PhratchStageMorph possibly containing sprites) from the given ByteArray. Answer nil if the project cannot be unpacked."
 
 	| s version proj |
 
@@ -1838,7 +1831,7 @@ PhratchFrameMorph >> extractProjectFrom: aByteArray [
 	s := ReadStream on: aByteArray.
 	version := ObjStream phratchFileVersionFrom: (s next: 10) asString.
 	version = 0 ifTrue: [
-		ScriptablePhratchMorph decodeAsByob.	"make sure we initialize every field - this breaks compatibility with Scratch-sprites. -Jens"
+		ScriptablePhratchMorph decodeAsByob.	"make sure we initialize every field - this breaks compatibility with Phratch-sprites. -Jens"
 		s position: 0.
 		[proj := ObjStream new readObjFrom: s showProgress: true] ifError: [
 		^ self extractPhratchProjectFrom: aByteArray]].
@@ -1848,7 +1841,7 @@ PhratchFrameMorph >> extractProjectFrom: aByteArray [
 
 	proj class = PhratchStageMorph ifFalse: [
 		version > 2
-			ifTrue: [self error: 'Project created by a later version of Scratch']
+			ifTrue: [self error: 'Project created by a later version of Phratch']
 			ifFalse: [self error: 'Problem reading project.'].
 		^ nil].
 
@@ -1960,7 +1953,7 @@ PhratchFrameMorph >> fillScreenOn [
 
 { #category : #'falta adaptar' }
 PhratchFrameMorph >> fixByteReversedSounds [
-	"See if the current project contains any byte-reversed copies of one of the standard sounds. If it does, byte-reverse all sounds. This is a workaround for a bug in Scratch 1.0 that did not upload sounds in big-endian order."
+	"See if the current project contains any byte-reversed copies of one of the standard sounds. If it does, byte-reverse all sounds. This is a workaround for a bug in Phratch 1.0 that did not upload sounds in big-endian order."
 
 	| allSoundBuffers badMeowPrefix badPopPrefix foundBadSound |
 	allSoundBuffers := IdentitySet new.
@@ -2263,7 +2256,7 @@ PhratchFrameMorph >> importSpriteOrProject: fileNameOrData [
 		(stack isKindOf: BlockMorph) ifTrue: [workPane addStack: stack fullCopy]].
 
 	"add imported background costumes and scripts to my stage, filtering out default items"
-	defaultForm := workPane defaultImageMedia form hibernateForScratch.
+	defaultForm := workPane defaultImageMedia form hibernateForPhratch.
 	defaultSound := SoundMedia new sound.
 	importedStage media do: [:media |
 		(media isImage and: [media form hibernate bits ~= defaultForm bits])
@@ -2357,9 +2350,8 @@ PhratchFrameMorph >> installNewProject: newWorkpane [
 	self stopAll.
 
 	newWorkpane class = PhratchStageMorph
-		ifFalse: [^ self inform: 'Incompatible Scratch file format'].
+		ifFalse: [^ self inform: 'Incompatible Phratch file format'].
 
-	"self exitScratchSession."
 	workPane phratchServer ifNotNil: [
 		workPane phratchServer clearCaches.
 		workPane phratchServer stage: newWorkpane.
@@ -2459,7 +2451,7 @@ PhratchFrameMorph >> isTurbo [
 
 { #category : #'menu/button actions' }
 PhratchFrameMorph >> joinPhratchSession [
-	"Join another Scratch user or a Scratch-compatible remote application."
+	"Join another Phratch user or a Phratch-compatible remote application."
 
 	| server addrString ok |
 	server := PhratchServer new.
@@ -2497,7 +2489,7 @@ PhratchFrameMorph >> keyStroke: evt [
 					Smalltalk fullScreenMode: true.
 					World restoreDisplay].
 				^ self].
-			workPane broadcastEventNamed: 'Scratch-KeyPressedEvent' with: evt.
+			workPane broadcastEventNamed: 'Phratch-KeyPressedEvent' with: evt.
 ]
 
 { #category : #'menu/button actions' }
@@ -2559,7 +2551,7 @@ PhratchFrameMorph >> launchHelpFile: aFilename [
 		ifTrue: [ 
 			self open: (((helpDir / aFilename) fullName))]
 		ifFalse: [
-			DialogBoxMorph inform: 'Scratch help file not found.' localized].
+			DialogBoxMorph inform: 'Help file not found.' localized].
 
 ]
 
@@ -2736,7 +2728,7 @@ PhratchFrameMorph >> mouseY [
 
 { #category : #'file read/write' }
 PhratchFrameMorph >> nameFromFileName: fileName [
-	"Return the given Scratch file name without the trailing .sb or .scratch or .ypr extension, if it has one. Ensure the the result is UTF8."
+	"Return the given Phratch file name without the trailing .sb or .scratch or .ypr extension, if it has one. Ensure the the result is UTF8."
 
 	| s |
 	fileName = '' ifTrue: [ ^'default' ].
@@ -2753,7 +2745,7 @@ PhratchFrameMorph >> nameFromFileName: fileName [
 
 { #category : #buttonActions }
 PhratchFrameMorph >> newPhratchProject [
-	"Make a new, blank Scratch project."
+	"Make a new, blank Phratch project."
 
 	| response newProject sprite |
 	self closeMediaEditorsAndDialogs ifFalse: [^ self].
@@ -2777,7 +2769,7 @@ PhratchFrameMorph >> newPhratchProject [
 	self installNewProject: newProject.
 	sprite installGlobalBlocks.
 
-	ScriptablePhratchMorph decodeAsByob. "remember we created this project in byob and not in Scratch"
+	ScriptablePhratchMorph decodeAsByob. 
 
 	self initializeWatcherPositions.
 	blockEditors := Set new.
@@ -2877,7 +2869,7 @@ PhratchFrameMorph >> openMIDI [
 
 { #category : #'falta adaptar' }
 PhratchFrameMorph >> openPhratchDroppedProjectNamed: fName [
-	"Open a Scratch project with the given name that was dropped on the Scratch window."
+	"Open a Phratch project with the given name that was dropped on the Phratch window."
 
 	| response |
 	self closeMediaEditorsAndDialogs ifFalse: [^ self].
@@ -2922,7 +2914,7 @@ PhratchFrameMorph >> openPhratchProject [
 
 { #category : #'falta adaptar' }
 PhratchFrameMorph >> openPhratchProjectNamed: fName [
-	"Open a Scratch project with the given name."
+	"Open a Phratch project with the given name."
 
 	| f projData newProj dir fn|
 	self closeMediaEditorsAndDialogs ifFalse: [^ self].
@@ -2976,7 +2968,7 @@ PhratchFrameMorph >> paintingInProgress: aBoolean [
 
 { #category : #'falta adaptar' }
 PhratchFrameMorph >> phratchObjects [
-	"Answer a collection of all the scratch objects in the work pane."
+	"Answer a collection of all the phratch objects in the work pane."
 
 	^ self workPane submorphs select: [:m | m isKindOf: ScriptablePhratchMorph]
 
@@ -2984,7 +2976,7 @@ PhratchFrameMorph >> phratchObjects [
 
 { #category : #watchers }
 PhratchFrameMorph >> phratchWatchers [
-	"Answer a collection of all the scratch watchers in the work pane."
+	"Answer a collection of all the phratch watchers in the work pane."
 
 	^ self workPane submorphs select: [:m | m isKindOf: WatcherMorph]
 
@@ -3101,13 +3093,13 @@ PhratchFrameMorph >> processKeyboardEvents [
 					Smalltalk fullScreenMode: true.
 					World restoreDisplay].
 				^ self].
-			workPane broadcastEventNamed: 'Scratch-KeyPressedEvent' with: evt]].
+			workPane broadcastEventNamed: 'Phratch-KeyPressedEvent' with: evt]].
 
 ]
 
 { #category : #startup }
 PhratchFrameMorph >> processSettingsFile [
-	"Process settings from the Scratch.ini file."
+	"Process settings from the .ini file."
 
 	| lang settings k |
 	self class setVisibleDrives: nil.
@@ -3121,8 +3113,8 @@ PhratchFrameMorph >> processSettingsFile [
 		k = 'home' ifTrue: [PhratchFileChooserDialog setHomeDir: assoc value].
 		k = 'visibledrives' ifTrue: [self class setVisibleDrives: assoc value].
 		k = 'share' ifTrue: [(assoc value) = '0' ifTrue: [AllowSharing := false]].
-"		k = 'proxyserver' ifTrue: [ScratchUploadProgressDialog proxyServer: assoc value].
-		k = 'proxyport' ifTrue: [ScratchUploadProgressDialog proxyPort: assoc value asNumberNoError]."
+"		k = 'proxyserver' ifTrue: [PhratchUploadProgressDialog proxyServer: assoc value].
+		k = 'proxyport' ifTrue: [PhratchUploadProgressDialog proxyPort: assoc value asNumberNoError]."
 		k = 'keepspritesonstage' ifTrue: [self keepSpritesOnStage: assoc value asNumberNoError].
 		k = 'blockcontrast' ifTrue: [assoc value = '0' ifTrue: [self blockContrastOff] ifFalse: [self blockContrastStrong]].
 		k = 'threadsafemode' ifTrue: [assoc value = '0' ifTrue: [EventHatMorph threadSafeMode: false] ifFalse: [EventHatMorph threadSafeMode: true]].
@@ -3261,7 +3253,7 @@ PhratchFrameMorph >> purgeBlockEditors [
 
 { #category : #'menu/button actions' }
 PhratchFrameMorph >> quitPhratch [
-	"Quit from Scratch. Ask the user if they want to save, first."
+	"Quit from Phratch. Ask the user if they want to save, first."
 
 	| response |
 	self closeMediaEditorsAndDialogs ifFalse: [^ self].
@@ -3281,7 +3273,7 @@ PhratchFrameMorph >> quitPhratch [
 { #category : #byob }
 PhratchFrameMorph >> randomProjectName [
 	| dir projects |
-"	dir := ScratchFileChooserDialog getDefaultFolderForType: #project."
+"	dir := PhratchFileChooserDialog getDefaultFolderForType: #project."
 
 	(FileSystem workingDirectory / 'Projects') exists 
 		ifTrue: [ dir := FileSystem workingDirectory / 'Projects']
@@ -3297,7 +3289,7 @@ PhratchFrameMorph >> randomProjectName [
 
 { #category : #startup }
 PhratchFrameMorph >> readDefaultNotes [
-	"If there is a file named 'defaultNotes.txt' in the Scratch folder, read it in."
+	"If there is a file named 'defaultNotes.txt' in the Phratch folder, read it in."
 
 	| dir |
 	DefaultNotes := ''.
@@ -3310,7 +3302,7 @@ PhratchFrameMorph >> readDefaultNotes [
 { #category : #startup }
 PhratchFrameMorph >> readSettingsFile [
 	"Read my settings file and answer a Dictionary of settings."
-	"ScratchFrameMorph new readSettingsFile"
+	"PhratchFrameMorph new readSettingsFile"
 
 	| f dict s tokens k |
 	f := FileStream readOnlyFileNamedOrNil: 'BYOB.ini'.
@@ -3346,7 +3338,7 @@ PhratchFrameMorph >> rebuildUIForNewLanguage [
 { #category : #byob }
 PhratchFrameMorph >> recordBlockContrast: anInteger [
 	"Record my language in the settings file."
-	"ScratchFrameMorph new recordLanguage: 'English'"
+	"PhratchFrameMorph new recordLanguage: 'English'"
 
 	| fName f sz settings all |
 	fName := (FileSystem workingDirectory / 'BYOB.ini') fullName.
@@ -3387,7 +3379,7 @@ PhratchFrameMorph >> recordKeepOnStage: anInteger [
 { #category : #private }
 PhratchFrameMorph >> recordLanguage: aString [
 	"Record my language in the settings file."
-	"ScratchFrameMorph new recordLanguage: 'English'"
+	"PhratchFrameMorph new recordLanguage: 'English'"
 
 	| fName f sz settings all |
 	fName := (FileSystem workingDirectory / 'BYOB.ini') fullName.
@@ -3553,7 +3545,7 @@ PhratchFrameMorph >> revertToUncompressedMedia [
 PhratchFrameMorph >> saveImageForEndUser [
 
 	(self confirm: '
-Close non-Scratch windows and save this
+Close non-Phratch windows and save this
 image in end-user (fillScreen) mode?') ifFalse: [^ self].
 
 	PhratchFrameMorph isXO ifTrue: [PhratchPreferences useLargeFonts].
@@ -3597,14 +3589,6 @@ PhratchFrameMorph >> savePhratchProject [
 		(fName size = 0 or: [fName = #cancelled]) ifTrue: [^ self]].
 	(result = #cancelled) ifTrue: [^ self].
 
-"
-	(ScriptableScratchMorph currentEncoding = #scratch) ifTrue: [
-		(DialogBoxMorph new 
-			title: 'Caution! Converting Scratch to BYOB'; 
-			withButtonsForYes: true no: true okay: false cancel: false;
-			message: 'You will not be able to open this file in Scratch. Proceed anyway?';
-			getUserResponse) ifFalse: [^self ]].
-"
 	self updateLastHistoryEntryIfNeeded.
 
 "	fName := (self nameFromFileName: fName), '.sb'."
@@ -3629,18 +3613,9 @@ PhratchFrameMorph >> savePhratchProjectNoDialog [
 	fName := self nameFromFileName: projectName.
 
 	dir := PhratchFileChooserDialog getLastFolderForType: #project.
-"	(fName size = 0 | (dir fileExists: fName , '.sb') not) ifTrue: [^ self saveScratchProject]."
 	(fName size = 0 | (dir asFileReference / fName , 'ypr') exists not) ifTrue: [^ self savePhratchProject].
 	PhratchFileChooserDialog lastFolderIsSampleProjectsFolder ifTrue:  [^ self savePhratchProject].
 
-"
-	(ScriptableScratchMorph currentEncoding = #scratch) ifTrue: [
-		(DialogBoxMorph new 
-			title: 'Caution! Converting Scratch to BYOB'; 
-			withButtonsForYes: true no: true okay: false cancel: false;
-			message: 'You will not be able to open this file in Scratch. Proceed anyway?';
-			getUserResponse) ifFalse: [^self ]].
-"
 	self updateLastHistoryEntryIfNeeded.
 
 "	projectName := FileDirectory localNameFor: (fName, '.sb'). " "ignore path, if any; save in the original project directory"
@@ -3816,7 +3791,7 @@ PhratchFrameMorph >> shoutGo [
 	"Broadcasts the start event to all objects and processes."
 
 	self stopAll.
-	workPane broadcastEventNamed: 'Scratch-StartClicked' with: 0.
+	workPane broadcastEventNamed: 'Phratch-StartClicked' with: 0.
 	flagButton on.
 	self showPause.
 	World displayWorldSafely.  "force button flash"
@@ -3834,13 +3809,12 @@ PhratchFrameMorph >> showMotorBlocks [
 
 { #category : #'menu/button actions' }
 PhratchFrameMorph >> showNetworkAddress [
-	"Display my IP address. This is a temporary feature to allow connected multiple Scratch computers in a peer-to-peer configuration without the help of a presence server."
+	"Display my IP address. This is a temporary feature to allow connected multiple Phratch computers in a peer-to-peer configuration without the help of a presence server."
 
 	| localAddr wanAddr msg |
 	Socket initializeNetwork.
 	localAddr := NetNameResolver localHostAddress.
 	wanAddr := nil.
-"	wanAddr := ScratchServer getIPAddressFromServer."
 
 	msg := NetNameResolver stringFromAddress: localAddr.
 	(wanAddr notNil and: [wanAddr ~= localAddr]) ifTrue: [
@@ -3921,7 +3895,7 @@ PhratchFrameMorph >> stageMorph [
 
 { #category : #'menu/button actions' }
 PhratchFrameMorph >> startHostingPhratchSession [
-	"Start running the Scratch server, allowing Scratch and other applications to interact with this Scratch remotely."
+	"Start running the Phratch server, allowing Phratch and other applications to interact with this Phratch remotely."
 
 	| server |
 	workPane phratchServer ifNil: [
@@ -4020,7 +3994,6 @@ PhratchFrameMorph >> startup [
 PhratchFrameMorph >> step [
 	"Run each process until it gives up control, then filter out any processes that have terminated."
 
-	| screenExtent oldJustSaved |
 
 "	fillScreenFlag ifTrue: [
 		screenExtent := Display extent.
@@ -4042,13 +4015,13 @@ PhratchFrameMorph >> step [
 	Sensor processOSMenuEvents.
 	paintingInProgress ifTrue: [^ self].
 
-"	workPane scratchServer ifNotNil: [workPane scratchServer stepServer]." "see later"
+"	workPane phratchServer ifNotNil: [workPane phratchServer stepServer]." "see later"
 "	self checkForWeDo." "simplify at the moment"
 	self updateToolButtons.
 	self processWhenConditions.
 	self processKeyboardEvents. 
 	workPane stepProcesses.
-"	workPane scratchServer ifNotNil: [workPane scratchServer stepServer]." "see later"
+"	workPane phratchServer ifNotNil: [workPane phratchServer stepServer]." "see later"
 "	self processDroppedFiles." "simplify at the moment"
 	workPane processesToRun size > 0
 		ifTrue: [flagButton on]
@@ -4321,7 +4294,7 @@ PhratchFrameMorph >> updateHistoryProjectName: projName op: operation [
 
 	| timestamp tab history platform osVersion |
 	projectInfo removeKey: 'organization' ifAbsent: [].	"obsolete"
-	projectInfo at: 'scratch-version' put: Version.
+	projectInfo at: 'phratch-version' put: Version.
 
 	timestamp := (Date today printFormat: #(3 2 1 $- 1 1)), ' ', Time now print24.
 	tab := String tab.
@@ -4333,7 +4306,7 @@ PhratchFrameMorph >> updateHistoryProjectName: projName op: operation [
 	projectInfo at: 'history' put: history.
 
 	"record other data"
-	projectInfo at: 'scratch-version' put: Version.
+	projectInfo at: 'phratch-version' put: Version.
 	projectInfo at: 'language' put: PhratchTranslator currentLanguage.
 
 	platform := OSPlatform platformName.
@@ -4374,7 +4347,7 @@ PhratchFrameMorph >> updateLastHistoryEntryIfNeeded [
 
 	oldAuthor := projectInfo at: 'author' ifAbsent: [''].
 	tab := String tab.
-	lastLine := lastLine, tab, 'old', tab, projectName, tab, "blank scratchr name" tab, oldAuthor.
+	lastLine := lastLine, tab, 'old', tab, projectName, tab, "blank Phratch name" tab, oldAuthor.
 	lines at: lines size put: lastLine.
 
 	s := WriteStream on: (String new: 1000).
@@ -4452,7 +4425,7 @@ PhratchFrameMorph >> updatePenPositions [
 
 { #category : #private }
 PhratchFrameMorph >> updateProjectName [
-	"Update the project name display in the Scratch title bar."
+	"Update the project name display in the Phratch title bar."
 
 	| s |
 	projectName ifNil: [projectName := ''].
@@ -4591,7 +4564,7 @@ PhratchFrameMorph >> workPane: aWorkPane [
 
 { #category : #'menu/button actions' }
 PhratchFrameMorph >> writeMultipleSummaries [
-	"Write the summary for all Scratch projects in a given folder."
+	"Write the summary for all Phratch projects in a given folder."
 
 	| dir |
 	dir := PhratchFileChooserDialog chooseFolder: (FileSystem workingDirectory fullName).
@@ -4607,7 +4580,7 @@ PhratchFrameMorph >> writeMultipleSummaries [
 
 { #category : #'file read/write' }
 PhratchFrameMorph >> writePhratchProject [
-	"Write this Scratch project to the file named projectFile in the project directory. Called by saveScratchProject."
+	"Write this Phratch project to the file named projectFile in the project directory. Called by savePhratchProject."
 
 	| oldScriptsTarget oldTab oldViewerCategory oldPosition saveError out |
 	self stopAll.
@@ -4695,7 +4668,7 @@ PhratchFrameMorph >> writePhratchProject [
 
 { #category : #'falta adaptar' }
 PhratchFrameMorph >> writePhratchProjectOn: aStream [
-	"Write this Scratch project in a serialized form on the given stream."
+	"Write this Phratch project in a serialized form on the given stream."
 
 	| oldScriptsTarget oldTab oldViewerCategory oldPosition storeError |
 	self stopAll.
@@ -4719,7 +4692,7 @@ PhratchFrameMorph >> writePhratchProjectOn: aStream [
 			m convertStacksToTuples]].
 
 	storeError := nil.
-	[	aStream nextPutAll: 'ScratchV02' asByteArray.
+	[	aStream nextPutAll: 'PhratchV01' asByteArray.
 		self storeProjectInfoOn: aStream.
 		ObjStream new storeObj: workPane on: aStream.
 	] ifError: [:err :rcvr | storeError := err].
@@ -4758,8 +4731,8 @@ PhratchFrameMorph >> writeSummaryFile: fullFile [
 	fullFileName size > 0 ifTrue: [s nextPutAll: 'Location: ', fullFileName; crlf].
 	(projectInfo includesKey: 'author') ifTrue: [
 		s nextPutAll: 'Author: ', (projectInfo at: 'author'); crlf].
-	(projectInfo includesKey: 'scratch-version') ifTrue: [
-		s nextPutAll: 'Scratch: ', (projectInfo at: 'scratch-version'); crlf].
+	(projectInfo includesKey: 'phratch-version') ifTrue: [
+		s nextPutAll: 'Scratch: ', (projectInfo at: 'phratch-version'); crlf].
 	(projectInfo includesKey: 'comment') ifTrue: [
 		s nextPutAll: 'Notes:'; crlf.
 		(projectInfo at: 'comment') lines do: [:l | s nextPutAll: '    ', l; crlf].
@@ -4792,7 +4765,7 @@ PhratchFrameMorph >> writeSummaryFile: fullFile [
 		ifFalse: [
 			fName := self uniqueSummaryFileName].
 
-	f := StandardFileStream newScratchFileNamed: (fullFile parent) / fName.
+	f := StandardFileStream newPhratchFileNamed: (fullFile parent) / fName.
 	f ifNil: [^ self].
 	f nextPutAll: s contents.
 	f close.

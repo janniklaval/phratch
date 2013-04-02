@@ -326,13 +326,13 @@ ImageMedia >> storeFieldsOn: anObjStream [
 
 	compositeForm := nil.
 	self hasTextLayer ifTrue: [
-		compositeForm := self compositeForm hibernateForScratch.
+		compositeForm := self compositeForm hibernateForPhratch.
 		compositeForm couldBeColorReduced ifTrue: [
-			f := compositeForm colorReduced hibernateForScratch.
+			f := compositeForm colorReduced hibernateForPhratch.
 			(f bits size < compositeForm bits size) ifTrue: [compositeForm := f]]].
 
 	jpegBytes
-		ifNil: [form := form hibernateForScratch]
+		ifNil: [form := form hibernateForPhratch]
 		ifNotNil: [form := JPEGPlaceholderForm].
 
 	self storeFieldsNamed: #(

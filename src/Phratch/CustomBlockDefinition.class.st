@@ -393,7 +393,7 @@ CustomBlockDefinition >> migrateBlockVars [
 		blob := VariableBlockMorph new 
 				isSpecialForm: true;
 				commandSpec: vn  ";
-				color: (ScriptableScratchMorph blockColorFor: 'variables')".
+				color: (ScriptablePhratchMorph blockColorFor: 'variables')".
 		dec replaceArgMorph: (dec argMorphs at: i) by: blob.
 		blockVars remove: vn ].
 

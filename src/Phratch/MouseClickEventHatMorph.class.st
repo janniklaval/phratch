@@ -11,7 +11,7 @@ Class {
 { #category : #other }
 MouseClickEventHatMorph >> eventName [
 
-	^ 'Scratch-MouseClickEvent'
+	^ 'Phratch-MouseClickEvent'
 
 ]
 

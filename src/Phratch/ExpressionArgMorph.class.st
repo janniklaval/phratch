@@ -79,7 +79,7 @@ ExpressionArgMorph >> drawOn: aCanvas [
 
 { #category : #evaluation }
 ExpressionArgMorph >> evaluate [
-	"Answer the result of evaluating my expression in the context of the given ScratchProcess."
+	"Answer the result of evaluating my expression in the context of the given PhratchProcess."
 
 	| expr |
 

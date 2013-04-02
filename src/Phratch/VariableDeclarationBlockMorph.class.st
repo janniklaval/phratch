@@ -21,7 +21,6 @@ VariableDeclarationBlockMorph >> addItem [
 	varBlock 
 		isSpecialForm: true;
 		selector: #getVar:;
-"		color: (ScriptableScratchMorph blockColorFor: 'variables');"
 		commandSpec: vname.
 	self replaceArgMorph: (self argumentAt: pos) by: varBlock.
 ]

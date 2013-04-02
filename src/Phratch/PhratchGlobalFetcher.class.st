@@ -135,7 +135,7 @@ PhratchGlobalFetcher >> request: aString fromServer: serverNameString [
 
 { #category : #private }
 PhratchGlobalFetcher >> sendGetRequest [
-	"Send an Scratch GET request."
+	"Send an Phratch GET request."
 
 	| requestString s requestMsg i byteCount |
 	requestString := '/get/', varName.
@@ -154,7 +154,7 @@ PhratchGlobalFetcher >> sendGetRequest [
 
 { #category : #private }
 PhratchGlobalFetcher >> sendRequest [
-	"Send an Scratch GET request."
+	"Send an Phratch GET request."
 
 	| s i byteCount finalRequest |
 	s := WriteStream on: ByteArray new.

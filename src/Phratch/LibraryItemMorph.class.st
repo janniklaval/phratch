@@ -85,12 +85,6 @@ LibraryItemMorph >> buildSubmorphs [
 		position: 0 @ (thumbnailMorph bottom -2).
 	self addMorph: nameMorph.
 
-	"scriptCountMorph := StringMorph new
-		font: (ScratchFrameMorph getFont: #LibraryItemInfo);
-		contents: '';
-		position: 0 @ nameMorph bottom.
-	self addMorph: scriptCountMorph."
-
 	self color: Color transparent.
 
 	self buildRotationToggleMorph
@@ -291,7 +285,7 @@ LibraryItemMorph >> mouseEnterDragging: evt [
 		useRoundedCorners.
 	s := StringMorph
 		contents: ('Copy to ', target objName)
-		font: (ScratchFrameMorph getFont: #Button).
+		font: (PhratchFrameMorph getFont: #Button).
 	s color: Color white.
 	m
 		addMorph: (s position: (5@2));

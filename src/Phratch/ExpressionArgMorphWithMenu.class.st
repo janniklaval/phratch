@@ -62,7 +62,7 @@ ExpressionArgMorphWithMenu >> directionMenu [
 { #category : #evaluation }
 ExpressionArgMorphWithMenu >> evaluate [
 	| expr |
-	"Answer the result of evaluating my expression in the context of the given ScratchProcess."
+	"Answer the result of evaluating my expression in the context of the given PhratchProcess."
 
 	(self isEmptySlot and: [implicitValue notNil])
 		ifTrue: [^implicitValue].

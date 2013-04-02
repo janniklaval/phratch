@@ -1273,7 +1273,7 @@ CommandBlockMorph >> rightButtonMenu [
 	sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
 	(sFrame notNil and: [#(sensor: sensorPressed:) includes: selector]) ifTrue: [
 		menu addLine.
-		menu add: 'show ScratchBoard watcher' value: #showSensorBoard.
+		menu add: 'show PhratchBoard watcher' value: #showSensorBoard.
 		sFrame workPane phratchServer
 			ifNil: [menu add: 'enable remote sensor connections' value: #enableRemoteSensors]
 			ifNotNil: [menu add: 'disable remote sensor connections' value: #exitPhratchSession]].
@@ -1358,14 +1358,14 @@ CommandBlockMorph >> start [
 	| stage rcvr |
 	self stop.
 	self receiver ifNil: [^ self].
-	scratchProc ifNotNil: [^ self].  "this stack is already running"
+	phratchProc ifNotNil: [^ self].  "this stack is already running"
 
 	rcvr := self receiver.
 	(rcvr isKindOf: ScriptablePhratchMorph)
 		ifTrue: [ (stage := rcvr ownerOrYourselfThatIsA: PhratchStageMorph) ifNil: [^ self]]
 		ifFalse: [stage := (self ownerOrYourselfThatIsA: PhratchFrameMorph) workPane].	
 
-	scratchProc := stage startProcessFor: self.
+	phratchProc := stage startProcessFor: self.
 	self changed.
 
 ]
@@ -1520,7 +1520,6 @@ CommandBlockMorph >> uncoloredArgMorphFor: specString [
 	$z = code ifTrue: [ ^ VariableBlockMorph new 
 							isSpecialForm: true; 
 							selector: #getVar:;
-							"color: (ScriptableScratchMorph blockColorFor: 'variables');"
 							commandSpec: '?'].
 	$Z = code ifTrue: [ ^ SpecialArgMorph new type: #reporterslot].
 	$Y = code ifTrue: [ ^ SpecialArgMorph new type: #booleanslot].

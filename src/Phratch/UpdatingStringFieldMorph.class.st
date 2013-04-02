@@ -77,9 +77,9 @@ UpdatingStringFieldMorph >> target [
 ]
 
 { #category : #accessing }
-UpdatingStringFieldMorph >> target: aScratchObjectOrMediaObjectOrNil [
+UpdatingStringFieldMorph >> target: aPhratchObjectOrMediaObjectOrNil [
 
-	target := aScratchObjectOrMediaObjectOrNil.
+	target := aPhratchObjectOrMediaObjectOrNil.
 	self step.
 
 ]

@@ -42,7 +42,7 @@ PhratchServerV1 class >> getIPAddressFromServer [
 
 { #category : #utilities }
 PhratchServerV1 class >> portNumber [
-	"Answer the port number for the Scratch server."
+	"Answer the port number for the Phratch server."
 
 	^ 42000
 ]
@@ -86,7 +86,7 @@ PhratchServerV1 >> addOutgoingTo: ipAddressString [
 
 { #category : #'incoming commands' }
 PhratchServerV1 >> dispatch: aString socket: requestSock [
-	"Dispatch an incoming command from a remote Scratch."
+	"Dispatch an incoming command from a remote Phratch."
 
 	| cmd op |
 	cmd := self parse: aString.
@@ -170,7 +170,7 @@ PhratchServerV1 >> initialize [
 
 { #category : #accessing }
 PhratchServerV1 >> isConnected [
-	"Answer true if this Scratch server has any external connections."
+	"Answer true if this Phratch server has any external connections."
 
 	incoming size > 0 ifTrue: [^ true].
 	outgoing size > 0 ifTrue: [^ true].
@@ -194,7 +194,7 @@ PhratchServerV1 >> openServerSocket [
 
 { #category : #'command parsing' }
 PhratchServerV1 >> parse: aString [
-	"ScratchServer new parse: 'test abc 1 -1 .01 -.01 true false'"
+	"PhratchServer new parse: 'test abc 1 -1 .01 -.01 true false'"
 
 	| out token |
 	in := ReadStream on: aString asString.
@@ -213,12 +213,12 @@ PhratchServerV1 >> processCommandFrom: requestSock [
 	| msg result errMsg |
 	msg := requestSock nextMessage.
 	msg ifNil: [^ self].
-	msg size = 0 ifTrue: [requestSock sendMessage: 'ScratchServer 1.0 alpha'. ^ self].
+	msg size = 0 ifTrue: [requestSock sendMessage: 'PhratchServer 0.1 alpha'. ^ self].
 
 	result := [self dispatch: msg asString socket: requestSock] ifError: [:err :rcvr | err].
 	(result isKindOf: String) ifTrue: [
 		"string result is an error message; no response sent if command succeeded"
-		errMsg := 'ScratchServer error: ', result.
+		errMsg := 'PhratchServer error: ', result.
 		requestSock sendMessage: errMsg].
 
 ]
@@ -262,8 +262,8 @@ PhratchServerV1 >> processUDPCommands [
 PhratchServerV1 >> queueBroadcast: aString [
 	"Queue the given broadcast event to be sent to my peers."
 
-	(#(	'Scratch-KeyPressedEvent'
-		'Scratch-MouseClickEvent'
+	(#(	'Phratch-KeyPressedEvent'
+		'Phratch-MouseClickEvent'
 	) includes: aString) ifTrue: [^ self].
 
 	outgoingBroadcasts addLast: aString.
@@ -429,9 +429,9 @@ PhratchServerV1 >> someVariableHasChanged [
 ]
 
 { #category : #accessing }
-PhratchServerV1 >> stage: aScratchStageMorph [
+PhratchServerV1 >> stage: aPhratchStageMorph [
 
-	stage := aScratchStageMorph.
+	stage := aPhratchStageMorph.
 
 ]
 

@@ -272,7 +272,7 @@ BlockMorph >> outerLoop [
 BlockMorph >> pauseProcess [
 	"Called on the top block of a running stack when all processes are stopped."
 
-	scratchProc ifNotNil: [scratchProc pause].
+	phratchProc ifNotNil: [phratchProc pause].
 
 ]
 
@@ -299,6 +299,6 @@ BlockMorph >> refreshAttributeArgs [
 BlockMorph >> resumeProcess [
 	"Called on the top block of a running stack when all processes are stopped."
 
-	scratchProc ifNotNil: [scratchProc resume].
+	phratchProc ifNotNil: [phratchProc resume].
 
 ]

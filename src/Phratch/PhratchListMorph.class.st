@@ -295,7 +295,7 @@ PhratchListMorph >> containsRecursive: anObject [
 ]
 
 { #category : #'byob lambdas' }
-PhratchListMorph >> convertBlockTuplesToStacksFor: aScriptableScratchMorph [
+PhratchListMorph >> convertBlockTuplesToStacksFor: aScriptablePhratchMorph [
 
 	"only for multi arg persistence"
 	| obj block |
@@ -305,7 +305,7 @@ PhratchListMorph >> convertBlockTuplesToStacksFor: aScriptableScratchMorph [
 		(obj isKindOf: Array) ifTrue: [
 
 			#block = obj first ifTrue: [
-				block := aScriptableScratchMorph stackFromTupleList: obj third receiver: aScriptableScratchMorph.
+				block := aScriptablePhratchMorph stackFromTupleList: obj third receiver: aScriptablePhratchMorph.
 				m complexObject: block ]]].
 
 	self updateContents
@@ -528,7 +528,7 @@ PhratchListMorph >> exportList [
 		type: #list.
 	fName = #cancelled ifTrue: [^ self].
 
-	f := StandardFileStream newScratchFileNamed: fName.
+	f := StandardFileStream newPhratchFileNamed: fName.
 	f ifNil: [^ self].
 	cellMorphs do: [:m | f nextPutAll: m firstSubmorph contents; crlf].
 	f close.

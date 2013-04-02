@@ -215,7 +215,7 @@ VariableFrame >> interpretStringAsNumberIfPossible: anObject [
 		ifTrue: [s := ReadStream on: anObject asByteArray]
 		ifFalse: [s := ReadStream on: anObject].
 
-	"see if the string can be parsed as a Scratch number:"
+	"see if the string can be parsed as a Phratch number:"
 	digits := '0123456789' asByteArray.
 	hasDigit := false.
 	(s atEnd not and: [s peek = $- asciiValue]) ifTrue: [s next].

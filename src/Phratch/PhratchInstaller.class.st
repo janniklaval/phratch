@@ -30,7 +30,7 @@ PhratchInstaller class >> beginInstall [
 		openContents:
 			'"To try it out run the following expression:" ' 
 			, String cr ,
-			'ScratchFrameMorph open.'
+			'PhratchFrameMorph open.'
 			, String cr , String cr , 
 			'"Open it in full screen mode, can break the image"'
 			, String cr,

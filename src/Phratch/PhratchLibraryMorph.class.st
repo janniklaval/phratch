@@ -217,7 +217,7 @@ PhratchLibraryMorph >> initialize [
 ]
 
 { #category : #initialization }
-PhratchLibraryMorph >> makeNewSpriteButtons: aScratchFrameMorph [
+PhratchLibraryMorph >> makeNewSpriteButtons: aPhratchFrameMorph [
 	"Return a morph containing a set of new sprite buttons."
 
 	| panel buttonSpecs buttons button butonExtent x |
@@ -236,7 +236,7 @@ PhratchLibraryMorph >> makeNewSpriteButtons: aScratchFrameMorph [
 			offForm: (PhratchFrameMorph skinAt: (spec at: 1)).
 
 		button
-			target: aScratchFrameMorph;
+			target: aPhratchFrameMorph;
 			actionSelector: (spec at: 2);
 			setProperty: #balloonText toValue: (spec at: 3) localized.
 		button].

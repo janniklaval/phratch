@@ -585,8 +585,8 @@ ReporterBlockMorph >> showLambdaValue [
 	gotError := false.
 
 	[self start.
-	zombie := scratchProc.
-	scratchProc stepUntilDoneFor: (receiver ownerOrYourselfThatIsA: PhratchStageMorph).
+	zombie := phratchProc.
+	phratchProc stepUntilDoneFor: (receiver ownerOrYourselfThatIsA: PhratchStageMorph).
 	msg := zombie answer ] ifError: [
 		gotError := true.
 		msg := 'Error!'].

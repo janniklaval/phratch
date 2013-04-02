@@ -204,7 +204,7 @@ LambdaBlockMorph >> newChangeVarBlock: varName [
 		isSpecialForm: true;
 		receiver: initialFrame;	
 		selector: #changeBlockVar:by: ";
-		color: (ScriptableScratchMorph blockColorFor: 'variables')".
+		color: (ScriptablePhratchMorph blockColorFor: 'variables')".
 	block expressionArg stringExpression: '0'.
 	^ block
 
@@ -219,7 +219,7 @@ LambdaBlockMorph >> newSetVarBlock: varName [
 		isSpecialForm: true;
 		receiver: initialFrame;	
 		selector: #setBlockVar:to:  ";
-		color: (ScriptableScratchMorph blockColorFor: 'variables')".
+		color: (ScriptablePhratchMorph blockColorFor: 'variables')".
 	block expressionArg stringExpression: '0'.
 	^ block
 
@@ -232,7 +232,7 @@ LambdaBlockMorph >> newVarBlock: varName [
 		isSpecialForm: true;
 		receiver: initialFrame;	
 		selector: #getBlockVar:;
-"		color: (ScriptableScratchMorph blockColorFor: 'variables');"
+"		color: (ScriptablePhratchMorph blockColorFor: 'variables');"
 		commandSpec: varName
 
 ]
@@ -403,7 +403,6 @@ LambdaBlockMorph >> rootForGrabOf: aMorph [
 					ifFalse: [^ root fullCopy]].
 			self dragNDropEnabled ifTrue: [^ root]].
 		root := root owner].
-	"(self isLambdaForm and: [ owner isKindOf: ScratchScriptsMorph]) ifTrue: [^nil]."
 
 	^ super rootForGrabOf: aMorph
 

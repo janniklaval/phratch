@@ -2,18 +2,18 @@ Class {
 	#name : #PhratchNotesDialog,
 	#superclass : #DialogBoxMorph,
 	#instVars : [
-		'scratchFrame',
-		'commentMorph'
+		'commentMorph',
+		'phratchFrame'
 	],
 	#category : #'Phratch-UI-Dialogs'
 }
 
 { #category : #'instance creation' }
-PhratchNotesDialog class >> editNotesFor: aScratchFrameMorph [
-	"Choose a name for sharing the current Scratch project file. Display the project thumbnail and info string and allow the info string to be edited. Answer the new project name."
+PhratchNotesDialog class >> editNotesFor: aPhratchFrameMorph [
+	"Choose a name for sharing the current Phratch project file. Display the project thumbnail and info string and allow the info string to be edited. Answer the new project name."
 
 	^ self new
-		createNotesDialogFor: aScratchFrameMorph;
+		createNotesDialogFor: aPhratchFrameMorph;
 		extent: 350@450.
 
 ]
@@ -26,8 +26,8 @@ PhratchNotesDialog >> comment [
 ]
 
 { #category : #initialization }
-PhratchNotesDialog >> createNotesDialogFor: aScratchFrameMorph [
-	"Create a Scratch project notes dialog box."
+PhratchNotesDialog >> createNotesDialogFor: aPhratchFrameMorph [
+	"Create a Phratch project notes dialog box."
 
 	| commentFont |
 	commentFont := (PhratchFrameMorph getFont: #ProjectNotes).
@@ -43,8 +43,8 @@ PhratchNotesDialog >> createNotesDialogFor: aScratchFrameMorph [
 	mainColumn addMorphBack: commentMorph.
 	mainColumn addMorphBack: buttonRow.
 
-	scratchFrame := aScratchFrameMorph.
-	commentMorph contents: scratchFrame projectCommentOrTemplate.
+	phratchFrame := aPhratchFrameMorph.
+	commentMorph contents: phratchFrame projectCommentOrTemplate.
 	bottomSpacer delete.
 	bottomSpacer := nil.
 
@@ -69,7 +69,7 @@ PhratchNotesDialog >> getUserResponse [
 	response = #cancelled ifTrue: [^ #cancelled].
 
 	"save notes in project"
-	scratchFrame projectComment: commentMorph contents.
+	phratchFrame projectComment: commentMorph contents.
 
 	^ #ok
 

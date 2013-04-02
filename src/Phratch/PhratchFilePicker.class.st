@@ -9,14 +9,11 @@ Class {
 		'directoryBarMorph',
 		'contentsPaneMorph',
 		'feedbackMorph',
-		'scratchInfoClient',
 		'currentDir',
 		'extensions',
 		'fetchInProgress',
 		'showThumbnails',
 		'thumbnailFetchProcess',
-		'scratchServers',
-		'scratchProjectFetcher',
 		'lastUpMSecs',
 		'wasSelected',
 		'isDoubleClick',
@@ -24,7 +21,10 @@ Class {
 		'finalSelection',
 		'freezeFocus',
 		'topBarMorph',
-		'directoryBarArrowMorph'
+		'directoryBarArrowMorph',
+		'phratchInfoClient',
+		'phratchServers',
+		'phratchProjectFetcher'
 	],
 	#category : #'Phratch-UI-Dialogs'
 }
@@ -138,19 +138,19 @@ PhratchFilePicker >> changeSelectionIndexBy: anInteger [
 			^ self]].
 
 	entries first highlight: true.
-	scratchInfoClient ifNotNil: [self reportPhratchProjectInfo].
+	phratchInfoClient ifNotNil: [self reportPhratchProjectInfo].
 
 ]
 
 { #category : #private }
 PhratchFilePicker >> checkForPhratchInfoFetchDone [
-	"Try to retrieve info for the currently selected Scratch project and, if successful, report it to our client."
+	"Try to retrieve info for the currently selected Phratch project and, if successful, report it to our client."
 	"Details: The fetcher is allowed to keep running even after the info dictionary is retrieved. Thus if the user decides to open this project, we'll have a head start on fetching it."
 
 	| data s version infoSize infoDict |
-	scratchProjectFetcher ifNil: [^ self].
+	phratchProjectFetcher ifNil: [^ self].
 
-	data := scratchProjectFetcher bodyData.
+	data := phratchProjectFetcher bodyData.
 	data size >= 14 ifTrue: [
 		s := ReadStream on: data.
 		version := ObjStream phratchFileVersionFrom: (s next: 10) asString.
@@ -159,9 +159,9 @@ PhratchFilePicker >> checkForPhratchInfoFetchDone [
 				infoSize := s uint32.
 				infoSize <= (s size - s position) ifTrue: [
 					infoDict := [ObjStream new readObjFrom: s] ifError: [Dictionary new].
-					scratchInfoClient phratchInfo: infoDict]]
+					phratchInfoClient phratchInfo: infoDict]]
 			ifFalse: [
-				scratchInfoClient phratchInfo: Dictionary new]].
+				phratchInfoClient phratchInfo: Dictionary new]].
 
 
 ]
@@ -266,8 +266,8 @@ PhratchFilePicker >> directoryMenu [
 
 	self addDriveShortcuts: menu.
 
-	"if opening a Scratch project, allow access to servers"
-	scratchInfoClient ifNotNil: [
+	"if opening a Phratch project, allow access to servers"
+	phratchInfoClient ifNotNil: [
 		serverEntries := PhratchFrameMorph phratchServers.
 		(serverEntries notNil and:[serverEntries size > 0]) ifTrue: [
 			menu addLine.
@@ -404,7 +404,7 @@ PhratchFilePicker >> getLocalDirectoryContents [
 	dirNames := self getLocalDirectoryNames.
 	dirNames := dirNames sort: [:n1 :n2 | n1 caseInsensitiveLessOrEqual: n2].
 	allNames := dirNames , fileNames.
-	allNames := allNames reject: [:n | n endsWith: ':=th.gif'].					"suppress Scratch project thumbnails"
+	allNames := allNames reject: [:n | n endsWith: ':=th.gif'].					"suppress Phratch project thumbnails"
 	allNames := allNames reject: [:n | n beginsWith: '.'].						"suppress hidden files on Mac OS X and Unix"
 	allNames := allNames reject: [:n |
 		ext := (currentDir / n) extension asLowercase.
@@ -443,7 +443,7 @@ PhratchFilePicker >> getLocalDirectoryNames [
 
 { #category : #private }
 PhratchFilePicker >> getPhratchInfoFromFile [
-	"Answer the project info dictionary for the currently selected file. Answer the empty dictionary if no file is selected or if the file does not include a project info dictionary (e.g. if it is in an older Scratch file format)."
+	"Answer the project info dictionary for the currently selected file. Answer the empty dictionary if no file is selected or if the file does not include a project info dictionary (e.g. if it is in an older Phratch file format)."
 
 	| result fullName f version buf |
 	result := Dictionary new.
@@ -477,7 +477,7 @@ PhratchFilePicker >> highlightAndScrollToEntry: e [
 
 	e highlight: true.
 	contentsPaneMorph scrollSubmorphIntoView: e.
-	scratchInfoClient ifNotNil: [self reportPhratchProjectInfo].
+	phratchInfoClient ifNotNil: [self reportPhratchProjectInfo].
 
 ]
 
@@ -493,7 +493,7 @@ PhratchFilePicker >> highlightEntryAt: aPoint [
 				ifTrue: [secondClick := m isHighlit. m highlight: true]
 				ifFalse: [m highlight: false]]].
 
-	scratchInfoClient ifNotNil: [self reportPhratchProjectInfo].
+	phratchInfoClient ifNotNil: [self reportPhratchProjectInfo].
 
 	^ secondClick
 
@@ -635,7 +635,7 @@ PhratchFilePicker >> mouseMove: evt [
 	(self highlightEntryAt: evt cursorPoint)
 		ifFalse: [isDoubleClick := false].
 
-	scratchInfoClient ifNotNil: [self reportPhratchProjectInfo].
+	phratchInfoClient ifNotNil: [self reportPhratchProjectInfo].
 
 ]
 
@@ -679,7 +679,7 @@ PhratchFilePicker >> mouseUp: evt [
 
 { #category : #private }
 PhratchFilePicker >> navigationForbidden [
-	"Answer true if navigating the file hierarch is forbidden because there is a visibledrives entry in the Scratch.ini file."
+	"Answer true if navigating the file hierarch is forbidden because there is a visibledrives entry in the .ini file."
 
 	| thisDrive pathParts |
 	PhratchFrameMorph visibleDrives ifNil: [^ false].
@@ -713,9 +713,9 @@ PhratchFilePicker >> newDirectory [
 
 { #category : #accessing }
 PhratchFilePicker >> phratchInfoClient: anObject [
-	"Set the object to be informed when a Scratch project file with an info dictionary is selected. The client will be sent the message #scratchInfo: once each time such a file is selected, allowing the project thumbnail and other project information to be displayed."
+	"Set the object to be informed when a Phratch project file with an info dictionary is selected. The client will be sent the message #phratchInfo: once each time such a file is selected, allowing the project thumbnail and other project information to be displayed."
 
-	scratchInfoClient := anObject.
+	phratchInfoClient := anObject.
 
 ]
 
@@ -725,13 +725,13 @@ PhratchFilePicker >> projectFetcher [
 	| fullPath |
 	fullPath := currentDir path, self selectedFile, '.scratch'.
 
-	scratchProjectFetcher ifNotNil: [  "try to use the existing fetcher"
-		(scratchProjectFetcher serverName = currentDir serverName and:
-		 [scratchProjectFetcher path = fullPath])
-			ifTrue: [^ scratchProjectFetcher]
+	phratchProjectFetcher ifNotNil: [  "try to use the existing fetcher"
+		(phratchProjectFetcher serverName = currentDir serverName and:
+		 [phratchProjectFetcher path = fullPath])
+			ifTrue: [^ phratchProjectFetcher]
 			ifFalse: [
-				scratchProjectFetcher stopDownload.
-				scratchProjectFetcher := nil]].
+				phratchProjectFetcher stopDownload.
+				phratchProjectFetcher := nil]].
 
 	"make a new fetcher"
 	^ HTTPFetcher new
@@ -743,28 +743,27 @@ PhratchFilePicker >> projectFetcher [
 
 { #category : #private }
 PhratchFilePicker >> reportPhratchProjectInfo [
-	"Try to retrieve info for the currently selected Scratch project and, if successful, report it to our client."
+	"Try to retrieve info for the currently selected Phratch project and, if successful, report it to our client."
 
 	| fullPath |
-	scratchInfoClient ifNil: [^ self].
+	phratchInfoClient ifNil: [^ self].
 
-	scratchProjectFetcher ifNotNil: [
-		scratchProjectFetcher stopDownload.
-		scratchProjectFetcher := nil].
+	phratchProjectFetcher ifNotNil: [
+		phratchProjectFetcher stopDownload.
+		phratchProjectFetcher := nil].
 
-	self selectedFile ifNil: [scratchInfoClient phratchInfo: nil. ^ self].
+	self selectedFile ifNil: [phratchInfoClient phratchInfo: nil. ^ self].
 
 	(currentDir isKindOf: AbstractFileReference ) ifTrue: [
-		^ scratchInfoClient phratchInfo: self getPhratchInfoFromFile].
+		^ phratchInfoClient phratchInfo: self getPhratchInfoFromFile].
 
 	"directory is on a server: start a fetcher to get the project info"
 	fullPath := currentDir / self selectedFile, '.scratch'.
-	"scratchProjectFetcher ifNil: [scratchProjectFetcher := HTTPFetcher new]."
-
-	((scratchProjectFetcher serverName ~= currentDir serverName) |
-	 (scratchProjectFetcher path ~= fullPath)) ifTrue: [
+	
+	((phratchProjectFetcher serverName ~= currentDir serverName) |
+	 (phratchProjectFetcher path ~= fullPath)) ifTrue: [
 		"start fetching from the new path"
-		scratchProjectFetcher
+		phratchProjectFetcher
 			startDownload: fullPath 
 			fromServer: currentDir serverName].
 
@@ -883,7 +882,7 @@ PhratchFilePicker >> step [
 			self getFetchedServerDirectoryContents.
 			fetchInProgress := false]].
 
-	scratchProjectFetcher ifNotNil: [
+	phratchProjectFetcher ifNotNil: [
 		self checkForPhratchInfoFetchDone].
 
 ]

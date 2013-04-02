@@ -96,15 +96,15 @@ MultiArgMorph >> defaultArgCount: anInt [
 ]
 
 { #category : #'as yet unclassified' }
-MultiArgMorph >> defaultValue: aScratchListMorph [
+MultiArgMorph >> defaultValue: aPhratchListMorph [
 	"Set my default value"
 
 	| element |
 
-	(aScratchListMorph isKindOf: PhratchListMorph)
+	(aPhratchListMorph isKindOf: PhratchListMorph)
 		ifFalse: [^ self].
-	1 to: aScratchListMorph lineCount do: [:i |
-		element := aScratchListMorph lineAt: i.
+	1 to: aPhratchListMorph lineCount do: [:i |
+		element := aPhratchListMorph lineAt: i.
 		((element isKindOf: ReporterBlockMorph)
 		and: [(element isKindOf: ArgMorph) not])
 			ifTrue: [self addArg: element]

@@ -381,7 +381,7 @@ PhratchProcess >> doApplyEval [
 	
 						""empty variadic inputs absorb all ensuing values""
 						(slot isKindOf: MultiArgMorph) 
-							ifTrue: [ obj := ScratchListMorph on: argsList from: i to: argsList size]
+							ifTrue: [ obj := PhratchListMorph on: argsList from: i to: argsList size]
 							ifFalse: [
 								obj := argsList at: i.
 								(obj isKindOf: ReporterBlockMorph)
@@ -1316,11 +1316,11 @@ PhratchProcess >> popStackFrameNoUnhightlight [
 ]
 
 { #category : #'private-stack' }
-PhratchProcess >> pushStackFrame: aScratchStackFrame [
+PhratchProcess >> pushStackFrame: aPhratchStackFrame [
 	"Pushes the given new stack frame onto the top of the stack, so that it becomes the current stack frame."
 
-	aScratchStackFrame parentFrame: stackFrame.
-	stackFrame := aScratchStackFrame.
+	aPhratchStackFrame parentFrame: stackFrame.
+	stackFrame := aPhratchStackFrame.
 
 ]
 

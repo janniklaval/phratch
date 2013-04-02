@@ -39,13 +39,13 @@ Class {
 		'colorPicker',
 		'zoomBar',
 		'canvasFrame',
-		'scratchFrame',
 		'originalObject',
 		'oldCostumeName',
 		'deleteSpriteOnCancel',
 		'setRotationCenterMorph',
 		'setRotationCenterButton',
-		'colorPickerButton'
+		'colorPickerButton',
+		'phratchFrame'
 	],
 	#classVars : [
 		'ColorPicker',
@@ -296,7 +296,7 @@ PaintFrame >> drawSubmorphsOn: aCanvas [
 { #category : #other }
 PaintFrame >> exitPaintEditor [
 
-	scratchFrame ifNotNil: [scratchFrame paintingInProgress: false].
+	phratchFrame ifNotNil: [phratchFrame paintingInProgress: false].
 	World ifNotNil: [World activeHand turnOffGridding; showTemporaryCursor: nil].
 
 ]
@@ -322,7 +322,7 @@ PaintFrame >> export [
 	fName size = 0 ifTrue: [^ self].
 
 	"make sure that file can be created"
-	f := StandardFileStream newScratchFileNamed: fName.
+	f := StandardFileStream newPhratchFileNamed: fName.
 	f ifNil: [^ self].
 	f close.
 	
@@ -520,7 +520,7 @@ PaintFrame >> newFormTextBoxAndRegPoint [
 
 { #category : #'entry points' }
 PaintFrame >> oldCostumeName: aString deleteOnCancel: aBoolean [
-	"Set state used when editing a Scratch costumes or painting a new sprite."
+	"Set state used when editing a Phratch costumes or painting a new sprite."
 
 	oldCostumeName := aString.
 	deleteSpriteOnCancel := aBoolean.
@@ -535,9 +535,9 @@ PaintFrame >> originalObject [
 ]
 
 { #category : #'entry points' }
-PaintFrame >> phratchFrame: aScratchFrameMorph [
+PaintFrame >> phratchFrame: aPhratchFrameMorph [
 
-	scratchFrame := aScratchFrameMorph.
+	phratchFrame := aPhratchFrameMorph.
 
 ]
 
@@ -592,19 +592,19 @@ PaintFrame >> updateScrollbars [
 
 { #category : #'entry points' }
 PaintFrame >> withStartingObject: anObject [
-	"Start editing the given object's form (i.e. it's current costume, if it is a ScratchSpriteMorph)."
+	"Start editing the given object's form (i.e. it's current costume, if it is a PhratchSpriteMorph)."
 
 	| costume |
 	originalObject := anObject.
 	(anObject respondsTo: #costume)
-		ifTrue: [  "editing a Scratch object"
+		ifTrue: [  "editing a Phratch object"
 			costume := anObject costume.
 			canvasMorph
 				editForm: costume form
 				regPoint: costume rotationCenter
 				textBox: costume textBox
 				isStage: (anObject isKindOf: PhratchStageMorph)]
-		ifFalse: [  "editing a non-Scratch object"
+		ifFalse: [  "editing a non-Phratch object"
 			canvasMorph editForm: anObject form].
 
 	(anObject isKindOf: PhratchStageMorph)

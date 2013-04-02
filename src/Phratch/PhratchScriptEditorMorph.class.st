@@ -461,7 +461,7 @@ PhratchScriptEditorMorph >> fullDrawOn: aCanvas [
 
 { #category : #accessing }
 PhratchScriptEditorMorph >> getTabTop [
-	"Used by ScratchFrameMorph when creating the tab pane. This returns the y position of where the top of the tabs should align. This situation is unfortunate (tabs should probaby be part of ScratchScriptEditorMorph), but we'll fix it later."
+	"Used by PhratchFrameMorph when creating the tab pane. This returns the y position of where the top of the tabs should align. This situation is unfortunate (tabs should probaby be part of PhratchScriptEditorMorph), but we'll fix it later."
 
 	PhratchFrameMorph isXO ifTrue: [^ thumbnailMorph bottom + 20].
 	(readoutMorphs size > 0)
@@ -541,7 +541,7 @@ PhratchScriptEditorMorph >> saveScriptsToImage [
 
 { #category : #'menu/button ops' }
 PhratchScriptEditorMorph >> scriptsMenu: aPosition [
-	"Present a menu of Scratch script operations."
+	"Present a menu of Phratch script operations."
 
 	| menu choice |
 	self target ifNil: [^ self].
@@ -627,13 +627,13 @@ PhratchScriptEditorMorph >> target [
 ]
 
 { #category : #accessing }
-PhratchScriptEditorMorph >> target: aScratchObjectOrNil [
+PhratchScriptEditorMorph >> target: aPhratchObjectOrNil [
 	"Start viewing the given object or no object."
 
 	| sFrame nameSel |
 	World activeHand newKeyboardFocus: nil.
-	(aScratchObjectOrNil isNil or:
-	 [aScratchObjectOrNil isScriptable not]) ifTrue: [
+	(aPhratchObjectOrNil isNil or:
+	 [aPhratchObjectOrNil isScriptable not]) ifTrue: [
 		thumbnailMorph target: nil.
 		nameMorph target: nil; contents: 'no object '.
 		pageViewerMorph contents: (Morph new color: Color red).
@@ -644,13 +644,13 @@ PhratchScriptEditorMorph >> target: aScratchObjectOrNil [
 		self showOrHideReadouts.
 		^ self].
 
-	thumbnailMorph target: aScratchObjectOrNil.
+	thumbnailMorph target: aPhratchObjectOrNil.
 
-	nameSel := (aScratchObjectOrNil isKindOf: PhratchStageMorph)
+	nameSel := (aPhratchObjectOrNil isKindOf: PhratchStageMorph)
 		ifTrue: [nil]
 		ifFalse: [#objName:].
 	nameMorph
-		target: aScratchObjectOrNil;
+		target: aPhratchObjectOrNil;
 		getSelector: #objName;
 		putSelector: nameSel.
 

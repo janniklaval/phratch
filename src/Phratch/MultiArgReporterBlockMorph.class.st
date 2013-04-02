@@ -154,8 +154,8 @@ MultiArgReporterBlockMorph >> evaluate [
 	"Evalue this block with the given argument list."
 
 	self start.
-	scratchProc stepUntilDoneFor: (receiver ownerOrYourselfThatIsA: PhratchStageMorph).
-	^scratchProc answer	
+	phratchProc stepUntilDoneFor: (receiver ownerOrYourselfThatIsA: PhratchStageMorph).
+	^phratchProc answer	
 ]
 
 { #category : #'as yet unclassified' }
@@ -163,8 +163,8 @@ MultiArgReporterBlockMorph >> evaluateWithArgs: rawArgs [
 	"Evalue this block with the given argument list."
 
 	self start.
-	scratchProc stepUntilDoneFor: (receiver ownerOrYourselfThatIsA: PhratchStageMorph).
-	^scratchProc answer	
+	phratchProc stepUntilDoneFor: (receiver ownerOrYourselfThatIsA: PhratchStageMorph).
+	^phratchProc answer	
 ]
 
 { #category : #'as yet unclassified' }
@@ -383,8 +383,8 @@ MultiArgReporterBlockMorph >> showValue [
 	gotError := false.
 
 	[self start.
-	scratchProc stepUntilDoneFor: (receiver ownerOrYourselfThatIsA: PhratchStageMorph).
-	msg := scratchProc answer] ifError: [
+	phratchProc stepUntilDoneFor: (receiver ownerOrYourselfThatIsA: PhratchStageMorph).
+	msg := phratchProc answer] ifError: [
 		gotError := true.
 		msg := 'Error!'].
 

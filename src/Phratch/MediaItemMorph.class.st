@@ -6,7 +6,6 @@ Class {
 	#name : #MediaItemMorph,
 	#superclass : #Morph,
 	#instVars : [
-		'scratchObj',
 		'media',
 		'thumbnailMorph',
 		'numberMorph',
@@ -22,7 +21,8 @@ Class {
 		'rightMorph',
 		'highlightPadding',
 		'numberMorphTopRight',
-		'minThumbHeight'
+		'minThumbHeight',
+		'phratchObj'
 	],
 	#classVars : [
 		'SoundIcon',
@@ -221,7 +221,7 @@ MediaItemMorph >> configureForDragging [
 MediaItemMorph >> deleteMedia [
 
 	PhratchFrameMorph putInClipboard: self configureForDragging.
-	scratchObj deleteMedia: media.
+	phratchObj deleteMedia: media.
 
 ]
 
@@ -235,15 +235,15 @@ MediaItemMorph >> doubleClick: evt [
 { #category : #'menu/button ops' }
 MediaItemMorph >> duplicateMedia [
 
-	scratchObj duplicateMedia: media.
+	phratchObj duplicateMedia: media.
 
 ]
 
 { #category : #'menu/button ops' }
 MediaItemMorph >> editImage [
 
-	scratchObj lookLike: media mediaName.
-	scratchObj editDrawing.
+	phratchObj lookLike: media mediaName.
+	phratchObj editDrawing.
 
 ]
 
@@ -264,7 +264,7 @@ MediaItemMorph >> editSound [
 	sFrame ifNil: [^ self].
 	workPane := sFrame workPane.
 
-	editor := PhratchSoundEditor new client: scratchObj; sound: media sound.
+	editor := PhratchSoundEditor new client: phratchObj; sound: media sound.
 	editor soundName: media mediaName.
 	editor position: workPane topLeft + (10@10).
 	workPane addMorph: editor.
@@ -312,7 +312,7 @@ MediaItemMorph >> getDeleteButton [
 		actionSelector: #deleteMedia;
 		toggleMode: false.
 
-	media isImage ifTrue: [(scratchObj isKindOf: PhratchStageMorph)
+	media isImage ifTrue: [(phratchObj isKindOf: PhratchStageMorph)
 		ifTrue: [b setBalloonText: 'Delete this background' localized]
 		ifFalse: [b setBalloonText: 'Delete this costume' localized]].
 	media isSound ifTrue: [b setBalloonText: 'Delete this sound' localized].
@@ -349,7 +349,7 @@ MediaItemMorph >> handleTool: toolName hand: hand [
 { #category : #'event handling' }
 MediaItemMorph >> handlesMouseDown: evt [
 
-	^ scratchObj notNil
+	^ phratchObj notNil
 
 ]
 
@@ -393,7 +393,7 @@ MediaItemMorph >> justDroppedInto: aMorph event: evt [
 		"I have been accepted into a media list; exit this method to prevent myself from being put into the Clipboard again"
 		^ self].
 
-	(scratchObj media includes: media) not ifTrue: [
+	(phratchObj media includes: media) not ifTrue: [
 		"I have been dropped outside of the media list; allow myself to be resurrected again".
 		^ self deleteMedia]
 
@@ -429,14 +429,14 @@ MediaItemMorph >> mediaName: name [
 MediaItemMorph >> mouseDown: evt [
 	"Handle a mouse click. Left button drags. Right button brings up a menu."
 
-	scratchObj ifNil: [^ self].
+	phratchObj ifNil: [^ self].
 	evt hand toolType ifNotNil: [
 		^ self handleTool: evt hand toolType hand: evt hand].
 
 	evt rightButtonPressed
 		ifTrue: [Sensor waitNoButton. ^ self rightButtonMenu]
 		ifFalse:	[
-			media isImage ifTrue: [scratchObj lookLike: media mediaName].
+			media isImage ifTrue: [phratchObj lookLike: media mediaName].
 			evt hand waitForClicksOrDrag: self event: evt].
 
 ]
@@ -451,15 +451,15 @@ MediaItemMorph >> mouseHold: evt [
 { #category : #accessing }
 MediaItemMorph >> phratchObj [
 
-	^ scratchObj 
+	^ phratchObj 
 
 ]
 
 { #category : #accessing }
-MediaItemMorph >> phratchObj: anObject media: aScratchMedia [
+MediaItemMorph >> phratchObj: anObject media: aPhratchMedia [
 
-	media := aScratchMedia.
-	scratchObj := anObject.
+	media := aPhratchMedia.
+	phratchObj := anObject.
 	self buildSubmorphs.
 
 ]

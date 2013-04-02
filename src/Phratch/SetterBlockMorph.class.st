@@ -14,7 +14,6 @@ Class {
 { #category : #private }
 SetterBlockMorph >> asBlockTuple [
 	"Answer a tuple (Array) describing this block and its arguments.
-
 	variable accessor blocks in BYOB come in two flavors: Those onces statically accessing sprite or stage variables, and those ones dynamically bound to other environments. The latter ones are marked as special forms.  To stay compatible with Scratch (which doesn't have temporaries or block vars) the isSpecialForm flag is not put into the file format, instead the distinction is made via an explanatory symbol:
 
 	isSpecialForm 	 	=	#changeBlockVariable

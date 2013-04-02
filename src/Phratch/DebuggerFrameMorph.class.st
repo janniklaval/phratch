@@ -176,7 +176,7 @@ DebuggerFrameMorph >> initialize [
 
 	scroller := ScrollFrameMorph2 new
 		growthFraction: 0.0;
-		color: Color transparent "ScratchFrameMorph scriptsPaneColor".
+		color: Color transparent "PhratchFrameMorph scriptsPaneColor".
 
 	contentsMorph := ImageMorph new.
 	contentsFrame := Morph new color: Color transparent; extent: 150 @ 80.
@@ -264,9 +264,9 @@ DebuggerFrameMorph >> mouseUp: evt [
 ]
 
 { #category : #'as yet unclassified' }
-DebuggerFrameMorph >> on: aScratchProcess [
+DebuggerFrameMorph >> on: aPhratchProcess [
 
-	thread := aScratchProcess.
+	thread := aPhratchProcess.
 
 	self 
 		createButtons;
@@ -277,9 +277,9 @@ DebuggerFrameMorph >> on: aScratchProcess [
 ]
 
 { #category : #'as yet unclassified' }
-DebuggerFrameMorph >> on: aScratchProcess returnValue: obj [
+DebuggerFrameMorph >> on: aPhratchProcess returnValue: obj [
 
-	thread := aScratchProcess.
+	thread := aPhratchProcess.
 	returnValue := obj.
 
 	self 

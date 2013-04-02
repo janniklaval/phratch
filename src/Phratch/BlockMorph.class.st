@@ -11,7 +11,6 @@ Class {
 		'highlightColor1',
 		'highlightColor2',
 		'shadowColor',
-		'scratchProc',
 		'hadError',
 		'blockLayoutNeeded',
 		'cachedForm',
@@ -19,7 +18,8 @@ Class {
 		'copyTooltip',
 		'lastLayoutTime',
 		'originalColor',
-		'isContrasted'
+		'isContrasted',
+		'phratchProc'
 	],
 	#classVars : [
 		'ArgFont',
@@ -281,7 +281,7 @@ BlockMorph >> changed [
 BlockMorph >> clearProcess [
 	"Called on the top block of a running stack when all processes are stopped."
 
-	scratchProc ifNotNil: [self phratchProc: nil].
+	phratchProc ifNotNil: [self phratchProc: nil].
 
 ]
 
@@ -524,7 +524,7 @@ BlockMorph >> disinheritAttribute [
 
 { #category : #'event handling' }
 BlockMorph >> doubleClick: evt [
-	"If I'm a block with a receiver that's in a Scratch window, execute me."
+	"If I'm a block with a receiver that's in a Phratch window, execute me."
 
 	self topBlock toggleProcess.
 
@@ -836,7 +836,7 @@ BlockMorph >> fullBounds [
 			self changed].
 		blockLayoutNeeded := false].
 
-	scratchProc ifNotNil: [^ super fullBounds expandBy: 3].  "allow for running/error feedback"
+	phratchProc ifNotNil: [^ super fullBounds expandBy: 3].  "allow for running/error feedback"
 
 	^ super fullBounds
 
@@ -855,7 +855,7 @@ BlockMorph >> fullDrawOn: aCanvas [
 	cachedForm ifNil: [^ super fullDrawOn: aCanvas].  "should not happen"
 
 	offset := 0@0.
-	scratchProc ifNotNil: [
+	phratchProc ifNotNil: [
 		offset := 3@3.
 		cachedFeedbackForm ifNil: [self updateCachedFeedbackForm].
 		cachedFeedbackForm ifNotNil: [
@@ -1000,7 +1000,7 @@ BlockMorph >> hasComment [
 { #category : #processes }
 BlockMorph >> hasRunningProcess [
 
-	^ scratchProc notNil and: [scratchProc isRunning]
+	^ phratchProc notNil and: [phratchProc isRunning]
 
 ]
 
@@ -1052,7 +1052,7 @@ BlockMorph >> initialize [
 	isSpecialForm := false.
 	color := Color r: 0.4 g: 0.7 b: 0.8.
 	oldColor := color.
-	scratchProc := nil.
+	phratchProc := nil.
 	hadError := false.
 	lastLayoutTime := 0.
 	isContrasted := false.
@@ -1441,7 +1441,7 @@ BlockMorph >> newScriptOwnerPrivate: newOwner [
 	self allMorphsDo: [:m |
 
 " commented out from #newScriptOwner: 
-for use in ScriptableScratchMorph ->> #definitionFor:
+for use in ScriptablePhratchMorph ->> #definitionFor:
 
 		((m isKindOf: CustomCommandBlockMorph) or: [
 		m isKindOf: CustomReporterBlockMorph]) ifTrue: [
@@ -1506,7 +1506,7 @@ BlockMorph >> outerLoop [
 BlockMorph >> pauseProcess [
 	"Called on the top block of a running stack when all processes are stopped."
 
-	scratchProc ifNotNil: [scratchProc pause].
+	phratchProc ifNotNil: [phratchProc pause].
 
 ]
 
@@ -1514,16 +1514,16 @@ BlockMorph >> pauseProcess [
 BlockMorph >> phratchProc [
 	"Answer my process or nil if I'm not currently the top of a running stack."
 
-	^ scratchProc
+	^ phratchProc
 
 ]
 
 { #category : #processes }
-BlockMorph >> phratchProc: aScratchProcess [
+BlockMorph >> phratchProc: aPhratchProcess [
 
 	hadError == true ifTrue: [cachedFeedbackForm := nil].
 	hadError := false.
-	scratchProc := aScratchProcess.
+	phratchProc := aPhratchProcess.
 	self changed.
 
 ]
@@ -1618,7 +1618,7 @@ BlockMorph >> removeCopyTooltip [
 BlockMorph >> resumeProcess [
 	"Called on the top block of a running stack when all processes are stopped."
 
-	scratchProc ifNotNil: [scratchProc resume].
+	phratchProc ifNotNil: [phratchProc resume].
 
 ]
 
@@ -1740,10 +1740,10 @@ BlockMorph >> startDrag: evt [
 { #category : #processes }
 BlockMorph >> stop [
 
-	scratchProc ifNotNil: [
+	phratchProc ifNotNil: [
 		self changed.
-		scratchProc stop.
-		scratchProc := nil].
+		phratchProc stop.
+		phratchProc := nil].
 
 ]
 
@@ -1781,7 +1781,7 @@ BlockMorph >> tabFields [
 { #category : #processes }
 BlockMorph >> toggleProcess [
 
-	(scratchProc isNil or: [scratchProc errorFlag])
+	(phratchProc isNil or: [phratchProc errorFlag])
 		ifTrue: [self start]
 		ifFalse: [self stop].
 
@@ -1812,7 +1812,7 @@ BlockMorph >> updateCachedFeedbackForm [
 
 	| outlineColor |
 	cachedForm ifNil: [^ self].
-	outlineColor := (scratchProc notNil and: [scratchProc errorFlag])
+	outlineColor := (phratchProc notNil and: [phratchProc errorFlag])
 		ifTrue: [Color r: 0.831 g: 0.156 b: 0.156]
 		ifFalse: [Color gray: 0.953].
 
@@ -1832,7 +1832,7 @@ BlockMorph >> updateCachedForm [
 	c := FormCanvas extent: self fullBounds extent depth: 32.
 	PhratchTranslator isRTL
 		ifTrue: [
-			offset := scratchProc ifNil: [0@0] ifNotNil: [3@3].
+			offset := phratchProc ifNil: [0@0] ifNotNil: [3@3].
 			c := c copyOffset: (self fullBounds topLeft + offset) negated]
 		ifFalse: [c := c copyOffset: self topLeft negated].
 	self drawOn: c.

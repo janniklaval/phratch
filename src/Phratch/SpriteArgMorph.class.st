@@ -29,7 +29,7 @@ SpriteArgMorph >> acceptsTypeOf: aBlockMorph [
 
 { #category : #other }
 SpriteArgMorph >> checkForDeletedMorph [
-	"If I refer to a Sprite that has been deleted, nil out my morph field. Do nothing if my morph is a ScratchStageMorph"
+	"If I refer to a Sprite that has been deleted, nil out my morph field. Do nothing if my morph is a PhratchStageMorph"
 
 	(morph isKindOf: Morph) ifFalse: [^ self].
 	morph owner ifNotNil: [^ self].
@@ -60,7 +60,7 @@ SpriteArgMorph >> defaultValue: aSpriteMorph [
 
 { #category : #other }
 SpriteArgMorph >> evaluate [
-	"Answer either nil, the symbols #mouse or #myself, or a Scratch sprite object."
+	"Answer either nil, the symbols #mouse or #myself, or a Phratch sprite object."
 
 	morph = #null ifTrue: [
 		^ nil ].
@@ -76,7 +76,7 @@ SpriteArgMorph >> evaluate [
 	morph = 'my owner' ifTrue: [
 		^owner receiver ownerSprite ].
 	morph = 'my parts' ifTrue: [
-		^ScratchListMorph on: owner receiver subsprites].
+		^PhratchListMorph on: owner receiver subsprites].
 	morph = 'my prototype' ifTrue: [
 		^owner receiver prototype ].
 	morph = 'my name' ifTrue: [
@@ -197,7 +197,7 @@ SpriteArgMorph >> mouseDown: evt [
 
 { #category : #'event handling' }
 SpriteArgMorph >> presentMenu [
-	"Let the user select a Scratch object or the special value #mouse."
+	"Let the user select a Phratch object or the special value #mouse."
 
 	| frame sel objList menu choice be |
 

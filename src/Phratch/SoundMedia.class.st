@@ -134,7 +134,7 @@ SoundMedia >> exportFilename: fileName for: stageOrSprite [
 	| fName f |
 	fName := fileName.
 	(fName asLowercase endsWith: '.wav') ifFalse: [fName := fName, '.wav'].
-	f := StandardFileStream newScratchFileNamed: fName.
+	f := StandardFileStream newPhratchFileNamed: fName.
 	f ifNil: [^ self].  "could not create or open file for writing"
 	f binary.
 	originalSound storeWAVSamplesOn: f.
@@ -202,7 +202,7 @@ SoundMedia >> initialize [
 
 { #category : #compressing }
 SoundMedia >> isBuiltInSound [
-	"Answer true if my sound is one of the Scratch builtin sounds."
+	"Answer true if my sound is one of the Phratch builtin sounds."
 
 	((mediaName = 'pop') and:
 	 [originalSound samples size = ScriptablePhratchMorph popSound samples size])

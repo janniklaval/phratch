@@ -186,7 +186,7 @@ PhratchStageMorph >> backgroundIndex [
 
 { #category : #'scratch processes/events' }
 PhratchStageMorph >> broadcastEventNamed: name with: value [
-	"Broadcast a ScratchEvent with given name and argument value to all Scratch objects and answer a collection of the newly created processes. This is done by finding all public scripts that respond to this event, and starting new processes for any not already running."
+	"Broadcast a PhratchEvent with given name and argument value to all Phratch objects and answer a collection of the newly created processes. This is done by finding all public scripts that respond to this event, and starting new processes for any not already running."
 
 	| event objList newProcs |
 	phratchServer ifNotNil: [phratchServer queueBroadcast: name].
@@ -384,7 +384,7 @@ PhratchStageMorph >> drawOn: aCanvas [
 
 { #category : #'pen support' }
 PhratchStageMorph >> drawPenTrailFor: aMorph from: oldPoint to: newPoint [
-	"Draw a pen trail between the given points for the given morph using its pen size and color. The points are in Scratch coordinates (that is, 0@0 is the center of the work pane and y increases toward the top of the screen."
+	"Draw a pen trail between the given points for the given morph using its pen size and color. The points are in Phratch coordinates (that is, 0@0 is the center of the work pane and y increases toward the top of the screen."
 	"The penTrailsForm is created on demand when the first pen is put down and removed (to save space) when pen trails are cleared."
 
 	| pen penSize offset p1 p2 r |
@@ -519,7 +519,7 @@ PhratchStageMorph >> fullDrawOn: aCanvas [
 
 	super fullDrawOn: aCanvas.
 
-	"don't draw shadows if owner is not a ScratchFrameMorph"
+	"don't draw shadows if owner is not a PhratchFrameMorph"
 	(owner isKindOf: PhratchFrameMorph) ifFalse: [^ self].
 
 	"shadow constants"
@@ -840,14 +840,14 @@ PhratchStageMorph >> nextBackground [
 ]
 
 { #category : #midi }
-PhratchStageMorph >> notePlayerFor: aScratchObject [
+PhratchStageMorph >> notePlayerFor: aPhratchObject [
 	"Answer a note player for the given object, creating one if necessary. Open the MIDI port if necessary."
 
 	| deletedMorphs channelUsage ch newCh newPlayer |
 	midiPort ifNil: [self tryToOpenMidiPort].
 
-	(notePlayerDict includesKey: aScratchObject) ifTrue: [
-		^ notePlayerDict at: aScratchObject].
+	(notePlayerDict includesKey: aPhratchObject) ifTrue: [
+		^ notePlayerDict at: aPhratchObject].
 
 	"remove deleted morphs from the note player dictionary"
 	deletedMorphs := notePlayerDict keys select: [:m | m owner isNil].
@@ -865,7 +865,7 @@ PhratchStageMorph >> notePlayerFor: aScratchObject [
 		channel: newCh;
 		midiPort: midiPort;
 		instrument: 1.
-	notePlayerDict at: aScratchObject put: newPlayer.
+	notePlayerDict at: aPhratchObject put: newPlayer.
 
 	^ newPlayer
 
@@ -940,15 +940,15 @@ PhratchStageMorph >> patchAt: patchRect withoutWatchersAnd: stopMorph andNothing
 
 { #category : #byob }
 PhratchStageMorph >> pauseAllProcesses [
-	"Pause all running Scratch processes."
+	"Pause all running Phratch processes."
 
-	| allObjs |
+	| |
 	"pause all sounds"
 	SoundPlayer pauseAll.
 		
 	"clear all processes, including those with error feedback"
 "
-	allObjs _ submorphs select: [:m | m isKindOf: ScriptableScratchMorph].
+	allObjs _ submorphs select: [:m | m isKindOf: ScriptablePhratchMorph].
 	allObjs _ allObjs copyWith: self.
 	allObjs do: [:obj |
 		(obj blocksBin isKindOf: Morph) ifTrue: [
@@ -1036,7 +1036,7 @@ PhratchStageMorph >> processesToRun [
 ]
 
 { #category : #byob }
-PhratchStageMorph >> referenceToList: aScratchList [
+PhratchStageMorph >> referenceToList: aPhratchList [
 
 	"answer an Array describing the variable which holds an anonymous list, nil
 	if there isn't any.
@@ -1047,12 +1047,12 @@ PhratchStageMorph >> referenceToList: aScratchList [
 		2 - var name"
 
 	self varNames do: [:key |
-		aScratchList == (vars at: key)
+		aPhratchList == (vars at: key)
 			ifTrue: [^ Array with: 'Stage' with: key ]].
 
 	sprites do: [:sprite |
 		sprite varNames do: [:vname |
-			aScratchList == (sprite getVar: vname)
+			aPhratchList == (sprite getVar: vname)
 				ifTrue: [^ Array with: sprite objName with: vname ]]].
 
 	^ nil
@@ -1108,22 +1108,12 @@ PhratchStageMorph >> rerecordScene: sceneName [
 
 { #category : #byob }
 PhratchStageMorph >> resumeAllProcesses [
-	"Pause all running Scratch processes."
+	"Pause all running Phratch processes."
 
-	| allObjs |
 	"resume all sounds"
 	SoundPlayer resumeAll.
 
 	"clear all processes, including those with error feedback"
-"
-	allObjs := submorphs select: [:m | m isKindOf: ScriptableScratchMorph].
-	allObjs := allObjs copyWith: self.
-	allObjs do: [:obj |
-		(obj blocksBin isKindOf: Morph) ifTrue: [
-			obj blocksBin submorphs do: [:b |
-				(b isKindOf: BlockMorph) ifTrue: [b resumeProcess]]]].
-
-"
 
 	runningBlocks do: [:each |
 		each resumeProcess]
@@ -1419,7 +1409,7 @@ PhratchStageMorph >> step [
 
 { #category : #'scratch processes/events' }
 PhratchStageMorph >> stepProcesses [
-	"Run each Scratch process until it gives up control, then filter out any processes that have terminated."
+	"Run each Phratch process until it gives up control, then filter out any processes that have terminated."
 	"Details: Iterate over a copy of processes to allow processes to stop themselves. During development, the error catcher makes it difficult to track down errors, so it can be disabled."
 
 	| proc |
@@ -1445,7 +1435,7 @@ PhratchStageMorph >> stepProcesses [
 
 { #category : #'scratch processes/events' }
 PhratchStageMorph >> stepProcessesTurbo [
-	"Run each Scratch process until it gives up control, then filter out any processes that have terminated. Do this repeatedly until time is up."
+	"Run each Phratch process until it gives up control, then filter out any processes that have terminated. Do this repeatedly until time is up."
 
 	| sliceMSecs startMSecs now proc |
 	sliceMSecs := 100.
@@ -1497,7 +1487,7 @@ PhratchStageMorph >> stopAll [
 
 { #category : #'scratch processes/events' }
 PhratchStageMorph >> stopAllProcesses [
-	"Stop all running Scratch processes."
+	"Stop all running Phratch processes."
 
 	| allObjs |
 	"clear all processes, including those with error feedback"
@@ -1517,7 +1507,7 @@ PhratchStageMorph >> stopAllProcesses [
 PhratchStageMorph >> stopAllScriptsFor: eventName [
 
 "	remember to implement this in the mesh network later -jens"
-"	scratchServer ifNotNil: [scratchServer queueBroadcast: name]."
+"	phratchServer ifNotNil: [phratchServer queueBroadcast: name]."
 
 	"stop scripts"
 	submorphs do: [:m | (m isKindOf: ScriptablePhratchMorph) ifTrue: [

@@ -98,14 +98,14 @@ PhratchPresenterMorph >> frame [
 ]
 
 { #category : #initialization }
-PhratchPresenterMorph >> frame: aScratchFrameMorph [
+PhratchPresenterMorph >> frame: aPhratchFrameMorph [
 
-	frame := aScratchFrameMorph.
-	stage := aScratchFrameMorph workPane.
+	frame := aPhratchFrameMorph.
+	stage := aPhratchFrameMorph workPane.
 
 	"insert stage in an OffscreenWorldMorph to detect damage"
 	offscreenWorld := OffscreenWorldMorph new on: stage.
-	offscreenWorld frame: aScratchFrameMorph.
+	offscreenWorld frame: aPhratchFrameMorph.
 
 ]
 
@@ -168,7 +168,7 @@ PhratchPresenterMorph >> keyStroke: evt [
 		ifNil: [ 
 			ch = 3 | (ch = 13)
 				ifTrue: [ ^ self shoutGo ].
-			stage broadcastEventNamed: 'Scratch-KeyPressedEvent' with: evt ]
+			stage broadcastEventNamed: 'Phratch-KeyPressedEvent' with: evt ]
 ]
 
 { #category : #'event handling' }
@@ -268,7 +268,7 @@ PhratchPresenterMorph >> processKeyboardEvents [
 					prompter dispatchKeyStroke: evt]
 				ifNil: [
 					(ch = 3) | (ch = 13) ifTrue: [^ self shoutGo].
-					stage broadcastEventNamed: 'Scratch-KeyPressedEvent' with: evt]]].
+					stage broadcastEventNamed: 'Phratch-KeyPressedEvent' with: evt]]].
 
 ]
 

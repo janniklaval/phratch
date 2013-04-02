@@ -12,9 +12,9 @@ Class {
 }
 
 { #category : #'instance creation' }
-PhratchRulerMorph class >> graphMorph: aScratchGraphMorph [
+PhratchRulerMorph class >> graphMorph: aPhratchGraphMorph [
 
-	^ self new graph: aScratchGraphMorph; extent: (aScratchGraphMorph extent x)@20.
+	^ self new graph: aPhratchGraphMorph; extent: (aPhratchGraphMorph extent x)@20.
 
 	
 ]
@@ -54,9 +54,9 @@ PhratchRulerMorph >> drawOn: aCanvas [
 ]
 
 { #category : #accessing }
-PhratchRulerMorph >> graph: aScratchGraphMorph [
+PhratchRulerMorph >> graph: aPhratchGraphMorph [
 
-	graph := aScratchGraphMorph.
+	graph := aPhratchGraphMorph.
 ]
 
 { #category : #initialize }
@@ -67,7 +67,7 @@ PhratchRulerMorph >> initialize [
 	max := 100.
 	marks := 20.0.
 	sigDigs := 1. 
-	graph := nil. "used specifically to coord with ScratchGraphMorph"
+	graph := nil. "used specifically to coord with PhratchGraphMorph"
 
 	self borderWidth: 1.
 	self extent: 200@20.

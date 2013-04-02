@@ -261,10 +261,10 @@ HatBlockMorph >> start [
 
 	| stage |
 	self stop.
-	scratchProc ifNil: [
+	phratchProc ifNil: [
 		scriptOwner ifNil: [^ self].
 		(stage := self receiver ownerOrYourselfThatIsA: PhratchStageMorph) ifNil: [^ self].
-		scratchProc := stage startProcessFor: self.
+		phratchProc := stage startProcessFor: self.
 		self changed].
 
 ]

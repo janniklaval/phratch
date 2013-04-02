@@ -685,7 +685,7 @@ PaintCanvas >> eraseAll [
 
 { #category : #private }
 PaintCanvas >> extractProjectFrom: aByteArray [
-	"Answer a Scratch project (i.e. a ScratchStageMorph possibly containing sprites) from the given ByteArray. Answer nil if the project cannot be unpacked."
+	"Answer a Phratch project (i.e. a PhratchStageMorph possibly containing sprites) from the given ByteArray. Answer nil if the project cannot be unpacked."
 
 	| s version proj |
 	s := ReadStream on: aByteArray.
@@ -699,7 +699,7 @@ PaintCanvas >> extractProjectFrom: aByteArray [
 
 	proj class = PhratchStageMorph ifFalse: [
 		version > 2
-			ifTrue: [self error: 'Project created by a later version of Scratch']
+			ifTrue: [self error: 'Project created by a later version of Phratch']
 			ifFalse: [self error: 'Problem reading project.'].
 		^ nil].
 

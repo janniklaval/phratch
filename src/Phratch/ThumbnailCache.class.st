@@ -122,7 +122,7 @@ ThumbnailCache >> thumbnailFromSpriteData: aByteArray [
 
 	version := ObjStream phratchFileVersionFrom: (s next: 10) asString.
 	version = 0 ifTrue: [
-		ScriptablePhratchMorph decodeAsByob.	"make sure we initialize every field - this breaks compatibility with Scratch-sprites. -Jens". 
+		ScriptablePhratchMorph decodeAsByob.	"make sure we initialize every field - this breaks compatibility with Phratch-sprites. -Jens". 
 
 		s position: 0.
 		proj := ObjStream new readObjFrom: s showProgress: false].

@@ -142,7 +142,6 @@ CustomReporterBlockMorph >> addLabelToNonTemplate [
 				argMorphs addLast: 	(VariableBlockMorph new 
 					isSpecialForm: true; 
 					selector: #getVar:;
-"					color: (ScriptableScratchMorph blockColorFor: 'variables');"
 					commandSpec: pn)]
 			ifFalse: [argMorphs addLast: (self argMorphFor: (args at: argMorphs size + 1))]].
 
@@ -203,7 +202,6 @@ CustomReporterBlockMorph >> addVariableTemplates [
 			receiver: self definition;
 			selector: #getBlockVar:;
 			commandSpec: (parms at: i);
-"			color: (ScriptableScratchMorph blockColorFor: 'variables');"
 			updateFragment;
 			parameterType: (self definition typeOf: (parms at: i));
 			parameterDefaultValue: (self definition defaultOf: (parms at: i));
@@ -308,8 +306,8 @@ CustomReporterBlockMorph >> evaluateWithArgs: rawArgs [
 	"Evalue this block with the given argument list."
 
 	self start.
-	scratchProc stepUntilDoneFor: (receiver ownerOrYourselfThatIsA: PhratchStageMorph).
-	^scratchProc answer	
+	phratchProc stepUntilDoneFor: (receiver ownerOrYourselfThatIsA: PhratchStageMorph).
+	^phratchProc answer	
 ]
 
 { #category : #'as yet unclassified' }
@@ -646,8 +644,8 @@ CustomReporterBlockMorph >> showValue [
 	gotError := false.
 
 	[self start.
-	scratchProc stepUntilDoneFor: (receiver ownerOrYourselfThatIsA: PhratchStageMorph).
-	msg := scratchProc answer] ifError: [
+	phratchProc stepUntilDoneFor: (receiver ownerOrYourselfThatIsA: PhratchStageMorph).
+	msg := phratchProc answer] ifError: [
 		gotError := true.
 		msg := 'Error!'].
 
@@ -702,7 +700,7 @@ CustomReporterBlockMorph >> updateSpecWithDnDSpec [
 	5. 	update every instance of the definition if it is global
 	6.	update the definition's userSpec -> update every instance of the definition
 	7.	update the Block Editor
-	8.	update the Scratch Window
+	8.	update the Phratch Window
 "
 
 	| newSpec parms defaults oldid newid types def  stage affected eachDef be sf |
@@ -787,7 +785,7 @@ CustomReporterBlockMorph >> updateSpecWithDnDSpec [
 			privateSetUserSpec: newSpec;
 			commandSpec: def commandSpec].
 
-	"8.	update the Scratch Window"
+	"8.	update the Phratch Window"
 
 	sf := receiver ownerOrYourselfThatIsA: PhratchFrameMorph.
 	sf viewerPane categoryChanged: 'variables'.

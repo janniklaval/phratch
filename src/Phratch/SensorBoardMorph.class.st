@@ -62,12 +62,12 @@ Class {
 		'currentState',
 		'highByte',
 		'useGoGoProtocol',
-		'scratchBoardV3',
 		'reportRaw',
 		'scanPorts',
 		'scanState',
 		'scanStartMSecs',
-		'lastPollMSecs'
+		'lastPollMSecs',
+		'phratchBoardV3'
 	],
 	#category : #'Phratch-UI-Panes'
 }
@@ -148,7 +148,7 @@ SensorBoardMorph >> closePort [
 	port := nil.
 	currentState := #idle.
 	sensorValues atAllPut: 0.
-	scratchBoardV3 := false.
+	phratchBoardV3 := false.
 	1 to: 8 do: [:i | (readouts at: i) contents: '0'].
 	scanState := #off.
 	self step.
@@ -196,7 +196,7 @@ SensorBoardMorph >> initialize [
 	currentState := #idle.
 	highByte := 0.
 	useGoGoProtocol ifNil: [useGoGoProtocol := false].
-	scratchBoardV3 := false.
+	phratchBoardV3 := false.
 	reportRaw := false.
 	scanState := #off.
 	self addReadouts.
@@ -295,7 +295,7 @@ SensorBoardMorph >> portIsOpen [
 
 { #category : #'serial port' }
 SensorBoardMorph >> portNames [
-	"Answer a collection of possible port names for the Scratch sensor board. Filter out modems and PDA cradles."
+	"Answer a collection of possible port names for the Phratch sensor board. Filter out modems and PDA cradles."
 
 	PhratchPlugin serialPortOpsAvailable ifFalse: [
 		^ (1 to: 32) collect: [:i | 'COM', i printString]].
@@ -315,20 +315,20 @@ SensorBoardMorph >> preemptsMouseDown: evt [
 
 { #category : #'sensor ops' }
 SensorBoardMorph >> privateSensor: sensorIndex [
-	"Read the virtual sensor with the given index permuted according to which Scratch board is plugged in and scaled if it is a known special sensor such as the light or sound sensor. If reportRaw is true then the raw sensor value (0..1023) is reported."
+	"Read the virtual sensor with the given index permuted according to which Phratch board is plugged in and scaled if it is a known special sensor such as the light or sound sensor. If reportRaw is true then the raw sensor value (0..1023) is reported."
 	"This method does not call processIncomingData. It should only be used by the step method."
 
 	| i raw |
 	"map the sensor index to the corresponding channel"
 	i := (sensorIndex asInteger max: 1) min: 8.
 	useGoGoProtocol ifFalse: [
-		scratchBoardV3
+		phratchBoardV3
 			ifTrue: [i := #(8 6 7 4 5 3 2 1) at: i] 
 			ifFalse: [i := #(5 6 7 8 1 2 3 4) at: i]].
 
 	raw := sensorValues at: i.
 	reportRaw ifTrue: [^ raw].
-	scratchBoardV3 ifTrue: [
+	phratchBoardV3 ifTrue: [
 		i = 6 ifTrue: [^ self scaleLight: raw].
 		i = 7 ifTrue: [^ self scaleSound: raw]].
 	raw > 1020 ifTrue: [raw := 1023].  "avoids jitter in the range 1021-1023"
@@ -364,7 +364,7 @@ SensorBoardMorph >> processGoGoByte: aByte [
 { #category : #private }
 SensorBoardMorph >> processIncomingData [
 	"Process incoming bytes from the serial port."
-	"Details: To work around a problem with the Prolific USB-Serial drivers on some Windows machines, a strict turn-taking polling protocol is used. A poll byte is sent, the ScratchBoard sends a response, and after a small delay (to be sure that all the data from the last poll has arrived, another poll is sent. The goal is to never allow more that few bytes to accumulate in the serial input buffer and to avoid sending a poll byte while data is arriving. However, since different versions of the ScratchBoard may send different amounts of data, we don't want to hard-code the number of reply bytes. Thus"
+	"Details: To work around a problem with the Prolific USB-Serial drivers on some Windows machines, a strict turn-taking polling protocol is used. A poll byte is sent, the PhratchBoard sends a response, and after a small delay (to be sure that all the data from the last poll has arrived, another poll is sent. The goal is to never allow more that few bytes to accumulate in the serial input buffer and to avoid sending a poll byte while data is arriving. However, since different versions of the PhratchBoard may send different amounts of data, we don't want to hard-code the number of reply bytes. Thus"
 
 	| buf msecsSinceLastPoll |
 	(self portIsOpen and: [#on = scanState]) ifFalse: [^ self].
@@ -380,7 +380,7 @@ SensorBoardMorph >> processIncomingData [
 	buf := port readByteArray.
 	buf do: [:b | self processPhratchByte: b].
 
-	port nextPut: 1.	"send a ScratchBoard V4 poll byte"
+	port nextPut: 1.	"send a PhratchBoard V4 poll byte"
 	lastPollMSecs := Time millisecondClockValue.
 
 
@@ -388,7 +388,7 @@ SensorBoardMorph >> processIncomingData [
 
 { #category : #private }
 SensorBoardMorph >> processPhratchByte: aByte [
-	"Process one byte of the incoming data stream from a Scratch sensor board."
+	"Process one byte of the incoming data stream from a Phratch sensor board."
 	"Sensor messages are two bytes with the following format:
 		Byte1: <1><sensor number (4 bits)><sensor value high bits (3 bits)>
 		Byte2: <0><sensor value low bits (7 bits)>"
@@ -412,7 +412,7 @@ SensorBoardMorph >> processPhratchByte: aByte [
 			sensorValues at: sensorNum put: val.
 			sensorNum = 16 ifTrue: [
 				(val == 3) | (val == 4) ifTrue: [
-					scratchBoardV3 := true]]].  "ScratchBoard, version 3 or 4"
+					phratchBoardV3 := true]]].  "PhratchBoard, version 3 or 4"
 
 		currentState := #idle].
 
@@ -452,7 +452,7 @@ SensorBoardMorph >> rightButtonMenu [
 				ifTrue: [menu add: 'stop reporting raw data' action: #toggleRawMode]
 				ifFalse: [menu add: 'report raw data' action: #toggleRawMode].
 			useGoGoProtocol
-				ifTrue: [menu add: 'use Scratch board' action: #usePhratchboardProtocol]
+				ifTrue: [menu add: 'use Phratch board' action: #usePhratchboardProtocol]
 				ifFalse: [menu add: 'use GoGo board' action: #useGoGoProtocol]]
 		ifFalse: [
 			menu add: 'select serial/USB port' action: #selectPort.
@@ -497,7 +497,7 @@ SensorBoardMorph >> scaleSound: val [
 { #category : #'serial port' }
 SensorBoardMorph >> scanForPort [
 	"Try to find the serial port that the sensor board is attached to. This is incremental--each time it is called it does the next task."
-	"Details: scanState is one of: #(off, start, checkData, on). scanPorts is a list of port names to try. Attempt to open each port in turn, then wait for a while and see if Scratch Sensor data of the right form has arrived."
+	"Details: scanState is one of: #(off, start, checkData, on). scanPorts is a list of port names to try. Attempt to open each port in turn, then wait for a while and see if Phratch Sensor data of the right form has arrived."
 
 	| msecs buf i |
 	#off = scanState ifTrue: [self scanNextPort].
@@ -522,7 +522,7 @@ SensorBoardMorph >> scanForPort [
 		port nextPut: 1.  "send poll byte"
 		((buf := port readByteArray) size < 10) ifTrue: [^ self].  "no data yet"
 
-		"check that the data is in Scratch Sensor Board format"
+		"check that the data is in Phratch Sensor Board format"
 		i := (buf first bitAnd: 128) > 0 ifTrue: [1] ifFalse: [2].
 		[i < (buf size - 1)] whileTrue: [
 			(((buf at: i) bitAnd: 128) > 0 and:
@@ -535,7 +535,7 @@ SensorBoardMorph >> scanForPort [
 
 { #category : #'serial port' }
 SensorBoardMorph >> scanNextPort [
-	"Called during port scanning. The current port does not seem to be a ScratchBoard. Close it and try the next port in the list."
+	"Called during port scanning. The current port does not seem to be a PhratchBoard. Close it and try the next port in the list."
 
 	self closePort.
 	scanState := #start.
@@ -620,7 +620,7 @@ SensorBoardMorph >> startReadingData [
 
 	currentState := #idle.
 	sensorValues atAllPut: 0.
-	scratchBoardV3 := false.
+	phratchBoardV3 := false.
 	self startStreamingSensors: 0.  "in case board was left in streaming mode"
 	port flushInputBuffer.
 
@@ -662,7 +662,7 @@ SensorBoardMorph >> step [
 
 	1 to: 8 do: [:i |
 		(readouts at: i) contents: (self privateSensor: i) truncated printString.
-		(scratchBoardV3 and: [i = 4])
+		(phratchBoardV3 and: [i = 4])
 			ifTrue: [(readouts at: i) contents: ((self privateSensor: i) < 10) printString]. "button"
 		frame := (readouts at: i) owner.
 		(frame respondsTo: #fixLayout) ifTrue: [frame fixLayout]].
@@ -768,7 +768,7 @@ SensorBoardMorph >> useGoGoProtocol [
 
 	self stopReadingData.
 	useGoGoProtocol := true.
-	scratchBoardV3 := false.
+	phratchBoardV3 := false.
 	self startReadingData.
 
 ]

@@ -96,7 +96,7 @@ PhratchTalkBubbleMorph >> message [
 
 { #category : #accessing }
 PhratchTalkBubbleMorph >> message: aString [
-	"(ScratchTalkBubbleMorph new message: 'Hello!') openInWorld"
+	"(PhratchTalkBubbleMorph new message: 'Hello!') openInWorld"
 
 	| maxWidth xOffset |
 	

@@ -520,7 +520,7 @@ PhratchCommentMorph >> tupleSequence [
 				(Array
 					with: #byob
 					with: ''
-					with: #scratchComment
+					with: #phratchComment
 					with: commentMorph contents
 					with: isShowing
 					with: self width)]
@@ -529,7 +529,7 @@ PhratchCommentMorph >> tupleSequence [
 				((Array
 					with: #byob
 					with: ''), 
-					(Array with: #scratchComment
+					(Array with: #phratchComment
 						with: commentMorph contents
 						with: isShowing
 						with: self width

@@ -417,8 +417,8 @@ BlockEditorFrameMorph >> position: aPoint [
 ]
 
 { #category : #'as yet unclassified' }
-BlockEditorFrameMorph >> receiver: aScriptableScratchMorph [
-	receiver := aScriptableScratchMorph
+BlockEditorFrameMorph >> receiver: aScriptablePhratchMorph [
+	receiver := aScriptablePhratchMorph
 ]
 
 { #category : #'as yet unclassified' }

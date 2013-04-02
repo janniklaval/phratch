@@ -525,7 +525,7 @@ PhratchTranslator class >> fontScaleMenu [
 { #category : #'Unicode rendering' }
 PhratchTranslator class >> formFor: aString font: aStrikeFont fgColor: fgColor bgColor: bgColor [
 	"Answer a Form containing the given string in the given font and color rendered with the current rendering system. Answer nil if no rendering system is available."
-	"(self formFor: 'Hello, Scratch!' font: (StrikeFont fontName: 'VerdanaBold' size: 48) fgColor: Color black bgColor: Color blue) display"
+	"(self formFor: 'Hello, Phratch!' font: (StrikeFont fontName: 'VerdanaBold' size: 48) fgColor: Color black bgColor: Color blue) display"
 
 	| f s |
 	RenderPlugin ifNil: [^ nil].
@@ -546,7 +546,7 @@ PhratchTranslator class >> formFor: aString font: aStrikeFont fgColor: fgColor b
 { #category : #'Unicode rendering' }
 PhratchTranslator class >> formFor: aString font: aStrikeFont fgColor: fgColor bgColor: bgColor suppressAntiAliasing: suppressAntiAliasing [
 	"Answer a Form containing the given string in the given font and color rendered with the current rendering system. The suppressAntiAliasing flag is useful when the background color is not constant, such as when part of the text is highlighted during editing. Answer nil if no rendering system is available."
-	"(self formFor: 'Hello, Scratch!' font: (StrikeFont fontName: 'VerdanaBold' size: 48) fgColor: Color black bgColor: Color blue) display"
+	"(self formFor: 'Hello, Phratch!' font: (StrikeFont fontName: 'VerdanaBold' size: 48) fgColor: Color black bgColor: Color blue) display"
 
 	| f s |
 	RenderPlugin ifNil: [^ nil].
@@ -595,7 +595,7 @@ msgid "Language-Direction"
 msgstr ""
 
 # Scale to apply to font size (2 for twice as large)
-# Use this if the font is too small for legibility on the Scratch interface
+# Use this if the font is too small for legibility on the Phratch interface
 msgid "Font-Scale"
 msgstr ""
 
@@ -627,7 +627,7 @@ msgstr ""
 { #category : #locale }
 PhratchTranslator class >> guessLanguage [
 	"Try to guess a language setting based on the local."
-	"ScratchTranslator guessLanguage"
+	"PhratchTranslator guessLanguage"
 
 	| lang country myLocale |
 	(lang := self primLanguage) ifNil: [^ 'en'].
@@ -650,7 +650,7 @@ PhratchTranslator class >> guessLanguage [
 
 { #category : #'language translation' }
 PhratchTranslator class >> importLanguagesList [
-	"Import the list of languages and language codes translated for Scratch by file names from 'Help/Translations'"
+	"Import the list of languages and language codes translated for Phratch by file names from 'Help/Translations'"
 
 	| dir code lang |
 	ISODict := Dictionary new.
@@ -669,8 +669,8 @@ PhratchTranslator class >> importLanguagesList [
 
 { #category : #'import/export' }
 PhratchTranslator class >> importOLPCTranslations [
-	"Imports translations from the OLPC Pootle translation directory into the Scratch/locale/ directory and renames the .po files"
-	"First copy the /scratch/ folder from https://dev.laptop.org/~sayamindu/scratch_translations.zip to the local directory, then run this"
+	"Imports translations from the OLPC Pootle translation directory into the Phratch/locale/ directory and renames the .po files"
+	"First copy the /phratch/ folder from https://dev.laptop.org/~sayamindu/scratch_translations.zip to the local directory, then run this"
 	"self importOLPCTranslations"
 
 	| dir subDir |
@@ -686,7 +686,7 @@ PhratchTranslator class >> importOLPCTranslations [
 
 { #category : #'import/export' }
 PhratchTranslator class >> importPootleTranslations [
-	"Imports translations from the LLK Pootle translation directory into the Scratch/locale/ directory"
+	"Imports translations from the LLK Pootle translation directory into the phratch/locale/ directory"
 	"First checkout svn://translate.scratch.mit.edu:52400 to the local directory, then run this"
 	"self importPootleTranslations"
 
@@ -732,7 +732,7 @@ PhratchTranslator class >> importTranslation: aFilename [
 
 { #category : #'class initialization' }
 PhratchTranslator class >> initialize [
-	"ScratchTranslator initialize"
+	"PhratchTranslator initialize"
 
 	TranslationDict := Dictionary new.
 	ISODict := Dictionary new.
@@ -1062,7 +1062,7 @@ PhratchTranslator class >> setFont: aStrikeFont antialias: antialiasFlag [
 			fontName := 'Verdana'.
 			isBold := true].
 
-		(fontName beginsWith: 'Times') ifTrue: [ "Squeak font; not used by Scratch"
+		(fontName beginsWith: 'Times') ifTrue: [ "Squeak font; not used by Phratch"
 			fontName := 'Comic'.
 			fontSize := font pointSize + 1].
 
@@ -1198,7 +1198,7 @@ PhratchTranslator class >> startUp [
 { #category : #'Unicode rendering' }
 PhratchTranslator class >> stringExtent: aString font: aStrikeFont [
 	"Answer the extent of the given string using my font under the current font rendering system."
-	"self stringExtent: 'Hello, Scratch!' font: (StrikeFont fontName: 'Verdana' size: 18)"
+	"self stringExtent: 'Hello, Phratch!' font: (StrikeFont fontName: 'Verdana' size: 18)"
 
 	| s |
 	RenderPlugin ifNil: [  "no renderer; use Squeak font size"
@@ -1368,7 +1368,7 @@ PhratchTranslator class >> unicodeClipboardPut: unicodeOrString [
 
 { #category : #'rendering menu' }
 PhratchTranslator class >> updatePhratchUI [
-	"Update the UI of all ScratchFrameMorphs after changing the font or font scale."
+	"Update the UI of all PhratchFrameMorphs after changing the font or font scale."
 
 	RenderCenterOffsetCache := RenderCenterOffsetCache species new.
 	RenderVerticalTrimCache := RenderVerticalTrimCache species new.
@@ -1378,7 +1378,7 @@ PhratchTranslator class >> updatePhratchUI [
 
 { #category : #'import/export' }
 PhratchTranslator class >> updateTranslationFiles [
-	"Takes the existing .po files and updates them to reflect the latest Scratch strings to be translated."
+	"Takes the existing .po files and updates them to reflect the latest Phratch strings to be translated."
 	"self updateTranslationFiles"
 
 	| translationDict codes |
@@ -1486,8 +1486,8 @@ PhratchTranslator class >> verticalTrimForFont: aStrikeFont [
 { #category : #'import/export' }
 PhratchTranslator class >> withoutComment: s [
 	"Answer the given string without any comment. A hash character (#) begins a comment that runs to the end of the line unless the hash character is inside a double-quoted string."
-	"ScratchTranslator withoutComment: '# full line comment'"
-	"ScratchTranslator withoutComment: 'contents Öffnen # plus s comment'"
+	"PhratchTranslator withoutComment: '# full line comment'"
+	"PhratchTranslator withoutComment: 'contents Öffnen # plus s comment'"
 
 	| inString lastCh ch |
 	(s indexOf: $#) = 0 ifTrue: [^ s].
