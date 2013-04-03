@@ -2849,7 +2849,8 @@ PhratchFrameMorph >> open: aFileName [
 		^ OSProcess command: ('xdg-open "', aFileName, '"').
 	].
 	OSPlatform isWin32 ifTrue:[
-		^NBWin32Shell shellOpen: '"', aFileName, '"'.
+		"^NBWin32Shell shellOpen: '', aFileName, ''."
+		^ OSProcess command: ('cmd.exe /k "', aFileName, '"').
 	]
 ]
 
