@@ -51,7 +51,7 @@ MediaItemMorph >> addPlayButton [
 		onForm: (PhratchFrameMorph skinAt: #btnPressed).
 
 	playButton
-		icon: (PhratchFrameMorph skinAt: #phratchSoundPlay);
+		icon: (PhratchFrameMorph skinAt: #scratchSoundPlay);
 		target: self;
 		actionSelector: #startPreviewSound;
 		toggleMode: false.
@@ -73,7 +73,7 @@ MediaItemMorph >> addStopButton [
 		onForm: (PhratchFrameMorph skinAt: #btnPressed).
 
 	stopButton
-		icon: (PhratchFrameMorph skinAt: #phratchSoundStop);
+		icon: (PhratchFrameMorph skinAt: #scratchSoundStop);
 		target: self;
 		actionSelector: #stopPreviewSound;
 		toggleMode: false.
