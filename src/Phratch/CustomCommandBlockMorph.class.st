@@ -533,7 +533,6 @@ CustomCommandBlockMorph >> rightButtonMenu [
 
 	| menu choice |
 	menu := MenuMorphNG new defaultTarget: self.
-	self halt.
 	menu add: 'help' value: #presentHelpScreen.
 	menu addLine.
 	isTemplate 

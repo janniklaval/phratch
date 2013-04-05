@@ -4247,7 +4247,7 @@ ScriptablePhratchMorph >> imageForm [
 ScriptablePhratchMorph >> importImage [
 	"Import a new image from a file and add it to my media (concatenating the name if it is greater than 16 characters long). If the file is an animated gif, import all frames of the gif as separate costumes."
 
-	| title result el ext fList isFirst newName type |
+	| title result el fList isFirst newName type |
 	(self isKindOf: PhratchStageMorph)
 		ifTrue: [type := #background. title := 'Import Background']
 		ifFalse: [type := #costume. title := 'Import Costume'].
@@ -4258,10 +4258,7 @@ ScriptablePhratchMorph >> importImage [
 
 	fList := OrderedCollection new.
 
-	ext := (result) extension asLowercase.
-	ext = 'gif'
-		ifTrue: [[fList := (GIFReadWriter new on: (FileStream readOnlyFileNamed: result)) nextImageSet] ifError: [^ self]]
-		ifFalse: [[fList addLast: (Form fromFileNamed: result)] ifError: [^ self]].
+	[fList addLast: (Form fromFileNamed: result)] ifError: [^ self].
 
 	isFirst := true.
 	fList do: [:f |
