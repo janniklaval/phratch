@@ -481,6 +481,7 @@ PhratchFrameMorph class >> readSkinFrom: aDirectory [
 	"self readSkinFrom: (FileDirectory default directoryNamed: 'ScratchSkin')"
 "Corregido error sintaxsis"
 	| dict img i xoDict fn1|
+	self halt.
 	dict := Dictionary new.
 	xoDict := Dictionary new.
 	aDirectory fileNames do:  [:fn |

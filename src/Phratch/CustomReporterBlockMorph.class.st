@@ -524,7 +524,7 @@ CustomReporterBlockMorph >> rightButtonMenu [
 
 	| menu choice |
 	self isTemplate ifTrue: [^ self].
-	self halt.
+self halt.
 	menu := MenuMorphNG new defaultTarget: self.
 	menu add: 'help' value: #presentHelpScreen.
 	menu addLine.
