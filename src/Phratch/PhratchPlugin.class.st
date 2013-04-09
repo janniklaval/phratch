@@ -67,7 +67,7 @@ PhratchPlugin class >> closePort: portNum [
 	"Close the given port."
 	"self closePort: 1"
 
-	<primitive: 'primClose' module: #PhratchPlugin>
+	<primitive: 'primClose' module: #ScratchPlugin>
 
 ]
 
@@ -347,7 +347,7 @@ PhratchPlugin class >> isPortOpen: portNum [
 	"Answer true if the given serial port is open."
 	"self isPortOpen: 1"
 
-	<primitive: 'primIsPortOpen' module: #PhratchPlugin>
+	<primitive: 'primIsPortOpen' module: #ScratchPlugin>
 	^ false
 
 ]
@@ -357,7 +357,7 @@ PhratchPlugin class >> openPortNamed: portName baud: baudRate [
 	"Open the port with the given name at the given baud rate. Answer the port number to use for further operations on the given port or -1 if the port could not be opened."
 	"self openPortNamed: '/dev/cu.USA19QW3b1P1.1' baud: 9600"
 
-	<primitive: 'primOpenPortNamed' module: #PhratchPlugin>
+	<primitive: 'primOpenPortNamed' module: #ScratchPlugin>
 	^ -1
 
 ]
@@ -378,7 +378,7 @@ PhratchPlugin class >> pluginAvailable [
 PhratchPlugin class >> port: portNum getOption: optionNum [
 	"Answer the value of the given serial port option, or nil if the port is not open or the option is not defined. See the class comment for the list of options."
 
-	<primitive: 'primGetOption' module: #PhratchPlugin>
+	<primitive: 'primGetOption' module: #ScratchPlugin>
 	^ nil
 
 ]
@@ -387,7 +387,7 @@ PhratchPlugin class >> port: portNum getOption: optionNum [
 PhratchPlugin class >> port: portNum setOption: optionNum to: anInteger [
 	"Set the given serial port option to the given value. Do nothing if the option is not defined. See the class comment for the list of options."
 
-	<primitive: 'primSetOption' module: #PhratchPlugin>
+	<primitive: 'primSetOption' module: #ScratchPlugin>
 
 ]
 
@@ -396,7 +396,7 @@ PhratchPlugin class >> portCount [
 	"Answer the number of serial ports. Answer 0 if there are no ports or if this primitive fails."
 	"self portCount"
 
-	<primitive: 'primPortCount' module: #PhratchPlugin>
+	<primitive: 'primPortCount' module: #ScratchPlugin>
 	^ 0
 
 ]
@@ -406,7 +406,7 @@ PhratchPlugin class >> portCountOrNil [
 	"Answer the number of serial ports. Answer nil if this primitive fails."
 	"self portCountOrNil"
 
-	<primitive: 'primPortCount' module: #PhratchPlugin>
+	<primitive: 'primPortCount' module: #ScratchPlugin>
 	^ nil
 
 ]
@@ -416,7 +416,7 @@ PhratchPlugin class >> portName: portIndex [
 	"Answer the name of the serial port with the given index. Answer nil if there is no port with the given index."
 	"self portName: 1"
 
-	<primitive: 'primPortName' module: #PhratchPlugin>
+	<primitive: 'primPortName' module: #ScratchPlugin>
 	^ nil
 
 ]
@@ -425,7 +425,7 @@ PhratchPlugin class >> portName: portIndex [
 PhratchPlugin class >> primBlur: inBitmap into: outBitmap width: w [
 	"Blur all the non-transparent pixels in the given 32-bit image bitmap, storing the result in outBitmap. The two bitmaps must be the same size. Each call to this primitive does one Gausian blur step."
 
-	<primitive: 'primitiveBlur' module: #PhratchPlugin>
+	<primitive: 'primitiveBlur' module: #ScratchPlugin>
 	self primitiveFailed
 
 ]
@@ -434,7 +434,7 @@ PhratchPlugin class >> primBlur: inBitmap into: outBitmap width: w [
 PhratchPlugin class >> primCondense: srcSoundBuffer into: dstSoundBuffer by: anInteger [
 	"Condense the given SoundBuffer by the given factor storing the rsult into the destination SoundBuffer."
 
-	<primitive: 'primitiveCondenseSound' module: #PhratchPlugin>
+	<primitive: 'primitiveCondenseSound' module: #ScratchPlugin>
 	self primitiveFailed
 
 ]
@@ -443,7 +443,7 @@ PhratchPlugin class >> primCondense: srcSoundBuffer into: dstSoundBuffer by: anI
 PhratchPlugin class >> primDouble: srcBitmap w: srcWidth h: srcHeight into: dstBitmap w: dstWidth h: dstHeight x: dstX y: dstY [
 	"Display the source form at double-size onto the destination form at the given location. Fails if the target rectangle does not fit entirely within the destination form."
 
-	<primitive: 'primitiveDoubleSize' module: #PhratchPlugin>
+	<primitive: 'primitiveDoubleSize' module: #ScratchPlugin>
 	self primitiveFailed
 
 ]
@@ -452,7 +452,7 @@ PhratchPlugin class >> primDouble: srcBitmap w: srcWidth h: srcHeight into: dstB
 PhratchPlugin class >> primExtractChannelFrom: srcSoundBuffer into: dstSoundBuffer rightFlag: rightFlag [
 	"Extract the given channel of the source SoundBuffer in the destination SoundBuffer."
 
-	<primitive: 'primitiveExtractChannel' module: #PhratchPlugin>
+	<primitive: 'primitiveExtractChannel' module: #ScratchPlugin>
 	self primitiveFailed
 
 ]
@@ -461,7 +461,7 @@ PhratchPlugin class >> primExtractChannelFrom: srcSoundBuffer into: dstSoundBuff
 PhratchPlugin class >> primFisheye: inBitmap into: outBitmap width: w power: anInteger [
 	"Do a fisheye lens transform of the given 32-bit image bitmap by the given power, storing the result in outBitmap. The two bitmaps must be the same size. Power is 0 for no change, > 0 for fisheye, < 0 for black hole effect."
 
-	<primitive: 'primitiveFisheye' module: #PhratchPlugin>
+	<primitive: 'primitiveFisheye' module: #ScratchPlugin>
 	self primitiveFailed
 
 ]
@@ -477,7 +477,7 @@ PhratchPlugin class >> primGetFolderPath: anInteger [
 	Return the path for the Phratch folder if the primitive fails."
 	"self primGetFolderPath: 1"
 
-	<primitive: 'primitiveGetFolderPath' module: #PhratchPlugin>
+	<primitive: 'primitiveGetFolderPath' module: #ScratchPlugin>
 	^ FileSystem workingDirectory fullName
 
 ]
@@ -493,7 +493,7 @@ PhratchPlugin class >> primGetFolderPathOrNil: anInteger [
 	Return nil if the primitive fails."
 	"self primGetFolderPathOrNil: 1"
 
-	<primitive: 'primitiveGetFolderPath' module: #PhratchPlugin>
+	<primitive: 'primitiveGetFolderPath' module: #ScratchPlugin>
 	^ nil
 
 ]
@@ -502,7 +502,7 @@ PhratchPlugin class >> primGetFolderPathOrNil: anInteger [
 PhratchPlugin class >> primHalfSizeAverage: srcBits w: srcW h: srcH into: dstBits w: dstW h: dstH srcX: x1 srcY: y1 dstX: x2 dstY: y2 dstW: w dstH: h [
 	"Display the source form at half-size onto the destination form at the given location by averaging the colors a 2x2 cell. Does not handle alpha or transparency. Return nil if the target rectangle does not fit entirely within the destination form."
 
-	<primitive: 'primitiveHalfSizeAverage' module: #PhratchPlugin>
+	<primitive: 'primitiveHalfSizeAverage' module: #ScratchPlugin>
 	^ nil
 
 ]
@@ -511,7 +511,7 @@ PhratchPlugin class >> primHalfSizeAverage: srcBits w: srcW h: srcH into: dstBit
 PhratchPlugin class >> primHalfSizeDiagonal: srcBits w: srcW h: srcH into: dstBits w: dstW h: dstH srcX: x1 srcY: y1 dstX: x2 dstY: y2 dstW: w dstH: h [
 	"Display the source form at half-size onto the destination form at the given location by averaging the colors of two pixels along the diagonal of a 2x2 cell, which is faster than averaging all four pixels but does not do as good a job on text. Does not handle alpha or transparency. Return nil if the target rectangle does not fit entirely within the destination form."
 
-	<primitive: 'primitiveHalfSizeDiagonal' module: #PhratchPlugin>
+	<primitive: 'primitiveHalfSizeDiagonal' module: #ScratchPlugin>
 	^ nil
 
 ]
@@ -520,7 +520,7 @@ PhratchPlugin class >> primHalfSizeDiagonal: srcBits w: srcW h: srcH into: dstBi
 PhratchPlugin class >> primInterpolate: aBitmap width: w x: xFixed y: yFixed [
 	"Answer the interpolated pixel value from the given 32-bit bitmap with the given width. The coordinates are given as fixed-point integers with 10-bits of fraction. That is, the float values of x and y are multiplied by 1024, then truncated."
 
-	<primitive: 'primitiveInterpolate' module: #PhratchPlugin>
+	<primitive: 'primitiveInterpolate' module: #ScratchPlugin>
 	^ 0
 ]
 
@@ -529,7 +529,7 @@ PhratchPlugin class >> primIsHidden: fullPath [
 	"Return true if file or folder with the given path should be hidden from the user. Return false if the primitive fails."
 	"self primIsHidden: 'testfile.txt'"
 
-	<primitive: 'primitiveIsHidden' module: #PhratchPlugin>
+	<primitive: 'primitiveIsHidden' module: #ScratchPlugin>
 	^ false
 
 ]
@@ -539,7 +539,7 @@ PhratchPlugin class >> primOpenURL: aString [
 	"Open a browser window on the given URL. Do nothing if the primitive fails."
 	"self primOpenURL: 'http://www.google.com'"
 
-	<primitive: 'primitiveOpenURL' module: #PhratchPlugin>
+	<primitive: 'primitiveOpenURL' module: #ScratchPlugin>
 	DialogBoxMorph inform: 'Could not open this file' localized
 ]
 
@@ -547,7 +547,7 @@ PhratchPlugin class >> primOpenURL: aString [
 PhratchPlugin class >> primScale: srcBitmap w: srcWidth h: srcHeight into: dstBitmap w: dstWidth h: dstHeight [
 	"Scale the source form to exactly fit the destination form using bilinear interpolation."
 
-	<primitive: 'primitiveScale' module: #PhratchPlugin>
+	<primitive: 'primitiveScale' module: #ScratchPlugin>
 	self primitiveFailed
 
 ]
@@ -556,7 +556,7 @@ PhratchPlugin class >> primScale: srcBitmap w: srcWidth h: srcHeight into: dstBi
 PhratchPlugin class >> primScaleNoFail: srcBitmap w: srcWidth h: srcHeight into: dstBitmap w: dstWidth h: dstHeight [
 	"Scale the source form to exactly fit the destination form using bilinear interpolation. Answer nil if I fail."
 
-	<primitive: 'primitiveScale' module: #PhratchPlugin>
+	<primitive: 'primitiveScale' module: #ScratchPlugin>
 	^ nil
 
 ]
@@ -566,7 +566,7 @@ PhratchPlugin class >> primSetUnicodePasteBuffer: aByteArray [
 	"Set the Mac OS X Unicode paste buffer. The argument is a big-endian UTF-16 Unicode string packed into a ByteArray. Needed to paste strings from Squeak into Second Life's code editor under Mac OS X. Do nothing if the primitive fails."
 	"self primSetUnicodePasteBuffer: ByteArray new"
 
-	<primitive: 'primitiveSetUnicodePasteBuffer' module: #PhratchPlugin>
+	<primitive: 'primitiveSetUnicodePasteBuffer' module: #ScratchPlugin>
 
 ]
 
@@ -575,7 +575,7 @@ PhratchPlugin class >> primSetWindowTitle: aString [
 	"Set the title of the Phratch window to the given string. Do nothing if the primitive fails."
 	"self primSetWindowTitle: 'hello!'"
 
-	<primitive: 'primitiveSetWindowTitle' module: #PhratchPlugin>
+	<primitive: 'primitiveSetWindowTitle' module: #ScratchPlugin>
 
 ]
 
@@ -583,7 +583,7 @@ PhratchPlugin class >> primSetWindowTitle: aString [
 PhratchPlugin class >> primShiftBrightness: inBitmap into: outBitmap by: shift [
 	"Shift the brightness of all the non-transparent pixels in the given 32-bit image bitmap, storing the result in outBitmap. The shift should be an integer between -100 and 100. The two bitmaps must be the same size."
 
-	<primitive: 'primitiveBrightnessShift' module: #PhratchPlugin>
+	<primitive: 'primitiveBrightnessShift' module: #ScratchPlugin>
 	self primitiveFailed
 
 ]
@@ -592,7 +592,7 @@ PhratchPlugin class >> primShiftBrightness: inBitmap into: outBitmap by: shift [
 PhratchPlugin class >> primShiftHue: inBitmap into: outBitmap byDegrees: shiftDegrees [
 	"Shift the hue of all the non-transparent, non-black pixels in the given 32-bit image bitmap, storing the result in outBitmap. The shift should be an integer between -360 and 360. The two bitmaps must be the same size."
 
-	<primitive: 'primitiveHueShift' module: #PhratchPlugin>
+	<primitive: 'primitiveHueShift' module: #ScratchPlugin>
 	self primitiveFailed.
 	^ nil
 
@@ -603,7 +603,7 @@ PhratchPlugin class >> primShiftHue: inBitmap into: outBitmap byDegrees: shiftDe
 PhratchPlugin class >> primShiftSaturation: inBitmap into: outBitmap by: shift [
 	"Shift the saturation of all the non-transparent, non-black pixels in the given 32-bit image bitmap, storing the result in outBitmap. The shift should be an integer between -100 and 100. The two bitmaps must be the same size."
 
-	<primitive: 'primitiveSaturationShift' module: #PhratchPlugin>
+	<primitive: 'primitiveSaturationShift' module: #ScratchPlugin>
 	self primitiveFailed
 
 ]
@@ -613,7 +613,7 @@ PhratchPlugin class >> primShortToLongPath: aString [
 	"Convert the given Windows short-filename path into a long-filename path. On other platforms this primitive will just return the input string."
 	"self primShortToLongPath: 'hello!'"
 
-	<primitive: 'primitiveShortToLongPath' module: #PhratchPlugin>
+	<primitive: 'primitiveShortToLongPath' module: #ScratchPlugin>
 	^ aString
 
 ]
@@ -622,7 +622,7 @@ PhratchPlugin class >> primShortToLongPath: aString [
 PhratchPlugin class >> primWaterRipples1: inBitmap into: outBitmap width: w dropNum: aNum array1: aArray array2: bArray [
 	"Apply the water ripple effect to inBitmap putting the result into outBitmap. The two bitmaps must have the same length and are for 32-bit deep Forms of the given width. The dropNum determines how many new water drops are started. The two arrays hold the state of the water-surface model."
 
-	<primitive: 'primitiveWaterRipples1' module: #PhratchPlugin>
+	<primitive: 'primitiveWaterRipples1' module: #ScratchPlugin>
 	self primitiveFailed
 
 ]
@@ -631,7 +631,7 @@ PhratchPlugin class >> primWaterRipples1: inBitmap into: outBitmap width: w drop
 PhratchPlugin class >> primWhirl: inBitmap into: outBitmap width: w angle: anAngle [
 	"Whirl all the non-transparent pixels in the given 32-bit image bitmap by the given angle, storing the result in outBitmap. The two bitmaps must be the same size."
 
-	<primitive: 'primitiveWhirl' module: #PhratchPlugin>
+	<primitive: 'primitiveWhirl' module: #ScratchPlugin>
 	self primitiveFailed
 
 ]
@@ -649,7 +649,7 @@ PhratchPlugin class >> readPort: portNum into: buffer [
 	"Read from the given port into the given ByteArray or String and answer the number of bytes read."
 	"self readPort: 1 into: (ByteArray new: 10)"
 
-	<primitive: 'primRead' module: #PhratchPlugin>
+	<primitive: 'primRead' module: #ScratchPlugin>
 	^ 0
 
 ]
@@ -834,7 +834,7 @@ PhratchPlugin class >> writePort: portNum data: buffer [
 	"Write data from the given ByteArray or String to the given port and answer the number of bytes written."
 	"self writePort: 1 into: (ByteArray new: 10)"
 
-	<primitive: 'primWrite' module: #PhratchPlugin>
+	<primitive: 'primWrite' module: #ScratchPlugin>
 	^ 0
 
 ]

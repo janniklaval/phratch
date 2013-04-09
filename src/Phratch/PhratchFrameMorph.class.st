@@ -1630,8 +1630,9 @@ PhratchFrameMorph >> enterPresentationMode [
 	| presenter |
 	PhratchPlugin pluginAvailable ifFalse: [
 		self updateViewModeButtons.
-		^ Beeper beep].
-
+		self halt.
+		^ Beeper beepPrimitive].
+self halt.
 	(viewMode = #presentation) ifTrue: [^ self].
 
 	lastViewMode := viewMode.
