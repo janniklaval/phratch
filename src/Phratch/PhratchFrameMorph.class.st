@@ -1630,9 +1630,7 @@ PhratchFrameMorph >> enterPresentationMode [
 	| presenter |
 	PhratchPlugin pluginAvailable ifFalse: [
 		self updateViewModeButtons.
-		self halt.
 		^ Beeper beepPrimitive].
-self halt.
 	(viewMode = #presentation) ifTrue: [^ self].
 
 	lastViewMode := viewMode.
@@ -1646,6 +1644,9 @@ self halt.
 
 	Display fillBlack.
 	Display fullScreenMode: true.
+	TaskbarMorph allInstances do: [: e | e hide ].
+	UsersManager default currentUser canShowMorphHalo: false.
+	
 	World restoreDisplay.
 	Display fillBlack.
 	World assuredCanvas.  "re-allocate canvas after entering full-screen mode"
@@ -1708,11 +1709,15 @@ PhratchFrameMorph >> exitPhratchSession [
 PhratchFrameMorph >> exitPresentationMode [
 	"Exit presentation mode."
 
+	TaskbarMorph allInstances do: [: e | e show ].
+	UsersManager default currentUser canShowMorphHalo: true.
+	
 	quitFlag ifTrue: [^Smalltalk quitPrimitive].
 
 	PhratchPreferences takeOverScreen ifFalse: [
 		Display fullScreenMode: false.
 		World restoreDisplay].
+
 
 	ScriptablePhratchMorph doubleSize: false.
 	self addMorphFront: workPane.
@@ -1725,6 +1730,7 @@ PhratchFrameMorph >> exitPresentationMode [
 	lastViewMode ifNil: [lastViewMode := #normal].
 	lastViewMode = #normal ifTrue: [^ self enterNormalMode].
 	lastViewMode = #quarter ifTrue: [^ self enterQuarterMode].
+
 
 ]
 

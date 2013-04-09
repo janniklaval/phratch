@@ -183,7 +183,7 @@ PhratchPresenterMorph >> mouseDown: evt [
 	evt hand toolType: nil.
 
 	p := mouseDownPoint := stage adjustedCursorPoint.
-	adjustedEvt := evt copy setCursorPoint: p.
+	adjustedEvt := evt copy cursorPoint: p.
 
 	rootM := stage submorphs
 		detect: [:m | (m containsPoint: p) & m isVisible]
@@ -223,7 +223,7 @@ PhratchPresenterMorph >> mouseMove: evt [
 	p = mouseDownPoint ifFalse: [mouseMoved := true].
 	mouseFocus ifNotNil: [
 		dragOffset
-			ifNil: [mouseMoved ifTrue: [mouseFocus mouseMove: (evt copy setCursorPoint: p)]]
+			ifNil: [mouseMoved ifTrue: [mouseFocus mouseMove: (evt copy cursorPoint: p)]]
 			ifNotNil: [mouseFocus position: p + dragOffset]].
 
 
@@ -246,7 +246,7 @@ PhratchPresenterMorph >> mouseUp: evt [
 
 	p := stage adjustedCursorPoint.
 	mouseFocus ifNotNil: [
-		mouseMoved ifFalse: [mouseFocus click: (MorphicEvent new setCursorPoint: p)]].
+		mouseMoved ifFalse: [mouseFocus click: (MorphicEvent new cursorPoint: p)]].
 
 	mouseFocus := nil.
 	dragOffset := nil.

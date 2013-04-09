@@ -1571,7 +1571,7 @@ PaintCanvas >> textMouseDown: evt [
 	((textBox bounds insetBy: 2) containsPoint: p) ifTrue: [  "click in textBox"
 		textDragMode := #select.
 		textBox ensureOSFont.
-		textBox mouseDown: (evt copy setCursorPoint: p).
+		textBox mouseDown: (evt copy cursorPoint: p).
 		evt hand newKeyboardFocus: self.  "take focus back from textBox"
 		^ self].
 
@@ -1591,7 +1591,7 @@ PaintCanvas >> textMouseMove: evt [
 		textBox position: ((p + dragOffset) max: 0@0).
 		textBox extent: canvasForm extent - textBox position].
 	#select = textDragMode ifTrue: [
-		textBox mouseMove: (evt copy setCursorPoint: p)].
+		textBox mouseMove: (evt copy cursorPoint: p)].
 	self changed.
 
 ]
