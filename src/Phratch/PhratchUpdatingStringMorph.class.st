@@ -1,6 +1,6 @@
 Class {
 	#name : #PhratchUpdatingStringMorph,
-	#superclass : #PhratchStringMorph,
+	#superclass : #StringMorph,
 	#instVars : [
 		'format',
 		'target',
