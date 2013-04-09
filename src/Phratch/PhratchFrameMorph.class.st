@@ -1140,7 +1140,7 @@ PhratchFrameMorph >> compressSounds [
 
 	| menu bitsPerSample count |
 	menu := MenuMorph new title: 'Sound quality:'; defaultTarget: self.
-	menu add: 'High (biggest)'
+	"menu add: 'High (biggest)'
 		target: self 
 		selector: #canonicalizeSoundsBits:saveOriginal:
 		argumentList: (Array with: 5 with: false).
@@ -1158,11 +1158,22 @@ PhratchFrameMorph >> compressSounds [
 		argumentList: (Array with: 2 with: false).
 	menu addLine.
 	menu add: 'cancel' action: nil.
-	count := menu localize; invokeModal.
+	count := menu localize; invokeModal."
 	
+	
+	menu := MenuMorphNG new title: 'Sound quality:'; defaultTarget: self.
+	menu add: 'High (biggest)' value: 5.
+	menu add: 'Normal' value: 4.
+	menu add: 'Low' value: 3.
+	menu add: 'Lowest (smallest)' value: 2.
+	menu addLine.
+	menu add: 'cancel' value: nil.
+	menu localize.
+	(bitsPerSample := menu invokeModal; selectedValue) ifNil: [^ self].
+
+	count := self canonicalizeSoundsBits: bitsPerSample saveOriginal: false.
 	scriptsPane categoryChanged: 'Sounds'.
 	DialogBoxMorph inform: 'Sounds compressed' withDetails: count printString.
-
 ]
 
 { #category : #'tools (no longer used)' }
@@ -1547,19 +1558,6 @@ PhratchFrameMorph >> editMenu: aMenuTitleMorph [
 	menu add: EventHatMorph threadSafeMode checkBoxString, 'Thread safe scripts' localized
 			toolTip: 'check to disallow script reentrancy' localized
 			action: #toggleThreadSafeMode.
-
-"	menu add: ( BlockMorph contrast = #strong) checkBoxString, 'Zebra Coloring' localized
-			toolTip: 'check to alternate color contrast among nested reporters with the same color' localized 
-			action: #toggleZebraColoring."
-
-"	menu add: HandMorph translucentWhenDragging checkBoxString, 'Translucent Dragging' localized
-			toolTip: 'check to see through objects when they are dragged' localized
-			action: #toggleTranslucentDragging."
-
-"	menu add: VariableFrame scopeContrast checkBoxString, 'Scope Contrast' localized
-			toolTip: 'check to contrast the color of lexically scoped blocks' localized
-			action: #toggleScopeContrast.
-"
 	menu addLine.
 	menu add: 'Compress Sounds' localized action: #compressSounds.
 	menu add: 'Compress Images' localized action: #compressImages.
