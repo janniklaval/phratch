@@ -57,7 +57,6 @@ Class {
 		'ShareServerPath',
 		'SupportServer',
 		'SupportServerPath',
-		'TakeOverScreen',
 		'UseErrorCatcher',
 		'Version',
 		'VersionDate',
@@ -599,15 +598,6 @@ PhratchFrameMorph class >> supportServerPath [
 	"Answer the path of the Phratch support site server."
 
 	^ SupportServerPath
-
-]
-
-{ #category : #'scratch skin' }
-PhratchFrameMorph class >> takeOverScreen: aBoolean [
-	"self takeOverScreen: true"
-	"self takeOverScreen: false"
-
-	TakeOverScreen := aBoolean
 
 ]
 
@@ -1719,7 +1709,7 @@ PhratchFrameMorph >> exitPresentationMode [
 
 	quitFlag ifTrue: [^Smalltalk quitPrimitive].
 
-	TakeOverScreen ifFalse: [
+	PhratchPreferences takeOverScreen ifFalse: [
 		Display fullScreenMode: false.
 		World restoreDisplay].
 
@@ -1909,10 +1899,13 @@ PhratchFrameMorph >> fillScreenOff [
 	"Stop filling the entire screen. Useful during development."
 
 
-	Smalltalk fullScreenMode: false.
+	DisplayScreen new fullScreenMode: false.
 	World restoreDisplay.
 
 	fillScreenFlag := false.
+	TaskbarMorph allInstances do: [: e | e show ].
+	UsersManager default currentUser canShowMorphHalo: true.
+	
 	self isSticky: false.
 	self extent: Display extent - 50.
 	UseErrorCatcher := false.
@@ -1928,13 +1921,17 @@ PhratchFrameMorph >> fillScreenOff [
 PhratchFrameMorph >> fillScreenOn [
 	"Start filling the entire screen and being sticky. Also configure a few other things for the end user such as turning off halos and the control menu (noviceMode) and making sure that error catching is enabled."
 
-	TakeOverScreen ifTrue: [
-		Smalltalk fullScreenMode: true.
+	PhratchPreferences takeOverScreen ifTrue: [
+		DisplayScreen new fullScreenMode: true.
 		World restoreDisplay].
 
 	fillScreenFlag := true.
+	TaskbarMorph allInstances do: [: e | e hide ].
+	UsersManager default currentUser canShowMorphHalo: false.
+	
 	self position: 0@0.
 	self isSticky: true.
+	self extent: Display extent.
 	self comeToFront.
 	UseErrorCatcher := true.
 	Sensor useOSEvents: true.
@@ -2441,6 +2438,11 @@ PhratchFrameMorph >> isDevelopmentMode [
 	^true
 ]
 
+{ #category : #'as yet unclassified' }
+PhratchFrameMorph >> isHandMorph [
+	^fillScreenFlag
+]
+
 { #category : #byob }
 PhratchFrameMorph >> isTurbo [
 	^ PhratchProcess blockHighlightMSecs < 1
@@ -2481,7 +2483,7 @@ PhratchFrameMorph >> keyStroke: evt [
 			ch = 17 ifTrue: [^ self quitPhratch].
 			ch = 19 ifTrue: [^ self savePhratchProjectNoDialog].       
 			ch = 27 ifTrue: [
-				TakeOverScreen ifTrue: [
+				PhratchPreferences takeOverScreen ifTrue: [
 					Smalltalk fullScreenMode: false.
 					Smalltalk fullScreenMode: true.
 					World restoreDisplay].
@@ -3085,7 +3087,7 @@ PhratchFrameMorph >> processKeyboardEvents [
 			ch = 17 ifTrue: [^ self quitPhratch].
 			ch = 19 ifTrue: [^ self savePhratchProjectNoDialog].
 			ch = 27 ifTrue: [
-				TakeOverScreen ifTrue: [
+				PhratchPreferences takeOverScreen ifTrue: [
 					Smalltalk fullScreenMode: false.
 					Smalltalk fullScreenMode: true.
 					World restoreDisplay].
@@ -3952,13 +3954,13 @@ PhratchFrameMorph >> startup [
 			presentationMode := true.
 			self isHidden: true.
 			Display fillBlack].
-		(n asLowercase = 'fullscreen') ifTrue: [TakeOverScreen := true]].
+		(n asLowercase = 'fullscreen') ifTrue: [PhratchPreferences takeOverScreen: true]].
 "
 	TakeOverScreen ifTrue: [
 		Display fullScreenMode: true.
 		World restoreDisplay].
 "
-			TakeOverScreen := false.
+			PhratchPreferences takeOverScreen: false.
 
 	self enterQuarterModeIfSmallScreen.
 

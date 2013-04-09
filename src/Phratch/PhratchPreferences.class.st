@@ -7,6 +7,7 @@ Class {
 		'NoviceMode',
 		'StandardButtonFont',
 		'StandardMenuFont',
+		'TakeOverScreen',
 		'TextHighlightColor',
 		'UseLargeFonts',
 		'WarnIfNoChangesFile',
@@ -88,6 +89,10 @@ PhratchPreferences class >> phratchSettingsOn: aBuilder [
 				label: 'meshServerEnabled' translated;
 		 		target: PhratchPreferences;
 		 		description: 'A mesh server allows to share projects' translated.	
+			(aBuilder setting: #takeOverScreen) 
+				label: 'takeOverScreen' translated;
+		 		target: PhratchPreferences;
+		 		description: 'Do you allow Phratch to display on all screen' translated.	
 		].
 ]
 
@@ -109,6 +114,16 @@ PhratchPreferences class >> standardMenuFont [
 { #category : #accessing }
 PhratchPreferences class >> standardMenuFont: anObject [
 	StandardMenuFont := anObject
+]
+
+{ #category : #accessing }
+PhratchPreferences class >> takeOverScreen [
+	^ TakeOverScreen ifNil: [ TakeOverScreen := false ] 
+]
+
+{ #category : #accessing }
+PhratchPreferences class >> takeOverScreen: anObject [
+	TakeOverScreen := anObject
 ]
 
 { #category : #accessing }

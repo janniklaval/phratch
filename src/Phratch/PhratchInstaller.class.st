@@ -31,10 +31,6 @@ PhratchInstaller class >> beginInstall [
 			'"To try it out run the following expression:" ' 
 			, String cr ,
 			'PhratchFrameMorph open.'
-			, String cr , String cr , 
-			'"Open it in full screen mode, can break the image"'
-			, String cr,
-			'PhratchFullScreenMorph open.'
 			)
 		label: 'Welcome to Phratch!'.
 ]
