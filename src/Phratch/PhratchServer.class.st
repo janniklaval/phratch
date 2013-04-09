@@ -568,6 +568,7 @@ PhratchServer >> sendSprite: aPhratchSpriteMorph [
 
 	| msg |
 	msg := self spriteMessageFor: aPhratchSpriteMorph.
+	self halt.
 	peerSockets copy do: [:sock |
 		sock isConnected
 			ifTrue: [
@@ -649,9 +650,9 @@ PhratchServer >> spriteMessageFor: aPhratchSpriteMorph [
 	|msg|
 	msg := WriteStream on: (ByteArray new: 100000).
 	msg 
-		nextPutString: 'sprite ';
-		nextPutString: userName;
-		nextPutString: String crlf;
+		nextPutAll: 'sprite ' asByteArray;
+		nextPutAll: userName asByteArray;
+		nextPutAll: String crlf asByteArray;
 		nextPutAll: aPhratchSpriteMorph serialized.
 	^msg contents 
 		

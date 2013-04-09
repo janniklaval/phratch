@@ -1,5 +1,13 @@
 Extension { #name : #Socket }
 
+{ #category : #'*Phratch-extensions' }
+Socket class >> deadlineSecs: secs [
+	"Return a deadline time the given number of seconds from now."
+
+	^ Time millisecondClockValue + (secs * 1000)
+
+]
+
 { #category : #'*Phratch-Extensions' }
 Socket >> readInto: aStringOrByteArray startingAt: aNumber [
 	"Read data into the given buffer starting at the given index and return the number of bytes received. Note the given buffer may be only partially filled by the received data. If no data is available, do nothing and return zero."
@@ -18,4 +26,17 @@ Socket >> sendDataNoWait: aStringOrByteArray startIndex: startIndex [
 		sendData: aStringOrByteArray
 		startIndex: startIndex
 		count: aStringOrByteArray size + 1 - startIndex
+]
+
+{ #category : #'*Phratch-Extensions' }
+Socket >> waitForSendDoneUntil: deadline [
+	"Wait up until the given deadline for the current send operation to complete. Return true if it completes by the deadline, false if not."
+
+	| sendDone |
+	[self isConnected & (sendDone := self primSocketSendDone: socketHandle) not
+			"Connection end and final data can happen fast, so test in this order"
+		and: [Time millisecondClockValue < deadline]] whileTrue: [
+			self writeSemaphore waitTimeoutMSecs: (deadline - Time millisecondClockValue)].
+
+	^ sendDone
 ]

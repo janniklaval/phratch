@@ -766,9 +766,8 @@ PhratchFrameMorph >> addBlockEditor: aBlockEditor [
 PhratchFrameMorph >> addServerCommandsTo: menu [
 	"Add Phratch server commands to the given menu."
 
-	| disable endCmd |
-	disable := false.  "make this true to disable this feature"
-	disable ifTrue: [^ self].
+	| endCmd |
+	PhratchPreferences meshServerEnabled ifFalse: [^ self].
 
 	menu addLine.
 	(workPane phratchServer notNil and:
@@ -2632,16 +2631,15 @@ PhratchFrameMorph >> makeExe [
 				, delim
 				, projectName.
 	Smalltalk os isWin32 ifTrue: [
-		^ SystemPlugin primLaunch: 'mak\pack ', argStr ].
-	SystemPlugin primLaunch: 
+		^ OSProcess command: FileSystem workingDirectory fullName, delim, 'mak', delim, 'pack ', argStr ].
+	OSProcess command: 
 		'"'
-		, FileSystem workingDirectory fullName
+		, FileSystem workingDirectory fullName", delim, 'mak', delim, 'pack'"
 		, delim
 		, 'compile.sh" '
 		, '"'
 		, argStr
 		, '"'
-
 ]
 
 { #category : #intialization }
@@ -3767,8 +3765,7 @@ PhratchFrameMorph >> shareMenu: aMenuTitleMorph [
 		(stage phratchServer notNil and: 
 		[stage phratchServer sessionInProgress])
 			ifTrue: [
-				menu add: 'share this sprite' action: #shareSprite ]].
-
+				menu add: 'Share this sprite' action: #shareSprite ]].
 	menu localize.
 
 	#(1) do: [:n |

@@ -3,6 +3,7 @@ Class {
 	#superclass : #Object,
 	#classVars : [
 		'InsertionPointColor',
+		'MeshServerEnabled',
 		'NoviceMode',
 		'StandardButtonFont',
 		'StandardMenuFont',
@@ -22,6 +23,16 @@ PhratchPreferences class >> insertionPointColor [
 { #category : #accessing }
 PhratchPreferences class >> insertionPointColor: anObject [
 	InsertionPointColor := anObject
+]
+
+{ #category : #accessing }
+PhratchPreferences class >> meshServerEnabled [
+	^ MeshServerEnabled  ifNil: [ MeshServerEnabled := true ]
+]
+
+{ #category : #accessing }
+PhratchPreferences class >> meshServerEnabled: anObject [
+	MeshServerEnabled := anObject
 ]
 
 { #category : #accessing }
@@ -73,6 +84,10 @@ PhratchPreferences class >> phratchSettingsOn: aBuilder [
 				label: 'warnIfNoSourcesFile' translated;
 		 		target: PhratchPreferences;
 		 		description: '...' translated.	
+			(aBuilder setting: #meshServerEnabled) 
+				label: 'meshServerEnabled' translated;
+		 		target: PhratchPreferences;
+		 		description: 'A mesh server allows to share projects' translated.	
 		].
 ]
 

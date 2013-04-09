@@ -130,7 +130,8 @@ ObjStream class >> fixedFormatClasses [
 		(23	IdentitySet				getCollection:id:		putCollection:id:)
 		(24	Dictionary				getDict:id:			putDict:id:)
 		(25	IdentityDictionary		getDict:id:			putDict:id:)
-	"26-29 reserved for additional collections"
+		(26	ColorArray				getArray:id:			putArray:id:)
+	"27-29 reserved for additional collections"
 		(30	Color					getColor:id:			putColor:id:)
 		(31	TranslucentColor		getColor:id:			putColor:id:)
 		(32	Point					getPoint:id:			putPoint:id:)
