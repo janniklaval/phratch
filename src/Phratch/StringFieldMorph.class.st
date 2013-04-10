@@ -434,7 +434,7 @@ StringFieldMorph >> initialize [
 
 	super initialize.
 
-	stringMorph := PhratchStringMorph new
+	stringMorph := StringMorph new
 		contents: String new font: (StrikeFont fontName: 'Verdana' size: 12);
 		forceUnicodeRendering: true.
 	self addMorph: stringMorph.

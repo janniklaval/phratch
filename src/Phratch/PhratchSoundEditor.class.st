@@ -174,7 +174,7 @@ PhratchSoundEditor >> addPlayButtons [
 
 	space := Morph new color: r color; extent: 3@5.
 
-	n := PhratchStringMorph new contents: 'Zoom to: '.
+	n := StringMorph new contents: 'Zoom to: '.
 	m addMorphBack: n.
 
 	scaleSelector :=  (IconicButton new
@@ -208,7 +208,7 @@ PhratchSoundEditor >> addPlayButtons [
 	m addMorphBack: (b fullCopy label: 'Stop';				actionSelector: #stop).
 
 	m addMorphBack: (Morph new color: r color; extent: 50@5).
-	m addMorphBack: (PhratchStringMorph new contents: 'Volume').
+	m addMorphBack: (StringMorph new contents: 'Volume').
 	m addMorphBack: space copy.
 	
 	volume := SimpleSliderMorph new
@@ -289,7 +289,7 @@ PhratchSoundEditor >> addValueSelectors [
 	"r addMorphBack: (b fullCopy label: '>>';					actionSelector: #faster)."
 
 	r addMorphBack: (Morph new color: r color; extent: 25@5).
-	m := PhratchStringMorph new contents: 'Sampling Rate'.
+	m := StringMorph new contents: 'Sampling Rate'.
 	r addMorphBack: m.
 	m := Morph new color: r color; extent: 5@5. "spacer"
 	r addMorphBack: m.
@@ -304,7 +304,7 @@ PhratchSoundEditor >> addValueSelectors [
 	r addMorphBack: rateSlider.
 	r addMorphBack: (Morph new color: r color; extent: 30@5).
 
-	m := PhratchStringMorph new contents: 'Index: '.
+	m := StringMorph new contents: 'Index: '.
 	r addMorphBack: m.
 	m := UpdatingStringMorph new
 		target: graph; getSelector: #cursor; putSelector: #cursor:;
@@ -314,7 +314,7 @@ PhratchSoundEditor >> addValueSelectors [
 	m:= Morph new color: r color; extent: 20@5. "spacer"
 	r addMorphBack: m.
 
-	m := PhratchStringMorph new contents: 'Value: '.
+	m := StringMorph new contents: 'Value: '.
 	r addMorphBack: m.
 	m := UpdatingStringMorph new
 		target: graph; getSelector: #valueAtCursor; putSelector: #valueAtCursor:;

@@ -45,7 +45,7 @@ KeyEventHatMorph >> initialize [
 
 	parts := PhratchTranslator labelPartsFor: 'when %k key pressed'.
 
-	s := PhratchStringMorph new
+	s := StringMorph new
 		contents: parts first; font: (PhratchFrameMorph getFont: #Label);
 		color: Color white.
 	self addMorphBack: s.

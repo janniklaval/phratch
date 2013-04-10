@@ -619,7 +619,7 @@ ScrollingStringMorph >> font [
 ScrollingStringMorph >> font: aFont [
 
 	font := aFont.
-	renderer := PhratchStringMorph new font: aFont.
+	renderer := StringMorph new font: aFont.
 	lineHeight := renderer stringHeight: PhratchTranslator renderHintString, 'Ag'.
 	lineHeight = 0 ifTrue: [lineHeight := 10].  "workaround for possible bug in stringHeight:"
 	layoutNeeded := true.

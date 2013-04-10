@@ -112,7 +112,7 @@ PhratchScriptEditorMorph >> addReadouts [
 			ifTrue: [s := (':', spec first) asUTF8]
 			ifFalse: [s := (spec first localized, PhratchTranslator colonSuffix)].
 
-		label := PhratchStringMorph new
+		label := StringMorph new
 			contents: s;
 			font: (PhratchFrameMorph getFont: #XYReadout);
 			position: x@y.

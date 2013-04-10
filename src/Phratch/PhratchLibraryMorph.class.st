@@ -67,7 +67,7 @@ PhratchLibraryMorph >> buildPanes [
 { #category : #initialization }
 PhratchLibraryMorph >> buildSpriteLabel [
 
-	^ PhratchStringMorph new
+	^ StringMorph new
 		font: (PhratchFrameMorph getFont: #Tab);
 		color: Color white;
 		contents: 'New sprite:' localized

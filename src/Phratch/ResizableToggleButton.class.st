@@ -110,8 +110,8 @@ ResizableToggleButton >> isOn [
 ResizableToggleButton >> label: aString font: aFont [
 
 	| oldLabel m |
-	(oldLabel := self findA: PhratchStringMorph) ifNotNil: [oldLabel delete].
-	m := PhratchStringMorph contents: aString font: (aFont ifNil: [PhratchPreferences standardButtonFont]).
+	(oldLabel := self findA: StringMorph) ifNotNil: [oldLabel delete].
+	m := StringMorph contents: aString font: (aFont ifNil: [PhratchPreferences standardButtonFont]).
 	m color: (Color r: (78/255) g: (82/255) b: (82/255)).
 	self extent: m extent + borderWidth.
 	self width: self width + sideMargin.
@@ -186,7 +186,7 @@ ResizableToggleButton >> off [
 	isOn := false.
 	self changed.
 
-	(myLabel := self findA: PhratchStringMorph) ifNotNil: [
+	(myLabel := self findA: StringMorph) ifNotNil: [
 		offLabelColor ifNotNil: [
 			myLabel color: offLabelColor]].
 
@@ -201,7 +201,7 @@ ResizableToggleButton >> on [
 	isOn := true.
 	self changed.
 
-	(myLabel := self findA: PhratchStringMorph) ifNotNil: [
+	(myLabel := self findA: StringMorph) ifNotNil: [
 		offLabelColor := myLabel color.
 		myLabel color: Color black].
 

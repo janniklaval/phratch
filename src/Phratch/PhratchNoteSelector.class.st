@@ -113,7 +113,7 @@ PhratchNoteSelector >> setUpNoteDisplay [
 	self extent: self fullBounds extent.
 	self addMorph: rectMorph.
 
-	labelMorph := PhratchStringMorph new.
+	labelMorph := StringMorph new.
 	labelMorph position: rectMorph position + (0@4).
 	rectMorph addMorph: labelMorph.
 	self extent: self fullBounds extent.

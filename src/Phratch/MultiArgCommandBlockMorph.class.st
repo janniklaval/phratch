@@ -200,7 +200,7 @@ MultiArgCommandBlockMorph >> fixBlockLayoutWrap [
 				x := left].
 			(m isKindOf: BlockMorph) ifTrue: [m fixBlockLayout].
 			(m isKindOf: ArgMorph) ifTrue: [m fixArgLayout].
-			(m isKindOf: PhratchStringMorph)
+			(m isKindOf: StringMorph)
 				ifTrue: [m color: self labelColor]
 				ifFalse: [x := x max: minXForArgs].
 

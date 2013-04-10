@@ -189,7 +189,7 @@ PaintFrame >> addSetRotationCenterButton [
 		actionSelector: #toggleRotationPoint;
 		setProperty: #balloonText toValue: 'Position the cross-hair to set the rotation center' localized.
 	spacer := Morph new extent: 6@3; color: Color transparent.
-	setRotationLabel := PhratchStringMorph contents: 'Set costume center' localized.
+	setRotationLabel := StringMorph contents: 'Set costume center' localized.
 	font := (PhratchFrameMorph getFont: #PaintSetRotationCenter).
 	setRotationLabel font: font; color: Color gray darker.
 

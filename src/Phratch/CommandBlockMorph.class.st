@@ -594,7 +594,7 @@ CommandBlockMorph >> drawInlinePaletteOn: aCanvas [
 CommandBlockMorph >> editElements [
 	| cls sel |
 	sel := selector.
-	cls := receiver class classThatUnderstands: sel.
+	cls := receiver class "classThatUnderstands: sel".
 	cls ifNil: [cls := PhratchProcess].
 	(cls canUnderstand: sel)
 		ifFalse: [isSpecialForm ifTrue: [
@@ -735,7 +735,7 @@ CommandBlockMorph >> fixBlockLayoutNoWrap [
 	self nonControlFlowSubmorphs do: [:m |
 		(m isKindOf: BlockMorph) ifTrue: [m fixBlockLayout].
 		(m isKindOf: ArgMorph) ifTrue: [m fixArgLayout].
-		(isFirst and: [(m isKindOf: PhratchStringMorph) not]) ifTrue: [
+		(isFirst and: [(m isKindOf: StringMorph) not]) ifTrue: [
 			"extra space when an arg overlaps with notch"
 			h := h max: m height + 3.
 			hAdjust := 1].
@@ -754,7 +754,7 @@ CommandBlockMorph >> fixBlockLayoutNoWrap [
 
 	x := self left + 5.
 	self nonControlFlowSubmorphs do: [:m |
-		(m isKindOf: PhratchStringMorph)
+		(m isKindOf: StringMorph)
 			ifTrue: [(m isKindOf: BlockLabelFragmentMorph) 
 				ifFalse: [m color: self labelColor]]
 			ifFalse: [x := x max: minXForArgs].
@@ -825,7 +825,7 @@ CommandBlockMorph >> fixBlockLayoutWrap [
 				x := left].
 			(m isKindOf: BlockMorph) ifTrue: [m fixBlockLayout].
 			(m isKindOf: ArgMorph) ifTrue: [m fixArgLayout].
-			(m isKindOf: PhratchStringMorph)
+			(m isKindOf: StringMorph)
 				ifTrue: [m color: self labelColor]
 				ifFalse: [x := x max: minXForArgs].
 
@@ -1027,7 +1027,7 @@ CommandBlockMorph >> labelMorphFor: aString [
 	s := aString.
 	commandSpec isUnicode ifTrue: [s := UTF8 withAll: s]
 		ifFalse:[s := s asString].
-	^ (PhratchStringMorph contents: s font: (PhratchFrameMorph getFont: #Label))
+	^ (StringMorph contents: s font: (PhratchFrameMorph getFont: #Label))
 		color: self labelColor
 
 ]

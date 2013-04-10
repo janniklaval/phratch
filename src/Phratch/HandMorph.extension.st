@@ -89,13 +89,13 @@ HandMorph >> toolType: aStringOrNil [
 	aStringOrNil ifNil: [self showTemporaryCursor: nil].
 ]
 
-{ #category : #'*Phratch-Compatibility' }
+{ #category : #'*Phratch-Extensions' }
 HandMorph class >> translucentWhenDragging [
 
 	^ (World activeHand valueOfProperty: #translucentWhenDragging) ifNil: [false]
 ]
 
-{ #category : #'*Phratch-Compatibility' }
+{ #category : #'*Phratch-Extensions' }
 HandMorph class >> translucentWhenDragging: aBoolean [
 
 	World activeHand setProperty: #translucentWhenDragging toValue: aBoolean

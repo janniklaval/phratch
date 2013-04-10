@@ -231,7 +231,7 @@ ToggleButton >> isOn [
 { #category : #accessing }
 ToggleButton >> label [
 
-	self allMorphsDo: [:m | (m isKindOf: PhratchStringMorph) ifTrue: [^ m]].
+	self allMorphsDo: [:m | (m isKindOf: StringMorph) ifTrue: [^ m]].
 	
 ]
 
@@ -240,8 +240,8 @@ ToggleButton >> label: aString font: aFont [
 	"Add the given label in the given font centered in my current extent."
 
 	| oldLabel m |
-	(oldLabel := self findA: PhratchStringMorph) ifNotNil: [oldLabel delete].
-	m := PhratchStringMorph contents: aString font: (aFont ifNil: [PhratchPreferences standardButtonFont]).
+	(oldLabel := self findA: StringMorph) ifNotNil: [oldLabel delete].
+	m := StringMorph contents: aString font: (aFont ifNil: [PhratchPreferences standardButtonFont]).
 	m position: self center - (m extent // 2).
 	self addMorph: m.
 	m lock.
@@ -402,7 +402,7 @@ ToggleButton >> setDefaultLabel [
 ToggleButton >> setLabelColor: aColor [
 
 	| s |
-	s := self findA: PhratchStringMorph.
+	s := self findA: StringMorph.
 	s color: aColor.
 
 ]
@@ -412,8 +412,8 @@ ToggleButton >> shortcutLabel: aString font: aFont [
 	"Add the given label in the given font centered in my current extent."
 
 	| oldLabel m |
-	(oldLabel := self findA: PhratchStringMorph) ifNotNil: [oldLabel delete].
-	m := PhratchStringMorph contents: aString font: (aFont ifNil: [PhratchPreferences standardButtonFont]).
+	(oldLabel := self findA: StringMorph) ifNotNil: [oldLabel delete].
+	m := StringMorph contents: aString font: (aFont ifNil: [PhratchPreferences standardButtonFont]).
 	m position: self center - (m extent // 2) + (0@6).
 	self addMorph: m.
 	m lock.

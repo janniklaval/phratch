@@ -44,13 +44,13 @@ VariableBlockMorph >> addLabel [
 		self addMorphBack: (self labelMorphFor: '...') ].
 
 	labelFragment isTemplate ifTrue: [
-		self addMorphBack: ((PhratchStringMorph contents: '^') color: self labelColor) ].
+		self addMorphBack: ((StringMorph contents: '^') color: self labelColor) ].
 
 	labelFragment isLoop ifTrue: [
-		self addMorphBack: ((PhratchStringMorph contents: '[') color: self labelColor) ].
+		self addMorphBack: ((StringMorph contents: '[') color: self labelColor) ].
 
 	labelFragment isUnevaluated ifTrue: [
-		self addMorphBack: ((PhratchStringMorph contents: '*') color: self labelColor) ].
+		self addMorphBack: ((StringMorph contents: '*') color: self labelColor) ].
 
 	(' ' asUTF8 = dflt or: [dflt isEmpty]) ifFalse: [
 		self addMorphBack: (self labelMorphFor: '=', labelFragment default asString)].

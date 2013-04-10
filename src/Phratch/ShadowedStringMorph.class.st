@@ -43,16 +43,15 @@ ShadowedStringMorph >> contents: aString [
 { #category : #accessing }
 ShadowedStringMorph >> contents: aString color: aColor font: aFont kern: aNumber [
 
-	mainMorph := PhratchStringMorph new
+self flag: 'remove kern'.
+	mainMorph := StringMorph new
 		contents: aString;
 		color: aColor;
-		font: aFont;
-		kern: aNumber.
-	shadowMorph := PhratchStringMorph new
+		font: aFont.
+	shadowMorph := StringMorph new
 		contents: aString;
 		color: (Color black mixed: 0.2 with: self color);
-		font: aFont;
-		kern: aNumber.
+		font: aFont.
 	self
 		addMorphBack: (mainMorph position: self position);
 		addMorphBack: (shadowMorph position: (self position + (2@1))).

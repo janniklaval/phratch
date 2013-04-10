@@ -1,6 +1,6 @@
 Extension { #name : #Collection }
 
-{ #category : #'*Phratch-Compatibility' }
+{ #category : #'*Phratch-Extensions' }
 Collection >> removeAllSansError: aCollection [ 
 
 	"Remove each element of aCollection which is present in the receiver from the receiver. Answer aCollection. No error is raised if an element isn't found. ArrayedCollections cannot respond to this message."

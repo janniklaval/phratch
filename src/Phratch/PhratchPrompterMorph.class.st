@@ -155,7 +155,7 @@ PhratchPrompterMorph >> question: aString [
 				ifFalse: [frm := aString imageForm].
 			questionMorph := ImageMorph new form: frm]
 		ifFalse: [
-			questionMorph := PhratchStringMorph new
+			questionMorph := StringMorph new
 				contents: aString asString;
 				font: (PhratchFrameMorph getFont: #DialogBoxButton)].
 

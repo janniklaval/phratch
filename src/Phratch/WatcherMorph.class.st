@@ -26,15 +26,14 @@ Class {
 WatcherMorph >> buildReadout [
 	"Build my readout component morphs."
 
-	readout := PhratchUpdatingStringMorph new
+	readout := UpdatingStringMorph new
 		contents: '';
 		floatPrecision: 0.1;
 		stepTime: 100.
 	readout
 		font: (PhratchFrameMorph getFont: #Watcher);
 		forceUnicodeRendering: true;
-		color: Color white;
-		kern: 1.
+		color: Color white.
 	readoutFrame := WatcherReadoutFrameMorph new addMorph: readout.
 
 ]
@@ -218,7 +217,7 @@ WatcherMorph >> initFieldsFrom: anObjStream version: classVersion [
 WatcherMorph >> initialize [
 
 	super initialize.
-	titleMorph := PhratchStringMorph contents: '???'.
+	titleMorph := StringMorph contents: '???'.
 	titleMorph font: (PhratchFrameMorph getFont: #Watcher).
 	readout := readoutFrame := phratchSlider := nil.
 	lastTargetName := nil.

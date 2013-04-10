@@ -64,7 +64,7 @@ BlockMorph >> contrastColor [
 			isContrasted := true.
 			color := color twiceLighter " lighter slightlyLighter "]].
 
-	submorphs do: [:m | (m isKindOf: PhratchStringMorph)
+	submorphs do: [:m | (m isKindOf: StringMorph)
 		ifTrue: [m color: self labelColor ]
 		ifFalse: [ (m isKindOf: MultiArgMorph)
 			ifTrue: [m contrastColor]]].	

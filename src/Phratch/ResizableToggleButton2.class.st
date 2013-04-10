@@ -127,7 +127,7 @@ ResizableToggleButton2 >> initialize [
 	vOffset := 5.
 	padding := 8@8.
 
-	label := PhratchStringMorph new.
+	label := StringMorph new.
 	labelColorOff := Color r: (78/255) g: (82/255) b: (82/255).
 	labelColorOn := Color black.
 	labelColorOver := labelColorOff.

@@ -57,7 +57,7 @@ EventHatMorph >> forStartEvent [
 
 	parts := PhratchTranslator labelPartsFor: 'when %m clicked'.
 
-	s := PhratchStringMorph new contents: parts first; font: (PhratchFrameMorph getFont: #Label); color: Color white.
+	s := StringMorph new contents: parts first; font: (PhratchFrameMorph getFont: #Label); color: Color white.
 	self addMorphBack: s.
 
 	m := ImageMorph new form: (PhratchFrameMorph skinAt: #goButton).
@@ -107,7 +107,7 @@ EventHatMorph >> initialize [
 	parts := PhratchTranslator labelPartsFor: 'when I receive %e'.
 
 	parts first size > 0 ifTrue: [
-		label := PhratchStringMorph contents: parts first font: (PhratchFrameMorph getFont: #Label).
+		label := StringMorph contents: parts first font: (PhratchFrameMorph getFont: #Label).
 		label color: Color white.
 		self addMorphBack: label].
 
@@ -115,7 +115,7 @@ EventHatMorph >> initialize [
 	self addMorphBack: scriptNameMorph.
 
 	parts second size > 0 ifTrue: [
-		label := (PhratchStringMorph contents: parts second font: (PhratchFrameMorph getFont: #Label)) color: Color white.
+		label := (StringMorph contents: parts second font: (PhratchFrameMorph getFont: #Label)) color: Color white.
 		self addMorphBack: label].
 
 ]

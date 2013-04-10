@@ -167,7 +167,7 @@ PhratchSoundRecorderDialogMorph >> makeRecordMeter [
 PhratchSoundRecorderDialogMorph >> makeRecordTimer [
 
 	"timer"
-	timerMorph := PhratchStringMorph  "morph to display the duration"
+	timerMorph := StringMorph  "morph to display the duration"
 		contents: (self convertToMmss: 0)
 		font: (PhratchFrameMorph getFont: #SoundRecorderTimer).
 	timerMorph color: Color darkGray.

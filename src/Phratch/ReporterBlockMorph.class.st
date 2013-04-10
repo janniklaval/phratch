@@ -290,10 +290,10 @@ ReporterBlockMorph >> fixBlockLayoutNoWrap [
 	h := (maxH + 4) max: 17.
 
 	x := isBoolean ifTrue: [8] ifFalse: [4].
-	(mList size > 0 and: [mList first isKindOf: PhratchStringMorph]) ifTrue: [x := x + 2].
+	(mList size > 0 and: [mList first isKindOf: StringMorph]) ifTrue: [x := x + 2].
 
 	mList do: [:m |
-		(m isKindOf: PhratchStringMorph) 
+		(m isKindOf: StringMorph) 
 			ifTrue: [(m isKindOf: BlockLabelFragmentMorph) 
 				ifFalse: [m color: self labelColor]].
 
@@ -360,7 +360,7 @@ ReporterBlockMorph >> fixBlockLayoutWrap [
 				x := left].
 			(m isKindOf: BlockMorph) ifTrue: [m fixBlockLayout].
 			(m isKindOf: ArgMorph) ifTrue: [m fixArgLayout].
-			(m isKindOf: PhratchStringMorph)
+			(m isKindOf: StringMorph)
 				ifTrue: [m color: self labelColor]
 				ifFalse: [x := x max: minXForArgs].
 

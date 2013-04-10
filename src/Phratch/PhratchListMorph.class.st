@@ -141,18 +141,18 @@ PhratchListMorph >> addScrollPane [
 { #category : #initialization }
 PhratchListMorph >> addTitleAndControls [
 
-	titleMorph := PhratchStringMorph new contents: 'myList'; font: (PhratchFrameMorph getFont: #Label).
+	titleMorph := StringMorph new contents: 'myList'; font: (PhratchFrameMorph getFont: #Label).
 	deleteMorph := (ImageMorph new form: (PhratchFrameMorph skinAt: #deleteItem)).
 	addItemMorph := (ImageMorph new form: (PhratchFrameMorph skinAt: #addItem)).
 	addSublistMorph := (ImageMorph new form: self sublistIcon).
 	resizeMorph := PhratchResizeMorph ofType: #corner.
-	countMorph := PhratchStringMorph new
+	countMorph := StringMorph new
 		contents: '0';
 		font: (PhratchFrameMorph getFont: #XYReadout);
 		color: (Color gray: 0.15).
 
 	"emptyMorph is added to contents pane when list is empty"
-	emptyMorph := PhratchStringMorph new
+	emptyMorph := StringMorph new
 		contents: '(empty)' localized;
 		font: (PhratchFrameMorph getFont: #CommentBlock).
 
@@ -1417,7 +1417,7 @@ PhratchListMorph >> updateIndices: rightX [
 	newNumbers := #().
 	numberMorphs size < cellMorphs size ifTrue: [
 		page := scrollPane contents.
-		s := PhratchStringMorph new
+		s := StringMorph new
 			color: self indexColor;
 			font: (PhratchFrameMorph getFont: #Label).
 		newNumbers := (numberMorphs size + 1 to: cellMorphs size)

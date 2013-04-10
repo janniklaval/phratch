@@ -2773,7 +2773,7 @@ ScriptablePhratchMorph >> costumesPage: xOffset [
 	(self isKindOf: PhratchStageMorph)
 		ifTrue: [label := 'New background:' localized]
 		ifFalse: [label := 'New costume:' localized].
-	m := PhratchStringMorph
+	m := StringMorph
 		contents: label
 		font: (PhratchFrameMorph getFont: #CostumesPage).
 	m color: Color white.
@@ -6636,7 +6636,7 @@ ScriptablePhratchMorph >> soundsPage: xOffset [
 
 	bin := PhratchBlockPaletteMorph new.
 
-	m := PhratchStringMorph
+	m := StringMorph
 		contents: 'New sound:' localized
 		font: (PhratchFrameMorph getFont: #SoundsPage).
 	m color: Color white.
@@ -7435,9 +7435,9 @@ ScriptablePhratchMorph >> viewerPageForMotion [
 		font := (PhratchFrameMorph getFont: #ViewerPage).
 		x := 20.
 		y := 12.
-		m := PhratchStringMorph contents: 'Stage selected:' localized font: font.
+		m := StringMorph contents: 'Stage selected:' localized font: font.
 		bin addMorph: (m color: Color white; position: x@y).
-		m := PhratchStringMorph contents: 'No motion blocks' localized font: font.
+		m := StringMorph contents: 'No motion blocks' localized font: font.
 		bin addMorph: (m color: Color white; position: x@(y + 17)).
 		^ bin].
 

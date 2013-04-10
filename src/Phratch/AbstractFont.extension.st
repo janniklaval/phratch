@@ -1,6 +1,6 @@
 Extension { #name : #AbstractFont }
 
-{ #category : #'*Phratch-Compatibility' }
+{ #category : #'*Phratch-Extensions' }
 AbstractFont >> isOSFont [
 
 	^ false

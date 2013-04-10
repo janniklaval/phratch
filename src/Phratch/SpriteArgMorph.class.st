@@ -167,7 +167,7 @@ SpriteArgMorph >> initialize [
 	self borderWidth: 1.
 	self color: Color white.
 
-	labelMorph := PhratchStringMorph new
+	labelMorph := StringMorph new
 		font: (PhratchFrameMorph getFont: #Arg);
 		forceUnicodeRendering: true;
 		color: Color white.

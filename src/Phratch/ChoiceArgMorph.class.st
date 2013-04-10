@@ -200,7 +200,7 @@ ChoiceArgMorph >> initialize [
 	self borderInset.
 	self borderWidth: 1.
 	self color: Color brown.
-	labelMorph := PhratchStringMorph new
+	labelMorph := StringMorph new
 		font: (PhratchFrameMorph getFont: #Arg);
 		forceUnicodeRendering: true;
 		color: Color white.

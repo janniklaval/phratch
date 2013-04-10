@@ -18,7 +18,7 @@ Class {
 		'startMSecs',
 		'totalMSecs'
 	],
-	#category : #'Phratch-Compatibility'
+	#category : #'Phratch-Networking'
 }
 
 { #category : #'as yet unclassified' }

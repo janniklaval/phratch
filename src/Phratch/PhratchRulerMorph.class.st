@@ -41,7 +41,7 @@ PhratchRulerMorph >> drawOn: aCanvas [
 		[:pos |
 			(pos - (self left)) \\ bigSpace = 0
 				ifTrue: [aCanvas line: (pos truncated)@((self top) truncated) to: (pos truncated)@((self top + 5) truncated) color: Color black.
-				s := PhratchStringMorph contents: (currVal asString).
+				s := StringMorph contents: (currVal asString).
 				s center: (pos truncated)@(self top + 12).
 				self addMorph: s.]
 				ifFalse: [aCanvas line: (pos truncated)@(self top truncated) to: (pos truncated)@((self top + 1) truncated) color: Color black.]. 

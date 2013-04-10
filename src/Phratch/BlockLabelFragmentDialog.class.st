@@ -132,7 +132,7 @@ BlockLabelFragmentDialog >> buildSlotTypeChoices [
 
 	typeFont := PhratchFrameMorph getFont: #FilePickerEntry.
 
-	typeLabel := ((PhratchStringMorph contents: 'Input type/Shape of slot:' localized font: (PhratchFrameMorph getFont: #Label))
+	typeLabel := ((StringMorph contents: 'Input type/Shape of slot:' localized font: (PhratchFrameMorph getFont: #Label))
 		color: titleClr;
 		position: typeChooser position + (15@14);
 		yourself).
@@ -150,7 +150,7 @@ BlockLabelFragmentDialog >> buildSlotTypeChoices [
 		actionSelector: #typeObject;
 		top: 6.
 	picture := ImageMorph new form: (self slotShapeFormFor: #object size: picSize).
-	label := (PhratchStringMorph contents: 'Object' localized font: typeFont)
+	label := (StringMorph contents: 'Object' localized font: typeFont)
 		color: labelClr.
 	lineObject := Morph new color: Color transparent.
 	lineObject extent: lineWidth @ picSize y.
@@ -174,7 +174,7 @@ BlockLabelFragmentDialog >> buildSlotTypeChoices [
 		actionSelector: #typeNumber;
 		top: 6.
 	picture := ImageMorph new form: (self slotShapeFormFor: #number size: picSize).
-	label := (PhratchStringMorph contents: 'Number' localized font: typeFont)
+	label := (StringMorph contents: 'Number' localized font: typeFont)
 		color: labelClr.
 	lineNumber := Morph new color: Color transparent.
 	lineNumber extent: lineWidth @ picSize y.
@@ -198,7 +198,7 @@ BlockLabelFragmentDialog >> buildSlotTypeChoices [
 		actionSelector: #typeText;
 		top: 6.
 	picture := ImageMorph new form: (self slotShapeFormFor: #text size: picSize).
-	label := (PhratchStringMorph contents: 'Text' localized font: typeFont)
+	label := (StringMorph contents: 'Text' localized font: typeFont)
 		color: labelClr.
 	lineText := Morph new color: Color transparent.
 	lineText extent: lineWidth @ picSize y.
@@ -222,7 +222,7 @@ BlockLabelFragmentDialog >> buildSlotTypeChoices [
 		actionSelector: #typeList;
 		top: 6.
 	picture := ImageMorph new form: (self slotShapeFormFor: #list size: picSize).
-	label := (PhratchStringMorph contents: 'List' localized font: typeFont)
+	label := (StringMorph contents: 'List' localized font: typeFont)
 		color: labelClr.
 	lineList := Morph new color: Color transparent.
 	lineList extent: lineWidth @ picSize y.
@@ -246,7 +246,7 @@ BlockLabelFragmentDialog >> buildSlotTypeChoices [
 		actionSelector: #typeAny; 
 		top: 6.
 	picture := ImageMorph new form: (self slotShapeFormFor: #any size: picSize).
-	label := (PhratchStringMorph contents: 'Any type' localized font: typeFont)
+	label := (StringMorph contents: 'Any type' localized font: typeFont)
 		color: labelClr.
 	lineAny := Morph new color: Color transparent.
 	lineAny extent: lineWidth @ picSize y.
@@ -270,7 +270,7 @@ BlockLabelFragmentDialog >> buildSlotTypeChoices [
 		actionSelector: #typeBoolean;
 		top: 6.
 	picture := ImageMorph new form: (self slotShapeFormFor: #boolean size: picSize).
-	label := (PhratchStringMorph contents: 'Boolean (T/F)' localized font: typeFont)
+	label := (StringMorph contents: 'Boolean (T/F)' localized font: typeFont)
 		color: labelClr.
 	lineBoolean := Morph new color: Color transparent.
 	lineBoolean extent: lineWidth @ picSize y.
@@ -294,7 +294,7 @@ BlockLabelFragmentDialog >> buildSlotTypeChoices [
 		actionSelector: #typeCommand;
 		top: 6.
 	picture := ImageMorph new form: (self slotShapeFormFor: #command size: picSize).
-	label := (PhratchStringMorph contents: 'Command (inline)' localized font: typeFont)
+	label := (StringMorph contents: 'Command (inline)' localized font: typeFont)
 		color: labelClr.
 	lineCommand := Morph new color: Color transparent.
 	lineCommand extent: lineWidth @ picSize y.
@@ -318,7 +318,7 @@ BlockLabelFragmentDialog >> buildSlotTypeChoices [
 		actionSelector: #typeReporter;
 		top: 6.
 	picture := ImageMorph new form: (self slotShapeFormFor: #reporter size: picSize).
-	label := (PhratchStringMorph contents: 'Reporter' localized font: typeFont)
+	label := (StringMorph contents: 'Reporter' localized font: typeFont)
 		color: labelClr.
 	lineReporter := Morph new color: Color transparent.
 	lineReporter extent: lineWidth @ picSize y.
@@ -342,7 +342,7 @@ BlockLabelFragmentDialog >> buildSlotTypeChoices [
 		actionSelector: #typePredicate;
 		top: 6.
 	picture := ImageMorph new form: (self slotShapeFormFor: #predicate size: picSize).
-	label := (PhratchStringMorph contents: 'Predicate' "(Reporter of Boolean)" localized font: typeFont)
+	label := (StringMorph contents: 'Predicate' "(Reporter of Boolean)" localized font: typeFont)
 		color: labelClr.
 	linePredicate := Morph new color: Color transparent.
 	linePredicate extent: lineWidth @ picSize y.
@@ -366,7 +366,7 @@ BlockLabelFragmentDialog >> buildSlotTypeChoices [
 		actionSelector: #typeLoop;
 		top: 6.
 	picture := ImageMorph new form: (self slotShapeFormFor: #loop size: picSize).
-	label := (PhratchStringMorph contents: 'C-shape' localized font: typeFont)
+	label := (StringMorph contents: 'C-shape' localized font: typeFont)
 		color: labelClr.
 	lineLoop := Morph new color: Color transparent.
 	lineLoop extent: lineWidth @ picSize y.
@@ -390,7 +390,7 @@ BlockLabelFragmentDialog >> buildSlotTypeChoices [
 		actionSelector: #typeUnevaluated;
 		top: 6.
 	picture := ImageMorph new form: (self slotShapeFormFor: #unevaluated size: picSize).
-	label := (PhratchStringMorph contents: 'Any (unevaluated)' localized font: typeFont)
+	label := (StringMorph contents: 'Any (unevaluated)' localized font: typeFont)
 		color: labelClr.
 	lineUnevaluated := Morph new color: Color transparent.
 	lineUnevaluated extent: lineWidth @ picSize y.
@@ -414,7 +414,7 @@ BlockLabelFragmentDialog >> buildSlotTypeChoices [
 		actionSelector: #typeUnevaluatedBoolean;
 		top: 6.
 	picture := ImageMorph new form: (self slotShapeFormFor: #unevaluatedBoolean size: picSize).
-	label := (PhratchStringMorph contents: 'Boolean (unevaluated)' localized font: typeFont)
+	label := (StringMorph contents: 'Boolean (unevaluated)' localized font: typeFont)
 		color: labelClr.
 	lineUnevaluatedBoolean := Morph new color: Color transparent.
 	lineUnevaluatedBoolean extent: lineWidth @ picSize y.
@@ -454,13 +454,13 @@ BlockLabelFragmentDialog >> buildSlotTypeChoices [
 		position: lineLoop left @ (divBar bottom + 9).
 	typeChooser addMorph: singleRadioButton.	
 
-	labelSingle := ((PhratchStringMorph contents: 'Single input.' localized font: (PhratchFrameMorph getFont: #Label))
+	labelSingle := ((StringMorph contents: 'Single input.' localized font: (PhratchFrameMorph getFont: #Label))
 		color: titleClr;
 		position: singleRadioButton topRight + (4@0);
 		yourself).
 	typeChooser addMorph: labelSingle.
 
-	defaultLabel := ((PhratchStringMorph contents: 'Default value:' localized font: (PhratchFrameMorph getFont: #Label))
+	defaultLabel := ((StringMorph contents: 'Default value:' localized font: (PhratchFrameMorph getFont: #Label))
 		color: titleClr;
 		position: labelSingle topRight + (10@0);
 		yourself).
@@ -491,7 +491,7 @@ BlockLabelFragmentDialog >> buildSlotTypeChoices [
 		position: singleRadioButton bottomLeft + (0@6).
 	typeChooser addMorph: multipleRadioButton.	
 
-	labelMultiple := ((PhratchStringMorph contents: 'Multiple inputs (value is list of inputs)' localized font: (PhratchFrameMorph getFont: #Label))
+	labelMultiple := ((StringMorph contents: 'Multiple inputs (value is list of inputs)' localized font: (PhratchFrameMorph getFont: #Label))
 		color: titleClr;
 		position: multipleRadioButton topRight + (4@0);
 		yourself).
@@ -507,7 +507,7 @@ BlockLabelFragmentDialog >> buildSlotTypeChoices [
 		position: multipleRadioButton bottomLeft + (0@6).
 	typeChooser addMorph: externalizedRadioButton.	
 
-	labelExternalized := ((PhratchStringMorph contents: 'Make internal variable visible to caller' localized font: (PhratchFrameMorph getFont: #Label))
+	labelExternalized := ((StringMorph contents: 'Make internal variable visible to caller' localized font: (PhratchFrameMorph getFont: #Label))
 		color: titleClr;
 		position: externalizedRadioButton topRight + (4@0);
 		yourself).

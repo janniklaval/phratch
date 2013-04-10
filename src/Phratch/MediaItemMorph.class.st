@@ -106,7 +106,7 @@ MediaItemMorph >> buildRightSideMorph [
 	nameMorph width: (5 * nameMorph height) asInteger.
 	rightMorph addMorphBack: nameMorph.
 
-	infoMorph := (PhratchStringMorph contents: (media infoString))
+	infoMorph := (StringMorph contents: (media infoString))
 		font: (PhratchFrameMorph getFont: #MediaItemInfo);
 		position: nameMorph left + 2 @ (nameMorph bottom).
 	rightMorph addMorph: infoMorph.
@@ -136,7 +136,7 @@ MediaItemMorph >> buildRightSideMorph [
 	nameMorph extent: (deleteButton right max: nameMorph width)@(nameMorph extent y).
 	deleteButton position: (nameMorph right - deleteButton width)@(infoMorph bottom + 6).
 
-	soundSizeMorph := (PhratchStringMorph contents: '')
+	soundSizeMorph := (StringMorph contents: '')
 		font: (PhratchFrameMorph getFont: #MediaItemInfo);
 		position: nameMorph right @ nameMorph bottom.
 	rightMorph addMorph: soundSizeMorph.
@@ -155,7 +155,7 @@ MediaItemMorph >> buildSubmorphs [
 	| thumbHeight |
 	self buildRightSideMorph.
 
-	numberMorph := (PhratchStringMorph contents: '345')
+	numberMorph := (StringMorph contents: '345')
 		font: (PhratchFrameMorph getFont: #MediaItemInfo);
 		color: Color white;
 		position: topRightInset.

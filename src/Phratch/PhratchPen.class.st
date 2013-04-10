@@ -10,7 +10,7 @@ Class {
 		'direction',
 		'penDown'
 	],
-	#category : #'Phratch-Compatibility'
+	#category : #'Phratch-Paint'
 }
 
 { #category : #examples }

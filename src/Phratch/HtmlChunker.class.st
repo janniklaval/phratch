@@ -1,5 +1,5 @@
 Class {
 	#name : #HtmlChunker,
 	#superclass : #Object,
-	#category : #'Phratch-Compatibility'
+	#category : #'Phratch-Networking'
 }

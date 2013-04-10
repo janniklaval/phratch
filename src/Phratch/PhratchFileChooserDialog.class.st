@@ -429,7 +429,7 @@ PhratchFileChooserDialog >> createFileChooserLayout: allowNewFile [
 	self title: 'Open'.
 	allowNewFile ifTrue: [
 		self title: 'Save As'.
-		newFileTitle := PhratchStringMorph new
+		newFileTitle := StringMorph new
 			contents: 'New Filename:' localized, ' ';
 			color: (Color gray: 0.3);
 			font: (PhratchFrameMorph getFont: #FileChooserNewFileTitle).
@@ -482,7 +482,7 @@ PhratchFileChooserDialog >> createPhratchFileChooserFor: aPhratchFrameMorph savi
 
 	savingFlag ifTrue: [
 		self title: 'Save Project'.
-		newFileTitle := PhratchStringMorph contents: ('New Filename:' localized, ' ') font: labelFont.
+		newFileTitle := StringMorph contents: ('New Filename:' localized, ' ') font: labelFont.
 		newFileTitle color: (Color gray: 0.3).
 		newFileName := StringFieldMorph new
 			contents: phratchFrame projectName;
@@ -521,7 +521,7 @@ PhratchFileChooserDialog >> createPhratchFileChooserFor: aPhratchFrameMorph savi
 	thumbnailMorph := ImageMorph new form: (Form extent: 160@120 depth: 1).
 	thumbnailFrameMorph addMorphFront: (thumbnailMorph position: ((thumbnailFrameMorph position) + (5@5))).
 
-	authorLabelMorph := PhratchStringMorph contents: 'Project author:' localized font: labelFont.
+	authorLabelMorph := StringMorph contents: 'Project author:' localized font: labelFont.
 	authorLabelMorph color: (Color gray: 0.3).
 	fileInfoColumn addMorphBack: authorLabelMorph.
 	savingFlag
@@ -541,7 +541,7 @@ PhratchFileChooserDialog >> createPhratchFileChooserFor: aPhratchFrameMorph savi
 		addMorphBack: authorMorph;
 		addMorphBack: (Morph new extent: (5@6); color: Color transparent). "spacer"
 
-	commentLabelMorph := PhratchStringMorph contents: 'About this project:' localized font: labelFont.
+	commentLabelMorph := StringMorph contents: 'About this project:' localized font: labelFont.
 	commentLabelMorph color: authorLabelMorph color.
 	fileInfoColumn addMorphBack: commentLabelMorph.
 	commentMorph := ScrollingStringMorph new

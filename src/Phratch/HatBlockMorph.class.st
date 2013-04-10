@@ -182,7 +182,7 @@ HatBlockMorph >> initialize [
 	self extent: 92@38.
 	scriptOwner := nil.
 
-	scriptNameMorph := PhratchStringMorph new
+	scriptNameMorph := StringMorph new
 		contents: 'script';
 		font: (PhratchFrameMorph getFont: #Label);
 		forceUnicodeRendering: true;

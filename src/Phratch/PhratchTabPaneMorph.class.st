@@ -135,7 +135,7 @@ PhratchTabPaneMorph >> tab: aResizableToggleButton2 label: aString [
 	"account for the size of the tab skin."
 	aResizableToggleButton2 extent: (aResizableToggleButton2 extent - (0@10)).
 
-	(label := aResizableToggleButton2 findA: PhratchStringMorph) ifNotNil: [
+	(label := aResizableToggleButton2 findA: StringMorph) ifNotNil: [
 		"slide label up a little"
 		label top: label top].
 

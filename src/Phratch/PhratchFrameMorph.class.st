@@ -979,7 +979,7 @@ PhratchFrameMorph >> checkBoxLabelled: aString marked: aBool width: anInt [
 		ifTrue: [cnts := ' ', aString localized asMacRoman]
 		ifFalse: [cnts := ' ' asUTF8, aString localized].
 
-	label := PhratchStringMorph contents: cnts font: PhratchPreferences standardMenuFont.
+	label := StringMorph contents: cnts font: PhratchPreferences standardMenuFont.
 	line := Morph new color: Color transparent.
 	line height: (box height max: label height).
 	line width: (box width + label width max: anInt).
@@ -1287,7 +1287,7 @@ PhratchFrameMorph >> createStageButtonsPanel [
 		centering: #center;
 		height: 20.
 
-	projectTitleMorph := PhratchStringMorph new
+	projectTitleMorph := StringMorph new
 		forceUnicodeRendering: true;
 		contents: '';
 		font: (PhratchFrameMorph getFont: #FrameMorphProjectTitle).
@@ -2669,8 +2669,8 @@ PhratchFrameMorph >> makeXYReadout [
 	panel := Morph new color: (Color r: 0.753 g: 0.764 b: 0.776).
 
 	PhratchTranslator isRTL
-		ifTrue: [labelX := PhratchStringMorph new font: normalFont; contents: ':x' asUTF8]
-		ifFalse: [labelX := PhratchStringMorph new font: normalFont; contents: 'x:' asUTF8].
+		ifTrue: [labelX := StringMorph new font: normalFont; contents: ':x' asUTF8]
+		ifFalse: [labelX := StringMorph new font: normalFont; contents: 'x:' asUTF8].
 	readoutX := UpdatingStringMorph new
 		target: self; getSelector: #mouseX;
 		forceUnicodeRendering: true;

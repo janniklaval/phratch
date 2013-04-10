@@ -472,7 +472,7 @@ BlockMorph >> contrastColor [
 			isContrasted := true.
 			color := color twiceLighter " lighter slightlyLighter "]].
 
-	submorphs do: [:m | (m isKindOf: PhratchStringMorph)
+	submorphs do: [:m | (m isKindOf: StringMorph)
 		ifTrue: [m color: self labelColor ]
 		ifFalse: [ (m isKindOf: MultiArgMorph)
 			ifTrue: [m contrastColor]]].	
@@ -1559,7 +1559,7 @@ BlockMorph >> printCodeSubmorph: aMorph on: aStream [
 		aMorph printCodeOn: aStream indent: 0.
 		aStream skip: -1.  "remove carriage return"
 		aStream nextPut: $)].
-	(aMorph isKindOf: PhratchStringMorph) ifTrue: [
+	(aMorph isKindOf: StringMorph) ifTrue: [
 		((aMorph contents = '?') | (aMorph contents = '%'))
 			ifTrue: [aStream skip: -1].	"remove space before ? or %"
 		aStream nextPutAll: aMorph contents].

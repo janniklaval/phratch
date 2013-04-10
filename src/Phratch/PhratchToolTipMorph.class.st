@@ -48,7 +48,7 @@ PhratchToolTipMorph >> message: aString [
 			str := aString.
 			(aString isKindOf: String) ifFalse: [
 				str := aString printString].
-			message := PhratchStringMorph
+			message := StringMorph
 				contents: str
 				font: self messageFont ].
 	self addMorph: message.

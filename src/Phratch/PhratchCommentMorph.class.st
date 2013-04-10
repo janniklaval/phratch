@@ -40,7 +40,7 @@ PhratchCommentMorph >> addTopBar [
 		cellPositioning: #leftCenter;
 		centering: #center.
 
-	labelMorph := PhratchStringMorph new
+	labelMorph := StringMorph new
 		color: (Color gray: 0.33);
 		contents: '';
 		font: (PhratchFrameMorph getFont: #Label).

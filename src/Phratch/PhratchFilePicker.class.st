@@ -356,7 +356,7 @@ PhratchFilePicker >> getFetchedServerDirectoryContents [
 	page := contentsPaneMorph contents.
 
 	currentDir fetchSucceeded ifFalse: [
-		m := PhratchStringMorph contents: 'Failed: ', currentDir fetchFailureReason.
+		m := StringMorph contents: 'Failed: ', currentDir fetchFailureReason.
 		page addMorph: (m position: page topLeft + (10@30)).
 		^ self].
 
@@ -507,7 +507,7 @@ PhratchFilePicker >> initialize [
 	fetchInProgress := false.
 	showThumbnails := false.
 	finalSelection := false.
-	feedbackMorph := PhratchStringMorph new.  "used to show a remote directory fetch in progress"
+	feedbackMorph := StringMorph new.  "used to show a remote directory fetch in progress"
 	freezeFocus := false.
 
 	self buildButtons.
