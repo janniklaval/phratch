@@ -594,13 +594,15 @@ CommandBlockMorph >> drawInlinePaletteOn: aCanvas [
 CommandBlockMorph >> editElements [
 	| cls sel |
 	sel := selector.
-	cls := receiver class "classThatUnderstands: sel".
+	cls := receiver class classThatUnderstands: sel.
+
 	cls ifNil: [cls := PhratchProcess].
 	(cls canUnderstand: sel)
 		ifFalse: [isSpecialForm ifTrue: [
 			(#(getBlockVar: getVar:) includes: sel) ifTrue: [sel := #getVar].
 			(#(setBlockVar:to: setVar:to:) includes: sel) ifTrue: [sel := #setVar].
 			(#(changeBlockVar:by: changeVar:by:) includes: sel) ifTrue: [sel := #changeVar]]].
+	
 	ElementsEditorFrameMorph new 
 		onMethod: sel ofClass: cls
 ]

@@ -25,14 +25,15 @@ Class {
 { #category : #initialization }
 WatcherMorph >> buildReadout [
 	"Build my readout component morphs."
-
-	readout := UpdatingStringMorph new
+		
+	readout := PhratchUpdatingStringMorph new
 		contents: '';
 		floatPrecision: 0.1;
 		stepTime: 100.
 	readout
 		font: (PhratchFrameMorph getFont: #Watcher);
 		forceUnicodeRendering: true;
+		target: self target;
 		color: Color white.
 	readoutFrame := WatcherReadoutFrameMorph new addMorph: readout.
 

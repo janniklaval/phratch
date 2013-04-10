@@ -27,7 +27,7 @@ ElementsEditorFrameMorph class >> initialize [
 
 { #category : #'as yet unclassified' }
 ElementsEditorFrameMorph class >> minExtent [
-	^600 @ 430.
+	^500 @ 400.
 ]
 
 { #category : #'as yet unclassified' }
@@ -109,7 +109,13 @@ ElementsEditorFrameMorph >> getUserResponse [
 	| w |
 	self openInWorld.
 
-	editor onMethod: initialMethod ofClass: initialClass.
+	editor on: (initialClass methods detect: [:e | e selector = initialMethod  ])
+							text: #sourceCode
+							accept: nil
+							readSelection: nil
+							menu: nil.
+	
+	" onMethod: initialMethod ofClass: initialClass."
 
 	UserPos isNil 
 		ifTrue: [ self centerOnScreen ]
@@ -139,7 +145,7 @@ ElementsEditorFrameMorph >> initialize [
 	self title: 'Elements Editor'.
 	resizeMorph := PhratchResizeMorph ofType: #corner.
 	
-	editor := ElementsMethodEditorMorph new.
+	editor := PluggableTextMorph new.
 
 	mainColumn addMorph: editor.
 

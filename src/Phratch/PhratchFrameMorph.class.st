@@ -1914,7 +1914,7 @@ PhratchFrameMorph >> fillScreenOff [
 	UsersManager default currentUser canShowMorphHalo: true.
 	
 	self isSticky: false.
-	self extent: Display extent - 50.
+	self extent: 1000@600"Display extent - 50".
 	UseErrorCatcher := false.
 	PhratchPreferences noviceMode: false.
 	PhratchPreferences warnIfNoSourcesFile: true.
