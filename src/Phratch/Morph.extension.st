@@ -52,6 +52,12 @@ Morph >> flags [
 ]
 
 { #category : #'*Phratch-Extensions' }
+Morph >> flags: aValue [
+
+	self setProperty: #flags toValue: aValue.
+]
+
+{ #category : #'*Phratch-Extensions' }
 Morph >> fullCopy [
 	^ self veryDeepCopy
 ]
