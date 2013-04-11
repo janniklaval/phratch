@@ -1906,7 +1906,7 @@ PhratchFrameMorph >> fillScreenOff [
 	"Stop filling the entire screen. Useful during development."
 
 
-	DisplayScreen new fullScreenMode: false.
+	Display fullScreenMode: false.
 	World restoreDisplay.
 
 	fillScreenFlag := false.
@@ -1929,7 +1929,7 @@ PhratchFrameMorph >> fillScreenOn [
 	"Start filling the entire screen and being sticky. Also configure a few other things for the end user such as turning off halos and the control menu (noviceMode) and making sure that error catching is enabled."
 
 	PhratchPreferences takeOverScreen ifTrue: [
-		DisplayScreen new fullScreenMode: true.
+		Display fullScreenMode: true.
 		World restoreDisplay].
 
 	fillScreenFlag := true.
@@ -2491,8 +2491,8 @@ PhratchFrameMorph >> keyStroke: evt [
 			ch = 19 ifTrue: [^ self savePhratchProjectNoDialog].       
 			ch = 27 ifTrue: [
 				PhratchPreferences takeOverScreen ifTrue: [
-					Smalltalk fullScreenMode: false.
-					Smalltalk fullScreenMode: true.
+					Display fullScreenMode: false.
+					Display fullScreenMode: true.
 					World restoreDisplay].
 				^ self].
 			workPane broadcastEventNamed: 'Phratch-KeyPressedEvent' with: evt.
@@ -3095,8 +3095,8 @@ PhratchFrameMorph >> processKeyboardEvents [
 			ch = 19 ifTrue: [^ self savePhratchProjectNoDialog].
 			ch = 27 ifTrue: [
 				PhratchPreferences takeOverScreen ifTrue: [
-					Smalltalk fullScreenMode: false.
-					Smalltalk fullScreenMode: true.
+					Display fullScreenMode: false.
+					Display fullScreenMode: true.
 					World restoreDisplay].
 				^ self].
 			workPane broadcastEventNamed: 'Phratch-KeyPressedEvent' with: evt]].

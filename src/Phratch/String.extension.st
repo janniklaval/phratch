@@ -95,12 +95,6 @@ String >> localizedMIDI [
 	^ PhratchTranslator translationFor: self
 ]
 
-{ #category : #'*Phratch' }
-String >> pathName [
-
-	^ self
-]
-
 { #category : #'*Phratch-Extensions' }
 String >> trailingDigits [
 	"Answer the trailing digits of a string such as 'foo123' If the string does not end in a digit, answer the empty string."
