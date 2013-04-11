@@ -17,13 +17,12 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-ShadowedStringMorph class >> contents: aString color: aColor font: aFont kern: aNumber [
+ShadowedStringMorph class >> contents: aString color: aColor font: aFont [
 
 	^ self new
 		contents: aString
 		color: aColor
-		font: aFont
-		kern: aNumber.
+		font: aFont.
 ]
 
 { #category : #accessing }
@@ -41,9 +40,8 @@ ShadowedStringMorph >> contents: aString [
 ]
 
 { #category : #accessing }
-ShadowedStringMorph >> contents: aString color: aColor font: aFont kern: aNumber [
+ShadowedStringMorph >> contents: aString color: aColor font: aFont [
 
-self flag: 'remove kern'.
 	mainMorph := StringMorph new
 		contents: aString;
 		color: aColor;

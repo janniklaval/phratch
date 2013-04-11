@@ -1602,7 +1602,6 @@ BlockMorph >> refreshAttributeArgs [
 { #category : #'event handling' }
 BlockMorph >> rejectDropEvent: evt [
 	"we should only reject drops if they're not blocks, variables, etc. Should check it out better"
-	self flag: 'to review'.  
 	^false
 ]
 

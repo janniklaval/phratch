@@ -312,7 +312,7 @@ PhratchPlugin class >> interpolationTest: scale [
 	(scaleP x <= 0 or: [scaleP y <= 0]) ifTrue: [self error: 'bad scale factor'].
 	srcForm := (Form fromFileNamed: TestFileName) asFormOfDepth: 32.
 	outExtent := (srcForm extent * scaleP) truncated.
-	(outExtent x > 1000 or: [outExtent y > 1000]) ifTrue: [self halt: 'result width or height will be > 1000 pixels'].
+	(outExtent x > 1000 or: [outExtent y > 1000]) ifTrue: [self error: 'result width or height will be > 1000 pixels'].
 	fOut := Form extent: outExtent depth: 32.
 	w := srcForm width.
 	h := srcForm height.

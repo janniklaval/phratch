@@ -1060,8 +1060,7 @@ PhratchStageMorph >> referenceToList: aPhratchList [
 
 { #category : #'scratch processes/events' }
 PhratchStageMorph >> rejectDropEvent: evt [
-	"we should only reject drops if they're not sprites, variables, etc. Should check it out better"
-	self flag: 'to review'.  
+	"we should only reject drops if they're not sprites, variables, etc. Should check it out better" 
 	^false
 ]
 

@@ -646,8 +646,7 @@ DialogBoxMorph >> title: aString [
 	titleMorph := ShadowedStringMorph new
 		contents: aString localized
 		color: Color white
-		font: (PhratchFrameMorph getFont: #DialogBoxTitle)
-		kern: 1.
+		font: (PhratchFrameMorph getFont: #DialogBoxTitle).
 
 	titleBin
 		addMorph: (AlignmentMorph newSpacer: Color transparent);

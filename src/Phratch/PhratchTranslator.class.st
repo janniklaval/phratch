@@ -108,7 +108,7 @@ PhratchTranslator class >> checkAllTranslations [
 	self languageNames do: [:lang |
 		self setLanguage: lang.
 		untranslated := self checkTranslationDict.
-		untranslated size > 0 ifTrue: [self halt: lang, ' missing ', untranslated size printString]].
+		untranslated size > 0 ifTrue: [lang, ' missing ', untranslated size printString]].
 
 ]
 
