@@ -109,7 +109,8 @@ PhratchViewerMorph >> rebuildCategorySelectors [
 		motion		control
 		looks		sensing
 		sound		operators
-		pen			variables).
+		pen			variables
+		files		colors).
 
 	"First, delete the old category buttons"
 	submorphs do: [:m | (m isKindOf: ResizableToggleButton2) ifTrue: [m delete]].

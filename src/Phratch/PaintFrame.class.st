@@ -45,7 +45,8 @@ Class {
 		'setRotationCenterMorph',
 		'setRotationCenterButton',
 		'colorPickerButton',
-		'phratchFrame'
+		'phratchFrame',
+		'deleteCostumeOnCancel'
 	],
 	#classVars : [
 		'ColorPicker',
@@ -279,6 +280,12 @@ PaintFrame >> clearRotationCenter [
 
 	canvasMorph clearRegistrationPoint.
 
+]
+
+{ #category : #'panther actions' }
+PaintFrame >> deleteCostumeOnCancel: aBoolean [
+
+	deleteCostumeOnCancel := aBoolean.
 ]
 
 { #category : #drawing }

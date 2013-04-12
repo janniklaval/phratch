@@ -33,6 +33,12 @@ PhratchStageMorph class >> blockSpecs [
 
 	| blocks |
 	blocks := #(
+		'control'
+			=
+			=
+			('%e received?'							b	eventReceivedNamed:)
+			=
+			=
 		'sensing'
 			('ask %s and wait'			s	doAsk 'What''s your name?')
 			('answer'					r	answer)
@@ -57,7 +63,15 @@ PhratchStageMorph class >> blockSpecs [
 			=
 			('object %m'						r	getObject:)
 			('attribute %a'						r	get:)
-
+			=
+			=
+			('ask %s in dialog'						-	showAskDialogWithText: 'What''s your name?')
+			-
+			('show dialog %s with text %s'	-	showInformDialog:withText: 'info' '')
+			-
+			('key pressed'								r	keyPressed)
+			=
+			=
 		'looks'
 			('switch to background %l'	-	showBackground: 'background1')
 			('next background'			-	nextBackground)
@@ -67,7 +81,24 @@ PhratchStageMorph class >> blockSpecs [
 			('set %g effect to %n'		-	setGraphicEffect:to: 'color' 0)
 			('clear graphic effects'		-	filterReset)
 			-
-"xxx			('place sprites for scene %x'	-	showScene:) "
+			=
+			=
+			('do with camera open'						c	doWithCamOpen)
+			('camera is open?'							b	cameraIsOpen)
+			-
+			('replace background %n with %8'	-	replaceBackground:with: 1)
+			('add %8 to backgrounds'			-	addBackgroundTyped:)
+			-
+			('%g effect'							r	graphicEffectNamed: 'color')
+			-
+			('change horizontal pan by %n'	-	changeHPanBy:)
+			('set horizontal pan to %n'		-	setHPanTo: 0)
+			('change vertical pan by %n'	-	changeVPanBy:)
+			('set vertical pan to %n'			-	setVPanTo: 0)
+			('change zoom by %n'			-	changeZoomBy:)
+			('set zoom to %n %'				-	setZoomTo:)
+			=
+			=
 		'pen'
 			('clear'						-	clearPenTrails)
 	).
@@ -90,6 +121,12 @@ PhratchStageMorph >> acceptDroppingMorph: aMorph event: evt [
 	self changed.
 
 
+]
+
+{ #category : #'panther actions' }
+PhratchStageMorph >> addBackgroundTyped: aString [
+
+	self addCostumeTyped: aString.
 ]
 
 { #category : #'-- all --' }
@@ -1078,6 +1115,12 @@ PhratchStageMorph >> removeTerminatedProcesses [
 
 	runningBlocks := newRunning.
 
+]
+
+{ #category : #'panther actions' }
+PhratchStageMorph >> replaceBackground: name with: sel [
+
+	self replaceCostume: name with: sel.
 ]
 
 { #category : #'looks ops' }

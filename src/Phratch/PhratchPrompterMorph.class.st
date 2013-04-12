@@ -39,6 +39,13 @@ PhratchPrompterMorph class >> lastAnswer [
 
 ]
 
+{ #category : #accessing }
+PhratchPrompterMorph class >> lastAnswer: anAnswer [
+
+	LastAnswer := anAnswer
+
+]
+
 { #category : #other }
 PhratchPrompterMorph >> accept [
 	"Accept button was pressed."

@@ -2,6 +2,7 @@ Class {
 	#name : #PhratchPreferences,
 	#superclass : #Object,
 	#classVars : [
+		'FileIOPreference',
 		'InsertionPointColor',
 		'MeshServerEnabled',
 		'NoviceMode',
@@ -15,6 +16,18 @@ Class {
 	],
 	#category : #'Phratch-Installation'
 }
+
+{ #category : #accessing }
+PhratchPreferences class >> fileIOPreference [
+
+	^ FileIOPreference
+]
+
+{ #category : #accessing }
+PhratchPreferences class >> fileIOPreference: aBoolean [ 
+
+	FileIOPreference := aBoolean
+]
 
 { #category : #accessing }
 PhratchPreferences class >> insertionPointColor [
@@ -93,6 +106,10 @@ PhratchPreferences class >> phratchSettingsOn: aBuilder [
 				label: 'takeOverScreen' translated;
 		 		target: PhratchPreferences;
 		 		description: 'Do you allow Phratch to display on all screen' translated.	
+			(aBuilder setting: #fileIOPreference) 
+				label: 'fileIOPreference' translated;
+		 		target: PhratchPreferences;
+		 		description: 'Do you allow Phratch to write files' translated.	
 		].
 ]
 

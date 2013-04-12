@@ -1525,10 +1525,6 @@ CommandBlockMorph >> uncoloredArgMorphFor: specString [
 							commandSpec: '?'].
 	$Z = code ifTrue: [ ^ SpecialArgMorph new type: #reporterslot].
 	$Y = code ifTrue: [ ^ SpecialArgMorph new type: #booleanslot].
-
-"++++ deprecated +++++++++++
-	$K = code ifTrue: [ ^ PredicateArgMorph new ].
-+++++++++++++++++++++++++++"
 	
 	$A = code ifTrue: [ ^ ChoiceArgMorph new options: {'with inputs' asUTF8 localized. 'with input list' asUTF8 localized}; choice: 'with inputs'].
 	$F = code ifTrue: [ ^ ChoiceArgMorph new options: {'number' localized. 'text' localized. 'boolean' localized. 'list' localized. 'command' localized. 'reporter' localized. 'predicate' localized. 'object' localized}; choice: 'number' localized].
@@ -1536,15 +1532,6 @@ CommandBlockMorph >> uncoloredArgMorphFor: specString [
 	$E = code ifTrue: [ ^ CSlotMorph new].
 	$G = code ifTrue: [ ^ CArgSlotMorph new].
 	$J = code ifTrue: [ ^ MultiArgMorph type: #loop].
-
-" ++++++++ commented out because we need the codes for other slots -jens +++++++++++++++++++++++
-
-	$K = code ifTrue: [ ^ CReporterSlotMorph new receiver: receiver; yourself ].
-	$Q = code ifTrue: [ ^ MultiArgMorph type: #reporterSlot].
-	$j = code ifTrue: [ ^ TypeInReporterSlotMorph new].
-	$q = code ifTrue: [ ^ MultiArgMorph type: #typeInReporter].
-
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 
 	$j = code ifTrue: [ ^ UnevaluatedExpressionArgMorph new stringExpression: ''].
 	$q = code ifTrue: [ ^ MultiArgMorph type: #unevaluated].
@@ -1554,6 +1541,18 @@ CommandBlockMorph >> uncoloredArgMorphFor: specString [
 	$1 = code ifTrue: [ ^ SpecialArgMorph new type: #objSlot].
 	$2 = code ifTrue: [ ^ MultiArgMorph type: #objSlot].
 
+
+	"special args for Panther"
+	"'CheckBox'			= code ifTrue: [^ CheckBoxArgMorph new]."
+	$3 = code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #constantNames].
+	$4 = code ifTrue: [^ ExpressionArgMorphWithMenu new stringExpression: 'a color'; menuSelector: #colorsMenu].
+	"'SensorNames'		= code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #hookupSensorNames].
+	'SensorBooleans'	= code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #hookupBooleanSensorNames]."
+	$5 = code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #namedColors; choice: #black].
+	$6 = code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #timeDates; choice: 'time'].
+	$7 = code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #layoutStyles; choice: 'large'].	
+	$8 = code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #newCostumeTypes; choice: 'camera'].
+			
 	^ ExpressionArgMorph new numExpression: '10'
 
 ]

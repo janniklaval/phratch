@@ -29,11 +29,13 @@ Class {
 		'sceneStates',
 		'customBlocks',
 		'deletedAttributes',
-		'temporaryVariables'
+		'temporaryVariables',
+		'colors'
 	],
 	#classVars : [
 		'BlockColorDict',
 		'BlockSpecDict',
+		'CameraOpenings',
 		'DefaultBackgroundForm',
 		'DefaultSpriteForm',
 		'DoubleSize',
@@ -83,7 +85,11 @@ ScriptablePhratchMorph class >> blockColorFor: aCategory [
 	'sensing' = aCategory ifTrue: [^ (Color h: 200 s: 0.98 v: 0.86)].
 	'variables' = aCategory ifTrue: [^ (Color h: 25 s: 0.88 v: 0.95)].
 	'list' = aCategory ifTrue: [^ ListBlockColor].
+	'files' = aCategory ifTrue: [^ (Color r: 0.17254901960784313725490196078431 g: 0.47058823529411764705882352941176 b: 0.76470588235294117647058823529412)].
+	'colors' = aCategory ifTrue: [^ (Color h: 0 s: 0 v: 0.25)].
+	'custom' = aCategory ifTrue: [^ (Color h: 200 s: 0.2 v: 0.5)].
 	(#('none' 'other') includes: aCategory) ifTrue: [^ Color lightGray ].
+
 
 	^ (Color h: 0 s: 0.81 v: 0.83)  "a shade of red"
 
@@ -119,6 +125,12 @@ ScriptablePhratchMorph class >> blockSpecs [
 
 	| blocks |
 	blocks := #(
+		'sensing'
+			=
+			=
+			('date/time: %6'							r	returnW:)
+			=
+			=
 		'control'
 			('when %m clicked'				S	-)
 			('when %k key pressed'			K	-)
@@ -201,7 +213,21 @@ ScriptablePhratchMorph class >> blockSpecs [
 			('clone'							r	spawn)
 			('set %a to %s'					- 	set:to:)
 			('delete %m'						-	deleteObject:)
-
+			=
+			=
+			('%n ^ %n'							r	n:toPower: - -)
+			-
+			('%s as boolean'							b	stringToBoolean: 'true')
+			-
+			('if %b then %s else %s'		r	if:then:else:)
+			('if %b then %b else %b'		b	ifB:then:else:)
+			-
+			('letters %n - %n of %s'		r	letters:through:of: 1 5 'hello world')
+			('index of %s starting at %n in %s'	r	indexOf:startingAt:in: 'o' 6 'hello world')
+			-
+			('%3'									r	numericConstant: 'pi')
+			=
+			=
 		'sound'
 			('play sound %S'				-	playSound:)
 			('play sound %S until done'		s	doPlaySoundAndWait)
@@ -231,6 +257,19 @@ ScriptablePhratchMorph class >> blockSpecs [
 			('hide variable %v'				-	hideVariable:)
 			('delete %r'						-	deleteObject:)
 			('variable named %s'			r	getVarOrListNamed:)
+			=
+			=
+			('%v'									r	reportVar: '')
+			~
+			('set %v to %s'						-	setVar:to: '' '0')
+			('change %v by %n'				-	changeVar:by: '' 1)
+			~
+			('move %v to x: %n y: %n'	-	moveVar:toX:y: '' 0 0)
+			('set layout of %v to %7'		-	setLayoutOfVar:to: '' '')
+			-
+			('make %s'									-	addVariable: 'a variable')
+			=
+			=
 		'list'
 			('list %X'						r	newList:)
 			-
@@ -245,6 +284,65 @@ ScriptablePhratchMorph class >> blockSpecs [
 			('%L as text'						r	contentsOfList: )
 			-
 			('copy of %t'					r	copyOfList: )
+			=
+			=
+			('%L'											r	contentsOfList: 'a list')
+			-
+			('show list %L'								-	showList:)
+			('hide list %L'								-	hideList:)
+			-
+			('make list %s'								-	quietCreateListNamed: 'a list')
+			('delete list %s'								-	deleteList: 'a list')
+			=
+			=
+		'files'
+			('contents of file %s'						r	readFile:)
+			('line %n of file %s'					r	readLine:ofFile:)
+			('number of lines of file %s'				r	numFileLines:)
+			('contents of file at URL %s'				r	readFromUrl: 'http://')
+			('line %n of file at URL %s'			r	readLine:FromUrl: 1 'http://')
+			('number of lines of file at URL %s'		r	numUrlFileLines: 'http://')
+			('write %s to file %s'					-	writeText:toFile:)
+			('clear file %s'								-	clearFile:)
+			-
+			('host mesh'										-	hostMesh)
+			('hosting mesh?'									b	isHostingMesh)
+			-
+			('join mesh %s'							-	joinMesh:)
+			('leave mesh'									-	leaveMesh)
+			-
+			('mesh IP address'								r	getMeshIPAddress)
+		'colors'
+			('%4'									g	reportColor: '')
+			('set %4 to %c'						-	setColor:to: '')
+			~
+			('show color %4'							-	showColor: '')
+			('hide color %4'							-	hideColor: '')
+			~
+			('make color %s'							-	addColor: 'a color')
+			('delete color %s'							-	deleteColorFull: 'a color')
+			-
+			('color r: %n g: %n b: %n'	g	colorR:g:b: 0 0 0)
+			~
+			('%c red'									r	colorR:)
+			('%c green'									r	colorG:)
+			('%c blue'									r	colorB:)
+			-
+			('color h: %n s: %n b: %n'	g	colorH:s:v: 0 0 0)
+			~
+			('%c hue'									r	colorH:)
+			('%c saturation'								r	colorS:)
+			('%c brightness'								r	colorV:)
+			-
+			('mix %c with %c'						g	mixColor:with:)
+			('mix %c %n : %n with %c'	g	mixColor:ratioA:toB:with:)
+			-
+			('color of pixel x: %n y: %n'		g	colorAtX:y: 0 0)
+			-
+			('%c as string'								r	colorAsString:)
+			('%s as color'								g	stringAsColor: '#FFFFFF')
+			-
+			('color named %5'					g	getNamedColor:)
 	).
 
 	^ blocks, self obsoleteBlockSpecs
@@ -564,6 +662,20 @@ ScriptablePhratchMorph class >> stopSoundRecorder [
 
 ]
 
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> addColor: colorName [
+	"Add a new user variable with the given name to this object. Do nothing if the variable already exists or is built in."
+	
+	| sFrame stage isGlobal |
+	(sFrame := self ownerThatIsA: PhratchFrameMorph) ifNil: [^ self beep].
+	isGlobal := false.
+	(stage := self ownerThatIsA: PhratchStageMorph)
+		ifNotNil: [isGlobal := stage colorNames includes: colorName asString].
+	((colors includesKey: colorName asString) or: [isGlobal = true]) ifFalse: [
+		colors at: colorName asString put: (Color black)].
+	sFrame viewerPane categoryChanged: 'colors'.
+]
+
 { #category : #scripts }
 ScriptablePhratchMorph >> addComment: aPhratchCommentMorph [
 	"Aligns the newly added script below the lowest script in the pane."
@@ -578,6 +690,45 @@ ScriptablePhratchMorph >> addComment: aPhratchCommentMorph [
 
 	blocksBin addMorph: aPhratchCommentMorph.
 
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> addCostumeTyped: aString [
+
+	| newC frameForm title result ext fList type |
+	aString = 'camera' ifTrue: [
+		"newC := ImageMedia new form: (Form extent: (self ownerThatIsA: ScratchStageMorph) extent) fillBlack."
+		"(CameraPlugin openCamera: 1 width: 480 height: 360) ifNotNil: [
+			CameraPlugin waitForCameraStart.
+			(CameraPlugin frameExtent: 1) x = 0 ifFalse: ["
+		self cameraIsOpen ifTrue: [
+			frameForm := Form extent: (CameraPlugin frameExtent: 1) depth: 32.
+			CameraPlugin getFrameForCamera: 1 into: frameForm bits.
+			newC := ImageMedia new form: frameForm]
+		ifFalse: [^ self]]."]]]."
+	aString = 'stage' ifTrue: [newC := ImageMedia new form: ((self ownerThatIsA: PhratchStageMorph) stageShotForm"Sized: 480@360")].
+	aString = 'paint new' ifTrue: [^ self drawNewCostume].
+	aString = 'import' ifTrue: [
+		(self isKindOf: PhratchStageMorph)
+			ifTrue: [type := #background. title := 'Import Background']
+			ifFalse: [type := #costume. title := 'Import Costume'].
+		result := PhratchFileChooserDialog
+			chooseImageFileType: type
+			title: title.
+		result = #cancelled ifTrue: [^ self].
+
+		fList := OrderedCollection new.
+		self halt:'add FileSystem'.
+		ext := FileSystem extensionFor: result asLowercase.
+		ext = 'gif'
+			ifTrue: [[fList := (GIFReadWriter new on: (FileStream readOnlyFileNamed: result)) nextImageSet] ifError: [^ self]]
+			ifFalse: [[fList addLast: (Form fromFileNamed: result)] ifError: [^ self]].
+
+		newC := ImageMedia new form: fList first].
+	newC mediaName: (self unusedMediaNameFromBaseName: (self defaultImageMedia mediaName)).
+	media addLast: newC.
+	self lookLike: newC mediaName.
+	self updateMediaCategory.
 ]
 
 { #category : #byob }
@@ -1177,6 +1328,18 @@ ScriptablePhratchMorph >> asciiLetter: anInteger [
 "
 
 	^ String with: (Character value: code)
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> askForFileIO [
+	"Ask the user to either allow or deny file I/O, or return the preference from the sFrame if it exists."
+	
+	| sFrame dialog |
+	(sFrame := self ownerThatIsA: PhratchFrameMorph) ifNil: [
+		sFrame := (self ownerThatIsA: OffscreenWorldMorph) frame].
+	PhratchPreferences fileIOPreference ifNotNil: [^ PhratchPreferences fileIOPreference].
+	dialog := FileIOAskerDialog new forPhratchFrame: sFrame.
+	^ dialog getUserResponse.
 ]
 
 { #category : #'BYOB OOP message passing' }
@@ -2116,6 +2279,18 @@ ScriptablePhratchMorph >> callMeWith: anArg [
 
 ]
 
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> cameraIsOpen [
+
+	^ CameraPlugin cameraIsOpen: 1.
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> cameraOpened [
+
+	CameraOpenings := (CameraOpenings max: 0) + 1.
+]
+
 { #category : #'looks ops' }
 ScriptablePhratchMorph >> changeCostumeIndexBy: aNumber [
 	"Change my costume index by the given amount."
@@ -2228,6 +2403,19 @@ ScriptablePhratchMorph >> changed [
 
 ]
 
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> clearFile: aFileNameString [
+	"Clear the given file."
+	
+	| f dir |
+	(self askForFileIO = true) ifFalse: [^ self].
+	self halt:'FileSystem to do'.
+	dir := FileSystem forFileName: aFileNameString.
+	dir deleteFileNamed: aFileNameString.
+	f := FileStream newFileNamed: aFileNameString.
+	f close
+]
+
 { #category : #private }
 ScriptablePhratchMorph >> clearMediaAndCostume [
 	"Private! Used when exporting an empty stage."
@@ -2291,6 +2479,43 @@ ScriptablePhratchMorph >> coerceSpriteArg: anObject [
 
 ]
 
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> colorAsString: aColor [
+
+	^ '#', aColor hex asString
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> colorAtX: x y: y [
+
+	| frame w newX newY p |
+	frame := self ownerThatIsA: PhratchFrameMorph.
+	frame ifNil: [
+		(w := self ownerThatIsA: OffscreenWorldMorph) ifNil: [^ self].
+		frame := w frame].
+
+	newX := x.
+	newX isNaN ifTrue: [newX := 0].
+	newX > 240 ifTrue: [newX := 240].
+	newX < -240 ifTrue: [newX := -240].
+	newY := y.
+	newY isNaN ifTrue: [newY := 0].
+	newY < -180 ifTrue: [newY := -180].
+	newY > 180 ifTrue: [newY := 180].
+
+	DoubleSize ifTrue: [
+		newX := newX * 2.
+		newY := newY * 2].
+	p := newX @ newY negated.
+	^ Display colorAt: (PhratchOrigin + p).
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> colorB: aColor [
+
+	^ aColor blue.
+]
+
 { #category : #'BYOB attributes' }
 ScriptablePhratchMorph >> colorEffect [
 
@@ -2309,6 +2534,76 @@ ScriptablePhratchMorph >> colorEffect: aNumber [
 	self undeleteAttribute: #color.
 	self passiveColorEffect: aNumber
 
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> colorG: aColor [
+
+	^ aColor green.
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> colorH: aColor [
+
+	^ aColor hue.
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> colorH: h s: s v: v [
+
+	^ (Color h: h s: s v: v).
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> colorNames [
+
+	^ colors keys asArray sort.
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> colorR: aColor [
+
+	^ aColor red.
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> colorR: r g: g b: b [
+	"Answer the given color."
+
+	"For /255 values"
+	"^ (Color r: (r / 255) g: (g / 255) b: (b / 255))."
+	^ (Color r: r g: g b: b).
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> colorS: aColor [
+
+	^ aColor saturation.
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> colorV: aColor [
+
+	^ aColor brightness.
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> colorsMenu [
+	"Ask the user which user variable to show, then show it."
+
+	| sFrame stage menu  |
+	sFrame := self ownerThatIsA: PhratchFrameMorph.
+	sFrame ifNil: [^ self].
+
+	stage := sFrame workPane.
+
+	menu := MenuMorphNG new.
+	stage colorNames do: [:v | menu add: v value: v].
+	self = stage ifFalse: [
+		stage colorNames isEmpty ifFalse: [menu addLine].
+		self colorNames do: [:v | menu add: v value: v]].
+
+	^ menu
 ]
 
 { #category : #'BYOB attributes' }
@@ -2346,6 +2641,17 @@ ScriptablePhratchMorph >> concatenate: arg1 with: arg2 [
 
 	^ arg1 asString asUTF8, arg2 asString asUTF8
 
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> constantNames [
+	"Answer the names of supported constants"
+
+	^ #(
+		'pi'
+		'e'
+		'newline'
+		'tab')
 ]
 
 { #category : #'list ops' }
@@ -3110,6 +3416,39 @@ ScriptablePhratchMorph >> deleteAttributes: aCollection [
 		self deleteAttribute: attrib ]	
 ]
 
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> deleteColor: colorName [
+	"Delete the variable with the given name. Do nothing if the variable doesn't exist."
+
+	| frame |
+	colors removeKey: colorName asString ifAbsent: [^ self].
+	(frame := self ownerThatIsA: PhratchFrameMorph) ifNil: [frame := (self ownerThatIsA: OffscreenWorldMorph) frame].
+	frame deleteWatchersForVar: colorName ofSprite: self.
+	frame viewerPane categoryChanged: 'colors'.
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> deleteColorFull: colorName [
+	"Delete the color variable with the given name. Do nothing if the variable doesn't exist."
+
+	| frame stage |
+	(colors includesKey: colorName) ifTrue: [self deleteColor: colorName].
+	stage := self ownerThatIsA: PhratchStageMorph.
+	(stage notNil and: [stage colorNames includes: colorName]) ifTrue: [stage deleteColor: colorName].
+	(frame := self ownerThatIsA: PhratchFrameMorph) ifNil: [^ self].
+	frame viewerPane categoryChanged: 'colors'.
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> deleteCostumeAt: index [
+	"Delete the costume at the given index."
+
+	| cList |
+	cList := media reject: [:m | m isSound].
+
+	self deleteMedia: (cList at: index).
+]
+
 { #category : #byob }
 ScriptablePhratchMorph >> deleteDefinitionId: id [
 
@@ -3544,6 +3883,37 @@ ScriptablePhratchMorph >> editDrawingOldCostumeName: oldCostumeName deleteOnCanc
 
 ]
 
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> editDrawingOldCostumeName: oldCostumeName deleteOnCancel: aBoolean deleteCostume: delCost [
+	"Edit my original form with the paint editor."
+
+	| sFrame paintEditor |
+	costume isMovie ifTrue: [^ self beep].
+	(sFrame := self ownerThatIsA: PhratchFrameMorph) ifNil: [(sFrame := (self ownerThatIsA: OffscreenWorldMorph) frame) ifNil: [^ self]].
+
+	sFrame paintingInProgress ifTrue: [^ self beep].
+	"sFrame stopAll."
+	sFrame paintingInProgress: true.
+
+	paintEditor := PaintFrame new.
+	paintEditor
+		withStartingObject: self;
+		phratchFrame: sFrame;
+		oldCostumeName: oldCostumeName deleteOnCancel: aBoolean;
+		deleteCostumeOnCancel: delCost.
+
+	oldCostumeName ifNotNil: [
+		"When an oldCostumeName is supplied, it means I'm making a new drawing. Clear the initial rotation center."
+		paintEditor clearRotationCenter].
+
+	(paintEditor isKindOf: DialogBoxMorph)
+		ifTrue: [paintEditor getUserResponse]
+		ifFalse: [
+			World addMorphFront: paintEditor.
+			World startSteppingSubmorphsOf: paintEditor].
+
+]
+
 { #category : #byob }
 ScriptablePhratchMorph >> editScriptId: id [
 	|sf def|
@@ -3776,6 +4146,26 @@ ScriptablePhratchMorph >> eventReceived: event [
 
 ]
 
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> eventReceivedNamed: eventName [
+	"Collect an array of all stacks that respond to the given event and keep only the ones that are running. Answer true if the final list has any items."
+
+	| targetScripts procs |
+	self isSprite ifTrue: [^ (self ownerThatIsA: PhratchStageMorph) eventReceivedNamed: eventName].
+	targetScripts := self scripts select: [:s |
+		(s class == EventHatMorph) and: [s eventName caseInsensitiveEqual: eventName]].
+	targetScripts := targetScripts asOrderedCollection.
+	self submorphsDo: [:m |
+		(m isKindOf: ScriptablePhratchMorph) ifTrue: [
+			(m scripts select: [:s |
+				(s class == EventHatMorph) and:
+				[s eventName caseInsensitiveEqual: eventName]]) do: [:script | targetScripts := targetScripts copyWith: script]]].
+
+	procs := targetScripts select: [:s |
+		s phratchProc notNil].
+	^ procs size > 0.
+]
+
 { #category : #byob }
 ScriptablePhratchMorph >> existsBlockId: id [
 
@@ -3968,6 +4358,12 @@ ScriptablePhratchMorph >> getAttribute: attr of: anObject [
 
 ]
 
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> getColor: colorName [
+
+	^ colors at: colorName ifAbsent: [(Color black)]
+]
+
 { #category : #byob }
 ScriptablePhratchMorph >> getFalse [
 	^false
@@ -3983,6 +4379,23 @@ ScriptablePhratchMorph >> getLine: lineNum ofList: listName [
 		ifFalse: [ list := self listNamed: listName ifNone: [^ '']].
 	^ list lineAt: (self lineNum: lineNum forList: list)
 
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> getMeshIPAddress [
+
+	| localAddr |
+	Socket initializeNetwork.
+	localAddr := NetNameResolver localHostAddress.
+	
+	^ NetNameResolver stringFromAddress: localAddr.
+	
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> getNamedColor: aColorName [
+
+	^ Color fromString: aColorName.
 ]
 
 { #category : #'byob OOP' }
@@ -4053,6 +4466,25 @@ ScriptablePhratchMorph >> getVarOrListNamed: varName [
 
 	^ value
 			
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> graphicEffectNamed: effect [
+"Answer the provided graphic effect"
+	
+	filterPack ifNil: [filterPack := FilterPack new].
+
+	'blur' = effect ifTrue: [^ filterPack blur].
+	'brightness' = effect ifTrue: [^ filterPack brightnessShift].
+	'fisheye' = effect ifTrue: [^ filterPack fisheye].
+	'color' = effect ifTrue: [^ filterPack hueShift].
+	'mosaic' = effect ifTrue: [^ filterPack mosaicCount].
+	'pixelate' = effect ifTrue: [^ filterPack pixelateCount].
+	'pointillize' = effect ifTrue: [^ filterPack pointillizeSize].
+	'saturation' = effect ifTrue: [^ filterPack saturationShift].
+	('transparency' = effect) | ('ghost' = effect) ifTrue: [^ self transparency].
+	'water ripple' = effect ifTrue: [^ filterPack waterRippleRate].
+	'whirl' = effect ifTrue: [^ filterPack whirl].
 ]
 
 { #category : #'looks ops' }
@@ -4181,6 +4613,24 @@ ScriptablePhratchMorph >> hatBlockType: blockType [
 
 ]
 
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> hideColor: varName [
+	"Hide the watcher(s) for the given variable. If the receiver is a sprite and both it and and the stage have the given variable, hide both. Do nothing if the variable does not exist or is already hidden."
+
+	| stage |
+	self showOrHideColor: varName show: false.
+
+	stage := self ownerThatIsA: PhratchStageMorph.
+	stage ~= self ifTrue: [stage showOrHideColor: varName show: false].
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> hideList: aList [
+	"Show the given list"
+
+	self showOrHideList: aList show: false
+]
+
 { #category : #variables }
 ScriptablePhratchMorph >> hideVariable: varName [
 	"Hide the watcher(s) for the given variable. If the receiver is a sprite and both it and and the stage have the given variable, hide both. Do nothing if the variable does not exist or is already hidden."
@@ -4233,6 +4683,36 @@ ScriptablePhratchMorph >> hookupSensorNumber [
 
 	^ (1 to: 8) collect: [:n | n printString]
 
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> hostMesh [
+	"Start running the Phratch server, allowing Phratch and other applications to interact with this Phratch remotely."
+
+	| sFrame server |
+	(sFrame := self ownerThatIsA: PhratchFrameMorph) ifNil: [sFrame := (self ownerThatIsA: OffscreenWorldMorph) frame].
+	sFrame workPane phratchServer ifNil: [
+		server := PhratchServer new.
+		server stage: (sFrame workPane).
+		sFrame workPane phratchServer: server].
+
+	sFrame workPane phratchServer startHosting.
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> if: aCondition then: trueString else: falseString [
+"Answer the first string if the given condition is true, otherwise answer the second."
+	aCondition
+		ifTrue: [^ trueString].
+	^ falseString
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> ifB: aCondition then: trueString else: falseString [
+"Answer the first string if the given condition is true, otherwise answer the second."
+	aCondition
+		ifTrue: [^ trueString = true].
+	^ falseString
 ]
 
 { #category : #accessing }
@@ -4375,6 +4855,12 @@ ScriptablePhratchMorph >> indexForSensorName: sensorName [
 
 ]
 
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> indexOf: subString startingAt: aNumber in: aString [
+
+    ^ aString asString findString: subString startingAt: aNumber
+]
+
 { #category : #'BYOB attributes' }
 ScriptablePhratchMorph >> inheritCostumesNow [
 
@@ -4475,6 +4961,7 @@ ScriptablePhratchMorph >> initialize [
 	objName := self nextInstanceName.
 	vars := Dictionary new.
 	lists := Dictionary new.
+	colors:= Dictionary new.
 	blocksBin := PhratchScriptsMorph new.
 	isClone := false.
 	costume := self defaultImageMedia.
@@ -4682,6 +5169,17 @@ ScriptablePhratchMorph >> isHidden [
 
 ]
 
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> isHostingMesh [
+	"Answer true if hosting a mesh."
+
+	| sFrame server |
+	(sFrame := self ownerThatIsA: PhratchFrameMorph) ifNil: [sFrame := (self ownerThatIsA: OffscreenWorldMorph) frame].
+
+	(server := sFrame workPane phratchServer) ifNil: [^ false].
+	^ server isHosting.
+]
+
 { #category : #'sensing ops' }
 ScriptablePhratchMorph >> isLoud [
 
@@ -4760,6 +5258,21 @@ ScriptablePhratchMorph >> isVisible [
 
 ]
 
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> joinMesh: addrString [
+	"Join another Phratch user or a Phratch-compatible remote application."
+
+	| server sFrame |
+	(sFrame := self ownerThatIsA: PhratchFrameMorph) ifNil: [sFrame := (self ownerThatIsA: OffscreenWorldMorph) frame].
+	server := PhratchServer new.
+	server stage: (sFrame workPane).
+	sFrame workPane phratchServer: server.
+
+	addrString size = 0 ifTrue: [^ ''].
+
+	sFrame workPane phratchServer joinSessionAt: addrString.
+]
+
 { #category : #'dropping/grabbing' }
 ScriptablePhratchMorph >> justDroppedInto: newOwner event: evt [
 	"If I'm dropped into any submorph of a PhratchFrameMorph, reject the drop unless it is onto the work pane. For developers, accept drops into other morphs (e.g. the World). Otherwise, reject the drop."
@@ -4786,6 +5299,15 @@ ScriptablePhratchMorph >> keyNames [
 	   ($a to: $z), ($0 to: $9)
 		 collect: [:ch | ch asString]
 
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> keyPressed [
+	"Answer the currently pressed key."
+
+	self keyNames do: [:ch |
+		(self keyPressed: ch) ifTrue: [^ ch]].
+	^ ''.
 ]
 
 { #category : #'sensing ops' }
@@ -4860,6 +5382,24 @@ ScriptablePhratchMorph >> layer: aNumber [
 	self changed.
 ]
 
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> layoutStyles [
+
+	^ #(
+		'small'
+		'large'
+		'slider'
+		).
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> leaveMesh [
+	
+	| sFrame |
+	(sFrame := self ownerThatIsA: PhratchFrameMorph) ifNil: [sFrame := (self ownerThatIsA: OffscreenWorldMorph) frame].
+	sFrame exitPhratchSession.
+]
+
 { #category : #'string ops' }
 ScriptablePhratchMorph >> letter: index of: anObject [
 	"Answer the ith letter of the given string. Answer the empty string if the index is out of bounds."
@@ -4895,6 +5435,13 @@ ScriptablePhratchMorph >> letterNum: letterNum of: aString [
 		^ s asNumberNoError].
 	^ 0
 
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> letters: start through: end of: aString [
+	"Returns the letters in a string from the start index through the end index."
+	
+	^ aString asString copyFrom: (start max: 1) to: (end min: aString size).
 ]
 
 { #category : #'list ops' }
@@ -5362,6 +5909,18 @@ ScriptablePhratchMorph >> midiNoteMenu [
 	^ menu
 ]
 
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> mixColor: color1 ratioA: a toB: b with: color2 [
+
+	^ color1 mixed: (a / (a + b)) with: color2.
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> mixColor: color1 with: color2 [
+
+	^ color1 mixed: 0.5 with: color2.
+]
+
 { #category : #'BYOB attributes' }
 ScriptablePhratchMorph >> mosaicEffect [
 
@@ -5540,12 +6099,41 @@ ScriptablePhratchMorph >> mouseY [
 
 ]
 
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> moveVar: aVarName toX: x y: y [
+	| stage |
+	self positionVar: aVarName atX: x y: y.
+
+	stage := self ownerThatIsA: PhratchStageMorph.
+	stage ~= self ifTrue: [stage positionVar: aVarName atX: x y: y].
+]
+
 { #category : #'other ops' }
 ScriptablePhratchMorph >> mwait: duration elapsed: elapsed from: ignored [
 	"Do nothing; just wait for the time interval to elapse."
 
 	^ nil
 
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> n: aNumber toPower: aPower [
+	^ aNumber raisedTo: aPower
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> namedColors [
+
+	^ Color colorNames.
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> newCostumeTypes [
+
+	^ #('camera'
+		'stage'
+		'paint new'
+		'import').
 ]
 
 { #category : #byob }
@@ -5637,11 +6225,43 @@ ScriptablePhratchMorph >> noteSelector [
 
 ]
 
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> numFileLines: aFileNameString [
+	"Answer the contents of the given file."
+	
+	| f data |
+	(self askForFileIO = true) ifFalse: [^ self].
+	self halt:'FileSystem to do'.
+	(FileSystem default fileExists: aFileNameString) ifFalse: [^ ''].
+	f := (FileStream readOnlyFileNamed: aFileNameString) binary.
+	f ifNil: [^ ''].
+	data := f contentsOfEntireFile asString.
+	f close.
+	"Replace newlines:
+	data replaceAll: $
+ with: $ ."
+	^ data lines size.
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> numUrlFileLines: aURLString [
+
+	^ (HTTPSocket httpGet: aURLString) contents lines size.
+]
+
 { #category : #'sound ops' }
 ScriptablePhratchMorph >> numberInParens: aNumber [
 
 	^ '(' , aNumber printString, ') '
 
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> numericConstant: t1 [ 
+	'pi' = t1 ifTrue: [^ Float pi].
+	'e' = t1 ifTrue: [^ Float e].
+	'newline' = t1 ifTrue: [^ String crlf].
+	'tab' = t1 ifTrue: [^ '	']
 ]
 
 { #category : #accessing }
@@ -5888,6 +6508,32 @@ ScriptablePhratchMorph >> pointillizeEffect: aNumber [
 	self setGraphicEffect: 'pointillize' to: aNumber
 ]
 
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> positionVar: varName atX: x y: y [
+	
+	| frame w b newX newY p |
+	(self varNames includes: varName) ifFalse: [^ self].
+	frame := self ownerThatIsA: PhratchFrameMorph.
+	frame ifNil: [
+		(w := self ownerThatIsA: OffscreenWorldMorph) ifNil: [^ self].
+		frame := w frame].
+
+	b := VariableBlockMorph new commandSpec: varName; receiver: self blockReceiver.
+	(w := frame watcherForBlock: b)
+		ifNil: [^ self].
+	newX := x.
+	newX isNaN ifTrue: [newX := 0].
+	newX > 240 ifTrue: [newX := 240].
+	newX < (-240 - w extent x) ifTrue: [newX := (-240 - w extent x)].
+	newY := y.
+	newY isNaN ifTrue: [newY := 0].
+	newY < -180 ifTrue: [newY := -180].
+	newY > (180 + w extent y) ifTrue: [newY := (180 + w extent y)].
+
+	p := newX @ newY negated.
+	w position: PhratchOrigin + p.
+]
+
 { #category : #scripts }
 ScriptablePhratchMorph >> prepareForExport [
 	self blocksBin allMorphsDo: [:m |
@@ -6085,6 +6731,20 @@ ScriptablePhratchMorph >> purgeVarsAndLists [
 "
 ]
 
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> quietCreateListNamed: listName [
+
+	| list stage n |
+	(self variableNameInUse: listName) ifTrue: [^ self].
+
+	lists at: listName put: (list := PhratchListMorph new listName: listName target: self).
+	(stage := self ownerThatIsA: PhratchStageMorph) ifNotNil: [
+		n := (stage submorphs select: [:m | m isKindOf: PhratchListMorph]) size.
+		stage addMorph: (list position: stage topRight - ((list width + 10)@0) + (0@(10+(20*n)))).
+		list startStepping].
+	self showOrHideList: listName show: false.
+]
+
 { #category : #'other ops' }
 ScriptablePhratchMorph >> randomFrom: start to: stop [
 	"Answer a random number within the given range. If both min and max are integers, the result is rounded to the nearest integer."
@@ -6098,6 +6758,50 @@ ScriptablePhratchMorph >> randomFrom: start to: stop [
 		ifFalse: [result := (RandomGen next * (max - min)) + min].
 	^ result
 
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> readFile: aFileNameString [
+	"Answer the contents of the given file."
+	
+	| f data |
+	(self askForFileIO = true) ifFalse: [^ self].
+	self halt:'FileSystem to do'.
+	(FileSystem default fileExists: aFileNameString) ifFalse: [^ ''].
+	f := (FileStream readOnlyFileNamed: aFileNameString) binary.
+	f ifNil: [^ ''].
+	data := f contentsOfEntireFile asString.
+	f close.
+	"Replace newlines:
+	data replaceAll: $
+ with: $ ."
+	^ data
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> readFromUrl: aURLString [
+
+	^ (HTTPSocket httpGet: aURLString) contents.
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> readLine: t1 FromUrl: t2 [ 
+	^ (HTTPSocket httpGet: t2) contents lines at: t1 ifAbsent: [''].
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> readLine: lineNum ofFile: aFileNameString [
+	"Answer the contents of the given file."
+	
+	| f data |
+	(self askForFileIO = true) ifFalse: [^ self].
+	self halt:'FileSystem to do'.
+	(FileSystem default fileExists: aFileNameString) ifFalse: [^ ''].
+	f := (FileStream readOnlyFileNamed: aFileNameString) binary.
+	f ifNil: [^ ''].
+	data := f contentsOfEntireFile asString.
+	f close.
+	^ data lines at: lineNum ifAbsent: [''].
 ]
 
 { #category : #media }
@@ -6130,12 +6834,110 @@ ScriptablePhratchMorph >> renewFilterPack [
 	filterPack := FilterPack new.
 ]
 
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> replaceCostume: aNumber with: aString [
+
+	| cList i newC name j m frameForm title result ext fList type |
+	cList := media reject: [:l | l isSound].
+	cList size = 0 ifTrue: [^ self].  "should never happen..."
+	i := ((aNumber rounded - 1) \\ cList size) + 1.
+	name := (cList at: i) mediaName.
+	aString = 'camera' ifTrue: [
+		"newC := ImageMedia new form: (Form extent: (self ownerThatIsA: ScratchStageMorph) extent) fillBlack."
+		"(CameraPlugin openCamera: 1 width: 480 height: 360) ifNotNil: [
+			CameraPlugin waitForCameraStart.
+			(CameraPlugin frameExtent: 1) x = 0 ifFalse: ["
+		self cameraIsOpen ifTrue: [
+			frameForm := Form extent: (CameraPlugin frameExtent: 1) depth: 32.
+			CameraPlugin getFrameForCamera: 1 into: frameForm bits.
+			newC := ImageMedia new form: frameForm]
+		ifFalse: [^ self]]."]]]."
+	aString = 'stage' ifTrue: [newC := ImageMedia new form: ((self ownerThatIsA: PhratchStageMorph) stageShotForm"Sized: 480@360")].
+	self halt:'add FileSystem'.
+	aString = 'paint new' ifTrue: [^ self editDrawingOldCostumeName: name deleteOnCancel: false deleteCostume: false].
+	aString = 'import' ifTrue: [
+		(self isKindOf: PhratchStageMorph)
+			ifTrue: [type := #background. title := 'Import Background']
+			ifFalse: [type := #costume. title := 'Import Costume'].
+		result := PhratchFileChooserDialog
+			chooseImageFileType: type
+			title: title.
+		result = #cancelled ifTrue: [^ self].
+
+		fList := OrderedCollection new.
+		self halt:'add FileSystem'.
+		ext := FileSystem extensionFor: result asLowercase.
+		ext = 'gif'
+			ifTrue: [[fList := (GIFReadWriter new on: (FileStream readOnlyFileNamed: result)) nextImageSet] ifError: [^ self]]
+			ifFalse: [[fList addLast: (Form fromFileNamed: result)] ifError: [^ self]].
+
+		newC := ImageMedia new form: fList first].
+	j := 1.
+	newC mediaName: name.
+	[j <= media size] whileTrue: [
+		m := media at: j.
+		((m isSound not) and: [m mediaName = name]) ifTrue: [
+			media at: j put: newC.
+			self lookLike: name.
+			^ self updateMediaCategory.].
+		j := j + 1].
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> reportColor: colorName [
+	"Answer the value of the given user color variable of this object or its parent."
+	| stage |
+	(self colorNames includes: colorName)
+		ifTrue: [^ self getColor: colorName].
+	(stage := self ownerThatIsA: PhratchStageMorph)
+		ifNotNil: [^ stage getColor: colorName]
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> reportVar: varName [
+	"Answer the value of the given user variable of this object or its parent."
+	| stage |
+	(self varNames includes: varName)
+		ifTrue: [^ self getVar: varName].
+	(stage := self ownerThatIsA: PhratchStageMorph)
+		ifNotNil: [^ stage getVar: varName]
+
+]
+
 { #category : #'sound ops' }
 ScriptablePhratchMorph >> rest: duration elapsed: elapsed from: ignored [
 	"Do nothing; just wait for the time interval to elapse."
 
 	^ nil
 
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> returnW: aTypeString [
+	| time date |
+	time := Time now.
+	date := Date today.
+	'time' = aTypeString ifTrue: [^ time asString].
+	'hour' = aTypeString ifTrue: [^ time hours].
+	'minute' = aTypeString ifTrue: [^ time minutes].
+	'second' = aTypeString ifTrue: [^ time seconds].
+	'date' = aTypeString ifTrue: [^ date asString].
+	'weekday-name' = aTypeString ifTrue: [^ date weekday].
+	'weekday-#' = aTypeString
+		ifTrue: 
+			[date weekday = 'Monday' ifTrue: [^ 1].
+			date weekday = 'Tuesday' ifTrue: [^ 2].
+			date weekday = 'Wednesday' ifTrue: [^ 3].
+			date weekday = 'Thursday' ifTrue: [^ 4].
+			date weekday = 'Friday' ifTrue: [^ 5].
+			date weekday = 'Saturday' ifTrue: [^ 6].
+			date weekday = 'Sunday' ifTrue: [^ 7]].
+	'month-name' = aTypeString ifTrue: [^ date monthName asString].
+	'month-#' = aTypeString ifTrue: [^ date monthIndex].
+	'day of month' = aTypeString ifTrue: [^ date dayOfMonth].
+	'day of year' = aTypeString ifTrue: [^ date daysInYear - date daysLeftInYear].
+	'year' = aTypeString ifTrue: [^ date year].
+	^ 0
 ]
 
 { #category : #media }
@@ -6349,6 +7151,20 @@ ScriptablePhratchMorph >> set: anObject to: aValue [
 	self error: ['cannot set this value']
 ]
 
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> setColor: colorName to: newValue [
+
+	| cName stage |
+	cName := colorName asString. "convert Symbol to String if needed"
+	(colors includesKey: cName) ifFalse: [
+		stage := self ownerThatIsA: PhratchStageMorph.
+		(stage notNil and: [stage ~= self]) ifTrue: [
+			stage setColor: cName to: newValue].
+		^ self].
+
+	colors at: cName put: newValue.
+]
+
 { #category : #'looks ops' }
 ScriptablePhratchMorph >> setGraphicEffect: effect to: aNumber [
 	"Set the given graphic effect to the given value."
@@ -6414,6 +7230,24 @@ ScriptablePhratchMorph >> setLayerTo: aNumber [
 
 	self undeleteAttribute: #layer.
 	self passiveSetLayerTo: aNumber
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> setLayoutOfVar: varName to: aString [
+
+	| symbol b w frame stage |
+	symbol := aString asSymbol.
+	frame := self ownerThatIsA: PhratchFrameMorph.
+	frame ifNil: [
+		(w := self ownerThatIsA: OffscreenWorldMorph) ifNil: [^ self].
+		frame := w frame].
+	(self varNames includes: varName) ifFalse: [
+		stage := frame workPane.
+		(stage varNames includes: varName) ifTrue: [^ stage setLayoutOfVar: varName to: aString.].].
+	
+	b := VariableBlockMorph new commandSpec: varName; receiver: self blockReceiver.
+	w := frame watcherForBlock: b.
+	w ifNotNil: [w layoutStyle: symbol].
 ]
 
 { #category : #'list ops' }
@@ -6507,6 +7341,78 @@ ScriptablePhratchMorph >> shareObject [
 	server ifNil: [^self].
 	server sendSprite: self
 
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> showAskDialogWithText: text [ 
+	"Show an information dialog with the given title and text."
+	PhratchPrompterMorph lastAnswer: (StringDialog ask: text)
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> showColor: varName [
+	"Show the watcher for the given variable. If the receiver is a sprite and both it and and the stage have the given variable, hide both. Do nothing if the variable does not exist or is already hidden."
+
+	| stage |
+	self showOrHideColor: varName show: true.
+
+	stage := self ownerThatIsA: PhratchStageMorph.
+	stage ~= self ifTrue: [stage showOrHideColor: varName show: true].
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> showInformDialog: title withText: text [ 
+	"Show an information dialog with the given title and text."
+	DialogBoxMorph inform: text title: title
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> showList: aList [
+	"Show the given list"
+
+	self showOrHideList: aList show: true
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> showOrHideColor: varName show: showFlag [
+	"Show the watcher for the given variable. Do nothing if the variable does not exist or is already showing."
+
+	| frame w b palette |
+	(self colorNames includes: varName) ifFalse: [^ self].
+	frame := self ownerThatIsA: PhratchFrameMorph.
+	frame ifNil: [
+		(w := self ownerThatIsA: OffscreenWorldMorph) ifNil: [^ self].
+		frame := w frame].
+
+	b := (self blockFromSpec: #('$ColorVar$' g reportColor: '')  color: (self class blockColorFor: 'colors')) defaultArgs: {varName}.
+	w := frame watcherForBlock: b.
+	showFlag
+		ifTrue: [w ifNil: [frame showWatcher: b createWatcher]]
+		ifFalse: [w ifNotNil: [w delete]].
+
+	palette := frame viewerPane pageViewer contents.
+	palette ifNotNil: [palette updateWatcherButtonsForFrame: frame].
+
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> showOrHideList: aList show: aBoolean [
+	"Show or hide the given list"
+ 
+	| list stage sFrame |
+	(stage := self ownerThatIsA: PhratchStageMorph).
+	(self listVarNames includes: aList)
+		ifFalse: [stage
+			ifNotNil: [(stage listVarNames includes: aList)
+				ifTrue: [list := stage lists at: aList]
+				ifFalse: [^ self]]
+			ifNil: [^ self]]
+		ifTrue: [list := lists at: aList].
+	aBoolean
+		ifTrue: [stage addMorph: list]
+		ifFalse: [list delete].
+	(sFrame := self ownerThatIsA: PhratchFrameMorph) ifNil: [^ self].
+	sFrame viewerPane categoryChanged: 'variables'
 ]
 
 { #category : #variables }
@@ -6832,6 +7738,12 @@ ScriptablePhratchMorph >> storeFieldsOn: anObjStream [
 
 ]
 
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> stringAsColor: aString [
+
+	^ Color fromString: (aString asString).
+]
+
 { #category : #'string ops' }
 ScriptablePhratchMorph >> stringLength: anObject [
 
@@ -6839,6 +7751,15 @@ ScriptablePhratchMorph >> stringLength: anObject [
 		ifTrue: [^ anObject asUTF32 size]
 		ifFalse: [^ anObject asString asUTF32 size].
 
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> stringToBoolean: aString [
+	"Answer the given string as a boolean."
+
+	| s |
+	s := aString asString.
+	((s = '0') or: [s = '' or: [s = 'false']]) ifTrue: [^ false] ifFalse: [^ true].
 ]
 
 { #category : #media }
@@ -6865,6 +7786,11 @@ ScriptablePhratchMorph >> tempo [
 ScriptablePhratchMorph >> thumbnailImageForm [
 
 	^ self imageForm toThumbnail: 50@50 borderWidth: 0 borderColor: Color transparent
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> timeDates [
+	^ #('time' 'hour' 'minute' 'second' 'date' 'day of month' 'day of year' 'weekday-name' 'weekday-#' 'month-name' 'month-#' 'year' )
 ]
 
 { #category : #'sensing ops' }
@@ -7575,6 +8501,21 @@ ScriptablePhratchMorph >> wholeBlockSpecForSelector: aSymbol [
 
 	^ nil
 
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> writeText: aString toFile: aFileNameString [
+	"Answer the contents of the given file."
+	
+	| f |
+	(self askForFileIO = true) ifFalse: [^ self].
+	self halt:'FileSystem to do'.
+	(FileSystem default fileExists: aFileNameString) ifFalse: [^ self].
+	f := (FileStream fileNamed: aFileNameString) binary.
+	f ifNil: [^ self].
+	f setToEnd.
+	f nextPutAll: aString.
+	f close
 ]
 
 { #category : #private }

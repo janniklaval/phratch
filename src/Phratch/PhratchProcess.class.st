@@ -956,6 +956,45 @@ PhratchProcess >> doWhile [
 	^self doUntil: false.
 ]
 
+{ #category : #'panther actions' }
+PhratchProcess >> doWithCamOpen [
+	"Evaluate the current expression (which must be a do w/ cam open)."
+
+	| block success |
+
+	block := stackFrame expression.
+	"arguments := stackFrame arguments."
+
+	"Evaluate the arg if we haven't already.
+	arguments size = 0
+		ifTrue:	[argExp := block argumentAt: 1.
+				^self pushStackFrame: (ScratchStackFrame new expression: argExp)]."
+
+	success := false.
+	(CameraPlugin openCamera: 1 width: 480 height: 360) ifNotNil: [
+			CameraPlugin waitForCameraStart.
+			(CameraPlugin frameExtent: 1) x = 0 ifFalse: [
+				success := true]].
+	"We can pop this expression off the stack either way."
+	self popStackFrame.
+
+	"If the camera wasn't opened, just return."
+	success ifFalse: [^ self].
+
+	ScriptablePhratchMorph cameraOpened.
+
+	"Since the camera was opened, set up to
+		1. evaluate the body of the do
+		2. close the camera
+	We must do these in reverse order."
+
+	"2. close the camera"
+	self pushStackFrame: (PhratchStackFrame new expression: (CommandBlockMorph new selector: #closeCamera; receiver: (block receiver))).
+
+
+	self pushStackFrame: (PhratchStackFrame new expression: block firstBlockList).
+]
+
 { #category : #accessing }
 PhratchProcess >> errorFlag [
 	"Answer true if this process has stopped due to an error."

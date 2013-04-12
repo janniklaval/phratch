@@ -44,6 +44,15 @@ PhratchSpriteMorph class >> blockSpecs [
 
 	| blocks |
 	blocks := #(
+		'control'
+			=
+			=
+			('%e received?'							b	eventReceivedNamed:)
+			('clone me'						-	cloneMe)
+			('delete me'						-	deleteMe)
+			('when %Sprite created'			C	-)
+			=
+			=
 		'motion'
 			('move %n steps'				-	forward:)
 			('turn %n degrees'				-	turnRight: 15)	"icon shows turn direction"
@@ -66,6 +75,13 @@ PhratchSpriteMorph class >> blockSpecs [
 			('x position'						r	xpos)
 			('y position'						r	ypos)
 			('direction'						r	heading)
+			=
+			=
+			('make draggable'				-	makeDrag)
+			('make undraggable'			-	makeNoDrag)
+			('draggable?'					b	isDraggable)
+			=
+			=
 		'pen'
 			('clear'							-	clearPenTrails)
 			-
@@ -83,6 +99,14 @@ PhratchSpriteMorph class >> blockSpecs [
 			('set pen size to %n'				-	penSize: 1)
 			-
 			('stamp'							-	stampCostume)
+			=
+			=
+			('pen color'						g	penColor)
+			('pen hue'						r	penHue)
+			('pen shade'						r	penShade)
+			('pen size'						r	penSize)
+			=
+			=
 	).
 
 	blocks := blocks, #(
@@ -109,6 +133,26 @@ PhratchSpriteMorph class >> blockSpecs [
 			-
 			('go to front'					-	comeToFront)
 			('go back %n layers'			-	goBackByLayers: 1)
+			=
+			=
+			('do with camera open'			c	doWithCamOpen)
+			('camera is open?'				b	cameraIsOpen)
+			-
+			('replace costume %n with %8'	-	replaceCostume:with: 1)
+			('add %8 to costumes'	-	addCostumeTyped:)
+			('delete costume %n'		-	deleteCostumeAt: 1)
+			-
+			('%g effect'				r	graphicEffectNamed: 'color')
+			-
+			('change stretch by %n'	-	changeStretchBy:)
+			('set stretch to %n %'		-	setStretchTo: 100)
+			('change vStretch by %n'	-	changeVStretchBy:)
+			('set vStretch to %n %'		-	setVStretchTo: 100)
+			('vStretch'						r	vScale)
+			-
+			('visible?'						b	isVisible)
+			=
+			=
 		'sensing'
 			('touching %m?' 				b	touching:)
 			('touching color %C?' 			b	touchingColor:)
@@ -139,6 +183,19 @@ PhratchSpriteMorph class >> blockSpecs [
 			=
 			('object %m'						r	getObject:)
 			('attribute %a'						r	get:)
+			=
+			=
+			('sprite name'					r	objName)
+			('set sprite name to %s'	-	setMyName:)
+			('I am a clone?'					b	isClone)
+			-
+			('ask %s in dialog'			-	showAskDialogWithText: 'What''s your name?')
+			-
+			('show dialog %s with text %s'	-	showInformDialog:withText: 'info' '')
+			-
+			('key pressed'					r	keyPressed)
+			=
+			=
 
 		).
 
@@ -343,6 +400,15 @@ PhratchSpriteMorph >> changeStretchBy: delta [
 
 ]
 
+{ #category : #'panther actions' }
+PhratchSpriteMorph >> changeVStretchBy: delta [
+	"Change my aspect ratio by the given amount."
+
+	| currentVStretch |
+	currentVStretch := (100.0 * scalePoint y) / scalePoint x.
+	self setVStretchTo: (currentVStretch + delta).
+]
+
 { #category : #'motion ops' }
 PhratchSpriteMorph >> changeXposBy: aNumber [
 	"Move right by the given amount."
@@ -409,6 +475,22 @@ PhratchSpriteMorph >> cloneAndSend: msgName [
 
 	frame workPane addMorph: clone.
 	clone eventReceived: (PhratchEvent new name: msgName asString argument: 0).
+
+]
+
+{ #category : #'panther actions' }
+PhratchSpriteMorph >> cloneMe [
+	
+	| stage clone |
+	(self ownerThatIsA: OffscreenWorldMorph) ifNotNil: [
+		stage := (self ownerThatIsA: OffscreenWorldMorph) frame workPane.
+		clone := (self fullCopy).
+		stage addMorphFront: clone.]
+	ifNil: [
+	clone := self duplicateNoAttach.
+	clone referencePosition: self referencePosition].
+	clone isClone: true.
+	clone eventReceived: (PhratchEvent new name: 'Phratch-CreationEvent' argument: 0)
 
 ]
 
@@ -486,6 +568,11 @@ PhratchSpriteMorph >> defaultImageMedia [
 		form: (Form extent: 8@8 depth: 8) fillWhite;
 		mediaName: ('costume' localized, '1')
 
+]
+
+{ #category : #'panther actions' }
+PhratchSpriteMorph >> deleteMe [
+	self isClone ifTrue: [self deleteSprite].
 ]
 
 { #category : #'motion ops' }
@@ -1054,6 +1141,11 @@ PhratchSpriteMorph >> isClone: aBoolean [
 
 ]
 
+{ #category : #'panther actions' }
+PhratchSpriteMorph >> isDraggable [
+	^ draggable.
+]
+
 { #category : #nesting }
 PhratchSpriteMorph >> isNested [
 	^self hasSubsprites or: [ownerSprite notNil]
@@ -1197,6 +1289,16 @@ PhratchSpriteMorph >> lookLike: costumeName [
 	self passiveLookLike: costumeName.
 	costumeName isNumber ifFalse: [
 		self lookLike: self costumeIndex ].
+]
+
+{ #category : #'panther actions' }
+PhratchSpriteMorph >> makeDrag [
+	draggable := true.
+]
+
+{ #category : #'panther actions' }
+PhratchSpriteMorph >> makeNoDrag [
+	draggable := false.
 ]
 
 { #category : #'looks ops' }
@@ -1992,6 +2094,11 @@ PhratchSpriteMorph >> scenes [
 
 ]
 
+{ #category : #'panther actions' }
+PhratchSpriteMorph >> setMyName: aName [
+	self objName: (aName asString).
+]
+
 { #category : #'pen ops' }
 PhratchSpriteMorph >> setPenColorFromCostumedNamed: costumeNameOrIndex x: x y: y [
 	"Set my pen color from my costume of the given name at the given point. If the point is off the edge, set my color to black."
@@ -2078,6 +2185,19 @@ PhratchSpriteMorph >> setStretchTo: percent [
 	newStretchFactor := ((percent max: 0) / 100.0) within: minStretch and: maxStretch.
 	self scalePoint: baseScale * (newStretchFactor @ 1.0).
 
+]
+
+{ #category : #'panther actions' }
+PhratchSpriteMorph >> setVStretchTo: percent [
+	"Set x stretch percent relative to y. For example, a stretch of 200 stretches x by a factor of two relative to y while a stretch of 50 compresses x by a factor of two. As my stretch is changed, my x scale changes but my y scale remains the same."
+
+	| baseScale origExtent minStretch maxStretch newStretchFactor |
+	baseScale := scalePoint x.
+	origExtent := self costumeForm extent.
+	minStretch := 8.0 / (baseScale * origExtent y).  "min height 8 pixels"
+	maxStretch := 500.0 / (baseScale * origExtent y). "max height 500 pixels"
+	newStretchFactor := ((percent max: 0) / 100.0) within: minStretch and: maxStretch.
+	self scalePoint: baseScale * (1.0 @ newStretchFactor).
 ]
 
 { #category : #'looks ops' }
@@ -2461,6 +2581,12 @@ PhratchSpriteMorph >> unhingeAll [
 		each unhinge ].
 
 	LibraryItemMorph allInstances do: [:each| each updateThumbnail]
+]
+
+{ #category : #'panther actions' }
+PhratchSpriteMorph >> vScale [
+
+	^ (100 * scalePoint y) rounded
 ]
 
 { #category : #'as yet unclassified' }
