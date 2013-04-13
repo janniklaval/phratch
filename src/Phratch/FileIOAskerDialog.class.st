@@ -11,7 +11,7 @@ Class {
 FileIOAskerDialog >> always [
 	"Set the file I/O preference to 'always' and never prompt the user again."
 	
-	scratchFrame ifNotNil: [
+	phratchFrame ifNotNil: [
 		PhratchPreferences fileIOPreference: true].
 
 	response := true.

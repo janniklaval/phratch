@@ -6246,7 +6246,7 @@ ScriptablePhratchMorph >> numFileLines: aFileNameString [
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> numUrlFileLines: aURLString [
 
-	^ (HTTPSocket httpGet: aURLString) contents lines size.
+	^ (ZnHTTPSocketFacade httpGet: aURLString) contents lines size.
 ]
 
 { #category : #'sound ops' }
@@ -6781,12 +6781,12 @@ ScriptablePhratchMorph >> readFile: aFileNameString [
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> readFromUrl: aURLString [
 
-	^ (HTTPSocket httpGet: aURLString) contents.
+	^ (ZnHTTPSocketFacade httpGet: aURLString) contents.
 ]
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> readLine: t1 FromUrl: t2 [ 
-	^ (HTTPSocket httpGet: t2) contents lines at: t1 ifAbsent: [''].
+	^ (ZnHTTPSocketFacade httpGet: t2) contents lines at: t1 ifAbsent: [''].
 ]
 
 { #category : #'panther actions' }

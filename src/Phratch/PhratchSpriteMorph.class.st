@@ -50,7 +50,7 @@ PhratchSpriteMorph class >> blockSpecs [
 			('%e received?'							b	eventReceivedNamed:)
 			('clone me'						-	cloneMe)
 			('delete me'						-	deleteMe)
-			('when %Sprite created'			C	-)
+			('when %m created'			C	-)
 			=
 			=
 		'motion'
@@ -101,7 +101,7 @@ PhratchSpriteMorph class >> blockSpecs [
 			('stamp'							-	stampCostume)
 			=
 			=
-			('pen color'						g	penColor)
+			('pen color'						r	penColor)
 			('pen hue'						r	penHue)
 			('pen shade'						r	penShade)
 			('pen size'						r	penSize)
