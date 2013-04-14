@@ -1850,7 +1850,7 @@ ScriptablePhratchMorph >> blockFromTuple: tuple receiver: scriptOwner [
 
 
 
-	(#(EventHatMorph KeyEventHatMorph MouseClickEventHatMorph WhenHatBlockMorph) includes: k) ifTrue: [
+	(#(EventHatMorph KeyEventHatMorph MouseClickEventHatMorph WhenHatBlockMorph CreationEventHatMorph) includes: k) ifTrue: [
 		block := self hatBlockFromTuple: tuple receiver: rcvr.
 		(block isKindOf: WhenHatBlockMorph) ifTrue: [block color: Color red].
 		^ block].
@@ -4610,6 +4610,7 @@ ScriptablePhratchMorph >> hatBlockType: blockType [
 	'M' = blockType ifTrue: [^ MouseClickEventHatMorph new scriptOwner: self].
 	'S' = blockType ifTrue: [^ EventHatMorph new forStartEvent scriptOwner: self].
 	'W' = blockType ifTrue: [^ WhenHatBlockMorph new scriptOwner: self].
+	'C' = blockType ifTrue: [^ CreationEventHatMorph new scriptOwner: self]
 
 ]
 
@@ -5555,7 +5556,7 @@ ScriptablePhratchMorph >> listVarNames [
 	"Answer a list of list variable names."
 
 	| lst |
-	lst := lists keys.
+	lst := lists keys asOrderedCollection.
 	self prototype ifNotNil: [
 		lst addAll: self prototype listVarNames ].
 

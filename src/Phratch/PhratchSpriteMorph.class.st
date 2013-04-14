@@ -49,7 +49,7 @@ PhratchSpriteMorph class >> blockSpecs [
 			=
 			('%e received?'							b	eventReceivedNamed:)
 			('clone me'						-	cloneMe)
-			('delete me'						-	deleteMe)
+			('delete me if I am a clone'						-	deleteMe)
 			('when %m created'			C	-)
 			=
 			=
