@@ -1594,7 +1594,7 @@ ScriptablePhratchMorph >> blockFromSpec: spec color: blockColor [
 	selector := (spec at: 3) asSymbol.
 	defaultArgs := self defaultArgsFor: spec.
 
-	(#(E K M S W) includes: blockType) ifTrue: [
+	(#(E K M S W C) includes: blockType) ifTrue: [
 		^ (self hatBlockType: blockType) color: blockColor].
 
 	"basic block type: normal or C-shaped"
@@ -4135,12 +4135,16 @@ ScriptablePhratchMorph >> eventReceived: event [
 						targetScripts := self scripts select: [:s |
 							s class == MouseClickEventHatMorph]]]
 				ifFalse: [
-					targetScripts := self scripts select: [:s |
-						(s class == EventHatMorph) and:
-						 [s eventName caseInsensitiveEqual: event name]]]].
+					event name = 'Phratch-CreationEvent'
+					ifTrue: [
+						targetScripts := self scripts select: [:s |
+							s class == CreationEventHatMorph]]
+					ifFalse: [
+						targetScripts := self scripts select: [:s |
+							(s class == EventHatMorph) and:
+							 [s eventName caseInsensitiveEqual: event name]]]]].
 	
 	newProcs := targetScripts asArray collect: [:script | script startForEvent: event].
-	
 	^ newProcs select: [:p | p notNil]
 
 

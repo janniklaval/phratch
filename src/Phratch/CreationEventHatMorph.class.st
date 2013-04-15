@@ -17,7 +17,7 @@ CreationEventHatMorph >> initialize [
 	super initialize.
 	self removeAllMorphs.
 
-	parts := PhratchTranslator labelPartsFor: 'when $Sprite$ created'.
+	parts := PhratchTranslator labelPartsFor: 'when %m created'.
 
 	s := StringMorph new contents: parts first; font: (PhratchFrameMorph getFont: #Label); color: Color white.
 	self addMorphBack: s.
