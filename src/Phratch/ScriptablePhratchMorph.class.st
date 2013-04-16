@@ -210,7 +210,7 @@ ScriptablePhratchMorph class >> blockSpecs [
 			('the %Z block'					Q	function)
 			('the %Z block. Input names: %s'		Q	functionWithArgs)
 			-
-			('clone'							r	spawn)
+			('duplicate'							r	spawn)
 			('set %a to %s'					- 	set:to:)
 			('delete %m'						-	deleteObject:)
 			=
@@ -1090,10 +1090,26 @@ ScriptablePhratchMorph >> addVariable [
 ScriptablePhratchMorph >> addVariable: varName [
 	"Add a new user variable with the given name to this object. Do nothing if the variable already exists or is built in."
 
+	| sFrame |
+	(sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNil: [^ Beeper beep].
 	(vars includesKey: varName asString) ifFalse: [
 		vars at: varName asString put: 0].
 	self isClone: false.
+	sFrame viewerPane categoryChanged: 'variables'.
+	self addWatcherForNewVariable: varName withScope: sFrame workPane.
 
+
+	"
+
+	| sFrame |
+	(sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNil: [^ Beeper beep].
+	(self variableNameInUse: varName asString) ifFalse: [
+		vars at: varName asString put: 0].
+	self isClone: false.
+
+	sFrame workPane addVariable: varName.
+	sFrame viewerPane categoryChanged: 'variables'.
+	self addWatcherForNewVariable: varName withScope: sFrame workPane."
 ]
 
 { #category : #variables }
@@ -3507,7 +3523,8 @@ ScriptablePhratchMorph >> deleteList [
 ScriptablePhratchMorph >> deleteList: listName [
 	"Delete the list variable with the given name. Do nothing if the variable doesn't exist."
 
-	| stage |
+	| stage sFrame |
+	(sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNil: [^ Beeper beep].
 	stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
 	lists removeKey: listName asString ifAbsent: [].
 	(self prototype notNil and: [self prototype lists includesKey: listName]) ifFalse: [ 
@@ -3516,6 +3533,7 @@ ScriptablePhratchMorph >> deleteList: listName [
 		[(m listName = listName) and: 
 		[m target = self]])
 			ifTrue: [m delete]]].
+	sFrame viewerPane categoryChanged: 'variables'.
 
 ]
 
