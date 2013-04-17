@@ -137,6 +137,7 @@ PhratchSpriteMorph class >> blockSpecs [
 			=
 			('do with camera open'			c	doWithCamOpen)
 			('camera is open?'				b	cameraIsOpen)
+			('close camera'				-	closeDefinitivelyCamera)
 			-
 			('replace costume %n with %8'	-	replaceCostume:with: 1)
 			('add %8 to costumes'	-	addCostumeTyped:)

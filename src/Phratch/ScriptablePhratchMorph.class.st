@@ -435,6 +435,25 @@ ScriptablePhratchMorph class >> buildBlockSpecDictionary [
 	BlockColorDict at: #/ put: (BlockColorDict at: #/\/).
 ]
 
+{ #category : #'panther-actions' }
+ScriptablePhratchMorph class >> cameraOpened [
+
+	CameraOpenings := ((CameraOpenings ifNil: [0]) max: 0) + 1.
+]
+
+{ #category : #'panther-actions' }
+ScriptablePhratchMorph class >> closeCamera [
+	CameraOpenings := (CameraOpenings - 1) max: 0.
+	CameraOpenings = 0 ifTrue: [CameraPlugin closeCamera: 1].
+]
+
+{ #category : #'panther-actions' }
+ScriptablePhratchMorph class >> closeDefinitivelyCamera [
+
+	CameraOpenings := 0.
+	CameraOpenings = 0 ifTrue: [CameraPlugin closeCamera: 1].
+]
+
 { #category : #'byob legacy support' }
 ScriptablePhratchMorph class >> currentEncoding [
 		^ObjEncoding ifNil: [^#scratch ]
@@ -695,7 +714,7 @@ ScriptablePhratchMorph >> addComment: aPhratchCommentMorph [
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> addCostumeTyped: aString [
 
-	| newC frameForm title result ext fList type |
+	| newC frameForm title result fList type |
 	aString = 'camera' ifTrue: [
 		"newC := ImageMedia new form: (Form extent: (self ownerThatIsA: ScratchStageMorph) extent) fillBlack."
 		"(CameraPlugin openCamera: 1 width: 480 height: 360) ifNotNil: [
@@ -718,11 +737,7 @@ ScriptablePhratchMorph >> addCostumeTyped: aString [
 		result = #cancelled ifTrue: [^ self].
 
 		fList := OrderedCollection new.
-		self halt:'add FileSystem'.
-		ext := FileSystem extensionFor: result asLowercase.
-		ext = 'gif'
-			ifTrue: [[fList := (GIFReadWriter new on: (FileStream readOnlyFileNamed: result)) nextImageSet] ifError: [^ self]]
-			ifFalse: [[fList addLast: (Form fromFileNamed: result)] ifError: [^ self]].
+		[fList addLast: (Form fromFileNamed: result)] ifError: [^ self].
 
 		newC := ImageMedia new form: fList first].
 	newC mediaName: (self unusedMediaNameFromBaseName: (self defaultImageMedia mediaName)).
@@ -2301,12 +2316,6 @@ ScriptablePhratchMorph >> cameraIsOpen [
 	^ CameraPlugin cameraIsOpen: 1.
 ]
 
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> cameraOpened [
-
-	CameraOpenings := (CameraOpenings max: 0) + 1.
-]
-
 { #category : #'looks ops' }
 ScriptablePhratchMorph >> changeCostumeIndexBy: aNumber [
 	"Change my costume index by the given amount."
@@ -2472,6 +2481,12 @@ ScriptablePhratchMorph >> closeBlockEditor [
 	sf := self ownerOrYourselfThatIsA: PhratchFrameMorph.
 	sf ifNil: [^self].
 	^sf closeBlockEditor
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> closeCamera [
+
+	self class closeCamera.
 ]
 
 { #category : #'sensing ops' }
@@ -4795,11 +4810,11 @@ ScriptablePhratchMorph >> importMedia: fileName [
 			mediaNameFromFileName: fileName
 			default: self defaultImageMedia mediaName.
 		fList := OrderedCollection new.
-		extensionLoc = 'gif' 
+		"extensionLoc = 'gif' 
 			ifTrue: 
 				[[fList := (GIFReadWriter new on: (FileStream oldFileNamed: fileName)) nextImageSet] ifError: [^ self]]
 			ifFalse: 
-				[[fList addLast: (Form fromFileNamed: fileName)] ifError: [^ self]].
+				["[fList addLast: (Form fromFileNamed: fileName)] ifError: [^ self]"]".
 		fList do: [:f | 
 			elList addLast: (ImageMedia new form: (PhratchFrameMorph scaledFormForPaintEditor: f))]].
 
@@ -6860,7 +6875,7 @@ ScriptablePhratchMorph >> renewFilterPack [
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> replaceCostume: aNumber with: aString [
 
-	| cList i newC name j m frameForm title result ext fList type |
+	| cList i newC name j m frameForm title result fList type |
 	cList := media reject: [:l | l isSound].
 	cList size = 0 ifTrue: [^ self].  "should never happen..."
 	i := ((aNumber rounded - 1) \\ cList size) + 1.
@@ -6876,7 +6891,6 @@ ScriptablePhratchMorph >> replaceCostume: aNumber with: aString [
 			newC := ImageMedia new form: frameForm]
 		ifFalse: [^ self]]."]]]."
 	aString = 'stage' ifTrue: [newC := ImageMedia new form: ((self ownerThatIsA: PhratchStageMorph) stageShotForm"Sized: 480@360")].
-	self halt:'add FileSystem'.
 	aString = 'paint new' ifTrue: [^ self editDrawingOldCostumeName: name deleteOnCancel: false deleteCostume: false].
 	aString = 'import' ifTrue: [
 		(self isKindOf: PhratchStageMorph)
@@ -6888,11 +6902,7 @@ ScriptablePhratchMorph >> replaceCostume: aNumber with: aString [
 		result = #cancelled ifTrue: [^ self].
 
 		fList := OrderedCollection new.
-		self halt:'add FileSystem'.
-		ext := FileSystem extensionFor: result asLowercase.
-		ext = 'gif'
-			ifTrue: [[fList := (GIFReadWriter new on: (FileStream readOnlyFileNamed: result)) nextImageSet] ifError: [^ self]]
-			ifFalse: [[fList addLast: (Form fromFileNamed: result)] ifError: [^ self]].
+		[fList addLast: (Form fromFileNamed: result)] ifError: [^ self].
 
 		newC := ImageMedia new form: fList first].
 	j := 1.
