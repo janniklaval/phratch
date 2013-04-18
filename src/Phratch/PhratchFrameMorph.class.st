@@ -1447,10 +1447,9 @@ PhratchFrameMorph >> deleteWatchersForVar: varName ofSprite: aSprite [
 	workPane submorphsDo: [:m |
 		(m isKindOf: WatcherMorph) ifTrue: [
 			((m target = aSprite) and:
-			 [(m getSelector = #getVar:) and:
+			 [(#(getVar: reportColor:) includes: m getSelector) and:
 			 [m parameter = varName]])
 				ifTrue: [m delete]]].
-
 ]
 
 { #category : #watchers }

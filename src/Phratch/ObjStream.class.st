@@ -366,6 +366,7 @@ ObjStream class >> userClasses [
 		(180		ScrollFrameMorph2)
 		(181		ListMultilineStringMorph)
 		(182		#PhratchScrollBar)
+		(185		UpdatingColorMorph)
 
 		(200		CustomCommandBlockMorph)
 		(201		CustomBlockDefinition)

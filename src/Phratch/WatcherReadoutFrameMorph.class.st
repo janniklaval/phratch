@@ -113,8 +113,21 @@ WatcherReadoutFrameMorph >> fixLayout [
 
 	watcher := self ownerOrYourselfThatIsA: WatcherMorph.
 	readout := submorphs first.
-
+	
 	isLarge := watcher ifNil: [false] ifNotNil: [watcher isLarge].
+	
+	(watcher ifNotNil: [watcher isColor]) ifTrue: [
+		readout position: self topLeft + (2@2).
+		isLarge ifFalse: [
+			self extent: 40@14.
+			readout extent: 36@10.
+			watcher  ifNotNil: [watcher layoutForViewer]]
+		ifTrue: [
+			self extent: 50@23.
+			readout extent: 46@19].
+		self layoutChanged.
+		^ self].
+	
 	s := readout contents.
 	isLarge
 		ifTrue: [self width: 50]

@@ -58,6 +58,13 @@ ColorArgMorph class >> initialize [
 ]
 
 { #category : #other }
+ColorArgMorph >> acceptsTypeOf: aBlockMorph [
+	"Answer true if I can accept a dropped reporter of the given type. Answer false by default."
+
+	^ (aBlockMorph isKindOf: ColorBlockMorph).
+]
+
+{ #category : #other }
 ColorArgMorph >> defaultValue: aColor [
 
 	self setColor: aColor.

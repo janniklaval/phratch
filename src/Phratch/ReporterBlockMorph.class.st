@@ -15,9 +15,8 @@ ReporterBlockMorph >> acceptsTypeOf: aBlockMorph [
 	self isBlockTemplate ifTrue: [^ false ].
 	(owner isKindOf: CustomCommandBlockMorph) ifTrue: [
 		owner isTemplate ifTrue: [^false]].
-	^ aBlockMorph isBooleanReporter = self isBooleanReporter or: [
+	^ (aBlockMorph isBooleanReporter = self isBooleanReporter  and: [(aBlockMorph isKindOf: ColorBlockMorph) not]) or: [
 		aBlockMorph isAbstractFunctionCall ]
-
 ]
 
 { #category : #'byob lambdas' }

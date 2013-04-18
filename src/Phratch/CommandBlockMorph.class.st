@@ -1443,6 +1443,7 @@ CommandBlockMorph >> typeOfArg: aMorph [
 		at: #command put: '%o';
 		at: #commandList put: '%O';
 		at: #reporter put: '%r';
+		at: #colorReporter put: '%g';
 		at: #repoerterList put: '%R';
 		at: #predicate put: '%p';
 		at: #predicateList put: '%P';

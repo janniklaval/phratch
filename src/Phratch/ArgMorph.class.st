@@ -44,7 +44,7 @@ ArgMorph >> acceptsDroppedReporters [
 
 ]
 
-{ #category : #other }
+{ #category : #'*Phratch-BYOB-ddddd-ddddd-ddddd' }
 ArgMorph >> acceptsTypeOf: aBlockMorph [
 	"Answer true if I can accept a dropped reporter of the given type. Answer false by default."
 

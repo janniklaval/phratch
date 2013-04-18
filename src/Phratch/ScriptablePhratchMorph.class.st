@@ -115,6 +115,7 @@ ScriptablePhratchMorph class >> blockSpecs [
 		b	boolean reporter
 		c	c-shaped block containing a sequence of commands (always special form)
 		r	reporter
+		g	color reporter
 		R	special form reporter with its own evaluation rule
 		s	special form command with its own evaluation rule
 		t	timed command, like wait or glide
@@ -686,7 +687,7 @@ ScriptablePhratchMorph class >> stopSoundRecorder [
 ScriptablePhratchMorph >> addColor [
 
 	| sFrame result colorName colorOwner |
-	(sFrame := self ownerThatIsA: PhratchFrameMorph) ifNil: [^ self beep].
+	(sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNil: [^ self beep].
 
 	result := NewVariableDialog ask: 'Color name?'.
 	result = #cancelled ifTrue: [^ self].
@@ -707,9 +708,9 @@ ScriptablePhratchMorph >> addColor: colorName [
 	"Add a new user variable with the given name to this object. Do nothing if the variable already exists or is built in."
 	
 	| sFrame stage isGlobal |
-	(sFrame := self ownerThatIsA: PhratchFrameMorph) ifNil: [^ self beep].
+	(sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNil: [^ Beeper beep].
 	isGlobal := false.
-	(stage := self ownerThatIsA: PhratchStageMorph)
+	(stage := self ownerOrYourselfThatIsA: PhratchStageMorph)
 		ifNotNil: [isGlobal := stage colorNames includes: colorName asString].
 	((colors includesKey: colorName asString) or: [isGlobal = true]) ifFalse: [
 		colors at: colorName asString put: (Color black)].
@@ -1718,7 +1719,9 @@ ScriptablePhratchMorph >> blockFromSpec: spec color: blockColor [
 									ifTrue: [
 										block := MultiArgCommandBlockMorph new.
 										block minArgs: 1]
-									ifFalse: [block := CommandBlockMorph new]]]]].
+									ifFalse: [(blockType includes: $g)
+										ifTrue: [block := ColorBlockMorph new]
+										ifFalse: [block := CommandBlockMorph new]]]]]].
 
 	(blockType includes: $b) ifTrue: [block isBoolean: true].
 	(blockType includes: $s) 
@@ -3527,7 +3530,7 @@ ScriptablePhratchMorph >> deleteColor [
 	"Ask the user which user variable to delete, then remove it."
 
 	| sFrame stage menu choice |
-	sFrame := self ownerThatIsA: PhratchFrameMorph.
+	sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
 	sFrame ifNil: [^ self].
 
 	stage := sFrame workPane.
@@ -3539,7 +3542,7 @@ ScriptablePhratchMorph >> deleteColor [
 	self = stage ifFalse: [
 		stage colorNames isEmpty ifFalse: [menu addLine].
 		self colorNames do: [:v | menu add: v value: (Array with: v with: #local)]].
-	choice := menu invokeModal.
+	choice := menu invokeModal; selectedValue.
 	choice ifNil: [^ self].
 
 	choice second = #global
@@ -3555,7 +3558,7 @@ ScriptablePhratchMorph >> deleteColor: colorName [
 
 	| frame |
 	colors removeKey: colorName asString ifAbsent: [^ self].
-	(frame := self ownerThatIsA: PhratchFrameMorph) ifNil: [frame := (self ownerThatIsA: OffscreenWorldMorph) frame].
+	(frame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNil: [frame := (self ownerOrYourselfThatIsA: OffscreenWorldMorph) frame].
 	frame deleteWatchersForVar: colorName ofSprite: self.
 	frame viewerPane categoryChanged: 'colors'.
 ]
@@ -3566,9 +3569,9 @@ ScriptablePhratchMorph >> deleteColorFull: colorName [
 
 	| frame stage |
 	(colors includesKey: colorName) ifTrue: [self deleteColor: colorName].
-	stage := self ownerThatIsA: PhratchStageMorph.
+	stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
 	(stage notNil and: [stage colorNames includes: colorName]) ifTrue: [stage deleteColor: colorName].
-	(frame := self ownerThatIsA: PhratchFrameMorph) ifNil: [^ self].
+	(frame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNil: [^ self].
 	frame viewerPane categoryChanged: 'colors'.
 ]
 
@@ -4770,7 +4773,7 @@ ScriptablePhratchMorph >> hideColor [
 	self = stage ifFalse: [
 		stage colorNames isEmpty ifFalse: [menu addLine].
 		self colorNames do: [:v | menu add: v value:  (Array with: v with: #local)]].
-	choice := menu invokeModal.
+	choice := menu invokeModal; selectedValue.
 	choice ifNil: [^ self].
 
 	choice second = #global
@@ -4787,7 +4790,7 @@ ScriptablePhratchMorph >> hideColor: varName [
 	| stage |
 	self showOrHideColor: varName show: false.
 
-	stage := self ownerThatIsA: PhratchStageMorph.
+	stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
 	stage ~= self ifTrue: [stage showOrHideColor: varName show: false].
 ]
 
@@ -7523,7 +7526,7 @@ ScriptablePhratchMorph >> showColor [
 	self = stage ifFalse: [
 		stage colorNames isEmpty ifFalse: [menu addLine].
 		self colorNames do: [:v | menu add: v value: (Array with: v with: #local)]].
-	choice := menu invokeModal.
+	choice := menu invokeModal; selectedValue.
 	choice ifNil: [^ self].
 
 	choice second = #global
@@ -7540,7 +7543,7 @@ ScriptablePhratchMorph >> showColor: varName [
 	| stage |
 	self showOrHideColor: varName show: true.
 
-	stage := self ownerThatIsA: PhratchStageMorph.
+	stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
 	stage ~= self ifTrue: [stage showOrHideColor: varName show: true].
 ]
 
@@ -7568,7 +7571,7 @@ ScriptablePhratchMorph >> showOrHideColor: varName show: showFlag [
 		(w := self ownerThatIsA: OffscreenWorldMorph) ifNil: [^ self].
 		frame := w frame].
 
-	b := (self blockFromSpec: #('$ColorVar$' g reportColor: '')  color: (self class blockColorFor: 'colors')) defaultArgs: {varName}.
+	b := (self blockFromSpec: #('%4' g reportColor: '')  color: (self class blockColorFor: 'colors')) defaultArgs: {varName}.
 	w := frame watcherForBlock: b.
 	showFlag
 		ifTrue: [w ifNil: [frame showWatcher: b createWatcher]]

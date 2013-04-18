@@ -17,7 +17,8 @@ Class {
 		'sliderMin',
 		'sliderMax',
 		'unused',
-		'phratchSlider'
+		'phratchSlider',
+		'isColor'
 	],
 	#category : #'Phratch-UI-Watchers'
 }
@@ -25,8 +26,9 @@ Class {
 { #category : #initialization }
 WatcherMorph >> buildReadout [
 	"Build my readout component morphs."
-		
-	readout := PhratchUpdatingStringMorph new
+
+	isColor ifFalse: [
+		readout := PhratchUpdatingStringMorph new
 		contents: '';
 		floatPrecision: 0.1;
 		stepTime: 100.
@@ -34,7 +36,11 @@ WatcherMorph >> buildReadout [
 		font: (PhratchFrameMorph getFont: #Watcher);
 		forceUnicodeRendering: true;
 		target: self target;
-		color: Color white.
+		color: Color white.]
+	ifTrue: [
+		readout := UpdatingColorMorph new
+			color: (Color black);
+			stepTime: 100].
 	readoutFrame := WatcherReadoutFrameMorph new addMorph: readout.
 
 ]
@@ -224,6 +230,7 @@ WatcherMorph >> initialize [
 	lastTargetName := nil.
 	isSpriteSpecific := true.
 	isLarge := false.
+	isColor := false.
 	sliderMin := 0.
 	sliderMax := 100.
 	watcher := AlignmentMorph new
@@ -249,6 +256,18 @@ WatcherMorph >> initialize [
 		addMorphBack: watcher;
 		addMorphBack: (Morph new color: Color transparent; extent: 5@1).
 
+]
+
+{ #category : #'panther actions' }
+WatcherMorph >> isColor [
+
+	^ isColor
+]
+
+{ #category : #'panther actions' }
+WatcherMorph >> isColor: aBoolean [
+
+	isColor := aBoolean.
 ]
 
 { #category : #accessing }
@@ -508,7 +527,8 @@ WatcherMorph >> showSmallReadout [
 	self hideSlider.
 
 	isLarge := false.
-	readout font: (PhratchFrameMorph getFont: #Watcher).
+	isColor ifFalse: [
+	readout font: (PhratchFrameMorph getFont: #Watcher)].
 	readoutFrame
 		borderColor: Color white;
 		fixLayout.
@@ -519,7 +539,6 @@ WatcherMorph >> showSmallReadout [
 		cornerStyle: #rounded.
 
 	self layoutForViewer.
-
 ]
 
 { #category : #accessing }
@@ -610,7 +629,6 @@ WatcherMorph >> target: anObject selector: selector parameter: parameter [
 		parameter: parameter.
 
 	isSpriteSpecific := ScriptablePhratchMorph isSpriteSpecificTarget: anObject selector: selector.
-
 ]
 
 { #category : #private }
