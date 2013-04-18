@@ -2579,7 +2579,7 @@ ScriptablePhratchMorph >> coerceSpriteArg: anObject [
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> colorAsString: aColor [
 
-	^ '#', aColor hex asString
+	^ aColor asHTMLColor
 ]
 
 { #category : #'panther actions' }
@@ -2699,7 +2699,7 @@ ScriptablePhratchMorph >> colorsMenu [
 	self = stage ifFalse: [
 		stage colorNames isEmpty ifFalse: [menu addLine].
 		self colorNames do: [:v | menu add: v value: v]].
-
+	menu invokeModal.
 	^ menu
 ]
 
