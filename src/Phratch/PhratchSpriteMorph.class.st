@@ -145,8 +145,9 @@ PhratchSpriteMorph class >> blockSpecs [
 			-
 			('%g effect'				r	graphicEffectNamed: 'color')
 			-
-			('change stretch by %n'	-	changeStretchBy:)
-			('set stretch to %n %'		-	setStretchTo: 100)
+			('change hStretch by %n'	-	changeStretchBy:)
+			('set hStretch to %n %'		-	setStretchTo: 100)
+			('hStretch'						r	hScale)
 			('change vStretch by %n'	-	changeVStretchBy:)
 			('set vStretch to %n %'		-	setVStretchTo: 100)
 			('vStretch'						r	vScale)
@@ -989,6 +990,12 @@ PhratchSpriteMorph >> grabFromScreen [
 	self undeleteAttribute: #costumes.
 	self propagateCostumes
 
+]
+
+{ #category : #'panther actions' }
+PhratchSpriteMorph >> hScale [
+
+	^ (100 * scalePoint x) rounded
 ]
 
 { #category : #nesting }

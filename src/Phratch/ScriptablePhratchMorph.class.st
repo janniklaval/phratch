@@ -30,7 +30,8 @@ Class {
 		'customBlocks',
 		'deletedAttributes',
 		'temporaryVariables',
-		'colors'
+		'colors',
+		'createdBlocks'
 	],
 	#classVars : [
 		'BlockColorDict',
@@ -682,6 +683,26 @@ ScriptablePhratchMorph class >> stopSoundRecorder [
 ]
 
 { #category : #'panther actions' }
+ScriptablePhratchMorph >> addColor [
+
+	| sFrame result colorName colorOwner |
+	(sFrame := self ownerThatIsA: PhratchFrameMorph) ifNil: [^ self beep].
+
+	result := NewVariableDialog ask: 'Color name?'.
+	result = #cancelled ifTrue: [^ self].
+	colorName := result first asUTF8.
+	colorOwner := result second ifTrue: [self] ifFalse: [sFrame workPane].
+	(colorOwner variableNameInUse: colorName) ifTrue: [
+		self beep.
+		DialogBoxMorph warn: 'That variable name is already in use'.
+		^ self].
+
+	colorOwner addColor: colorName.
+	sFrame viewerPane categoryChanged: 'colors'.
+	
+]
+
+{ #category : #'panther actions' }
 ScriptablePhratchMorph >> addColor: colorName [
 	"Add a new user variable with the given name to this object. Do nothing if the variable already exists or is built in."
 	
@@ -725,7 +746,7 @@ ScriptablePhratchMorph >> addCostumeTyped: aString [
 			CameraPlugin getFrameForCamera: 1 into: frameForm bits.
 			newC := ImageMedia new form: frameForm]
 		ifFalse: [^ self]]."]]]."
-	aString = 'stage' ifTrue: [newC := ImageMedia new form: ((self ownerThatIsA: PhratchStageMorph) stageShotForm"Sized: 480@360")].
+	aString = 'stage' ifTrue: [newC := ImageMedia new form: ((self ownerOrYourselfThatIsA: PhratchStageMorph) stageShotForm"Sized: 480@360")].
 	aString = 'paint new' ifTrue: [^ self drawNewCostume].
 	aString = 'import' ifTrue: [
 		(self isKindOf: PhratchStageMorph)
@@ -823,6 +844,25 @@ ScriptablePhratchMorph >> addEventNamesTo: aSet [
 			(aSet anySatisfy: [:el | el caseInsensitiveEqual: m eventName]) ifFalse: [
 				aSet add: m eventName]]].
 
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> addGenericColorBlocksTo: page x: x y: startY [
+	"Add the generic variable blocks to the given page starting at the given y offset. Answer the new y."
+
+	| y |
+	y := startY.
+
+	(self blocksFor: 'colors') do: [:blockOrSym |
+		(blockOrSym = #-) | (blockOrSym = #~)
+			ifTrue: [
+				(blockOrSym = #-) ifTrue: [y := y + 15].	"insert a full space"
+				(blockOrSym = #~) ifTrue: [y := y + 5]]	"insert a half space"
+			ifFalse: [
+				y := self createBlock: blockOrSym atPosition: x@y onPage: page.
+				page submorphs last color: (ScriptablePhratchMorph blockColorFor: 'colors')]].
+
+	^ y
 ]
 
 { #category : #blocks }
@@ -945,6 +985,25 @@ ScriptablePhratchMorph >> addGenericVariableBlocksTo: page x: x y: startY [
 	^ y
 
 
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> addGlobalColor [
+	"Ask the user for a color variable name, then add a background (global) variable of that name."
+
+	| sFrame cName |
+	(sFrame := self ownerThatIsA: PhratchFrameMorph) ifNil: [^ self beep].
+
+	cName := StringDialog ask: 'Variable name?'.
+	cName size = 0 ifTrue: [^ self].
+	cName := cName asUTF8.
+	(sFrame workPane colorNames includes: cName) ifTrue: [
+		self beep.
+		DialogBoxMorph warn: 'That variable name is already in use'.
+		^ self].
+
+	sFrame workPane addColor: cName.
+	sFrame viewerPane categoryChanged: 'colors'.
 ]
 
 { #category : #'list ops' }
@@ -1399,6 +1458,12 @@ ScriptablePhratchMorph >> blockCategories [
 	^ (self class blockSpecs select: [:el |
 		(el isKindOf: String) and: [el ~= '-' and: [el ~= '~']]]) asArray
 
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> blockColor: blockName [
+
+	^ (createdBlocks at: blockName) at: 5 ifAbsent: [self class blockColorFor: 'obsolete'].
 ]
 
 { #category : #byob }
@@ -2432,11 +2497,9 @@ ScriptablePhratchMorph >> changed [
 ScriptablePhratchMorph >> clearFile: aFileNameString [
 	"Clear the given file."
 	
-	| f dir |
+	| f |
 	(self askForFileIO = true) ifFalse: [^ self].
-	self halt:'FileSystem to do'.
-	dir := FileSystem forFileName: aFileNameString.
-	dir deleteFileNamed: aFileNameString.
+	aFileNameString asFileReference delete.
 	f := FileStream newFileNamed: aFileNameString.
 	f close
 ]
@@ -3359,6 +3422,18 @@ ScriptablePhratchMorph >> defaultArgsFor: blockSpec [
 
 ]
 
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> defaultColorName [
+
+	| stage |
+	colors size > 0 ifTrue: [^ colors keys asArray sort first].
+
+	(stage := self ownerThatIsA: PhratchStageMorph) ifNotNil: [
+		stage colorNames size > 0 ifTrue: [^ stage colorNames asArray sort first]].
+
+	^ 'a color'
+]
+
 { #category : #media }
 ScriptablePhratchMorph >> defaultImageMedia [
 	"Placeholder image media."
@@ -3445,6 +3520,33 @@ ScriptablePhratchMorph >> deleteAttributes: aCollection [
 	self undeleteAllAttributes.
 	aCollection do:[:attrib |
 		self deleteAttribute: attrib ]	
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> deleteColor [
+	"Ask the user which user variable to delete, then remove it."
+
+	| sFrame stage menu choice |
+	sFrame := self ownerThatIsA: PhratchFrameMorph.
+	sFrame ifNil: [^ self].
+
+	stage := sFrame workPane.
+	(stage colorNames isEmpty) & (self colorNames isEmpty)
+		ifTrue: [^ self inform: 'No colors.' localized].
+
+	menu := MenuMorphNG new.
+	stage colorNames do: [:v | menu add: v value: (Array with: v with: #global)].
+	self = stage ifFalse: [
+		stage colorNames isEmpty ifFalse: [menu addLine].
+		self colorNames do: [:v | menu add: v value: (Array with: v with: #local)]].
+	choice := menu invokeModal.
+	choice ifNil: [^ self].
+
+	choice second = #global
+		ifTrue: [stage deleteColor: choice first]
+		ifFalse: [self deleteColor: choice first].
+
+	sFrame viewerPane categoryChanged: 'colors'.
 ]
 
 { #category : #'panther actions' }
@@ -4652,6 +4754,33 @@ ScriptablePhratchMorph >> hatBlockType: blockType [
 ]
 
 { #category : #'panther actions' }
+ScriptablePhratchMorph >> hideColor [
+	"Ask the user which user variable to hide, then hide it."
+
+	| sFrame stage menu choice |
+	sFrame := self ownerThatIsA: PhratchFrameMorph.
+	sFrame ifNil: [^ self].
+
+	stage := sFrame workPane.
+	(stage colorNames isEmpty) & (self colorNames isEmpty)
+		ifTrue: [^ self inform: 'No colors.' localized].
+
+	menu := MenuMorphNG new.
+	stage colorNames do: [:v | menu add: v value: (Array with: v with: #global)].
+	self = stage ifFalse: [
+		stage colorNames isEmpty ifFalse: [menu addLine].
+		self colorNames do: [:v | menu add: v value:  (Array with: v with: #local)]].
+	choice := menu invokeModal.
+	choice ifNil: [^ self].
+
+	choice second = #global
+		ifTrue: [stage hideColor: choice first]
+		ifFalse: [self hideColor: choice first].
+
+	sFrame viewerPane categoryChanged: 'colors'.
+]
+
+{ #category : #'panther actions' }
 ScriptablePhratchMorph >> hideColor: varName [
 	"Hide the watcher(s) for the given variable. If the receiver is a sprite and both it and and the stage have the given variable, hide both. Do nothing if the variable does not exist or is already hidden."
 
@@ -5000,6 +5129,7 @@ ScriptablePhratchMorph >> initialize [
 	vars := Dictionary new.
 	lists := Dictionary new.
 	colors:= Dictionary new.
+	createdBlocks := Dictionary new.
 	blocksBin := PhratchScriptsMorph new.
 	isClone := false.
 	costume := self defaultImageMedia.
@@ -6269,8 +6399,7 @@ ScriptablePhratchMorph >> numFileLines: aFileNameString [
 	
 	| f data |
 	(self askForFileIO = true) ifFalse: [^ self].
-	self halt:'FileSystem to do'.
-	(FileSystem default fileExists: aFileNameString) ifFalse: [^ ''].
+	(aFileNameString asFileReference exists) ifFalse: [^ ''].
 	f := (FileStream readOnlyFileNamed: aFileNameString) binary.
 	f ifNil: [^ ''].
 	data := f contentsOfEntireFile asString.
@@ -6804,15 +6933,11 @@ ScriptablePhratchMorph >> readFile: aFileNameString [
 	
 	| f data |
 	(self askForFileIO = true) ifFalse: [^ self].
-	self halt:'FileSystem to do'.
-	(FileSystem default fileExists: aFileNameString) ifFalse: [^ ''].
+	(aFileNameString asFileReference exists) ifFalse: [^ ''].
 	f := (FileStream readOnlyFileNamed: aFileNameString) binary.
 	f ifNil: [^ ''].
 	data := f contentsOfEntireFile asString.
 	f close.
-	"Replace newlines:
-	data replaceAll: $
- with: $ ."
 	^ data
 ]
 
@@ -6833,8 +6958,7 @@ ScriptablePhratchMorph >> readLine: lineNum ofFile: aFileNameString [
 	
 	| f data |
 	(self askForFileIO = true) ifFalse: [^ self].
-	self halt:'FileSystem to do'.
-	(FileSystem default fileExists: aFileNameString) ifFalse: [^ ''].
+	(aFileNameString asFileReference exists) ifFalse: [^ ''].
 	f := (FileStream readOnlyFileNamed: aFileNameString) binary.
 	f ifNil: [^ ''].
 	data := f contentsOfEntireFile asString.
@@ -6890,7 +7014,7 @@ ScriptablePhratchMorph >> replaceCostume: aNumber with: aString [
 			CameraPlugin getFrameForCamera: 1 into: frameForm bits.
 			newC := ImageMedia new form: frameForm]
 		ifFalse: [^ self]]."]]]."
-	aString = 'stage' ifTrue: [newC := ImageMedia new form: ((self ownerThatIsA: PhratchStageMorph) stageShotForm"Sized: 480@360")].
+	aString = 'stage' ifTrue: [newC := ImageMedia new form: ((self ownerOrYourselfThatIsA: PhratchStageMorph) stageShotForm"Sized: 480@360")].
 	aString = 'paint new' ifTrue: [^ self editDrawingOldCostumeName: name deleteOnCancel: false deleteCostume: false].
 	aString = 'import' ifTrue: [
 		(self isKindOf: PhratchStageMorph)
@@ -7379,7 +7503,34 @@ ScriptablePhratchMorph >> shareObject [
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> showAskDialogWithText: text [ 
 	"Show an information dialog with the given title and text."
-	PhratchPrompterMorph lastAnswer: (StringDialog ask: text)
+	PhratchPrompterMorph lastAnswer: (StringDialog ask: text).
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> showColor [
+	"Ask the user which user variable to show, then show it."
+
+	| sFrame stage menu choice |
+	sFrame := self ownerThatIsA: PhratchFrameMorph.
+	sFrame ifNil: [^ self].
+
+	stage := sFrame workPane.
+	(stage colorNames isEmpty) & (self colorNames isEmpty)
+		ifTrue: [^ self inform: 'No colors.' localized].
+
+	menu := MenuMorphNG new.
+	stage colorNames do: [:v | menu add: v value: (Array with: v with: #global)].
+	self = stage ifFalse: [
+		stage colorNames isEmpty ifFalse: [menu addLine].
+		self colorNames do: [:v | menu add: v value: (Array with: v with: #local)]].
+	choice := menu invokeModal.
+	choice ifNil: [^ self].
+
+	choice second = #global
+		ifTrue: [stage showColor: choice first]
+		ifFalse: [self showColor: choice first].
+
+	sFrame viewerPane categoryChanged: 'colors'.
 ]
 
 { #category : #'panther actions' }
@@ -8352,6 +8503,7 @@ ScriptablePhratchMorph >> viewerPageForCategory: aCategoryName [
 
 	| bin x y |
 	aCategoryName = 'variables' ifTrue: [^ self variablesPage].
+	aCategoryName = 'colors' ifTrue: [^ self viewerPageForColors].
 	aCategoryName = 'motion' ifTrue: [^ self viewerPageForMotion].
 	aCategoryName = 'sensing' ifTrue: [^ self viewerPageForSensing].
 
@@ -8372,6 +8524,51 @@ ScriptablePhratchMorph >> viewerPageForCategory: aCategoryName [
 
 	^ bin
 
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> viewerPageForColors [
+
+	| page addButton deleteButton showButton hideButton hasColors stage x y maxX |
+	page := PhratchBlockPaletteMorph new
+		color: (Color r: 0.8 g: 0.8 b: 1.0);
+		borderWidth: 0.
+
+	addButton := PhratchFrameMorph
+		buttonLabel: 'Make a color' localized
+		selector: #addGlobalColor.
+	(self isKindOf: PhratchSpriteMorph) ifTrue: [addButton actionSelector: #addColor].
+
+	deleteButton := PhratchFrameMorph
+		buttonLabel: 'Delete a color' localized
+		selector: #deleteColor.
+	showButton := PhratchFrameMorph
+		buttonLabel: 'Show a color' localized
+		selector: #showColor.
+	hideButton := PhratchFrameMorph
+		buttonLabel: 'Hide a color' localized
+		selector: #hideColor.
+
+	x := 13.
+	page addMorph: (addButton target: self; position: x@7).
+	y := addButton bottom + 3.
+
+	hasColors := self colorNames size > 0.
+	(stage := self ownerThatIsA: PhratchStageMorph) ifNotNil: [
+		stage colorNames size > 0 ifTrue: [hasColors := true]].
+
+	hasColors ifTrue: [
+		page addMorph: (deleteButton target: self; position: x@y).
+		y := deleteButton bottom + 3.
+		page addMorph: (showButton target: self; position: x@y).
+		y := showButton bottom + 3.
+		page addMorph: (hideButton target: self; position: x@y).
+		y := hideButton bottom + 10].
+
+	self addGenericColorBlocksTo: page x: x y: y.
+	maxX := page submorphs inject: 0 into: [:t :m | t max: m right].
+	page extent: (maxX + 10) @ y.
+	^ page
 ]
 
 { #category : #blocks }
@@ -8542,8 +8739,7 @@ ScriptablePhratchMorph >> writeText: aString toFile: aFileNameString [
 	
 	| f |
 	(self askForFileIO = true) ifFalse: [^ self].
-	self halt:'FileSystem to do'.
-	(FileSystem default fileExists: aFileNameString) ifFalse: [^ self].
+	(aFileNameString asFileReference exists) ifFalse: [^ self].
 	f := (FileStream fileNamed: aFileNameString) binary.
 	f ifNil: [^ self].
 	f setToEnd.

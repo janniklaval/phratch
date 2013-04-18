@@ -125,7 +125,6 @@ PhratchStageMorph >> acceptDroppingMorph: aMorph event: evt [
 
 { #category : #'panther actions' }
 PhratchStageMorph >> addBackgroundTyped: aString [
-
 	self addCostumeTyped: aString.
 ]
 
