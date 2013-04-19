@@ -727,7 +727,7 @@ StringFieldMorph >> paste [
 	"Paste the last cut or copy over the current selection."
 
 	| strToInsert str newStr |
-	strToInsert := PhratchTranslator unicodeClipboard.
+	strToInsert := PhratchTranslator unicodeClipboard asText string.
 	strToInsert size = 0 ifTrue: [^ self].
 
 	self recordUndoState.

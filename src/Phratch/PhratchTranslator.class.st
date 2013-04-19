@@ -1301,12 +1301,12 @@ PhratchTranslator class >> unicodeClipboard [
 	| n buf raw ch out s ch2 |
 	RenderPlugin ifNil: [
 		"if there is no plugin, return the normal text clipboard as UTF32"
-		^ (UTF8 withAll: Smalltalk clipboardText) asUTF32].
+		^ (UTF8 withAll: Clipboard clipboardText) asUTF32].
 
 	n := RenderPlugin primClipboardSize.
 	n = 0 ifTrue: [
 		"if unicode clipboard is empty, try the normal one"
-		^ (UTF8 withAll: Smalltalk clipboardText) asUTF32].
+		^ (UTF8 withAll: Clipboard clipboardText) asUTF32].
 
 	buf := SoundBuffer new: n.
 	n := RenderPlugin primGetCliboardInto: buf.
