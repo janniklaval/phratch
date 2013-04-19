@@ -108,8 +108,7 @@ WatcherReadoutFrameMorph >> fieldsVersion [
 WatcherReadoutFrameMorph >> fixLayout [
 
 	| watcher readout isLarge s e readoutWidth yOffset w inset blist |
-
-	((submorphs size = 1) and: [submorphs first isKindOf: StringMorph]) ifFalse: [^ self].
+	"((submorphs size = 1) and: [submorphs first isKindOf: StringMorph]) ifFalse: [^ self]."
 
 	watcher := self ownerOrYourselfThatIsA: WatcherMorph.
 	readout := submorphs first.

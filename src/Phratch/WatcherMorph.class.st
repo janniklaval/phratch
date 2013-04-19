@@ -406,6 +406,19 @@ WatcherMorph >> replace: argStr with: translatedArg in: s [
 
 ]
 
+{ #category : #'as yet unclassified' }
+WatcherMorph >> replaceArgIn: aString with: arg [
+
+	| i str |
+	str := aString.
+	i := str findString: '$'.
+	((i > 0) and: [i < str size]) ifTrue: [
+		((str at: (i + 1)) isLetter) ifFalse: [^ str].
+		(str indexOf: $$ startingAt: (i + 1)) > 0 ifFalse: [^ str].
+		str := (str copyFrom: 1 to: i - 1), arg, (str copyFrom: (str indexOf: $$ startingAt: (i + 1)) + 1 to: str size)].
+	^ str
+]
+
 { #category : #'right button menu' }
 WatcherMorph >> rightButtonMenu [
 
@@ -485,7 +498,8 @@ WatcherMorph >> showLargeReadout [
 	self hideSlider.
 
 	isLarge := true.
-	readout font: (PhratchFrameMorph getFont: #WatcherLarge).
+	isColor ifFalse: [
+		readout font: (PhratchFrameMorph getFont: #WatcherLarge)].
 	readoutFrame
 		borderColor: (Color gray: 3);
 		fixLayout.
@@ -528,7 +542,7 @@ WatcherMorph >> showSmallReadout [
 
 	isLarge := false.
 	isColor ifFalse: [
-	readout font: (PhratchFrameMorph getFont: #Watcher)].
+		readout font: (PhratchFrameMorph getFont: #Watcher)].
 	readoutFrame
 		borderColor: Color white;
 		fixLayout.
@@ -638,7 +652,7 @@ WatcherMorph >> translatedName [
 	| sel spec result param |
 	readout target ifNil: [^ 'xxx'].
 	sel := readout getSelector.
-	#getVar: = sel ifTrue: [^ readout parameter].
+	(#(getVar: reportColor: ) includes: sel) ifTrue: [^ readout parameter].
 
 	spec := readout target blockSpecForSelector: sel.
 	spec ifNil: [^ sel].
@@ -647,13 +661,14 @@ WatcherMorph >> translatedName [
 	param := readout parameter.
 	param ifNil: [param := ''].
 
-	#sensor: = sel ifTrue: [
+	(param isKindOf: String) ifTrue: [result := self replaceArgIn: result with: param] ifFalse: [result := self replaceArgIn: result with: '[]'].
+	
+	"#sensor: = sel ifTrue: [
 		result := self replace: '%H' with: (PhratchTranslator translationFor: param) in: result].
 	#sensorPressed: = sel ifTrue: [
-		result := self replace: '%h' with: (PhratchTranslator translationFor: param) in: result].
+		result := self replace: '%h' with: (PhratchTranslator translationFor: param) in: result]."
 
 	^ result
-
 ]
 
 { #category : #private }
