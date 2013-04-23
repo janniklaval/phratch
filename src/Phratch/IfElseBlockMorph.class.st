@@ -328,7 +328,7 @@ IfElseBlockMorph >> fixBlockLayout [
 	(falseBlock notNil and: [falseBlock owner ~~ self]) ifTrue: [falseBlock := nil].
 	(nextBlock notNil and: [nextBlock owner ~~ self]) ifTrue: [nextBlock := nil].
 
-	self fixBlockLayoutNoWrap.
+	super fixBlockLayout.
 	newH := self topBarHeight + 3.
 
 	trueBlock

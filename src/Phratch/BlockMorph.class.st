@@ -918,7 +918,7 @@ BlockMorph >> handleReporterDrop [
 { #category : #'event handling' }
 BlockMorph >> handleTool: toolName hand: hand [
 
-	| myStack myOwner copiedStack sFrame varToDelete |
+	| myStack myOwner sFrame varToDelete |
 	toolName = 'CopyTool' ifTrue: [
 		Sensor shiftPressed ifFalse: [hand toolType: nil].
 		(owner isKindOf: PhratchBlockPaletteMorph) ifTrue: [^ self].  "ignore if in palette"

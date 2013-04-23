@@ -30,8 +30,7 @@ Class {
 		'wantsName',
 		'wantsPossession',
 		'numberArgFlags',
-		'key',
-		'stopFrame'
+		'key'
 	],
 	#category : #'Phratch-Blocks'
 }
@@ -1016,9 +1015,13 @@ CommandBlockMorph >> key: aKey [
 CommandBlockMorph >> labelColor [
 	"Answer a label color, either black or white, that maximizes the contrast with my color."
 
-	(self class contrast = #strong and: [isContrasted])
-		ifTrue: [^Color black].
 	^ LabelColor
+
+"old:
+	^ self color luminance > 0.8
+		ifTrue: [Color black]
+		ifFalse: [Color white]
+"
 
 ]
 

@@ -88,6 +88,7 @@ CBlockMorph >> attachBlockNested: aBlockMorph [
 		ifTrue: [self bottomBlock nextBlock: aBlockMorph]
 		ifFalse: [nestedBlock := aBlockMorph].
 
+	PhratchFrameMorph allInstancesDo: [:a | a fixNestedBlocks]
 ]
 
 { #category : #private }
@@ -221,9 +222,8 @@ CBlockMorph >> drawInnerTopY: y on: aCanvas [
 CBlockMorph >> drawOn: aCanvas [ 
 
 	| c |
-
 	self contrastColor.
-
+	
 	topBarBottom := self top + self topBarHeight.
 	self isForever
 		ifTrue: [blockBottom := self bottom - 3]
@@ -236,8 +236,8 @@ CBlockMorph >> drawOn: aCanvas [
 	self drawTopBarOn: c.
 	self drawVerticalBarOn: c.
 	self drawBottomBarOn: c.
-	self drawFinalOn: aCanvas fromCanvas: c.
 
+	self drawFinalOn: aCanvas fromCanvas: c.
 	self drawInlinePaletteOn: aCanvas
 
 ]
@@ -346,7 +346,7 @@ CBlockMorph >> fixBlockLayout [
 
 	| oldExtent newW newH f |
 	blockLayoutNeeded ifFalse: [^ self].
-	super fixBlockLayoutNoWrap.
+	super fixBlockLayout.
 
 	"fix nestedBlock and nextBlock in case they've been removed from me"
 	(nestedBlock notNil and: [nestedBlock owner ~~ self]) ifTrue: [nestedBlock := nil].
