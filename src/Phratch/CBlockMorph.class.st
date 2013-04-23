@@ -236,7 +236,6 @@ CBlockMorph >> drawOn: aCanvas [
 	self drawTopBarOn: c.
 	self drawVerticalBarOn: c.
 	self drawBottomBarOn: c.
-
 	self drawFinalOn: aCanvas fromCanvas: c.
 
 	self drawInlinePaletteOn: aCanvas

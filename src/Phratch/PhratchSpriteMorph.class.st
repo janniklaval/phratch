@@ -47,6 +47,7 @@ PhratchSpriteMorph class >> blockSpecs [
 		'control'
 			('clone me'						-	cloneMe)
 			('delete me if I am a clone'						-	deleteMe)
+			('I am a clone?'					b	isClone)
 			=
 			('when %m created'			C	-)
 
@@ -144,7 +145,6 @@ PhratchSpriteMorph class >> blockSpecs [
 		'sensing'
 			('sprite name'					r	objName)
 			('set sprite name to %s'	-	setMyName:)
-			('I am a clone?'					b	isClone)
 			=
 			('touching %m?' 				b	touching:)
 			('touching color %C?' 			b	touchingColor:)

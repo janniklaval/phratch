@@ -584,6 +584,7 @@ BlockMorph >> drawBottomEdgeOn: aCanvas [
 BlockMorph >> drawFinalOn: aCanvas fromCanvas: c [
 
 	| flipped |
+	
 	PhratchTranslator isRTL 
 		ifTrue: [flipped := c form flipBy: #horizontal centerAt: c form center.
 			aCanvas paintImage: flipped at: self topLeft]

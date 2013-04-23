@@ -4385,7 +4385,7 @@ ScriptablePhratchMorph >> filteredForm [
 	filterPack filtersActive ifTrue: [  "filter parameters have changed; apply filters"
 		PhratchFrameMorph useErrorCatcher
 			ifTrue: [[filterPack applyFiltersTo: self rotatedForm]
-						ifError: [filterPack := nil. ^ self rotatedForm]]
+						ifError: [Transcript show: 'There is a problem with FilterPack'. filterPack := nil. ^ self rotatedForm]]
 			ifFalse: [filterPack applyFiltersTo: self rotatedForm]].
 	^ filterPack resultForm
 
@@ -4399,7 +4399,6 @@ ScriptablePhratchMorph >> fisheyeEffect [
 	self prototype ifNotNil: [
 		(self deletedAttributes includes: att) ifTrue: [
 			^ self prototype get: att]].
-
 	^ [filterPack fisheye] ifError: [0]
 ]
 
@@ -6514,7 +6513,7 @@ ScriptablePhratchMorph >> passiveBrightnessEffect: aNumber [
 ScriptablePhratchMorph >> passiveColorEffect: aNumber [
 
 	self privateSetGraphicEffect: 'color' to: aNumber asNumberNoError.
-	self propagate: #color
+	self propagate: #color.
 ]
 
 { #category : #'BYOB attributes' }
@@ -6762,6 +6761,7 @@ ScriptablePhratchMorph >> privateSetGraphicEffect: effect to: aNumber [
 	'whirl' = effect ifTrue: [filterPack whirl: aNumber].
 
 	costumeChangeMSecs := Time millisecondClockValue.
+	self layoutChanged.
 	self changed.
 	self spread
 ]

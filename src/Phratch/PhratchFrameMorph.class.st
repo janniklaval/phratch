@@ -1376,7 +1376,7 @@ PhratchFrameMorph >> createViewModeButtonsPanel [
 	specs := OrderedCollection new.
 	specs add: #(quarter			enterQuarterMode		'Switch to small stage').
 	specs add: #(normal			enterNormalMode		'Switch to full stage').
-	specs add: #(presentation	enterPresentationMode	'Switch to presentation mode').
+	"specs add: #(presentation	enterPresentationMode	'Switch to presentation mode')."
 
 	specs do: [:spec |
 		bName := spec first.
@@ -2227,9 +2227,8 @@ current project."
 PhratchFrameMorph >> importSpriteOrProject: fileNameOrData [
 	"Read the sprite or project file and merge into the current project."
 
-	| data f importedStage defaultForm defaultSound oldName oldPosition |
+	| data f importedStage defaultForm defaultSound |
 	data := fileNameOrData.
-
 	(data isKindOf: FileReference) ifTrue: [  "read the contents of a local file"
 		fileNameOrData exists ifFalse: [^ self].
 		f := (FileStream readOnlyFileNamed: fileNameOrData) binary.
@@ -2289,7 +2288,10 @@ PhratchFrameMorph >> importSpriteOrProject: fileNameOrData [
 			workPane sprites addLast: m.
 			self view: m tab: 'Scripts' category: 'motion'.
 			m refPos ifNotNil: [
-				m referencePosition: m refPos + (50@ -50) ]]].
+				m referencePosition: m refPos + (50@ -50) ].
+			m layoutChanged.
+			m changed
+			]].
 
 	workPane layoutChanged.
 
