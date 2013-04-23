@@ -33,21 +33,19 @@ PhratchStageMorph class >> blockSpecs [
 
 	| blocks |
 	blocks := #(
-		'control'
-			=
-			=
-			('%e received?'							b	eventReceivedNamed:)
-			=
-			=
 		'sensing'
 			('ask %s and wait'			s	doAsk 'What''s your name?')
+			('ask %s in dialog'						-	showAskDialogWithText: 'What''s your name?')
 			('answer'					r	answer)
+			-
+			('show dialog %s with text %s'	-	showInformDialog:withText: 'info' '')
 			-
 			('mouse x'					r	mouseX)
 			('mouse y'					r	mouseY)
 			('mouse down?'				b	mousePressed)
-			-
-			('key %k pressed?'			b	keyPressed: 'space')
+			"-
+			('key %k pressed?'			b	keyPressed: 'space')"
+			"('key pressed'								r	keyPressed)"
 			-
 			('reset timer'				-	timerReset)
 			('timer'						r	timer)
@@ -63,42 +61,29 @@ PhratchStageMorph class >> blockSpecs [
 			=
 			('object %m'						r	getObject:)
 			('attribute %a'						r	get:)
-			=
-			=
-			('ask %s in dialog'						-	showAskDialogWithText: 'What''s your name?')
-			-
-			('show dialog %s with text %s'	-	showInformDialog:withText: 'info' '')
-			-
-			('key pressed'								r	keyPressed)
-			=
-			=
 		'looks'
 			('switch to background %l'	-	showBackground: 'background1')
 			('next background'			-	nextBackground)
-			('background #'				r	backgroundIndex)
-			-
-			('change %g effect by %n'	-	changeGraphicEffect:by: 'color' 25)
-			('set %g effect to %n'		-	setGraphicEffect:to: 'color' 0)
-			('clear graphic effects'		-	filterReset)
-			-
-			=
-			=
-			('do with camera open'						c	doWithCamOpen)
-			('camera is open?'							b	cameraIsOpen)
 			-
 			('replace background %n with %8'	-	replaceBackground:with: 1)
 			('add %8 to backgrounds'			-	addBackgroundTyped:)
-			-
+			('background #'				r	backgroundIndex)
+			=
+			('change %g effect by %n'	-	changeGraphicEffect:by: 'color' 25)
+			('set %g effect to %n'		-	setGraphicEffect:to: 'color' 0)
+			('clear graphic effects'		-	filterReset)
 			('%g effect'							r	graphicEffectNamed: 'color')
 			-
 			('change horizontal pan by %n'	-	changeHPanBy:)
 			('set horizontal pan to %n'		-	setHPanTo: 0)
 			('change vertical pan by %n'	-	changeVPanBy:)
 			('set vertical pan to %n'			-	setVPanTo: 0)
-			('change zoom by %n'			-	changeZoomBy:)
-			('set zoom to %n %'				-	setZoomTo:)
+			"('change zoom by %n'			-	changeZoomBy:)
+			('set zoom to %n %'				-	setZoomTo:)"
 			=
-			=
+			"('do with camera open'						c	doWithCamOpen)"
+			('camera is open?'							b	cameraIsOpen)
+			('close camera'				-	closeDefinitivelyCamera)
 		'pen'
 			('clear'						-	clearPenTrails)
 	).

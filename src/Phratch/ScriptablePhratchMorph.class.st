@@ -127,12 +127,6 @@ ScriptablePhratchMorph class >> blockSpecs [
 
 	| blocks |
 	blocks := #(
-		'sensing'
-			=
-			=
-			('date/time: %6'							r	returnW:)
-			=
-			=
 		'control'
 			('when %m clicked'				S	-)
 			('when %k key pressed'			K	-)
@@ -146,10 +140,13 @@ ScriptablePhratchMorph class >> blockSpecs [
 			('broadcast %e'					-	broadcast:)
 			('broadcast %e and wait'			s	doBroadcastAndWait)
 			('when I receive %e'			E	-)
+			('%e received?'							b	eventReceivedNamed:)
 			-
 			('forever if %b'					c	doForeverIf)
 			('if %b'							c	doIf)
 			('if %b'							c	doIfElse)
+			('if %b then %s else %s'		r	if:then:else:)
+			('if %b then %b else %b'		b	ifB:then:else:)
 			('wait until %b'					s	doWaitUntil)
 			('repeat until %b'				c	doUntil)
 			-
@@ -181,6 +178,8 @@ ScriptablePhratchMorph class >> blockSpecs [
 			('%n / %n'						r	/\/ - -)
 			-
 			('pick random %n to %n'		r	randomFrom:to: 1 10)
+			('%3'									r	numericConstant: 'pi')
+			('date/time: %6'							r	returnW:)
 			-
 			('%s < %s'						b	< '' '')
 			('%s = %s'						b	= '' '')
@@ -196,15 +195,19 @@ ScriptablePhratchMorph class >> blockSpecs [
 			('join %s %s'					r	concatenate:with: 'hello ' 'world')
 			('letter %n of %s'				r	letter:of: 1 'world')
 			('length of %s'					r	stringLength: 'world')
+			('letters %n - %n of %s'		r	letters:through:of: 1 5 'hello world')
+			('index of %s starting at %n in %s'	r	indexOf:startingAt:in: 'o' 6 'hello world')
 			-
 			('ascii code of %s'				r	asciiCodeOf: 'a')
 			('ascii %n as letter'				r	asciiLetter: '65')
 			-
+			('%n ^ %n'							r	n:toPower: - -)
 			('%n mod %n'					r	\\ - -)
 			('round %n'						r	rounded -)
 			-
 			('%f of %n'						r	computeFunction:of: 'sqrt' 10)
 			-
+			('%s as boolean'							b	stringToBoolean: 'true')
 			('is %s a %F ?'					b	isObject:type:)
 			=
 			('the script'						q	procedure)
@@ -215,21 +218,6 @@ ScriptablePhratchMorph class >> blockSpecs [
 			('duplicate'							r	spawn)
 			('set %a to %s'					- 	set:to:)
 			('delete %m'						-	deleteObject:)
-			=
-			=
-			('%n ^ %n'							r	n:toPower: - -)
-			-
-			('%s as boolean'							b	stringToBoolean: 'true')
-			-
-			('if %b then %s else %s'		r	if:then:else:)
-			('if %b then %b else %b'		b	ifB:then:else:)
-			-
-			('letters %n - %n of %s'		r	letters:through:of: 1 5 'hello world')
-			('index of %s starting at %n in %s'	r	indexOf:startingAt:in: 'o' 6 'hello world')
-			-
-			('%3'									r	numericConstant: 'pi')
-			=
-			=
 		'sound'
 			('play sound %S'				-	playSound:)
 			('play sound %S until done'		s	doPlaySoundAndWait)
@@ -255,25 +243,31 @@ ScriptablePhratchMorph class >> blockSpecs [
 			('motor power %n'				-	startMotorPower: 100)
 			('motor direction %W'			-	setMotorDirection: 'this way')
 		'variables'
+			~
+			('make %s'						-	addVariable: 'a variable')
+			-
 			('show variable %v'				-	showVariable:)
 			('hide variable %v'				-	hideVariable:)
 			('delete %r'						-	deleteObject:)
-			('variable named %s'			r	getVarOrListNamed:)
-			=
-			=
+			-
 			('%v'									r	reportVar: '')
-			~
+			('variable named %s'			r	getVarOrListNamed:)
+			-
 			('set %v to %s'						-	setVar:to: '' '0')
 			('change %v by %n'				-	changeVar:by: '' 1)
-			~
+			=
 			('move %v to x: %n y: %n'	-	moveVar:toX:y: '' 0 0)
 			('set layout of %v to %7'		-	setLayoutOfVar:to: '' '')
-			-
-			('make %s'									-	addVariable: 'a variable')
-			=
 			=
 		'list'
+			('%L'											r	contentsOfList: 'a list')
 			('list %X'						r	newList:)
+			-
+			('make list %s'								-	quietCreateListNamed: 'a list')
+			('delete list %s'								-	deleteList: 'a list')
+			-
+			('show list %L'								-	showList:)
+			('hide list %L'								-	hideList:)
 			-
 			('add %s to %L'					-	append:toList: 'thing')
 			('delete %y of %L'				-	deleteLine:ofList: 1)
@@ -286,17 +280,6 @@ ScriptablePhratchMorph class >> blockSpecs [
 			('%L as text'						r	contentsOfList: )
 			-
 			('copy of %t'					r	copyOfList: )
-			=
-			=
-			('%L'											r	contentsOfList: 'a list')
-			-
-			('show list %L'								-	showList:)
-			('hide list %L'								-	hideList:)
-			-
-			('make list %s'								-	quietCreateListNamed: 'a list')
-			('delete list %s'								-	deleteList: 'a list')
-			=
-			=
 		'files'
 			('contents of file %s'						r	readFile:)
 			('line %n of file %s'					r	readLine:ofFile:)

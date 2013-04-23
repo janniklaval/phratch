@@ -45,14 +45,11 @@ PhratchSpriteMorph class >> blockSpecs [
 	| blocks |
 	blocks := #(
 		'control'
-			=
-			=
-			('%e received?'							b	eventReceivedNamed:)
 			('clone me'						-	cloneMe)
 			('delete me if I am a clone'						-	deleteMe)
+			=
 			('when %m created'			C	-)
-			=
-			=
+
 		'motion'
 			('move %n steps'				-	forward:)
 			('turn %n degrees'				-	turnRight: 15)	"icon shows turn direction"
@@ -76,13 +73,15 @@ PhratchSpriteMorph class >> blockSpecs [
 			('y position'						r	ypos)
 			('direction'						r	heading)
 			=
-			=
 			('make draggable'				-	makeDrag)
 			('make undraggable'			-	makeNoDrag)
 			('draggable?'					b	isDraggable)
-			=
-			=
 		'pen'
+			('pen color'						r	penColor)
+			('pen hue'						r	penHue)
+			('pen shade'						r	penShade)
+			('pen size'						r	penSize)
+			=
 			('clear'							-	clearPenTrails)
 			-
 			('pen down'						-	putPenDown)
@@ -99,14 +98,6 @@ PhratchSpriteMorph class >> blockSpecs [
 			('set pen size to %n'				-	penSize: 1)
 			-
 			('stamp'							-	stampCostume)
-			=
-			=
-			('pen color'						r	penColor)
-			('pen hue'						r	penHue)
-			('pen shade'						r	penShade)
-			('pen size'						r	penSize)
-			=
-			=
 	).
 
 	blocks := blocks, #(
@@ -115,6 +106,10 @@ PhratchSpriteMorph class >> blockSpecs [
 			('next costume'					-	nextCostume)
 			('costume #'						r	costumeIndex)
 			-
+			('replace costume %n with %8'	-	replaceCostume:with: 1)
+			('add %8 to costumes'	-	addCostumeTyped:)
+			('delete costume %n'		-	deleteCostumeAt: 1)
+			=
 			('say %s for %n secs'			t	say:duration:elapsed:from: 'Hello!' 2)
 			('say %s'						-	say: 'Hello!')
 			('think %s for %n secs'			t	think:duration:elapsed:from: 'Hmm...' 2)
@@ -123,27 +118,11 @@ PhratchSpriteMorph class >> blockSpecs [
 			('change %g effect by %n'		-	changeGraphicEffect:by: 'color' 25)
 			('set %g effect to %n'			-	setGraphicEffect:to: 'color' 0)
 			('clear graphic effects'			-	filterReset)
+			('%g effect'				r	graphicEffectNamed: 'color')
 			-
 			('change size by %n'			-	changeSizeBy:)
 			('set size to %n%'				-	setSizeTo: 100)
 			('size'							r	scale)
-			-
-			('show'							-	show)
-			('hide'							-	hide)
-			-
-			('go to front'					-	comeToFront)
-			('go back %n layers'			-	goBackByLayers: 1)
-			=
-			=
-			('do with camera open'			c	doWithCamOpen)
-			('camera is open?'				b	cameraIsOpen)
-			('close camera'				-	closeDefinitivelyCamera)
-			-
-			('replace costume %n with %8'	-	replaceCostume:with: 1)
-			('add %8 to costumes'	-	addCostumeTyped:)
-			('delete costume %n'		-	deleteCostumeAt: 1)
-			-
-			('%g effect'				r	graphicEffectNamed: 'color')
 			-
 			('change hStretch by %n'	-	changeStretchBy:)
 			('set hStretch to %n %'		-	setStretchTo: 100)
@@ -151,23 +130,39 @@ PhratchSpriteMorph class >> blockSpecs [
 			('change vStretch by %n'	-	changeVStretchBy:)
 			('set vStretch to %n %'		-	setVStretchTo: 100)
 			('vStretch'						r	vScale)
-			-
+			=
+			('show'							-	show)
+			('hide'							-	hide)
 			('visible?'						b	isVisible)
+			-
+			('go to front'					-	comeToFront)
+			('go back %n layers'			-	goBackByLayers: 1)
 			=
-			=
+			"('do with camera open'			c	doWithCamOpen)"
+			('camera is open?'				b	cameraIsOpen)
+			('close camera'				-	closeDefinitivelyCamera)
 		'sensing'
+			('sprite name'					r	objName)
+			('set sprite name to %s'	-	setMyName:)
+			('I am a clone?'					b	isClone)
+			=
 			('touching %m?' 				b	touching:)
 			('touching color %C?' 			b	touchingColor:)
 			('color %C is touching %C?'		b	color:sees:)
 			-
 			('ask %s and wait'				s	doAsk 'What''s your name?')
+			('ask %s in dialog'			-	showAskDialogWithText: 'What''s your name?')
 			('answer'						r	answer)
 			-
+			('show dialog %s with text %s'	-	showInformDialog:withText: 'info' '')
+			=
 			('mouse x'						r	mouseX)
 			('mouse y'						r	mouseY)
 			('mouse down?'					b	mousePressed)
-			-
+			"-
 			('key %k pressed?'				b	keyPressed: 'space')
+			"
+			"('key pressed'					r	keyPressed)"
 			-
 			('distance to %m'				r	distanceTo:)
 			-
@@ -185,20 +180,6 @@ PhratchSpriteMorph class >> blockSpecs [
 			=
 			('object %m'						r	getObject:)
 			('attribute %a'						r	get:)
-			=
-			=
-			('sprite name'					r	objName)
-			('set sprite name to %s'	-	setMyName:)
-			('I am a clone?'					b	isClone)
-			-
-			('ask %s in dialog'			-	showAskDialogWithText: 'What''s your name?')
-			-
-			('show dialog %s with text %s'	-	showInformDialog:withText: 'info' '')
-			-
-			('key pressed'					r	keyPressed)
-			=
-			=
-
 		).
 
 	^ blocks, super blockSpecs

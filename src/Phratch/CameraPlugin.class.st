@@ -45,7 +45,7 @@ CameraPlugin class >> closeCamera: cameraNum [
 	"Close the camera. Do nothing if it was not open."
 
 	<primitive: 'primCloseCamera' module: 'CameraPlugin'>
-
+	^nil
 ]
 
 { #category : #translation }
