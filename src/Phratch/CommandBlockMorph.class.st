@@ -30,7 +30,8 @@ Class {
 		'wantsName',
 		'wantsPossession',
 		'numberArgFlags',
-		'key'
+		'key',
+		'stopFrame'
 	],
 	#category : #'Phratch-Blocks'
 }
