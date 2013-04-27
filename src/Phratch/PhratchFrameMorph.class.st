@@ -3575,6 +3575,7 @@ image in end-user (fillScreen) mode?') ifFalse: [^ self].
 	Display newDepth: 32.
 	self fillScreenOn.
 	World doOneCycleNow.
+	ImageCleaner cleanUpForProduction.
 	Smalltalk snapshot: true andQuit: true.
 	self startup.
 	Sensor useOSEvents: true.
