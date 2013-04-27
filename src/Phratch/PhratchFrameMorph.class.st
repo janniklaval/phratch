@@ -1374,7 +1374,7 @@ PhratchFrameMorph >> createViewModeButtonsPanel [
 
 	viewModeButtons := OrderedCollection new.
 	specs := OrderedCollection new.
-	specs add: #(quarter			enterQuarterMode		'Switch to small stage').
+	"specs add: #(quarter			enterQuarterMode		'Switch to small stage')."
 	specs add: #(normal			enterNormalMode		'Switch to full stage').
 	"specs add: #(presentation	enterPresentationMode	'Switch to presentation mode')."
 
@@ -3971,7 +3971,7 @@ PhratchFrameMorph >> startup [
 "
 			PhratchPreferences takeOverScreen: false.
 
-	self enterQuarterModeIfSmallScreen.
+	"self enterQuarterModeIfSmallScreen."
 
 	fileName := startupFileNames
 		detect: [:fn |
