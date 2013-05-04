@@ -126,7 +126,7 @@ ColorArgMorph >> mouseUp: evt [
 
 	| w palette |
 	showPalette ifNil: [showPalette := true].
-
+	
 	(w := self world) ifNil: [^ self].
 	showPalette ifTrue: [
 		palette := ImageMorph new form: ColorPalette.
@@ -135,11 +135,13 @@ ColorArgMorph >> mouseUp: evt [
 		w displayWorldSafely].
 
 	Cursor eyeDropper showWhile: [
-		Sensor waitButton.
+		"Listen for two events here: the first click, then any further ones if the button held down"
+		self color: (Display colorAt: Sensor waitButton).
+		self updateOwnerBlock.
 		[Sensor anyButtonPressed] whileTrue: [
 			self color: (Display colorAt: Sensor cursorPoint).
-			self updateOwnerBlock.
-			w displayWorldSafely]].
+			self updateOwnerBlock ].
+		w displayWorldSafely ].
 
 	palette ifNotNil: [palette delete].
 
