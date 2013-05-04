@@ -140,6 +140,13 @@ PhratchFrameMorph class >> cameraMode [
 
 ]
 
+{ #category : #'as yet unclassified' }
+PhratchFrameMorph class >> close [
+	"Close Phratch window but don't quit Pharo"
+
+	PhratchFrameMorph allInstancesDo: [ :i | i delete ]
+]
+
 { #category : #utilities }
 PhratchFrameMorph class >> colorToTrack [
 
@@ -221,7 +228,7 @@ PhratchFrameMorph class >> initFonts [
 		(SoundRecorderTimer		NewYorkBold	10	NewYorkBold	12)
 		(StringDialogTypeIn			Verdana		12	Verdana		16)
 		(NewVariableDialogBox		Verdana		11	Verdana		14)
-		(AboutScratch				VerdanaBold		11	VerdanaBold		14)
+		(AboutPhratch				VerdanaBold		11	VerdanaBold		14)
 		(UploadTagLabel				VerdanaBold		10	VerdanaBold		12)
 		(UploadTag					Verdana		10	Verdana		12)
 		(UploadDialogLabel			VerdanaBold		10	VerdanaBold		12)
