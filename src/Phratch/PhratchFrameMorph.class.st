@@ -300,7 +300,7 @@ PhratchFrameMorph class >> isXO: aBoolean [
 PhratchFrameMorph class >> open [
 "	InputEventSensor startUp."
 	"SoundPlayer initialize; shutDown; startUp. "
-	self new startup openInWorld
+	^ self new startup openInWorld
 ]
 
 { #category : #utilities }
