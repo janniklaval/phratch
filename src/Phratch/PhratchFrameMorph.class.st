@@ -3589,6 +3589,40 @@ image in end-user (fillScreen) mode?') ifFalse: [^ self].
 
 ]
 
+{ #category : #'menu/button actions' }
+PhratchFrameMorph >> saveImageForEndUserSilently [
+
+"	(self confirm: '
+Close non-Phratch windows and save this
+image in end-user (fillScreen) mode?') ifFalse: [^ self].
+"
+	PhratchFrameMorph isXO ifTrue: [PhratchPreferences useLargeFonts].
+
+	self setLanguage: 'en'.
+
+	self enterNormalMode.
+	self blockContrastStrong.
+	ScriptablePhratchMorph keepOnStage: true.
+	self recordKeepOnStage: 1. 
+	EventHatMorph threadSafeMode: false.
+	self recordThreadSafeMode: 0.
+
+	BlockLabelFragmentDialog isExpanded: false.
+
+	World submorphs do: [:m |
+		(m isKindOf: SystemWindow) ifTrue: [m delete]].
+	self clearStage.
+
+	Display newDepth: 32.
+	self fillScreenOn.
+	World doOneCycleNow.
+	ImageCleaner cleanUpForProduction.
+	Smalltalk snapshot: true andQuit: true.
+	self startup.
+	Sensor useOSEvents: true.
+
+]
+
 { #category : #'file read/write' }
 PhratchFrameMorph >> savePhratchProject [
 
