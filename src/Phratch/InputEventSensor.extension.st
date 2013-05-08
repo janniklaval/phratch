@@ -54,9 +54,12 @@ InputEventSensor >> fileDropPoint [
 
 { #category : #'*Phratch' }
 InputEventSensor >> keyPressed: asciiValue [
-
-	^ ((self keyboardPeek) ifNil: [^ false]) = asciiValue
-
+	"Is this key being pressed? If an event is found it is removed from the queue."
+	| event |
+	event := eventQueue nextOrNilSuchThat: [  :evt |
+		(self isKbdEvent: evt) and: [ evt sixth = asciiValue ]
+	].
+	^ event notNil
 
 ]
 

@@ -1254,7 +1254,7 @@ PhratchProcess >> isAtomic [
 		self stop.
 		PhratchFrameMorph allInstances do: [:sf| sf stopAll]].
 
-	((Character value: 27) = Sensor keyboardPeek) ifTrue: [
+	(Sensor keyPressed: 27) ifTrue: [
 			Sensor flushKeyboard.
 			PhratchPreferences noviceMode ifFalse: [
 				Display flash: stopButtonRect].

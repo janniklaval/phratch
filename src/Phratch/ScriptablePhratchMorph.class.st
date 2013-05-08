@@ -5456,7 +5456,9 @@ ScriptablePhratchMorph >> keyNames [
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> keyPressed [
-	"Answer the currently pressed key."
+	"Answer the currently pressed key.
+	
+	TODO: This needs to be rewritten to use Sensor keyboard or the like."
 
 	self keyNames do: [:ch |
 		(self keyPressed: ch) ifTrue: [^ ch]].

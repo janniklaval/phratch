@@ -159,10 +159,8 @@ PhratchSpriteMorph class >> blockSpecs [
 			('mouse x'						r	mouseX)
 			('mouse y'						r	mouseY)
 			('mouse down?'					b	mousePressed)
-			"-
 			('key %k pressed?'				b	keyPressed: 'space')
-			"
-			"('key pressed'					r	keyPressed)"
+			('_key pressed'					r	keyPressed)
 			-
 			('distance to %m'				r	distanceTo:)
 			-
