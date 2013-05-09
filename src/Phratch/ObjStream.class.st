@@ -131,7 +131,8 @@ ObjStream class >> fixedFormatClasses [
 		(24	Dictionary				getDict:id:			putDict:id:)
 		(25	IdentityDictionary		getDict:id:			putDict:id:)
 		(26	ColorArray				getArray:id:			putArray:id:)
-	"27-29 reserved for additional collections"
+		(27	Association				getAssoc:id:			putAssoc:id:)								
+	"28-29 reserved for additional collections"
 		(30	Color					getColor:id:			putColor:id:)
 		(31	TranslucentColor		getColor:id:			putColor:id:)
 		(32	Point					getPoint:id:			putPoint:id:)
@@ -490,6 +491,22 @@ ObjStream >> getArray: anObject id: classID [
 ]
 
 { #category : #'fixed format-reading' }
+ObjStream >> getAssoc: anObject id: classID [
+
+	| result key value newContents |
+	firstPass ifTrue: [
+		key := self readField.
+		value := self readField.
+		result := (self classForID: classID) key: key value: value.
+		^ result].
+
+	"fix references"
+	newContents := ((self targetObjectFor: anObject key) -> (self targetObjectFor: anObject value)).
+	newContents.
+
+]
+
+{ #category : #'fixed format-reading' }
 ObjStream >> getBigInt: anObject id: classID [
 
 	| digitCount result |
@@ -721,6 +738,16 @@ ObjStream >> objects [
 ObjStream >> putArray: anObject id: classID [
 
 	self putCollection: anObject id: classID.
+
+]
+
+{ #category : #'fixed format-writing' }
+ObjStream >> putAssoc: anObject id: classID [
+
+	firstPass ifFalse: [
+		stream nextPut: classID].
+	self putField: anObject key.
+	self putField: anObject value.
 
 ]
 
