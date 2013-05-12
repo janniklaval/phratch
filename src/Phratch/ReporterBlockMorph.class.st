@@ -669,7 +669,7 @@ ReporterBlockMorph >> storeFieldsOn: anObjStream [
 ReporterBlockMorph >> tabFields [
 
 	| fields |
-	fields _	OrderedCollection new.
+	fields := OrderedCollection new.
 	submorphs do: [:m |
 		((m isKindOf: ReporterBlockMorph) or: [m isKindOf: MultiArgMorph]) 
 			ifTrue: [fields addAll: m tabFields ]

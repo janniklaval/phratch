@@ -517,7 +517,7 @@ CBlockMorph >> tabFields [
 
 	nst := nestedBlock.
 	nst ifNotNil: [
-		nstfields _	nst tabFields ].
+		nstfields := nst tabFields ].
 
 	nxt := self nextBlock.
 	nxt ifNotNil: [
