@@ -511,7 +511,7 @@ IfElseBlockMorph >> tabFields [
 
 	tr := trueBlock.
 	tr ifNotNil: [
-		tfields _	 tr tabFields ].
+		tfields := tr tabFields ].
 
 	fl := falseBlock.
 	fl ifNotNil: [

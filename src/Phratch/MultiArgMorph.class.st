@@ -450,7 +450,7 @@ MultiArgMorph >> showError [
 MultiArgMorph >> tabFields [
 
 	| fields |
-	fields _	OrderedCollection new.
+	fields := OrderedCollection new.
 	submorphs do: [:m |
 		(m isKindOf: ReporterBlockMorph)
 			ifTrue: [fields addAll: m tabFields ]

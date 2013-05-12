@@ -5891,7 +5891,7 @@ ScriptablePhratchMorph >> midiDrumMenu [
 
 { #category : #'sound ops' }
 ScriptablePhratchMorph >> midiInstrument: aNumber [
-	"Old 'set instrument to _' block. Set the MIDI instrument used for note sounds."
+	"Old 'set instrument to :=' block. Set the MIDI instrument used for note sounds."
 
 	| stage player |
 	(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNil: [^ self].
@@ -7337,7 +7337,7 @@ ScriptablePhratchMorph >> setHideFlagTo: aBool [
 
 { #category : #'sound ops' }
 ScriptablePhratchMorph >> setInstrument: aNumber [
-	"New 'set instrument to _' block. Set the instrument used for note sounds. Testing in beta but reverted."
+	"New 'set instrument to :=' block. Set the instrument used for note sounds. Testing in beta but reverted."
 
 	| stage map n player |
 	(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNil: [^ self].

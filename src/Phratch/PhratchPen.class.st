@@ -200,8 +200,8 @@ PhratchPen >> arrowHeadForArrowSpec: anArrowSpec [
 	"Put an arrowhead on the previous pen stroke"
 "
 	 | pen aPoint |
-	aPoint _ Point fromUser.
-	pen _ Pen new.
+	aPoint := Point fromUser.
+	pen := Pen new.
 	20 timesRepeat: [pen turn: 360//20; go: 20; arrowHeadForArrowSpec: aPoint].
 "
 
@@ -264,7 +264,7 @@ PhratchPen >> defaultNib: widthInteger [
 		sourceForm: aForm"
 "Example:
 	| bic |
-	bic _ Pen new sourceForm: Cursor normal.
+	bic := Pen new sourceForm: Cursor normal.
 	bic combinationRule: Form paint; turn: 90.
 	10 timesRepeat: [bic down; go: 3; up; go: 10]."
 

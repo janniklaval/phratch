@@ -969,8 +969,8 @@ PhratchStageMorph >> pauseAllProcesses [
 		
 	"clear all processes, including those with error feedback"
 "
-	allObjs _ submorphs select: [:m | m isKindOf: ScriptablePhratchMorph].
-	allObjs _ allObjs copyWith: self.
+	allObjs := submorphs select: [:m | m isKindOf: ScriptablePhratchMorph].
+	allObjs := allObjs copyWith: self.
 	allObjs do: [:obj |
 		(obj blocksBin isKindOf: Morph) ifTrue: [
 			obj blocksBin submorphs do: [:b |
