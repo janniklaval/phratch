@@ -2,10 +2,9 @@ Extension { #name : #InputEventSensor }
 
 { #category : #'*Phratch-Extensions' }
 InputEventSensor >> clearKeystate [
-	"Clear the keystate array. Do nothing if we're not using OS event handling."
-"
-	keystate ifNotNil: [keystate _ Array new: 256 withAll: false].
-"
+	"Clear the keystate array. "
+	keyPressed := nil
+
 ]
 
 { #category : #'*Phratch' }
@@ -54,12 +53,9 @@ InputEventSensor >> fileDropPoint [
 
 { #category : #'*Phratch' }
 InputEventSensor >> keyPressed: asciiValue [
-	"Is this key being pressed? If an event is found it is removed from the queue."
-	| event |
-	event := eventQueue nextOrNilSuchThat: [  :evt |
-		(self isKbdEvent: evt) and: [ evt sixth = asciiValue ]
-	].
-	^ event notNil
+	"Is this key being pressed?"
+	self nextEvent.
+	^keyPressed = asciiValue
 
 ]
 
@@ -68,6 +64,62 @@ InputEventSensor >> lastMousePosition [
 
 	^ mousePosition
 
+]
+
+{ #category : #'*Phratch' }
+InputEventSensor >> processEvent: evt [ 
+	"Process a single event. This method is run at high priority.
+	
+	The event record is:
+	<type><timestamp><character code><updown><modifier keys>...
+	where updown is:
+	  0 - keystroke
+	  1 - key down
+	  2 - key up
+	
+	NOTE: You must ensure that there is an instance variable keyPressed."
+	
+	| type updown |
+		
+	type := evt at: 1.
+
+	"Treat menu events first"
+	type = EventTypeMenu
+		ifTrue: [
+			self processMenuEvent: evt.
+			^nil].
+
+	"Tackle mouse events first"
+	type = EventTypeMouse
+		ifTrue: [
+			"Transmogrify the button state according to the platform's button map definition"
+			evt at: 5 put: (ButtonDecodeTable at: (evt at: 5) + 1).
+			"Map the mouse buttons depending on modifiers"
+			evt at: 5 put: (self mapButtons: (evt at: 5) modifiers: (evt at: 6)).
+
+			"Update state for polling calls"
+			mousePosition := (evt at: 3) @ (evt at: 4).
+			modifiers := evt at: 6.
+			mouseButtons := evt at: 5.
+
+			^evt].
+	
+	
+	"Finally keyboard"
+	type = EventTypeKeyboard
+		ifTrue: [
+			"Update state for polling calls"
+			modifiers := evt at: 5.
+			updown := evt at: 4.
+			(updown = 2) ifTrue: [ 
+				keyPressed := nil
+			] ifFalse: [  
+				keyPressed := evt at: 3 ].
+			^evt].
+				
+	"Handle all events other than Keyborad or Mouse."
+	^evt.
+	
 ]
 
 { #category : #'*Phratch' }
