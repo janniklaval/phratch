@@ -36,7 +36,7 @@ PhratchSpritePureMorph >> forward: distance [
 	| currentPosition nextPosition |
 	super forward: distance.
 	currentPosition := connectedRobot localizationService currentPosition.
-	nextPosition :=  (currentPosition x + distance) @ (currentPosition y). 
+	nextPosition :=  (currentPosition x + (distance/100)) @ (currentPosition y). 
 	connectedRobot trajectoryService 
 		insertSegmentFrom:  currentPosition to: nextPosition  speed: 0.25;
 		startMotion.
@@ -49,7 +49,7 @@ PhratchSpritePureMorph >> gotoX: x y: y [
 	super gotoX: x y: y.
 	currentPosition := connectedRobot localizationService currentPosition.
 	self trajectoryService 
-		insertSegmentFrom:  currentPosition to: x@y  speed: 0.25;
+		insertSegmentFrom:  currentPosition to: (x/100)@(y/100)  speed: 0.25;
 		startMotion.
 ]
 
@@ -122,26 +122,26 @@ PhratchSpritePureMorph >> viewerPageForPure [
 PhratchSpritePureMorph >> xpos [
 
 	super xpos.
-	^ connectedRobot localizationService currentPosition x.
+	^ connectedRobot localizationService currentPosition x * 100.
 ]
 
 { #category : #'motion ops' }
 PhratchSpritePureMorph >> xpos: aNumber [ 
 
-	super xpos: aNumber .
-	^ connectedRobot localizationService x: aNumber y: self ypos orientation: self heading.
+	super xpos: (aNumber/100) .
+	^ connectedRobot localizationService x: (aNumber/100) y: self ypos orientation: self heading.
 ]
 
 { #category : #'motion ops' }
 PhratchSpritePureMorph >> ypos [
 
 	super ypos.
-	^ connectedRobot localizationService currentPosition x.
+	^ connectedRobot localizationService currentPosition x * 100.
 ]
 
 { #category : #'motion ops' }
 PhratchSpritePureMorph >> ypos: aNumber [ 
 
-	super ypos: aNumber.
-	^ connectedRobot localizationService x: self xpos y: aNumber orientation: self heading.
+	super ypos: (aNumber/100).
+	^ connectedRobot localizationService x: self xpos y: (aNumber/100) orientation: self heading.
 ]
