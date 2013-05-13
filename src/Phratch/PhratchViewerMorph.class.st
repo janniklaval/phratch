@@ -149,7 +149,7 @@ PhratchViewerMorph >> rebuildCategorySelectors [
 
 	"calculate catButtonsExtent"
 	pad := 15. "padding on left, right, and betwen the button columns"
-	catButtonsExtent := ((2 * maxExtent x) + (3 * pad)) @ (((catList size // 2) * (maxExtent y + 6)) + 25).
+	catButtonsExtent := ((2 * maxExtent x) + (3 * pad)) @ (((catList size+1 // 2) * (maxExtent y + 6)) + 25).
 
 	"place the buttons"
 	leftColumnX := self left + 12 + pad.
