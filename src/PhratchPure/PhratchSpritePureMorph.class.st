@@ -24,6 +24,10 @@ PhratchSpritePureMorph class >> blockSpecs [
 			('x position'						r	xpos)
 			('y position'						r	ypos)
 			('direction'						r	heading)
+			-
+			('laser position'						r	laserpos)
+			('telemeter position'						r	telemeterpos)
+			('infrared position'						r	infraredpos)
 		).
 
 	^ blocks, super blockSpecs
@@ -67,12 +71,24 @@ PhratchSpritePureMorph >> heading: headingDegrees [
 	^ connectedRobot localizationService x: self xpos y: self ypos orientation: headingDegrees.
 ]
 
+{ #category : #'motion ops' }
+PhratchSpritePureMorph >> infraredpos [
+
+	| laser notification |
+	laser := connectedRobot irTelemeterService.
+	laser enableNotificationsEvery: 10.
+	notification := self notificationOrNilFrom: laser.
+	^ notification distances
+]
+
 { #category : #'as yet unclassified' }
 PhratchSpritePureMorph >> initializeKompai1 [
 
 	connectedRobot := PNGRobulabHandcodedFactory kompai1.
 	self setMyName: 'Kompai1'.
-	self xpos: 0; ypos:0.
+	"self xpos: 0; ypos:0.
+	"
+	self initializeSkin.
 	^ connectedRobot
 ]
 
@@ -81,8 +97,52 @@ PhratchSpritePureMorph >> initializeKompai2 [
 
 	connectedRobot := PNGRobulabHandcodedFactory kompai2.
 	self setMyName: 'Kompai2'.
-	self xpos: 0; ypos:0.
+	"self xpos: 0; ypos:0."
+	self initializeSkin.
 	^ connectedRobot
+]
+
+{ #category : #'as yet unclassified' }
+PhratchSpritePureMorph >> initializeSkin [
+	| botSkin botImage |
+	botSkin := Form fromFileNamed: (FileSystem workingDirectory / 'ScratchSkin' / 'bot.png').
+
+	botImage := ImageMedia new form: botSkin.
+	botImage mediaName: (self unusedMediaNameFromBaseName: (self defaultImageMedia mediaName)).
+	media addLast: botImage.
+	self lookLike: botImage mediaName.
+	self updateMediaCategory.
+	
+]
+
+{ #category : #'motion ops' }
+PhratchSpritePureMorph >> laserpos [
+
+	| laser notification |
+	laser := connectedRobot laserService.
+	laser enableNotificationsEvery: 10.
+	notification := self notificationOrNilFrom: laser.
+	^ notification distances
+]
+
+{ #category : #'as yet unclassified' }
+PhratchSpritePureMorph >> stopPlaying [
+	"Reset my transient state, such as pen down."
+
+	super stopPlaying.
+	connectedRobot emergencyStop.
+
+
+]
+
+{ #category : #'motion ops' }
+PhratchSpritePureMorph >> telemeterpos [
+
+	| laser notification |
+	laser := connectedRobot sonarTelemeterService.
+	laser enableNotificationsEvery: 10.
+	notification := self notificationOrNilFrom: laser.
+	^ notification distances
 ]
 
 { #category : #'as yet unclassified' }
