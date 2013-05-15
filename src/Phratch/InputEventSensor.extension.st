@@ -53,8 +53,8 @@ InputEventSensor >> fileDropPoint [
 
 { #category : #'*Phratch' }
 InputEventSensor >> keyPressed: asciiValue [
-	"Is this key being pressed?"
-	self nextEvent.
+	"Is this key being pressed down?
+	We assume that something else is processing events and therefore keyPressed it set."
 	^keyPressed = asciiValue
 
 ]
