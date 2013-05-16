@@ -8,6 +8,15 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
+PhratchFileTests >> addBlock: blockSpec toSprite: aSprite [
+	"blockSpec is something like: #('move %n steps' - forward:)"
+	| block |
+	block := aSprite blockFromSpec: blockSpec color: Color black.
+	aSprite addStack: block.
+	^ block
+]
+
+{ #category : #'as yet unclassified' }
 PhratchFileTests >> firstSprite [
 	^ window workPane submorphs first.
 ]
@@ -73,7 +82,28 @@ PhratchFileTests >> testSave [
 	self openProject: fileName.
 	
 	sprite := self firstSprite.
-	self assert: sprite objName = 'A sprite'
+	self assert: sprite objName = 'A sprite'.
+]
+
+{ #category : #'as yet unclassified' }
+PhratchFileTests >> testSaveBlocks [
+	"Create a few blocks and check they can be saved and loaded.
+	To create blocks we use sprite blockFromSpec: passing in a array of symbols from the blockSpec class method."
+
+	| fileName commandBlock1 commandBlock2 blocks |
+	fileName := '_testSaveBlocks.ypr'.
+	commandBlock1 := self addBlock: #('move %n steps' - forward:) toSprite: self firstSprite.
+	commandBlock2 := self addBlock: #('turn %n degrees' - turnRight: 15) toSprite: self firstSprite.
+
+	self saveProject: fileName.
+	window newPhratchProject.
+	self openProject: fileName.
+	
+	"Use codeString to compare blocks, to check that they are equivalent"
+	blocks := self firstSprite blocksBin submorphs.
+	self assert: blocks first codeString = commandBlock1 codeString.
+	self assert: blocks second codeString = commandBlock2 codeString.
+	
 ]
 
 { #category : #'as yet unclassified' }

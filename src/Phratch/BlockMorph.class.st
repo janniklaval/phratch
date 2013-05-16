@@ -1723,8 +1723,9 @@ BlockMorph >> start [
 
 { #category : #'event handling' }
 BlockMorph >> startDrag: evt [
-
+	
 	| startEvt rootForGrab |
+
 	evt hand toolType ifNil: [
 		startEvt := evt hand firstClickEvent.
 		startEvt ifNil: [startEvt := evt].
