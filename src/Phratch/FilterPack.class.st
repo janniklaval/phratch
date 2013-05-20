@@ -193,8 +193,10 @@ FilterPack >> applyStaticFiltersTo: srcForm [
 			tmp := resultForm.
 			resultForm := fOut.
 			fOut := tmp]].
-
+		
 	cachedForm := resultForm.
+	
+	
 
 ]
 

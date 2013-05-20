@@ -4379,7 +4379,7 @@ ScriptablePhratchMorph >> filterReset [
 
 { #category : #accessing }
 ScriptablePhratchMorph >> filteredForm [
-
+	
 	filterPack ifNil: [^ self rotatedForm].
 
 	filterPack filtersActive ifTrue: [  "filter parameters have changed; apply filters"
@@ -4387,7 +4387,8 @@ ScriptablePhratchMorph >> filteredForm [
 			ifTrue: [[filterPack applyFiltersTo: self rotatedForm]
 						ifError: [Transcript show: 'There is a problem with FilterPack'. filterPack := nil. ^ self rotatedForm]]
 			ifFalse: [filterPack applyFiltersTo: self rotatedForm]].
-	^ filterPack resultForm
+
+	^ filterPack resultForm as8BitColorForm
 
 ]
 
