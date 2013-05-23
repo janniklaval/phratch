@@ -241,23 +241,22 @@ PhratchFilePicker >> deleteDirectory [
 
 { #category : #private }
 PhratchFilePicker >> directoryMenu [
-	"BROKEN!!"
 	"Present a drop-down menu of all directories in my current path."
 
-	| menu pathParts prefix n serverEntries choice s serverPath entry1 |
+	| menu pathParts prefix serverEntries choice s serverPath entry1 pathArg n |
 	
 	self navigationForbidden ifTrue: [^ self].
 	menu := MenuMorph new defaultTarget: self.
 	pathParts := (currentDir) path.
 	prefix := ''.
-	n := 1.
+	pathArg := ''.
 	pathParts do: [:part |
+		pathArg := pathArg , '/' , part.
 		menu add: prefix asUTF8, part
 				target: self 
 				selector: #currentDirectory:
-				argument: n.
-		prefix := prefix ,'  '.
-		n := n + 1].
+				argument: pathArg.
+		prefix := prefix ,'  ' ].
 	pathParts isEmpty ifTrue: [
 		menu add: 'Computer' 
 				target: self 
@@ -267,6 +266,8 @@ PhratchFilePicker >> directoryMenu [
 	self addDriveShortcuts: menu.
 
 	"if opening a Phratch project, allow access to servers"
+	"TODO: Looks like n is not correct arg here."
+	n := 1.
 	phratchInfoClient ifNotNil: [
 		serverEntries := PhratchFrameMorph phratchServers.
 		(serverEntries notNil and:[serverEntries size > 0]) ifTrue: [
