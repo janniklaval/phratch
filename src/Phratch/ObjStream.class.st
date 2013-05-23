@@ -600,7 +600,9 @@ ObjStream >> getDict: anObject id: classID [
 		newContents add: ((self targetObjectFor: assoc key) -> (self targetObjectFor: assoc value)).
 		anObject removeKey: assoc key].
 	anObject size = 0 ifFalse: [self error: 'should be empty!'].
-	anObject addAll: newContents.
+	
+	"finally update the object with new contents"
+	newContents do: [ :kvpair | anObject at: kvpair key put: kvpair value ].
 
 ]
 
