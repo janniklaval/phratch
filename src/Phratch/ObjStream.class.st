@@ -302,6 +302,8 @@ ObjStream class >> userClasses [
 	"Answer an array of (<class id>, <class name>) records for all version numbered user classes."
 	"The following finds obsolete user classes:"
 	"self initialize. self userClasses reject: [:rec | Smalltalk includesKey: rec second]"
+	
+	"TODO: Why are some classes prefixed with # ?"
 
 	^ #(
 		"id		class"
@@ -368,6 +370,7 @@ ObjStream class >> userClasses [
 		(181		ListMultilineStringMorph)
 		(182		#PhratchScrollBar)
 		(185		UpdatingColorMorph)
+		(186		PhratchUpdatingStringMorph)
 
 		(200		CustomCommandBlockMorph)
 		(201		CustomBlockDefinition)

@@ -3661,16 +3661,13 @@ PhratchFrameMorph >> savePhratchProjectNoDialog [
 	projectName ifNil: [projectName := ''].
 	fName := self nameFromFileName: projectName.
 
+	"Do we need to ask for a filename or directory?"
 	dir := PhratchFileChooserDialog getLastFolderForType: #project.
 	(fName size = 0 | (dir asFileReference / fName , 'ypr') exists not) ifTrue: [^ self savePhratchProject].
 	PhratchFileChooserDialog lastFolderIsSampleProjectsFolder ifTrue:  [^ self savePhratchProject].
-
-	self updateLastHistoryEntryIfNeeded.
-
-"	projectName := FileDirectory localNameFor: (fName, '.sb'). " "ignore path, if any; save in the original project directory"
-	projectName := dir basename.  "ignore path, if any; save in the original project directory"
 	projectDirectory := dir.
 
+	self updateLastHistoryEntryIfNeeded.
 	self updateHistoryProjectName: projectName op: 'save'.
 	self writePhratchProject.
 

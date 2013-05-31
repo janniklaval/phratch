@@ -1,3 +1,16 @@
+"
+Tests loading and saving Phratch scripts.
+
+Instance Variables
+	window:		The PhratchFrameMorph. setUp opens this for you before your tests run, and tearDown closes it.
+
+New failing tests TODO (for defects):
+- Saving over existing file doesn't seem to work (nothing is saved), using either Save or Save As. See testSaveAgain.
+
+New failing tests written -- fixes needed:
+- After Save filename changes to default or Phratch Project.
+
+"
 Class {
 	#name : #PhratchFileTests,
 	#superclass : #TestCase,
@@ -83,6 +96,38 @@ PhratchFileTests >> testSave [
 	
 	sprite := self firstSprite.
 	self assert: sprite objName = 'A sprite'.
+]
+
+{ #category : #'as yet unclassified' }
+PhratchFileTests >> testSaveAgain [
+	"Test repeated saves, with a sprite name change, and that reloading the saved file works. 
+	
+	We use savePhratchProjectNoDialog instead of writePhratchProject as this mirrors the menu 
+	actions (and at the time of writing is buggy)."
+
+	| sprite projectName |
+	projectName := '_testSaveAgain'.
+	window projectName: projectName.
+	
+	sprite := self firstSprite.
+	self assert: sprite objName = 'Sprite1'.	
+	
+	"Make a change and save"
+	sprite objName: 'Cat'.
+	window savePhratchProjectNoDialog.
+	self assert: window projectName = projectName.
+		
+	"Make another change"
+	sprite objName: 'TopCat'.
+	window savePhratchProjectNoDialog.
+	self assert: window projectName = projectName.
+	
+	"Now make some changes that will get overwritten when we reload the project"
+	sprite objName: 'Another Name'.
+	self openProject: projectName.
+	
+	sprite := self firstSprite.
+	self assert: sprite objName = 'TopCat'.
 ]
 
 { #category : #'as yet unclassified' }
