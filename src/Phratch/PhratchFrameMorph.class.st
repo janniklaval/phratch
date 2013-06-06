@@ -2956,6 +2956,18 @@ PhratchFrameMorph >> openPhratchProjectNamed: fName [
 ]
 
 { #category : #'menu/button actions' }
+PhratchFrameMorph >> ownerChanged [
+	"The receiver's owner has changed its layout.
+	Since this method is called synchronously in the
+	ui, delete the receiver if there are any excpetions."
+	super ownerChanged.
+	fillScreenFlag ifTrue:  [
+		self position: 0@0.
+	self isSticky: true.
+	self extent: Display extent. ]
+]
+
+{ #category : #'menu/button actions' }
 PhratchFrameMorph >> paintSpriteMorph [
 
 	| m |
