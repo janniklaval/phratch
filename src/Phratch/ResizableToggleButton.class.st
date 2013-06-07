@@ -111,7 +111,7 @@ ResizableToggleButton >> label: aString font: aFont [
 
 	| oldLabel m |
 	(oldLabel := self findA: StringMorph) ifNotNil: [oldLabel delete].
-	m := StringMorph contents: aString font: (aFont ifNil: [PhratchPreferences standardButtonFont]).
+	m := StringMorph contents: aString font: (aFont ifNil: [PhratchFrameMorph standardButtonFont]).
 	m color: (Color r: (78/255) g: (82/255) b: (82/255)).
 	self extent: m extent + borderWidth.
 	self width: self width + sideMargin.

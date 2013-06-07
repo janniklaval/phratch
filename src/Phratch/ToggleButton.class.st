@@ -241,7 +241,7 @@ ToggleButton >> label: aString font: aFont [
 
 	| oldLabel m |
 	(oldLabel := self findA: StringMorph) ifNotNil: [oldLabel delete].
-	m := StringMorph contents: aString font: (aFont ifNil: [PhratchPreferences standardButtonFont]).
+	m := StringMorph contents: aString font: (aFont ifNil: [PhratchFrameMorph standardButtonFont]).
 	m position: self center - (m extent // 2).
 	self addMorph: m.
 	m lock.
@@ -413,7 +413,7 @@ ToggleButton >> shortcutLabel: aString font: aFont [
 
 	| oldLabel m |
 	(oldLabel := self findA: StringMorph) ifNotNil: [oldLabel delete].
-	m := StringMorph contents: aString font: (aFont ifNil: [PhratchPreferences standardButtonFont]).
+	m := StringMorph contents: aString font: (aFont ifNil: [PhratchFrameMorph standardButtonFont]).
 	m position: self center - (m extent // 2) + (0@6).
 	self addMorph: m.
 	m lock.

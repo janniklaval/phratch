@@ -1256,7 +1256,7 @@ PhratchProcess >> isAtomic [
 
 	(Sensor keyPressed: 27) ifTrue: [
 			Sensor flushKeyboard.
-			PhratchPreferences noviceMode ifFalse: [
+			ScriptablePhratchMorph noviceMode ifFalse: [
 				Display flash: stopButtonRect].
 			^ false ].
 

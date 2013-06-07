@@ -41,9 +41,11 @@ Class {
 		'DefaultSpriteForm',
 		'DoubleSize',
 		'Experimental',
+		'FileIOPreference',
 		'KeepOnStage',
 		'ListBlockColor',
 		'MeowSound',
+		'NoviceMode',
 		'ObjEncoding',
 		'OldMeowPrefixReversed',
 		'PhratchOrigin',
@@ -548,6 +550,16 @@ ScriptablePhratchMorph class >> meowSound [
 
 	^ MeowSound ifNil: [MeowSound := SampledSound fromFileNamed: (((FileSystem workingDirectory / 'ScratchSkin') / 'Kitten.wav') fullName)]
 
+]
+
+{ #category : #accessing }
+ScriptablePhratchMorph class >> noviceMode [
+	^ NoviceMode  ifNil: [ NoviceMode := false ]
+]
+
+{ #category : #accessing }
+ScriptablePhratchMorph class >> noviceMode: anObject [
+	NoviceMode := anObject
 ]
 
 { #category : #'block specs' }
@@ -1411,7 +1423,7 @@ ScriptablePhratchMorph >> askForFileIO [
 	| sFrame dialog |
 	(sFrame := self ownerThatIsA: PhratchFrameMorph) ifNil: [
 		sFrame := (self ownerThatIsA: OffscreenWorldMorph) frame].
-	PhratchPreferences fileIOPreference ifNotNil: [^ PhratchPreferences fileIOPreference].
+	ScriptablePhratchMorph fileIOPreference ifNotNil: [^ ScriptablePhratchMorph fileIOPreference].
 	dialog := FileIOAskerDialog new forPhratchFrame: sFrame.
 	^ dialog getUserResponse.
 ]
@@ -5441,7 +5453,7 @@ ScriptablePhratchMorph >> justDroppedInto: newOwner event: evt [
 		newOwner = sFrame workPane ifTrue: [^ self]. "allow drops onto the work pane"
 		^ evt hand rejectDropMorph: self event: evt].
 
-	PhratchPreferences noviceMode ifTrue: [^ evt hand rejectDropMorph: self event: evt].
+	ScriptablePhratchMorph noviceMode ifTrue: [^ evt hand rejectDropMorph: self event: evt].
 
 ]
 

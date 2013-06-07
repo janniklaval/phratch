@@ -13,8 +13,32 @@ Class {
 		'currentMethod',
 		'currentClass'
 	],
+	#classVars : [
+		'WarnIfNoChangesFile',
+		'WarnIfNoSourcesFile'
+	],
 	#category : #'Phratch-BYOB-Elements-UI'
 }
+
+{ #category : #accessing }
+ElementsMethodEditorMorph class >> warnIfNoChangesFile [
+	^ WarnIfNoChangesFile ifNil: [ WarnIfNoChangesFile := false ]
+]
+
+{ #category : #accessing }
+ElementsMethodEditorMorph class >> warnIfNoChangesFile: anObject [
+	WarnIfNoChangesFile := anObject
+]
+
+{ #category : #accessing }
+ElementsMethodEditorMorph class >> warnIfNoSourcesFile [
+	^ WarnIfNoSourcesFile ifNil: [ WarnIfNoSourcesFile := false ]
+]
+
+{ #category : #accessing }
+ElementsMethodEditorMorph class >> warnIfNoSourcesFile: anObject [
+	WarnIfNoSourcesFile := anObject
+]
 
 { #category : #'as yet unclassified' }
 ElementsMethodEditorMorph >> about [
@@ -131,9 +155,9 @@ ElementsMethodEditorMorph >> developmentMode [
 		extent: World extent - 50;
 		arrangePanes.
 	palette arrangePanes.	
-	PhratchPreferences noviceMode: false.
-	PhratchPreferences warnIfNoSourcesFile: true.
-	PhratchPreferences warnIfNoChangesFile: true.
+	ScriptablePhratchMorph noviceMode: false.
+	ElementsMethodEditorMorph warnIfNoSourcesFile: true.
+	ElementsMethodEditorMorph warnIfNoChangesFile: true.
 
 
 ]
@@ -214,7 +238,7 @@ ElementsMethodEditorMorph >> mouseDown: evt [
 
 	evt rightButtonPressed
 		ifTrue: [ ^self invokeContextMenu].
-	PhratchPreferences noviceMode ifTrue: [^self].
+	ScriptablePhratchMorph noviceMode ifTrue: [^self].
 	self startDrag: evt
 
 ]
@@ -332,9 +356,9 @@ ElementsMethodEditorMorph >> switchToInstanceSide [
 ElementsMethodEditorMorph >> userMode [
 
 	fillScreenOn := true.
-	PhratchPreferences noviceMode: true.
-	PhratchPreferences warnIfNoSourcesFile: false.
-	PhratchPreferences warnIfNoChangesFile: false.
+	ScriptablePhratchMorph noviceMode: true.
+	ElementsMethodEditorMorph warnIfNoSourcesFile: false.
+	ElementsMethodEditorMorph warnIfNoChangesFile: false.
 
 
 ]

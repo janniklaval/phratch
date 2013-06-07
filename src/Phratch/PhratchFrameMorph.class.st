@@ -50,14 +50,19 @@ Class {
 		'Fonts',
 		'FontsXO',
 		'IsXO',
+		'MeshServerEnabled',
 		'PhratchServers',
 		'PhratchSkin',
 		'PhratchSkinXO',
 		'ShareServer',
 		'ShareServerPath',
+		'StandardButtonFont',
+		'StandardMenuFont',
 		'SupportServer',
 		'SupportServerPath',
+		'TakeOverScreen',
 		'UseErrorCatcher',
+		'UseLargeFonts',
 		'Version',
 		'VersionDate',
 		'VisibleDrives',
@@ -295,6 +300,16 @@ PhratchFrameMorph class >> isXO: aBoolean [
 	"aBoolean ifTrue: [(Preferences setMenuFontTo: (StrikeFont fontName: #VerdanaBold size: 18))]
 			ifFalse: [(Preferences restoreDefaultFonts)]." "annoying for development"
 
+]
+
+{ #category : #accessing }
+PhratchFrameMorph class >> meshServerEnabled [
+	^ MeshServerEnabled  ifNil: [ MeshServerEnabled := true ]
+]
+
+{ #category : #accessing }
+PhratchFrameMorph class >> meshServerEnabled: anObject [
+	MeshServerEnabled := anObject
 ]
 
 { #category : #utilities }
@@ -593,6 +608,26 @@ PhratchFrameMorph class >> skinAt: aSymbolOrString ifAbsent: aBlock [
 
 ]
 
+{ #category : #'as yet unclassified' }
+PhratchFrameMorph class >> standardButtonFont [
+	^ StandardButtonFont   ifNil: [ StandardButtonFont := StandardFonts defaultFont ] 
+]
+
+{ #category : #accessing }
+PhratchFrameMorph class >> standardButtonFont: anObject [
+	StandardButtonFont := anObject
+]
+
+{ #category : #accessing }
+PhratchFrameMorph class >> standardMenuFont [
+	^ StandardMenuFont ifNil: [ StandardMenuFont := StandardFonts defaultFont ]
+]
+
+{ #category : #accessing }
+PhratchFrameMorph class >> standardMenuFont: anObject [
+	StandardMenuFont := anObject
+]
+
 { #category : #utilities }
 PhratchFrameMorph class >> supportServer [
 	"Answer the name of the Phratch support site server."
@@ -607,6 +642,16 @@ PhratchFrameMorph class >> supportServerPath [
 
 	^ SupportServerPath
 
+]
+
+{ #category : #accessing }
+PhratchFrameMorph class >> takeOverScreen [
+	^ TakeOverScreen ifNil: [ TakeOverScreen := false ] 
+]
+
+{ #category : #accessing }
+PhratchFrameMorph class >> takeOverScreen: anObject [
+	TakeOverScreen := anObject
 ]
 
 { #category : #'as yet unclassified' }
@@ -643,6 +688,16 @@ PhratchFrameMorph class >> useErrorCatcher [
 
 	^ UseErrorCatcher
 
+]
+
+{ #category : #accessing }
+PhratchFrameMorph class >> useLargeFonts [
+	^ UseLargeFonts ifNil: [ UseLargeFonts := false ]
+]
+
+{ #category : #accessing }
+PhratchFrameMorph class >> useLargeFonts: anObject [
+	UseLargeFonts := anObject
 ]
 
 { #category : #utilities }
@@ -765,7 +820,7 @@ PhratchFrameMorph >> addServerCommandsTo: menu [
 	"Add Phratch server commands to the given menu."
 
 	| endCmd |
-	PhratchPreferences meshServerEnabled ifFalse: [^ self].
+	PhratchFrameMorph meshServerEnabled ifFalse: [^ self].
 
 	menu addLine.
 	(workPane phratchServer notNil and:
@@ -987,7 +1042,7 @@ PhratchFrameMorph >> checkBoxLabelled: aString marked: aBool width: anInt [
 		ifTrue: [cnts := ' ', aString localized asMacRoman]
 		ifFalse: [cnts := ' ' asUTF8, aString localized].
 
-	label := StringMorph contents: cnts font: PhratchPreferences standardMenuFont.
+	label := StringMorph contents: cnts font: PhratchFrameMorph standardMenuFont.
 	line := Morph new color: Color transparent.
 	line height: (box height max: label height).
 	line width: (box width + label width max: anInt).
@@ -1721,7 +1776,7 @@ PhratchFrameMorph >> exitPresentationMode [
 	
 	quitFlag ifTrue: [^Smalltalk quitPrimitive].
 
-	PhratchPreferences takeOverScreen ifFalse: [
+	PhratchFrameMorph takeOverScreen ifFalse: [
 		Display fullScreenMode: false.
 		World restoreDisplay].
 
@@ -1923,11 +1978,10 @@ PhratchFrameMorph >> fillScreenOff [
 	self isSticky: false.
 	self extent: 1000@600"Display extent - 50".
 	UseErrorCatcher := false.
-	PhratchPreferences noviceMode: false.
-	PhratchPreferences warnIfNoSourcesFile: true.
-	PhratchPreferences warnIfNoChangesFile: true.
-	PhratchPreferences insertionPointColor: (Color r: 0.4 g: 1.0 b: 0.0).
-	PhratchPreferences textHighlightColor: (Color r: 0.4 g: 1.0 b: 0.0).
+	ScriptablePhratchMorph noviceMode: false.
+	ElementsMethodEditorMorph warnIfNoSourcesFile: true.
+	ElementsMethodEditorMorph warnIfNoChangesFile: true.
+	Paragraph insertionPointColor: (Color r: 0.4 g: 1.0 b: 0.0).
 
 ]
 
@@ -1935,7 +1989,7 @@ PhratchFrameMorph >> fillScreenOff [
 PhratchFrameMorph >> fillScreenOn [
 	"Start filling the entire screen and being sticky. Also configure a few other things for the end user such as turning off halos and the control menu (noviceMode) and making sure that error catching is enabled."
 
-	PhratchPreferences takeOverScreen ifTrue: [
+	PhratchFrameMorph takeOverScreen ifTrue: [
 		Display fullScreenMode: true.
 		World restoreDisplay].
 
@@ -1949,11 +2003,10 @@ PhratchFrameMorph >> fillScreenOn [
 	self comeToFront.
 	UseErrorCatcher := true.
 	Sensor useOSEvents: true.
-	PhratchPreferences noviceMode: true.
-	PhratchPreferences warnIfNoSourcesFile: false.
-	PhratchPreferences warnIfNoChangesFile: false.
-	PhratchPreferences insertionPointColor: (Color r: 0.353 g: 0.607 b: 0.788).
-	PhratchPreferences textHighlightColor: (Color r: 0.353 g: 0.607 b: 0.788).
+	ScriptablePhratchMorph noviceMode: true.
+	ElementsMethodEditorMorph warnIfNoSourcesFile: false.
+	ElementsMethodEditorMorph warnIfNoChangesFile: false.
+	Paragraph insertionPointColor: (Color r: 0.353 g: 0.607 b: 0.788).
 	self updateProjectName.
 	self step.
 
@@ -2499,7 +2552,7 @@ PhratchFrameMorph >> keyStroke: evt [
 			ch = 17 ifTrue: [^ self quitPhratch].
 			ch = 19 ifTrue: [^ self savePhratchProjectNoDialog].       
 			ch = 27 ifTrue: [
-				PhratchPreferences takeOverScreen ifTrue: [
+				PhratchFrameMorph takeOverScreen ifTrue: [
 					Display fullScreenMode: false.
 					Display fullScreenMode: true.
 					World restoreDisplay].
@@ -3115,7 +3168,7 @@ PhratchFrameMorph >> processKeyboardEvents [
 			ch = 17 ifTrue: [^ self quitPhratch].
 			ch = 19 ifTrue: [^ self savePhratchProjectNoDialog].
 			ch = 27 ifTrue: [
-				PhratchPreferences takeOverScreen ifTrue: [
+				PhratchFrameMorph takeOverScreen ifTrue: [
 					Display fullScreenMode: false.
 					Display fullScreenMode: true.
 					World restoreDisplay].
@@ -3575,7 +3628,7 @@ PhratchFrameMorph >> saveImageForEndUser [
 Close non-Phratch windows and save this
 image in end-user (fillScreen) mode?') ifFalse: [^ self].
 
-	PhratchFrameMorph isXO ifTrue: [PhratchPreferences useLargeFonts].
+	PhratchFrameMorph isXO ifTrue: [PhratchFrameMorph useLargeFonts].
 
 	self setLanguage: 'en'.
 
@@ -3609,7 +3662,7 @@ PhratchFrameMorph >> saveImageForEndUserSilently [
 Close non-Phratch windows and save this
 image in end-user (fillScreen) mode?') ifFalse: [^ self].
 "
-	PhratchFrameMorph isXO ifTrue: [PhratchPreferences useLargeFonts].
+	PhratchFrameMorph isXO ifTrue: [PhratchFrameMorph useLargeFonts].
 
 	self setLanguage: 'en'.
 
@@ -4014,13 +4067,13 @@ PhratchFrameMorph >> startup [
 			presentationMode := true.
 			self isHidden: true.
 			Display fillBlack].
-		(n asLowercase = 'fullscreen') ifTrue: [PhratchPreferences takeOverScreen: true]].
+		(n asLowercase = 'fullscreen') ifTrue: [PhratchFrameMorph takeOverScreen: true]].
 "
 	TakeOverScreen ifTrue: [
 		Display fullScreenMode: true.
 		World restoreDisplay].
 "
-			PhratchPreferences takeOverScreen: false.
+			PhratchFrameMorph takeOverScreen: false.
 
 	"self enterQuarterModeIfSmallScreen."
 

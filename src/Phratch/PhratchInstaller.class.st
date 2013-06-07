@@ -139,6 +139,56 @@ PhratchInstaller class >> initialize [
 ]
 
 { #category : #'as yet unclassified' }
+PhratchInstaller class >> phratchSettingsOn: aBuilder [  
+	<systemsettings>  
+	(aBuilder group: #phratch)
+		label: 'Phratch' translated;
+		description: 'All Phratch settings' translated;
+		with: [ 
+			(aBuilder setting: #insertionPointColor) 
+				label: 'insertionPointColor' translated;
+		 		target: Paragraph;
+		 		description: '...' translated.	
+			(aBuilder setting: #noviceMode) 
+				label: 'noviceMode' translated;
+		 		target: ScriptablePhratchMorph;
+		 		description: '...' translated.	
+			(aBuilder setting: #standardButtonFont) 
+				label: 'standardButtonFont' translated;
+		 		target: PhratchFrameMorph;
+		 		description: '...' translated.	
+			(aBuilder setting: #standardMenuFont) 
+				label: 'standardMenuFont' translated;
+		 		target: PhratchFrameMorph;
+		 		description: '...' translated.	
+			(aBuilder setting: #useLargeFonts) 
+				label: 'useLargeFonts' translated;
+		 		target: PhratchFrameMorph;
+		 		description: '...' translated.	
+			(aBuilder setting: #warnIfNoChangesFile) 
+				label: 'warnIfNoChangesFile' translated;
+		 		target: ElementsMethodEditorMorph;
+		 		description: '...' translated.	
+			(aBuilder setting: #warnIfNoSourcesFile) 
+				label: 'warnIfNoSourcesFile' translated;
+		 		target: ElementsMethodEditorMorph;
+		 		description: '...' translated.	
+			(aBuilder setting: #meshServerEnabled) 
+				label: 'meshServerEnabled' translated;
+		 		target: PhratchFrameMorph;
+		 		description: 'A mesh server allows to share projects' translated.	
+			(aBuilder setting: #takeOverScreen) 
+				label: 'takeOverScreen' translated;
+		 		target: PhratchFrameMorph;
+		 		description: 'Do you allow Phratch to display on all screen' translated.	
+			(aBuilder setting: #fileIOPreference) 
+				label: 'fileIOPreference' translated;
+		 		target: ScriptablePhratchMorph;
+		 		description: 'Do you allow Phratch to write files' translated.	
+		].
+]
+
+{ #category : #'as yet unclassified' }
 PhratchInstaller class >> pluginsPath [
 
 "	^(Smalltalk vmBinary resolve parent / 'Plugins')."

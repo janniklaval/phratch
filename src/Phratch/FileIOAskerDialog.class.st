@@ -12,7 +12,7 @@ FileIOAskerDialog >> always [
 	"Set the file I/O preference to 'always' and never prompt the user again."
 	
 	phratchFrame ifNotNil: [
-		PhratchPreferences fileIOPreference: true].
+		ScriptablePhratchMorph fileIOPreference: true].
 
 	response := true.
 	done := true.
@@ -56,7 +56,7 @@ FileIOAskerDialog >> never [
 	"Set the file I/O preference to 'never' and never prompt the user again."
 	
 	phratchFrame ifNotNil: [
-		phratchFrame fileIOPreference: false].
+		ScriptablePhratchMorph fileIOPreference: false].
 	
 	response := false.
 	done := true.

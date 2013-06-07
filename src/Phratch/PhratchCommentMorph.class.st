@@ -273,7 +273,7 @@ PhratchCommentMorph >> justDroppedInto: newOwner event: evt [
 		^ evt hand rejectDropMorph: self event: evt].
 
 	"okay to drop comments into the world during development"
-	((owner == World) and: [PhratchPreferences noviceMode not]) ifTrue: [^ self].
+	((owner == World) and: [ScriptablePhratchMorph noviceMode not]) ifTrue: [^ self].
 
 	(owner isKindOf: PhratchScriptsMorph) ifFalse: [
 		^ evt hand rejectDropMorph: self event: evt].
