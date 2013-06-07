@@ -131,7 +131,8 @@ ObjStream class >> fixedFormatClasses [
 		(24	Dictionary				getDict:id:			putDict:id:)
 		(25	IdentityDictionary		getDict:id:			putDict:id:)
 		(26	ColorArray				getArray:id:			putArray:id:)
-		(27	Association				getAssoc:id:			putAssoc:id:)								
+		(27	Association				getAssoc:id:			putAssoc:id:)	
+		(28	SmallIdentityDictionary		getDict:id:			putDict:id:)							
 	"28-29 reserved for additional collections"
 		(30	Color					getColor:id:			putColor:id:)
 		(31	TranslucentColor		getColor:id:			putColor:id:)
@@ -313,13 +314,15 @@ ObjStream class >> userClasses [
 		(103		EllipseMorph)
 		(104		AlignmentMorph)
 		(105		#StringMorph)
-		(106		#UpdatingStringMorph)
+		(106		UpdatingStringMorph)
 		(107		SimpleSliderMorph)
 		(108		SimpleButtonMorph)
 		(109		SampledSound)
 		(110		ImageMorph)
 		(111		SketchMorph)
-
+		
+		(112		MorphExtension)
+				
 		"(120	SpriteMorph)"
 		"(121		SoundMorph)"
 		"(122	ImageBoxMorph)"

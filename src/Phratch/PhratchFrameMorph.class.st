@@ -269,6 +269,7 @@ PhratchFrameMorph class >> initialize [
 	UseErrorCatcher := true.
 	AllowSharing := true.
 	DefaultNotes := ''.
+	Version := '0.1'.
 
 	self initFonts.
 
@@ -4486,11 +4487,13 @@ PhratchFrameMorph >> updateProjectName [
 
 	| s |
 	projectName ifNil: [projectName := ''].
-	projectTitleMorph contents: (self nameFromFileName: projectName).
+	projectName := (self nameFromFileName: projectName).
+	projectName := projectName, '.ypr'.
+	projectTitleMorph contents: projectName.
 
 	projectTitleMorph contents size > 0
-		ifTrue: [s := projectTitleMorph contents, '- BYOB']
-		ifFalse: [s := 'BYOB ', Version].
+		ifTrue: [s := projectTitleMorph contents, '- PHR']
+		ifFalse: [s := 'PHR ', Version asString].
 	PhratchPlugin primSetWindowTitle: s.
 
 	self fixLayout.
@@ -4640,6 +4643,9 @@ PhratchFrameMorph >> writePhratchProject [
 	"Write this Phratch project to the file named projectFile in the project directory. Called by savePhratchProject."
 
 	| oldScriptsTarget oldTab oldViewerCategory oldPosition saveError out |
+	workPane submorphsDo: [:m |
+		(m isKindOf: WatcherMorph) ifTrue: [m delete]].
+	
 	self stopAll.
 
 	ObjStream initialize. "just to make sure this works in filed-in changesets, -Jens"

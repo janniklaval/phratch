@@ -216,6 +216,7 @@ WatcherMorph >> initFieldsFrom: anObjStream version: classVersion [
 	classVersion < 5 ifTrue: [^ self].
 	self initFieldsNamed: #(
 		isLarge
+		isColor
 	) from: anObjStream.
 
 ]
@@ -615,7 +616,9 @@ WatcherMorph >> storeFieldsOn: anObjStream [
 		sliderMin
 		sliderMax
 		isLarge
+		isColor
 	) on: anObjStream.
+	      
 
 ]
 
@@ -643,6 +646,20 @@ WatcherMorph >> target: anObject selector: selector parameter: parameter [
 		parameter: parameter.
 
 	isSpriteSpecific := ScriptablePhratchMorph isSpriteSpecificTarget: anObject selector: selector.
+]
+
+{ #category : #accessing }
+WatcherMorph >> titleMorph [
+
+	^ titleMorph
+
+]
+
+{ #category : #accessing }
+WatcherMorph >> titleMorph: anObject [
+
+	titleMorph := anObject.
+
 ]
 
 { #category : #private }
