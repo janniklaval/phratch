@@ -2223,12 +2223,13 @@ PhratchFrameMorph >> helpMenu: aMenuTitleMorph [
 	menu add: 'Help Screens' action: #launchAllHelpScreens.
 	menu addLine.
 	menu add: 'BYOB Reference Manual' action: #openBYOBManual.
+	menu add: 'Panther Tutorials' action: #openPantherTutorials.
 	menu addLine.
 	menu add: 'About Phratch' action: #aboutPhratch.
 
 	menu localize.
 
-	#(1 2 3 4 5) do: [:n |
+	#(1 2 3 4 5 6) do: [:n |
 		menu labels at: n put:
 			((menu labels at: n) contents copyFrom: 1 to: (menu labels at: n) contents size - 1), PhratchTranslator ellipsesSuffix].
 
@@ -2932,6 +2933,14 @@ PhratchFrameMorph >> openMIDI [
 	"Prompt the user to select a MIDI port number, then open it."
 
 	workPane openMIDI.
+
+]
+
+{ #category : #'menu/button actions' }
+PhratchFrameMorph >> openPantherTutorials [
+
+	self world displayWorldSafely.
+	Cursor wait showWhile: [PhratchPlugin primOpenURL: 'http://pantherprogramming.weebly.com/panther-tutorials.html'].
 
 ]
 
