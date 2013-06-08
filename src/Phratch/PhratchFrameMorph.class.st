@@ -1958,7 +1958,7 @@ PhratchFrameMorph >> fileMenu: aMenuTitleMorph [
 		menu labels at: n put:
 			((menu labels at: n) contents copyFrom: 1 to: (menu labels at: n) contents size - 1), PhratchTranslator ellipsesSuffix].
 
-	menu invokeAt: aMenuTitleMorph bottomLeft + (0@10) in: World.
+	menu popUpAt: aMenuTitleMorph bottomLeft + (0@10) inWorld: World.
 
 
 ]
@@ -2233,7 +2233,7 @@ PhratchFrameMorph >> helpMenu: aMenuTitleMorph [
 		menu labels at: n put:
 			((menu labels at: n) contents copyFrom: 1 to: (menu labels at: n) contents size - 1), PhratchTranslator ellipsesSuffix].
 
-	menu invokeAt: aMenuTitleMorph bottomLeft + (0@10) in: World.
+	menu popUpAt: aMenuTitleMorph bottomLeft + (0@10) inWorld: World.
 ]
 
 { #category : #'menu/button actions' }
@@ -3894,7 +3894,7 @@ PhratchFrameMorph >> shareMenu: aMenuTitleMorph [
 		menu labels at: n put:
 			((menu labels at: n) contents copyFrom: 1 to: (menu labels at: n) contents size - 1), PhratchTranslator ellipsesSuffix].
 
-	menu invokeAt: (aMenuTitleMorph bottomLeft + (0@10)) in: World.
+	menu popUpAt: (aMenuTitleMorph bottomLeft + (0@10)) inWorld: World.
 
 
 ]

@@ -1288,7 +1288,7 @@ CommandBlockMorph >> rightButtonMenu [
 		menu addLine.
 		menu add: 'show tuples' value: #showTuples].
 	
-	(choice := (menu localize; invokeAt: World activeHand position  in:   World; yourself)selectedValue) ifNil: [^ self].
+	(choice := (menu localize; popUpAt: World activeHand position  inWorld:   World; yourself)selectedValue) ifNil: [^ self].
 	(#(presentHelpScreen duplicate fastDuplicate rename delete editElements inheritAttribute disinheritAttribute) includes: choice) ifTrue: [^ self perform: choice].
 	choice = #showSensorBoard ifTrue: [sFrame showSensorBoard. ^ self].
 	choice = #enableRemoteSensors ifTrue: [sFrame enableRemoteSensors. ^ self].

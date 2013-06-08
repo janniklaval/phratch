@@ -384,7 +384,7 @@ DebuggerFrameMorph >> varMenu [
 	mh := menu menuForm height.
 	mw := menu menuForm width.
 
-	menu invokeAt: ((varButton left + (varButton width - mw // 2)) @ (varButton top - mh)) in: World
+	menu popUpAt: ((varButton left + (varButton width - mw // 2)) @ (varButton top - mh)) inWorld: World
 ]
 
 { #category : #'as yet unclassified' }

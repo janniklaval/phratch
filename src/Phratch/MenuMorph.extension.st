@@ -76,3 +76,10 @@ MenuMorph >> localize [
 
 	"not yet implemented"
 ]
+
+{ #category : #'*Phratch' }
+MenuMorph >> popUpAt: aPosition inWorld: aWorld [
+	"Present this menu under control of the given hand."
+	^self popUpAt: aPosition forHand: aWorld primaryHand in: aWorld
+
+]

@@ -396,7 +396,7 @@ VariableBlockMorph >> rename [
 	list asArray do:[:aVarName |
 		choice add: aVarName action: nil.	
 	].
-	choice localize; invokeAt: self topRight in: World.
+	choice localize; popUpAt: self topRight inWorld: World.
 	
 	
 	choice selectedItem contents ifNil: [^ self].

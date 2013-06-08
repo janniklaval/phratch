@@ -507,7 +507,7 @@ CustomCommandBlockMorph >> rename [
 	menu := MenuMorph new defaultTarget: self.
 	defs do: [:eachDef |
 		menu addIcon: (receiver lambda: eachDef id) imageForm toolTip: nil action: eachDef].
-	choice := menu invokeAt: self topRight in: World.
+	choice := menu popUpAt: self topRight inWorld: World.
 	choice ifNil: [^ self].
 	self userSpec: choice userSpec
 ]
