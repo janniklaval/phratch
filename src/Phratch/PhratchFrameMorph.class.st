@@ -1307,7 +1307,7 @@ PhratchFrameMorph >> createMenuPanel [
 		"name			selector"
 		(File			fileMenu:)
 		(Edit			editMenu:)
-		(Share			shareMenu:)
+		"(Share			shareMenu:)"
 		(Help			helpMenu:)
 	).
 
