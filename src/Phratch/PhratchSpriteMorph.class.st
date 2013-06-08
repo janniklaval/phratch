@@ -83,8 +83,6 @@ PhratchSpriteMorph class >> blockSpecs [
 			('pen shade'						r	penShade)
 			('pen size'						r	penSize)
 			=
-			('clear'							-	clearPenTrails)
-			-
 			('pen down'						-	putPenDown)
 			('pen up'						-	putPenUp)
 			-

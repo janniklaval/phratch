@@ -330,6 +330,8 @@ ScriptablePhratchMorph class >> blockSpecs [
 			('%s as color'								g	stringAsColor: '#FFFFFF')
 			-
 			('color named %5'					g	getNamedColor:)
+		'pen'
+			('clear'						-	clearPenTrails)
 	).
 
 	^ blocks, self obsoleteBlockSpecs

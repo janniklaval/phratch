@@ -81,11 +81,9 @@ PhratchStageMorph class >> blockSpecs [
 			"('change zoom by %n'			-	changeZoomBy:)
 			('set zoom to %n %'				-	setZoomTo:)"
 			=
-			"('do with camera open'						c	doWithCamOpen)"
+			('do with camera open'						c	doWithCamOpen)
 			('camera is open?'							b	cameraIsOpen)
-			('close camera'				-	closeDefinitivelyCamera)
-		'pen'
-			('clear'						-	clearPenTrails)
+			('close camera'				-	closeDefinitivelyCamera)	
 	).
 
 	^ blocks, super blockSpecs
