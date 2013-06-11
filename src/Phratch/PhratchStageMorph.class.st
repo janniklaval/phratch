@@ -43,9 +43,9 @@ PhratchStageMorph class >> blockSpecs [
 			('mouse x'					r	mouseX)
 			('mouse y'					r	mouseY)
 			('mouse down?'				b	mousePressed)
-			"-
-			('key %k pressed?'			b	keyPressed: 'space')"
-			"('key pressed'								r	keyPressed)"
+			-
+			('key %k pressed?'			b	keyPressed: 'space')
+			('key pressed'								r	keyPressed)
 			-
 			('reset timer'				-	timerReset)
 			('timer'						r	timer)

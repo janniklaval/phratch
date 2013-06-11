@@ -137,7 +137,7 @@ PhratchSpriteMorph class >> blockSpecs [
 			('go to front'					-	comeToFront)
 			('go back %n layers'			-	goBackByLayers: 1)
 			=
-			"('do with camera open'			c	doWithCamOpen)"
+			('do with camera open'			c	doWithCamOpen)
 			('camera is open?'				b	cameraIsOpen)
 			('close camera'				-	closeDefinitivelyCamera)
 		'sensing'
