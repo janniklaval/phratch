@@ -16,14 +16,14 @@ SpecialArgMorph class >> example [
 	script := nil.
 	dict := Dictionary new.
 	dict
-		at: 'Any type' put: '%s';
-		at: 'Number' put: '%n';
-		at: 'Boolean (T/F)' put: '%b';
-		at: 'Text' put: '%T';
-		at: 'List' put: '%t';
-		at: 'Command' put: '%o';
-		at: 'Reporter' put: '%r';
-		at: 'Predicate (Reporter of Boolean)' put: '%p'.
+		at: 'Any type' put: '$String$';
+		at: 'Number' put: '$Number$';
+		at: 'Boolean (T/F)' put: '$Boolean$';
+		at: 'Text' put: '$Text$';
+		at: 'List' put: '$SAList$';
+		at: 'Command' put: '$CSlot$';
+		at: 'Reporter' put: '$OSReporter$';
+		at: 'Predicate (Reporter of Boolean)' put: '$OSBoolean$'.
 
 	dict keysDo: [:key |
 		block := CommandBlockMorph new

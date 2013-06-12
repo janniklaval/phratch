@@ -380,27 +380,27 @@ MultiArgMorph >> newSlot [
 	| specs slot |
 	specs := Dictionary new.
 	specs
-		at: #command put: '%o';
-		at: #reporter put: '%r';
-		at: #predicate put: '%p';
-		at: #list put: '%t';
-		at: #text put: '%T';
-		at: #any put: '%s';
-		at: #boolean put: '%b';
-		at: #number put: '%n';
-		at: #loop put: '%G';
-		at: #unevaluated put: '%j';
-		at: #unevaluatedBoolean put: '%Q';
-		at: #objSlot put: '%1'.
+		at: #command put: '$CSlot$';
+		at: #reporter put: '$OSReporter$';
+		at: #predicate put: '$OSBoolean$';
+		at: #list put: '$SAList$';
+		at: #text put: '$Text$';
+		at: #any put: '$String$';
+		at: #boolean put: '$Boolean$';
+		at: #number put: '$Number$';
+		at: #loop put: '$CArgSlot$';
+		at: #unevaluated put: '$UnEExp$';
+		at: #unevaluatedBoolean put: '$UnEBool$';
+		at: #objSlot put: '$SAObjS$'.
 
 " +++ deprecated experimental slots    -jens ++++++
 
-		at: #reporterSlot put: '%K';
-		at: #typeInReporter put: '%j'.
+		at: #reporterSlot put: '$MAUnEBool$';
+		at: #typeInReporter put: '$UnEExp$'.
 
 +++++++++++++++++++++++++++++++++++++++++++++++"
 
-	slot := CommandBlockMorph new uncoloredArgMorphFor: (specs at: type ifAbsent: [ '%s']).
+	slot := CommandBlockMorph new uncoloredArgMorphFor: (specs at: type ifAbsent: [ '$String$']).
 	slot defaultValue: ''.
 	^slot
 ]

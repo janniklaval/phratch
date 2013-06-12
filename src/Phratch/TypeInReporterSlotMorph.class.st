@@ -50,7 +50,7 @@ TypeInReporterSlotMorph >> evaluate [
 	answerBlock
 		isSpecialForm: true;
 		selector: #doAnswer;
-		commandSpec: '%s'.
+		commandSpec: '$String$'.
 	answerBlock argMorphs first defaultValue: submorphs first evaluate.
 	^ answerBlock
 "
@@ -60,7 +60,7 @@ TypeInReporterSlotMorph >> evaluate [
 TypeInReporterSlotMorph >> initialize [
 	super initialize.
 	self selector: #typeInLambda.
-	self commandSpec: '%s'.
+	self commandSpec: '$String$'.
 	removeElementMorph ifNotNil: [
 		removeElementMorph delete]
 ]

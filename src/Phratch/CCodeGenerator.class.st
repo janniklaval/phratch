@@ -420,7 +420,7 @@ void error(char *s) {
 	/* Print an error message and exit. */
 	static int printingStack = false;
 
-	printf("\n%s\n\n", s);
+	printf("\n$String$\n\n", s);
 	if (!printingStack) {
 		/* flag prevents recursive error when trying to print a broken stack */
 		printingStack = true;

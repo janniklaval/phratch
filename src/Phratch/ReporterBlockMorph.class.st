@@ -27,7 +27,7 @@ ReporterBlockMorph >> asLambda [
 		receiver: ScriptablePhratchMorph new;
 		isSpecialForm: false;
 		minArgs: 1;
-		commandSpec: '%s';
+		commandSpec: '$String$';
 		selector: #function.
 	lambda replaceArgMorph: (lambda argumentAt: 1) by: self fullCopy.
 	^lambda evaluate
@@ -549,7 +549,7 @@ ReporterBlockMorph >> lambdafied [
 		minArgs: 1;
 		selector: #function;
 		isAtomic: false;
-		commandSpec: 'the %s block').
+		commandSpec: 'the $String$ block').
 
 	(owner isKindOf: BlockMorph) ifTrue: [
 		owner replaceArgMorph: self by: lambda.

@@ -43,7 +43,7 @@ KeyEventHatMorph >> initialize [
 	super initialize.
 	self removeAllMorphs.
 
-	parts := PhratchTranslator labelPartsFor: 'when %k key pressed'.
+	parts := PhratchTranslator labelPartsFor: 'when $Keys$ key pressed'.
 
 	s := StringMorph new
 		contents: parts first; font: (PhratchFrameMorph getFont: #Label);

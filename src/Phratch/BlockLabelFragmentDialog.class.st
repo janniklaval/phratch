@@ -651,7 +651,7 @@ BlockLabelFragmentDialog >> initialize [
 BlockLabelFragmentDialog >> inputButtonForm [
 	| bg block |
 	block := VariableBlockMorph new commandSpec: 'Input name' localized; color: (ScriptablePhratchMorph blockColorFor: 'variables').
-	bg := LabelFragmentBlockMorph new commandSpec: '%i'; color: (ScriptablePhratchMorph blockColorFor: category asString).
+	bg := LabelFragmentBlockMorph new commandSpec: '$ListIndex$'; color: (ScriptablePhratchMorph blockColorFor: category asString).
 	bg replaceArgMorph: bg argMorphs first by: block.
 	^bg imageForm
 ]
@@ -709,18 +709,18 @@ BlockLabelFragmentDialog >> slotShapeFormFor: type size: aPoint [
 
 	specs := Dictionary new.
 	specs
-		at: #command put: '%o';
-		at: #loop put: '%G';
-		at: #unevaluated put: '%j';
-		at: #reporter put: '%r';
-		at: #predicate put: '%p';
-		at: #list put: '%t';
-		at: #text put: '%T';
-		at: #any put: '%s';
-		at: #boolean put: '%b';
-		at: #number put: '%n';
-		at: #unevaluatedBoolean put: '%Q';
-		at: #object put: '%1'.
+		at: #command put: '$CSlot$';
+		at: #loop put: '$CArgSlot$';
+		at: #unevaluated put: '$UnEExp$';
+		at: #reporter put: '$OSReporter$';
+		at: #predicate put: '$OSBoolean$';
+		at: #list put: '$SAList$';
+		at: #text put: '$Text$';
+		at: #any put: '$String$';
+		at: #boolean put: '$Boolean$';
+		at: #number put: '$Number$';
+		at: #unevaluatedBoolean put: '$UnEBool$';
+		at: #object put: '$SAObjS$'.
 
 	block := LabelFragmentBlockMorph new
 		color: (ScriptablePhratchMorph blockColorFor: category asString); 

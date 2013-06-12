@@ -34,52 +34,52 @@ PhratchStageMorph class >> blockSpecs [
 	| blocks |
 	blocks := #(
 		'sensing'
-			('ask %s and wait'			s	doAsk 'What''s your name?')
-			('ask %s in dialog'						-	showAskDialogWithText: 'What''s your name?')
+			('ask $String$ and wait'			s	doAsk 'What''s your name?')
+			('ask $String$ in dialog'						-	showAskDialogWithText: 'What''s your name?')
 			('answer'					r	answer)
 			-
-			('show dialog %s with text %s'	-	showInformDialog:withText: 'info' '')
+			('show dialog $String$ with text $String$'	-	showInformDialog:withText: 'info' '')
 			-
 			('mouse x'					r	mouseX)
 			('mouse y'					r	mouseY)
 			('mouse down?'				b	mousePressed)
 			-
-			('key %k pressed?'			b	keyPressed: 'space')
+			('key $Keys$ pressed?'			b	keyPressed: 'space')
 			('key pressed'								r	keyPressed)
 			-
 			('reset timer'				-	timerReset)
 			('timer'						r	timer)
 			-
-			('%a of %m'					r	getAttribute:of:)
-			('get %a of %m'				r	attribute:of:)
+			('$Attributes$ of $Sprite$'					r	getAttribute:of:)
+			('get $Attributes$ of $Sprite$'				r	attribute:of:)
 			-
 			('loudness'					r	soundLevel)
 			('loud?'						b	isLoud)
 			~
-			('%H sensor value'			r	sensor: 'slider')
-			('sensor %h?'				b	sensorPressed: 'button pressed')
+			('$SensorNames$ sensor value'			r	sensor: 'slider')
+			('sensor $SensorBooleans$?'				b	sensorPressed: 'button pressed')
 			=
-			('object %m'						r	getObject:)
-			('attribute %a'						r	get:)
+			('object $Sprite$'						r	getObject:)
+			('attribute $Attributes$'						r	get:)
 		'looks'
-			('switch to background %l'	-	showBackground: 'background1')
+			('switch to background $Costumes$'	-	showBackground: 'background1')
 			('next background'			-	nextBackground)
 			-
-			('replace background %n with %8'	-	replaceBackground:with: 1)
-			('add %8 to backgrounds'			-	addBackgroundTyped:)
+			('replace background $Number$ with $NewCostume$'	-	replaceBackground:with: 1)
+			('add $NewCostume$ to backgrounds'			-	addBackgroundTyped:)
 			('background #'				r	backgroundIndex)
 			=
-			('change %g effect by %n'	-	changeGraphicEffect:by: 'color' 25)
-			('set %g effect to %n'		-	setGraphicEffect:to: 'color' 0)
+			('change $Effects$ effect by $Number$'	-	changeGraphicEffect:by: 'color' 25)
+			('set $Effects$ effect to $Number$'		-	setGraphicEffect:to: 'color' 0)
 			('clear graphic effects'		-	filterReset)
-			('%g effect'							r	graphicEffectNamed: 'color')
+			('$Effects$ effect'							r	graphicEffectNamed: 'color')
 			-
-			('change horizontal pan by %n'	-	changeHPanBy:)
-			('set horizontal pan to %n'		-	setHPanTo: 0)
-			('change vertical pan by %n'	-	changeVPanBy:)
-			('set vertical pan to %n'			-	setVPanTo: 0)
-			"('change zoom by %n'			-	changeZoomBy:)
-			('set zoom to %n %'				-	setZoomTo:)"
+			('change horizontal pan by $Number$'	-	changeHPanBy:)
+			('set horizontal pan to $Number$'		-	setHPanTo: 0)
+			('change vertical pan by $Number$'	-	changeVPanBy:)
+			('set vertical pan to $Number$'			-	setVPanTo: 0)
+			"('change zoom by $Number$'			-	changeZoomBy:)
+			('set zoom to $Number$'				-	setZoomTo:)"
 			=
 			('do with camera open'						c	doWithCamOpen)
 			('camera is open?'							b	cameraIsOpen)

@@ -135,7 +135,7 @@ PhratchTranslator class >> checkTranslationDict [
 	"remove obsolete specs and math operators"
 	PhratchSpriteMorph obsoleteBlockSpecs do: [:spec |  "remove obsolete block specs"
 		allSpecs remove: spec ifAbsent: []].
-	mathOps := ('+-*/<=>' asArray collect: [:ch | '%n ', ch asString, ' %n']) asSet.
+	mathOps := ('+-*/<=>' asArray collect: [:ch | '$Number$ ', ch asString, ' $Number$']) asSet.
 	allSpecs := allSpecs select: [:spec | (mathOps includes: spec first) not].
 
 	allSpecs := allSpecs asArray sort: [:s1 :s2 | s1 first < s2 first].
@@ -242,16 +242,16 @@ PhratchTranslator class >> doNotTranslate [
 	'z'
 	'A'
 	'B'
-	'%n * %n'
-	'%n + %n'
-	'%n - %n'
-	'%n / %n'
-	'%n < %n'
-	'%n = %n'
-	'%n > %n'
-	'%s > %s'
-	'%s = %s'
-	'%s < %s'
+	'$Number$ * $Number$'
+	'$Number$ + $Number$'
+	'$Number$ - $Number$'
+	'$Number$ / $Number$'
+	'$Number$ < $Number$'
+	'$Number$ = $Number$'
+	'$Number$ > $Number$'
+	'$String$ > $String$'
+	'$String$ = $String$'
+	'$String$ < $String$'
 	'*'
 	'+'
 	'-'
@@ -797,13 +797,13 @@ PhratchTranslator class >> isoDict [
 
 { #category : #'language translation' }
 PhratchTranslator class >> labelPartsFor: aString [
-	"Answer a collection label strings for the translation of given block label. Currently handles one or two-part labels. In a two-part label, the label is split at the field name begginning with a percent sign. For example, 'when %s clicked' would yield the two label parts 'when' and 'clicked'."
-
-	| s i p1 p2 |
+	"Answer a collection label strings for the translation of given block label. Currently handles one or two-part labels. In a two-part label, the label is split at the field name begginning with a percent sign. For example, 'when $String$ clicked' would yield the two label parts 'when' and 'clicked'."
+	| s i p1 p2 j |
 	s := PhratchTranslator translationFor: aString.
-	i := s indexOf: $% ifAbsent: [^ Array with: s with: ''].
+	i := s indexOf: $$ ifAbsent: [^ Array with: s with: ''].
 	p1 := (s copyFrom: 1 to: i - 1) trimBoth.
-	p2 := (s copyFrom: i + 2 to: s size) trimBoth.
+	j := s indexOf: $$ startingAt: i+1 ifAbsent: [^ Array with: s with: ''].
+	p2 := (s copyFrom: j+1 to: s size) trimBoth.
 	^ Array with: p1 with: p2
 
 ]
@@ -840,22 +840,23 @@ PhratchTranslator class >> midiTranslationSet [
 
 { #category : #'language translation' }
 PhratchTranslator class >> parameterSpecs: aString [
-	"Answer the sequence of parameter specs (e.g. %n) for the given block specification. Used for checking translations."
-	"self parameterSpecs: 'this %b is %s a %c test %n%'"
-	"self parameterSpecs: 'this %b'"
-	"self parameterSpecs: 'this %'"
-	"self parameterSpecs: 'this'"
+	"Answer the sequence of parameter specs (e.g. $Number$) for the given block specification. Used for checking translations."
+	"self parameterSpecs: 'this $Boolean$ is $String$ a $Color$ test $Number$'"
+	"self parameterSpecs: 'this $Boolean$'"
+	"self parameterSpecs: 'this $'"
 
-	| result i |
+	| result i j |
 	result := OrderedCollection new.
 	i := 1.
 	[i < aString size] whileTrue: [
-		i := aString indexOf: $% startingAt: i.
-		i = 0 ifTrue: [i := aString size].  "% not found"
+		i := aString indexOf: $$ startingAt: i.
+		i = 0 ifTrue: [i := aString size]. 
 		i < aString size ifTrue: [
-			result addLast: (aString copyFrom: i to: i + 1)].
-		i := i + 2].
-
+			j := aString indexOf: $$ startingAt: i+1.
+			j <= aString size ifTrue: [
+				result addLast: (aString copyFrom: i to: j)].
+			i := j+1].
+		].
 	^ result asArray
 
 ]
@@ -863,9 +864,9 @@ PhratchTranslator class >> parameterSpecs: aString [
 { #category : #'import/export' }
 PhratchTranslator class >> parseCommandSpec: aCommandSpec [
 	"Answer an array of token strings containing my keywords and argument specs."
-	"self parseCommandSpec: '%a of %m'"
+	"self parseCommandSpec: '$Attributes$ of $Sprite$'"
 
-	| result len i j spec |
+	| result len i j spec k |
 	result := OrderedCollection new.
 	spec := aCommandSpec.
 	(spec isKindOf: UTF8) ifTrue: [spec := String withAll: spec].
@@ -874,19 +875,29 @@ PhratchTranslator class >> parseCommandSpec: aCommandSpec [
 	i := 1.
 	[(i < len) and: [(spec at: i) isSeparator]] whileTrue: [i := i + 1].
 	[i <= len] whileTrue: [
-		j := spec indexOf: $% startingAt: i.
+		j := spec indexOf: $$ startingAt: i.
 		j > 0
 			ifTrue: [
 				j > i ifTrue: [result addLast: (spec copyFrom: i to: j - 1)].
 				j < len
-					ifTrue: [result addLast: (spec copyFrom: j to: j + 1)]
-					ifFalse: [result addLast: '%'].
+					ifTrue: [k := j + 1.
+						((spec at: k) isLetter)
+							ifTrue: [[(k+1 <= len) and: [(spec at: k+1) ~= $$]] whileTrue:[
+								k _ k + 1].
+								(k >= len)
+									ifTrue: [result addLast: (spec copyFrom: j to: len).
+										i := len + 1]
+									ifFalse: [result addLast: (spec copyFrom: j to: k).
+										i := k+2]]
+							ifFalse: [result addLast: '$'.
+										i := j + 1]]
+					ifFalse: [result addLast: '$'].
 				i := j + 2]
 			ifFalse: [
 				result addLast: (spec copyFrom: i to: len).
 				i := len + 1]].
-
-	^ result asArray collect: [:s | s trimBoth]
+	result := result select: [:s | s ~= ' '].
+	^ result asArray collect: [:s | s trimBoth].
 ]
 
 { #category : #'import/export' }
@@ -1419,7 +1430,7 @@ PhratchTranslator class >> varSpecTranslationFor: spec varName: varName [
 
 	| s i |
 	s :=  PhratchTranslator translationFor: spec.
-	i := s indexOfSubCollection: '%v' startingAt: 1.
+	i := s indexOfSubCollection: '$Variable$' startingAt: 1.
 	^ (s copyFrom: 1 to: i - 1), varName, (s copyFrom: (i + 2) to: s size).
 
 ]

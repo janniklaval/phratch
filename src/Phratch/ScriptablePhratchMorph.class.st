@@ -130,206 +130,206 @@ ScriptablePhratchMorph class >> blockSpecs [
 	| blocks |
 	blocks := #(
 		'control'
-			('when %m clicked'				S	-)
-			('when %k key pressed'			K	-)
-			('when %m clicked'				M	-)
+			('when $Sprite$ clicked'				S	-)
+			('when $Keys$ key pressed'			K	-)
+			('when $Sprite$ clicked'				M	-)
 			-
-			('wait %n secs'					t	wait:elapsed:from: 1)
+			('wait $Number$ secs'					t	wait:elapsed:from: 1)
 			-
 			('forever'						c	doForever)
-			('repeat %n'						c	doRepeat 10)
+			('repeat $Number$ times'						c	doRepeat 10)
 			-
-			('broadcast %e'					-	broadcast:)
-			('broadcast %e and wait'			s	doBroadcastAndWait)
-			('when I receive %e'			E	-)
-			('%e received?'							b	eventReceivedNamed:)
+			('broadcast $Event$'					-	broadcast:)
+			('broadcast $Event$ and wait'			s	doBroadcastAndWait)
+			('when I receive $Event$'			E	-)
+			('$Event$ received?'							b	eventReceivedNamed:)
 			-
-			('forever if %b'					c	doForeverIf)
-			('if %b'							c	doIf)
-			('if %b'							c	doIfElse)
-			('if %b then %s else %s'		r	if:then:else:)
-			('if %b then %b else %b'		b	ifB:then:else:)
-			('wait until %b'					s	doWaitUntil)
-			('repeat until %b'				c	doUntil)
+			('forever if $Boolean$'					c	doForeverIf)
+			('if $Boolean$'							c	doIf)
+			('if $Boolean$'							c	doIfElse)
+			('if $Boolean$ then $String$ else $String$'		r	if:then:else:)
+			('if $Boolean$ then $Boolean$ else $Boolean$'		b	ifB:then:else:)
+			('wait until $Boolean$'					s	doWaitUntil)
+			('repeat until $Boolean$'				c	doUntil)
 			-
-			('stop all scripts for %e'			-	stopAllScriptsFor:)
+			('stop all scripts for $Event$'			-	stopAllScriptsFor:)
 			('stop script'					s	doReturn)
 			('stop all'						-	stopAll)
 			-
 			('self'							r	objName)
 			=
-			('run %o'						u	doRun)
-			('run %o %A %s'				u	doRunBlockWithArgs)
-			('run %o %A %t'					u	doRunBlockWithArgList)
-			('launch %o'					u	doFork)
-			('launch %o %A %s'				u	doForkBlockWithArgs)
-			('launch %o %A %t'				u	doForkBlockWithArgList)
-			('call %r'						d	doReport)
-			('call %r %A %s'					d	doCallBlockWithArgs)
-			('call %r %A %t'					d	doCallBlockWithArgList)
+			('run $CSlot$'						u	doRun)
+			('run $CSlot$ $Input$ $String$'				u	doRunBlockWithArgs)
+			('run $CSlot$ $Input$ $SAList$'					u	doRunBlockWithArgList)
+			('launch $CSlot$'					u	doFork)
+			('launch $CSlot$ $Input$ $String$'				u	doForkBlockWithArgs)
+			('launch $CSlot$ $Input$ $SAList$'				u	doForkBlockWithArgList)
+			('call $OSReporter$'						d	doReport)
+			('call $OSReporter$ $Input$ $String$'					d	doCallBlockWithArgs)
+			('call $OSReporter$ $Input$ $SAList$'					d	doCallBlockWithArgList)
 			-
-			('report %s'						s	doAnswer)
+			('report $String$'						s	doAnswer)
 			('stop block'						s	doStopBlock)
 			"-"
 			"('debug'							s	doPauseThread)
-			('debug %s'						R	doPauseThreadReporter)"
+			('debug $String$'						R	doPauseThreadReporter)"
 		'operators'
-			('%n + %n'						r	+ - -)
-			('%n - %n'						r	- - -)
-			('%n * %n'						r	* - -)
-			('%n / %n'						r	/\/ - -)
+			('$Number$ + $Number$'						r	+ - -)
+			('$Number$ - $Number$'						r	- - -)
+			('$Number$ * $Number$'						r	* - -)
+			('$Number$ / $Number$'						r	/\/ - -)
 			-
-			('pick random %n to %n'		r	randomFrom:to: 1 10)
-			('%3'									r	numericConstant: 'pi')
-			('date/time: %6'							r	returnW:)
+			('pick random $Number$ to $Number$'		r	randomFrom:to: 1 10)
+			('$Constants$'									r	numericConstant: 'pi')
+			('date/time: $TimeDates$'							r	returnW:)
 			-
-			('%s < %s'						b	< '' '')
-			('%s = %s'						b	= '' '')
-			('%s > %s'						b	> '' '')
+			('$String$ < $String$'						b	< '' '')
+			('$String$ = $String$'						b	= '' '')
+			('$String$ > $String$'						b	> '' '')
 			-
-			('%b and %b'					b	&)
-			('%b or %b'						b	|)
-			('not %b'						b	not)
+			('$Boolean$ and $Boolean$'					b	&)
+			('$Boolean$ or $Boolean$'						b	|)
+			('not $Boolean$'						b	not)
 			-
 			('true'							b	getTrue)
 			('false'							b	getFalse)
 			-
-			('join %s %s'					r	concatenate:with: 'hello ' 'world')
-			('letter %n of %s'				r	letter:of: 1 'world')
-			('length of %s'					r	stringLength: 'world')
-			('letters %n - %n of %s'		r	letters:through:of: 1 5 'hello world')
-			('index of %s starting at %n in %s'	r	indexOf:startingAt:in: 'o' 6 'hello world')
+			('join $String$ $String$'					r	concatenate:with: 'hello ' 'world')
+			('letter $Number$ of $String$'				r	letter:of: 1 'world')
+			('length of $String$'					r	stringLength: 'world')
+			('letters $Number$ - $Number$ of $String$'		r	letters:through:of: 1 5 'hello world')
+			('index of $String$ starting at $Number$ in $String$'	r	indexOf:startingAt:in: 'o' 6 'hello world')
 			-
-			('ascii code of %s'				r	asciiCodeOf: 'a')
-			('ascii %n as letter'				r	asciiLetter: '65')
+			('ascii code of $String$'				r	asciiCodeOf: 'a')
+			('ascii $Number$ as letter'				r	asciiLetter: '65')
 			-
-			('%n ^ %n'							r	n:toPower: - -)
-			('%n mod %n'					r	\\ - -)
-			('round %n'						r	rounded -)
+			('$Number$ ^ $Number$'							r	n:toPower: - -)
+			('$Number$ mod $Number$'					r	\\ - -)
+			('round $Number$'						r	rounded -)
 			-
-			('%f of %n'						r	computeFunction:of: 'sqrt' 10)
+			('$MathFunctions$ of $Number$'						r	computeFunction:of: 'sqrt' 10)
 			-
-			('%s as boolean'							b	stringToBoolean: 'true')
-			('is %s a %F ?'					b	isObject:type:)
+			('$String$ as boolean'							b	stringToBoolean: 'true')
+			('is $String$ a $Type$ ?'					b	isObject:type:)
 			=
 			('the script'						q	procedure)
-			('the script. Input names: %s'			q	procedureWithArgs)
-			('the %Z block'					Q	function)
-			('the %Z block. Input names: %s'		Q	functionWithArgs)
+			('the script. Input names: $String$'			q	procedureWithArgs)
+			('the $SAReporter$ block'					Q	function)
+			('the $SAReporter$ block. Input names: $String$'		Q	functionWithArgs)
 			-
 			('duplicate'							r	spawn)
-			('set %a to %s'					- 	set:to:)
-			('delete %m'						-	deleteObject:)
+			('set $Attributes$ to $String$'					- 	set:to:)
+			('delete $Sprite$'						-	deleteObject:)
 		'sound'
-			('play sound %S'				-	playSound:)
-			('play sound %S until done'		s	doPlaySoundAndWait)
+			('play sound $SoundNames$'				-	playSound:)
+			('play sound $SoundNames$ until done'		s	doPlaySoundAndWait)
 			('stop all sounds'				-	stopAllSounds)
 			-
-			('play drum %D for %n beats'	t 	drum:duration:elapsed:from: 48 0.2)
-			('rest for %n beats'				t 	rest:elapsed:from: 0.2)
+			('play drum $Drums$ for $Number$ beats'	t 	drum:duration:elapsed:from: 48 0.2)
+			('rest for $Number$ beats'				t 	rest:elapsed:from: 0.2)
 			-
-			('play note %N for %n beats'	t	noteOn:duration:elapsed:from: 60 0.5)
-			('set instrument to %I'			- 	midiInstrument: 1)
+			('play note $Notes$ for $Number$ beats'	t	noteOn:duration:elapsed:from: 60 0.5)
+			('set instrument to $Instruments$'			- 	midiInstrument: 1)
 			-
-			('change volume by %n'		- 	changeVolumeBy: -10)
-			('set volume to %n%'			- 	setVolumeTo: 100)
+			('change volume by $Number$'		- 	changeVolumeBy: -10)
+			('set volume to $Number$'			- 	setVolumeTo: 100)
 			('volume'						r 	volume)
 			-
-			('change tempo by %n'			- 	changeTempoBy: 20)
-			('set tempo to %n bpm'			- 	setTempoTo: 60)
+			('change tempo by $Number$'			- 	changeTempoBy: 20)
+			('set tempo to $Number$ bpm'			- 	setTempoTo: 60)
 			('tempo'							r 	tempo)
 		'motor'
-			('motor on for %n secs'			t	motorOnFor:elapsed:from: 1)
+			('motor on for $Number$ secs'			t	motorOnFor:elapsed:from: 1)
 			('motor on'						-	allMotorsOn)
 			('motor off'						-	allMotorsOff)
-			('motor power %n'				-	startMotorPower: 100)
-			('motor direction %W'			-	setMotorDirection: 'this way')
+			('motor power $Number$'				-	startMotorPower: 100)
+			('motor direction $MotorDirection$'			-	setMotorDirection: 'this way')
 		'variables'
 			~
-			('make %s'						-	addVariable: 'a variable')
+			('make $String$'						-	addVariable: 'a variable')
 			-
-			('show variable %v'				-	showVariable:)
-			('hide variable %v'				-	hideVariable:)
-			('delete %r'						-	deleteObject:)
+			('show variable $Variable$'				-	showVariable:)
+			('hide variable $Variable$'				-	hideVariable:)
+			('delete $OSReporter$'						-	deleteObject:)
 			-
-			('%v'									r	reportVar: '')
-			('variable named %s'			r	getVarOrListNamed:)
+			('$Variable$'									r	reportVar: '')
+			('variable named $String$'			r	getVarOrListNamed:)
 			-
-			('set %v to %s'						-	setVar:to: '' '0')
-			('change %v by %n'				-	changeVar:by: '' 1)
+			('set $Variable$ to $String$'						-	setVar:to: '' '0')
+			('change $Variable$ by $Number$'				-	changeVar:by: '' 1)
 			=
-			('move %v to x: %n y: %n'	-	moveVar:toX:y: '' 0 0)
-			('set layout of %v to %7'		-	setLayoutOfVar:to: '' '')
+			('move $Variable$ to x: $Number$ y: $Number$'	-	moveVar:toX:y: '' 0 0)
+			('set layout of $Variable$ to $LayoutStyles$'		-	setLayoutOfVar:to: '' '')
 			=
 		'list'
-			('%L'											r	contentsOfList: 'a list')
-			('list %X'						r	newList:)
+			('$List$'											r	contentsOfList: 'a list')
+			('list $MAAny$'						r	newList:)
 			-
-			('make list %s'								-	quietCreateListNamed: 'a list')
-			('delete list %s'								-	deleteList: 'a list')
+			('make list $String$'								-	quietCreateListNamed: 'a list')
+			('delete list $String$'								-	deleteList: 'a list')
 			-
-			('show list %L'								-	showList:)
-			('hide list %L'								-	hideList:)
+			('show list $List$'								-	showList:)
+			('hide list $List$'								-	hideList:)
 			-
-			('add %s to %L'					-	append:toList: 'thing')
-			('delete %y of %L'				-	deleteLine:ofList: 1)
-			('insert %s at %i of %L'			-	insert:at:ofList: 'thing' 1)
-			('replace item %i of %L with %s'		-	setLine:ofList:to: 1 'list' 'thing')
+			('add $String$ to $List$'					-	append:toList: 'thing')
+			('delete $ListDelete$ of $List$'				-	deleteLine:ofList: 1)
+			('insert $String$ at $ListIndex$ of $List$'			-	insert:at:ofList: 'thing' 1)
+			('replace item $ListIndex$ of $List$ with $String$'		-	setLine:ofList:to: 1 'list' 'thing')
 			-
-			('item %i of %L'					r	getLine:ofList: 1)
-			('length of %L'					r	lineCountOfList:)
-			('%L contains %s'				b	list:contains: 'list' 'thing')
-			('%L as text'						r	contentsOfList: )
+			('item $ListIndex$ of $List$'					r	getLine:ofList: 1)
+			('length of $List$'					r	lineCountOfList:)
+			('$List$ contains $String$'				b	list:contains: 'list' 'thing')
+			('$List$ as text'						r	contentsOfList: )
 			-
-			('copy of %t'					r	copyOfList: )
+			('copy of $SAList$'					r	copyOfList: )
 		'files'
-			('contents of file %s'						r	readFile:)
-			('line %n of file %s'					r	readLine:ofFile:)
-			('number of lines of file %s'				r	numFileLines:)
-			('contents of file at URL %s'				r	readFromUrl: 'http://')
-			('line %n of file at URL %s'			r	readLine:FromUrl: 1 'http://')
-			('number of lines of file at URL %s'		r	numUrlFileLines: 'http://')
-			('write %s to file %s'					-	writeText:toFile:)
-			('clear file %s'								-	clearFile:)
+			('contents of file $String$'						r	readFile:)
+			('line $Number$ of file $String$'					r	readLine:ofFile:)
+			('number of lines of file $String$'				r	numFileLines:)
+			('contents of file at URL $String$'				r	readFromUrl: 'http://')
+			('line $Number$ of file at URL $String$'			r	readLine:FromUrl: 1 'http://')
+			('number of lines of file at URL $String$'		r	numUrlFileLines: 'http://')
+			('write $String$ to file $String$'					-	writeText:toFile:)
+			('clear file $String$'								-	clearFile:)
 			-
 			('host mesh'										-	hostMesh)
 			('hosting mesh?'									b	isHostingMesh)
 			-
-			('join mesh %s'							-	joinMesh:)
+			('join mesh $String$'							-	joinMesh:)
 			('leave mesh'									-	leaveMesh)
 			-
 			('mesh IP address'								r	getMeshIPAddress)
 		'colors'
-			('%4'									g	reportColor: '')
-			('set %4 to %c'						-	setColor:to: '')
+			('$ColorVar$'									g	reportColor: '')
+			('set $ColorVar$ to $Color$'						-	setColor:to: '')
 			~
-			('show color %4'							-	showColor: '')
-			('hide color %4'							-	hideColor: '')
+			('show color $ColorVar$'							-	showColor: '')
+			('hide color $ColorVar$'							-	hideColor: '')
 			~
-			('make color %s'							-	addColor: 'a color')
-			('delete color %s'							-	deleteColorFull: 'a color')
+			('make color $String$'							-	addColor: 'a color')
+			('delete color $String$'							-	deleteColorFull: 'a color')
 			-
-			('color r: %n g: %n b: %n'	g	colorR:g:b: 0 0 0)
+			('color r: $Number$ g: $Number$ b: $Number$'	g	colorR:g:b: 0 0 0)
 			~
-			('%c red'									r	colorR:)
-			('%c green'									r	colorG:)
-			('%c blue'									r	colorB:)
+			('$Color$ red'									r	colorR:)
+			('$Color$ green'									r	colorG:)
+			('$Color$ blue'									r	colorB:)
 			-
-			('color h: %n s: %n b: %n'	g	colorH:s:v: 0 0 0)
+			('color h: $Number$ s: $Number$ b: $Number$'	g	colorH:s:v: 0 0 0)
 			~
-			('%c hue'									r	colorH:)
-			('%c saturation'								r	colorS:)
-			('%c brightness'								r	colorV:)
+			('$Color$ hue'									r	colorH:)
+			('$Color$ saturation'								r	colorS:)
+			('$Color$ brightness'								r	colorV:)
 			-
-			('mix %c with %c'						g	mixColor:with:)
-			('mix %c %n : %n with %c'	g	mixColor:ratioA:toB:with:)
+			('mix $Color$ with $Color$'						g	mixColor:with:)
+			('mix $Color$ $Number$ : $Number$ with $Color$'	g	mixColor:ratioA:toB:with:)
 			-
-			('color of pixel x: %n y: %n'		g	colorAtX:y: 0 0)
+			('color of pixel x: $Number$ y: $Number$'		g	colorAtX:y: 0 0)
 			-
-			('%c as string'								r	colorAsString:)
-			('%s as color'								g	stringAsColor: '#FFFFFF')
+			('$Color$ as string'								r	colorAsString:)
+			('$String$ as color'								g	stringAsColor: '#FFFFFF')
 			-
-			('color named %5'					g	getNamedColor:)
+			('color named $NamedColors$'					g	getNamedColor:)
 		'pen'
 			('clear'						-	clearPenTrails)
 	).
@@ -376,8 +376,8 @@ ScriptablePhratchMorph class >> blockSpecsForTranslation [
 	allSpecs
 		add: 'else';
 		add: 'variables';
-		add: 'set %v to %n';
-		add: 'change %v by %n'.
+		add: 'set $Variable$ to $Number$';
+		add: 'change $Variable$ by $Number$'.
 	^ allSpecs asArray sort
 
 ]
@@ -570,54 +570,54 @@ ScriptablePhratchMorph class >> obsoleteBlockSpecs [
 
 	^ #(
 	'obsolete number blocks'
-		('abs %n'							r	abs -)
-		('sqrt %n'							r	sqrt -)
+		('abs $Number$'							r	abs -)
+		('sqrt $Number$'							r	sqrt -)
 	'obsolete sound blocks'
-		('rewind sound %S'					-	rewindSound:)
+		('rewind sound $SoundNames$'					-	rewindSound:)
 	'obsolete sprite motion blocks'
 		('point away from edge'				-	turnAwayFromEdge)
-		('glide x:%n y:%n in %n secs'		t	gotoX:y:duration:elapsed:from: 50 50 1)
+		('glide x:$Number$ y:$Number$ in $Number$ secs'		t	gotoX:y:duration:elapsed:from: 50 50 1)
 	'obsolete sprite looks blocks'
-		('change costume by %n'			-	changeCostumeIndexBy: 1)
-		('change background by %n' 		-	changeBackgroundIndexBy: 1)
+		('change costume by $Number$'			-	changeCostumeIndexBy: 1)
+		('change background by $Number$' 		-	changeBackgroundIndexBy: 1)
 		-
-		('change stretch by %n'				-	changeStretchBy:)
-		('set stretch to %n%'					-	setStretchTo: 100)
+		('change stretch by $Number$'				-	changeStretchBy:)
+		('set stretch to $Number$'					-	setStretchTo: 100)
 		-
 		('say nothing'						-	sayNothing)
 		-
-		('change visibility by %n'			-	changeVisibilityBy: -10)
-		('set visibility to %n%'				-	setVisibilityTo: 100)
+		('change visibility by $Number$'			-	changeVisibilityBy: -10)
+		('set visibility to $Number$'				-	setVisibilityTo: 100)
 	'obsolete image effects'
-		('change color-effect by %n'		-	changeHueShiftBy: 25)
-		('set color-effect to %n'				-	setHueShiftTo: 0)
+		('change color-effect by $Number$'		-	changeHueShiftBy: 25)
+		('set color-effect to $Number$'				-	setHueShiftTo: 0)
 		-
-		('change fisheye by %n'			-	changeFisheyeBy: 10)
-		('set fisheye to %n'					-	setFisheyeTo: 0)
+		('change fisheye by $Number$'			-	changeFisheyeBy: 10)
+		('set fisheye to $Number$'					-	setFisheyeTo: 0)
 		~
-		('change whirl by %n'				-	changeWhirlBy: 30)
-		('set whirl to %n'					-	setWhirlTo: 0)
+		('change whirl by $Number$'				-	changeWhirlBy: 30)
+		('set whirl to $Number$'					-	setWhirlTo: 0)
 		-
-		('change pixelate by %n'			- 	changePixelateCountBy: 1)
-		('set pixelate to %n'					- 	setPixelateCountTo: 1)
+		('change pixelate by $Number$'			- 	changePixelateCountBy: 1)
+		('set pixelate to $Number$'					- 	setPixelateCountTo: 1)
 		~
-		('change mosaic by %n'				- 	changeMosaicCountBy: 1)
-		('set mosaic to %n'					- 	setMosaicCountTo: 1)
+		('change mosaic by $Number$'				- 	changeMosaicCountBy: 1)
+		('set mosaic to $Number$'					- 	setMosaicCountTo: 1)
 		-
-		('change brightness-shift by %n'	-	changeBrightnessShiftBy: 10)
-		('set brightness-shift to %n'			-	setBrightnessShiftTo: 0)
+		('change brightness-shift by $Number$'	-	changeBrightnessShiftBy: 10)
+		('set brightness-shift to $Number$'			-	setBrightnessShiftTo: 0)
 		~
-		('change saturation-shift by %n'	-	changeSaturationShiftBy: 10)
-		('set saturation-shift to %n'			-	setSaturationShiftTo: 0)
+		('change saturation-shift by $Number$'	-	changeSaturationShiftBy: 10)
+		('set saturation-shift to $Number$'			-	setSaturationShiftTo: 0)
 		-
-		('change pointillize drop by %n'		-	changePointillizeSizeBy: 5)
-		('set pointillize drop to %n'			-	setPointillizeSizeTo: 0)
+		('change pointillize drop by $Number$'		-	changePointillizeSizeBy: 5)
+		('set pointillize drop to $Number$'			-	setPointillizeSizeTo: 0)
 		~
-		('change water ripple by %n'		-	changeWaterRippleBy: 5)
-		('set water ripple to %n'				-	setWaterRippleTo: 0)
+		('change water ripple by $Number$'		-	changeWaterRippleBy: 5)
+		('set water ripple to $Number$'				-	setWaterRippleTo: 0)
 		-
-		('change blur by %n'				-	changeBlurBy: 1)
-		('set blur to %n'						-	setBlurTo: 0)
+		('change blur by $Number$'				-	changeBlurBy: 1)
+		('set blur to $Number$'						-	setBlurTo: 0)
 	)
 
 ]
@@ -1514,7 +1514,7 @@ ScriptablePhratchMorph >> blockFromOldFormTuple: tuple receiver: scriptOwner [
 			color: Color lightGray;
 			receiver: scriptOwner;
 			selector: k;
-			commandSpec: 'the %B block'.
+			commandSpec: 'the $BlockId$ block'.
 		(block argumentAt: 1) defaultValue: (tuple at: 2).
 		^block ].
 
@@ -1550,7 +1550,7 @@ ScriptablePhratchMorph >> blockFromOldFormTuple: tuple receiver: scriptOwner [
 			selector: #doMakeNewList.
 		spec := 'list'.
 		argCount := tuple size - 1.
-		argCount timesRepeat: [ spec := spec, ' %s' ].
+		argCount timesRepeat: [ spec := spec, ' $String$' ].
 		block commandSpec: spec.
 		1 to: argCount do: [:i |
 			arg := tuple at: i + 1.
@@ -1573,7 +1573,7 @@ ScriptablePhratchMorph >> blockFromOldFormTuple: tuple receiver: scriptOwner [
 			selector: k.
 		spec := scriptOwner blockSpecForSelector: k.
 		argCount := tuple size - 1.
-		(argCount - 2) timesRepeat: [ spec := spec, ' %s' ].
+		(argCount - 2) timesRepeat: [ spec := spec, ' $String$' ].
 		block commandSpec: spec.
 		1 to: argCount do: [:i |
 			arg := tuple at: i + 1.
@@ -1595,7 +1595,7 @@ ScriptablePhratchMorph >> blockFromOldFormTuple: tuple receiver: scriptOwner [
 			selector: k.
 		spec := scriptOwner blockSpecForSelector: k.
 		argCount := tuple size - 1.
-		(argCount - 2) timesRepeat: [ spec := spec, ' %s' ].
+		(argCount - 2) timesRepeat: [ spec := spec, ' $String$' ].
 		block commandSpec: spec.
 		1 to: argCount do: [:i |
 			arg := tuple at: i + 1.
@@ -1641,7 +1641,7 @@ ScriptablePhratchMorph >> blockFromOldFormTuple: tuple receiver: scriptOwner [
 		argCount := tuple size - 2.
 		argCount > 1 ifTrue: [
 			csp := block commandSpec.
-			argCount - 1 timesRepeat: [ csp := csp, ' %s' ].
+			argCount - 1 timesRepeat: [ csp := csp, ' $String$' ].
 			block commandSpec: csp ]].
 
 	(block isKindOf: CommandBlockMorph) ifTrue: [
@@ -1778,7 +1778,7 @@ ScriptablePhratchMorph >> blockFromTuple: tuple receiver: scriptOwner [
 			color: Color lightGray;
 			receiver: rcvr;
 			selector: k;
-			commandSpec: 'the %B block'.
+			commandSpec: 'the $BlockId$ block'.
 		(block argumentAt: 1) defaultValue: (tuple at: 4).
 		^block ].
 
@@ -1855,7 +1855,7 @@ ScriptablePhratchMorph >> blockFromTuple: tuple receiver: scriptOwner [
 			selector: #doMakeNewList.
 		spec := 'list'.
 		argCount := tuple size - 3.
-		argCount timesRepeat: [ spec := spec, ' %s' ].
+		argCount timesRepeat: [ spec := spec, ' $String$' ].
 		block commandSpec: spec.
 		1 to: argCount do: [:i |
 			arg := tuple at: i + 3. 
@@ -1878,7 +1878,7 @@ ScriptablePhratchMorph >> blockFromTuple: tuple receiver: scriptOwner [
 			selector: k.
 		spec := rcvr blockSpecForSelector: k.
 		argCount := tuple size - 3. 
-		(argCount - 3) timesRepeat: [ spec := spec, ' %s' ].
+		(argCount - 3) timesRepeat: [ spec := spec, ' $String$' ].
 		block commandSpec: spec.
 		1 to: argCount do: [:i |
 			arg := tuple at: i + 3.
@@ -1908,7 +1908,7 @@ ScriptablePhratchMorph >> blockFromTuple: tuple receiver: scriptOwner [
 			isAtomic: (tuple at: 8).
 		spec := scriptOwner blockSpecForSelector: k. 
 		argCount := tuple size - 9.
-		(argCount - 2) timesRepeat: [ spec := spec, ' %s' ].
+		(argCount - 2) timesRepeat: [ spec := spec, ' $String$' ].
 		block commandSpec: spec.
 		1 to: argCount do: [:i |
 			arg := tuple at: i + 8.
@@ -1931,7 +1931,7 @@ ScriptablePhratchMorph >> blockFromTuple: tuple receiver: scriptOwner [
 			selector: k.
 		argCount := tuple size - 3.
 		spec := 'script variables' localized.
-		argCount timesRepeat: [ spec := spec, ' %s' ].
+		argCount timesRepeat: [ spec := spec, ' $String$' ].
 		block commandSpec: spec.
 		1 to: argCount do: [:i |
 			arg := tuple at: i + 3.
@@ -1987,7 +1987,7 @@ ScriptablePhratchMorph >> blockFromTuple: tuple receiver: scriptOwner [
 		argCount := tuple size - 9. 
 		argCount > 1 ifTrue: [
 			csp := block commandSpec.
-			argCount - 1 timesRepeat: [ csp := csp, ' %s' ].
+			argCount - 1 timesRepeat: [ csp := csp, ' $String$' ].
 			block commandSpec: csp ].
 		1 to: argCount do: [:i |
 			arg := tuple at: i + 8.
@@ -2014,7 +2014,7 @@ ScriptablePhratchMorph >> blockFromTuple: tuple receiver: scriptOwner [
 		argCount := tuple size - 9. 
 		argCount > 1 ifTrue: [
 			csp := block commandSpec.
-			argCount - 1 timesRepeat: [ csp := csp, ' %s' ].
+			argCount - 1 timesRepeat: [ csp := csp, ' $String$' ].
 			block commandSpec: csp ].
 		1 to: argCount do: [:i |
 			arg := tuple at: i + 8.
@@ -2038,7 +2038,7 @@ ScriptablePhratchMorph >> blockFromTuple: tuple receiver: scriptOwner [
 		(block isKindOf: MultiArgCommandBlockMorph) ifTrue: [
 			argCount := tuple size - 3.
 			csp := block commandSpec.
-			(argCount - 3) timesRepeat: [ csp := csp, ' %s' ].
+			(argCount - 3) timesRepeat: [ csp := csp, ' $String$' ].
 			block commandSpec: csp.
 			1 to: argCount do: [:i |
 				arg := tuple at: i + 3.
@@ -2348,7 +2348,7 @@ ScriptablePhratchMorph >> callMe [
 	^ (ReporterBlockMorph new
 		color: Color random;
 		receiver: self;
-		commandSpec: 'Wow, you''re a smart one. Now call ME %s !';
+		commandSpec: 'Wow, you''re a smart one. Now call ME $String$ !';
 		selector: #callMeWith:) asLambda
 		
 ]
@@ -2366,7 +2366,7 @@ ScriptablePhratchMorph >> callMeWith: anArg [
 		^ (CommandBlockMorph new
 			color: Color random;
 			receiver: self;
-			commandSpec: 'Cool! Now RUN me %s !';
+			commandSpec: 'Cool! Now RUN me $String$ !';
 			selector: #runMeWith:;
 			yourself) asLambda ].
 
@@ -7571,7 +7571,7 @@ ScriptablePhratchMorph >> showOrHideColor: varName show: showFlag [
 		(w := self ownerThatIsA: OffscreenWorldMorph) ifNil: [^ self].
 		frame := w frame].
 
-	b := (self blockFromSpec: #('%4' g reportColor: '')  color: (self class blockColorFor: 'colors')) defaultArgs: {varName}.
+	b := (self blockFromSpec: #('$ColorVar$' g reportColor: '')  color: (self class blockColorFor: 'colors')) defaultArgs: {varName}.
 	w := frame watcherForBlock: b.
 	showFlag
 		ifTrue: [w ifNil: [frame showWatcher: b createWatcher]]

@@ -681,9 +681,9 @@ WatcherMorph >> translatedName [
 	(param isKindOf: String) ifTrue: [result := self replaceArgIn: result with: param] ifFalse: [result := self replaceArgIn: result with: '[]'].
 	
 	"#sensor: = sel ifTrue: [
-		result := self replace: '%H' with: (PhratchTranslator translationFor: param) in: result].
+		result := self replace: '$SensorNames$' with: (PhratchTranslator translationFor: param) in: result].
 	#sensorPressed: = sel ifTrue: [
-		result := self replace: '%h' with: (PhratchTranslator translationFor: param) in: result]."
+		result := self replace: '$SensorBooleans$' with: (PhratchTranslator translationFor: param) in: result]."
 
 	^ result
 ]

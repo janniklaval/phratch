@@ -49,24 +49,24 @@ PhratchSpriteMorph class >> blockSpecs [
 			('delete me if I am a clone'						-	deleteMe)
 			('I am a clone?'					b	isClone)
 			=
-			('when %m created'			C	-)
+			('when $Sprite$ created'			C	-)
 
 		'motion'
-			('move %n steps'				-	forward:)
-			('turn %n degrees'				-	turnRight: 15)	"icon shows turn direction"
-			('turn %n degrees'				-	turnLeft: 15)	"icon shows turn direction"
+			('move $Number$ steps'				-	forward:)
+			('turn $Number$ degrees'				-	turnRight: 15)	"icon shows turn direction"
+			('turn $Number$ degrees'				-	turnLeft: 15)	"icon shows turn direction"
 			-
-			('point in direction %d'			-	heading: 90)
-			('point towards %m'				-	pointTowards:)
+			('point in direction $Directions$'			-	heading: 90)
+			('point towards $Sprite$'				-	pointTowards:)
 			-
-			('go to x:%n y:%n'				-	gotoX:y: 0 0)
-			('go to %m'						-	gotoSpriteOrMouse:)
-			('glide %n secs to x:%n y:%n'	t	glideSecs:toX:y:elapsed:from: 1 50 50)
+			('go to x:$Number$ y:$Number$'				-	gotoX:y: 0 0)
+			('go to $Sprite$'						-	gotoSpriteOrMouse:)
+			('glide $Number$ secs to x:$Number$ y:$Number$'	t	glideSecs:toX:y:elapsed:from: 1 50 50)
 			-
-			('change x by %n'				-	changeXposBy: 10)
-			('set x to %n'					-	xpos: 0)
-			('change y by %n'				-	changeYposBy: 10)
-			('set y to %n'					-	ypos: 0)
+			('change x by $Number$'				-	changeXposBy: 10)
+			('set x to $Number$'					-	xpos: 0)
+			('change y by $Number$'				-	changeYposBy: 10)
+			('set y to $Number$'					-	ypos: 0)
 			-
 			('if on edge, bounce'			-	bounceOffEdge)
 			-
@@ -86,48 +86,48 @@ PhratchSpriteMorph class >> blockSpecs [
 			('pen down'						-	putPenDown)
 			('pen up'						-	putPenUp)
 			-
-			('set pen color to %c'			-	penColor:)
-			('change pen color by %n'		-	changePenHueBy:)
-			('set pen color to %n'			-	setPenHueTo: 0)
+			('set pen color to $Color$'			-	penColor:)
+			('change pen color by $Number$'		-	changePenHueBy:)
+			('set pen color to $Number$'			-	setPenHueTo: 0)
 			-
-			('change pen shade by %n'		-	changePenShadeBy:)
-			('set pen shade to %n'			-	setPenShadeTo: 50)
+			('change pen shade by $Number$'		-	changePenShadeBy:)
+			('set pen shade to $Number$'			-	setPenShadeTo: 50)
 			-
-			('change pen size by %n'		-	changePenSizeBy: 1)
-			('set pen size to %n'				-	penSize: 1)
+			('change pen size by $Number$'		-	changePenSizeBy: 1)
+			('set pen size to $Number$'				-	penSize: 1)
 			-
 			('stamp'							-	stampCostume)
 	).
 
 	blocks := blocks, #(
 		'looks'
-			('switch to costume %l'			-	lookLike:)
+			('switch to costume $Costumes$'			-	lookLike:)
 			('next costume'					-	nextCostume)
 			('costume #'						r	costumeIndex)
 			-
-			('replace costume %n with %8'	-	replaceCostume:with: 1)
-			('add %8 to costumes'	-	addCostumeTyped:)
-			('delete costume %n'		-	deleteCostumeAt: 1)
+			('replace costume $Number$ with $NewCostume$'	-	replaceCostume:with: 1)
+			('add $NewCostume$ to costumes'	-	addCostumeTyped:)
+			('delete costume $Number$'		-	deleteCostumeAt: 1)
 			=
-			('say %s for %n secs'			t	say:duration:elapsed:from: 'Hello!' 2)
-			('say %s'						-	say: 'Hello!')
-			('think %s for %n secs'			t	think:duration:elapsed:from: 'Hmm...' 2)
-			('think %s'						-	think: 'Hmm...')
+			('say $String$ for $Number$ secs'			t	say:duration:elapsed:from: 'Hello!' 2)
+			('say $String$'						-	say: 'Hello!')
+			('think $String$ for $Number$ secs'			t	think:duration:elapsed:from: 'Hmm...' 2)
+			('think $String$'						-	think: 'Hmm...')
 			-
-			('change %g effect by %n'		-	changeGraphicEffect:by: 'color' 25)
-			('set %g effect to %n'			-	setGraphicEffect:to: 'color' 0)
+			('change $Effects$ effect by $Number$'		-	changeGraphicEffect:by: 'color' 25)
+			('set $Effects$ effect to $Number$'			-	setGraphicEffect:to: 'color' 0)
 			('clear graphic effects'			-	filterReset)
-			('%g effect'				r	graphicEffectNamed: 'color')
+			('$Effects$ effect'				r	graphicEffectNamed: 'color')
 			-
-			('change size by %n'			-	changeSizeBy:)
-			('set size to %n%'				-	setSizeTo: 100)
+			('change size by $Number$'			-	changeSizeBy:)
+			('set size to $Number$'				-	setSizeTo: 100)
 			('size'							r	scale)
 			-
-			('change hStretch by %n'	-	changeStretchBy:)
-			('set hStretch to %n %'		-	setStretchTo: 100)
+			('change hStretch by $Number$'	-	changeStretchBy:)
+			('set hStretch to $Number$'		-	setStretchTo: 100)
 			('hStretch'						r	hScale)
-			('change vStretch by %n'	-	changeVStretchBy:)
-			('set vStretch to %n %'		-	setVStretchTo: 100)
+			('change vStretch by $Number$'	-	changeVStretchBy:)
+			('set vStretch to $Number$'		-	setVStretchTo: 100)
 			('vStretch'						r	vScale)
 			=
 			('show'							-	show)
@@ -135,47 +135,47 @@ PhratchSpriteMorph class >> blockSpecs [
 			('visible?'						b	isVisible)
 			-
 			('go to front'					-	comeToFront)
-			('go back %n layers'			-	goBackByLayers: 1)
+			('go back $Number$ layers'			-	goBackByLayers: 1)
 			=
 			('do with camera open'			c	doWithCamOpen)
 			('camera is open?'				b	cameraIsOpen)
 			('close camera'				-	closeDefinitivelyCamera)
 		'sensing'
 			('sprite name'					r	objName)
-			('set sprite name to %s'	-	setMyName:)
+			('set sprite name to $String$'	-	setMyName:)
 			=
-			('touching %m?' 				b	touching:)
-			('touching color %C?' 			b	touchingColor:)
-			('color %C is touching %C?'		b	color:sees:)
+			('touching $Sprite$?' 				b	touching:)
+			('touching color $ScreenColor$?' 			b	touchingColor:)
+			('color $ScreenColor$ is touching $ScreenColor$?'		b	color:sees:)
 			-
-			('ask %s and wait'				s	doAsk 'What''s your name?')
-			('ask %s in dialog'			-	showAskDialogWithText: 'What''s your name?')
+			('ask $String$ and wait'				s	doAsk 'What''s your name?')
+			('ask $String$ in dialog'			-	showAskDialogWithText: 'What''s your name?')
 			('answer'						r	answer)
 			-
-			('show dialog %s with text %s'	-	showInformDialog:withText: 'info' '')
+			('show dialog $String$ with text $String$'	-	showInformDialog:withText: 'info' '')
 			=
 			('mouse x'						r	mouseX)
 			('mouse y'						r	mouseY)
 			('mouse down?'					b	mousePressed)
-			('key %k pressed?'				b	keyPressed: 'space')
+			('key $Keys$ pressed?'				b	keyPressed: 'space')
 			('_key pressed'					r	keyPressed)
 			-
-			('distance to %m'				r	distanceTo:)
+			('distance to $Sprite$'				r	distanceTo:)
 			-
 			('reset timer'					-	timerReset)
 			('timer'							r	timer)
 			-
-			('%a of %m'						r	getAttribute:of:)
-			('get %a of %m'					r	attribute:of:)
+			('$Attributes$ of $Sprite$'						r	getAttribute:of:)
+			('get $Attributes$ of $Sprite$'					r	attribute:of:)
 			-
 			('loudness'						r	soundLevel)
 			('loud?'							b	isLoud)
 			~
-			('%H sensor value'				r	sensor: 'slider')
-			('sensor %h?'					b	sensorPressed: 'button pressed')
+			('$SensorNames$ sensor value'				r	sensor: 'slider')
+			('sensor $SensorBooleans$?'					b	sensorPressed: 'button pressed')
 			=
-			('object %m'						r	getObject:)
-			('attribute %a'						r	get:)
+			('object $Sprite$'						r	getObject:)
+			('attribute $Attributes$'						r	get:)
 		).
 
 	^ blocks, super blockSpecs

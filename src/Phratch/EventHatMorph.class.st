@@ -55,7 +55,7 @@ EventHatMorph >> forStartEvent [
 	super initialize.
 	self removeAllMorphs.
 
-	parts := PhratchTranslator labelPartsFor: 'when %m clicked'.
+	parts := PhratchTranslator labelPartsFor: 'when $Sprite$ clicked'.
 
 	s := StringMorph new contents: parts first; font: (PhratchFrameMorph getFont: #Label); color: Color white.
 	self addMorphBack: s.
@@ -104,7 +104,7 @@ EventHatMorph >> initialize [
 	super initialize.
 	self removeAllMorphs.
 
-	parts := PhratchTranslator labelPartsFor: 'when I receive %e'.
+	parts := PhratchTranslator labelPartsFor: 'when I receive $Event$'.
 
 	parts first size > 0 ifTrue: [
 		label := StringMorph contents: parts first font: (PhratchFrameMorph getFont: #Label).

@@ -22,7 +22,7 @@ Class {
 
 { #category : #'as yet unclassified' }
 PhratchFileTests >> addBlock: blockSpec toSprite: aSprite [
-	"blockSpec is something like: #('move %n steps' - forward:)"
+	"blockSpec is something like: #('move $Number$ steps' - forward:)"
 	| block |
 	block := aSprite blockFromSpec: blockSpec color: Color black.
 	aSprite addStack: block.
@@ -137,8 +137,8 @@ PhratchFileTests >> testSaveBlocks [
 
 	| fileName commandBlock1 commandBlock2 blocks |
 	fileName := '_testSaveBlocks.ypr'.
-	commandBlock1 := self addBlock: #('move %n steps' - forward:) toSprite: self firstSprite.
-	commandBlock2 := self addBlock: #('turn %n degrees' - turnRight: 15) toSprite: self firstSprite.
+	commandBlock1 := self addBlock: #('move $Number$ steps' - forward:) toSprite: self firstSprite.
+	commandBlock2 := self addBlock: #('turn $Number$ degrees' - turnRight: 15) toSprite: self firstSprite.
 
 	self saveProject: fileName.
 	window newPhratchProject.

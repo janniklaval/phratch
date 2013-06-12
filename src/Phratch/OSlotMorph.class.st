@@ -164,11 +164,11 @@ OSlotMorph >> type: aSymbol [
 
 	#reporterslot = type ifTrue: [
 		selector := #autoBlock.
-		self commandSpec: '%Z'].
+		self commandSpec: '$SAReporter$'].
 
 	#booleanslot = type ifTrue: [
 		selector := #autoPredicate.
-		self commandSpec: '%Y'].
+		self commandSpec: '$SABoolean$'].
 
 	self addLabel.
 

@@ -95,7 +95,7 @@ PhratchFrameMorph class >> addSlotShapesToSkin [
 	self skin at: #typeReporter put: (form withEmbeddedOutlineColor: Color darkGray width: 1).
 
 	"typeList"
-	block := ReporterBlockMorph new color: (ScriptablePhratchMorph blockColorFor: 'list'); commandSpec: '%s'.
+	block := ReporterBlockMorph new color: (ScriptablePhratchMorph blockColorFor: 'list'); commandSpec: '$String$'.
 	slot := block argMorphs first.
 	slot extent: 7 @ 4.
 	form := slot imageForm.
@@ -115,7 +115,7 @@ PhratchFrameMorph class >> addSlotShapesToSkin [
 	self skin at: #typeList put: ((big withOutlineColor: Color white width: 2) withEmbeddedOutlineColor: Color darkGray width: 1).
 
 	"typeText"
-	block := ReporterBlockMorph new color: Color lightGray; commandSpec: '%s'.
+	block := ReporterBlockMorph new color: Color lightGray; commandSpec: '$String$'.
 	block argMorphs first stringExpression: '     '.
 	form := block argMorphs first imageForm.
 	self skin at: #typeText put: form. 
@@ -778,7 +778,7 @@ Please report bugs to https://code.google.com/p/phratch/issues/list.
 '
 		font: (PhratchFrameMorph getFont: #AboutPhratch).
 
-	dialogBox setBalloonText: ((CommandBlockMorph new color: (ScriptablePhratchMorph blockColorFor: 'control'); commandSpec: 'B Y %r B')) asLambda displayForm.
+	dialogBox setBalloonText: ((CommandBlockMorph new color: (ScriptablePhratchMorph blockColorFor: 'control'); commandSpec: 'B Y $OSReporter$ B')) asLambda displayForm.
 
 	dialogBox getUserResponse.
 

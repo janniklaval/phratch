@@ -65,8 +65,8 @@ ReporterBlockDropTargetMorph >> isBoolean: aBoolean [
 { #category : #'as yet unclassified' }
 ReporterBlockDropTargetMorph >> label: aString [
 	|dropSpec|
-	dropSpec := ' %s'.
-	isBoolean ifTrue: [dropSpec := ' %b'].
+	dropSpec := ' $String$'.
+	isBoolean ifTrue: [dropSpec := ' $Boolean$'].
 	self commandSpec: aString, dropSpec
 ]
 

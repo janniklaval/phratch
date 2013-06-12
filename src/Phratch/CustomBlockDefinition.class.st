@@ -25,8 +25,8 @@ CustomBlockDefinition class >> idFromSpec: aUserSpecOrCommandSpec [
 	cmd := PhratchServer new parse: aUserSpecOrCommandSpec.
 	out := WriteStream on: String new.
 	cmd do: [:each|
-		(each asString beginsWith: '%')
-			ifTrue: [out nextPutAll: '%s' ]
+		(each asString beginsWith: '$')
+			ifTrue: [out nextPutAll: '$String$' ]
 			ifFalse: [out nextPutAll: each asString].
 		out space ].
 	^out contents withoutTrailingBlanks
@@ -84,8 +84,8 @@ CustomBlockDefinition >> answerBlock [
 	| spec block |
 
 	#boolean = type
-		ifTrue: [spec := 'answer %b']
-		ifFalse: [spec := 'answer %s'].
+		ifTrue: [spec := 'answer $Boolean$']
+		ifFalse: [spec := 'answer $String$'].
 	
 	block := CommandBlockMorph new
 		commandSpec: spec;
@@ -174,14 +174,13 @@ CustomBlockDefinition >> commandSpec [
 
 { #category : #accessing }
 CustomBlockDefinition >> commandSpecFrom: aUserSpec [
-
 	|cmd out pname ptype|
 	cmd := PhratchServer new parse: aUserSpec.
 	out := WriteStream on: String new. 
 	cmd do: [:each|
-		(each asString beginsWith: '%')
+		(each asString beginsWith: '$')
 			ifTrue: [
-				pname := each asString allButFirst.
+				pname := each asString allButFirst allButLast.
 				ptype := declarations at: pname ifAbsent: [#any].
 				out nextPutAll: (self specFor: ptype) ]
 			ifFalse: [out nextPutAll: each asString].
@@ -386,7 +385,7 @@ CustomBlockDefinition >> migrateBlockVars [
 
 	vars := self varNames.
 		spec := 'script variables' localized.
-	vars size timesRepeat: [ spec := spec, ' %s' ].
+	vars size timesRepeat: [ spec := spec, ' $String$' ].
 	dec commandSpec: spec.
 	1 to: vars size do: [:i |
 		vn := vars at: i.
@@ -426,8 +425,8 @@ CustomBlockDefinition >> parameterNamesInSpec: aString [
 	cmd := PhratchServer new parse: aString asMacRoman.
 	out := OrderedCollection new.
 	cmd do: [:each|
-		(each asString beginsWith: '%')
-			ifTrue: [out add: (each asString allButFirst) asUTF8]].
+		(each asString beginsWith: '$')
+			ifTrue: [out add: (each asString allButFirst allButLast) asUTF8]].
 	^out asArray
 ]
 
@@ -436,45 +435,45 @@ CustomBlockDefinition >> specFor: typeSym [
 	 | specs |
 	specs := Dictionary new.
 	specs
-		at: #command put: '%o';
-		at: #commandList put: '%O';
-		at: #reporter put: '%r';
-		at: #reporterList put: '%R';
+		at: #command put: '$CSlot$';
+		at: #commandList put: '$MACommand$';
+		at: #reporter put: '$OSReporter$';
+		at: #reporterList put: '$MAReporter$';
 
 "+++++++ deprecated experimental slots    -jens +++++++++++++
 
-		at: #reporterSlot put: '%K';
-		at: #reporterSlotList put: '%Q';
-		at: #typeInReporter put: '%j';
-		at: #typeInReporterList put: '%q';
+		at: #reporterSlot put: '$MAUnEBool$';
+		at: #reporterSlotList put: '$UnEBool$';
+		at: #typeInReporter put: '$UnEExp$';
+		at: #typeInReporterList put: '$MAUneval$';
 
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 
-		at: #unevaluated put: '%j';
-		at: #unevaluatedList put: '%q';
-		at: #unevaluatedBoolean put: '%Q';
-		at: #unevaluatedBooleanList put: '%K';
+		at: #unevaluated put: '$UnEExp$';
+		at: #unevaluatedList put: '$MAUneval$';
+		at: #unevaluatedBoolean put: '$UnEBool$';
+		at: #unevaluatedBooleanList put: '$MAUnEBool$';
 
-		at: #predicate put: '%p';
-		at: #predicateList put: '%P';
-		at: #list put: '%t';
-		at: #listList put: '%u';
-		at: #text put: '%T';
-		at: #textList put: '%U';
-		at: #any put: '%s';
-		at: #anyList put:  '%X';
-		at: #boolean put: '%b';
-		at: #booleanList put: '%V';
-		at: #number put: '%n';
-		at: #numberList put: '%w';
-		at: #template put: '%z';
-		at: #loop put: '%G';
-		at: #loopList put: '%J';
+		at: #predicate put: '$OSBoolean$';
+		at: #predicateList put: '$MAPredicate$';
+		at: #list put: '$SAList$';
+		at: #listList put: '$MAList$';
+		at: #text put: '$Text$';
+		at: #textList put: '$MAText$';
+		at: #any put: '$String$';
+		at: #anyList put:  '$MAAny$';
+		at: #boolean put: '$Boolean$';
+		at: #booleanList put: '$MABoolean$';
+		at: #number put: '$Number$';
+		at: #numberList put: '$MANumber$';
+		at: #template put: '$SpecialVar$';
+		at: #loop put: '$CArgSlot$';
+		at: #loopList put: '$Loop$';
 
-		at: #object put: '%1';
-		at: #objectList put: '%2'.
+		at: #object put: '$SAObjS$';
+		at: #objectList put: '$MAObjS$'.
 
-	^specs at: typeSym ifAbsent: ['%s']
+	^specs at: typeSym ifAbsent: ['$String$']
 ]
 
 { #category : #'object i/o' }

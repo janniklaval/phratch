@@ -155,7 +155,7 @@ CReporterSlotMorph >> initialize [
 	super initialize.
 	isSpecialForm := true.
 	selector := #cLambda.
-	self commandSpec: '%Z'.
+	self commandSpec: '$SAReporter$'.
 	self addLabel.
 
 	removeElementMorph ifNotNil: [

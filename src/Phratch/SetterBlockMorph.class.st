@@ -157,8 +157,8 @@ SetterBlockMorph >> initChangerForVar: varName [
 	(var isKindOf: Array) ifTrue: [
 		var := receiver blockFromTuple: var receiver: receiver].
 
-	self commandSpec: (PhratchTranslator translationFor: 'change %v by %s').
-	argPermutation := CommandBlockMorph argPermutationForSpec: 'set %v to %s' withTranslation: commandSpec.
+	self commandSpec: (PhratchTranslator translationFor: 'change $Variable$ by $String$').
+	argPermutation := CommandBlockMorph argPermutationForSpec: 'set $Variable$ to $String$' withTranslation: commandSpec.
 	self selector: #changeVar:by:.
 	self variable: var.
 
@@ -183,8 +183,8 @@ SetterBlockMorph >> initSetterForVar: varName [
 	(var isKindOf: Array) ifTrue: [
 		var := receiver blockFromTuple: var receiver: receiver].
 	
-	self commandSpec: (PhratchTranslator translationFor: 'set %v to %s').
-	argPermutation := CommandBlockMorph argPermutationForSpec: 'set %v to %s' withTranslation: commandSpec.
+	self commandSpec: (PhratchTranslator translationFor: 'set $Variable$ to $String$').
+	argPermutation := CommandBlockMorph argPermutationForSpec: 'set $Variable$ to $String$' withTranslation: commandSpec.
 	self selector: #setVar:to:.
 	self variable: var.
 

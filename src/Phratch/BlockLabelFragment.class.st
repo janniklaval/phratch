@@ -102,9 +102,7 @@ BlockLabelFragment >> spec [
 	isDeleted ifTrue: [^''].
 	isInput ifFalse: [^ label].
 	label isEmpty ifTrue: [^ label].
-	spec := '%', label asMacRoman. 
-	(spec includes: $ ) ifTrue: [
-		^ (String with: $"), spec, (String with: $")].
+	spec := '$', label asMacRoman, '$'. 
 	^spec asUTF8
 
 

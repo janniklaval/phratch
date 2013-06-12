@@ -1159,7 +1159,7 @@ PhratchListMorph >> storeFieldsOn: anObjStream [
 PhratchListMorph >> sublistIcon [
 
 	| block slot form halfList big |
-	block := ReporterBlockMorph new color: (ScriptablePhratchMorph blockColorFor: 'list'); commandSpec: '%s'.
+	block := ReporterBlockMorph new color: (ScriptablePhratchMorph blockColorFor: 'list'); commandSpec: '$String$'.
 	slot := block argMorphs first.
 	slot extent: 7 @ 4.
 	form := slot imageForm.

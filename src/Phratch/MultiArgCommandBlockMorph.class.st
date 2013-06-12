@@ -13,7 +13,7 @@ Class {
 { #category : #'as yet unclassified' }
 MultiArgCommandBlockMorph >> addItem [
 	self stop.
-	self commandSpec: commandSpec, ' %s'.
+	self commandSpec: commandSpec, ' $String$'.
 
 
 
