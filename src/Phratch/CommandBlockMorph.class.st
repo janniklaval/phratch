@@ -1449,9 +1449,9 @@ CommandBlockMorph >> uncoloredArgMorphFor: specString [
 	"Answer an argument morph for the given argument specification string."
 
 	| code |
-	code := specString copyFrom: 2 to: specString size.
+	code := specString copyFrom: 2 to: specString size-1.
 	
-	"$a"'Attributes'			= code ifTrue: [^ AttributeArgMorph new choice: 'volume'].
+	"$a"'Attributes'			= code ifTrue: [^ AttributeArgMorph new choice: ''].
 	"b"'Boolean'			= code ifTrue: [^ BooleanArgMorph new].
 	""'CheckBox'			= code ifTrue: [^ CheckBoxArgMorph new].
 	"c"'Color'				= code ifTrue: [^ ColorArgMorph new showPalette: true].
@@ -1469,7 +1469,7 @@ CommandBlockMorph >> uncoloredArgMorphFor: specString [
 	"i"'ListIndex'			= code ifTrue: [^ ExpressionArgMorphWithMenu new numExpression: '1'; menuSelector: #listIndexMenu].
 	"k"'Keys'				= code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #keyNames; choice: 'space'].
 	"5"'NamedColors'		= code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #namedColors; choice: #black].
-	"L"'List'				= code ifTrue: [^ ExpressionArgMorphWithMenu new stringExpression: 'a list'; menuSelector: #listVarMenu].
+	"L"'List'				= code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #listVarMenu].
 	"l"'Costumes'			= code ifTrue: [^ ChoiceOrExpressionArgMorph new getOptionsSelector: #costumeNames; choice: 'costume1'].
 	"m"'Sprite'				= code ifTrue: [^ SpriteArgMorph new].
 	"M"'MotorNames'		= code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #motorNames].
@@ -1479,7 +1479,7 @@ CommandBlockMorph >> uncoloredArgMorphFor: specString [
 	"S"'SoundNames'		= code ifTrue: [^ ChoiceOrExpressionArgMorph new getOptionsSelector: #soundNames; choice: 'pop'].
 	"6"'TimeDates'			= code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #timeDates; choice: 'time'].
 	"7"'LayoutStyles'		= code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #layoutStyles; choice: 'large'].
-	"v"'Variable'			= code ifTrue: [^ ExpressionArgMorphWithMenu new stringExpression: 'a variable'; menuSelector: #varNamesMenu].
+	"v"'Variable'			= code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #varNamesMenu; choice: ''].
 	"W"'MotorDirection'		= code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #motorDirection].
 	"x"'SceneNames'		= code ifTrue: [^ ChoiceOrExpressionArgMorph new getOptionsSelector: #sceneNames; choice: ''].
 	"8"'NewCostume'		= code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #newCostumeTypes; choice: 'camera'].
