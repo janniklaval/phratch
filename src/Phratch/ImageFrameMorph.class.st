@@ -131,7 +131,6 @@ ImageFrameMorph >> drawOn: aCanvas [
 	self drawBackgroundOn: aCanvas.
 
 	frameInFront ifFalse: [self drawFrameOn: aCanvas].
-
 ]
 
 { #category : #drawing }

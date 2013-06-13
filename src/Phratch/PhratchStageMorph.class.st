@@ -1492,7 +1492,6 @@ PhratchStageMorph >> stopAll [
 	self stopAsks.
 	self deleteAllClones.
 	self midiAllNotesOff.
-"	WeDoPlugin resetWeDo."
 	self stopPlaying.
 	self allMorphsDo: [:m |
 		(m isKindOf: ScriptablePhratchMorph) ifTrue: [m stopPlaying]].
@@ -1505,7 +1504,7 @@ PhratchStageMorph >> stopAll [
 			(m respondsTo: #litUp:) ifTrue: [m litUp: false]].
 		World startSteppingSubmorphsOf: sFrame].
 
-	World startSteppingSubmorphsOf: self.
+	World startSteppingSubmorphsOf: self. 
 
 ]
 

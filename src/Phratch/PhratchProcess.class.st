@@ -468,7 +468,6 @@ PhratchProcess >> doAsk [
 
 	block := stackFrame expression.
 	args := stackFrame arguments.
-	self haltOnce.
 	"first time (args size = 0): open prompter"
 	args size = 0
 		ifTrue: [
@@ -1328,7 +1327,6 @@ PhratchProcess >> popStackFrame [
 	"this effectively disables Scratch's so called single stepping mechanism
 	for BYOB, a sacrifice that let's us catch up with Scratch speed again,
 	-jens"
-
 	true ifTrue: [^self].
 
 	"and this is the old code"

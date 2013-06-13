@@ -75,7 +75,6 @@ StringDialog >> getUserResponse [
 	| w |
 	self openInWorld.
 	self centerOnScreen.
-
 	w := self world.
 	w activeHand newKeyboardFocus: typeinMorph.
 	done := false.

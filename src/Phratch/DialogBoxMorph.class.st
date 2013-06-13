@@ -112,7 +112,7 @@ DialogBoxMorph class >> inform: informationString withDetails: detailsString [
 		message: (informationString localized, PhratchTranslator colonSuffix)
 		details: detailsString
 		font: (PhratchFrameMorph getFont: #DialogBoxMessage).
-
+PhratchFrameMorph allInstancesDo: [ :d | d updatePanes ].
 	^ dialogBox getUserResponse
 
 ]
@@ -396,7 +396,6 @@ DialogBoxMorph >> getUserResponse [
 		w activeHand newKeyboardFocus: (tabFields at: 1)].
 	done := false.
 	[done] whileFalse: [w doOneCycle].  "wait for user to press a button"
-
 	^ response
 
 ]

@@ -745,7 +745,9 @@ ScriptablePhratchMorph >> addCostumeTyped: aString [
 			newC := ImageMedia new form: frameForm]
 		ifFalse: [^ self]]."]]]."
 	aString = 'stage' ifTrue: [newC := ImageMedia new form: ((self ownerOrYourselfThatIsA: PhratchStageMorph) stageShotForm"Sized: 480@360")].
-	aString = 'paint new' ifTrue: [^ self drawNewCostume].
+	aString = 'paint new' ifTrue: [self drawNewCostume.
+		^ self updateAfterPopUp
+	].
 	aString = 'import' ifTrue: [
 		(self isKindOf: PhratchStageMorph)
 			ifTrue: [type := #background. title := 'Import Background']
@@ -753,12 +755,13 @@ ScriptablePhratchMorph >> addCostumeTyped: aString [
 		result := PhratchFileChooserDialog
 			chooseImageFileType: type
 			title: title.
-		result = #cancelled ifTrue: [^ self].
+		result = #cancelled ifTrue: [^ self updateAfterPopUp].
 
 		fList := OrderedCollection new.
-		[fList addLast: (Form fromFileNamed: result)] ifError: [^ self].
+		[fList addLast: (Form fromFileNamed: result)] ifError: [^ self updateAfterPopUp].
 
-		newC := ImageMedia new form: fList first].
+		newC := ImageMedia new form: fList first.
+		self updateAfterPopUp].
 	newC mediaName: (self unusedMediaNameFromBaseName: (self defaultImageMedia mediaName)).
 	media addLast: newC.
 	self lookLike: newC mediaName.
@@ -7018,7 +7021,10 @@ ScriptablePhratchMorph >> replaceCostume: aNumber with: aString [
 			newC := ImageMedia new form: frameForm]
 		ifFalse: [^ self]]."]]]."
 	aString = 'stage' ifTrue: [newC := ImageMedia new form: ((self ownerOrYourselfThatIsA: PhratchStageMorph) stageShotForm"Sized: 480@360")].
-	aString = 'paint new' ifTrue: [^ self editDrawingOldCostumeName: name deleteOnCancel: false deleteCostume: false].
+	aString = 'paint new' ifTrue: [self editDrawingOldCostumeName: name deleteOnCancel: false deleteCostume: false.
+		self flag:'crappy line to solve Issue 53:	some blocks are executable only once'.
+		^ self updateAfterPopUp.
+		].
 	aString = 'import' ifTrue: [
 		(self isKindOf: PhratchStageMorph)
 			ifTrue: [type := #background. title := 'Import Background']
@@ -7026,12 +7032,13 @@ ScriptablePhratchMorph >> replaceCostume: aNumber with: aString [
 		result := PhratchFileChooserDialog
 			chooseImageFileType: type
 			title: title.
-		result = #cancelled ifTrue: [^ self].
+		result = #cancelled ifTrue: [^ self updateAfterPopUp.].
 
 		fList := OrderedCollection new.
-		[fList addLast: (Form fromFileNamed: result)] ifError: [^ self].
+		[fList addLast: (Form fromFileNamed: result)] ifError: [^ self updateAfterPopUp].
 
-		newC := ImageMedia new form: fList first].
+		newC := ImageMedia new form: fList first.
+		self updateAfterPopUp].
 	j := 1.
 	newC mediaName: name.
 	[j <= media size] whileTrue: [
@@ -7507,6 +7514,10 @@ ScriptablePhratchMorph >> shareObject [
 ScriptablePhratchMorph >> showAskDialogWithText: text [ 
 	"Show an information dialog with the given title and text."
 	PhratchPrompterMorph lastAnswer: (StringDialog ask: text).
+	
+	self flag:'crappy line to solve Issue 53:	some blocks are executable only once'.
+	self updateAfterPopUp.
+	
 ]
 
 { #category : #'panther actions' }
@@ -7550,7 +7561,10 @@ ScriptablePhratchMorph >> showColor: varName [
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> showInformDialog: title withText: text [ 
 	"Show an information dialog with the given title and text."
-	DialogBoxMorph inform: text title: title
+	DialogBoxMorph inform: text title: title.
+	
+	self flag:'crappy line to solve Issue 53:	some blocks are executable only once'.
+	self updateAfterPopUp.
 ]
 
 { #category : #'panther actions' }
@@ -8147,6 +8161,13 @@ ScriptablePhratchMorph >> unusedMediaNameFromBaseName: baseName forMedia: aMedia
 
 	^ nm, (greatestNum+1) printString
 
+]
+
+{ #category : #'as yet unclassified' }
+ScriptablePhratchMorph >> updateAfterPopUp [
+
+	self flag:'crappy line to solve Issue 53:	some blocks are executable only once'.
+	PhratchFrameMorph allInstancesDo:[:d | d  updateWorkPane].
 ]
 
 { #category : #byob }

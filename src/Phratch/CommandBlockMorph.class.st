@@ -412,10 +412,10 @@ CommandBlockMorph >> canBecomeWatcher [
 		get:
 	) includes: selector) ifTrue: [^false].
 
-	i := selector asString findAnySubStr: #('mouse' 'key' 'touching' 'distance') startingAt: 1.
+	i := selector asString findAnySubStr: #('mouse' 'key' 'touching' 'distance' 'File' 'Url') startingAt: 1.
 	^ (self isReporter) &
 	   (self argumentCount <= 1) &
-	   ((#(not atRandom abs rounded lineCountOfList: stringLength:) includes: selector) not) &
+	   ((#(not atRandom abs rounded lineCountOfList: stringLength: keyPressed: numericConstant: true false returnW: objName stringToBoolean: reportVar: contentsOfList: reportColor:) includes: selector) not) &
 	   (i > selector asString size)
 
 ]

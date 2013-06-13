@@ -4595,6 +4595,15 @@ PhratchFrameMorph >> updateViewModeButtons [
 
 ]
 
+{ #category : #private }
+PhratchFrameMorph >> updateWorkPane [
+
+	| |
+	self flag:'crappy line to solve Issue 53:	some blocks are executable only once'.	
+	World startSteppingSubmorphsOf: self.
+
+]
+
 { #category : #other }
 PhratchFrameMorph >> view: aMorph tab: t category: c [
 	"Add given morph to the work pane and view it."
