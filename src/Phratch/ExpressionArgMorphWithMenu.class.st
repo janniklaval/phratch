@@ -241,7 +241,7 @@ ExpressionArgMorphWithMenu >> midiDrumMenu [
 	) do: [:pair |
 		menu
 			add: (self numberInParens: pair second), (pair first localizedMIDI)
-			value: pair second asString].
+			value: pair second].
 	
 	menu invokeModal.
 	^ menu

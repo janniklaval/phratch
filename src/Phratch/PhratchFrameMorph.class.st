@@ -2998,7 +2998,7 @@ PhratchFrameMorph >> openPhratchProjectNamed: fName [
 	fn := fName.
 	f := FileStream readOnlyFileNamedOrNil: fn.
  	f ifNil: ["try a different encoding, fixes a Firefox bug, -Jens"
-		fn := fName isoLatinToMac asUTF8.
+		fn := fName fullName asUTF8.
 		f := FileStream readOnlyFileNamedOrNil: fn.
 		f ifNil: [^ self inform: 'Could not read' withDetails: fName]].
 

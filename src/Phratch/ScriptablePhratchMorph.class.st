@@ -291,14 +291,14 @@ ScriptablePhratchMorph class >> blockSpecs [
 			('number of lines of file at URL $String$'		r	numUrlFileLines: 'http://')
 			('write $String$ to file $String$'					-	writeText:toFile:)
 			('clear file $String$'								-	clearFile:)
-			-
+			"-
 			('host mesh'										-	hostMesh)
 			('hosting mesh?'									b	isHostingMesh)
 			-
 			('join mesh $String$'							-	joinMesh:)
 			('leave mesh'									-	leaveMesh)
 			-
-			('mesh IP address'								r	getMeshIPAddress)
+			('mesh IP address'								r	getMeshIPAddress)"
 		'colors'
 			('$ColorVar$'									g	reportColor: '')
 			('set $ColorVar$ to $Color$'						-	setColor:to: '')

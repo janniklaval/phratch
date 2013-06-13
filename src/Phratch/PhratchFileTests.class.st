@@ -36,7 +36,7 @@ PhratchFileTests >> firstSprite [
 
 { #category : #'as yet unclassified' }
 PhratchFileTests >> openProject: fileName [
-	window openPhratchProjectNamed: (window projectDirectory / fileName)
+	window openPhratchProjectNamed: window projectDirectory / fileName
 ]
 
 { #category : #'as yet unclassified' }
@@ -124,7 +124,7 @@ PhratchFileTests >> testSaveAgain [
 	
 	"Now make some changes that will get overwritten when we reload the project"
 	sprite objName: 'Another Name'.
-	self openProject: projectName.
+	self openProject: projectName, '.ypr'.
 	
 	sprite := self firstSprite.
 	self assert: sprite objName = 'TopCat'.
