@@ -1153,7 +1153,7 @@ PhratchStageMorph >> rightButtonMenu [
 	menu add: 'grab screen region for new sprite' action: #grabSpriteFromScreen.
 	menu addLine.
 	menu add: 'save picture of stage...' action: #stageShot.
-	menu localize; popUpInWorld.
+	menu localize; invokeModal.
 
 ]
 

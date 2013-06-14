@@ -482,7 +482,7 @@ MediaItemMorph >> rightButtonMenu [
 		menu add: 'export this costume' action: #exportMedia].
 	media isSound ifTrue: [
 		menu add: 'export this sound' action: #exportMedia].
-	menu localize; popUpInWorld.
+	menu localize; invokeModal.
 
 ]
 

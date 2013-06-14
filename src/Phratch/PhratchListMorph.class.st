@@ -1026,7 +1026,7 @@ PhratchListMorph >> rightButtonMenu [
 	menu localize.
 	menu labels at: 2 put: 
 		((menu labels at: 2) contents copyFrom: 1 to: (menu labels at: 2) contents size - 1), PhratchTranslator ellipsesSuffix.
-	menu popUpInWorld.
+	menu invokeModal.
 ]
 
 { #category : #private }

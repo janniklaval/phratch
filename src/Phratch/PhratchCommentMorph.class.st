@@ -401,7 +401,7 @@ PhratchCommentMorph >> rightButtonMenu [
 	menu add: 'delete' action: #delete.
 	menu add: 'duplicate' action: #duplicate.
 
-	menu localize; popUpInWorld"localize; invokeOn: self".
+	menu localize; invokeModal"localize; invokeOn: self".
 
 ]
 

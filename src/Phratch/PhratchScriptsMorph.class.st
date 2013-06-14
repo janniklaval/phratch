@@ -223,7 +223,7 @@ PhratchScriptsMorph >> rightButtonMenu [
 	menu addLine.
 	menu add: 'make a block' action: #makeNewBlock.
 
-	menu localize; popUpInWorld.
+	menu localize; invokeModal.
 
 ]
 

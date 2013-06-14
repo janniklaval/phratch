@@ -1639,7 +1639,7 @@ BlockMorph >> rightButtonMenu [
 		menu addLine.
 		menu add: 'show tuples' value: #showTuples].
 	
-	menu localize; popUpAt: World activeHand position inWorld:  World  "localize; invokeOn: self"
+	menu localize; invokeModal" popUpAt: World activeHand position inWorld:  World"  "localize; invokeOn: self"
 
 ]
 

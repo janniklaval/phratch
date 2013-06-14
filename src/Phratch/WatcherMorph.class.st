@@ -447,7 +447,7 @@ WatcherMorph >> rightButtonMenu [
 
 	menu addLine.
 	menu add: '  ' asUTF8,  'hide' localized action: #delete.
-	menu popUpInWorld.
+	menu invokeModal.
 
 ]
 

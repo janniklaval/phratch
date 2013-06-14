@@ -416,7 +416,7 @@ ResizableToggleButton2 >> rightButtonMenu [
 	(self owner isKindOf: PhratchBlockPaletteMorph) ifTrue: [
 		menu := MenuMorph new defaultTarget: self.
 		menu add: 'help' action: #presentHelpScreen.
-		menu localize; popUpInWorld].
+		menu localize; invokeModal].
 
 
 ]

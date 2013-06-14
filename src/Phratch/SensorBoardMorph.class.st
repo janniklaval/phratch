@@ -461,7 +461,7 @@ SensorBoardMorph >> rightButtonMenu [
 			menu addLine.
 			menu add: 'hide' action: #delete].
 
-	menu localize; popUpInWorld.
+	menu localize; invokeModal.
 
 ]
 

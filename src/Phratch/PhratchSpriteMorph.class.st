@@ -1886,7 +1886,7 @@ PhratchSpriteMorph >> rightButtonMenu [
 		menu add: 'detach all subsprites' action: #unhingeAll ].
 	ownerSprite ifNotNil: [
 		menu add: 'detach from ', self ownerSprite objName action: #unhinge  ].
-	menu localize; popUpInWorld.
+	menu localize; invokeModal.
 
 ]
 
