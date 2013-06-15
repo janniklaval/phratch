@@ -7751,7 +7751,7 @@ ScriptablePhratchMorph >> soundsPage: xOffset [
 
 	recBut := PhratchFrameMorph buttonLabel: 'Record' localized selector: #recordSound.
 	recBut target: self.
-	bin addMorph: recBut.
+	"bin addMorph: recBut."
 
 	impBut := PhratchFrameMorph buttonLabel: 'Import' localized selector: #importSound.
 	impBut target: self.
