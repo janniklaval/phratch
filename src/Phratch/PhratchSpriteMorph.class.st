@@ -139,6 +139,7 @@ PhratchSpriteMorph class >> blockSpecs [
 			=
 			('do with camera open'			c	doWithCamOpen)
 			('camera is open?'				b	cameraIsOpen)
+			('open camera'				-	openCamera)
 			('close camera'				-	closeDefinitivelyCamera)
 		'sensing'
 			('sprite name'					r	objName)

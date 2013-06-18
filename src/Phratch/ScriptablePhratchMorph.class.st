@@ -436,13 +436,6 @@ ScriptablePhratchMorph class >> closeCamera [
 	CameraOpenings = 0 ifTrue: [CameraPlugin closeCamera: 1].
 ]
 
-{ #category : #'panther-actions' }
-ScriptablePhratchMorph class >> closeDefinitivelyCamera [
-
-	CameraOpenings := 0.
-	CameraOpenings = 0 ifTrue: [CameraPlugin closeCamera: 1].
-]
-
 { #category : #'byob legacy support' }
 ScriptablePhratchMorph class >> currentEncoding [
 		^ObjEncoding ifNil: [^#scratch ]
@@ -736,12 +729,15 @@ ScriptablePhratchMorph >> addCostumeTyped: aString [
 	| newC frameForm title result fList type |
 	aString = 'camera' ifTrue: [
 		"newC := ImageMedia new form: (Form extent: (self ownerThatIsA: ScratchStageMorph) extent) fillBlack."
-		"(CameraPlugin openCamera: 1 width: 480 height: 360) ifNotNil: [
-			CameraPlugin waitForCameraStart.
-			(CameraPlugin frameExtent: 1) x = 0 ifFalse: ["
+		
 		self cameraIsOpen ifTrue: [
+			self flag:'this is crappy, but works...'.
 			frameForm := Form extent: (CameraPlugin frameExtent: 1) depth: 32.
 			CameraPlugin getFrameForCamera: 1 into: frameForm bits.
+			(2 seconds) asDelay wait.
+			CameraPlugin getFrameForCamera: 1 into: frameForm bits.
+			
+			
 			newC := ImageMedia new form: frameForm]
 		ifFalse: [^ self]]."]]]."
 	aString = 'stage' ifTrue: [newC := ImageMedia new form: ((self ownerOrYourselfThatIsA: PhratchStageMorph) stageShotForm"Sized: 480@360")].
@@ -2553,6 +2549,14 @@ ScriptablePhratchMorph >> closeBlockEditor [
 ScriptablePhratchMorph >> closeCamera [
 
 	self class closeCamera.
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> closeDefinitivelyCamera [
+
+	^ self cameraIsOpen ifTrue: [
+		CameraOpenings := 0.
+		CameraPlugin closeCamera: 1].
 ]
 
 { #category : #'sensing ops' }
@@ -6513,6 +6517,15 @@ ScriptablePhratchMorph >> onlyCostume: aForm [
 	self lookLike: el mediaName.
 	self updateMediaCategory.
 
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> openCamera [
+	self cameraIsOpen ifFalse: [
+			(CameraPlugin openCamera: 1 width: 480 height: 360) ifNotNil: [
+				CameraPlugin waitForCameraStart.]
+	].
+	CameraOpenings := CameraOpenings +1.
 ]
 
 { #category : #'BYOB attributes' }
