@@ -848,7 +848,7 @@ PhratchFrameMorph >> addShortcutButtonsTo: rowMorph [
 
 	buttonSpecs := #(
 		"name		tool tip				selector"
-		(language	'Set language'		languageMenu:)
+		"(language	'Set language'		languageMenu:)"
 		(save		'Save this project'	#savePhratchProjectNoDialog)
 "		(share		'Share this project'	share)"
 	).

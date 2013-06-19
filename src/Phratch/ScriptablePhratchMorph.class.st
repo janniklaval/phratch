@@ -291,6 +291,8 @@ ScriptablePhratchMorph class >> blockSpecs [
 			('number of lines of file at URL $String$'		r	numUrlFileLines: 'http://')
 			('write $String$ to file $String$'					-	writeText:toFile:)
 			('clear file $String$'								-	clearFile:)
+			('create file $String$'								-	createFile:)
+			('delete file $String$'								-	deleteFile:)
 			"-
 			('host mesh'										-	hostMesh)
 			('hosting mesh?'									b	isHostingMesh)
@@ -473,6 +475,16 @@ ScriptablePhratchMorph class >> doubleSize: aBoolean [
 
 	DoubleSize := aBoolean.
 
+]
+
+{ #category : #accessing }
+ScriptablePhratchMorph class >> fileIOPreference [
+	^ FileIOPreference  ifNil: [ FileIOPreference := true ]
+]
+
+{ #category : #accessing }
+ScriptablePhratchMorph class >> fileIOPreference: anObject [
+	FileIOPreference := anObject
 ]
 
 { #category : #other }
@@ -3275,6 +3287,17 @@ ScriptablePhratchMorph >> createBlock: block atPosition: pos onPage: page [
 
 ]
 
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> createFile: aFileNameString [
+	"Create the given file."
+	
+	| f |
+	(self askForFileIO = true) ifFalse: [^ self].
+	aFileNameString asFileReference delete.
+	f := FileStream newFileNamed: aFileNameString.
+	f close
+]
+
 { #category : #'list ops' }
 ScriptablePhratchMorph >> createListNamed: listName [
 
@@ -3603,6 +3626,14 @@ ScriptablePhratchMorph >> deleteDefinitionId: id [
 	stage sprites, {stage} do: [:obj |
 		obj deleteLocalDefinitionId: id]
 	
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> deleteFile: aFileNameString [
+	"Create the given file."
+	
+	(self askForFileIO = true) ifFalse: [^ self].
+	aFileNameString asFileReference delete.
 ]
 
 { #category : #'list ops' }
