@@ -149,6 +149,7 @@ PhratchFrameMorph class >> cameraMode [
 PhratchFrameMorph class >> close [
 	"Close Phratch window but don't quit Pharo"
 
+	Smalltalk unloadModule: 'MIDIPlugin'.
 	PhratchFrameMorph allInstancesDo: [ :i | i delete ]
 ]
 
@@ -4038,6 +4039,10 @@ PhratchFrameMorph >> startup [
 "
 	ScriptablePhratchMorph randomInit.
 	PhratchTranslator detectRenderPlugin.
+	
+	Smalltalk loadModule: 'SerialPlugin'.
+	[Smalltalk loadModule: 'MIDIPlugin'] on: Error do:[].
+	
 	PhratchTranslator importLanguagesList.
 
 	PhratchFrameMorph readShareServerEntry.
