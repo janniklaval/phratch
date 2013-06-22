@@ -1520,6 +1520,8 @@ CommandBlockMorph >> uncoloredArgMorphFor: specString [
 
 	"$1"'SAObjS' = code ifTrue: [ ^ SpecialArgMorph new type: #objSlot].
 	"$2"'MAObjS' = code ifTrue: [ ^ MultiArgMorph type: #objSlot].	
+	
+	"$r"'Rotation' = code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #rotationStyleChanger; choice: 'normal'].
 			
 	^ ExpressionArgMorph new numExpression: '10'
 ]

@@ -52,6 +52,7 @@ PhratchSpriteMorph class >> blockSpecs [
 			('when $Sprite$ created'			C	-)
 
 		'motion'
+			('Arrow key move with speed $Number$ ' #- #arrowMove:)
 			('move $Number$ steps'				-	forward:)
 			('turn $Number$ degrees'				-	turnRight: 15)	"icon shows turn direction"
 			('turn $Number$ degrees'				-	turnLeft: 15)	"icon shows turn direction"
@@ -62,6 +63,8 @@ PhratchSpriteMorph class >> blockSpecs [
 			('go to x:$Number$ y:$Number$'				-	gotoX:y: 0 0)
 			('go to $Sprite$'						-	gotoSpriteOrMouse:)
 			('glide $Number$ secs to x:$Number$ y:$Number$'	t	glideSecs:toX:y:elapsed:from: 1 50 50)
+			('go $Number$ of the way to x: $Number$ y: $Number$' #- #distance:X:Y:)
+			('go in between x: $Number$ y: $Number$ and x: $Number$ y: $Number$' #- #betweenX:Y:X:Y:)
 			-
 			('change x by $Number$'				-	changeXposBy: 10)
 			('set x to $Number$'					-	xpos: 0)
@@ -69,6 +72,13 @@ PhratchSpriteMorph class >> blockSpecs [
 			('set y to $Number$'					-	ypos: 0)
 			-
 			('if on edge, bounce'			-	bounceOffEdge)
+			('if touching $Sprite$ bounce' #- #bounceOffSprite:)
+			('if $Boolean$ bounce' #- #bounceIfBoolean:)
+			-
+			('set rotation style to $Rotation$' #- #rotationStyle:)
+			('rotation style' #r #rotationStyle)
+			('point at x:$Number$ y:$Number$' #- #pointToX:y:)
+			('point at random coordinate' #- #randxypos)
 			-
 			('x position'						r	xpos)
 			('y position'						r	ypos)
@@ -122,6 +132,10 @@ PhratchSpriteMorph class >> blockSpecs [
 			('change size by $Number$'			-	changeSizeBy:)
 			('set size to $Number$'				-	setSizeTo: 100)
 			('size'							r	scale)
+			('height' #r #height)
+			('width' #r #width)
+			('area' #r #area)
+			('perimeter' #r #perimeter)
 			-
 			('change hStretch by $Number$'	-	changeStretchBy:)
 			('set hStretch to $Number$'		-	setStretchTo: 100)
@@ -129,6 +143,8 @@ PhratchSpriteMorph class >> blockSpecs [
 			('change vStretch by $Number$'	-	changeVStretchBy:)
 			('set vStretch to $Number$'		-	setVStretchTo: 100)
 			('vStretch'						r	vScale)
+			('h flip' #- #hFlip)
+			('v flip' #- #vFlip)
 			=
 			('show'							-	show)
 			('hide'							-	hide)
@@ -154,6 +170,7 @@ PhratchSpriteMorph class >> blockSpecs [
 			('answer'						r	answer)
 			-
 			('show dialog $String$ with text $String$'	-	showInformDialog:withText: 'info' '')
+			('warn $String$' #- #warn: 'Invalid input')
 			=
 			('mouse x'						r	mouseX)
 			('mouse y'						r	mouseY)
@@ -162,6 +179,7 @@ PhratchSpriteMorph class >> blockSpecs [
 			('key pressed'					r	keyPressed)
 			-
 			('distance to $Sprite$'				r	distanceTo:)
+			('distance to x $Number$ y $Number$' #r #dist:and:)
 			-
 			('reset timer'					-	timerReset)
 			('timer'							r	timer)
@@ -215,6 +233,45 @@ PhratchSpriteMorph >> allSubsprites [
 	^ all
 ]
 
+{ #category : #'as yet unclassified' }
+PhratchSpriteMorph >> area [
+^self height * self width
+]
+
+{ #category : #'as yet unclassified' }
+PhratchSpriteMorph >> arrowMove: i1 [ 
+"Made using Scramble by Hardmath123"
+| t4 t3 t2 t1|
+
+t1:= 'up arrow'.
+t2:= 'down arrow'.
+t3:= 'left arrow'.
+t4:= 'right arrow'.
+
+t1:= self keyPressed:t1.
+t2:= self keyPressed:t2.
+t3:= self keyPressed:t3.
+t4:= self keyPressed:t4.
+
+t1 ifTrue: [
+self gotoX: self xpos y: (i1+ self ypos).
+].
+
+t2 ifTrue: [
+t2:=i1 * -1.
+self gotoX: self xpos y: (t2+ self ypos).
+].
+
+t3 ifTrue: [
+t3:=i1 * -1.
+self gotoX: (t3+self xpos) y: self ypos.
+].
+
+t4 ifTrue: [
+self gotoX: (i1+self xpos) y: self ypos.
+].
+]
+
 { #category : #'byob OOP' }
 PhratchSpriteMorph >> asReferenceTuple [
 
@@ -264,6 +321,20 @@ PhratchSpriteMorph >> attributeNames [
 
 ]
 
+{ #category : #'as yet unclassified' }
+PhratchSpriteMorph >> betweenX: t1 Y: t2 X: t3 Y: t4 [
+| newX newY |
+
+newX:= (t1 + t3) / 2.
+newY:= (t2 + t4) / 2.
+self referencePosition: newX @ newY
+]
+
+{ #category : #'as yet unclassified' }
+PhratchSpriteMorph >> bounceIfBoolean: condition [
+     condition ifTrue: [self turnRight: 180]
+]
+
 { #category : #'motion ops' }
 PhratchSpriteMorph >> bounceOffEdge [
 	"Set my direction to bounce off the edge."
@@ -289,6 +360,19 @@ PhratchSpriteMorph >> bounceOffEdge [
 	self xpos: self xpos.
 	self ypos: self ypos 
 
+]
+
+{ #category : #'as yet unclassified' }
+PhratchSpriteMorph >> bounceOffSprite: aName [ 
+    | sprite oldDir |
+    sprite := self coerceSpriteArg: aName.
+    (self touching: sprite)
+        ifFalse: [^ self].
+    oldDir := self heading.
+    self pointTowards: sprite.
+    self turnRight: self heading - oldDir + 180.
+    [self touching: sprite]
+        whileTrue: [self forward: 1]
 ]
 
 { #category : #'looks ops' }
@@ -571,6 +655,19 @@ PhratchSpriteMorph >> directionMenu [
 			value: pair second].
 	menu invokeModal.
 	^ menu selectedValue
+]
+
+{ #category : #'as yet unclassified' }
+PhratchSpriteMorph >> dist: t1 and: t2 [ 
+    ^ (self xpos - t1 * (self xpos - t1) + (self ypos - t2 * (self ypos - t2))) abs sqrt
+]
+
+{ #category : #'as yet unclassified' }
+PhratchSpriteMorph >> distance: t1 X: t2 Y: t3 [ 
+    | newX newY |
+    newX := t1 * 0.01 * (t2 - self xpos).
+    newY := t1 * 0.01 * (t3 - self ypos).
+    self gotoX: newX + self xpos y: newY + self ypos
 ]
 
 { #category : #'motion ops' }
@@ -968,6 +1065,12 @@ PhratchSpriteMorph >> grabFromScreen [
 	self undeleteAttribute: #costumes.
 	self propagateCostumes
 
+]
+
+{ #category : #'as yet unclassified' }
+PhratchSpriteMorph >> hFlip [
+    costume form: (self form flipBy: #horizontal centerAt: 0 @ 0).
+    self costumeChanged
 ]
 
 { #category : #'panther actions' }
@@ -1625,6 +1728,11 @@ PhratchSpriteMorph >> penSize: aNumber [
 	self passivePenSize: aNumber
 ]
 
+{ #category : #'as yet unclassified' }
+PhratchSpriteMorph >> perimeter [
+^ (2 * self height) + (2 * self width)
+]
+
 { #category : #'motion ops' }
 PhratchSpriteMorph >> pointToX: x y: y [
 	"Set my heading to point at the given point."
@@ -1764,6 +1872,12 @@ PhratchSpriteMorph >> putPenUp [
 
 	self penDown: false.
 
+]
+
+{ #category : #'as yet unclassified' }
+PhratchSpriteMorph >> randxypos [
+    self pointToX: (self randomFrom: -240 to: 240)
+        y: (self randomFrom: -180 to: 180)
 ]
 
 { #category : #nesting }
@@ -2000,9 +2114,7 @@ PhratchSpriteMorph >> rotationDegrees: newRotationDegrees scalePoint: newScalePo
 
 { #category : #accessing }
 PhratchSpriteMorph >> rotationStyle [
-
-	^ rotationStyle
-
+    ^ rotationStyle
 ]
 
 { #category : #accessing }
@@ -2016,6 +2128,11 @@ PhratchSpriteMorph >> rotationStyle: aSymbol [
 	self costumeChanged.
 	self positionTalkBubble.
 
+]
+
+{ #category : #'as yet unclassified' }
+PhratchSpriteMorph >> rotationStyleChanger [
+    ^ #('normal' 'leftRight' 'none' )
 ]
 
 { #category : #'looks ops' }
@@ -2569,6 +2686,12 @@ PhratchSpriteMorph >> unhingeAll [
 	LibraryItemMorph allInstances do: [:each| each updateThumbnail]
 ]
 
+{ #category : #'as yet unclassified' }
+PhratchSpriteMorph >> vFlip [
+    costume form: (self form flipBy: #vertical centerAt: 0 @ 0).
+    self costumeChanged
+]
+
 { #category : #'panther actions' }
 PhratchSpriteMorph >> vScale [
 
@@ -2620,6 +2743,12 @@ PhratchSpriteMorph >> virtualScale [
 { #category : #nesting }
 PhratchSpriteMorph >> virtualScale: aPoint [
 	virtualScale := aPoint
+]
+
+{ #category : #'as yet unclassified' }
+PhratchSpriteMorph >> warn: t1 [ 
+    DialogBoxMorph warn: t1.
+	self updateAfterPopUp.
 ]
 
 { #category : #accessing }

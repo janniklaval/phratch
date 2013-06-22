@@ -152,9 +152,11 @@ ScriptablePhratchMorph class >> blockSpecs [
 			('wait until $Boolean$'					s	doWaitUntil)
 			('repeat until $Boolean$'				c	doUntil)
 			-
+			('press green flag' #- #pressGreenFlag)
 			('stop all scripts for $Event$'			-	stopAllScriptsFor:)
 			('stop script'					s	doReturn)
 			('stop all'						-	stopAll)
+			('pause' #- #pause)
 			-
 			('self'							r	objName)
 			=
@@ -170,6 +172,9 @@ ScriptablePhratchMorph class >> blockSpecs [
 			-
 			('report $String$'						s	doAnswer)
 			('stop block'						s	doStopBlock)
+			-
+			('save project' #- #saveProj)
+			('quit Phratch' #- #exitScratch)
 			"-"
 			"('debug'							s	doPauseThread)
 			('debug $String$'						R	doPauseThreadReporter)"
@@ -208,9 +213,14 @@ ScriptablePhratchMorph class >> blockSpecs [
 			('round $Number$'						r	rounded -)
 			-
 			('$MathFunctions$ of $Number$'						r	computeFunction:of: 'sqrt' 10)
+			('factorial of $Number$' #r #factorial:)
+			('$Number$ is an integer?' #b #isInteger:)
+			('$Number$ is a Fibonacci number?' #b #isFibonacci:)
+			('$Number$ is prime?' #b #isPrime:)
 			-
 			('$String$ as boolean'							b	stringToBoolean: 'true')
 			('is $String$ a $Type$ ?'					b	isObject:type:)
+			('is $String$ nil?' #b #checkNil:)
 			=
 			('the script'						q	procedure)
 			('the script. Input names: $String$'			q	procedureWithArgs)
@@ -280,6 +290,11 @@ ScriptablePhratchMorph class >> blockSpecs [
 			('length of $List$'					r	lineCountOfList:)
 			('$List$ contains $String$'				b	list:contains: 'list' 'thing')
 			('$List$ as text'						r	contentsOfList: )
+			('first index of $String$ in $List$' #r #indexOf:List: '' 'list')
+			('times $String$ appears in $List$' #r #times:List: '' 'list')
+			-
+			('sort items of $List$ by numerical value' #- #numberSort: 'list')
+			('sort items of $List$ by string value' #- #stringSort: 'list')
 			-
 			('copy of $SAList$'					r	copyOfList: )
 		'files'
@@ -2504,6 +2519,11 @@ ScriptablePhratchMorph >> changed [
 
 ]
 
+{ #category : #'as yet unclassified' }
+ScriptablePhratchMorph >> checkNil: str [
+^ str isNil
+]
+
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> clearFile: aFileNameString [
 	"Clear the given file."
@@ -4372,6 +4392,11 @@ ScriptablePhratchMorph >> existsBlockId: id global: bool [
 
 ]
 
+{ #category : #'as yet unclassified' }
+ScriptablePhratchMorph >> exitScratch [
+    Smalltalk snapshot: false andQuit: true
+]
+
 { #category : #'right button menu' }
 ScriptablePhratchMorph >> exportObject [
 
@@ -4409,6 +4434,24 @@ ScriptablePhratchMorph >> exportObject [
 		self inform: 'Could not write file' withDetails: 'Export failed' localized].
 
 
+]
+
+{ #category : #'as yet unclassified' }
+ScriptablePhratchMorph >> factorial: t1 [ 
+    | answer t1store |
+    t1 isInf ifTrue:[^0].
+    t1 isNaN ifTrue:[^0].
+    answer := 1.
+    t1store := t1.
+    t1 = 0 ifTrue: [^ 1].
+    t1 < 0 ifTrue: [^ 0].
+    t1 isInf ifTrue: [^ 0].
+    t1 isNaN ifTrue: [^ 0].
+    [t1store > 1]
+        whileTrue: 
+            [answer := answer * t1store.
+            t1store := t1store - 1].
+    ^ answer
 ]
 
 { #category : #'looks ops' }
@@ -5060,6 +5103,18 @@ ScriptablePhratchMorph >> indexForSensorName: sensorName [
 
 ]
 
+{ #category : #'as yet unclassified' }
+ScriptablePhratchMorph >> indexOf: t1 List: t2 [ 
+    | t3 |
+    t3 := 1.
+    (self lineCountOfList: t2)
+        timesRepeat: 
+            [(self getLine: t3 ofList: t2)
+                = t1 ifTrue: [^ t3].
+            t3 := t3 + 1].
+    ^ 0
+]
+
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> indexOf: subString startingAt: aNumber in: aString [
 
@@ -5361,6 +5416,30 @@ ScriptablePhratchMorph >> isColorable [
 
 ]
 
+{ #category : #'as yet unclassified' }
+ScriptablePhratchMorph >> isFibonacci: t1 [ 
+    | fib1 fib2 oldfib2 fib3 oldfib3 |
+                t1 isInf ifTrue:[^false].
+                t1 isNaN ifTrue:[^false].
+                t1 < 0 ifTrue: [^ false].
+    t1 = 0 ifTrue: [^ true].
+    t1 = 1 ifTrue: [^ true].
+    fib1 := 0.
+    fib2 := 1.
+    oldfib2 := fib2.
+    fib3 := fib1 + fib2.
+    oldfib3 := fib3.
+    [t1 > fib3]
+        whileTrue: 
+            [fib3 := fib1 + fib2.
+            fib2 := oldfib3.
+            fib1 := oldfib2.
+            oldfib3 := fib3.
+            oldfib2 := fib2].
+    t1 = fib3 ifTrue: [^ true].
+    t1 = fib3 ifFalse: [^ false]
+]
+
 { #category : #'BYOB attributes' }
 ScriptablePhratchMorph >> isHidden [
 
@@ -5384,6 +5463,11 @@ ScriptablePhratchMorph >> isHostingMesh [
 
 	(server := sFrame workPane phratchServer) ifNil: [^ false].
 	^ server isHosting.
+]
+
+{ #category : #'as yet unclassified' }
+ScriptablePhratchMorph >> isInteger: t1 [
+    ^ t1 = t1 rounded
 ]
 
 { #category : #'sensing ops' }
@@ -5440,6 +5524,23 @@ ScriptablePhratchMorph >> isObject: object type: type [
 
 
 
+]
+
+{ #category : #'as yet unclassified' }
+ScriptablePhratchMorph >> isPrime: t1 [ 
+    | divisor factor |
+    t1 isInf ifTrue: [^ false].
+    t1 isNaN ifTrue: [^ false].
+    t1 < 1 ifTrue: [^ false].
+    t1 = 1 ifTrue: [^ false].
+    t1 = t1 rounded ifFalse:[^false].
+    divisor := 2.
+    [divisor > (0.5 * t1)]
+        whileFalse: 
+            [factor := t1 / divisor.
+            factor = factor rounded ifTrue: [^false].
+            divisor := divisor + 1].
+    ^ true
 ]
 
 { #category : #accessing }
@@ -6463,6 +6564,36 @@ ScriptablePhratchMorph >> numberInParens: aNumber [
 
 ]
 
+{ #category : #'as yet unclassified' }
+ScriptablePhratchMorph >> numberSort: t1 [ 
+    | t2 t3 t4 t5 t6 |
+    t2 := #() asOrderedCollection.
+    t3 := #() asOrderedCollection.
+    t4 := #() asOrderedCollection.
+    t6 := #() asOrderedCollection.
+    t5 := 1.
+    (self lineCountOfList: t1)
+        timesRepeat: 
+            [t2 add: (self getLine: t5 ofList: t1).
+            t5 := t5 + 1].
+    t2 do: 
+        [:t7 | 
+        t3 add: t7 asNumberNoError.
+        t7 asNumberNoError = 0 ifTrue: [t4 add: t7]].
+    t3 := t3 asArray sort.
+    t3 := t3 asOrderedCollection.
+    t5 := 1.
+    t3 do: 
+        [:t8 | 
+        t8 = 0 ifFalse: [t6 add: t8].
+        t8 = 0
+            ifTrue: 
+                [t6 add: (t4 at: t5).
+                t5 := t5 + 1]].
+    self deleteLine: 'all' ofList: t1.
+    t6 do: [:t9 | self append: t9 toList: t1]
+]
+
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> numericConstant: t1 [ 
 	'pi' = t1 ifTrue: [^ Float pi].
@@ -6651,6 +6782,12 @@ ScriptablePhratchMorph >> passiveWhirlEffect: aNumber [
 	self propagate: #whirl
 ]
 
+{ #category : #'as yet unclassified' }
+ScriptablePhratchMorph >> pause [
+    DialogBoxMorph warn: 'Paused: Click OK to continue'.
+	self updateAfterPopUp.
+]
+
 { #category : #'looks ops' }
 ScriptablePhratchMorph >> penDown [
 	"Overriden by sprites."
@@ -6771,6 +6908,14 @@ ScriptablePhratchMorph >> prepareForExport [
 		self subsprites do: [:sub |
 			sub prepareForExport ]]
 
+]
+
+{ #category : #'as yet unclassified' }
+ScriptablePhratchMorph >> pressGreenFlag [
+	
+	| sFrame |
+	sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
+	sFrame pressGreenFlagButton
 ]
 
 { #category : #private }
@@ -7230,6 +7375,13 @@ ScriptablePhratchMorph >> savePhoto: aForm [
 
 
 
+]
+
+{ #category : #'as yet unclassified' }
+ScriptablePhratchMorph >> saveProj [
+| t1 |
+t1 := self ownerThatIsA: PhratchFrameMorph.
+t1 savePhratchProject
 ]
 
 { #category : #media }
@@ -7998,6 +8150,24 @@ ScriptablePhratchMorph >> stringLength: anObject [
 
 ]
 
+{ #category : #'as yet unclassified' }
+ScriptablePhratchMorph >> stringSort: t1 [ 
+    | t2 t3 |
+    (self lineCountOfList: t1)
+        = 0 ifTrue: [^ self].
+    (self lineCountOfList: t1)
+        = 1 ifTrue: [^ self].
+    t2 := #() asOrderedCollection.
+    t3 := 1.
+    (self lineCountOfList: t1)
+        timesRepeat: 
+            [t2 add: (self getLine: t3 ofList: t1).
+            t3 := t3 + 1].
+    t2 := t2 asArray sort.
+    self deleteLine: 'all' ofList: t1.
+    t2 do: [:t4 | self append: t4 toList: t1]
+]
+
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> stringToBoolean: aString [
 	"Answer the given string as a boolean."
@@ -8054,6 +8224,19 @@ ScriptablePhratchMorph >> timerReset [
 
 	TimerStartMSecs := Time millisecondClockValue.
 
+]
+
+{ #category : #'as yet unclassified' }
+ScriptablePhratchMorph >> times: t1 List: t2 [ 
+    | t3 t4 |
+    t3 := 1.
+    t4 := 0.
+    (self lineCountOfList: t2)
+        timesRepeat: 
+            [(self getLine: t3 ofList: t2)
+                = t1 ifTrue: [t4 := t4 + 1].
+            t3 := t3 + 1].
+    ^ t4
 ]
 
 { #category : #'looks ops' }
