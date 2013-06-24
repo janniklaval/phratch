@@ -459,7 +459,7 @@ PhratchFilePicker >> getPhratchInfoFromFile [
 		(version = 1) | (version = 2) ifTrue: [
 			buf := f next: f uint32.
 			result := ((ObjStream new readObjFrom: (ReadStream on: buf)) associations collect: [:each | each value] ) asDictionary ].
-	] ifError: [].
+	] ifError: [:e | Transcript show: e printString, ' in PhratchFilePicker>>getPhratchInfoFromFile'].
 	f close.
 
 	^ result

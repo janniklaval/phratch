@@ -1883,7 +1883,6 @@ PhratchFrameMorph >> extractProjectFrom: aByteArray [
 	| s version proj |
 
 	ObjStream initialize. "just to make sure this works in filed-in changesets, -Jens"
-
 	s := ReadStream on: aByteArray.
 	version := ObjStream phratchFileVersionFrom: (s next: 10) asString.
 	version = 0 ifTrue: [
