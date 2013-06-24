@@ -71,7 +71,6 @@ Morph >> initFieldsFrom: anObjStream version: classVersion [
 		owner
 		submorphs
 		color
-		extension
 		flags
 	) from: anObjStream.
 	
@@ -240,7 +239,6 @@ Morph >> storeFieldsOn: anObjStream [
 		owner
 		submorphs
 		color
-		extension
 	"	flags"
 	) on: anObjStream.
 	
