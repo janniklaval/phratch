@@ -590,7 +590,10 @@ PhratchFrameMorph class >> skin [
 { #category : #'scratch skin' }
 PhratchFrameMorph class >> skinAt: aSymbolOrString [
 
-	^ self skinAt: aSymbolOrString ifAbsent: [self skinAt: 'control']
+	^ self skinAt: aSymbolOrString ifAbsent: [
+		(aSymbolOrString endsWith: 'Over') ifTrue: [ ^self skinAt: 'controlOver' ifAbsent:[] ].
+		(aSymbolOrString endsWith: 'Pressed') ifTrue: [ ^self skinAt: 'controlPressed' ifAbsent:[] ].
+		^self skinAt: 'control' ifAbsent:[]]
 
 ]
 
