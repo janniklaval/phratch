@@ -105,12 +105,7 @@ PhratchViewerMorph >> pageViewer [
 PhratchViewerMorph >> rebuildCategorySelectors [
 
 	| catList maxExtent buttons label offForm onForm overForm b pad leftColumnX rightColumnX x y |
-	catList := #(
-		motion		control
-		looks		sensing
-		sound		operators
-		pen			variables
-		files		colors).
+	catList := (((PhratchCategory allSubclasses select:[:e | e visible]) sort: [:e :f | e order < f order]) collect: [:c | c label] ) asArray.
 
 	"First, delete the old category buttons"
 	submorphs do: [:m | (m isKindOf: ResizableToggleButton2) ifTrue: [m delete]].

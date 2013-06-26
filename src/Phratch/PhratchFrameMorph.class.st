@@ -590,7 +590,7 @@ PhratchFrameMorph class >> skin [
 { #category : #'scratch skin' }
 PhratchFrameMorph class >> skinAt: aSymbolOrString [
 
-	^ self skinAt: aSymbolOrString ifAbsent: [PhratchSkin error: 'key not found']
+	^ self skinAt: aSymbolOrString ifAbsent: [self skinAt: 'control']
 
 ]
 

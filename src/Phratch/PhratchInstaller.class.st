@@ -185,6 +185,17 @@ PhratchInstaller class >> phratchSettingsOn: aBuilder [
 				label: 'fileIOPreference' translated;
 		 		target: ScriptablePhratchMorph;
 		 		description: 'Do you allow Phratch to write files' translated.	
+			(aBuilder group: #visibility)
+				label: 'Category Visibility' translated;
+				description: 'Category Visibility' translated;
+				with: [ 
+					(PhratchCategory allSubclasses) do:[:e | 
+						(aBuilder setting: #visible) 
+							label: e label, ' visible' translated;
+		 					target: e;
+		 					description: 'Do you to see this category ?' translated.
+					].
+				].
 		].
 ]
 
