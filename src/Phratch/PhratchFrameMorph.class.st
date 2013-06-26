@@ -4072,7 +4072,7 @@ PhratchFrameMorph >> startup [
 	presentationMode := false.
 	quitFlag := false.
 	
-	startupFileNames := "InputSensor startupFileNames asOrderedCollection" #().
+	startupFileNames := "InputSensor startupFileNames asOrderedCollection" OrderedCollection new.
 	
 	
 	2 to: 10 do: [:i |

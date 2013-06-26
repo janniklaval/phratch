@@ -1451,7 +1451,7 @@ CommandBlockMorph >> uncoloredArgMorphFor: specString [
 	| code |
 	code := specString copyFrom: 2 to: specString size-1.
 	
-	"$a"'Attributes'			= code ifTrue: [^ AttributeArgMorph new choice: ''].
+	"%a"'Attributes'			= code ifTrue: [^ AttributeArgMorph new choice: ''].
 	"b"'Boolean'			= code ifTrue: [^ BooleanArgMorph new].
 	""'CheckBox'			= code ifTrue: [^ CheckBoxArgMorph new].
 	"c"'Color'				= code ifTrue: [^ ColorArgMorph new showPalette: true].
