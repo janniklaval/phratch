@@ -3070,6 +3070,37 @@ PhratchFrameMorph >> phratchWatchers [
 
 ]
 
+{ #category : #'menu/button actions' }
+PhratchFrameMorph >> prepareImageForEndUserSilently [
+
+"	(self confirm: '
+Close non-Phratch windows and save this
+image in end-user (fillScreen) mode?') ifFalse: [^ self].
+"
+	PhratchFrameMorph isXO ifTrue: [PhratchFrameMorph useLargeFonts].
+
+	self setLanguage: 'en'.
+
+	self enterNormalMode.
+	self blockContrastStrong.
+	ScriptablePhratchMorph keepOnStage: true.
+	self recordKeepOnStage: 1. 
+	EventHatMorph threadSafeMode: false.
+	self recordThreadSafeMode: 0.
+
+	BlockLabelFragmentDialog isExpanded: false.
+
+	World submorphs do: [:m |
+		(m isKindOf: SystemWindow) ifTrue: [m delete]].
+	self clearStage.
+
+	Display newDepth: 32.
+	self fillScreenOn.
+	World doOneCycleNow.
+	ImageCleaner cleanUpForProduction.
+
+]
+
 { #category : #'falta adaptar' }
 PhratchFrameMorph >> presentHelpScreen: aStringOrNil [
 	"Look for a help screen with the given name in the 'Help' folder. If found, present it to the user."
@@ -3670,27 +3701,7 @@ PhratchFrameMorph >> saveImageForEndUserSilently [
 Close non-Phratch windows and save this
 image in end-user (fillScreen) mode?') ifFalse: [^ self].
 "
-	PhratchFrameMorph isXO ifTrue: [PhratchFrameMorph useLargeFonts].
-
-	self setLanguage: 'en'.
-
-	self enterNormalMode.
-	self blockContrastStrong.
-	ScriptablePhratchMorph keepOnStage: true.
-	self recordKeepOnStage: 1. 
-	EventHatMorph threadSafeMode: false.
-	self recordThreadSafeMode: 0.
-
-	BlockLabelFragmentDialog isExpanded: false.
-
-	World submorphs do: [:m |
-		(m isKindOf: SystemWindow) ifTrue: [m delete]].
-	self clearStage.
-
-	Display newDepth: 32.
-	self fillScreenOn.
-	World doOneCycleNow.
-	ImageCleaner cleanUpForProduction.
+	self prepareImageForEndUserSilently.
 	Smalltalk snapshot: true andQuit: true.
 	self startup.
 	Sensor useOSEvents: true.
