@@ -111,7 +111,7 @@ ScriptablePhratchMorph class >> blockSpecs [
 		S	start event hat
 		W	when <condition> hat (obsolete)"
 
-	| blocks |
+	| blocks allPragmas |
 	blocks := #(
 		'control'
 			('when $Sprite$ clicked'				S	-)
@@ -334,9 +334,26 @@ ScriptablePhratchMorph class >> blockSpecs [
 		'pen'
 			('clear'						-	clearPenTrails)
 	).
+	
+	
+	"Add the block with the new method of declaration:"
+	allPragmas := Pragma allNamed: #phratchItem:kind:category:defaultValues:subCategory: from: self to:  (PhratchSpriteMorph) sortedByArgument: 5.
+
+	PhratchCategory allSubclassesDo: [ :c |
+		|previousSC|
+		previousSC := nil.
+		blocks := blocks, {c label}.
+		allPragmas select:[:pragma | (pragma arguments at: 3) = c label] 
+			thenDo:[:aP |
+				|prov|
+				(previousSC notNil and: [previousSC ~~( aP arguments at: 5)]) ifTrue:[blocks := blocks, #(-) ].
+				prov := { aP arguments at: 1 . aP arguments at: 2 . aP method selector},  (aP arguments at: 4).
+				blocks := blocks, {prov}.
+				previousSC := aP arguments at: 5.
+			].
+	].
 
 	^ blocks, self obsoleteBlockSpecs
-
 ]
 
 { #category : #'translation support' }
