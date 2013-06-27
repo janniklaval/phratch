@@ -1,26 +1,26 @@
 Class {
-	#name : #PhratchPure,
+	#name : #PhratchCategoryPure,
 	#superclass : #PhratchCategory,
 	#category : #PhratchPure
 }
 
 { #category : #'as yet unclassified' }
-PhratchPure class >> color [
+PhratchCategoryPure class >> color [
 	^(Color h: 220 s: 0.85 v: 0.725)
 ]
 
 { #category : #'as yet unclassified' }
-PhratchPure class >> label [
-	^'Pure'
+PhratchCategoryPure class >> label [
+	^'pure'
 ]
 
 { #category : #'as yet unclassified' }
-PhratchPure class >> order [
+PhratchCategoryPure class >> order [
 	^11
 ]
 
 { #category : #'as yet unclassified' }
-PhratchPure class >> viewerPageFor: aScriptablePhratchMorph [
+PhratchCategoryPure class >> viewerPageFor: aScriptablePhratchMorph [
 
 		"Answer a morph containing my variables."
 
@@ -45,6 +45,7 @@ PhratchPure class >> viewerPageFor: aScriptablePhratchMorph [
 	page addMorph: (addButton2 target: aScriptablePhratchMorph; position: x@30).
 	y := addButton2 bottom + 3.
 
+	aScriptablePhratchMorph addGenericPureBlocksTo: page x: x y: y.
 	maxX := page submorphs inject: 0 into: [:t :m | t max: m right].
 	page extent: (maxX + 10) @ y.
 	^ page

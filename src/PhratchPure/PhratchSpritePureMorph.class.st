@@ -7,37 +7,10 @@ Class {
 	#category : #PhratchPure
 }
 
-{ #category : #'as yet unclassified' }
-PhratchSpritePureMorph class >> blockSpecs [
-
-	| blocks |
-	blocks := #(
-		'pure'
-			('move %n cm'				-	forward: 100)
-			('emergency stop'				-	stopRobot)
-			-
-			('go to x:%n y:%n'				-	gotoX:y: 0 0)
-			-
-			('set x to %n'					-	xpos: 0)
-			('set y to %n'					-	ypos: 0)
-			('set orientation to %n'			-	heading: 0)
-			-
-			('x position'						r	xpos)
-			('y position'						r	ypos)
-			('direction'						r	heading)
-			-
-			('min laser position'						r	minLaserpos)
-			('min telemeter position'						r	minTelemeterpos)
-			('min infrared position'						r	minInfraredpos)
-		).
-
-	^ blocks, super blockSpecs
-
-]
-
 { #category : #'motion ops' }
 PhratchSpritePureMorph >> forward: distance [
-
+	<phratchItem: 'move $Number$ cm' kind: #- category: 'pure' defaultValues: #(100) subCategory: 1>
+	
 	| currentPosition nextPosition |
 	super forward: distance.
 	[currentPosition := connectedRobot localizationService currentPosition.
@@ -51,6 +24,8 @@ PhratchSpritePureMorph >> forward: distance [
 { #category : #'motion ops' }
 PhratchSpritePureMorph >> gotoX: x y: y [
 
+	<phratchItem: 'go to x:$Number$ y:$Number$' kind: #- category: 'pure' defaultValues: #(0 0) subCategory: 2>
+	
 	| currentPosition |
 	super gotoX: x y: y.
 	[currentPosition := connectedRobot localizationService currentPosition.
@@ -63,6 +38,8 @@ PhratchSpritePureMorph >> gotoX: x y: y [
 { #category : #'motion ops' }
 PhratchSpritePureMorph >> heading [
 
+	<phratchItem: 'direction' kind: #r category: 'pure' defaultValues: #() subCategory: 4>
+	
 	"super heading."
 	[^ connectedRobot localizationService currentPose orientation.
 	] on: Exception do: [ Transcript show: 'heading'; cr ]
@@ -71,6 +48,7 @@ PhratchSpritePureMorph >> heading [
 { #category : #'motion ops' }
 PhratchSpritePureMorph >> heading: headingDegrees [
 
+	<phratchItem: 'set orientation to $Number$' kind: #- category: 'pure' defaultValues: #(0) subCategory: 3>
 	"super heading: headingDegrees."
 	[^ connectedRobot localizationService x: self xpos y: self ypos orientation: headingDegrees.
 	] on: Exception do: [ Transcript show: 'heading:'; cr ]
@@ -134,6 +112,7 @@ PhratchSpritePureMorph >> laserpos [
 { #category : #'motion ops' }
 PhratchSpritePureMorph >> minInfraredpos [
 
+	<phratchItem: 'min infrared position' kind: #r category: 'pure' defaultValues: #() subCategory: 5>
 	| laser notification |
 	laser := connectedRobot irTelemeterService.
 	[laser enableNotificationsEvery: 100.]on: Exception do:[].
@@ -145,6 +124,7 @@ PhratchSpritePureMorph >> minInfraredpos [
 { #category : #'motion ops' }
 PhratchSpritePureMorph >> minLaserpos [
 
+	<phratchItem: 'min laser position' kind: #r category: 'pure' defaultValues: #() subCategory: 5>
 	| laser notification |
 	laser := connectedRobot laserService.
 	[laser enableNotificationsEvery: 100.]on: Exception do:[].
@@ -154,7 +134,8 @@ PhratchSpritePureMorph >> minLaserpos [
 
 { #category : #'motion ops' }
 PhratchSpritePureMorph >> minTelemeterpos [
-
+	
+	<phratchItem: 'min telemeter position' kind: #r category: 'pure' defaultValues: #() subCategory: 5>
 	| laser notification |
 	laser := connectedRobot sonarTelemeterService.
 	[laser enableNotificationsEvery: 100.]on: Exception do:[].
@@ -186,7 +167,7 @@ PhratchSpritePureMorph >> stopPlaying [
 
 { #category : #'as yet unclassified' }
 PhratchSpritePureMorph >> stopRobot [
-	
+	<phratchItem: 'Stop robot' kind: #- category: 'pure' defaultValues: #() subCategory: 1>
 	connectedRobot trajectoryService emergencyStop.
 
 
@@ -202,42 +183,10 @@ PhratchSpritePureMorph >> telemeterpos [
 	^ notification distances
 ]
 
-{ #category : #'as yet unclassified' }
-PhratchSpritePureMorph >> viewerPageForPure [
-	"Answer a morph containing my variables."
-
-	| page addButton x y maxX addButton2 |
-	page := PhratchBlockPaletteMorph new
-		color: (Color r: 0.8 g: 0.8 b: 1.0);
-		borderWidth: 0.
-
-	addButton := PhratchFrameMorph
-		buttonLabel: 'Make kompai1' localized
-		selector: #addKompai1.
-	"(self isKindOf: PhratchSpritePureMorph) ifFalse: [addButton actionSelector: #addKompai1WithAlert]."
-
-	addButton2 := PhratchFrameMorph
-		buttonLabel: 'Make kompai2' localized
-		selector: #addKompai2.
-	"(self isKindOf: PhratchSpritePureMorph) ifFalse: [addButton actionSelector: #addKompai2WithAlert]."
-	
-	x := 13.
-	page addMorph: (addButton target: self; position: x@7).
-	y := addButton bottom + 3.
-	
-	y := y + 0.
-	page addMorph: (addButton2 target: self; position: x@30).
-	y := addButton2 bottom + 3.
-
-	self addGenericPureBlocksTo: page x: x y: y.
-	maxX := page submorphs inject: 0 into: [:t :m | t max: m right].
-	page extent: (maxX + 10) @ y.
-	^ page
-]
-
 { #category : #'motion ops' }
 PhratchSpritePureMorph >> xpos [
 
+	<phratchItem: 'x position' kind: #r category: 'pure' defaultValues: #() subCategory: 4>
 	"super xpos."
 	[^ connectedRobot localizationService currentPosition x * 100.
 	] on: Exception do: [ Transcript show: 'xpos'; cr ]
@@ -246,6 +195,7 @@ PhratchSpritePureMorph >> xpos [
 { #category : #'motion ops' }
 PhratchSpritePureMorph >> xpos: aNumber [ 
 
+	<phratchItem: 'set x to $Number$' kind: #- category: 'pure' defaultValues: #(0) subCategory: 3>
 	"super xpos: (aNumber/100) ."
 	[^ connectedRobot localizationService x: (aNumber/100) y: self ypos orientation: self heading.
 	] on: Exception do: [ Transcript show: 'xpos:'; cr ]
@@ -254,6 +204,7 @@ PhratchSpritePureMorph >> xpos: aNumber [
 { #category : #'motion ops' }
 PhratchSpritePureMorph >> ypos [
 
+	<phratchItem: 'y position' kind: #r category: 'pure' defaultValues: #() subCategory: 4>
 	"super ypos."
 	[^ connectedRobot localizationService currentPosition x * 100.
 	] on: Exception do: [ Transcript show: 'ypos'; cr ]
@@ -262,6 +213,7 @@ PhratchSpritePureMorph >> ypos [
 { #category : #'motion ops' }
 PhratchSpritePureMorph >> ypos: aNumber [ 
 
+	<phratchItem: 'set y to $Number$' kind: #- category: 'pure' defaultValues: #(0) subCategory: 3>
 	"super ypos: (aNumber/100)."
 	[^ connectedRobot localizationService x: self xpos y: (aNumber/100) orientation: self heading.
 	] on: Exception do: [ Transcript show: 'ypos:'; cr ]
