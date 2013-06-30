@@ -10,21 +10,12 @@ IMPORTANT!  The current implementation cannot stand alone, it needs to be a subm
 "
 Class {
 	#name : #PhratchGraphMorph,
-	#superclass : #BorderedMorph,
+	#superclass : #GraphMorph,
 	#instVars : [
-		'data',
-		'dataColor',
 		'playCursorColor',
 		'playing',
-		'cursorColor',
-		'cursorColorAtZeroCrossings',
-		'startIndex',
-		'minVal',
-		'maxVal',
 		'selection',
 		'scale',
-		'cachedForm',
-		'hasChanged',
 		'ruler',
 		'viewer',
 		'trueCalls',
@@ -61,15 +52,6 @@ PhratchGraphMorph class >> openOn: dataCollection [
 
 ]
 
-{ #category : #menu }
-PhratchGraphMorph >> addCustomMenuItems: aCustomMenu hand: aHandMorph [
-
-	super addCustomMenuItems: aCustomMenu hand: aHandMorph.
-	aCustomMenu add: 'open wave editor' action: #openWaveEditor.
-	aCustomMenu add: 'read file' action: #readDataFromFile.
-
-]
-
 { #category : #initialization }
 PhratchGraphMorph >> addRuler [
 
@@ -86,20 +68,6 @@ PhratchGraphMorph >> adjustSelection [
 	editor selectionNil ifTrue: [^ self].
 	editor selection: editor cursor scd: editor startSelection.
 
-
-]
-
-{ #category : #commands }
-PhratchGraphMorph >> appendValue: aPointOrNumber [
-
-	| newVal |
-	(data isKindOf: OrderedCollection) ifFalse: [data := data asOrderedCollection].
-	newVal := self asNumber: aPointOrNumber.
-	data addLast: newVal.
-	newVal < minVal ifTrue: [minVal := newVal].
-	newVal > maxVal ifTrue: [maxVal := newVal].
-	self cursor: data size.
-	self flushCachedForm.
 
 ]
 
@@ -131,109 +99,11 @@ PhratchGraphMorph >> calculateDataArray [
 						pos := pos max: (data at: i).].].
 ]
 
-{ #category : #commands }
-PhratchGraphMorph >> centerCursor [
-	"Scroll so that the cursor is as close as possible to the center of my window."
-
-	| w |
-
-	w := self width - (2 * borderWidth).
-	self startIndex: ((editor cursor - (w // (scale*2))) max: 1).
-
-]
-
-{ #category : #commands }
-PhratchGraphMorph >> clear [
-
-	self startIndex: 1.
-	self cursor: 1.
-	self data: OrderedCollection new.
-
-]
-
-{ #category : #accessing }
-PhratchGraphMorph >> color: aColor [
-
-	super color: aColor.
-	self flushCachedForm.
-
-]
-
 { #category : #viewing }
 PhratchGraphMorph >> computeSlider [
 	
 	editor slider sliderThickness: ((bounds width//scale)/data size)*(editor slider extent x).
 	editor slider changed.
-]
-
-{ #category : #accessing }
-PhratchGraphMorph >> cursor [
-
-	^ editor cursor
-
-]
-
-{ #category : #accessing }
-PhratchGraphMorph >> cursor: aNumber [
-
-
-	editor cursor: aNumber.
-
-]
-
-{ #category : #accessing }
-PhratchGraphMorph >> cursorAtEnd [
-
-	^editor cursor truncated >= data size
-
-]
-
-{ #category : #accessing }
-PhratchGraphMorph >> cursorColor [
-
-	^ cursorColor
-
-]
-
-{ #category : #accessing }
-PhratchGraphMorph >> cursorColor: aColor [
-
-	cursorColor := aColor.
-	self flushCachedForm.
-
-]
-
-{ #category : #accessing }
-PhratchGraphMorph >> cursorColorAtZeroCrossing [
-
-	^ cursorColorAtZeroCrossings
-
-]
-
-{ #category : #accessing }
-PhratchGraphMorph >> cursorColorAtZeroCrossings: aColor [
-
-	cursorColorAtZeroCrossings := aColor.
-	self flushCachedForm.
-
-]
-
-{ #category : #accessing }
-PhratchGraphMorph >> cursorWrapped: aNumber [
-
-	| sz |
-	editor cursor ~= aNumber ifTrue: [
-		editor cursor: aNumber.
-		sz := data size.
-		sz = 0
-			ifTrue: [editor cursor: 1]
-			ifFalse: [
-				((editor cursor >= (sz + 1)) or: [editor cursor < 0]) ifTrue: [
-					 editor cursor: editor cursor - ((editor cursor // sz) * sz)].
-				editor cursor < 1 ifTrue: [editor cursor: sz + editor cursor]].
-		"assert: 1 <= cursor < data size + 1"
-		hasChanged := true].
-
 ]
 
 { #category : #accessing }
@@ -245,41 +115,6 @@ PhratchGraphMorph >> customScale [
 	answer size = 0 ifTrue: [^ self].
 	answer := answer copyWithout: $x.
 	self zoom: answer asNumber.
-
-]
-
-{ #category : #accessing }
-PhratchGraphMorph >> data [
-
-	^ data
-
-]
-
-{ #category : #accessing }
-PhratchGraphMorph >> data: aCollection [
-
-	data := aCollection.
-	maxVal := minVal := 0.
-	data do: [:x |
-		x < minVal ifTrue: [minVal := x].
-		x > maxVal ifTrue: [maxVal := x]].
-
-	self flushCachedForm.
-
-]
-
-{ #category : #accessing }
-PhratchGraphMorph >> dataColor [
-
-	^ dataColor
-
-]
-
-{ #category : #accessing }
-PhratchGraphMorph >> dataColor: aColor [
-
-	dataColor := aColor.
-	self flushCachedForm.
 
 ]
 
@@ -336,15 +171,9 @@ PhratchGraphMorph >> drawDataOn: aCanvas [
 { #category : #drawing }
 PhratchGraphMorph >> drawOn: aCanvas [
 
-	| c |
+	| |
 
-	cachedForm = nil ifTrue:  [
-		c := FormCanvas extent: bounds extent.
-		c translateBy: bounds origin negated
-			during:[:tempCanvas| self drawDataOn: tempCanvas].
-		cachedForm := c form].
-	aCanvas paintImage: cachedForm at: bounds origin.
-	self drawCursorOn: aCanvas.
+	super drawOn: aCanvas.
 	self drawPlayCursorOn: aCanvas.
 	
 ]
@@ -473,14 +302,6 @@ PhratchGraphMorph >> editor: aSoundEditor [
 	editor := aSoundEditor.
 ]
 
-{ #category : #private }
-PhratchGraphMorph >> flushCachedForm [
-
-	cachedForm := nil.
-	hasChanged := true.
- 
-]
-
 { #category : #events }
 PhratchGraphMorph >> handlesMouseDown: evt [
 
@@ -488,123 +309,19 @@ PhratchGraphMorph >> handlesMouseDown: evt [
 
 ]
 
-{ #category : #drawing }
-PhratchGraphMorph >> hasChanged: aBoolean [
-	
-	hasChanged := aBoolean.
-]
-
 { #category : #initialization }
 PhratchGraphMorph >> initialize [
 
 	super initialize.
 	self color: (Color r: 0.8 g: 0.8 b: 0.6).
-	self extent: 365@80.
 	self borderWidth: 2.
-	dataColor := Color darkGray.
-	cursorColor := Color red.
 	playCursorColor := Color blue.
-	cursorColorAtZeroCrossings := Color red.
-	startIndex := 1.
 	viewer := false.
 	selection := {nil. nil}.
 	scale := 1.0.
-	hasChanged := false.
 	posVals := negVals := nil.
-
-	self data:
-		((0 to: 360 - 1) collect:
-			[:x | (100.0 * (x degreesToRadians sin)) asInteger]).
-
 	
 	
-
-]
-
-{ #category : #accessing }
-PhratchGraphMorph >> interpolatedValueAtCursor [
-
-	| sz prev frac next |
-	data isEmpty ifTrue: [^ 0].
-	sz := data size.
-	owner cursor < 0 ifTrue: [^ data at: 1].  "just to be safe, though cursor shouldn't be negative"
-	prev := owner cursor truncated.
-	frac := owner cursor - prev.
-	prev < 1 ifTrue: [prev := sz].
-	prev > sz ifTrue: [prev := 1].
-	"assert: 1 <= prev <= sz"
-	frac = 0 ifTrue: [^ data at: prev].  "no interpolation needed"
-
-	"interpolate"
-	next := prev = sz ifTrue: [1] ifFalse: [prev + 1].
-	^ ((1.0 - frac) * (data at: prev)) + (frac * (data at: next))
-
-]
-
-{ #category : #private }
-PhratchGraphMorph >> keepIndexInView: index [
-
-	| w newStart |
-
-	w := bounds width - (2 * borderWidth).
-	index < startIndex ifTrue: [
-		newStart := index - w//scale + 1.
-		^ self startIndex: (newStart max: 1)].
-	index > (startIndex + w//scale) ifTrue: [
-		^ self startIndex: (index min: data size)].
-
-]
-
-{ #category : #accessing }
-PhratchGraphMorph >> lastValue [
-
-	data size = 0 ifTrue: [^ 0].
-	^ data last
-
-]
-
-{ #category : #accessing }
-PhratchGraphMorph >> lastValue: aNumber [
-
-	self appendValue: aNumber.
-
-]
-
-{ #category : #'change reporting' }
-PhratchGraphMorph >> layoutChanged [
-
-	super layoutChanged.
-	cachedForm := nil.
-
-]
-
-{ #category : #commands }
-PhratchGraphMorph >> loadSineWave [
-
-	self loadSoundData: FMSound sineTable.
-
-]
-
-{ #category : #commands }
-PhratchGraphMorph >> loadSound: aSound [
-
-	self loadSoundData: aSound samples.
-
-]
-
-{ #category : #commands }
-PhratchGraphMorph >> loadSoundData: aCollection [
-
-	| factor absV newData |
-	factor := 0.
-	aCollection do: [:v | (absV := v abs) > factor ifTrue: [scale := absV]].
-	scale := 100.0 / factor.
-	newData := OrderedCollection new: aCollection size.
-	1 to: aCollection size do: [:i | newData addLast: (factor * (aCollection at: i))].
-
-	self data: newData.
-	self startIndex: 1.
-	self cursor: 1.
 
 ]
 
@@ -679,35 +396,6 @@ PhratchGraphMorph >> mouseUp: evt [
 ]
 
 { #category : #menu }
-PhratchGraphMorph >> openWaveEditor [
-
-	| factor scaledData |
-	self data: data.  "make sure maxVal and minVal are current"
-	factor := 32767 // ((minVal abs max: maxVal abs) max: 1).
-	scaledData := SoundBuffer newMonoSampleCount: data size.
-	1 to: data size do: [:i | scaledData at: i put: (factor * (data at: i)) truncated].
-	(SimpleWaveEditor new
-		data: scaledData;
-		samplingRate: 11025) openInWorld.
-
-]
-
-{ #category : #commands }
-PhratchGraphMorph >> playOnce [
-
-	| factor absV scaledData |
-	data isEmpty ifTrue: [^ self].  "nothing to play"
-	factor := 1.
-	data do: [:v | (absV := v abs) > factor ifTrue: [factor := absV]].
-	factor := 32767.0 / factor.
-	scaledData := SoundBuffer newMonoSampleCount: data size.
-	1 to: data size do: [:i |
-		scaledData at: i put: (factor * (data at: i)) truncated].
-	(SampledSound samples: scaledData samplingRate: 11025) play.
-
-]
-
-{ #category : #menu }
 PhratchGraphMorph >> readDataFromFile [
 
 	| result fName menu |
@@ -730,20 +418,6 @@ PhratchGraphMorph >> readDataKind: aKind [
 	self data: (SampledSound fromFileNamed: fName) samples.
 
 
-]
-
-{ #category : #commands }
-PhratchGraphMorph >> reverse [
-
-	data := data reversed.
-	self flushCachedForm.
-
-]
-
-{ #category : #accessing }
-PhratchGraphMorph >> ruler [
-
-	^ruler.
 ]
 
 { #category : #accessing }
@@ -811,58 +485,10 @@ PhratchGraphMorph >> setScaleBy: choice [
 		ifTrue: [ self customScale].
 ]
 
-{ #category : #accessing }
-PhratchGraphMorph >> startIndex [
-
-	^ startIndex
-
-]
-
-{ #category : #accessing }
-PhratchGraphMorph >> startIndex: aNumber [
-
-	startIndex ~= aNumber ifTrue:  [
-		startIndex := aNumber asInteger.
-		self flushCachedForm].
-
-]
-
-{ #category : #stepping }
-PhratchGraphMorph >> step [
-	"Make a deferred damage rectangle if I've changed. This allows applications to call methods that invalidate my display at high-bandwidth without paying the cost of doing the damage reporting on ever call; they can merely set hasChanged to true."
-
-	super step.
-	
-	hasChanged == nil ifTrue: [hasChanged := false].
-	hasChanged ifTrue: [
-		self changed.
-		hasChanged := false].
-
-]
-
 { #category : #stepping }
 PhratchGraphMorph >> stepTime [
 
 	^150
-]
-
-{ #category : #accessing }
-PhratchGraphMorph >> valueAtCursor [
-
-	data isEmpty ifTrue: [^ 0].
-	^ data at: ((editor cursor truncated max: 1) min: data size).
-
-]
-
-{ #category : #accessing }
-PhratchGraphMorph >> valueAtCursor: aPointOrNumber [
-
-	data isEmpty ifTrue: [^ 0].
-	data
-		at: ((editor cursor truncated max: 1) min: data size)
-		put: (self asNumber: aPointOrNumber).
-	self flushCachedForm.
-
 ]
 
 { #category : #viewing }
