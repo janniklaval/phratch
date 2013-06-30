@@ -113,52 +113,7 @@ ScriptablePhratchMorph class >> blockSpecs [
 
 	| blocks allPragmas |
 	blocks := #(
-		'control'
-			('when $Sprite$ clicked'				S	-)
-			('when $Keys$ key pressed'			K	-)
-			('when $Sprite$ clicked'				M	-)
-			-
-			('wait $Number$ secs'					t	wait:elapsed:from: 1)
-			-
-			('forever'						c	doForever)
-			('repeat $Number$ times'						c	doRepeat 10)
-			-
-			('broadcast $Event$'					-	broadcast:)
-			('broadcast $Event$ and wait'			s	doBroadcastAndWait)
-			('when I receive $Event$'			E	-)
-			('$Event$ received?'							b	eventReceivedNamed:)
-			-
-			('forever if $Boolean$'					c	doForeverIf)
-			('if $Boolean$'							c	doIf)
-			('if $Boolean$'							c	doIfElse)
-			('if $Boolean$ then $String$ else $String$'		r	if:then:else:)
-			('if $Boolean$ then $Boolean$ else $Boolean$'		b	ifB:then:else:)
-			('wait until $Boolean$'					s	doWaitUntil)
-			('repeat until $Boolean$'				c	doUntil)
-			-
-			('press green flag' #- #pressGreenFlag)
-			('stop all scripts for $Event$'			-	stopAllScriptsFor:)
-			('stop script'					s	doReturn)
-			('stop all'						-	stopAll)
-			('pause' #- #pause)
-			-
-			('self'							r	objName)
-			=
-			('run $CSlot$'						u	doRun)
-			('run $CSlot$ $Input$ $String$'				u	doRunBlockWithArgs)
-			('run $CSlot$ $Input$ $SAList$'					u	doRunBlockWithArgList)
-			('launch $CSlot$'					u	doFork)
-			('launch $CSlot$ $Input$ $String$'				u	doForkBlockWithArgs)
-			('launch $CSlot$ $Input$ $SAList$'				u	doForkBlockWithArgList)
-			('call $OSReporter$'						d	doReport)
-			('call $OSReporter$ $Input$ $String$'					d	doCallBlockWithArgs)
-			('call $OSReporter$ $Input$ $SAList$'					d	doCallBlockWithArgList)
-			-
-			('report $String$'						s	doAnswer)
-			('stop block'						s	doStopBlock)
-			-
-			('save project' #- #saveProj)
-			('quit Phratch' #- #exitScratch)
+		"'control'"
 			"-"
 			"('debug'							s	doPauseThread)
 			('debug $String$'						R	doPauseThreadReporter)"
@@ -337,7 +292,7 @@ ScriptablePhratchMorph class >> blockSpecs [
 	
 	
 	"Add the block with the new method of declaration:"
-	allPragmas := Pragma allNamed: #phratchItem:kind:category:defaultValues:subCategory: from: self to:  (PhratchSpriteMorph) sortedByArgument: 5.
+	allPragmas := Pragma allNamed: #phratchItem:kind:category:defaultValues:subCategory: from: self to:  ScriptablePhratchMorph  sortedByArgument: 5.
 
 	PhratchCategory allSubclassesDo: [ :c |
 		|previousSC|
@@ -2354,7 +2309,7 @@ ScriptablePhratchMorph >> brightnessEffect: aNumber [
 { #category : #'other ops' }
 ScriptablePhratchMorph >> broadcast: name [
 	"Broadcast the given event name with zero as its argument."
-
+	<phratchItem: 'broadcast $Event$' kind: #- category: 'control' defaultValues: #() subCategory: #broadcast>
 	self broadcast: name withArgument: 0.
 
 ]
@@ -3941,6 +3896,135 @@ ScriptablePhratchMorph >> desparatelyGetVar: varName from: aVarBlockMorph [
 		
 ]
 
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> doAnswer [
+"Answer the first string if the given condition is true, otherwise answer the second."
+	<phratchItem: 'report $String$' kind: #s category: 'control' defaultValues: #() subCategory: #process>
+
+]
+
+{ #category : #byob }
+ScriptablePhratchMorph >> doBroadcastAndWait [
+	<phratchItem: 'broadcast $Event$ and wait' kind: #s category: 'control' defaultValues: #() subCategory: #broadcast>
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> doCallBlockWithArgList [
+"Answer the first string if the given condition is true, otherwise answer the second."
+	<phratchItem: 'call $OSReporter$ $Input$ $SAList$' kind: #d category: 'control' defaultValues: #() subCategory: #process>
+
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> doCallBlockWithArgs [
+"Answer the first string if the given condition is true, otherwise answer the second."
+	<phratchItem: 'call $OSReporter$ $Input$ $String$' kind: #d category: 'control' defaultValues: #() subCategory: #process>
+
+]
+
+{ #category : #byob }
+ScriptablePhratchMorph >> doForever [
+	<phratchItem: 'forever' kind: #c category: 'control' defaultValues: #() subCategory: #loop>
+]
+
+{ #category : #byob }
+ScriptablePhratchMorph >> doForeverIf [
+	<phratchItem: 'forever if $Boolean$' kind: #c category: 'control' defaultValues: #() subCategory: #loop>
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> doFork [
+"Answer the first string if the given condition is true, otherwise answer the second."
+	<phratchItem: 'launch $CSlot$' kind: #u category: 'control' defaultValues: #() subCategory: #process>
+
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> doForkBlockWithArgList [
+"Answer the first string if the given condition is true, otherwise answer the second."
+	<phratchItem: 'launch $CSlot$ $Input$ $SAList$' kind: #u category: 'control' defaultValues: #() subCategory: #process>
+
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> doForkBlockWithArgs [
+"Answer the first string if the given condition is true, otherwise answer the second."
+	<phratchItem: 'launch $CSlot$ $Input$ $String$' kind: #u category: 'control' defaultValues: #() subCategory: #process>
+
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> doIf [
+"Answer the first string if the given condition is true, otherwise answer the second."
+	<phratchItem: 'if $Boolean$' kind: #c category: 'control' defaultValues: #() subCategory: #if>
+
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> doIfElse [
+"Answer the first string if the given condition is true, otherwise answer the second."
+	<phratchItem: 'if $Boolean$' kind: #c category: 'control' defaultValues: #() subCategory: #if>
+
+]
+
+{ #category : #byob }
+ScriptablePhratchMorph >> doRepeat [
+	<phratchItem: 'repeat $Number$ times' kind: #c category: 'control' defaultValues: #(10) subCategory: #loop>
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> doReport [
+"Answer the first string if the given condition is true, otherwise answer the second."
+	<phratchItem: 'call $OSReporter$' kind: #d category: 'control' defaultValues: #() subCategory: #process>
+
+]
+
+{ #category : #byob }
+ScriptablePhratchMorph >> doReturn [
+	<phratchItem: 'stop script' kind: #s category: 'control' defaultValues: #() subCategory: #loop>
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> doRun [
+"Answer the first string if the given condition is true, otherwise answer the second."
+	<phratchItem: 'run $CSlot$' kind: #u category: 'control' defaultValues: #() subCategory: #process>
+
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> doRunBlockWithArgList [
+"Answer the first string if the given condition is true, otherwise answer the second."
+	<phratchItem: 'run $CSlot$ $Input$ $SAList$' kind: #u category: 'control' defaultValues: #() subCategory: #process>
+
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> doRunBlockWithArgs [
+"Answer the first string if the given condition is true, otherwise answer the second."
+	<phratchItem: 'run $CSlot$ $Input$ $String$' kind: #u category: 'control' defaultValues: #() subCategory: #process>
+
+]
+
+{ #category : #'other ops' }
+ScriptablePhratchMorph >> doStopBlock [
+	"Stop everything!"
+	<phratchItem: 'stop block' kind: #s category: 'control' defaultValues: #() subCategory: #startstop>
+	
+]
+
+{ #category : #byob }
+ScriptablePhratchMorph >> doUntil [
+	<phratchItem: 'repeat until $Boolean$' kind: #c category: 'control' defaultValues: #(10) subCategory: #loop>
+]
+
+{ #category : #'other ops' }
+ScriptablePhratchMorph >> doWaitUntil [
+	"Do nothing; just wait for the time interval to elapse."
+	<phratchItem: 'wait until $Boolean$' kind: #s category: 'control' defaultValues: #() subCategory: #time>
+	^ nil
+
+]
+
 { #category : #'event handling' }
 ScriptablePhratchMorph >> doubleClick: evt [
 	"Show my viewer and script editor."
@@ -4346,7 +4430,7 @@ ScriptablePhratchMorph >> eventReceived: event [
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> eventReceivedNamed: eventName [
 	"Collect an array of all stacks that respond to the given event and keep only the ones that are running. Answer true if the final list has any items."
-
+	<phratchItem: '$Event$ received?' kind: #b category: 'control' defaultValues: #() subCategory: #broadcast>
 	| targetScripts procs |
 	self isSprite ifTrue: [^ (self ownerThatIsA: PhratchStageMorph) eventReceivedNamed: eventName].
 	targetScripts := self scripts select: [:s |
@@ -4393,7 +4477,8 @@ ScriptablePhratchMorph >> existsBlockId: id global: bool [
 ]
 
 { #category : #'as yet unclassified' }
-ScriptablePhratchMorph >> exitScratch [
+ScriptablePhratchMorph >> exitPhratch [
+	<phratchItem: 'quit Phratch' kind: #- category: 'control' defaultValues: #() subCategory: #project>
     Smalltalk snapshot: false andQuit: true
 ]
 
@@ -4950,6 +5035,7 @@ ScriptablePhratchMorph >> hostMesh [
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> if: aCondition then: trueString else: falseString [
 "Answer the first string if the given condition is true, otherwise answer the second."
+	<phratchItem: 'if $Boolean$ then $String$ else $String$' kind: #r category: 'control' defaultValues: #() subCategory: #if>
 	aCondition
 		ifTrue: [^ trueString].
 	^ falseString
@@ -4958,6 +5044,7 @@ ScriptablePhratchMorph >> if: aCondition then: trueString else: falseString [
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> ifB: aCondition then: trueString else: falseString [
 "Answer the first string if the given condition is true, otherwise answer the second."
+	<phratchItem: 'if $Boolean$ then $Boolean$ else $Boolean$' kind: #b category: 'control' defaultValues: #() subCategory: #if>
 	aCondition
 		ifTrue: [^ trueString = true].
 	^ falseString
@@ -6604,7 +6691,7 @@ ScriptablePhratchMorph >> numericConstant: t1 [
 
 { #category : #accessing }
 ScriptablePhratchMorph >> objName [
-
+	<phratchItem: 'self' kind: #r category: 'control' defaultValues: #() subCategory: #self>
 	^ objName
 
 ]
@@ -6784,6 +6871,7 @@ ScriptablePhratchMorph >> passiveWhirlEffect: aNumber [
 
 { #category : #'as yet unclassified' }
 ScriptablePhratchMorph >> pause [
+	<phratchItem: 'pause' kind: #- category: 'control' defaultValues: #() subCategory: #startstop>
     DialogBoxMorph warn: 'Paused: Click OK to continue'.
 	self updateAfterPopUp.
 ]
@@ -6912,7 +7000,7 @@ ScriptablePhratchMorph >> prepareForExport [
 
 { #category : #'as yet unclassified' }
 ScriptablePhratchMorph >> pressGreenFlag [
-	
+	<phratchItem: 'press green flag' kind: #- category: 'control' defaultValues: #() subCategory: #startstop>
 	| sFrame |
 	sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
 	sFrame pressGreenFlagButton
@@ -7379,6 +7467,7 @@ ScriptablePhratchMorph >> savePhoto: aForm [
 
 { #category : #'as yet unclassified' }
 ScriptablePhratchMorph >> saveProj [
+	<phratchItem: 'save project' kind: #- category: 'control' defaultValues: #() subCategory: #project>
 | t1 |
 t1 := self ownerThatIsA: PhratchFrameMorph.
 t1 savePhratchProject
@@ -8058,7 +8147,7 @@ ScriptablePhratchMorph >> stepTime [
 { #category : #'other ops' }
 ScriptablePhratchMorph >> stopAll [
 	"Stop everything!"
-
+	<phratchItem: 'stop all' kind: #- category: 'control' defaultValues: #() subCategory: #startstop>
 	| stage |
 	stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
 	stage ifNotNil: [stage stopAll].
@@ -8067,7 +8156,7 @@ ScriptablePhratchMorph >> stopAll [
 
 { #category : #byob }
 ScriptablePhratchMorph >> stopAllScriptsFor: eventName [
-
+	<phratchItem: 'stop all scripts for $Event$' kind: #- category: 'control' defaultValues: #() subCategory: #startstop>
 	| stage |
 	(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNotNil: [
 		stage stopAllScriptsFor: eventName].
@@ -8916,7 +9005,7 @@ ScriptablePhratchMorph >> volume [
 { #category : #'other ops' }
 ScriptablePhratchMorph >> wait: duration elapsed: elapsed from: ignored [
 	"Do nothing; just wait for the time interval to elapse."
-
+	<phratchItem: 'wait $Number$ secs' kind: #t category: 'control' defaultValues: #(1) subCategory: #time>
 	^ nil
 
 ]
@@ -8929,6 +9018,26 @@ ScriptablePhratchMorph >> waterRippleEffect [
 { #category : #'BYOB attributes' }
 ScriptablePhratchMorph >> waterRippleEffect: aNumber [
 	self setGraphicEffect: 'water ripple' to: aNumber
+]
+
+{ #category : #'other ops' }
+ScriptablePhratchMorph >> whenEventReceived [
+	<phratchItem: 'when I receive $Event$' kind: #E category: 'control' defaultValues: #() subCategory: #ahat>
+]
+
+{ #category : #'other ops' }
+ScriptablePhratchMorph >> whenFlagClicked [
+	<phratchItem: 'when $Sprite$ clicked' kind: #S category: 'control' defaultValues: #() subCategory: #ahat>
+]
+
+{ #category : #'other ops' }
+ScriptablePhratchMorph >> whenKeyPressed [
+	<phratchItem: 'when $Keys$ key pressed' kind: #K category: 'control' defaultValues: #() subCategory: #ahat>
+]
+
+{ #category : #'other ops' }
+ScriptablePhratchMorph >> whenSpriteClicked [
+	<phratchItem: 'when $Sprite$ clicked' kind: #M category: 'control' defaultValues: #() subCategory: #ahat>
 ]
 
 { #category : #'BYOB attributes' }

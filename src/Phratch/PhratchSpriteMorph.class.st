@@ -44,13 +44,6 @@ PhratchSpriteMorph class >> blockSpecs [
 
 	| blocks |
 	blocks := #(
-		'control'
-			('clone me'						-	cloneMe)
-			('delete me if I am a clone'						-	deleteMe)
-			('I am a clone?'					b	isClone)
-			=
-			('when $Sprite$ created'			C	-)
-
 		'motion'
 			('Arrow key move with speed $Number$ ' #- #arrowMove:)
 			('move $Number$ steps'				-	forward:)
@@ -544,7 +537,7 @@ PhratchSpriteMorph >> cloneAndSend: msgName [
 
 { #category : #'panther actions' }
 PhratchSpriteMorph >> cloneMe [
-	
+	<phratchItem: 'clone me' kind: #- category: 'control' defaultValues: #() subCategory: #self>
 	| stage clone |
 	(self ownerThatIsA: OffscreenWorldMorph) ifNotNil: [
 		stage := (self ownerThatIsA: OffscreenWorldMorph) frame workPane.
@@ -636,6 +629,7 @@ PhratchSpriteMorph >> defaultImageMedia [
 
 { #category : #'panther actions' }
 PhratchSpriteMorph >> deleteMe [
+	<phratchItem: 'delete me if I am a clone' kind: #- category: 'control' defaultValues: #() subCategory: #self>
 	self isClone ifTrue: [self deleteSprite].
 ]
 
@@ -1218,7 +1212,7 @@ PhratchSpriteMorph >> initializeNodes [
 
 { #category : #'motion ops' }
 PhratchSpriteMorph >> isClone [
-
+	<phratchItem: 'Am I a clone?' kind: #b category: 'control' defaultValues: #() subCategory: #self>
 	^ isClone
 
 ]
@@ -2749,6 +2743,13 @@ PhratchSpriteMorph >> virtualScale: aPoint [
 PhratchSpriteMorph >> warn: t1 [ 
     DialogBoxMorph warn: t1.
 	self updateAfterPopUp.
+]
+
+{ #category : #'motion ops' }
+PhratchSpriteMorph >> whenSpriteCreated [
+	<phratchItem: 'when $Sprite$ created' kind: #C category: 'control' defaultValues: #() subCategory: #ahat>
+
+
 ]
 
 { #category : #accessing }

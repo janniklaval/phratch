@@ -65,7 +65,6 @@ CameraMedia >> form [
 
 { #category : #accessing }
 CameraMedia >> frameExtent [
-
 	^ frameExtent
 
 ]
