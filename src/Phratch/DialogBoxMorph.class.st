@@ -560,7 +560,7 @@ DialogBoxMorph >> percentDone: aNumber [
 
 	| percent fullWidth indicator |
 	percentMorph ifNil: [
-		percentMorph := RectangleMorph new
+		percentMorph := BorderedMorph new
 			extent: 104@16;
 			borderWidth: 1;
 			color: Color transparent;

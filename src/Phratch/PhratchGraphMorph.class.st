@@ -10,7 +10,7 @@ IMPORTANT!  The current implementation cannot stand alone, it needs to be a subm
 "
 Class {
 	#name : #PhratchGraphMorph,
-	#superclass : #RectangleMorph,
+	#superclass : #BorderedMorph,
 	#instVars : [
 		'data',
 		'dataColor',
