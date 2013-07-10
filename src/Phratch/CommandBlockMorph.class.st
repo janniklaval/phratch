@@ -602,8 +602,7 @@ CommandBlockMorph >> editElements [
 			(#(setBlockVar:to: setVar:to:) includes: sel) ifTrue: [sel := #setVar].
 			(#(changeBlockVar:by: changeVar:by:) includes: sel) ifTrue: [sel := #changeVar]]].
 	
-	ElementsEditorFrameMorph new 
-		onMethod: sel ofClass: cls
+	[(cls methodNamed: sel) browse ] on: Error do: [cls browse].
 ]
 
 { #category : #evaluation }
@@ -1244,7 +1243,8 @@ CommandBlockMorph >> rightButtonMenu [
 			ifTrue: [menu add: 'disinherit' value: #disinheritAttribute]
 			ifFalse: [menu add: 'inherit' value: #inheritAttribute]].
 	
-	menu add: 'edit elements' value: #editElements.
+	menu add: 'show block' value: #showElements.
+	menu add: 'edit block for developer' value: #editElements.
 
 	sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
 	(sFrame notNil and: [#(sensor: sensorPressed:) includes: selector]) ifTrue: [
@@ -1259,7 +1259,7 @@ CommandBlockMorph >> rightButtonMenu [
 		menu add: 'show tuples' value: #showTuples].
 	
 	(choice := (menu localize; invokeModal"popUpAt: World activeHand position  inWorld:   World"; yourself)selectedValue) ifNil: [^ self].
-	(#(presentHelpScreen duplicate fastDuplicate rename delete editElements inheritAttribute disinheritAttribute) includes: choice) ifTrue: [^ self perform: choice].
+	(#(presentHelpScreen duplicate fastDuplicate rename delete showElements editElements inheritAttribute disinheritAttribute) includes: choice) ifTrue: [^ self perform: choice].
 	choice = #showSensorBoard ifTrue: [sFrame showSensorBoard. ^ self].
 	choice = #enableRemoteSensors ifTrue: [sFrame enableRemoteSensors. ^ self].
 	choice = #exitPhratchSession ifTrue: [sFrame exitPhratchSession. ^ self].
@@ -1326,6 +1326,23 @@ CommandBlockMorph >> selectorAndArg [
 	args := self args.
 	^ Array with: selector with: (args size = 0 ifTrue: [nil] ifFalse: [args first])
 
+]
+
+{ #category : #elements }
+CommandBlockMorph >> showElements [
+	| cls sel |
+	sel := selector.
+	cls := receiver class classThatUnderstands: sel.
+
+	cls ifNil: [cls := PhratchProcess].
+	(cls canUnderstand: sel)
+		ifFalse: [isSpecialForm ifTrue: [
+			(#(getBlockVar: getVar:) includes: sel) ifTrue: [sel := #getVar].
+			(#(setBlockVar:to: setVar:to:) includes: sel) ifTrue: [sel := #setVar].
+			(#(changeBlockVar:by: changeVar:by:) includes: sel) ifTrue: [sel := #changeVar]]].
+	
+	ElementsEditorFrameMorph new 
+		onMethod: sel ofClass: cls
 ]
 
 { #category : #byob }
