@@ -1244,8 +1244,10 @@ CommandBlockMorph >> rightButtonMenu [
 			ifFalse: [menu add: 'inherit' value: #inheritAttribute]].
 	
 	menu add: 'show block' value: #showElements.
-	menu add: 'edit block for developer' value: #editElements.
-
+	
+	ScriptablePhratchMorph noviceMode ifFalse:[
+		menu add: 'edit block for developer' value: #editElements.
+	].
 	sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
 	(sFrame notNil and: [#(sensor: sensorPressed:) includes: selector]) ifTrue: [
 		menu addLine.
