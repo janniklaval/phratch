@@ -444,18 +444,18 @@ PaintPalette >> storedColor: aColor [
 { #category : #'event handling' }
 PaintPalette >> textFontMenu [
 
-	| useOSFont fontList lcName menu choice fontSize font |
+	| useOSFont fontList lcName menu |
 
-	useOSFont := true.
+	"useOSFont := true.
 	fontList := UnicodePlugin getFontList.
-	fontList size = 0 ifTrue: [
+	fontList size = 0 ifTrue: ["
 		useOSFont := false.
 		fontList := StrikeFont fontNames reject: [:fn |
 			lcName := fn asLowercase.
 			(lcName includesSubString: 'arial') |
 			(lcName includesSubString: 'helvetica') |
 			(lcName includesSubString: 'narrowspace') |
-			(lcName includesSubString: 'newyork')]].
+			(lcName includesSubString: 'newyork')]"]".
 
 	menu := MenuMorph new defaultTarget: self.
 	fontList do: [:n | 
