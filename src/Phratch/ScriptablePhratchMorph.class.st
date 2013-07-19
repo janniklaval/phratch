@@ -664,7 +664,7 @@ ScriptablePhratchMorph >> addColor [
 
 	result := NewVariableDialog ask: 'Color name?'.
 	result = #cancelled ifTrue: [^ self].
-	colorName := result first asUTF8.
+	colorName := result first.
 	colorOwner := result second ifTrue: [self] ifFalse: [sFrame workPane].
 	(colorOwner variableNameInUse: colorName) ifTrue: [
 		self beep.
@@ -976,7 +976,7 @@ ScriptablePhratchMorph >> addGlobalColor [
 
 	cName := StringDialog ask: 'Variable name?'.
 	cName size = 0 ifTrue: [^ self].
-	cName := cName asUTF8.
+	cName := cName.
 	(sFrame workPane colorNames includes: cName) ifTrue: [
 		self beep.
 		DialogBoxMorph warn: 'That variable name is already in use'.
@@ -1008,7 +1008,7 @@ ScriptablePhratchMorph >> addGlobalVariable [
 
 	varName := StringDialog ask: 'Variable name?'.
 	varName size = 0 ifTrue: [^ self].
-	varName := varName asUTF8.
+	varName := varName.
 	(sFrame workPane variableNameInUse: varName) ifTrue: [
 		self beep.
 		DialogBoxMorph warn: 'That variable name is already in use'.
@@ -1123,7 +1123,7 @@ ScriptablePhratchMorph >> addVariable [
 
 	result := NewVariableDialog ask: 'Variable name?'.
 	result = #cancelled ifTrue: [^ self].
-	varName := result first asUTF8.
+	varName := result first.
 	varOwner := result second ifTrue: [self] ifFalse: [sFrame workPane].
 	(varOwner variableNameInUse: varName) ifTrue: [
 		Beeper beep.
@@ -1334,7 +1334,6 @@ ScriptablePhratchMorph >> asListElement: anObject [
 	(anObject isKindOf: BlockMorph) ifTrue: [^ anObject].
 	(anObject isKindOf: PhratchListMorph) ifTrue: [^ anObject].
 	(anObject isKindOf: String) ifTrue: [^ anObject].
-	anObject isUnicode ifTrue: [^ anObject].
 	(anObject isKindOf: Character) ifTrue: [^ anObject asString].
 
 	(anObject isKindOf: Boolean) ifTrue: [
@@ -1354,7 +1353,7 @@ ScriptablePhratchMorph >> asListElement: anObject [
 ScriptablePhratchMorph >> asciiCodeOf: aString [
 
 	| str |
-	str := aString asMacRoman.
+	str := aString.
 	str size = 1 ifFalse: [
 		^ 0 ].
 	^ str first asciiValue
@@ -2727,7 +2726,7 @@ ScriptablePhratchMorph >> computeFunction: functionName of: aNumber [
 ScriptablePhratchMorph >> concatenate: arg1 with: arg2 [
 	"Concatenate two strings. Arguments are converted to strings."
 
-	^ arg1 asString asUTF8, arg2 asString asUTF8
+	^ arg1 asString, arg2 asString
 
 ]
 
@@ -3081,7 +3080,7 @@ ScriptablePhratchMorph >> costumeFromName: aString [
 		^ cameraCostume].
 
 	^ media
-		detect: [:el | el isSound not and: [el mediaName = aString or: [el mediaName = aString asMacRoman]]]
+		detect: [:el | el isSound not and: [el mediaName = aString or: [el mediaName = aString]]]
 		ifNone: [nil]
 
 ]
@@ -4242,7 +4241,7 @@ ScriptablePhratchMorph >> editSpecId: id [
 	(ans = #cancelled) ifTrue: [^self ].
 	ans first isEmpty ifTrue: [^self].
 
-	((self existsBlockId: (CustomBlockDefinition idFromSpec: ans first)) and: [def userSpec asUTF8 ~= ans first])
+	((self existsBlockId: (CustomBlockDefinition idFromSpec: ans first)) and: [def userSpec ~= ans first])
 			ifTrue: [ ^DialogBoxMorph warn: 'a custom block with this label already exists' localized].
 	(def varNames includesAnyOf: (def parameterNamesInSpec: ans first))
 		ifTrue: [^DialogBoxMorph warn: 'a block variable with the same name as a parameter already exists'].
@@ -5079,7 +5078,7 @@ ScriptablePhratchMorph >> importImage [
 	fList do: [:f |
 		el := ImageMedia new form: (PhratchFrameMorph scaledFormForPaintEditor: f).
 		newName := self mediaNameFromFileName: result default: 'costume'.
-		el mediaName: (self unusedMediaNameFromBaseName: (UTF8 withAll: newName)).
+		el mediaName: (self unusedMediaNameFromBaseName: (String withAll: newName)).
 		media addLast: el.
 		isFirst ifTrue: [isFirst := false. self lookLike: el mediaName.]].
 
@@ -5156,7 +5155,7 @@ ScriptablePhratchMorph >> importSound [
 	el ifNil: [^ self].
 
 	newName := self mediaNameFromFileName: result default: 'sound'.
-	el mediaName: (UTF8 withAll: (self unusedMediaNameFromBaseName: newName)).
+	el mediaName: (String withAll: (self unusedMediaNameFromBaseName: newName)).
 	media addLast: el.
 	self updateMediaCategory.
 
@@ -5575,7 +5574,7 @@ ScriptablePhratchMorph >> isObject: object type: type [
 		(object isKindOf: Morph) ifTrue: [^ false].
 		(object isKindOf: Boolean) ifTrue: [^ false].
 		object isEmpty ifTrue: [^ false].
-		object asMacRoman do: [:c | 
+		object do: [:c | 
 			c isDigit ifFalse: [(#($0 $. $-) includes: c) ifFalse: [^ false]]].
 		^ true].
 
@@ -5584,7 +5583,7 @@ ScriptablePhratchMorph >> isObject: object type: type [
 		(object isKindOf: Morph) ifTrue: [^ false].
 		(object isKindOf: Boolean) ifTrue: [^ false].
 		object isEmpty ifTrue: [^ true].
-		object asMacRoman do: [:c | 
+		object do: [:c | 
 			c isDigit ifFalse: [(#($0 $. $-) includes: c) ifFalse: [^ true]]].
 		^ false].
 
@@ -5803,13 +5802,11 @@ ScriptablePhratchMorph >> letter: index of: anObject [
 	| s i |
 	s := anObject.
 
-	anObject isUnicode
-		ifTrue: [s := anObject asUTF32]
-		ifFalse: [s := anObject asString asUTF32].
+	s := anObject asString.
 
 	i := self letterNum: index of: s.
 	((i < 1) | (i > s size)) ifTrue: [^ ''].
-	^ (String with: (s at: i)) asUTF8
+	^ (String with: (s at: i))
 
 ]
 
@@ -5821,7 +5818,6 @@ ScriptablePhratchMorph >> letterNum: letterNum of: aString [
 	letterNum isNumber ifTrue: [^ letterNum asInteger].
 
 	s := letterNum.
-	s isUnicode ifTrue: [s := String withAll: letterNum].
 	(s isKindOf: String) ifTrue: [
 		#first = s ifTrue: [^ 1].
 		#last = s ifTrue: [^ aString size].
@@ -5856,7 +5852,6 @@ ScriptablePhratchMorph >> lineNum: lineNum forList: list [
 	lineNum isNumber ifTrue: [^ lineNum asInteger].
 
 	s := lineNum.
-	s isUnicode ifTrue: [s := String withAll: lineNum].
 	(s isKindOf: String) ifTrue: [
 		#first = s ifTrue: [^ 1].
 		#last = s ifTrue: [^ list lineCount].
@@ -6573,7 +6568,7 @@ ScriptablePhratchMorph >> nextInstanceName [
 	| stage lastN digits |
 	self = PhratchStageMorph ifTrue: [^ 'Stage' localized].
 
-	(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNil: [^ 'Sprite' localized asUTF8, 1 printString].
+	(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNil: [^ 'Sprite' localized, 1 printString].
 	lastN := 0.
 	stage sprites ifNotNil: [
 		stage sprites do: [:m |
@@ -6582,7 +6577,7 @@ ScriptablePhratchMorph >> nextInstanceName [
 				((digits size > 0) and: [m objName beginsWith: ('Sprite' localized)])
 					ifTrue: [lastN := lastN max: digits asNumber]]]].
 
-	^ 'Sprite' localized asUTF8, (lastN + 1) printString
+	^ 'Sprite' localized, (lastN + 1) printString
 
 ]
 
@@ -8233,9 +8228,7 @@ ScriptablePhratchMorph >> stringAsColor: aString [
 { #category : #'string ops' }
 ScriptablePhratchMorph >> stringLength: anObject [
 
-	anObject isUnicode
-		ifTrue: [^ anObject asUTF32 size]
-		ifFalse: [^ anObject asString asUTF32 size].
+	^ anObject asString size
 
 ]
 
@@ -8450,17 +8443,17 @@ ScriptablePhratchMorph >> unusedMediaNameFromBaseName: baseName forMedia: aMedia
 
 	nm size = 0 ifTrue: [
 		aMedia
-			ifNil: [nm := 'new' localized asUTF8, '1']
+			ifNil: [nm := 'new' localized, '1']
 			ifNotNil: [
 				aMedia isImage
 					ifTrue: [nm := self defaultImageMedia mediaName]
-					ifFalse: [nm := 'sound' localized asUTF8, '1']]].
+					ifFalse: [nm := 'sound' localized, '1']]].
 
 	existingNames := Set new.
-	media do: [:m | m = aMedia ifFalse: [existingNames add: (UTF8 withAll: m mediaName)]].
+	media do: [:m | m = aMedia ifFalse: [existingNames add: (String withAll: m mediaName)]].
 
 	(nm size > 0 and: [nm last isDigit]) ifFalse: [
-		(existingNames includes: (UTF8 withAll: nm)) ifFalse: [^ nm]].
+		(existingNames includes: (String withAll: nm)) ifFalse: [^ nm]].
 
 	"remove trailing digits, if any"
 	i := nm size.

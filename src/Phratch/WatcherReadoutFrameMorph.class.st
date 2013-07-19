@@ -153,7 +153,7 @@ WatcherReadoutFrameMorph >> fixLayout [
 	(readoutWidth + 10) > self width ifTrue: [self width: readoutWidth + 12].
 	self width > (readoutWidth + 50) ifTrue: [self width: readoutWidth + 50].
 
-	readout contents: (UTF8 withAll: readout contents).
+	readout contents: (String withAll: readout contents).
 	"set height"
 	isLarge
 		ifTrue: [self height: (e y max: 23)]

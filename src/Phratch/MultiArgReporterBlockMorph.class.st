@@ -51,7 +51,7 @@ MultiArgReporterBlockMorph >> adjustInputParadigm: choice [
 		ifTrue: [maxArgs := 3]
 		ifFalse: [maxArgs := nil].		
 	newSpec := self receiver blockSpecForSelector: selector.
-	newSpec := newSpec localized asMacRoman. 
+	newSpec := newSpec localized. 
 	self commandSpec: newSpec.
 
 
@@ -104,7 +104,7 @@ MultiArgReporterBlockMorph >> adjustInternals [
 		ifTrue: [ maxArgs := 3]
 		ifFalse: [maxArgs := nil].		
 	newSpec := self receiver blockSpecForSelector: selector.
-	newSpec := newSpec asMacRoman localized.
+	newSpec := newSpec localized.
 	self commandSpec: newSpec.
 
 ]
@@ -138,7 +138,7 @@ MultiArgReporterBlockMorph >> asBlockTuple [
 					ifTrue: [
 						val := arg getExpression.
 						arg isNumberExpression
-							ifTrue: [val = ' ' asUTF8
+							ifTrue: [val = ' '
 								ifTrue: [eval := val]
 								ifFalse: [eval := val asNumberNoError]]
 							ifFalse: [eval := arg evaluate]]

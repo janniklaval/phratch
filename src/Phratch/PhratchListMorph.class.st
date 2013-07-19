@@ -116,8 +116,8 @@ PhratchListMorph >> aboutToBeGrabbedBy: aHand [
 { #category : #'list ops' }
 PhratchListMorph >> addLettersOf: anObject [
 
-	anObject asString asUTF32 do: [:ch |
-		cellMorphs addLast: (self createCell: (String with: ch) asUTF8)].
+	anObject asString do: [:ch |
+		cellMorphs addLast: (self createCell: (String with: ch))].
 
 	self noteChangeAtIndex: cellMorphs size.
 
@@ -240,7 +240,7 @@ PhratchListMorph >> concatenatedLines [
 	isSingleLetters := true.
 	cellMorphs do: [:m |
 		isSingleLetters ifTrue: [
-			m firstSubmorph contents asString asUTF32 size <= 1 ifFalse: [isSingleLetters := false]]].
+			m firstSubmorph contents asString size <= 1 ifFalse: [isSingleLetters := false]]].
 
 	s := WriteStream on: (String new: 1000).
 	isSingleLetters
@@ -267,7 +267,7 @@ PhratchListMorph >> contains: anObject [
 			m complexObject = anObject ifTrue: [^ true]].
 		^ false].
 
-	s := anObject asString asUTF8.
+	s := anObject asString.
 	cellMorphs do: [:m |
 		m complexObject = anObject ifTrue: [^ true ].
 		s = m firstSubmorph contents ifTrue: [^ true]].
@@ -280,7 +280,7 @@ PhratchListMorph >> contains: anObject [
 PhratchListMorph >> containsRecursive: anObject [
 
 	| s |
-	s := anObject asString asUTF8.
+	s := anObject asString.
 	cellMorphs do: [:m |
 		m complexObject notNil
 			ifTrue: [
@@ -861,7 +861,7 @@ PhratchListMorph >> listName [
 { #category : #initialization }
 PhratchListMorph >> listName: asString target: aScriptableSpriteMorph [
 
-	listName := asString asUTF8.
+	listName := asString.
 	target := aScriptableSpriteMorph.
 	self updateTitle.
 

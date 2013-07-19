@@ -69,7 +69,7 @@ ObjStream class >> fixedFormatClassTests [
 	self equalityTest: 'hello'.
 	self equalityTest: 'hello' asSymbol.
 	self equalityTest: #(1 2 3) asByteArray.
-	self equalityTest: (UTF8 withAll: 'hello').
+	self equalityTest: (String withAll: 'hello').
 
 	self equalityTest: (SoundBuffer fromArray: #(1 2 3 4)).
 	self equalityTest: (Bitmap withAll: #(0 1 2 2147483647 2147483648 4294967295)).
@@ -118,7 +118,6 @@ ObjStream class >> fixedFormatClasses [
 		(11	ByteArray				getBytes:id:			putBytes:id:)
 		(12	SoundBuffer			getSoundBuf:id:		putSoundBuf:id:)
 		(13	Bitmap					getBitmap:id:		putBitmap:id:)
-		(14	UTF8					getBytes:id:			putBytes:id:)
 											
 		(15	ByteString					getBytes:id:			putBytes:id:)			
 		(16	ByteSymbol				getBytes:id:			putBytes:id:)			
@@ -544,7 +543,7 @@ ObjStream >> getBytes: anObject id: classID [
 	classID = 15 ifTrue: [^ result asString].
 	classID = 10 ifTrue: [^ result asString asSymbol].
 	classID = 16 ifTrue: [^ result asString asSymbol].
-	classID = 14 ifTrue: [^ UTF8 withAll: result].
+	classID = 14 ifTrue: [^ String withAll: result].
 	^ result
 
 ]

@@ -136,7 +136,6 @@ LabelFragmentBlockMorph >> parseCommandSpecPreservingBlanks: aCommandSpec [
 	| result len i j spec k |
 	result := OrderedCollection new.
 	spec := aCommandSpec.
-	(spec isKindOf: UTF8) ifTrue: [spec := String withAll: spec].
 	len := aCommandSpec size.
 
 	i := 1.

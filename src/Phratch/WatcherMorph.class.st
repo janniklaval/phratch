@@ -403,7 +403,7 @@ WatcherMorph >> replace: argStr with: translatedArg in: s [
 	| i |
 	i := s findString: argStr startingAt: 1.
 	i = 0 ifTrue: [^ s].
-	^ ((s copyFrom: 1 to: i - 1), translatedArg, (s copyFrom: i + argStr size to: s size)) asUTF8
+	^ ((s copyFrom: 1 to: i - 1), translatedArg, (s copyFrom: i + argStr size to: s size))
 
 ]
 
@@ -430,23 +430,23 @@ WatcherMorph >> rightButtonMenu [
 	hasSlider := self isVariableWatcher and: [phratchSlider notNil].
 
 	hasSlider not & isLarge not
-		ifTrue: [menu add: '* ' asUTF8, 'normal readout' localized,' *'	action: #showSmallReadout]
-		ifFalse: [menu add: '  ' asUTF8, 'normal readout' localized		action: #showSmallReadout].
+		ifTrue: [menu add: '* ', 'normal readout' localized,' *'	action: #showSmallReadout]
+		ifFalse: [menu add: '  ', 'normal readout' localized		action: #showSmallReadout].
 
 	hasSlider not & isLarge
-		ifTrue: [menu add: '* ' asUTF8, 'large readout' localized, ' *'		action: #showLargeReadout]
-		ifFalse: [menu add: '  ' asUTF8, 'large readout' localized			action: #showLargeReadout].
+		ifTrue: [menu add: '* ', 'large readout' localized, ' *'		action: #showLargeReadout]
+		ifFalse: [menu add: '  ', 'large readout' localized			action: #showLargeReadout].
 
 	self isVariableWatcher ifTrue: [
 		phratchSlider
-			ifNil: [menu add: '  ' asUTF8, 'slider' localized action: #showSlider]
+			ifNil: [menu add: '  ', 'slider' localized action: #showSlider]
 			ifNotNil: [
-				menu add: '* ' asUTF8, 'slider' localized,' *' action: #showSlider.
+				menu add: '* ', 'slider' localized,' *' action: #showSlider.
 				menu addLine.
-				menu add: '  ' asUTF8, 'set slider min and max' localized action: #setSliderMinAndMax]].
+				menu add: '  ', 'set slider min and max' localized action: #setSliderMinAndMax]].
 
 	menu addLine.
-	menu add: '  ' asUTF8,  'hide' localized action: #delete.
+	menu add: '  ',  'hide' localized action: #delete.
 	menu invokeModal.
 
 ]
@@ -696,11 +696,11 @@ WatcherMorph >> updateTargetName [
 	(self ownerOrYourselfThatIsA: HandMorph) ifNotNil: [^ self].  "do nothing when in a HandMorph"
 	isLarge ifTrue: [^ self].  "don't show target or var name if large readout showing"
 
-	targetName := readout target objName asUTF8.
+	targetName := readout target objName.
 	(lastTargetName = targetName) ifTrue: [^ self].  "no change"
 
 	isSpriteSpecific
-		ifTrue: [titleMorph contents: targetName, ' ', self translatedName asUTF8]
+		ifTrue: [titleMorph contents: targetName, ' ', self translatedName]
 		ifFalse: [titleMorph contents: self translatedName].
 
 	lastTargetName := targetName.

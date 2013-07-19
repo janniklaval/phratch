@@ -64,7 +64,7 @@ UpdatingStringFieldMorph >> step [
 	(target notNil & getSelector notNil) ifFalse: [^ self].
 
 	s := target perform: getSelector.
-	s asUTF8   = self contents ifFalse: [self contents: s  ].
+	s = self contents ifFalse: [self contents: s  ].
 
 
 ]

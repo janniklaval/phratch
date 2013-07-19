@@ -291,7 +291,7 @@ PhratchCommentMorph >> labelWhenClosed [
 	maxW := self width - 22.
 	firstLine := commentMorph lines at: 1.
 	(labelMorph stringWidth: firstLine) < maxW ifTrue: [^ firstLine].
-	ellipses := PhratchTranslator ellipsesSuffix asUTF32.
+	ellipses := PhratchTranslator ellipsesSuffix.
 
 	1 to: firstLine size do: [:i |
 		s := firstLine copyFrom: 1 to: i.

@@ -1,11 +1,7 @@
-Class {
-	#name : #PhratchWarpBlt,
-	#superclass : #WarpBlt,
-	#category : #'Phratch-System Subclasses'
-}
+Extension { #name : #WarpBlt }
 
-{ #category : #'as yet unclassified' }
-PhratchWarpBlt class >> rotate: srcForm degrees: angleInDegrees center: rotationPoint scaleBy: scalePoint smoothing: cellSize [
+{ #category : #'*Phratch-Extensions' }
+WarpBlt class >> rotatePhratch: srcForm degrees: angleInDegrees center: rotationPoint scaleBy: scalePoint smoothing: cellSize [
 	"Rotate the given Form the given number of degrees about the given center and scale its width and height by x and y of the given scale point. Smooth using the given cell size, an integer between 1 and 3, where 1 means no smoothing. Return a pair where the first element is the rotated Form and the second is the position offset required to align the rotationPoint of the rotated Form with that of the original. Note that the dimensions of the resulting Form generally differ from those of the original."
 
 	| srcRect center radians dstOrigin dstCorner p dstRect dstExtent inverseScale quad warpSrc dstForm  oldOffset newRotationPoint |

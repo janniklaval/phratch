@@ -87,13 +87,13 @@ ChoiceArgMorph >> choice: aSymbol [
 		frame ifNotNil: [^ frame workPane rerecordScene]].
 
 	choice := label := aSymbol.
-	label isUnicode ifFalse: [label := label asString].
+	label := label asString.
 	doLocalization := (#(costumeNames soundNames varNamesMenu listVarMenu) includes: getOptionsSelector) not. 
-	doLocalization & label isUnicode not
+	doLocalization
 		ifTrue:[labelMorph contents: label localized]
 		ifFalse:[labelMorph contents: label].
-	options = {'with inputs' asUTF8 localized. 'with input list' asUTF8 localized} ifTrue: [
-		labelMorph contents: label asMacRoman localized].
+	options = {'with inputs' localized. 'with input list' localized} ifTrue: [
+		labelMorph contents: label localized].
 	labelMorph position: self position + borderWidth + (3 @ -1).
 	self extent: (labelMorph extent + (16@2) + borderWidth).
 
@@ -106,9 +106,9 @@ ChoiceArgMorph >> choice: aSymbol [
 
 	(owner isKindOf: SetterBlockMorph) ifTrue: [ owner determineIfSpecialForm ].
 
-	options = {'with inputs' asUTF8 localized. 'with input list' asUTF8 localized} ifTrue: [
+	options = {'with inputs' localized. 'with input list' localized} ifTrue: [
 		(owner respondsTo: #adjustInputParadigm:) ifTrue: [
-			owner adjustInputParadigm: choice asMacRoman localized]]. 
+			owner adjustInputParadigm: choice localized]]. 
 
 	(palette := self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph) ifNil: [^ self].
 	(block := self ownerOrYourselfThatIsA: BlockMorph) ifNil: [^ self].
@@ -253,21 +253,21 @@ ChoiceArgMorph >> options: stringList [
 ChoiceArgMorph >> presentMenu [
 	"Pop up a menu of choices."
 
-	| optionList doLocalization menu selection option |
+	| optionList doLocalization menu option |
 	optionList := self options.
 	optionList size = 0 ifTrue: [^ self].
 	doLocalization := (#(costumeNames soundNames varNamesMenu listVarMenu) includes: getOptionsSelector) not.
 	doLocalization ifFalse: [
-		doLocalization = (optionList = {'with inputs' asUTF8 localized. 'with input list' asUTF8 localized})].
+		doLocalization = (optionList = {'with inputs' localized. 'with input list' localized})].
 	menu := MenuMorph new defaultTarget: self.
 	optionList do: [:sym |
 		'-' = sym
 			ifTrue: [menu addLine]
 			ifFalse: [
-				doLocalization & sym isUnicode not
-					ifTrue: [ option := sym localized asUTF8]
+				doLocalization
+					ifTrue: [ option := sym localized]
 					ifFalse: [ PhratchTranslator useSqueakRendering & doLocalization
-						ifTrue: [ option := sym asMacRoman localized]
+						ifTrue: [ option := sym localized]
 						ifFalse: [option := sym localized]].
 
 				((#(hookupSensorNames hookupBooleanSensorNames) includes: getOptionsSelector) and:
@@ -282,11 +282,11 @@ ChoiceArgMorph >> presentMenu [
 									argument: (sym, '-', c)]
 							ifTrue: [
 								menu
-								 	add: (c asUTF8, ' ', option)
+								 	add: (c, ' ', option)
 									target: self 
 									selector: #choice:
 									argument: (c, ' ' ,sym)]]]
-					ifFalse: [option isUnicode ifTrue: [option := option printString].
+					ifFalse: [
 						menu
 							add: (option)
 							target: self 
@@ -325,9 +325,9 @@ ChoiceArgMorph >> privateSetChoice: aSymbol [
 		frame ifNotNil: [^ frame workPane rerecordScene]].
 
 	choice := label := aSymbol.
-	label isUnicode ifFalse: [label := label asString].
+	label := label asString.
 	doLocalization := (#(costumeNames soundNames varNamesMenu listVarMenu) includes: getOptionsSelector) not.
-	doLocalization & label isUnicode not
+	doLocalization
 		ifTrue:[labelMorph contents: label localized]
 		ifFalse:[labelMorph contents: label].
 	labelMorph position: self position + borderWidth + (3 @ -1).

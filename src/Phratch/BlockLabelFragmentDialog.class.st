@@ -83,7 +83,7 @@ BlockLabelFragmentDialog >> acceptDefaultValue [
 	#number = fragment type 
 		ifTrue: [
 			cnts := defaultField contents.
-			cnts = ' ' asUTF8
+			cnts = ' '
 				ifTrue: [ fragment default: cnts ]
 				ifFalse: [ fragment default: cnts asNumberNoError ]]
 		ifFalse: [fragment default: defaultField contents asString ]
@@ -688,7 +688,7 @@ BlockLabelFragmentDialog >> setInitialValues [
 			fragment label isEmpty
 				ifTrue: [ self message: 'Create input name' localized]
 				ifFalse: [ self message: 'Edit input name' localized].
-			self initialAnswer: (UTF8 withAll: fragment label asMacRoman)]
+			self initialAnswer: (String withAll: fragment label)]
 		ifFalse: [ 
 			fragment label isEmpty
 				ifTrue: [ self message: 'Create label fragment' localized]
@@ -941,8 +941,8 @@ BlockLabelFragmentDialog >> updateDefaultValue [
 
 	#number = fragment type ifTrue: [
 		defaultField isNumeric: true.
-		(dat = ' ' asUTF8 or: [dat = '' asUTF8])
-			ifTrue: [ defaultField contents: ' ' asUTF8 ]
+		(dat = ' ' or: [dat = ''])
+			ifTrue: [ defaultField contents: ' ' ]
 			ifFalse: [ defaultField contents: dat asNumberNoError printString].
 		^ self ].
 

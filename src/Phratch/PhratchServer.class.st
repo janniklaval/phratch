@@ -252,7 +252,7 @@ PhratchServer >> doVarsUpdate: cmd from: requestSock [
     | i sName sValue |
     i := 2.	
     [i < cmd size] whileTrue: [
-        sName := (cmd at: i) asUTF8 .
+        sName := (cmd at: i).
         sValue := cmd at: i + 1.
         "(sName isKindOf: String)
           ifTrue: [stage vars at: sName put: sValue]".
@@ -310,7 +310,7 @@ PhratchServer >> joinSessionAt: ipAddressString [
 { #category : #S4A }
 PhratchServer >> listComands [
 ^(stage allEventNames 
-	inject:'broadcast ' into: [:sum :each | sum,'"', (each asMacRoman),'"',' ']  )
+	inject:'broadcast ' into: [:sum :each | sum,'"', each,'"',' ']  )
 ]
 
 { #category : #'private-incoming commands' }

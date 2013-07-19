@@ -105,7 +105,7 @@ PhratchTalkBubbleMorph >> message: aString [
 			maxWidth := 145.
 			contentsMorph
 				width: maxWidth;
-				contents: aString asUTF8 trimBoth;
+				contents: aString trimBoth;
 				fitContents ]
 		ifFalse: [
 			maxWidth := 145.

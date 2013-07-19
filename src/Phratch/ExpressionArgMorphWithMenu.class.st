@@ -133,7 +133,7 @@ ExpressionArgMorphWithMenu >> initFieldsFrom: anObjStream version: classVersion 
 { #category : #BYOB }
 ExpressionArgMorphWithMenu >> isEmptySlot [
 	specialValue ifNotNil: [
-		^ specialValue = ' ' asUTF8].
+		^ specialValue = ' '].
 	^super isEmptySlot
 ]
 
@@ -421,7 +421,7 @@ ExpressionArgMorphWithMenu >> mouseDown: evt [
 { #category : #menus }
 ExpressionArgMorphWithMenu >> numberInParens: aNumber [
 
-	^" (String  with: 16r200E) asUTF8," '(' "asUTF8", aNumber printString, ') ' asMacRoman 
+	^" (String  with: 16r200E) asUTF8," '(' "asUTF8", aNumber printString, ') ' 
 
 ]
 

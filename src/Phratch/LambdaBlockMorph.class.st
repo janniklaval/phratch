@@ -60,8 +60,8 @@ LambdaBlockMorph >> checkBoxLabelled: aString marked: aBool width: anInt [
 	box := ImageMorph new form: pic. 
 	
 	PhratchTranslator useSqueakRendering
-		ifTrue: [cnts := ' ', aString localized asMacRoman]
-		ifFalse: [cnts := ' ' asUTF8, aString localized].
+		ifTrue: [cnts := ' ', aString localized]
+		ifFalse: [cnts := ' ', aString localized].
 
 	label := StringMorph contents: cnts font: PhratchFrameMorph standardMenuFont.
 	line := Morph new color: Color transparent.

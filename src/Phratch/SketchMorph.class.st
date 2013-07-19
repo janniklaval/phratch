@@ -190,7 +190,7 @@ SketchMorph >> generateRotatedForm [
 				ifTrue: [smoothPix := 2]
 				ifFalse: [smoothPix := 1].
 			pair := WarpBlt
-				rotate: originalForm
+				rotatePhratch: originalForm
 				degrees: adjustedAngle negated
 				center: rotationCenter
 				scaleBy: self scalePoint

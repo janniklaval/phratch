@@ -15,8 +15,8 @@ VariableDeclarationBlockMorph >> addItem [
 	super addItem.
 	pos := argMorphs size.
 	pos > names size
-		ifTrue: [vname := ('z', (pos - names size + 1) printString) asUTF8]
-		ifFalse: [vname := (names at: pos) asString asUTF8].
+		ifTrue: [vname := ('z', (pos - names size + 1) printString)]
+		ifFalse: [vname := (names at: pos) asString].
 	varBlock := VariableBlockMorph new.
 	varBlock 
 		isSpecialForm: true;

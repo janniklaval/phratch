@@ -645,7 +645,7 @@ PhratchSpriteMorph >> directionMenu [
 		('down' 180)
 	) do: [:pair |
 		menu
-			add: '(' asUTF8, pair second printString, ') ', pair first localized
+			add: '(', pair second printString, ') ', pair first localized
 			value: pair second].
 	menu invokeModal.
 	^ menu selectedValue
@@ -855,8 +855,8 @@ PhratchSpriteMorph >> generateRotatedForm [
 			((scalePoint x < 1.0) or: [scalePoint y < 1.0])
 				ifTrue: [smoothPix := 2]
 				ifFalse: [smoothPix := 1].
-			pair := PhratchWarpBlt
-				rotate: srcForm
+			pair := WarpBlt
+				rotatePhratch: srcForm
 				degrees: adjustedAngle negated
 				center: costume rotationCenter
 				scaleBy: scalePoint

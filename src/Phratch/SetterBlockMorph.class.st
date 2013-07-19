@@ -49,7 +49,7 @@ this symbol is *not* the selector!. Instead the selector goes into slot 5. The i
 					ifTrue: [
 						val := arg getExpression.
 						arg isNumberExpression
-							ifTrue: [val = ' ' asUTF8
+							ifTrue: [val = ' '
 								ifTrue: [eval := val]
 								ifFalse: [eval := val asNumberNoError]]
 							ifFalse: [eval := arg evaluate]]
@@ -82,7 +82,7 @@ this symbol is *not* the selector!. Instead the selector goes into slot 5. The i
 					ifTrue: [
 						val := arg getExpression.
 						arg isNumberExpression
-							ifTrue: [val = ' ' asUTF8
+							ifTrue: [val = ' '
 								ifTrue: [eval := val]
 								ifFalse: [eval := val asNumberNoError]]
 							ifFalse: [eval := arg evaluate]]
@@ -204,8 +204,6 @@ SetterBlockMorph >> labelMorphFor: aString [
 
 	| s |
 	s := aString.
-	commandSpec isUnicode ifTrue: [s := UTF8 withAll: s].
-	self variable isUnicode ifTrue: [s := UTF8 withAll: s].
 	^ (StringMorph contents: s font: (PhratchFrameMorph getFont: #Label))
 		color: self labelColor
 

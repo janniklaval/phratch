@@ -252,7 +252,7 @@ PhratchFilePicker >> directoryMenu [
 	pathArg := ''.
 	pathParts do: [:part |
 		pathArg := pathArg , '/' , part.
-		menu add: prefix asUTF8, part
+		menu add: prefix, part
 				target: self 
 				selector: #currentDirectory:
 				argument: pathArg.

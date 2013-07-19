@@ -116,7 +116,7 @@ MultiArgMorph >> defaultValue: aPhratchListMorph [
 							self replaceSubmorph: self elements last by: element 
 							"self elements last replaceArgMorph: self elements last args first by: element body"]]
 					ifFalse: [ 
-						element = 'nil' asUTF8
+						element = 'nil'
 							ifTrue: [element := nil].
 						self elements last defaultValue: element ]]]
 		

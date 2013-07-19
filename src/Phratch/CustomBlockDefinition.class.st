@@ -422,11 +422,11 @@ CustomBlockDefinition >> parameterNames [
 CustomBlockDefinition >> parameterNamesInSpec: aString [
 
 	| cmd out |
-	cmd := PhratchServer new parse: aString asMacRoman.
+	cmd := PhratchServer new parse: aString.
 	out := OrderedCollection new.
 	cmd do: [:each|
 		(each asString beginsWith: '$')
-			ifTrue: [out add: (each asString allButFirst allButLast) asUTF8]].
+			ifTrue: [out add: (each asString allButFirst allButLast)]].
 	^out asArray
 ]
 

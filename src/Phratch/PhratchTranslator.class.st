@@ -45,7 +45,6 @@ PhratchTranslator class >> addSensorTranslations [
 	root ifNotNil: [
 		#(A B C D) do: [:ch |
 			prefix := ch asString, ' '.
-			root isUnicode ifTrue: [prefix := UTF8 withAll: prefix].
 			TranslationDict at: (prefix, 'connected') put: (prefix, root)]].
 
 	root := TranslationDict at: 'resistance' ifAbsent: [nil].
@@ -90,59 +89,6 @@ PhratchTranslator class >> centerOffsetForButtonWithFont: aStrikeFont [
 
 ]
 
-{ #category : #'Unicode rendering' }
-PhratchTranslator class >> centerOffsetForLabelWithFont: aStrikeFont [
-	
-	| co |
-	co := self centerOffsetForButtonWithFont: aStrikeFont.
-	^ co - 8.
-
-]
-
-{ #category : #'language translation' }
-PhratchTranslator class >> checkAllTranslations [
-	"Check all the translation dictionaries."
-	"self checkAllTranslations"
-
-	| untranslated |
-	self languageNames do: [:lang |
-		self setLanguage: lang.
-		untranslated := self checkTranslationDict.
-		untranslated size > 0 ifTrue: [lang, ' missing ', untranslated size printString]].
-
-]
-
-{ #category : #'language translation' }
-PhratchTranslator class >> checkTranslationDict [
-	"Do some sanity check on the current translation dictionary."
-
-	| categories allSpecs mathOps |
-	TranslationDict size = 0 ifTrue: [^ #()].  "English"
-
-	categories := #(motion control looks pen numbers	sound sensing variables).
-	categories do: [:cat | self assert: [TranslationDict includesKey: cat asString]].
-
-	"make sure all translations have the same number arguments"
-	TranslationDict associationsDo: [:assoc |
-		self assert: [(self parameterSpecs: assoc key) = (self parameterSpecs: assoc value)]].
-
-	"makes sure there is a translation for every block in every category (except variables)"
-	allSpecs := Set new: 100.
-	(PhratchSpriteMorph blockSpecs, PhratchStageMorph blockSpecs) do: [:spec |
-		(spec isKindOf: Array) ifTrue: [allSpecs add: spec]].
-	allSpecs add: #('else').
-
-	"remove obsolete specs and math operators"
-	PhratchSpriteMorph obsoleteBlockSpecs do: [:spec |  "remove obsolete block specs"
-		allSpecs remove: spec ifAbsent: []].
-	mathOps := ('+-*/<=>' asArray collect: [:ch | '$Number$ ', ch asString, ' $Number$']) asSet.
-	allSpecs := allSpecs select: [:spec | (mathOps includes: spec first) not].
-
-	allSpecs := allSpecs asArray sort: [:s1 :s2 | s1 first < s2 first].
-	^ allSpecs select: [:spec | (TranslationDict includesKey: spec first) not]
-
-]
-
 { #category : #'language translation' }
 PhratchTranslator class >> colonSuffix [
 	"Answer a colon suffix. If the current language is RTL, then include the Unicode RTL mark after the colon."
@@ -158,9 +104,7 @@ PhratchTranslator class >> convertToMacRoman [
 	| s |
 	TranslationDict associationsDo: [:assoc |
 		(assoc key asLowercase ~= 'language-name') ifTrue: [
-			s := assoc value.
-			s isUnicode ifTrue: [
-				assoc value: s asMacRoman]]].
+			s := assoc value]].
 
 ]
 
@@ -307,29 +251,6 @@ PhratchTranslator class >> export: keyString value: aStringOrUTF8 to: aStream [
 ]
 
 { #category : #'import/export' }
-PhratchTranslator class >> exportPootleTranslations [
-	"Exports translations from the locale folder into a new localeForPootle directory with a different subdirectory structure"
-	"Need to figure out how to overwrite files without getting a permission dialog"
-	"self exportPootleTranslations"
-
-	| defaultDir localeDir localeForPootleDir fs dirName sdir |
-	defaultDir := FileSystem workingDirectory.
-	(defaultDir directoryNames includes: 'locale')
-		ifTrue: [localeDir := self translationDir]
-		ifFalse: [^ self "dialog should say no locale folder found"].
-	localeForPootleDir := defaultDir directoryNamed: 'translate.scratch.mit.edu'.
-	localeForPootleDir := localeForPootleDir directoryNamed: 'scratch'.
-	localeDir fileNames do: [:n |
-		(n endsWith: '.po') ifTrue: [
-			dirName := (n copyFrom: 1 to: n size - 3).
-			sdir := localeForPootleDir directoryNamed: dirName.
-			fs := sdir newFileNamed: n.
-			fs nextPutAll: (localeDir fileNamed: n) contentsOfEntireFile.
-			fs close]].
-
-]
-
-{ #category : #'import/export' }
 PhratchTranslator class >> exportStringsToTranslateFrom: aDictionary toFile: fName [
 	"Export the strings to be translated either to Scratch.pot or an existing translation (.po) file."
 	"self resetUITranslationSet. self resetMIDITranslationSet. self exportStringsToTranslateFrom: nil toFile: nil"
@@ -439,7 +360,7 @@ PhratchTranslator class >> extractLanguageFromFileNamed: aFilename [
 			(line asLowercase beginsWith: 'language-name') ifTrue: [
 				nextLine := (self withoutComment: (self lineOf: s containingIndex: (i + lineSize))) trimBoth.
 				lang := (nextLine copyFrom: 9 to: (nextLine size - 1)) trimBoth.
-				^ (UTF8 withAll: lang)]]].
+				^ (String withAll: lang)]]].
 	^ nil
 
 ]
@@ -471,23 +392,10 @@ PhratchTranslator class >> fixAmbigousRTLPunctuation [
 	"In a right-to-left language such as Arabic, punctuation characters such as period can be treated as either right-to-left or left-to-right characters. When they appear at the beginning of a string, the directionality is ambiguous. We assume that translation strings that start with punctuation characters are intended to start in left-to-right mode. This method prefixes punctuation characters with the Unicode LTR mark character, U+200E."
 	"Note: Embedded colons are prefixed with the LTR mark everwhere that they appear since block translation strings are broken into component parts that can start with a colon."
 
-	| punctuation colon prefix utf32 s |
+	| punctuation colon prefix |
 	punctuation := '.!%#' asByteArray.
 	colon := $: asciiValue.
-	prefix := UTF32 with: 16r200E.
-	TranslationDict keys do: [:k |
-		((TranslationDict at: k) isKindOf: UTF8) ifTrue: [
-		utf32 := (UTF8 withAll: (TranslationDict at: k)) asUTF32.
-		(utf32 size > 0 and: [punctuation includes: utf32 first]) ifTrue: [
-			TranslationDict at: k put: (prefix, utf32) asUTF8].
-		(utf32 includes: colon) ifTrue: [
-			s := WriteStream on: (UTF32 new: 100).
-			utf32 do: [:ch |
-				ch = colon ifTrue: [s nextPut: 16r200E].
-				s nextPut: ch].
-			TranslationDict at: k put: s contents asUTF8]]].
-
-
+	prefix := String value:  16r200E.
 ]
 
 { #category : #'rendering menu' }
@@ -520,48 +428,6 @@ PhratchTranslator class >> fontScaleMenu [
 			selector: #renderFontScale:
 			argument: n].
 	menu popUpInWorld.
-]
-
-{ #category : #'Unicode rendering' }
-PhratchTranslator class >> formFor: aString font: aStrikeFont fgColor: fgColor bgColor: bgColor [
-	"Answer a Form containing the given string in the given font and color rendered with the current rendering system. Answer nil if no rendering system is available."
-	"(self formFor: 'Hello, Phratch!' font: (StrikeFont fontName: 'VerdanaBold' size: 48) fgColor: Color black bgColor: Color blue) display"
-
-	| f s |
-	RenderPlugin ifNil: [^ nil].
-
-	self setFont: aStrikeFont antialias: RenderAntiAliasing.
-	RenderAntiAliasing
-		ifTrue: [RenderPlugin setColorFG: fgColor BG: bgColor bgTransparent: true]
-		ifFalse: [RenderPlugin setColorFG: fgColor BG: Color transparent bgTransparent: true].
- 
-	s := aString.
-	s isUnicode ifTrue: [s := s asUTF8].  "convert from UTF32 to UTF8 if necessary"
-	f := Form extent: (RenderPlugin primMeasureString: s) depth: 32.
-	RenderPlugin drawString: s on: f.
-	^ f
-
-]
-
-{ #category : #'Unicode rendering' }
-PhratchTranslator class >> formFor: aString font: aStrikeFont fgColor: fgColor bgColor: bgColor suppressAntiAliasing: suppressAntiAliasing [
-	"Answer a Form containing the given string in the given font and color rendered with the current rendering system. The suppressAntiAliasing flag is useful when the background color is not constant, such as when part of the text is highlighted during editing. Answer nil if no rendering system is available."
-	"(self formFor: 'Hello, Phratch!' font: (StrikeFont fontName: 'VerdanaBold' size: 48) fgColor: Color black bgColor: Color blue) display"
-
-	| f s |
-	RenderPlugin ifNil: [^ nil].
-
-	self setFont: aStrikeFont antialias: (RenderAntiAliasing & suppressAntiAliasing not).
-	RenderAntiAliasing
-		ifTrue: [RenderPlugin setColorFG: fgColor BG: bgColor bgTransparent: true]
-		ifFalse: [RenderPlugin setColorFG: fgColor BG: Color transparent bgTransparent: true].
- 
-	s := aString.
-	s isUnicode ifTrue: [s := s asUTF8].  "convert from UTF32 to UTF8 if necessary"
-	f := Form extent: (RenderPlugin primMeasureString: s) depth: 32.
-	RenderPlugin drawString: s on: f.
-	^ f
-
 ]
 
 { #category : #'language translation' }
@@ -668,46 +534,6 @@ PhratchTranslator class >> importLanguagesList [
 ]
 
 { #category : #'import/export' }
-PhratchTranslator class >> importOLPCTranslations [
-	"Imports translations from the OLPC Pootle translation directory into the Phratch/locale/ directory and renames the .po files"
-	"First copy the /phratch/ folder from https://dev.laptop.org/~sayamindu/scratch_translations.zip to the local directory, then run this"
-	"self importOLPCTranslations"
-
-	| dir subDir |
-	dir := FileSystem workingDirectory.
-	(dir directoryNames includes: 'scratch')
-		ifTrue: [dir := dir directoryNamed: 'scratch']
-		ifFalse: [^ self "dialog should say no scratch folder found"].
-	dir directoryNames do: [:n |
-		subDir := dir directoryNamed: n.
-		subDir rename: 'Scratch.po' toBe: (self translationDir fullNameFor: n,'.po')].
-
-]
-
-{ #category : #'import/export' }
-PhratchTranslator class >> importPootleTranslations [
-	"Imports translations from the LLK Pootle translation directory into the phratch/locale/ directory"
-	"First checkout svn://translate.scratch.mit.edu:52400 to the local directory, then run this"
-	"self importPootleTranslations"
-
-	| dir subDir fs |
-	dir := FileSystem workingDirectory.
-	(dir directoryNames includes: 'translate.scratch.mit.edu')
-		ifTrue: [dir := dir directoryNamed: 'translate.scratch.mit.edu'.
-			(dir directoryNames includes: 'scratch')
-				ifTrue: [dir := dir directoryNamed: 'scratch']
-				ifFalse: [^ self "dialog should say no scratch folder found"]]
-		ifFalse: [^ self "dialog should say no scratch folder found"].
-	dir directoryNames do: [:n |
-		(n = '.svn') ifFalse: [
-			subDir := dir directoryNamed: n.
-			fs := self translationDir newFileNamed: n,'.po'.
-			fs nextPutAll: (subDir fileNamed: n,'.po') contentsOfEntireFile.
-			fs close]].
-
-]
-
-{ #category : #'import/export' }
 PhratchTranslator class >> importTranslation: aFilename [
 	"Import a translation dictionary."
 	"self importTranslation: 'cs.po'"
@@ -744,8 +570,8 @@ PhratchTranslator class >> initialize [
 	RenderPlugin := nil.
 	self setRenderingHints.
 
-	ColonSuffix := ':' asUTF8, (UTF32 with: 16r200F) asUTF8.
-	EllipsesSuffix := '...' asUTF8, (UTF32 with: 16r200F) asUTF8.
+	ColonSuffix := ':', (String value: 16r200F).
+	EllipsesSuffix := '...', (String value: 16r200F).
 
 ]
 
@@ -761,13 +587,6 @@ PhratchTranslator class >> isRTL [
 	"Returns true if the header 'Language-Direction' is set to 'RTL'"
 
 	^ IsRTL
-
-]
-
-{ #category : #'Unicode rendering' }
-PhratchTranslator class >> isRTL: aBoolean [
-
-	IsRTL := aBoolean.
 
 ]
 
@@ -838,29 +657,6 @@ PhratchTranslator class >> midiTranslationSet [
 
 ]
 
-{ #category : #'language translation' }
-PhratchTranslator class >> parameterSpecs: aString [
-	"Answer the sequence of parameter specs (e.g. $Number$) for the given block specification. Used for checking translations."
-	"self parameterSpecs: 'this $Boolean$ is $String$ a $Color$ test $Number$'"
-	"self parameterSpecs: 'this $Boolean$'"
-	"self parameterSpecs: 'this $'"
-
-	| result i j |
-	result := OrderedCollection new.
-	i := 1.
-	[i < aString size] whileTrue: [
-		i := aString indexOf: $$ startingAt: i.
-		i = 0 ifTrue: [i := aString size]. 
-		i < aString size ifTrue: [
-			j := aString indexOf: $$ startingAt: i+1.
-			j <= aString size ifTrue: [
-				result addLast: (aString copyFrom: i to: j)].
-			i := j+1].
-		].
-	^ result asArray
-
-]
-
 { #category : #'import/export' }
 PhratchTranslator class >> parseCommandSpec: aCommandSpec [
 	"Answer an array of token strings containing my keywords and argument specs."
@@ -869,7 +665,6 @@ PhratchTranslator class >> parseCommandSpec: aCommandSpec [
 	| result len i j spec k |
 	result := OrderedCollection new.
 	spec := aCommandSpec.
-	(spec isKindOf: UTF8) ifTrue: [spec := String withAll: spec].
 	len := aCommandSpec size.
 
 	i := 1.
@@ -914,7 +709,7 @@ PhratchTranslator class >> parseTranslationLines: lineStream [
 	[lineStream atEnd] whileFalse: [
 		((lineStream peek beginsWith: '# ')
 			and: [(#('# BLOCKS' '# USER INTERFACE' '# MIDI INSTRUMENTS' '# FORMATTING') includes: (lineStream peek)) not])
-			ifTrue: [comments add: (UTF8 withAll: (lineStream next))]
+			ifTrue: [comments add: (String withAll: (lineStream next))]
 			ifFalse: [(lineStream peek beginsWith: '#, fuzzy')
 				ifTrue: [fuzzy := lineStream next]
 				ifFalse: [((lineStream peek beginsWith: 'msgid') or: [lineStream peek beginsWith: 'Ôªømsgid']) "BOM"
@@ -926,8 +721,8 @@ PhratchTranslator class >> parseTranslationLines: lineStream [
 							[lineStream atEnd not and: [lineStream peek beginsWith: '"']] whileTrue:[
 								val := val, (self extractQuotedStringFrom: lineStream next)]].
 						comments size > 0 ifTrue: [result at: key,'-comments' put: comments].
-						fuzzy ifNotNil: [result at: key,'-fuzzy' put: (UTF8 withAll: fuzzy)].
-						result at: key put: (UTF8 withAll: val).
+						fuzzy ifNotNil: [result at: key,'-fuzzy' put: (String withAll: fuzzy)].
+						result at: key put: (String withAll: val).
 						comments := OrderedCollection new.
 						fuzzy := nil]
 					ifFalse: [lineStream next.
@@ -957,14 +752,6 @@ PhratchTranslator class >> primLanguage [
 
 ]
 
-{ #category : #'rendering menu' }
-PhratchTranslator class >> renderAntiAliasing [
-
-	^ RenderAntiAliasing
-
-
-]
-
 { #category : #'as yet unclassified' }
 PhratchTranslator class >> renderFont: choice [
 	choice ifNotNil: [
@@ -990,7 +777,7 @@ PhratchTranslator class >> renderHintString [
 	| result srcs |
 	result := RenderHintString.
 	result ifNil: [
-		result := UTF8 new.
+		result := String new.
 		srcs := #('New' 'Open' 'Save' 'Save As' 'Share!' 'Undo' 'Language' 'Extras' 'Want Help?' 'motion' 'looks' 'sound' 'pen' 'control' 'sensing' 'operators' 'variables').
 		srcs do: [: s |
 			result := result, (self translationFor: s)]].
@@ -1032,25 +819,6 @@ PhratchTranslator class >> renderingMenu [
 		ifFalse: [menu add: 'suppress bold' action: #toggleSuppressBold].
 
 	menu localize; popUpInWorld
-]
-
-{ #category : #'language translation' }
-PhratchTranslator class >> resetMIDITranslationSet [
-
-	MIDITranslationSet := Set new.
-	#('Accordion' 'Acoustic Bass' 'Acoustic Bass Drum' 'Acoustic Grand' 'Acoustic Snare' 'Agogo' 'Alto Sax' 'Applause' 'Bagpipe' 'Banjo' 'Baritone Sax' 'Bass Drum 1' 'Bassoon' 'Bird Tweet' 'Blown Bottle' 'Brass Section' 'Breath Noise' 'Bright Acoustic' 'Cabasa' 'Celesta' 'Cello' 'Chinese Cymbal' 'Choir Aahs' 'Church Organ' 'Clarinet' 'Claves' 'Clavinet' 'Closed Hi-Hat' 'Contrabass' 'Cowbell' 'Crash Cymbal 1' 'Crash Cymbal 2' 'Distortion Guitar' 'Drawbar Organ' 'Dulcimer' 'Electric Bass (finger)' 'Electric Bass (pick)' 'Electric Clean Guitar' 'Electric Grand' 'Electric Jazz Guitar' 'Electric Muted Guitar' 'Electric Piano 1' 'Electric Piano 2' 'Electric Snare' 'English Horn' 'FX 1 (rain)' 'FX 2 (soundtrack)' 'FX 3 (crystal)' 'FX 4 (atmosphere)' 'FX 5 (brightness)' 'FX 6 (goblins)' 'FX 7 (echoes)' 'FX 8 (sci-fi)' 'Fiddle' 'Flute' 'French Horn' 'Fretless Bass' 'Glockenspiel' 'Guitar Fret Noise' 'Guitar Harmonics' 'Gunshot' 'Hand Clap' 'Harmonica' 'Harpsichord' 'Helicopter' 'Hi Bongo' 'Hi Wood Block' 'Hi-Mid Tom' 'High Agogo' 'High Floor Tom' 'High Timbale' 'High Tom' 'Honky-Tonk' 'Kalimba' 'Koto' 'Lead 1 (square)' 'Lead 2 (sawtooth)' 'Lead 3 (calliope)' 'Lead 4 (chiff)' 'Lead 5 (charang)' 'Lead 6 (voice)' 'Lead 7 (fifths)' 'Lead 8 (bass+lead)' 'Long Guiro' 'Long Whistle' 'Low Agogo' 'Low Bongo' 'Low Conga' 'Low Floor Tom' 'Low Timbale' 'Low Tom' 'Low Wood Block' 'Low-Mid Tom' 'Maracas' 'Marimba' 'Melodic Tom' 'Music Box' 'Mute Cuica' 'Mute Hi Conga' 'Mute Triangle' 'Muted Trumpet' 'Nylon String Guitar' 'Oboe' 'Ocarina' 'Open Cuica' 'Open Hi Conga' 'Open Hi-Hat' 'Open Triangle' 'Orchestra Hit' 'Orchestral Strings' 'Overdriven Guitar' 'Pad 1 (new age)' 'Pad 2 (warm)' 'Pad 3 (polysynth)' 'Pad 4 (choir)' 'Pad 5 (bowed)' 'Pad 6 (metallic)' 'Pad 7 (halo)' 'Pad 8 (sweep)' 'Pan Flute' 'Pedal Hi-Hat' 'Percussive Organ' 'Piccolo' 'Pizzicato Strings' 'Recorder' 'Reed Organ' 'Reverse Cymbal' 'Ride Bell' 'Ride Cymbal 1' 'Ride Cymbal 2' 'Rock Organ' 'Seashore' 'Shakuhachi' 'Shamisen' 'Shanai' 'Short Guiro' 'Short Whistle' 'Side Stick' 'Sitar' 'Slap Bass 1' 'Slap Bass 2' 'Soprano Sax' 'Splash Cymbal' 'Steel Drums' 'Steel String Guitar' 'String Ensemble 1' 'String Ensemble 2' 'Synth Bass 1' 'Synth Bass 2' 'Synth Drum' 'Synth Voice' 'SynthBrass 1' 'SynthBrass 2' 'SynthStrings 1' 'SynthStrings 2' 'Taiko Drum' 'Tambourine' 'Tango Accordion' 'Telephone Ring' 'Tenor Sax' 'Timpani' 'Tinkle Bell' 'Tremolo Strings' 'Trombone' 'Trumpet' 'Tuba' 'Tubular Bells' 'Vibraphone' 'Vibraslap' 'Viola' 'Violin' 'Voice Oohs' 'Whistle' 'Woodblock' 'Xylophone') do:[:t |
-		self addMIDITranslation: t].
-
-	
-]
-
-{ #category : #'language translation' }
-PhratchTranslator class >> resetUITranslationSet [
-
-	UITranslationSet := Set new.
-	#('Normal' 'new' 'New' 't' 'New sound:' 'New sprite:' 'No' 'New costume:' 'New Filename:' 'New background:' 'No motion blocks' 'OK' 'New Sprite' '3' 'No variables.' 'no scripts' 'm' 'normal readout' 'No serial ports found' 'No MIDI ports currently available.' 'Open' 'Off' 'f' 'Open Project' 'On' 'Preparing project...' 'or' 'Open a Scratch project' 'only face left-right' '10 ^' 'B' '10' 'play' 'Pictures' 'Password:' 'Project Notes' 'Project notes' 'Paint' 'pop' 'Project uploaded.' 'u' 'Project name' 'Please enter a number' 'Paint Editor' 'Projects' 'Paintbrush' 'pixelate' 'Project author:' 'Paint new sprite' 'Percent? (100 gives original size)' '4' 'n' 'abs' 'atan' 'Position the cross-hair to set the rotation center' 'asin' 'Quit' 'Quit Scratch' 'About Scratch' 'and' '-' 'acos' 'all' 'any' 'Brush size: ' 'g' '1 script' 'add comment' 'Animation' 'Art' 'add comment here' 'About this project:' 'Redo' 'right' 'resistance' 'backgrounds' 'Backgrounds' 'button pressed' 'Reference Guide' 'button' 'save picture of stage...' 'recording' 'Save As' 'record' 'Record' 'right arrow' '<' 'background' 'brightness' 'Remove viewer from stage' 'v' 're-record' 'set translation formatting...' 'reverse' 'Rotate clock-wise' 'Rotation degrees?' 'resize this sprite' 'rotate this sprite' 'Remote sensor connections enabled' 'Reading' 'Rotate counter-clock-wise' '5' 'Clear' 'o' 'space' 'Sounds' 'slider' 'cancel' 'sin' 'Sprite1' 'Sprites' 'connected' 'Stage' 'Could not read' 'stop' 'Choose a folder' 'color' 'Sound Recorder' 'cos' 'Save failed' 'Slider range:' 'costumes' 'sqrt' 'set slider min and max' 'Costumes' 'show ScratchBoard watcher' 'Cancel' 'Single-step speed?' 'costume' 'Computer' 'Sounds compressed' 'Set language' 'Camera' 'Clear canvas' 'Compress Sounds' 'select serial/USB port' 'Sprite' 'e ^' 'close port' 'Close dialog?' 'Compress Images' 'Rectangle tool (draw outlined or filled rectangle or square)' 'Save this project' 'Share this project' 'Scratch' 'Save the current project' 'Share' 'Switch to full stage' 'Show Motor Blocks' 'Could not write file' 'Switch to small stage' 'Stage selected:' 'Switch to presentation mode' 'a' 'Copy' 'tan' 'Set costume center' 'Save changes before quitting?' 'Shrink' 'Story' 'Save Project' 'Close paint editor?' 'thing' 'Support Site' 'Close sound recorder?' 'Select tool (move, modify, or delete selection)' 'Set Single Stepping' 'Start Single Stepping' 'Save the current project?' 'Simulation' 'Set rotation center' 'Create an empty project' 'Share This Project Online' 'Save' 'Stop everything' 'Scripts' 'Close and continue' 'Switch colors' 'Turbo speed' 'h' 'Stamp tool (select area, then stamp copies of it)' 'Done' 'can rotate' 'Tags:' 'Delete a list' 'Don''t Save' 'down arrow' 'Shrink sprite' 'clean up' 'distance' 'disable remote sensor connections' 'Save Stage Shot' 'Save Scripts Snapshot' 'this way' 'delete' 'Delete' 'drag to rotate' 'down' 'Text tool (edit text layer)' 'duplicate' 'Duplicate' 'Documents' 'Delete a variable' 'drag to resize' 'don''t rotate' 'Desktop' 'that way' 'p' 'Delete this background' 'Export failed' 'up' 'That variable name is already in use' 'tilt' 'Delete this sprite' 'enter' 'Eraser' 'Save a copy of the current project' 'Exit presentation mode' 'Export Costume' 'Undelete' 'Examples' 'Could not read project; file may be damaged' 'Updating thumbnails' 'Exit presentation' 'Export Sprite' 'Create account' 'Choose new sprite from file' 'Compress sounds and images' 'Eraser size' 'export this sprite' '/' 'Delete this costume' 'Connecting to ' '=' 'Upload succeeded!' 'true' 'up arrow' 'enable remote sensor connections' 'export' 'Extras menu' 'Export Sound' 'Eyedropper tool (select a color)' 'Enter presentation mode' 'save picture of scripts' 'Upload to Scratch Server' 'Start green flag scripts' 'Export Background' 'Data sent. Waiting for response...' 'edge' '6' 'Failed:' 'Edit' 'Ellipse tool (draw outlined or filled ellipse or circle)' 'draggable on website?' 'Stop Single Stepping' 'File' 'Delete this sound' 'w' 'Variable name?' 'View on stage' 'For all sprites' 'b' 'enable remote access...' 'false' 'first' 'Undo' 'Flip vertically' 'File not found' 'Flip horizontally' 'i' 'turn into new sprite' 'fisheye' 'For this sprite only' 'Sound quality:' 'The file name already exists. Overwrite existing file?' 'Uploading' 'Error!' 'export this costume' 'Flash blocks (fast)' 'export this sound' 'Flash blocks (slow)' '!' '>' 'x' 'Hmm...' 'Fill tool (fill areas with color or gradient)' 'Game' 'Grow' 'Getting Started' 'world' '7' 'whirl' 'ghost' 'What''s your name?' 'q' 'Get the last thing deleted' 'Grow sprite' 'Write Multiple Project Summaries' 'Get surprise sprite' 'Write Project Summary' 'Go To Scratch Website' 'grab screen region for new costume' '0' 'j' 'grab screen region for new sprite' 'help' 'Home' 'Help' 'Help Page' 'Hello!' 'hello ' 'Help Screens' 'Hide Motor Blocks' 'Host Mesh' 'c' '(empty)' 'High (biggest)' 'Yes' 'y' 'JPEG Quality (10-100)?' 'Import Project' 'import project' 'Import Image' 'Images compressed' 'import' 'Import' 'Import Sound' 'Import Costume' 'Your project is now online at' 'Import Background' '8' 'Incompatible Scratch file format' 'Import List' 'r' 'Your Scratch website login name:' 'Import an image on top of your current canvas' 'Is the folder read-only?' '1' 'k' 'Zoom in' 'Join Mesh' #'[' 'Zoom out' '*' 'd' 'kbytes' 'z' '9' 's' 'left' 'light' 'Language' 'ln' 'List name?' 'Low' 'log' '2' 'last' 'l' 'left arrow' 'length' 'large readout' 'Lowest (smallest)' 'Line tool (draw lines)' '+' 'e' 'Music' 'mosaic' 'Message name:' 'meow' 'mod' #']' 'Min:' 'more' 'mouse-pointer' 'Move' 'Make a variable' 'Max:' 'More tags:' 'Make a list' 'My Projects' 'mouse x:' 'mouse y:' 'A' 'New file name?') do: [:t |
-		self addUITranslation: t].
-
 ]
 
 { #category : #'Unicode rendering' }
@@ -1155,12 +923,12 @@ PhratchTranslator class >> setRenderingHints [
 
 	s := TranslationDict at: 'Font-Scale' ifAbsent: [''].
 	s size > 0 ifTrue: [
-		RenderScale := s asString asUTF32  asNumber.
+		RenderScale := s asString  asNumber.
 		RenderScale = 0 ifTrue: [RenderScale := 1].  "non-number string"
 		RenderScale := RenderScale asNumber within: 0.5 and: 2.5].
 
 	s := TranslationDict at: 'Suppress-Bold' ifAbsent: [''].
-	s size > 0 ifTrue: [s asMacRoman  asLowercase = 'true' ifTrue: [RenderSuppressBold := true]].
+	s size > 0 ifTrue: [s  asLowercase = 'true' ifTrue: [RenderSuppressBold := true]].
 
 	"even though we are not actively using the hint string, keep this code in case we need it in the future:"
 	s := TranslationDict at: 'Layout-Hint' ifAbsent: [''].
@@ -1168,26 +936,6 @@ PhratchTranslator class >> setRenderingHints [
 
 	RenderWithSqueak := self useSqueakRendering.
 
-]
-
-{ #category : #'Unicode rendering' }
-PhratchTranslator class >> showHintString [
-	"self showHintString"
-
-	| f p r |
-	p := 20@70.
-	f := (StringMorph contents: self renderHintString font: (StrikeFont fontName: 'Verdana' size: 18)) imageForm.
-	r := f rectangleEnclosingPixelsNotOfColor: (f colorAt: 0@0).
-	Display fillWhite: (p extent: f extent).
-	f displayOn: Display at: p rule: Form paint.
-	Display border: (r translateBy: p) width: 1 rule: Form over fillColor: Color blue.
-
-	^ {
-		f height.
-		r height.
-		f height - r height.
-		self verticalTrimForFont: (StrikeFont fontName: 'VerdanaBold' size: 10)
-	}
 ]
 
 { #category : #startup }
@@ -1218,7 +966,6 @@ PhratchTranslator class >> stringExtent: aString font: aStrikeFont [
 	aString size = 0 ifTrue: [^ 5@((aStrikeFont pointSize * RenderScale) rounded)].
 
 	s := aString.
-	s isUnicode ifTrue: [s := s asUTF8].  "convert from UTF32 to UTF8 if necessary"
 	self setFont: aStrikeFont antialias: RenderAntiAliasing.
 	^ RenderPlugin primMeasureString: s
 
@@ -1233,25 +980,10 @@ PhratchTranslator class >> templateFilename [
 ]
 
 { #category : #'rendering menu' }
-PhratchTranslator class >> toggleAntiAliasing [
-
-	RenderAntiAliasing := RenderAntiAliasing not.
-	self updatePhratchUI.
-
-]
-
-{ #category : #'rendering menu' }
 PhratchTranslator class >> toggleSuppressBold [
 
 	RenderSuppressBold := RenderSuppressBold not.
 	self updatePhratchUI.
-
-]
-
-{ #category : #'language translation' }
-PhratchTranslator class >> translationDict [
-
-	^ TranslationDict
 
 ]
 
@@ -1277,9 +1009,6 @@ PhratchTranslator class >> translationFor: englishString [
 	| s |
 	s := TranslationDict at: englishString ifAbsent: [englishString].
 	s size = 0 ifTrue: [s := englishString].
-	RenderWithSqueak
-		ifTrue: [s isUnicode ifTrue: [s := s asMacRoman]]
-		ifFalse: [s := s asString].
 	^ s
 
 
@@ -1312,12 +1041,12 @@ PhratchTranslator class >> unicodeClipboard [
 	| n buf raw ch out s ch2 |
 	RenderPlugin ifNil: [
 		"if there is no plugin, return the normal text clipboard as UTF32"
-		^ (UTF8 withAll: Clipboard clipboardText) asUTF32].
+		^ (String withAll: Clipboard clipboardText)].
 
 	n := RenderPlugin primClipboardSize.
 	n = 0 ifTrue: [
 		"if unicode clipboard is empty, try the normal one"
-		^ (UTF8 withAll: Clipboard clipboardText) asUTF32].
+		^ (String withAll: Clipboard clipboardText)].
 
 	buf := SoundBuffer new: n.
 	n := RenderPlugin primGetCliboardInto: buf.
@@ -1326,7 +1055,7 @@ PhratchTranslator class >> unicodeClipboard [
 		ch < 0 ifTrue: [ch := ch + 65536].
 		ch].
 
-	out := WriteStream on: (UTF32 new: n).
+	out := WriteStream on: (String new: n).
 	s := ReadStream on: raw.
 	[s atEnd] whileFalse: [
 		ch := s next.
@@ -1351,13 +1080,11 @@ PhratchTranslator class >> unicodeClipboardPut: unicodeOrString [
 	| useCRLF s buf ch|
 	RenderPlugin ifNil: [
 		"if there is no plugin, put UTF8 for string into the normal text clipboard"
-		Clipboard clipboardText: unicodeOrString asUTF8.
+		Clipboard clipboardText: unicodeOrString.
 		^ self].
 
 	useCRLF := OSPlatform isWin32.
 	s := unicodeOrString.
-	s isUnicode ifFalse: [s := s asUTF8].
-	s := s asUTF32.
 	buf := WriteStream on: (Array new: 2 * s size).
 	s do: [:ch1 | ch:= ch1.
 		ch > 16r10000
@@ -1387,21 +1114,6 @@ PhratchTranslator class >> updatePhratchUI [
 
 ]
 
-{ #category : #'import/export' }
-PhratchTranslator class >> updateTranslationFiles [
-	"Takes the existing .po files and updates them to reflect the latest Phratch strings to be translated."
-	"self updateTranslationFiles"
-
-	| translationDict codes |
-	self importLanguagesList.
-	codes := self isoDict keys.
-	codes do: [:c |
-		(c = 'en') ifFalse:[
-			translationDict := self importTranslation: c,'.po'.
-			self exportStringsToTranslateFrom: translationDict toFile: c,'.po']].
-
-]
-
 { #category : #'Unicode rendering' }
 PhratchTranslator class >> useSqueakRendering [
 	"Answer true if the current langauge can (or must) be rendered using Squeak,based on the availablility of a rendering plugin, the settings in the .po file and the contents of the translations. Assume that the header has already been processed to initialize HeaderDict."
@@ -1412,68 +1124,7 @@ PhratchTranslator class >> useSqueakRendering [
 	RenderScale ~= 1 ifTrue: [^ false].
 	RenderSuppressBold ifTrue: [^ false].
 
-true ifTrue: [^ false].  "disable Squeak rendering, even if language can be represented in MacRoman"
-
-	TranslationDict associationsDo: [:assoc |
-		((assoc key endsWith: '-comment') not and:
-		 [(assoc key asLowercase = 'language-name') not and:
-		 [assoc value isUnicode]]) ifTrue: [
-			assoc value isMacRoman ifFalse: [^ false]]].
-
-	^ true
-
-]
-
-{ #category : #'language translation' }
-PhratchTranslator class >> varSpecTranslationFor: spec varName: varName [
-	"Return the translation of a variable setter command spec for the given variable."
-
-	| s i |
-	s :=  PhratchTranslator translationFor: spec.
-	i := s indexOfSubCollection: '$Variable$' startingAt: 1.
-	^ (s copyFrom: 1 to: i - 1), varName, (s copyFrom: (i + 2) to: s size).
-
-]
-
-{ #category : #'import/export' }
-PhratchTranslator class >> verifyTranslationFiles [
-	"Returns a dictionary with each language filename as a key and a dictionary with the header and formatting fields as the key's value"
-	"self verifyTranslationFiles"
-
-	| verificationDict dict subDict |
-	verificationDict := Dictionary new.
-	self translationDir fileNames do: [: n |
-		dict := self importTranslation: n.
-		subDict := Dictionary new.
-		subDict at: 'header' put: (dict at: '' ifAbsent: ['no header']).
-		self formattingHeaderFields do: [:f |
-			subDict at: f put: (dict at: f ifAbsent: [''])].
-
-		verificationDict at: n put: subDict].
-	^ verificationDict
-]
-
-{ #category : #'import/export' }
-PhratchTranslator class >> verifyTranslationFilesArgOrder [
-	"Returns a dictionary with any language file with invalid arguments as the key and the invalid arguments as the value"
-	"self verifyTranslationFilesArgOrder2"
-
-	| verificationDict dict subDict ts argsS argsTS |
-	verificationDict := Dictionary new.
-	self translationDir fileNames do: [: n |
-		dict := self importTranslation: n.
-		subDict := Dictionary new.
-		ScriptablePhratchMorph blockSpecsForTranslation do: [:s |
-			ts := dict at: s ifAbsent: [s].
-			argsS := (CommandBlockMorph parseCommandSpec: s) select: [:a | CommandBlockMorph isArgSpec: a].
-			argsTS := (CommandBlockMorph parseCommandSpec: ts) select: [:a | CommandBlockMorph isArgSpec: a].
-			(argsS sort = argsTS sort)
-				ifFalse: [(ts size > 0) ifTrue: [subDict at: s put: ts]]].
-		(subDict values size > 0)
-			ifTrue: [verificationDict at: n put: subDict]].
-
-	^ verificationDict
-
+	^ false
 ]
 
 { #category : #'Unicode rendering' }
@@ -1513,15 +1164,5 @@ PhratchTranslator class >> withoutComment: s [
 			(inString and: [lastCh = $\]) ifFalse: [
 				inString := inString not]]].
 	^ s
-
-]
-
-{ #category : #'Unicode rendering' }
-PhratchTranslator class >> xRangesFor: utf8 font: aStrikeFont [
-	"Anwer an array of (leftX, rightX) pairs for the given Unicode string. There will be an entry in the resulting array for each UTF character in the input string, even when characters combine. Thus, in general, the x ranges for characters can overlap."
-
-	RenderPlugin ifNil: [^ Array new: (utf8 asUTF32 size) withAll: #(0 0)].
-	self setFont: aStrikeFont antialias: RenderAntiAliasing.
-	^ RenderPlugin xRangesFor: utf8
 
 ]

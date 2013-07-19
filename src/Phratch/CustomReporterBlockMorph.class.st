@@ -67,7 +67,7 @@ CustomReporterBlockMorph >> addLabel [
 				m := argMorphs at: nextArgIndex.
 				nextArgIndex := nextArgIndex + 1]
 			ifFalse:	[
-				m := self labelMorphFor: (UTF8 withAll: s)].
+				m := self labelMorphFor: (String withAll: s)].
 		self addMorphBack: m.
 		specParts add: m.
 		part := ArgumentPlaceHolderMorph new.
@@ -111,7 +111,7 @@ CustomReporterBlockMorph >> addLabelToNonTemplate [
 				ifTrue: [argValues add: a listValue]
 				ifFalse: [(a isKindOf: ExpressionArgMorph)
 					ifTrue: [ a isNumberExpression
-						ifTrue: [a getExpression = ' ' asUTF8
+						ifTrue: [a getExpression = ' '
 							ifTrue: [argValues add: a getExpression]
 							ifFalse: [argValues add: a getExpression asNumberNoError]]
 						ifFalse: [argValues add: a getExpression]]
@@ -153,7 +153,7 @@ CustomReporterBlockMorph >> addLabelToNonTemplate [
 				m := argMorphs at: nextArgIndex.
 				nextArgIndex := nextArgIndex + 1]
 			ifFalse:	[
-				m := self labelMorphFor: (UTF8 withAll: s)].
+				m := self labelMorphFor: (String withAll: s)].
 		self addMorphBack: m].
 
 	(self isReporter and: [submorphs isEmpty not]) ifTrue: [
@@ -248,7 +248,7 @@ CustomReporterBlockMorph >> asBlockTuple [
 						ifTrue: [
 							val := arg getExpression.
 							arg isNumberExpression
-								ifTrue: [val = ' ' asUTF8
+								ifTrue: [val = ' '
 									ifTrue: [eval := val]
 									ifFalse: [eval := val asNumberNoError]]
 								ifFalse: [eval := arg getExpression]]
@@ -336,8 +336,8 @@ CustomReporterBlockMorph >> getDnDSpec [
 	| s |
 	s := ''.
 	specParts do: [:part | 
-		s := s, ' ', (part labelFragment spec) asMacRoman].
-	^s withoutLeadingBlanks asUTF8
+		s := s, ' ', (part labelFragment spec)].
+	^s withoutLeadingBlanks
 ]
 
 { #category : #template }
@@ -443,7 +443,6 @@ CustomReporterBlockMorph >> labelMorphFor: aString [
 	isTemplate ifFalse: [^super labelMorphFor: aString].
 
 	s := aString.
-	commandSpec isUnicode ifTrue: [s := UTF8 withAll: s].
 	^ (BlockLabelFragmentMorph contents: s font: (PhratchFrameMorph getFont: #Label))
 		color: self labelColor;
 		updateFragment;

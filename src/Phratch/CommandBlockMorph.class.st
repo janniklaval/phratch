@@ -88,7 +88,6 @@ CommandBlockMorph class >> parseCommandSpec: aCommandSpec [
 	| result len i j spec k |
 	result := OrderedCollection new.
 	spec := aCommandSpec.
-	(spec isKindOf: UTF8) ifTrue: [spec := String withAll: spec].
 	len := aCommandSpec size.
 
 	i := 1.
@@ -354,7 +353,7 @@ CommandBlockMorph >> asBlockTuple [
 						ifTrue: [
 							val := arg getExpression.
 							arg isNumberExpression
-								ifTrue: [val = ' ' asUTF8
+								ifTrue: [val = ' '
 									ifTrue: [eval := val]
 									ifFalse: [(arg evaluate isKindOf: Symbol)	" special case for special values in list blocks (first, last, any)"
 										ifTrue: [eval := arg evaluate]
@@ -1029,8 +1028,6 @@ CommandBlockMorph >> labelMorphFor: aString [
 
 	| s |
 	s := aString.
-	commandSpec isUnicode ifTrue: [s := UTF8 withAll: s]
-		ifFalse:[s := s asString].
 	^ (StringMorph contents: s font: (PhratchFrameMorph getFont: #Label))
 		color: self labelColor
 
@@ -1526,7 +1523,7 @@ CommandBlockMorph >> uncoloredArgMorphFor: specString [
 	"$Z"'SAReporter' = code ifTrue: [ ^ SpecialArgMorph new type: #reporterslot].
 	"$Y"'SABoolean' = code ifTrue: [ ^ SpecialArgMorph new type: #booleanslot].
 	
-	"$A"'Input' = code ifTrue: [ ^ ChoiceArgMorph new options: {'with inputs' asUTF8 localized. 'with input list' asUTF8 localized}; choice: 'with inputs'].
+	"$A"'Input' = code ifTrue: [ ^ ChoiceArgMorph new options: {'with inputs' localized. 'with input list' localized}; choice: 'with inputs'].
 	"$F"'Type' = code ifTrue: [ ^ ChoiceArgMorph new options: {'number' localized. 'text' localized. 'boolean' localized. 'list' localized. 'command' localized. 'reporter' localized. 'predicate' localized. 'object' localized}; choice: 'number' localized].
 
 	"$G"'CArgSlot' = code ifTrue: [ ^ CArgSlotMorph new].

@@ -11,7 +11,7 @@ AttributeArgMorph >> isBYOBattributeArg [
 AttributeArgMorph >> presentAttributesMenu [
 	"Pop up a menu of built-in choices for every sprite/stage object."
 
-	| optionList menu selection option advancedOptions |
+	| optionList menu option advancedOptions |
 
 	(#(get: set:to:) includes: owner selector) ifTrue: [
 		^ self presentUniversalAttributesMenu].
@@ -19,10 +19,8 @@ AttributeArgMorph >> presentAttributesMenu [
 	optionList := #('x position' 'y position' 'direction' 'costume #' 'size' 'volume').
 	menu := MenuMorph new defaultTarget: self.
 	optionList do: [:sym |
-		sym isUnicode not
-			ifTrue: [option := sym localized asUTF8]
-			ifFalse: [option := sym].
-		menu add: (UTF8 withAll: option) asMacRoman
+		option := sym localized.
+		menu add: (String withAll: option)
 			target: self 
 			selector: #choice:
 			argument: sym].
@@ -30,10 +28,8 @@ AttributeArgMorph >> presentAttributesMenu [
 	menu addLine.
 	advancedOptions :=  #('name' 'prototype' 'owner' 'parts').
 	advancedOptions do: [:sym |
-		sym isUnicode not
-			ifTrue: [option := sym localized asUTF8]
-			ifFalse: [option := sym].
-		menu add: (UTF8 withAll: option) asMacRoman
+		option := sym localized.
+		menu add: (String withAll: option)
 			target: self 
 			selector: #choice:
 			argument: sym].
@@ -45,7 +41,7 @@ AttributeArgMorph >> presentAttributesMenu [
 AttributeArgMorph >> presentUniversalAttributesMenu [
 	"Pop up a menu of built-in choices for every sprite/stage object."
 
-	| oi menu entry option selection catz actions pairs val |
+	| oi menu entry option catz actions pairs val |
 
 	catz := #(sprite motion looks effects sound pen relationship).
 	oi := owner receiver objectInterface.
@@ -73,10 +69,8 @@ AttributeArgMorph >> presentUniversalAttributesMenu [
 			menu addLine].
 		(actions at: cat) do: [:tuple |
 			entry := tuple first.
-			entry isUnicode not
-				ifTrue: [option := entry localized asUTF8]
-				ifFalse: [option := entry].
-			menu add: (UTF8 withAll: option) asMacRoman
+			option := entry localized.
+			menu add: (String withAll: option)
 				target: self 
 				selector: #universalAttributeChoice:
 				argument: tuple second]].
@@ -103,10 +97,8 @@ AttributeArgMorph >> universalAttributeChoice: aSymbol [
 		ifFalse: [label := (oi at: aSymbol) value fourth].
 
 	labelMorph isHidden: false.
-	label isUnicode ifFalse: [label := label asString].
-	label isUnicode not
-		ifTrue:[labelMorph contents: label localized]
-		ifFalse:[labelMorph contents: label].
+	label := label asString.
+	labelMorph contents: label localized.
 	labelMorph position: self position + borderWidth + (3 @ -1).
 	self extent: (labelMorph extent + (16@2) + borderWidth).
 

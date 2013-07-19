@@ -8,7 +8,6 @@ Class {
 PhratchUpdatingStringMorph >> formatValue: v [
 
 	format = #string ifTrue: [
-		v isUnicode ifTrue: [^ v].
 		^ v asString].
 
 	(format = #default and: [v isNumber]) ifTrue: [

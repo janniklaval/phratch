@@ -52,7 +52,7 @@ VariableBlockMorph >> addLabel [
 	labelFragment isUnevaluated ifTrue: [
 		self addMorphBack: ((StringMorph contents: '*') color: self labelColor) ].
 
-	(' ' asUTF8 = dflt or: [dflt isEmpty]) ifFalse: [
+	(' ' = dflt or: [dflt isEmpty]) ifFalse: [
 		self addMorphBack: (self labelMorphFor: '=', labelFragment default asString)].
 
 

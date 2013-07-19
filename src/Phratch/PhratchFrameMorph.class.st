@@ -1042,8 +1042,8 @@ PhratchFrameMorph >> checkBoxLabelled: aString marked: aBool width: anInt [
 	box := ImageMorph new form: pic. 
 	
 	PhratchTranslator useSqueakRendering
-		ifTrue: [cnts := ' ', aString localized asMacRoman]
-		ifFalse: [cnts := ' ' asUTF8, aString localized].
+		ifTrue: [cnts := ' ', aString localized]
+		ifFalse: [cnts := ' ', aString localized].
 
 	label := StringMorph contents: cnts font: PhratchFrameMorph standardMenuFont.
 	line := Morph new color: Color transparent.
@@ -1628,11 +1628,11 @@ PhratchFrameMorph >> editMenu: aMenuTitleMorph [
 	Sensor shiftPressed ifTrue: [	self isDevelopmentMode ifTrue: [
 			menu addLine.
 		fillScreenFlag
-			ifTrue: [menu add: 'turn fill screen off' localized asMacRoman action: #fillScreenOff]
-			ifFalse: [menu add: 'turn fill screen on' localized asMacRoman action: #fillScreenOn].
+			ifTrue: [menu add: 'turn fill screen off' localized action: #fillScreenOff]
+			ifFalse: [menu add: 'turn fill screen on' localized action: #fillScreenOn].
 		UseErrorCatcher
-			ifTrue: [menu add: 'turn error catching off' localized asMacRoman action: #toggleErrorCatcher]
-			ifFalse: [menu add: 'turn error catching on' localized asMacRoman action: #toggleErrorCatcher].
+			ifTrue: [menu add: 'turn error catching off' localized action: #toggleErrorCatcher]
+			ifFalse: [menu add: 'turn error catching on' localized action: #toggleErrorCatcher].
 		]].
  
 	menu localize.
@@ -2572,19 +2572,17 @@ PhratchFrameMorph >> languageMenu: aToggleButtonMorph [
 	PhratchTranslator canRenderUnicode ifFalse: [
 		"try to find a Unicode plugin in case this is the first use after startup"
 		PhratchTranslator detectRenderPlugin].
-
-"	bullet := UTF8 withAll: 'Ç¢ '."
-	bullet := UTF8 withAll: '*'.
+	bullet := String withAll: '*'.
 	menu := MenuMorph new defaultTarget: self.
 	PhratchTranslator languageNames do: [:lang |
 		((PhratchTranslator isoCodeForName: lang) = (PhratchTranslator currentLanguage))
 			ifTrue: [menu 
-						add: (bullet, ' ', lang asMacRoman, ' ', bullet)
+						add: (bullet, ' ', lang, ' ', bullet)
 						target: self 
 						selector: #setLanguage:
 						argument: lang]
 			ifFalse: [menu 
-						add: lang asMacRoman
+						add: lang
 						target: self 
 						selector: #setLanguage:
 						argument: lang]].
@@ -2734,8 +2732,8 @@ PhratchFrameMorph >> makeXYReadout [
 	panel := Morph new color: (Color r: 0.753 g: 0.764 b: 0.776).
 
 	PhratchTranslator isRTL
-		ifTrue: [labelX := StringMorph new font: normalFont; contents: ':x' asUTF8]
-		ifFalse: [labelX := StringMorph new font: normalFont; contents: 'x:' asUTF8].
+		ifTrue: [labelX := StringMorph new font: normalFont; contents: ':x']
+		ifFalse: [labelX := StringMorph new font: normalFont; contents: 'x:'].
 	readoutX := UpdatingStringMorph new
 		target: self; getSelector: #mouseX;
 		forceUnicodeRendering: true;
@@ -2744,8 +2742,8 @@ PhratchFrameMorph >> makeXYReadout [
 		growable: false.
 	readoutX width: (readoutX stringWidth: '-1000').
 	PhratchTranslator isRTL
-		ifTrue: [labelY := labelX fullCopy contents: ':y' asUTF8]
-		ifFalse: [labelY := labelX fullCopy contents: 'y:' asUTF8].
+		ifTrue: [labelY := labelX fullCopy contents: ':y']
+		ifFalse: [labelY := labelX fullCopy contents: 'y:'].
 	readoutY := readoutX fullCopy getSelector: #mouseY.
 
 	spaceWidth := ((readoutX stringWidth: ' ') * 0.8) asInteger.
@@ -2806,7 +2804,7 @@ PhratchFrameMorph >> nameFromFileName: fileName [
 	(s asLowercase endsWith: '.scratch') ifTrue: [s := s copyFrom: 1 to: s size - 8].
 	(s asLowercase endsWith: '.sb') ifTrue: [s := s copyFrom: 1 to: s size - 3].
 	(s asLowercase endsWith: '.ypr') ifTrue: [s := s copyFrom: 1 to: s size - 4].
-	s isUnicode ifFalse: [s := UTF8 withAll: s].
+	s := String withAll: s.
 
 	^ s
 
@@ -3000,7 +2998,7 @@ PhratchFrameMorph >> openPhratchProjectNamed: fName [
 	fn := fName.
 	f := FileStream readOnlyFileNamedOrNil: fn.
  	f ifNil: ["try a different encoding, fixes a Firefox bug, -Jens"
-		fn := fName fullName asUTF8.
+		fn := fName fullName.
 		f := FileStream readOnlyFileNamedOrNil: fn.
 		f ifNil: [^ self inform: 'Could not read' withDetails: fName]].
 

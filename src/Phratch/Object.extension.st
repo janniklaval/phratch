@@ -39,14 +39,6 @@ Object >> initObsoleteFieldNamed: varName from: anObjStream [
 ]
 
 { #category : #'*Phratch-Extensions' }
-Object >> isUnicode [
-	"Answer true if I represent a Unicode string."
-
-	^ false
-
-]
-
-{ #category : #'*Phratch-Extensions' }
 Object >> storeFieldsNamed: varList on: anObjStream [
 	"Store the instance variables in the given list on the given object stream."
 

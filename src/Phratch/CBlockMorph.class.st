@@ -50,7 +50,7 @@ CBlockMorph >> asBlockTuple [
 				ifTrue: [
 					val := arg getExpression.
 					arg isNumberExpression
-						ifTrue: [val = ' ' asUTF8
+						ifTrue: [val = ' '
 							ifTrue: [eval := val]
 							ifFalse: [eval := val asNumberNoError]]
 						ifFalse: [eval := arg evaluate]]

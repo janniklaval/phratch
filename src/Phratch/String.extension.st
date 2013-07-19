@@ -1,14 +1,6 @@
 Extension { #name : #String }
 
 { #category : #'*Phratch-Extensions' }
-String >> asMacRoman [
-	"Squeak strings are encoded as MacRoman."
-
-	^ self
-
-]
-
-{ #category : #'*Phratch-Extensions' }
 String >> asNumberNoError [
 	"Convert the given string to a number without giving errors about its format. Ignore non-digit characters and allow a leading '+', which kids sometimes type. Answer zero if empty."
 
@@ -44,22 +36,6 @@ String >> asNumberNoError [
 ]
 
 { #category : #'*Phratch-Extensions' }
-String >> asUTF32 [
-	"Answer this string, assumed be encoded in MacRoman, encoded as UTF-32."
-
-	^ "(UTF8 fromMacRoman: self) asUTF32" self
-
-]
-
-{ #category : #'*Phratch-Extensions' }
-String >> asUTF8 [
-	"Answer this string, assumed be encoded in MacRoman, encoded as UTF-8."
-
-	^ " UTF8 fromMacRoman: self" self
-
-]
-
-{ #category : #'*Phratch-Extensions' }
 String >> caseInsensitiveEqual: aString [ 
 	"Answer whether the receiver is equal to aString ignoring case differences."
 
@@ -83,7 +59,7 @@ String >> localized [
 	| selfAsString |
 	selfAsString := self asString.
 	PhratchTranslator addUITranslation: selfAsString.
-	^( PhratchTranslator translationFor: selfAsString) asMacRoman .
+	^( PhratchTranslator translationFor: selfAsString).
 
 ]
 

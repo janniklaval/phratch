@@ -166,7 +166,7 @@ ScrollingStringMorph >> contents [
 		sz := s size.
 		result replaceFrom: i to: i + sz - 1 with: s startingAt: 1.
 		i := i + sz].
-	^ result asUTF8
+	^ result
 
 ]
 
@@ -477,22 +477,8 @@ ScrollingStringMorph >> drawSelectionOn: aCanvas [
 { #category : #drawing }
 ScrollingStringMorph >> drawString: aString at: aPoint on: aCanvas [
 
-	| s bgColor f |
+	| s |
 	s := aString.
-	s isUnicode ifTrue: [
-		bgColor := color.
-		bgColor isTransparent ifTrue: [bgColor := self backgroundColor].
-		f := PhratchTranslator
-			formFor: s
-			font: self font
-			fgColor: textColor
-			bgColor: bgColor
-			suppressAntiAliasing: false.
-		f ifNotNil: [  "have rendering plugin"
-			aCanvas paintImage: f at: aPoint.
-			^ self].
-		"no rendering plugin; convert to MacRoman and render with Squeak"
-		s := s asMacRoman].
 
 	aCanvas
 		text: s
@@ -1046,7 +1032,7 @@ ScrollingStringMorph >> replaceTabs: aString [
 	"Answer a copy of the given UTF32 with each tab replaced by four spaces and all non-printing characters except spaces and line ends removed. Covert LF's to CR's."
 
 	| s tab lf cr space result |
-	s := aString asUTF32.
+	s := aString.
 	tab := Character codePoint: 9.
 	lf := Character codePoint: 10.
 	cr := Character codePoint: 13.
@@ -1055,7 +1041,7 @@ ScrollingStringMorph >> replaceTabs: aString [
 	s do: [:ch |
 		ch < space
 			ifTrue: [ "non-printing"
-				ch = tab ifTrue: [result nextPutAll: '    ' asUTF32].
+				ch = tab ifTrue: [result nextPutAll: '    '].
 				(ch = cr) | (ch = lf) ifTrue: [result nextPut: cr]]
 			ifFalse: [
 				result nextPut: ch]].

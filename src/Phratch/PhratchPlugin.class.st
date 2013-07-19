@@ -33,65 +33,12 @@ Class {
 	#category : #'Phratch-Primitives-Plugins'
 }
 
-{ #category : #'image filters-testing' }
-PhratchPlugin class >> blurTest: count [
-	"self blurTest: 10"
-
-	| f outBits |
-	f := (Form fromFileNamed: TestFileName) asFormOfDepth: 32.
-	f display.
-	count timesRepeat: [
-		outBits := f bits copy.
-		self primBlur: f bits into: outBits width: f width.
-		f bits: outBits.
-		f display].
-
-]
-
-{ #category : #'image filters-testing' }
-PhratchPlugin class >> brightnessShiftTest [
-	"self brightnessShiftTest"
-
-	| f fOut shift |
-	f := (Form fromFileNamed: TestFileName) asFormOfDepth: 32.
-	fOut := f deepCopy.
-	[Sensor anyButtonPressed] whileFalse: [
-		shift := ((Sensor cursorPoint x - Display center x) * 220) // Display width.
-		self primShiftBrightness: f bits into: fOut bits by: shift.
-		fOut display].
-
-]
-
 { #category : #'serial port primitives' }
 PhratchPlugin class >> closePort: portNum [
 	"Close the given port."
 	"self closePort: 1"
 
 	<primitive: 'primClose' module: #ScratchPlugin>
-
-]
-
-{ #category : #'sound buffer utilities' }
-PhratchPlugin class >> compactSound: aSoundBuffer by: log2 [
-	"Collapse the given by cutting in half log2 times."
-	"self compactSound: (SoundBuffer fromArray: (1 to: 100) asArray) by: 3"
-
-	| buf |
-	buf := aSoundBuffer.
-	log2 timesRepeat: [buf := self extractChannelFrom: buf rightFlag: false].
-	^ buf
-
-]
-
-{ #category : #'sound buffer utilities' }
-PhratchPlugin class >> condenseSoundBuffer: aSoundBuffer by: factor [
-	"Condense the given SoundBuffer by the given factor. The result is a SoundBuffer 1/factor of the original size in which each sample represents the peak signal value over factor samples of the source."
-	"self condenseSoundBuffer: (SoundBuffer fromArray: (1 to: 100) asArray) by: 10"
-
-	| result |
-	result := SoundBuffer newMonoSampleCount: (aSoundBuffer size + factor - 1) // factor.
-	self primCondense: aSoundBuffer into: result by: factor.
-	^ result
 
 ]
 
@@ -105,127 +52,6 @@ PhratchPlugin class >> declareCVarsIn: aCCodeGenerator [
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>'.
-
-]
-
-{ #category : #'image filters-testing' }
-PhratchPlugin class >> doubleTest [
-	"self doubleTest"
-
-	| f fOut |
-	f := (Form fromFileNamed: TestFileName) asFormOfDepth: 32.
-	fOut := Form extent: (2 * f extent) + 20 depth: 32.
-	self primDouble: f bits w: f width h: f height into: fOut bits w: fOut width h: fOut height x: 9 y: 10.
-	fOut display.
-
-
-]
-
-{ #category : #'sound buffer utilities' }
-PhratchPlugin class >> extractChannelFrom: aSoundBuffer rightFlag: rightFlag [
-	"Extract one channel from the given stereo sound buffer. If rightFlag is true, extract the right channel; otherwise, extract the left one."
-	"self extractChannelFrom: (SoundBuffer fromArray: #(1 2 3 4)) rightFlag: true"
-
-	| result |
-	result := SoundBuffer newMonoSampleCount: aSoundBuffer size // 2.
-	self primExtractChannelFrom: aSoundBuffer into: result rightFlag: rightFlag.
-	^ result
-
-]
-
-{ #category : #'image filters-testing' }
-PhratchPlugin class >> filterBenchmark: count [
-	"self filterBenchmark: 100"
-
-	| f fOut s msecs |
-	s := (WriteStream on: String new) cr.
-	f := (Form fromFileNamed: TestFileName) asFormOfDepth: 32.
-	fOut := f deepCopy.
-
-	msecs := [count timesRepeat: [self primShiftHue: f bits into: fOut bits byDegrees: 100]] msecs.
-	s nextPutAll: 'hue shift: ', ((msecs asFloat / count) roundTo: 0.01) printString, ' msecs'; cr.
-	fOut display.
-	
-	msecs := [count timesRepeat: [self primShiftBrightness: f bits into: fOut bits by: 50]] msecs.
-	s nextPutAll: 'brightness shift: ', ((msecs asFloat / count) roundTo: 0.01) printString, ' msecs'; cr.
-	fOut display.
-
-	msecs := [count timesRepeat: [self primShiftSaturation: f bits into: fOut bits by: 50]] msecs.
-	s nextPutAll: 'saturation shift: ', ((msecs asFloat / count) roundTo: 0.01) printString, ' msecs'; cr.
-	fOut display.
-
-	msecs := [count timesRepeat: [self primFisheye: f bits into: fOut bits width: f width power: 300]] msecs.
-	s nextPutAll: 'fisheye: ', ((msecs asFloat / count) roundTo: 0.01) printString, ' msecs'; cr.
-	fOut display.
-
-	msecs := [count timesRepeat: [self primWhirl: f bits into: fOut bits width: f width angle: 1000]] msecs.
-	s nextPutAll: 'whirl: ', ((msecs asFloat / count) roundTo: 0.01) printString, ' msecs'; cr.
-	fOut display.
-
-	msecs := [count timesRepeat: [fOut display]] msecs.
-	s nextPutAll: 'display: ', ((msecs asFloat / count) roundTo: 0.01) printString, ' msecs'; cr.
-
-
-	^ s contents
-
-
-]
-
-{ #category : #'image filters-testing' }
-PhratchPlugin class >> fishEye: inForm out: outForm power: power [
-
-	| height sz centerX centerY dx dy ang pix  width r srcX srcY |
-	"calculate height, center, scales, radius, whirlRadians, and radiusSquared"
-	sz := inForm bits size.
-	width := inForm width.
-
-	height := sz // width.
-	centerX := width // 2.
-	centerY := height // 2.
-
-	0 to: width - 1 do: [:x |
-		0 to: height - 1 do: [:y |
-			dx := (x - centerX) / centerX asFloat.
-			dy := (y - centerY) / centerY asFloat.
-			r := ((dx * dx) + (dy * dy)) sqrt raisedTo: power.
-			r <= 1.0
-				ifTrue: [
-					ang := dy arcTan: dx.
-					srcX := centerX + ((r * ang cos) * centerX).
-					srcY := centerY + ((r * ang sin) * centerY)]
-				ifFalse: [
-					srcX := x.
-					srcY := y].
-			pix := self primInterpolate: inForm bits width: inForm width x: (srcX * 1024) truncated y: (srcY * 1024) truncated.
-			outForm bits at: ((y * width) + x + 1) put: pix]].
-
-
-]
-
-{ #category : #'image filters-testing' }
-PhratchPlugin class >> fisheyeTest [
-	"self fisheyeTest"
-
-	| f fOut |
-	f := (Form fromFileNamed: TestFileName) asFormOfDepth: 32.
-	fOut := f deepCopy.
-	f display.
-	100 to: 300 by: 10 do: [:power |
-		self primFisheye: f bits into: fOut bits width: f width power: power.
-		fOut display].
-
-]
-
-{ #category : #'image filters-testing' }
-PhratchPlugin class >> fisheyeTest2: power [
-	"self fisheyeTest2: 100"
-
-	| f fOut |
-	f := (Form fromFileNamed: TestFileName) asFormOfDepth: 32.
-	fOut := f deepCopy.
-	f display.
-	self primFisheye: f bits into: fOut bits width: f width power: power.
-	fOut display.
 
 ]
 
@@ -249,84 +75,6 @@ PhratchPlugin class >> halfSize: srcForm into: dstForm srcPoint: srcPoint dstRec
 		clipRect: dstRect;
 		cellSize: 2;
 		copyQuad: srcR corners toRect: dstRect.
-
-]
-
-{ #category : #'image filters-testing' }
-PhratchPlugin class >> halfSizeAverageTest [
-	"self halfSizeAverageTest"
-
-	| f fOut |
-	f := (Form fromFileNamed: TestFileName) asFormOfDepth: 32.
-	fOut := Form extent: f extent // 2 depth: 32.
-	self
-		primHalfSizeAverage: f bits w: f width h: f height
-		into: fOut bits w: fOut width h: fOut height
-		srcX: 0 srcY: 0
-		dstX: 0 dstY: 0 dstW: fOut width dstH: fOut height.
-	f display.
-	fOut display.
-
-
-]
-
-{ #category : #'image filters-testing' }
-PhratchPlugin class >> halfSizeDiagonalTest [
-	"self halfSizeDiagonalTest"
-
-	| f fOut |
-	f := (Form fromFileNamed: TestFileName) asFormOfDepth: 32.
-	fOut := Form extent: f extent // 2 depth: 32.
-	self
-		primHalfSizeDiagonal: f bits w: f width h: f height
-		into: fOut bits w: fOut width h: fOut height
-		srcX: 0 srcY: 0
-		dstX: 0 dstY: 0 dstW: fOut width dstH: fOut height.
-	f display.
-	fOut display.
-
-
-]
-
-{ #category : #'image filters-testing' }
-PhratchPlugin class >> hueShiftTest [
-	"self hueShiftTest"
-
-	| f fOut shift |
-	f := (Form fromFileNamed: TestFileName) asFormOfDepth: 32.
-	fOut := f deepCopy.
-	[Sensor anyButtonPressed] whileFalse: [
-		shift := ((Sensor cursorPoint x - Display center x) * 380 * 2) // Display width.
-		self primShiftHue: f bits into: fOut bits byDegrees: shift.
-		fOut display].
-
-]
-
-{ #category : #'image filters-testing' }
-PhratchPlugin class >> interpolationTest: scale [
-	"Answer a copy of the given form scaled by the given factor using linear interpolation."
-	"(self interpolationTest: 1.5) display"
-
-	| scaleP srcForm outExtent fOut w h outW pix outH |
-	scaleP := scale asPoint.
-	(scaleP x <= 0 or: [scaleP y <= 0]) ifTrue: [self error: 'bad scale factor'].
-	srcForm := (Form fromFileNamed: TestFileName) asFormOfDepth: 32.
-	outExtent := (srcForm extent * scaleP) truncated.
-	(outExtent x > 1000 or: [outExtent y > 1000]) ifTrue: [self error: 'result width or height will be > 1000 pixels'].
-	fOut := Form extent: outExtent depth: 32.
-	w := srcForm width.
-	h := srcForm height.
-	outW := fOut width.
-	outH := fOut height.
-	0 to: fOut width - 1 do: [:x |
-		0 to: fOut height - 1 do: [:y |
-			pix := self
-				primInterpolate: srcForm bits
-				width: srcForm width
-				x: (x * w * 1024) // outW
-				y:  (y * h * 1024) // outH.
-			fOut bits at: ((y * outW) + x + 1) put: pix]].
-	^ fOut
 
 ]
 
@@ -430,29 +178,11 @@ PhratchPlugin class >> primBlur: inBitmap into: outBitmap width: w [
 
 ]
 
-{ #category : #'sound buffer utilities' }
-PhratchPlugin class >> primCondense: srcSoundBuffer into: dstSoundBuffer by: anInteger [
-	"Condense the given SoundBuffer by the given factor storing the rsult into the destination SoundBuffer."
-
-	<primitive: 'primitiveCondenseSound' module: #ScratchPlugin>
-	self primitiveFailed
-
-]
-
 { #category : #'image scale primitives' }
 PhratchPlugin class >> primDouble: srcBitmap w: srcWidth h: srcHeight into: dstBitmap w: dstWidth h: dstHeight x: dstX y: dstY [
 	"Display the source form at double-size onto the destination form at the given location. Fails if the target rectangle does not fit entirely within the destination form."
 
 	<primitive: 'primitiveDoubleSize' module: #ScratchPlugin>
-	self primitiveFailed
-
-]
-
-{ #category : #'sound buffer utilities' }
-PhratchPlugin class >> primExtractChannelFrom: srcSoundBuffer into: dstSoundBuffer rightFlag: rightFlag [
-	"Extract the given channel of the source SoundBuffer in the destination SoundBuffer."
-
-	<primitive: 'primitiveExtractChannel' module: #ScratchPlugin>
 	self primitiveFailed
 
 ]
@@ -463,22 +193,6 @@ PhratchPlugin class >> primFisheye: inBitmap into: outBitmap width: w power: anI
 
 	<primitive: 'primitiveFisheye' module: #ScratchPlugin>
 	self primitiveFailed
-
-]
-
-{ #category : #'OS utilities' }
-PhratchPlugin class >> primGetFolderPath: anInteger [
-	"Return the folder path for the given ID. Folder ID's are:
-		1	home
-		2	desktop
-		3	documents
-		4	my pictures
-		5	my music.
-	Return the path for the Phratch folder if the primitive fails."
-	"self primGetFolderPath: 1"
-
-	<primitive: 'primitiveGetFolderPath' module: #ScratchPlugin>
-	^ FileSystem workingDirectory fullName
 
 ]
 
@@ -494,6 +208,7 @@ PhratchPlugin class >> primGetFolderPathOrNil: anInteger [
 	"self primGetFolderPathOrNil: 1"
 
 	<primitive: 'primitiveGetFolderPath' module: #ScratchPlugin>
+	self halt:'should remove'.
 	^ nil
 
 ]
@@ -639,8 +354,11 @@ PhratchPlugin class >> primWhirl: inBitmap into: outBitmap width: w angle: anAng
 { #category : #'primitive failure' }
 PhratchPlugin class >> primitiveFailed [
 	"Just beep rather than bringing up an error notifier."
-
-	Beeper beep.
+	ScriptablePhratchMorph noviceMode ifTrue:[
+		^Beeper beep]
+	ifFalse:[
+		^self primitiveFailed: 'ScratchPlugin primitive failed'
+		]
 
 ]
 
@@ -651,20 +369,6 @@ PhratchPlugin class >> readPort: portNum into: buffer [
 
 	<primitive: 'primRead' module: #ScratchPlugin>
 	^ 0
-
-]
-
-{ #category : #'image filters-testing' }
-PhratchPlugin class >> saturationShiftTest [
-	"self saturationShiftTest"
-
-	| f fOut shift |
-	f := (Form fromFileNamed: TestFileName) asFormOfDepth: 32.
-	fOut := f deepCopy.
-	[Sensor anyButtonPressed] whileFalse: [
-		shift := ((Sensor cursorPoint x - Display center x) * 220) // Display width.
-		self primShiftSaturation: f bits into: fOut bits by: shift.
-		fOut display].
 
 ]
 
@@ -684,19 +388,6 @@ PhratchPlugin class >> scale: aForm by: scale [
 
 ]
 
-{ #category : #'image filters-testing' }
-PhratchPlugin class >> scaleTest: scale [
-	"self scaleTest: 1.5"
-
-	| f fOut |
-	f := (Form fromFileNamed: TestFileName) asFormOfDepth: 32.
-	fOut := Form extent: (f extent * scale) rounded depth: 32.
-	self primScale: f bits w: f width h: f height into: fOut bits w: fOut width h: fOut height.
-	fOut display.
-
-
-]
-
 { #category : #'serial port primitives' }
 PhratchPlugin class >> serialPortOpsAvailable [
 	"Answer true if this plugin is available."
@@ -704,128 +395,6 @@ PhratchPlugin class >> serialPortOpsAvailable [
 	"Smalltalk unloadPlugin: self name"
 
 	^ self portCountOrNil notNil
-
-]
-
-{ #category : #'OS utilities' }
-PhratchPlugin class >> setUnicodePasteBuffer: aString [
-	"Set the Mac OS X Unicode paste buffer to the given Squeak string. Since the source is a Squeak string, there is no need to handle UTF-16 extended (4-byte) characters. However, we must take byte order into account to accomodate both Intel and PowerPC."
-	"self setUnicodePasteBuffer: 'Hello, Unicode!'"
-
-	| utf32 s |
-	utf32 := aString asUTF32.
-	s := WriteStream on: (ByteArray new: 2 * aString size).
-	Smalltalk isBigEndian
-		ifTrue: [utf32 do: [:u | s nextPut: (u >> 8). s nextPut: (u bitAnd: 255)]]
-		ifFalse: [utf32 do: [:u | s nextPut: (u bitAnd: 255). s nextPut: (u >> 8)]].
-
-	self primSetUnicodePasteBuffer: s contents.
-
-]
-
-{ #category : #'image filters-testing' }
-PhratchPlugin class >> testFileName: aString [
-	"Set the name of an image file for testing."
-	"self testFileName: 'hammy.jpg'"
-	"self testFileName: 'JohnMugShotBW.jpg'"
-
-	TestFileName := aString.
-
-]
-
-{ #category : #'image filters-testing' }
-PhratchPlugin class >> waterRipples1ModuleTest [
-	"Smalltalk unloadPlugin: self name"
-	"self waterRipples1ModuleTest"
-
-	| f fOut ripply aArray bArray |
-	f := (Form fromFileNamed: TestFileName) asFormOfDepth: 32.
-	fOut := f deepCopy.
-	aArray := ByteArray new: (f width) * (f height) * 8 withAll: 0.
-	bArray := ByteArray new: (f width) * (f height) * 8 withAll: 0.
-
-	[Sensor anyButtonPressed] whileFalse: [
-		ripply := Sensor cursorPoint x max: 1.
-		ripply := (((ripply / fOut width) sqrt) * 16.0) asInteger.
-		ripply < 1 ifTrue: [ripply := 1].
-ripply printString display.
-		self primWaterRipples1: f bits
-			into: fOut bits
-			width: f width
-			dropNum: ripply
-			array1: aArray
-			array2: bArray.
-		fOut displayAt: 10@30].
-
-]
-
-{ #category : #'image filters-testing' }
-PhratchPlugin class >> waterRipples1ModuleTest: n [
-	"Smalltalk unloadPlugin: self name"
-	"self waterRipples1ModuleTest: 100"
-
-	| f fOut aArray bArray |
-	f := (Form fromFileNamed: TestFileName) asFormOfDepth: 32.
-	fOut := f deepCopy.
-	aArray := ByteArray new: (f width * f height) * 8 withAll: 0.
-	bArray := ByteArray new: (f width * f height) * 8 withAll: 0.
-
-	self primWaterRipples1: f bits
-		into: fOut bits
-		width: f width
-		dropNum: n
-		array1: aArray
-		array2: bArray.
-	[Sensor anyButtonPressed] whileFalse: [
-		self primWaterRipples1: f bits
-			into: fOut bits
-			width: f width
-			dropNum: 1
-			array1: aArray
-			array2: bArray.
-		fOut displayAt: 10@30].
-
-]
-
-{ #category : #'image filters-testing' }
-PhratchPlugin class >> waterRipplesTime: n [
-	"Smalltalk unloadPlugin: self name"
-	"self waterRipplesTime: 100"
-
-	| f fOut aArray bArray |
-	f := (Form fromFileNamed: TestFileName) asFormOfDepth: 32.
-	fOut := f deepCopy.
-	aArray := ByteArray new: (f width * f height) * 8 withAll: 0.
-	bArray := ByteArray new: (f width * f height) * 8 withAll: 0.
-
-	self primWaterRipples1: f bits
-		into: fOut bits
-		width: f width
-		dropNum: n
-		array1: aArray
-		array2: bArray.
-
-	^ [100 timesRepeat: [
-		self primWaterRipples1: f bits
-			into: fOut bits
-			width: f width
-			dropNum: 100
-			array1: aArray
-			array2: bArray]] msecs.
-
-]
-
-{ #category : #'image filters-testing' }
-PhratchPlugin class >> whirlTest [
-	"self whirlTest"
-
-	| f fOut degrees |
-	f := (Form fromFileNamed: TestFileName) asFormOfDepth: 32.
-	fOut := f deepCopy.
-	[Sensor anyButtonPressed] whileFalse: [
-		degrees := ((Sensor cursorPoint x - Display center x) * 450 * 2) // Display width.
-		self primWhirl: f bits into: fOut bits width: f width angle: degrees.
-		fOut display].
 
 ]
 

@@ -11,7 +11,7 @@ ReporterScriptBlockMorph >> addItem [
 	pos := (argMorphs reject: [:m | m == self nextBlock]) size.
 	(self isKindOf: CommandScriptBlockMorph)
 		ifFalse: [pos := pos - 1 ].
-	pname := ('#', pos printString) asUTF8.
+	pname := ('#', pos printString).
 	varBlock := VariableBlockMorph new.
 	varBlock 
 		isSpecialForm: true;
@@ -68,7 +68,7 @@ ReporterScriptBlockMorph >> adjustInternals [
 	selector := newSelector.
 
 	newSpec := self receiver blockSpecForSelector: selector.
-	newSpec := newSpec asMacRoman localized.
+	newSpec := newSpec localized.
 
 	self commandSpec: newSpec.
 

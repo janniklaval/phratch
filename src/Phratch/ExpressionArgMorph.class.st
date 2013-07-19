@@ -41,7 +41,7 @@ ExpressionArgMorph >> defaultValue: anObject [
 ExpressionArgMorph >> defaultValueFromSpec: anObject [
 	"Like defaultValue:, but '-' in a block spec creates an empty number expression."
 
-	'-' asUTF8 = anObject 
+	'-' = anObject 
 		ifTrue: [self numExpression: ' ']  "empty, evaluates to zero"
 		ifFalse: [self defaultValue: anObject].
 
@@ -173,8 +173,8 @@ ExpressionArgMorph >> initialize [
 ExpressionArgMorph >> isEmptySlot [
 
 	isText ifTrue: [
-		^ labelMorph savedContents = '' asUTF8].
-	^ (Array with: '' asUTF8 with: ' ' asUTF8) includes: labelMorph savedContents
+		^ labelMorph savedContents = ''].
+	^ (Array with: '' with: ' ') includes: labelMorph savedContents
 
 ]
 

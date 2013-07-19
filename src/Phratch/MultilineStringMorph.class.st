@@ -160,7 +160,7 @@ MultilineStringMorph >> contents [
 MultilineStringMorph >> contents: aStringOrText [
 	"Set my contents to the given String or Text. Break into lines, emove non-printing characters, and replace tabs with sequences of spaces."
 
-	lines := Array with: (self replaceTabs: aStringOrText asUTF32).
+	lines := Array with: (self replaceTabs: aStringOrText).
 	self lineWrapFrom: 1.
 
 ]
@@ -448,31 +448,13 @@ MultilineStringMorph >> drawSelectionOn: aCanvas [
 { #category : #drawing }
 MultilineStringMorph >> drawString: aString at: aPoint on: aCanvas [
 
-	| s bgColor f |
-	s := aString asUTF8 .
+	| s |
+	s := aString.
 	suppressAntiAliasing ifNil: [suppressAntiAliasing := false].
 	renderWithSqueak ifNil: [renderWithSqueak := false].
 
 	"allows costume textboxes using old fonts to be rendered:"
-	(renderWithSqueak and: [font isOSFont not]) ifTrue: [s := s asMacRoman].
-
-	s isUnicode ifTrue: [
-		bgColor := color.
-		bgColor isTransparent ifTrue: [
-			bgColor := self backgroundColor.
-			(suppressAntiAliasing and: [bgColor = textColor])
-				ifTrue: [bgColor := textColor negated]].
-		f := PhratchTranslator
-			formFor: s
-			font: self font
-			fgColor: textColor
-			bgColor: bgColor
-			suppressAntiAliasing: suppressAntiAliasing.
-		f ifNotNil: [  "have rendering plugin"
-			aCanvas paintImage: f at: aPoint.
-			^ self].
-		"no rendering plugin; convert to MacRoman and render with Squeak"
-		s := s asMacRoman].
+	(renderWithSqueak and: [font isOSFont not]) ifTrue: [s := s].
 
 	aCanvas
 		text: s
@@ -678,7 +660,7 @@ MultilineStringMorph >> initFieldsFrom: anObjStream version: classVersion [
 		selectionColor
 		lines
 	) from: anObjStream.
-	lines := lines collect: [:s | s asUTF32].
+	lines := lines collect: [:s | s].
 
 ]
 
@@ -1002,7 +984,7 @@ MultilineStringMorph >> replaceTabs: aString [
 	"Answer a copy of the given UTF32 with each tab replaced by four spaces and all non-printing characters except spaces and line ends removed. Covert LF's to CR's."
 
 	| s tab lf cr space result |
-	s := aString asUTF32.
+	s := aString.
 	tab := Character codePoint: 9.
 	lf := Character codePoint: 10.
 	cr := Character codePoint: 13.
@@ -1011,7 +993,7 @@ MultilineStringMorph >> replaceTabs: aString [
 	s do: [:ch |
 		ch < space
 			ifTrue: [ "non-printing"
-				ch = tab ifTrue: [result nextPutAll: '    ' asUTF32].
+				ch = tab ifTrue: [result nextPutAll: '    '].
 				(ch = cr) | (ch = lf) ifTrue: [result nextPut: cr]]
 			ifFalse: [
 				result nextPut: ch]].
@@ -1105,14 +1087,14 @@ MultilineStringMorph >> storeFieldsOn: anObjStream [
 
 	super storeFieldsOn: anObjStream.
 
-	lines := lines collect: [:s | s asUTF8].
+	lines := lines collect: [:s | s].
 	anObjStream putField: {font name. font pointSize. font isOSFont}.  "font spec"
 	self storeFieldsNamed: #(
 		textColor
 		selectionColor
 		lines
 	) on: anObjStream.
-	lines := lines collect: [:s | s asUTF32].
+	lines := lines collect: [:s | s].
 
 
 ]

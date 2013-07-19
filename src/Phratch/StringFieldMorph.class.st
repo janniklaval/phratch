@@ -170,7 +170,7 @@ StringFieldMorph >> color [
 { #category : #accessing }
 StringFieldMorph >> contents [
 
-	^ stringMorph contents asUTF8
+	^ stringMorph contents
 
 ]
 
@@ -178,8 +178,8 @@ StringFieldMorph >> contents [
 StringFieldMorph >> contents: aString [
 
 	doResizing
-		ifTrue: [stringMorph contents: aString asUTF32]
-		ifFalse: [stringMorph contentsClipped: aString asUTF32].
+		ifTrue: [stringMorph contents: aString]
+		ifFalse: [stringMorph contentsClipped: aString].
 
 	self stringChanged.
 
@@ -213,7 +213,7 @@ StringFieldMorph >> currsorOffsetFor: characterOffset [
 
 	"special case for a single character; double it to see if it is RTL"
 	xRanges size = 1 ifTrue: [
-		r := stringMorph xRangesFor: (s asUTF8, s asUTF8).
+		r := stringMorph xRangesFor: (s, s).
 		startsOnLeft := r first first < r last last].
 
 	"if string starts left-to-right, then put cursor on the left side left of first char, otherwise put it on the right side"
@@ -246,7 +246,7 @@ StringFieldMorph >> cursorOffsetFor: characterOffset [
 
 	"special case for a single character; double it to see if it is RTL"
 	xRanges size = 1 ifTrue: [
-		r := stringMorph xRangesFor: (s asUTF8, s asUTF8).
+		r := stringMorph xRangesFor: (s, s).
 		startsOnLeft := r first first < r last last].
 
 	"if string starts left-to-right, then put cursor on the left side left of first char, otherwise put it on the right side"
@@ -387,7 +387,7 @@ StringFieldMorph >> font [
 StringFieldMorph >> font: aFont [
 
 	stringMorph font: aFont.
-	stringMorph height: (stringMorph stringHeight: PhratchTranslator renderHintString asUTF8).
+	stringMorph height: (stringMorph stringHeight: PhratchTranslator renderHintString).
 	self height: stringMorph height + (2 * borderWidth) + heightPadding.
 	insetY := (self height // 2) - borderWidth - (PhratchTranslator centerOffsetForButtonWithFont: aFont).
 	insetY := insetY max: 1.
@@ -466,9 +466,7 @@ StringFieldMorph >> insertCharacter: unicodeChar [
 
 	self recordUndoState.
 	str := stringMorph contents.
-	insertion := String  with: unicodeChar.
-	(str class = UTF8) ifTrue: [insertion := insertion asUTF8].
-	(str class = String) ifTrue: [insertion := insertion asMacRoman].
+	insertion := (String  with: unicodeChar).
 	newStr :=
 		((str copyFrom: 1 to: self leftSelection)),
 		insertion,
@@ -598,8 +596,8 @@ StringFieldMorph >> keyboardFocusChange: amGettingFocus [
 		lastContents := nil.
 		isNumeric ifTrue: [ | str |			"suppress auto-filling with zero for BYOB (jens)"
 			str := stringMorph contents.
-			str isEmpty | (str = ' ' asUTF32)
-				ifTrue: [self contents: ' ' asUTF32]
+			str isEmpty | (str = ' ')
+				ifTrue: [self contents: ' ']
 				ifFalse: [self contents: str asNumberNoError printStringNoExponent]].
 		acceptWhenFocusLost ifTrue: [self acceptEdits]].
 
@@ -793,8 +791,8 @@ StringFieldMorph >> rightSelection [
 StringFieldMorph >> savedContents [
 	"If the user is editing, return the last contents before editing. Otherwise, return my contents."
 
-	(isKeyboardFocus and: [lastContents notNil]) ifTrue: [^ lastContents asUTF8].
-	^ stringMorph contents asUTF8
+	(isKeyboardFocus and: [lastContents notNil]) ifTrue: [^ lastContents].
+	^ stringMorph contents
 
 ]
 

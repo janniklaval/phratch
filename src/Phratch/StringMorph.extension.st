@@ -79,11 +79,6 @@ StringMorph >> stringExtent: aString [
 	| s usingOSFont scanner |
 	s := aString.
 	usingOSFont := font notNil and: [font isOSFont].
-	s isUnicode | usingOSFont ifTrue: [
-		PhratchTranslator canRenderUnicode
-			ifTrue: [^ PhratchTranslator stringExtent: s asMacRoman    font: self font]
-			ifFalse: [s := s asMacRoman]].
-
 	scanner := MultiDisplayScanner quickPrintOn: Display box: Display boundingBox font: self font.
 	^ scanner stringExtent: s
 ]
@@ -141,12 +136,7 @@ StringMorph >> stringWithEllipses: aString limitedToWidth: aNumber [
 StringMorph >> xRangesFor: s [
 	"Anwer an array of (leftX, rightX) pairs for the given string. For Unicode, there will be an entry in the resulting array for each UTF character in the input string, even when characters combine, so the x ranges for characters may overlap."
 	"StringMorph new xRangesFor: 'Hello' asUTF8"
-
-	s isUnicode ifTrue: [
-		PhratchTranslator canRenderUnicode
-			ifTrue: [^ PhratchTranslator xRangesFor: s asMacRoman  font: self font]
-			ifFalse: [^ self font xRangesFor: s asMacRoman]].
-
+	
 	^ self font xRangesFor: s
 
 ]

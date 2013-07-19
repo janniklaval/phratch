@@ -716,7 +716,7 @@ PhratchFileChooserDialog >> labelForHomeFolder [
 	home ifNil: [^ 'Home' localized].
 	delimiter := FileSystem disk delimiter asString.
 
-	^ UTF8 withAll: (home findTokens: delimiter) last
+	^ String withAll: (home findTokens: delimiter) last
 
 ]
 

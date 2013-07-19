@@ -477,12 +477,12 @@ LibraryItemMorph >> truncatedLabel [
 
 	nameMorph contents = target objName ifFalse: [
 		n := target objName.
-		ellipses := PhratchTranslator ellipsesSuffix asUTF32.
+		ellipses := PhratchTranslator ellipsesSuffix.
 		1 to: n size do: [:i |
 			s := n copyFrom: 1 to: i.
-			w := nameMorph stringWidth: (s asUTF32, ellipses).
+			w := nameMorph stringWidth: (s, ellipses).
 			w > (self width - 3) ifTrue: [
-				^ (n copyFrom: 1 to: i - 1) asUTF32, ellipses]]].
+				^ (n copyFrom: 1 to: i - 1), ellipses]]].
 
 	^ target objName
 
@@ -493,10 +493,10 @@ LibraryItemMorph >> updateNameAndInfo [
 
 	| w y txt |
 
-	txt := ((target objName asUTF8, ' (' asUTF8, 'Scripts' localized, PhratchTranslator colonSuffix, ' ' asUTF8, target scripts size printString asUTF8,')' asUTF8) asUTF8).
+	txt := ((target objName, ' (', 'Scripts' localized, PhratchTranslator colonSuffix, ' ', target scripts size printString,')')).
 
 	target prototype ifNotNil: [
-		txt := (txt, ' kind of: ' asUTF8, target prototype objName asUTF8) asUTF8].
+		txt := (txt, ' kind of: ', target prototype objName)].
 
 	self
 		setProperty: #balloonText
