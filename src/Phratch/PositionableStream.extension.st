@@ -23,15 +23,6 @@ PositionableStream >> littleEndianUint16: anInteger [
 ]
 
 { #category : #'*Phratch-Extensions' }
-PositionableStream >> littleEndianUint24 [
-	"Answer the next unsigned, little-endian 24-bit integer from this (binary) stream."
-
-	| bytes |
-	bytes := self next: 3.
-	^ (bytes at: 1) + ((bytes at: 2) bitShift: 8) + ((bytes at: 3) bitShift: 16)
-]
-
-{ #category : #'*Phratch-Extensions' }
 PositionableStream >> littleEndianUint24: anInteger [
 	"Store the given unsigned, 24-bit integer on this (binary) stream least-significant byte first."
 

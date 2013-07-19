@@ -7,7 +7,7 @@ InputEventSensor >> clearKeystate [
 
 ]
 
-{ #category : #'*Phratch' }
+{ #category : #'*Phratch-Extensions' }
 InputEventSensor >> droppedFiles [
 	"Poll for a dropped file event. If there is such an event, answer an array containing the drop point followed by one or more FileStream's for the dropped files. Otherwise, answer the empty array."
 	"Note: File dropping does not work on versions of the Squeak VM before the DropPlugin and event primitive. This method can still be called, but it will always answer an empty array."
@@ -51,7 +51,7 @@ InputEventSensor >> fileDropPoint [
 
 ]
 
-{ #category : #'*Phratch' }
+{ #category : #'*Phratch-Extensions' }
 InputEventSensor >> keyPressed: asciiValue [
 	"Is this key being pressed down?
 	We assume that something else is processing events and therefore keyPressed it set."
@@ -66,7 +66,7 @@ InputEventSensor >> lastMousePosition [
 
 ]
 
-{ #category : #'*Phratch' }
+{ #category : #'*Phratch-Extensions' }
 InputEventSensor >> processEvent: evt [ 
 	"Process a single event. This method is run at high priority.
 	
@@ -122,7 +122,7 @@ InputEventSensor >> processEvent: evt [
 	
 ]
 
-{ #category : #'*Phratch' }
+{ #category : #'*Phratch-Extensions' }
 InputEventSensor >> processOSMenuEvents [
 ]
 
@@ -132,6 +132,6 @@ InputEventSensor >> rightButtonPressed [
 ^ self blueButtonPressed 
 ]
 
-{ #category : #'*Phratch' }
+{ #category : #'*Phratch-Extensions' }
 InputEventSensor >> useOSEvents: bool [
 ]

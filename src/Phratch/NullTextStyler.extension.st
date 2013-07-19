@@ -7,12 +7,6 @@ NullTextStyler >> attributesFor: aSymbol [
 ]
 
 { #category : #'*Phratch-Extensions' }
-NullTextStyler >> evaluateWithoutStyling: aBlock [
-	self deprecated: 'Not sent in 1.3'.
-	^ aBlock
-]
-
-{ #category : #'*Phratch-Extensions' }
 NullTextStyler >> monitor [
 	self deprecated: 'Not sent in 1.3'.
 	^Monitor new
@@ -44,12 +38,6 @@ NullTextStyler >> privateFormat: aText [
 NullTextStyler >> privateStyle: aText [
 	self deprecated: 'Not sent in 1.3'.
 	^aText
-]
-
-{ #category : #'*Phratch-Extensions' }
-NullTextStyler >> sourceMap: aSortedCollection [
-	self deprecated: 'Not sent in 1.3'.
-
 ]
 
 { #category : #'*Phratch-Extensions' }

@@ -53,7 +53,7 @@ StringMorph >> leftMargin [
 
 ]
 
-{ #category : #'*Phratch' }
+{ #category : #'*Phratch-Extensions' }
 StringMorph >> rightJustify:  ignored [
 ]
 

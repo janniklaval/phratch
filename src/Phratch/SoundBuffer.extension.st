@@ -1,6 +1,6 @@
 Extension { #name : #SoundBuffer }
 
-{ #category : #'*Phratch' }
+{ #category : #'*Phratch-Extensions' }
 SoundBuffer >> beginsWith: aCollection [
 	"Return true if I begin with the samples in the given collection (usually a SoundBuffer or Array)."
 

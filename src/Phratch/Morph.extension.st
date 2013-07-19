@@ -119,12 +119,6 @@ Morph >> isPartsBin [
 ]
 
 { #category : #'*Phratch-Extensions' }
-Morph >> isPartsDonor [
-
-	^ false
-]
-
-{ #category : #'*Phratch-Extensions' }
 Morph >> isPartsDonor: aBoolean [
 
 	^false
@@ -214,18 +208,6 @@ Morph >> rootForGrabOf: aMorph [
 					owner allowSubmorphExtraction
 						ifTrue: [^ self]
 						ifFalse: [^ owner rootForGrabOf: aMorph]]].
-
-]
-
-{ #category : #'*Phratch-Extensions' }
-Morph >> setFlag: maskInteger to: aBoolean [
-	"Set the given flag bit to the given boolean value (false = 0, true = 1). The maskInteger is assumed to be an integer with only as single bit set, the bit corresponding to the flag to be modified."
-	"Details: Morphs have a number of boolean properties that are most efficiently stored as a bit-vector packed into a single 31-bit Squeak SmallInteger."
-
-	| flags |
-	aBoolean
-		ifTrue: [flags := flags bitOr: maskInteger]
-		ifFalse: [flags := flags bitAnd: maskInteger bitInvert].
 
 ]
 

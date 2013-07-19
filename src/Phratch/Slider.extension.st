@@ -7,7 +7,7 @@ Slider >> fieldsVersion [
 
 ]
 
-{ #category : #'*Phratch' }
+{ #category : #'*Phratch-Extensions' }
 Slider >> hasMenuButton: ignored [
 ]
 
@@ -26,7 +26,7 @@ Slider >> initFieldsFrom: anObjStream version: classVersion [
 		)from: anObjStream
 ]
 
-{ #category : #'*Phratch' }
+{ #category : #'*Phratch-Extensions' }
 Slider >> setValueSelector: aSymbol [
 	"Directly set the selector to make more flexible."
 	

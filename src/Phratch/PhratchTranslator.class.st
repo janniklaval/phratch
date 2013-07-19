@@ -26,7 +26,7 @@ Class {
 		'TranslationDict',
 		'UITranslationSet'
 	],
-	#category : #'Phratch-Translation'
+	#category : #'Phratch-Objects'
 }
 
 { #category : #'language translation' }

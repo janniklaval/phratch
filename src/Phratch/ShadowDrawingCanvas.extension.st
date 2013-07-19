@@ -5,7 +5,7 @@ ShadowDrawingCanvas >> contentsOfArea: aRectangle into: aForm [
 	^myCanvas contentsOfArea: aRectangle into: aForm
 ]
 
-{ #category : #'*Phratch-extensions' }
+{ #category : #'*Phratch-Extensions' }
 ShadowDrawingCanvas >> copyClipRect: aRectangle [
 
 ^ myCanvas  copyClipRect: aRectangle

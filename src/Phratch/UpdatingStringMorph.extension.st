@@ -20,17 +20,17 @@ UpdatingStringMorph >> initFieldsFrom: anObjStream version: classVersion [
 		from: anObjStream
 ]
 
-{ #category : #'*Phratch' }
+{ #category : #'*Phratch-Extensions' }
 UpdatingStringMorph >> kern: ignored [
 ]
 
-{ #category : #'*Phratch' }
+{ #category : #'*Phratch-Extensions' }
 UpdatingStringMorph >> parameter [
 
 	^ self valueOfProperty: #scratchParameter
 ]
 
-{ #category : #'*Phratch' }
+{ #category : #'*Phratch-Extensions' }
 UpdatingStringMorph >> parameter: anObject [
 
 	self setProperty: #scratchParameter toValue: anObject

@@ -1,6 +1,6 @@
 Extension { #name : #SimpleButtonMorph }
 
-{ #category : #'*Phratch' }
+{ #category : #'*Phratch-Extensions' }
 SimpleButtonMorph >> drawToolTipAbove: ignored [
 ]
 

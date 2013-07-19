@@ -50,16 +50,6 @@ HandMorph >> nextUnclaimedKeystrokeOrNil [
 ]
 
 { #category : #'*Phratch-Extensions' }
-HandMorph >> recordUnclaimedKeystroke: evt [
-
-	self unclaimedKeystrokes ifNil: [self unclaimedKeystrokes: OrderedCollection new].
-	self unclaimedKeystrokes addLast: evt.
-	[self unclaimedKeystrokes size > 10] 
-		whileTrue: [self unclaimedKeystrokes removeFirst].  "keep only most recent N keystrokes"
-
-]
-
-{ #category : #'*Phratch-Extensions' }
 HandMorph >> rejectDropMorph: aMorph event: evt [
 	"aMorph has been rejected, and must be put back somewhere.  There are three cases:
 	(1)  It remembers its former owner and position, and goes right back there

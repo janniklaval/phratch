@@ -1,51 +1,6 @@
 Extension { #name : #MultiDisplayScanner }
 
 { #category : #'*Phratch-Extensions' }
-MultiDisplayScanner >> drawString: aString at: aPoint [
-	"Draw the given string."
-
-	destX := aPoint x asInteger.
-	destY := aPoint y asInteger.
-	self primScanCharactersFrom: 1 to: aString size in: aString
-		rightX: bitBlt clipX + bitBlt clipWidth + font maxWidth
-		stopConditions: stopConditions kern: kern.
-	font displayString: aString on: bitBlt from: 1 to: lastIndex at: aPoint kern: kern.
-	
-]
-
-{ #category : #'*Phratch-Extensions' }
-MultiDisplayScanner >> primScanCharactersFrom: startIndex to: stopIndex in: sourceString rightX: rightX stopConditions: stops kern: kernDelta [
-	"Primitive. This is the inner loop of text display--but see 
-	scanCharactersFrom: to:rightX: which would get the string, 
-	stopConditions and displaying from the instance. March through source 
-	String from startIndex to stopIndex. If any character is flagged with a 
-	non-nil entry in stops, then return the corresponding value. Determine 
-	width of each character from xTable, indexed by map. 
-	If dextX would exceed rightX, then return stops at: 258. 
-	Advance destX by the width of the character. If stopIndex has been
-	reached, then return stops at: 257. Optional. 
-	See Object documentation whatIsAPrimitive."
-	| ascii nextDestX char |
-	<primitive: 103>
-	lastIndex := startIndex.
-	[lastIndex <= stopIndex]
-		whileTrue: 
-			[char := (sourceString at: lastIndex).
-			ascii := char asciiValue + 1.
-			(stops at: ascii) == nil ifFalse: [^stops at: ascii].
-			"Note: The following is querying the font about the width
-			since the primitive may have failed due to a non-trivial
-			mapping of characters to glyphs or a non-existing xTable."
-			nextDestX := destX + (font widthOf: char).
-			nextDestX > rightX ifTrue: [^stops at: CrossedX].
-			destX := nextDestX + kernDelta.
-			lastIndex := lastIndex + 1].
-	lastIndex := stopIndex.
-	^stops at: EndOfRun
-
-]
-
-{ #category : #'*Phratch-Extensions' }
 MultiDisplayScanner classSide >> quickPrintOn: aForm box: aRectangle [
 	"Create an instance to print on the given form in the given rectangle."
 

@@ -7,7 +7,7 @@ True >> asNumberNoError [
 	^ 1
 ]
 
-{ #category : #'*Phratch' }
+{ #category : #'*Phratch-Extensions' }
 True >> checkBoxString [
 
 	^ '<yes>'

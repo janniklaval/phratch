@@ -1,6 +1,6 @@
 Extension { #name : #Number }
 
-{ #category : #'*Phratch' }
+{ #category : #'*Phratch-Extensions' }
 Number >> /\/ aNumber [
 
 	^ self / aNumber
@@ -13,7 +13,7 @@ Number >> asNumberNoError [
 
 ]
 
-{ #category : #'*Phratch' }
+{ #category : #'*Phratch-Extensions' }
 Number >> hhmmss [
 
 	^ self rounded hhmmss
@@ -25,14 +25,14 @@ Number >> isInf [
 	^false
 ]
 
-{ #category : #'*Phratch' }
+{ #category : #'*Phratch-Extensions' }
 Number >> localized [
 
 	^ self
 
 ]
 
-{ #category : #'*Phratch' }
+{ #category : #'*Phratch-Extensions' }
 Number >> printStringNoExponent [
 
 	^ self printString

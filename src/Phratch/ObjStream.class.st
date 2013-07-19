@@ -573,7 +573,7 @@ ObjStream >> getColor: anObject id: classID [
 	rgb := stream uint32.
 	(self classForID: classID) = TranslucentColor
 		ifTrue: [^ TranslucentColor basicNew setRgb: rgb alpha: stream next]
-		ifFalse: [^ Color basicNew setRgb: rgb].
+		ifFalse: [^ Color basicNew setRGB: rgb].
 
 ]
 
