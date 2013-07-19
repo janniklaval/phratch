@@ -8,14 +8,6 @@ Class {
 	#category : #'Phratch-Primitives-Plugins'
 }
 
-{ #category : #private }
-InterpreterPlugin class >> codeGeneratorClass [
-	"Answer the appropriate code generator class."
-
-	^ PluggableCodeGenerator
-
-]
-
 { #category : #translation }
 InterpreterPlugin class >> declareCVarsIn: aCCodeGenerator [
 	"Note: This method must be implemented by all subclasses to declare variables."

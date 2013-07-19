@@ -992,8 +992,6 @@ ObjStream >> readObjFrom: aStream showProgress: showProgress [
 					objects do: [:rec | self fixReferencesForObjectRecord: rec].
 					progressBar value: objCount + (tenPercent // 2).
 					objects do: [:rec | self initializeUserDefinedFields: rec].
-					self halt.
-
 					progressBar value: objCount + tenPercent.
 					(Delay forMilliseconds: 200) wait]]
 		ifFalse: [

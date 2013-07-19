@@ -78,7 +78,7 @@ ScriptablePhratchMorph class >> blockColorDict [
 ScriptablePhratchMorph class >> blockColorFor: aCategory [
 	"Answer the block color for the given category."
 
-	^(PhratchCategory allSubclasses detect:[:e | e label = aCategory]) color.
+	^(PhratchCategory allSubclasses detect:[:e | e label = aCategory] ifNone: [PhratchCategory]) color.
 
 ]
 
