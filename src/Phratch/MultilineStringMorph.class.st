@@ -800,7 +800,7 @@ MultilineStringMorph >> keyboardFocusChange: aBoolean [
 
 	self changed.
 
-	listwatcher := self ownerOrYourselfThatIsA: BYOBListWatcherMorph.
+	listwatcher := self ownerOrYourselfThatIsA: PhratchListMorph.
 	listwatcher ifNotNil: [
 		listwatcher updateList ].
 

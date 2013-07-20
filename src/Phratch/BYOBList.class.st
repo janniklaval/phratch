@@ -12,7 +12,7 @@ Class {
 BYOBList class >> purgeAll [
 	"for dev purposes only"
 
-	BYOBListWatcherMorph allInstancesDo: [:l | l delete].
+	PhratchListMorph allInstancesDo: [:l | l delete].
 	BYOBList allInstancesDo: [:l | l = nil].
 	Smalltalk garbageCollect
 
@@ -25,7 +25,7 @@ BYOBList class >> test [
 	| myList |
 	myList := BYOBList new.
 	3 timesRepeat: [
-		(BYOBListWatcherMorph on: myList) openInWorld; startStepping]
+		(PhratchListMorph on: myList) openInWorld; startStepping]
 ]
 
 { #category : #accessing }

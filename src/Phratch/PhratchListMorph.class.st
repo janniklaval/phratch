@@ -38,7 +38,10 @@ Class {
 		'highlightActive',
 		'lastActivityError',
 		'listLayoutNeeded',
-		'deleteMorph'
+		'deleteMorph',
+		'list',
+		'lastUpdated',
+		'isUpdating'
 	],
 	#category : #'Phratch-UI-Watchers'
 }
@@ -72,10 +75,9 @@ PhratchListMorph class >> deepCopyFrom: anArray from: start to: stop [
 ]
 
 { #category : #'instance creation' }
-PhratchListMorph class >> on: anArray [
-	^self on: anArray from: 1 to: anArray size
+PhratchListMorph class >> on: aBYOBList [
 
-
+	^ self new list: aBYOBList
 ]
 
 { #category : #'instance creation' }
@@ -103,6 +105,12 @@ PhratchListMorph class >> with: anObject [
 		insertLine: (ScriptablePhratchMorph new asListElement: anObject) at: 1
 	
 
+]
+
+{ #category : #'as yet unclassified' }
+PhratchListMorph >> = another [
+
+	^ self == another
 ]
 
 { #category : #'byob lambdas' }
@@ -505,6 +513,8 @@ PhratchListMorph >> deleteLineAt: aNumber [
 	self noteChangeAtIndex: index.
 	owner ifNil: [self step].
 
+	list deleteLineAt: aNumber.
+	lastUpdated := list lastChanged
 ]
 
 { #category : #'byob lambdas' }
@@ -606,7 +616,7 @@ PhratchListMorph >> focusCell: cellMorph [
 
 	focusIndex := cellMorphs indexOf: cellMorph ifAbsent: [1].
 	World activeHand newKeyboardFocus: cellMorph firstSubmorph.
-
+	lastUpdated := list lastChanged.
 ]
 
 { #category : #accessing }
@@ -629,7 +639,8 @@ PhratchListMorph >> focusIndex: anInteger [
 		(cell complexObject isKindOf: Morph) ifFalse: [
 			World activeHand newKeyboardFocus: cell firstSubmorph.
 			scrollPane scrollSubmorphIntoView: cell]].
-
+	lastUpdated := list lastChanged.
+	lastActivityIndex := anInteger
 ]
 
 { #category : #'byob lambdas' }
@@ -741,7 +752,9 @@ PhratchListMorph >> initialize [
 	self addScrollPane.
 
 	self extent: 65@115.
-
+	list := BYOBList new.
+	lastUpdated := list lastChanged.
+	isUpdating := false
 ]
 
 { #category : #'list ops' }
@@ -770,6 +783,8 @@ PhratchListMorph >> insertLine: aString at: aNumber [
 
 	self updateCountMorph.
 	self noteChangeAtIndex: index.
+	list insertLine: aString at: aNumber.
+	lastUpdated := list lastChanged.
 	^ newCell
 
 ]
@@ -844,6 +859,19 @@ PhratchListMorph >> lineCount [
 
 ]
 
+{ #category : #'dropping/grabbing' }
+PhratchListMorph >> list [
+	^ list
+]
+
+{ #category : #'dropping/grabbing' }
+PhratchListMorph >> list: aBYOBList [
+
+	list := aBYOBList.
+	self update
+
+]
+
 { #category : #accessing }
 PhratchListMorph >> listContents [
 
@@ -879,7 +907,7 @@ PhratchListMorph >> listOwner [
 PhratchListMorph >> mouseDown: evt [
 	"Handle a mouse click. Left button either drags or performs click action. Right button brings up a menu."
 
-	| p listOwner newList |
+	| p listOwner |
 
 	resizeOffset := nil.
 	evt hand toolType = 'CutTool' ifTrue: [
@@ -894,17 +922,11 @@ PhratchListMorph >> mouseDown: evt [
 		^ self insertLine: '' at: (self lineCount + 1)].
 
 	((addSublistMorph bounds expandBy: 2) containsPoint: p) ifTrue: [
-		newList := PhratchListMorph new 
-							listName: '' target: nil; 
-							updateCountMorph; 
-							startStepping;
-							yourself.
-		self insertLine: newList at: (self lineCount + 1).
-		^ newList fixLayout].
+		^ list insertLine: BYOBList new at: (self lineCount + 1)].
 
 	listOwner := self listOwner.
 	(((deleteMorph bounds expandBy: 2) containsPoint: p) and: [listOwner notNil]) ifTrue: [
-		^ listOwner deleteLineAt: (listOwner indexOf: self)].
+		^ listOwner deleteLineAt: (listOwner indexOf: self list)].
 
 	evt rightButtonPressed
 		ifTrue: [Sensor waitNoButton. ^ self rightButtonMenu]
@@ -997,6 +1019,10 @@ PhratchListMorph >> privateInsertLine: aString at: aNumber [
 			index > cellMorphs size
 				ifTrue: [cellMorphs addLast: newCell]
 				ifFalse: [cellMorphs add: newCell afterIndex: index - 1]].
+			
+	self updateCountMorph.
+
+	self updateContents.
 	^ newCell
 
 ]
@@ -1080,7 +1106,9 @@ PhratchListMorph >> setLineAt: aNumber to: newContents [
 			cell complexObject: obj ].
 
 	cell changed.
-	self noteChangeAtIndex: index
+	self noteChangeAtIndex: index.
+	list setLineAt: aNumber to: newContents.
+	lastUpdated := list lastChanged
 
 
 ]
@@ -1110,7 +1138,9 @@ PhratchListMorph >> showEmpty [
 
 { #category : #stepping }
 PhratchListMorph >> step [
-
+	lastUpdated = list lastChanged
+		ifTrue: [^ self].
+	self update.
 	self updateTitle.
 	self updateBorder.
 	self updateCountMorph.
@@ -1185,6 +1215,20 @@ PhratchListMorph >> target [
 
 	^ target
 
+]
+
+{ #category : #'list ops' }
+PhratchListMorph >> update [
+
+	isUpdating ifTrue: [^ self].
+	isUpdating := true.
+	self clear.
+	1 to: list size do: [:i |
+		self privateInsertLine: (list at: i) at: i].
+	self layoutChanged.
+	lastUpdated := list lastChanged.
+	isUpdating := false.
+		
 ]
 
 { #category : #stepping }
@@ -1431,6 +1475,12 @@ PhratchListMorph >> updateIndices: rightX [
 		num position: (rightX - num width) @ (cell top + ((cell height - num height) // 2))].
 
 
+]
+
+{ #category : #'list ops' }
+PhratchListMorph >> updateList [
+	list contents: self asArray asOrderedCollection.
+	lastUpdated := list lastChanged
 ]
 
 { #category : #stepping }

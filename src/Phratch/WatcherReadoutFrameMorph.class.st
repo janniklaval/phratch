@@ -32,7 +32,7 @@ WatcherReadoutFrameMorph >> complexObject: anObject [
 		^ self].
 
 	(anObject isKindOf: BYOBList) ifTrue: [
-		newListWatcher := BYOBListWatcherMorph new 
+		newListWatcher := PhratchListMorph new 
 							listName: '' target: nil; 
 							list: anObject; 
 							updateCountMorph; 
@@ -141,7 +141,7 @@ WatcherReadoutFrameMorph >> fixLayout [
 			^self layoutChanged ]
 
 		ifFalse: [
-			blist := submorphs detect: [:sm | sm isKindOf: BYOBListWatcherMorph] ifNone: [nil].
+			blist := submorphs detect: [:sm | sm isKindOf: PhratchListMorph] ifNone: [nil].
 			blist ifNotNil: [
 				readout extent: blist extent.
 				self extent: blist extent +( 10@10).

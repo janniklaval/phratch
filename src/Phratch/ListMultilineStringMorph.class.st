@@ -129,7 +129,7 @@ ListMultilineStringMorph >> list [
 	rf ifNotNil: [((rf complexObject isKindOf: PhratchListMorph) or: [
 		rf complexObject isKindOf: BYOBList])
 			ifTrue: [ (rf complexObject isKindOf: BYOBList)
-				ifTrue: [^ rf submorphs detect: [:sm | sm isKindOf: BYOBListWatcherMorph] ifNone: [nil]]
+				ifTrue: [^ rf submorphs detect: [:sm | sm isKindOf: PhratchListMorph] ifNone: [nil]]
 				ifFalse: [^ rf complexObject]]].
 	^ nil
 
