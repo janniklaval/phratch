@@ -1,30 +1,6 @@
 Extension { #name : #StrikeFont }
 
 { #category : #'*Phratch-Extensions' }
-StrikeFont class >> closestNameTo: aString [
-	"Answer the font name whose most similar to the given name."
-
-	| lcName closestMatch closestPrefixLength thisName n prefixLength |
-	lcName := aString asLowercase.
-	(self fontNames includes: #Verdana)
-		ifTrue: [closestMatch := #Verdana]
-		ifFalse: [closestMatch := StrikeFont allInstances first name].
-	closestPrefixLength := 0.
-	self fontNames do: [:fn |
-		thisName := fn asLowercase.
-		thisName = lcName ifTrue: [^ fn].
-		n := lcName size min: thisName size.
-		prefixLength := ((1 to: n) detect: [:i | (lcName at: i) ~= (thisName at: i)] ifNone: [n + 1]) - 1.
-		prefixLength > closestPrefixLength ifTrue: [
-			closestMatch := fn.
-			closestPrefixLength := prefixLength]].
-
-	^ closestMatch
-
-
-]
-
-{ #category : #'*Phratch-Extensions' }
 StrikeFont class >> fontName: aName size: aSize [ 
 
 	^ self familyName: aName size: aSize

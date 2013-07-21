@@ -33,7 +33,7 @@ Class {
 	#classVars : [
 		'Expanded'
 	],
-	#category : #'Phratch-BYOB'
+	#category : #'Phratch-UI-Dialogs'
 }
 
 { #category : #'class initialization' }

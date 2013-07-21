@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'labelFragment'
 	],
-	#category : #'Phratch-BYOB'
+	#category : #'Phratch-UI-Support'
 }
 
 { #category : #'as yet unclassified' }

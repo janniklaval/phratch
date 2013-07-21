@@ -17,7 +17,7 @@ Class {
 		'userSpec',
 		'type'
 	],
-	#category : #'Phratch-BYOB'
+	#category : #'Phratch-UI-Dialogs'
 }
 
 { #category : #'instance creation' }

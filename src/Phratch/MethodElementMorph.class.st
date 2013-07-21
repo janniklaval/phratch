@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'header'
 	],
-	#category : #'Phratch-BYOB-Elements'
+	#category : #'Phratch-UI-Elements'
 }
 
 { #category : #'as yet unclassified' }

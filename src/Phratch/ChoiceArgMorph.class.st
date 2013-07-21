@@ -213,7 +213,7 @@ ChoiceArgMorph >> initialize [
 
 ]
 
-{ #category : #'*Phratch-BYOB' }
+{ #category : #byob }
 ChoiceArgMorph >> isEmptySlot [
 	^choice size = 0
 ]

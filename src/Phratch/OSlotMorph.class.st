@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'implicitValue'
 	],
-	#category : #'Phratch-BYOB'
+	#category : #'Phratch-Blocks'
 }
 
 { #category : #'argument slot behavior' }

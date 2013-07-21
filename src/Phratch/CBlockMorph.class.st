@@ -413,7 +413,7 @@ CBlockMorph >> initialize [
 
 ]
 
-{ #category : #'*Phratch-BYOB-ddddd-ddddd' }
+{ #category : #private }
 CBlockMorph >> isCShape [
 
 	^ true
@@ -431,7 +431,7 @@ CBlockMorph >> nestedBlockAt: aPoint [
 
 ]
 
-{ #category : #'*Phratch-BYOB-ddddd-ddddd' }
+{ #category : #private }
 CBlockMorph >> nests: aCommandBlock [
 
 	(nestedBlock isKindOf: BlockMorph) 
@@ -501,7 +501,7 @@ CBlockMorph >> stretchHeight: aNumber [
 
 ]
 
-{ #category : #'*Phratch-BYOB-ddddd-ddddd' }
+{ #category : #private }
 CBlockMorph >> tabFields [
 
 	| nst nstfields fields nxt nxtFields |

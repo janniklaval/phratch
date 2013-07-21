@@ -75,7 +75,7 @@ AttributeArgMorph >> drawOn: aCanvas [
 			aCanvas paintImage: (target lambda: choice) imageForm at: self position + (1@1) ]
 ]
 
-{ #category : #'*Phratch-BYOB-ddddd-ddddd-ddddd-ddddd' }
+{ #category : #byob }
 AttributeArgMorph >> isBYOBattributeArg [
 	^ (owner isKindOf: CommandBlockMorph) and:
 	 [#(attribute:of: get: set:to:) includes: owner selector]
@@ -105,7 +105,7 @@ AttributeArgMorph >> options [
 
 ]
 
-{ #category : #'*Phratch-BYOB-ddddd-ddddd-ddddd-ddddd' }
+{ #category : #byob }
 AttributeArgMorph >> presentAttributesMenu [
 	"Pop up a menu of built-in choices for every sprite/stage object."
 
@@ -187,7 +187,7 @@ AttributeArgMorph >> presentMenu [
 	menu popUpInWorld
 ]
 
-{ #category : #'*Phratch-BYOB-ddddd-ddddd-ddddd-ddddd' }
+{ #category : #byob }
 AttributeArgMorph >> presentUniversalAttributesMenu [
 	"Pop up a menu of built-in choices for every sprite/stage object."
 
@@ -228,7 +228,7 @@ AttributeArgMorph >> presentUniversalAttributesMenu [
 	menu popUpInWorld
 ]
 
-{ #category : #'*Phratch-BYOB-ddddd-ddddd-ddddd-ddddd' }
+{ #category : #byob }
 AttributeArgMorph >> refresh [
 	self choice: choice
 ]
@@ -247,7 +247,7 @@ AttributeArgMorph >> target [
 
 ]
 
-{ #category : #'*Phratch-BYOB-ddddd-ddddd-ddddd-ddddd' }
+{ #category : #byob }
 AttributeArgMorph >> universalAttributeChoice: aSymbol [
 	"Update the toggle button when an argument is changed within a block."
 

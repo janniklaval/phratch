@@ -1,7 +1,7 @@
 Class {
 	#name : #PredicateArgMorph,
 	#superclass : #BooleanArgMorph,
-	#category : #'Phratch-BYOB'
+	#category : #'Phratch-Blocks'
 }
 
 { #category : #drawing }

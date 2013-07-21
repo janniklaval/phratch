@@ -6,7 +6,7 @@ Class {
 		'feedbackMorph',
 		'lambdaMorph'
 	],
-	#category : #'Phratch-BYOB'
+	#category : #'Phratch-Blocks'
 }
 
 { #category : #'as yet unclassified' }

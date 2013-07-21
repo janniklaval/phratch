@@ -1,7 +1,7 @@
 Class {
 	#name : #ReporterScriptBlockMorph,
 	#superclass : #LambdaBlockMorph,
-	#category : #'Phratch-BYOB'
+	#category : #'Phratch-Blocks'
 }
 
 { #category : #'as yet unclassified' }

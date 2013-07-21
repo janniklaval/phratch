@@ -47,14 +47,6 @@ SerialPort2 >> flushInputBuffer [
 
 ]
 
-{ #category : #options }
-SerialPort2 >> getOption: optionNum [
-	"Answer the current setting of the given option."
-
-	^ PhratchPlugin port: portNum getOption: optionNum.
-
-]
-
 { #category : #'open/close' }
 SerialPort2 >> isOpen [
 	"Answer true if this serial port is open."

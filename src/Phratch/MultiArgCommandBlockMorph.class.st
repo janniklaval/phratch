@@ -7,7 +7,7 @@ Class {
 		'minArgs',
 		'maxArgs'
 	],
-	#category : #'Phratch-BYOB'
+	#category : #'Phratch-Blocks'
 }
 
 { #category : #'as yet unclassified' }

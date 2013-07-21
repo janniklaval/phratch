@@ -16,7 +16,7 @@ Class {
 		'UserPos',
 		'UserSize'
 	],
-	#category : #'Phratch-BYOB'
+	#category : #'Phratch-UI-Dialogs'
 }
 
 { #category : #'as yet unclassified' }

@@ -70,6 +70,14 @@ MessageSocket >> connectTo: serverAddress port: serverPortNumber waitSecs: waitS
 	^ socket notNil
 ]
 
+{ #category : #'as yet unclassified' }
+MessageSocket >> deadlineSecs: secs [
+	"Return a deadline time the given number of seconds from now."
+
+	^ Time millisecondClockValue + (secs * 1000)
+
+]
+
 { #category : #connection }
 MessageSocket >> destroy [
 	"Destroy my socket, breaking the connection. Do nothing if it the socket is nil."
@@ -254,7 +262,7 @@ MessageSocket >> request: aByteArrayOrString [
 		sending := self sendData.
 		reply := self nextMessage.
 		reply ifNotNil: [^ reply].
-		sending ifFalse: [socket waitForDataUntil: (Socket deadlineSecs: 1)]].
+		sending ifFalse: [socket waitForDataUntil: (self deadlineSecs: 1)]].
 
 	"connection was broken"
 	self destroy.  "close my end"
@@ -273,7 +281,7 @@ MessageSocket >> request: aByteArrayOrString timeoutSecs: timeoutSecs [
 		sending := self sendData.
 		reply := self nextMessage.
 		reply ifNotNil: [^ reply].
-		sending ifFalse: [socket waitForDataUntil: (Socket deadlineSecs: 1)]].
+		sending ifFalse: [socket waitForDataUntil: (self deadlineSecs: 1)]].
 	^ nil  "timeout or broken connection"
 
 ]
@@ -289,7 +297,7 @@ MessageSocket >> request: aByteArrayOrString withStream: aPositionableStream [
 		sending := self sendData.
 		reply := self nextMessage.
 		reply ifNotNil: [^ reply].
-		sending ifFalse: [socket waitForDataUntil: (Socket deadlineSecs: 1)]].
+		sending ifFalse: [socket waitForDataUntil: (self deadlineSecs: 1)]].
 
 	"connection was broken"
 	self destroy.  "close my end"
@@ -311,7 +319,7 @@ MessageSocket >> sendData [
 
 	| buf n msg |
  	(socket notNil and: [socket isConnected]) ifFalse: [^ false].
-	socket waitForSendDoneUntil: (Socket deadlineSecs: 1).
+	socket waitForSendDoneUntil: (self deadlineSecs: 1).
 
 	outBuf ifNil: [  "not currently sending"
 		outgoingMessages size = 0 ifTrue: [^ false].  "no more message to send"
@@ -379,6 +387,6 @@ MessageSocket >> socket [
 MessageSocket >> waitForData [
 	"Wait a little while for data to arrive. Return when data arrives or when the deadline time is reached, whichever comes first. Calling this allows other threads to run while this thread is waiting for data."
 
-	^ socket waitForDataUntil: (Socket deadlineSecs: 1)
+	^ socket waitForDataUntil: (self deadlineSecs: 1)
 
 ]

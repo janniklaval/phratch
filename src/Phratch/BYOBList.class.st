@@ -5,7 +5,7 @@ Class {
 		'contents',
 		'lastChanged'
 	],
-	#category : #'Phratch-BYOB'
+	#category : #'Phratch-Objects'
 }
 
 { #category : #demo }

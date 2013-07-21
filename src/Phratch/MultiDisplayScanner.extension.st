@@ -1,18 +1,17 @@
 Extension { #name : #MultiDisplayScanner }
 
 { #category : #'*Phratch-Extensions' }
-MultiDisplayScanner classSide >> quickPrintOn: aForm box: aRectangle [
-	"Create an instance to print on the given form in the given rectangle."
-
-	^(super new) quickPrintOn: aForm box: aRectangle font: self defaultFont color: Color black
-
-]
-
-{ #category : #'*Phratch-Extensions' }
 MultiDisplayScanner classSide >> quickPrintOn: aForm box: aRectangle font: aStrikeFont [
 	"Create an instance to print on the given form in the given rectangle."
 
 	^(super new) quickPrintOn: aForm box: aRectangle font: aStrikeFont color: Color black
+]
+
+{ #category : #'*Phratch-Extensions' }
+MultiDisplayScanner classSide >> quickPrintOn: aForm box: aRectangle font: aStrikeFont color: textColor [
+	"Create an instance to print on the given form in the given rectangle."
+
+	^ (super new) quickPrintOn: aForm box: aRectangle font: aStrikeFont color: textColor
 ]
 
 { #category : #'*Phratch-Extensions' }
@@ -31,13 +30,6 @@ MultiDisplayScanner >> quickPrintOn: aForm box: aRectangle font: aStrikeFont col
 	bitBlt colorMap: (Bitmap with: 0      "Assumes 1-bit deep fonts"
 						with: (textColor pixelValueForDepth: bitBlt destForm depth)).
 	bitBlt clipRect: aRectangle.
-]
-
-{ #category : #'*Phratch-Extensions' }
-MultiDisplayScanner classSide >> quickPrintOn: aForm box: aRectangle font: aStrikeFont color: textColor [
-	"Create an instance to print on the given form in the given rectangle."
-
-	^ (super new) quickPrintOn: aForm box: aRectangle font: aStrikeFont color: textColor
 ]
 
 { #category : #'*Phratch-Extensions' }

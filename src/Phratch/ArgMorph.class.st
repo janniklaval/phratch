@@ -15,7 +15,7 @@ Class {
 	#category : #'Phratch-Blocks'
 }
 
-{ #category : #'*Phratch-BYOB-see-ddddd lambdas' }
+{ #category : #'class initialization' }
 ArgMorph class >> dropDownMenuForm [
 	^DropDownMenuForm
 ]
@@ -44,7 +44,7 @@ ArgMorph >> acceptsDroppedReporters [
 
 ]
 
-{ #category : #'*Phratch-BYOB-ddddd-ddddd-ddddd' }
+{ #category : #byob }
 ArgMorph >> acceptsTypeOf: aBlockMorph [
 	"Answer true if I can accept a dropped reporter of the given type. Answer false by default."
 
@@ -52,7 +52,7 @@ ArgMorph >> acceptsTypeOf: aBlockMorph [
 
 ]
 
-{ #category : #'*Phratch-BYOB-ddddd-ddddd-ddddd' }
+{ #category : #byob }
 ArgMorph >> defaultValue [
 
 	| def pos pname val |
@@ -95,12 +95,12 @@ ArgMorph >> fixArgLayout [
 	"Fix my layout. This default implementation does nothing."
 ]
 
-{ #category : #'*Phratch-BYOB-ddddd-ddddd-ddddd' }
+{ #category : #byob }
 ArgMorph >> implicitValue [
 	^ implicitValue
 ]
 
-{ #category : #'*Phratch-BYOB-ddddd-ddddd-ddddd' }
+{ #category : #byob }
 ArgMorph >> implicitValue: anObject [
 	implicitValue := anObject
 ]
@@ -131,7 +131,7 @@ ArgMorph >> isBlockMorph [
 
 ]
 
-{ #category : #'*Phratch-BYOB-ddddd-ddddd-ddddd' }
+{ #category : #byob }
 ArgMorph >> isEmptySlot [
 	^true
 ]

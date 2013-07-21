@@ -5,7 +5,7 @@ VariableDeclarationBlockMorph new commandSpec: 'local variables'; color: Scratch
 Class {
 	#name : #VariableDeclarationBlockMorph,
 	#superclass : #MultiArgCommandBlockMorph,
-	#category : #'Phratch-BYOB'
+	#category : #'Phratch-Blocks'
 }
 
 { #category : #'as yet unclassified' }

@@ -9,7 +9,7 @@ Class {
 		'declarations',
 		'isAtomic'
 	],
-	#category : #'Phratch-BYOB'
+	#category : #'Phratch-Blocks'
 }
 
 { #category : #'as yet unclassified' }

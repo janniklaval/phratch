@@ -14,7 +14,7 @@ Class {
 		'contentsChanged',
 		'growthFraction'
 	],
-	#category : #'Phratch-BYOB-Elements-UI'
+	#category : #'Phratch-UI-Support'
 }
 
 { #category : #accessing }

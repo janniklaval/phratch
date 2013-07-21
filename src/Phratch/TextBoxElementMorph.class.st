@@ -21,7 +21,7 @@ Class {
 		'dragStartIndex',
 		'isEditable'
 	],
-	#category : #'Phratch-BYOB-Elements'
+	#category : #'Phratch-UI-Elements'
 }
 
 { #category : #'as yet unclassified' }

@@ -5,7 +5,7 @@ Class {
 		'target',
 		'selector'
 	],
-	#category : #'Phratch-BYOB-Elements-UI'
+	#category : #'Phratch-UI-Support'
 }
 
 { #category : #'as yet unclassified' }

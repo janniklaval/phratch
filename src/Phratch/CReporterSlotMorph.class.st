@@ -5,7 +5,7 @@ Class {
 		'topBarBottom',
 		'blockBottom'
 	],
-	#category : #'Phratch-BYOB'
+	#category : #'Phratch-Blocks'
 }
 
 { #category : #drawing }

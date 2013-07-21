@@ -1,7 +1,7 @@
 Class {
 	#name : #StepHolderElementMorph,
 	#superclass : #ArgumentElementMorph,
-	#category : #'Phratch-BYOB-Elements'
+	#category : #'Phratch-UI-Elements'
 }
 
 { #category : #'as yet unclassified' }

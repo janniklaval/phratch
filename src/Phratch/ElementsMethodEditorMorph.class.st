@@ -17,7 +17,7 @@ Class {
 		'WarnIfNoChangesFile',
 		'WarnIfNoSourcesFile'
 	],
-	#category : #'Phratch-BYOB-Elements-UI'
+	#category : #'Phratch-UI-Support'
 }
 
 { #category : #accessing }

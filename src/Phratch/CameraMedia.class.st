@@ -15,12 +15,7 @@ Class {
 CameraMedia >> colorTrackStep [
 
 	| p |
-	p := VideoSensorPlugin
-		trackColorIn: frameForm bits
-		width: frameForm width
-		rgb: PhratchFrameMorph colorToTrack asPackedRGB
-		threshold: 50.
-	p ifNil: [p := frameForm extent // 2].
+	p := frameForm extent // 2.
 
 	frameForm fill: (p - (15@3) extent: 30@6) fillColor: Color yellow.
 	frameForm fill: (p - (3@15) extent: 6@30) fillColor: Color yellow.
@@ -149,12 +144,12 @@ CameraMedia >> motionStep [
 		historyForm colors:
 			(Array with: Color transparent), (Array new: 255 withAll: Color blue)].
 
-	VideoSensorPlugin
+	"VideoSensorPlugin
 		motionHistoryMap: frameForm bits
 		and: prevFrameForm
 		bits to: historyForm bits
 		threshold: 40
-		historyCount: 4.
+		historyCount: 4."
 
 	prevFrameForm bits: frameForm bits copy.  "optimization"
 	historyForm displayOn: frameForm at: 0@0 rule: Form paint.

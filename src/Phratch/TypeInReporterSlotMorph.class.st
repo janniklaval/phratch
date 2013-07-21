@@ -1,7 +1,7 @@
 Class {
 	#name : #TypeInReporterSlotMorph,
 	#superclass : #OSlotMorph,
-	#category : #'Phratch-BYOB'
+	#category : #'Phratch-Blocks'
 }
 
 { #category : #'as yet unclassified' }

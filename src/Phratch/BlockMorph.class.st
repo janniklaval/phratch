@@ -152,7 +152,7 @@ BlockMorph >> acceptsTypeOf: aBlockMorph [
 
 ]
 
-{ #category : #'*Phratch-BYOB-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd lambdas' }
+{ #category : #byob }
 BlockMorph >> addAreasOf: outerRect outside: innerRect color: col to: coll [
 
 	coll addAll: (((outerRect areasOutside: innerRect) 
@@ -172,7 +172,7 @@ BlockMorph >> addCopyTooltip: aMorph [
 
 ]
 
-{ #category : #'*Phratch-BYOB-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd lambdas' }
+{ #category : #byob }
 BlockMorph >> addHLineFrom: startX to: endX y: yOffset color: c to: coll [
 
 	| y |
@@ -182,7 +182,7 @@ BlockMorph >> addHLineFrom: startX to: endX y: yOffset color: c to: coll [
 				with: c)
 ]
 
-{ #category : #'*Phratch-BYOB-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd lambdas' }
+{ #category : #byob }
 BlockMorph >> addPoint: aPoint color: c to: coll [
 
 	coll add: (Array 
@@ -439,7 +439,7 @@ BlockMorph >> computeHighlightColors [
 
 ]
 
-{ #category : #'*Phratch-BYOB-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd lambdas' }
+{ #category : #byob }
 BlockMorph >> contrastColor [
 
 	| ob |
@@ -501,7 +501,7 @@ BlockMorph >> delete [
 
 ]
 
-{ #category : #'*Phratch-BYOB-ddddd-ddddd-ddddd-ddddd OOP' }
+{ #category : #byob }
 BlockMorph >> disinheritAttribute [
 
 	| sel rcv oi |
@@ -603,7 +603,7 @@ BlockMorph >> drawHLineFrom: startX to: endX y: yOffset color: c on: aCanvas [
 
 ]
 
-{ #category : #'*Phratch-BYOB-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd lambdas' }
+{ #category : #byob }
 BlockMorph >> drawInlinePaletteOn: aCanvas [
 	^self
 ]
@@ -741,7 +741,7 @@ BlockMorph >> duplicate [
 
 ]
 
-{ #category : #'*Phratch-BYOB-ddddd-ddddd-ddddd-ddddd fast copying' }
+{ #category : #byob }
 BlockMorph >> fastCopy [
 
 	"copies only the receiver without the nextBlock and its parts"
@@ -753,7 +753,7 @@ BlockMorph >> fastCopy [
 	^ new	
 ]
 
-{ #category : #'*Phratch-BYOB-ddddd-ddddd-ddddd-ddddd fast copying' }
+{ #category : #byob }
 BlockMorph >> fastCopyRecordingIn: dict [
 
 	"copies just the receiver withoug the nextBlock and its parts"
@@ -772,7 +772,7 @@ BlockMorph >> fastCopyRecordingIn: dict [
 
 ]
 
-{ #category : #'*Phratch-BYOB-ddddd-ddddd-ddddd-ddddd fast copying' }
+{ #category : #byob }
 BlockMorph >> fastDuplicate [
 
 	"for debugging"
@@ -1013,7 +1013,7 @@ BlockMorph >> helpScreenName [
 
 ]
 
-{ #category : #'*Phratch-BYOB-ddddd-ddddd-ddddd-ddddd OOP' }
+{ #category : #byob }
 BlockMorph >> inheritAttribute [
 
 	| sel rcv oi |
@@ -1086,7 +1086,7 @@ BlockMorph >> isBlockMorph [
 
 ]
 
-{ #category : #'*Phratch-BYOB-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd lambdas' }
+{ #category : #byob }
 BlockMorph >> isBlockTemplate [
 
 	^ (self rootForGrabOf: self) ~= self
@@ -1100,28 +1100,28 @@ BlockMorph >> isBooleanReporter [
 
 ]
 
-{ #category : #'*Phratch-BYOB-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd lambdas' }
+{ #category : #byob }
 BlockMorph >> isCShape [
 
 	^ false
 ]
 
-{ #category : #'*Phratch-BYOB-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd lambdas' }
+{ #category : #byob }
 BlockMorph >> isContrasted [
 	^isContrasted ifNil: [isContrasted := false]
 ]
 
-{ #category : #'*Phratch-BYOB-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd lambdas' }
+{ #category : #byob }
 BlockMorph >> isContrasted: bool [
 	isContrasted := bool
 ]
 
-{ #category : #'*Phratch-BYOB-ddddd-ddddd-ddddd-ddddd OOP' }
+{ #category : #byob }
 BlockMorph >> isCustomBlock [
 	^false
 ]
 
-{ #category : #'*Phratch-BYOB-ddddd-ddddd-ddddd-ddddd OOP' }
+{ #category : #byob }
 BlockMorph >> isDeletedAttribute [
 
 	| sel rcv oi |
@@ -1168,7 +1168,7 @@ BlockMorph >> isHatBlock [
 
 ]
 
-{ #category : #'*Phratch-BYOB-ddddd-ddddd-ddddd-ddddd OOP' }
+{ #category : #byob }
 BlockMorph >> isInheritableAttribute [
 	"indicate if my context menu lets me delete my attribute"
 
@@ -1192,12 +1192,12 @@ BlockMorph >> isInheritableAttribute [
 	^ false
 ]
 
-{ #category : #'*Phratch-BYOB-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd lambdas' }
+{ #category : #byob }
 BlockMorph >> isLambdaForm [
 	^false
 ]
 
-{ #category : #'*Phratch-BYOB-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd lambdas' }
+{ #category : #byob }
 BlockMorph >> isNestedCShape [
 
 	^ self outerLoop notNil
@@ -1395,7 +1395,7 @@ BlockMorph >> mouseHold: evt [
 
 ]
 
-{ #category : #'*Phratch-BYOB-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd lambdas' }
+{ #category : #byob }
 BlockMorph >> nests: aBlock [
 	^ false
 ]
@@ -1494,7 +1494,7 @@ BlockMorph >> nonControlFlowSubmorphs [
 
 ]
 
-{ #category : #'*Phratch-BYOB-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd lambdas' }
+{ #category : #byob }
 BlockMorph >> outerLoop [
 
 	| all |
@@ -1503,7 +1503,7 @@ BlockMorph >> outerLoop [
 	^ all detect: [:o | o nests: self] ifNone: [nil]
 ]
 
-{ #category : #'*Phratch-BYOB-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd lambdas' }
+{ #category : #byob }
 BlockMorph >> pauseProcess [
 	"Called on the top block of a running stack when all processes are stopped."
 
@@ -1567,13 +1567,13 @@ BlockMorph >> printCodeSubmorph: aMorph on: aStream [
 
 ]
 
-{ #category : #'*Phratch-BYOB-ddddd-ddddd-ddddd-ddddd fast copying' }
+{ #category : #byob }
 BlockMorph >> privateProperties: collectionOfProperties [
 
 	self setProperty: #properties toValue: collectionOfProperties
 ]
 
-{ #category : #'*Phratch-BYOB-ddddd-ddddd-ddddd-ddddd fast copying' }
+{ #category : #byob }
 BlockMorph >> properties [
 	self valueOfProperty: #properties
 ]
@@ -1592,7 +1592,7 @@ BlockMorph >> receiver: anObject [
 
 ]
 
-{ #category : #'*Phratch-BYOB-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd lambdas' }
+{ #category : #byob }
 BlockMorph >> refreshAttributeArgs [
 
 	self allMorphsDo: [:m |
@@ -1614,7 +1614,7 @@ BlockMorph >> removeCopyTooltip [
 
 ]
 
-{ #category : #'*Phratch-BYOB-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd-ddddd lambdas' }
+{ #category : #byob }
 BlockMorph >> resumeProcess [
 	"Called on the top block of a running stack when all processes are stopped."
 

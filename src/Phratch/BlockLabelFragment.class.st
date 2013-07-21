@@ -8,7 +8,7 @@ Class {
 		'default',
 		'isDeleted'
 	],
-	#category : #'Phratch-BYOB'
+	#category : #'Phratch-UI-Support'
 }
 
 { #category : #'as yet unclassified' }

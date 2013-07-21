@@ -1,13 +1,5 @@
 Extension { #name : #Socket }
 
-{ #category : #'*Phratch-extensions' }
-Socket class >> deadlineSecs: secs [
-	"Return a deadline time the given number of seconds from now."
-
-	^ Time millisecondClockValue + (secs * 1000)
-
-]
-
 { #category : #'*Phratch-Extensions' }
 Socket >> readInto: aStringOrByteArray startingAt: aNumber [
 	"Read data into the given buffer starting at the given index and return the number of bytes received. Note the given buffer may be only partially filled by the received data. If no data is available, do nothing and return zero."
