@@ -120,25 +120,10 @@ PhratchTranslator class >> currentLanguage [
 PhratchTranslator class >> detectRenderPlugin [
 	"Determine which plugin is available for rendering Unicode."
 	"self detectRenderPlugin"
-
-	| hasPlugin |
 	RenderPlugin := nil.
 
 	RenderCenterOffsetCache := IdentityDictionary new.
 	RenderVerticalTrimCache := IdentityDictionary new.
-
-	"first try the Uniscribe plugin"
-	hasPlugin := true.
-	"[UnicodePlugin primMeasureString: 'test'] ifError: [hasPlugin := false].
-	hasPlugin ifTrue: [RenderPlugin := UnicodePlugin. ^ self]."
-
-	"then try the Pango plugin"
-	"hasPlugin := true.
-	[PangoPlugin2 primMeasureString: 'test'] ifError: ["hasPlugin := false"].
-	hasPlugin ifTrue: [RenderPlugin := PangoPlugin2. ^ self]".
-
-	"if we get here, we don't have a Unicode rendering plugin"
-	RenderPlugin := nil.
 
 ]
 
@@ -496,9 +481,9 @@ PhratchTranslator class >> guessLanguage [
 	"PhratchTranslator guessLanguage"
 
 	| lang country myLocale |
-	(lang := self primLanguage) ifNil: [^ 'en'].
+	(lang := Locale current primLanguage) ifNil: [^ 'en'].
 	lang size > 2 ifTrue: [lang := lang copyFrom: 1 to: 2].
-	country := self primCountry ifNil: [^ lang].
+	country := Locale current primCountry ifNil: [^ lang].
 	country size > 2 ifTrue: [country := country copyFrom: 1 to: 2].
 
 	"first try lang + country:"
@@ -729,26 +714,6 @@ PhratchTranslator class >> parseTranslationLines: lineStream [
 						lineStream atEnd ifTrue: [^ result]]]]].
 
 	^ result
-
-]
-
-{ #category : #locale }
-PhratchTranslator class >> primCountry [
-	"Return a string with ISO 639 country tag for this system, or nil if the primitive fails."
-	"self primCountry"
-
-	<primitive: 'primitiveCountry' module: 'LocalePlugin'>
-	^ nil
-
-]
-
-{ #category : #locale }
-PhratchTranslator class >> primLanguage [
-	"Return a string with ISO 639 language tag for this system, or nil if the primitive fails."
-	"self primLanguage"
-
-	<primitive:'primitiveLanguage' module: 'LocalePlugin'>
-	^ nil
 
 ]
 

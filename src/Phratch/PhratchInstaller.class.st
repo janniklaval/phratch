@@ -121,10 +121,8 @@ PhratchInstaller class >> gotPhratchMedia [
 { #category : #'as yet unclassified' }
 PhratchInstaller class >> gotPhratchPlugins [
 	^ (self pluginsPath /  'CameraPlugin') exists
-		& (self pluginsPath / 'LocalePlugin') exists
 		& (self pluginsPath /  'mpeg3Plugin') exists
 		& (self pluginsPath / 'ScratchPlugin') exists
-		& (self pluginsPath / 'UnicodePlugin') exists
 ]
 
 { #category : #'as yet unclassified' }
