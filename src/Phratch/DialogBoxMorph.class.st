@@ -221,7 +221,7 @@ DialogBoxMorph >> buttonLabel: labelString action: actionSelector [
 	offForm := PhratchFrameMorph skinAt: #dialogButtonFrame.
 	overForm := PhratchFrameMorph skinAt: #dialogButtonFrame.
 
-	button := ResizableToggleButton2 new
+	button := ResizableToggleButton new
 		offForm: offForm
 		onForm: onForm
 		overForm: overForm.
@@ -239,7 +239,7 @@ DialogBoxMorph >> buttonLabel: labelString action: actionSelector [
 DialogBoxMorph >> buttons [
 
 	^ buttonRow submorphs select: [:m |
-		m isKindOf: ResizableToggleButton2].
+		m isKindOf: ResizableToggleButton].
 
 ]
 
@@ -308,7 +308,7 @@ DialogBoxMorph >> enterKeyPressed: evt [
 	"Respond to the enter key being pressed in one of my input fields or on one of my buttons."
 
 	"if a button has focus, do that button"
-	(evt hand keyboardFocus isKindOf: ResizableToggleButton2) ifTrue: [
+	(evt hand keyboardFocus isKindOf: ResizableToggleButton) ifTrue: [
 		evt hand keyboardFocus doButtonAction.
 		^ self].
 
@@ -592,7 +592,7 @@ DialogBoxMorph >> shortcutButtonLabel: labelString action: actionSelector icon: 
 	offForm := PhratchFrameMorph skinAt: #dialogButtonFrame.
 	overForm := PhratchFrameMorph skinAt: #dialogButtonFrameOver.
 
-	button := ResizableToggleButton2 new
+	button := ResizableToggleButton new
 		offForm: offForm
 		onForm: onForm.
 
@@ -693,7 +693,7 @@ DialogBoxMorph >> withButtonsForYes: yesFlag no: noFlag okay: okayFlag cancel: c
 		buttonRow addMorphBack: spacer fullCopy].
 
 	buttonRow submorphs do: [:b |
-		(b isKindOf: ResizableToggleButton2) ifTrue: [tabFields add: b]].
+		(b isKindOf: ResizableToggleButton) ifTrue: [tabFields add: b]].
 
 ]
 
@@ -729,7 +729,7 @@ DialogBoxMorph >> withButtonsForYes: yesFlag no: noFlag okay: okayFlag delete: d
 		buttonRow addMorphBack: spacer fullCopy].
 
 	buttonRow submorphs do: [:b |
-		(b isKindOf: ResizableToggleButton2) ifTrue: [tabFields add: b]].
+		(b isKindOf: ResizableToggleButton) ifTrue: [tabFields add: b]].
 
 ]
 

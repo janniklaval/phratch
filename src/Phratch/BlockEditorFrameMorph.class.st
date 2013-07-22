@@ -295,7 +295,7 @@ BlockEditorFrameMorph >> initialize [
 
 	container := Morph new 	color: Color transparent.
 
-	sl := ScrollFrameMorph2 new
+	sl := ScrollFrameMorph new
 		growthFraction: 0.0;
 		color: PhratchFrameMorph scriptsPaneColor.
 

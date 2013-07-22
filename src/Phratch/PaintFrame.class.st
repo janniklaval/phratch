@@ -88,7 +88,7 @@ PaintFrame >> addButtons [
 	b setProperty: #balloonText toValue: 'Import an image on top of your current canvas' localized.
 	fileButtons addMorphBack: b.
 
-	b := ResizableToggleButton2 new
+	b := ResizableToggleButton new
 		offForm: (PhratchFrameMorph skinAt: #paintUtilityButton)
 			onForm: (PhratchFrameMorph skinAt: #paintUtilityButtonPressed);
 		label: 'Clear' localized font: (PhratchFrameMorph getFont: #PaintUtilityButton);
@@ -434,7 +434,7 @@ PaintFrame >> makeButtonLabel: aString selector: sel [
 
 	| font |
 	font := (PhratchFrameMorph getFont: #PaintUtilityButton).
-	^ ResizableToggleButton2 new
+	^ ResizableToggleButton new
 		offForm: (PhratchFrameMorph skinAt: #paintUtilityButton)
 			onForm: (PhratchFrameMorph skinAt: #paintUtilityButtonPressed);
 		label: aString localized font: font;

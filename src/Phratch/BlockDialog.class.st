@@ -85,12 +85,12 @@ BlockDialog >> buildCategoryChooser [
 
 		PhratchTranslator isRTL
 			ifTrue:[
-				b := ResizableToggleButton2 new
+				b := ResizableToggleButton new
 					offForm:	(offForm flipBy: #horizontal centerAt: offForm center)
 					onForm:		(onForm flipBy: #horizontal centerAt: onForm center)
 					overForm:	(overForm flipBy: #horizontal centerAt: overForm center)]
 			ifFalse:[
-				b := ResizableToggleButton2 new
+				b := ResizableToggleButton new
 					offForm:	offForm
 					onForm:		onForm
 					overForm:	overForm].
@@ -225,7 +225,7 @@ BlockDialog >> category: aString [
 	self updateTypeSelection.
 
 	categoryChooser submorphs do: [:m |
-		(m isKindOf: ResizableToggleButton2) ifTrue: [
+		(m isKindOf: ResizableToggleButton) ifTrue: [
 			m arguments first = category
 				ifTrue: [m on]
 				ifFalse: [m off]]].

@@ -31,12 +31,12 @@ PhratchScriptsMorph >> cleanUp [
 	sortedBlocks := collectedBlocks copy sorted: [:s1 :s2 | s1 top < s2 top].
 
 	y := 20.
-	(owner isKindOf: ScrollFrameMorph2) ifTrue: [
+	(owner isKindOf: ScrollFrameMorph) ifTrue: [
 		owner hScrollPixels: 0.
 		owner vScrollPixels: 0].
 	sortedBlocks do: [:s |
 		PhratchTranslator isRTL
-			ifTrue: [(owner isKindOf: ScrollFrameMorph2)
+			ifTrue: [(owner isKindOf: ScrollFrameMorph)
 				ifTrue: [s position: (owner left + owner visibleExtent x - s width - 29)@(self top + y)]
 				ifFalse: [s position: (self right - s width - 20)@(self top + y)]]
 			ifFalse: [s position: self position + (20@y)].

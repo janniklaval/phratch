@@ -43,6 +43,6 @@ PhratchCloseDialog >> initialize [
 	buttonRow addMorphBack: spacer fullCopy.
 
 	buttonRow submorphs do: [:b |
-		(b isKindOf: ResizableToggleButton2) ifTrue: [tabFields add: b]].
+		(b isKindOf: ResizableToggleButton) ifTrue: [tabFields add: b]].
 
 ]

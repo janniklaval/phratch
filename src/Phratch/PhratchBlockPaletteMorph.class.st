@@ -48,7 +48,7 @@ PhratchBlockPaletteMorph >> fixLayout [
 					ifTrue: [m position: (self right - m width - 18 - 10)@(m position y)]
 					ifFalse: [m position: (self right - m width - 10)@(m position y)].
 				m changed].
-			((m isKindOf: ToggleButton) or: [m isKindOf: ResizableToggleButton2]) ifTrue:[	"watcher checkbox case"
+			((m isKindOf: ToggleButton) or: [m isKindOf: ResizableToggleButton]) ifTrue:[	"watcher checkbox case"
 				m position: (self right - m width - 10)@(m position y)].
 			(m isKindOf: ImageMorph) ifTrue: [
 				m position: (self right - m width - 10)@(m position y)]]].

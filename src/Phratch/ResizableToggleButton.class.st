@@ -2,93 +2,113 @@ Class {
 	#name : #ResizableToggleButton,
 	#superclass : #SimpleButtonMorph,
 	#instVars : [
-		'sideMargin',
+		'label',
+		'iconMorph',
+		'current',
+		'normal',
+		'pressed',
+		'over',
+		'labelColorOff',
+		'labelColorOn',
+		'labelColorOver',
 		'isOn',
-		'offLabelColor',
-		'normalFormLeft',
-		'normalFormEdge',
-		'normalFormRight',
-		'pressedFormLeft',
-		'pressedFormEdge',
-		'pressedFormRight'
+		'wasOn',
+		'toggleMode',
+		'toggleButtonMode',
+		'justification',
+		'padding',
+		'hOffset',
+		'vOffset'
 	],
 	#category : #'Phratch-UI-Support'
 }
 
-{ #category : #'instance creation' }
-ResizableToggleButton class >> normalFormLeft: f1 normalFormEdge: f2 normalFormRight: f3 label: aLabel sideMargin: aNumber [
-	"Set the forms used for my normal state."
-
-	^ self new
-		normalFormLeft: f1
-		normalFormEdge: f2
-		normalFormRight: f3
-		label: aLabel
-		sideMargin: aNumber.
-]
-
 { #category : #accessing }
-ResizableToggleButton >> actWhen [
+ResizableToggleButton >> action [
 
-	^ actWhen
+	^ actionSelector
+
 ]
 
-{ #category : #drawing }
-ResizableToggleButton >> areasRemainingToFill: aRectangle [
-	"Don't optimize redraw; I may have transparent areas!"
+{ #category : #layout }
+ResizableToggleButton >> centerLabelOffset: anInteger [
+	"Center the label horizontally with the given offset."
 
-	^ Array with: aRectangle
+	justification := #center.
+	hOffset := anInteger.
+	self updateLayout.
 
 ]
 
 { #category : #accessing }
 ResizableToggleButton >> color [
 
-	isOn
-		ifNotNil:[isOn
-			ifTrue:[^ pressedFormEdge colorAt: ((pressedFormEdge width // 2)@(pressedFormEdge height // 2))]
-			ifFalse:[^ normalFormEdge colorAt: ((normalFormEdge width // 2)@(normalFormEdge height // 2))]]
-		ifNil:[^ super color].
-]
-
-{ #category : #drawing }
-ResizableToggleButton >> drawOn: aCanvas [
-	"Draw my normalLeft/normalEdge/normalRight forms and extend the normalEdgeForm to the width of my bounds."
-
-	| startPoint p clipC lastX formLeft formEdge formRight |
-
-	isOn & pressedFormLeft notNil
-		ifTrue: [formLeft := pressedFormLeft.
-				formEdge := pressedFormEdge.
-				formRight := pressedFormRight] 
-		ifFalse: [formLeft := normalFormLeft.
-				formEdge := normalFormEdge.
-				formRight := normalFormRight].
-	
-	startPoint := self bounds origin + (formLeft width@0).
-	p := startPoint.
-	clipC := aCanvas copyClipRect: self bounds.
-	lastX := self bounds right - (formRight width) - 1.
-
-	clipC paintImage: formLeft at: self bounds origin.
-	[p x <= lastX] whileTrue: [
-		clipC paintImage: formEdge at: p.
-		p := (p x + formEdge width) @ p y].
-	clipC paintImage: formRight at: p.
-	
-	
+	current ifNil: [^ Color white].
+	^ current color
 
 ]
 
-{ #category : #accessing }
+{ #category : #'event handling' }
+ResizableToggleButton >> copyRecordingIn: dict [
+	"Copy frame morphs for all states."
+
+	| result |
+	result := super copyRecordingIn: dict.
+	normal ifNotNil: [result normal: (normal copyRecordingIn: dict)].
+	pressed ifNotNil: [result pressed: (pressed copyRecordingIn: dict)].
+	over ifNotNil: [result over: (over copyRecordingIn: dict)].
+	^ result
+]
+
+{ #category : #geometry }
+ResizableToggleButton >> extent: aPoint [
+
+	super extent: aPoint.
+	current ifNotNil: [current extent: aPoint].
+	self updateLayout.
+	iconMorph ifNotNil: [
+		iconMorph position: self position + ((self extent - iconMorph extent) // 2)].
+
+]
+
+{ #category : #initialization }
+ResizableToggleButton >> forceUnicodeRendering: aBoolean [
+
+	label forceUnicodeRendering: aBoolean.
+	self updateSize.
+
+
+]
+
+{ #category : #'event handling' }
+ResizableToggleButton >> handlesMouseOver: evt [
+	
+	^ true
+
+]
+
+{ #category : #private }
 ResizableToggleButton >> helpScreenName [
 	"Answer the name of the help screen for this block, or nil if no help is available."
 
 	#addGlobalVariable = actionSelector ifTrue: [^ 'addVariable'].
-	(#(addVariable addGlobalVariable deleteVariable) includes: actionSelector)
+	#addGlobalList = actionSelector ifTrue: [^ 'addList'].
+	(#(addVariable addGlobalVariable deleteVariable addList addGlobalList deleteList addCustomBlock) includes: actionSelector)
 		ifTrue: [^ actionSelector asString].
 
 	^ nil
+
+]
+
+{ #category : #accessing }
+ResizableToggleButton >> icon: aForm [
+	"Add an icon to this button."
+
+	iconMorph ifNotNil: [iconMorph delete].  "delete old icon"
+	iconMorph := ImageMorph new form: aForm.
+	self addMorph: iconMorph.
+	self extent: (iconMorph extent + 10).
+
 
 ]
 
@@ -97,61 +117,185 @@ ResizableToggleButton >> initialize [
 
 	super initialize.
 	self cornerStyle: #square.
+	color := Color transparent.
+	borderWidth := 0.
 	isOn := false.
+	toggleButtonMode := false.
+	toggleMode := true.
+	justification := #center.
+	hOffset := 0.
+	vOffset := 5.
+	padding := 8@8.
+
+	label := StringMorph new.
+	labelColorOff := Color r: (78/255) g: (82/255) b: (82/255).
+	labelColorOn := Color black.
+	labelColorOver := labelColorOff.
+
 ]
 
 { #category : #accessing }
 ResizableToggleButton >> isOn [
 
 	^ isOn
+
+]
+
+{ #category : #'event handling' }
+ResizableToggleButton >> keyStroke: evt [
+
+	| ch m |
+"	ch := evt unicodeChar.
+	ch = 0 ifTrue: [ch := evt keyValue]."
+
+	ch := evt keyValue.
+
+	ch = 9 ifTrue: [  "tab"
+		(m := self ownerOrYourselfThatIsA: DialogBoxMorph) ifNotNil: [m tabToNextField: evt].
+		^ self].
+
+	ch = 27 ifTrue: [  "escape key"
+		(m := self ownerOrYourselfThatIsA: DialogBoxMorph) ifNotNil: [m escapeKeyPressed: evt].
+		^ self].
+
+	(ch = 10) | (ch = 13) ifTrue: [  "cr, lf, or enter key"
+		(m := self ownerOrYourselfThatIsA: DialogBoxMorph) ifNotNil: [^ m enterKeyPressed: evt].
+		evt hand newKeyboardFocus: nil.
+		^ self].
+
+
+]
+
+{ #category : #'event handling' }
+ResizableToggleButton >> keyboardFocusChange: aBoolean [
+
+	aBoolean
+		ifTrue: [self on]
+		ifFalse: [self off].
+
+
 ]
 
 { #category : #accessing }
-ResizableToggleButton >> label: aString font: aFont [
+ResizableToggleButton >> label [
 
-	| oldLabel m |
-	(oldLabel := self findA: StringMorph) ifNotNil: [oldLabel delete].
-	m := StringMorph contents: aString font: (aFont ifNil: [PhratchFrameMorph standardButtonFont]).
-	m color: (Color r: (78/255) g: (82/255) b: (82/255)).
-	self extent: m extent + borderWidth.
-	self width: self width + sideMargin.
-	self height: (self height max: normalFormLeft height).
-	m position: (self center - (m extent // 2)) - (0@1).
-	self addMorph: m.
-	m lock.
+	^ label
+
+]
+
+{ #category : #initialization }
+ResizableToggleButton >> label: aString font: font [
+
+	label delete.
+	label
+		contents: aString font: font;
+		color: (isOn ifTrue: [labelColorOn] ifFalse: [labelColorOff]).
+	self addMorphFront: label.
+	self updateSize.
+
+]
+
+{ #category : #private }
+ResizableToggleButton >> labelColorOn: onColor labelColorOff: offColor labelColorOver: overColor [
+	
+	labelColorOn := onColor.
+	labelColorOff := offColor.
+	labelColorOver := overColor.
+	isOn ifTrue: [ label color: onColor ] ifFalse: [ label color: offColor ].
+
+]
+
+{ #category : #layout }
+ResizableToggleButton >> leftJustifyInset: anInteger [
+	"Left-justify the label with the given inset from the left edge."
+
+	justification := #left.
+	hOffset := anInteger.
+	self updateLayout.
 
 ]
 
 { #category : #'event handling' }
 ResizableToggleButton >> mouseDown: evt [
 
-	evt rightButtonPressed ifTrue: [^ self rightButtonMenu].
-
 	evt hand toolType: nil.
+	wasOn := isOn.
 
-	self on.
+	evt hand newKeyboardFocus: nil.
+
+	evt rightButtonPressed ifTrue: [
+		Sensor waitNoButton.
+		^ self rightButtonMenu].
+
+	toggleButtonMode
+		ifTrue: [
+			toggleMode
+				ifTrue: [
+					isOn
+						ifTrue: [isOn := false. self over]
+						ifFalse: [self on]]
+
+				ifFalse: [
+					isOn
+						ifTrue: [^ self]
+						ifFalse: [self on]]]
+		ifFalse: [self on].
+
 	actWhen = #buttonDown ifTrue: [
 		self doButtonAction.
 		self off].
 
+]
+
+{ #category : #'event handling' }
+ResizableToggleButton >> mouseEnter: evt [
+
+	self over.
 
 ]
 
 { #category : #'event handling' }
 ResizableToggleButton >> mouseLeave: evt [
 
+	isOn ifFalse: [ over ifNotNil: [self off] ].
 	PhratchToolTipMorph clearToolTips.
 
 ]
 
 { #category : #'event handling' }
 ResizableToggleButton >> mouseMove: evt [
-
+ 
+	| containsPoint |
 	actWhen = #buttonDown ifTrue: [^ self].
-	(self containsPoint: evt cursorPoint)
-		ifTrue: [self on]
-		ifFalse: [self off].
 
+	containsPoint := self containsPoint: evt cursorPoint.
+	toggleButtonMode
+		ifFalse: [
+			containsPoint
+				ifTrue: [isOn ifFalse: [self on]]
+				ifFalse: [isOn ifTrue: [self off]]]
+		ifTrue: [
+			toggleMode
+				ifTrue: [
+					containsPoint
+						ifTrue: [
+							wasOn
+								ifTrue: [isOn ifTrue: [isOn := false. self over]]
+								ifFalse: [isOn ifTrue: [^ self] ifFalse: [self on]]]
+						ifFalse: [
+							wasOn
+								ifTrue: [isOn ifFalse: [self on]]
+								ifFalse: [isOn ifTrue: [self off]]]]
+				ifFalse: [
+					containsPoint
+						ifTrue: [
+							wasOn
+								ifTrue: [^ self]
+								ifFalse: [isOn ifFalse: [self on]]]
+						ifFalse: [
+							wasOn
+								ifTrue: [^ self]
+								ifFalse: [isOn ifTrue: [isOn := false. self over]]]]].
 
 ]
 
@@ -162,18 +306,14 @@ ResizableToggleButton >> mouseUp: evt [
 	 [self containsPoint: evt cursorPoint])
 		ifTrue: [self doButtonAction].
 
-	self off.
+	toggleButtonMode ifFalse: [ self off ].
 
 ]
 
-{ #category : #initialization }
-ResizableToggleButton >> normalFormLeft: f1 normalFormEdge: f2 normalFormRight: f3 label: aLabel sideMargin: aNumber [
+{ #category : #private }
+ResizableToggleButton >> normal: aMorph [
 
-	normalFormLeft := f1.
-	normalFormEdge := f2.
-	normalFormRight := f3.
-	sideMargin := aNumber.
-	self label: aLabel font: TextStyle defaultFont.
+	normal := aMorph.
 
 ]
 
@@ -181,14 +321,34 @@ ResizableToggleButton >> normalFormLeft: f1 normalFormEdge: f2 normalFormRight: 
 ResizableToggleButton >> off [
 	"Turn myself off."
 
-	| myLabel |
-	isOn ifFalse: [^ self].
 	isOn := false.
-	self changed.
+	self setCurrent: normal.
+	label color: labelColorOff.
 
-	(myLabel := self findA: StringMorph) ifNotNil: [
-		offLabelColor ifNotNil: [
-			myLabel color: offLabelColor]].
+
+]
+
+{ #category : #initialization }
+ResizableToggleButton >> offForm: offForm onForm: onForm [
+
+	normal := ImageFrameMorph new initFromForm: offForm.
+	pressed := ImageFrameMorph new initFromForm: onForm.
+	over := nil.
+	current := normal.
+	padding := normal minExtent - (0@5).
+
+	toggleMode := false.
+	self off.
+
+
+]
+
+{ #category : #initialization }
+ResizableToggleButton >> offForm: offForm onForm: onForm overForm: overForm [
+
+	self offForm: offForm onForm: onForm.
+	overForm ifNotNil: [over := ImageFrameMorph new initFromForm: overForm].
+
 
 ]
 
@@ -196,18 +356,41 @@ ResizableToggleButton >> off [
 ResizableToggleButton >> on [
 	"Turn myself on."
 
-	| myLabel |
-	isOn ifTrue: [^ self].
 	isOn := true.
-	self changed.
+	self setCurrent: pressed.
+	label color: labelColorOn.
 
-	(myLabel := self findA: StringMorph) ifNotNil: [
-		offLabelColor := myLabel color.
-		myLabel color: Color black].
 
 ]
 
 { #category : #accessing }
+ResizableToggleButton >> over [
+	"Show my over skin."
+
+	"toggleButtonMode ifFalse: [^ self]."
+	isOn ifTrue: [^ self].
+	over ifNil: [^ self].
+
+	self setCurrent: over.
+	label color: labelColorOver.
+
+]
+
+{ #category : #private }
+ResizableToggleButton >> over: aMorph [
+
+	over := aMorph.
+
+]
+
+{ #category : #accessing }
+ResizableToggleButton >> padding: aPoint [
+
+	padding := aPoint.
+
+]
+
+{ #category : #private }
 ResizableToggleButton >> presentHelpScreen [
 	"Answer the name of the help screen for this block, or nil if no help is available."
 
@@ -215,16 +398,14 @@ ResizableToggleButton >> presentHelpScreen [
 	fr := self ownerOrYourselfThatIsA: PhratchFrameMorph.
 	fr
 		ifNil: [^ nil]
-		ifNotNil: [fr presentHelpScreen: self helpScreenName]
+		ifNotNil: [fr presentHelpScreen: self helpScreenName].
 
 ]
 
-{ #category : #initialization }
-ResizableToggleButton >> pressedFormLeft: f1 pressedFormEdge: f2 pressedFormRight: f3 [ 
+{ #category : #private }
+ResizableToggleButton >> pressed: aMorph [
 
-	pressedFormLeft := f1.
-	pressedFormEdge := f2.
-	pressedFormRight := f3.
+	pressed := aMorph.
 
 ]
 
@@ -232,7 +413,6 @@ ResizableToggleButton >> pressedFormLeft: f1 pressedFormEdge: f2 pressedFormRigh
 ResizableToggleButton >> rightButtonMenu [
 
 	| menu |
-
 	(self owner isKindOf: PhratchBlockPaletteMorph) ifTrue: [
 		menu := MenuMorph new defaultTarget: self.
 		menu add: 'help' action: #presentHelpScreen.
@@ -241,8 +421,96 @@ ResizableToggleButton >> rightButtonMenu [
 
 ]
 
+{ #category : #layout }
+ResizableToggleButton >> rightJustifyInset: anInteger [
+	"Right-justify the label with the given inset from the right edge."
+
+	justification := #right.
+	hOffset := anInteger.
+	self updateLayout.
+
+]
+
+{ #category : #private }
+ResizableToggleButton >> setCurrent: aMorph [
+	"Make the given morph be the one currently displayed."
+
+	aMorph ifNil: [^ self].  "should not happen"
+	aMorph
+		position: self position;
+		extent: self extent.
+
+	current delete.
+	current := aMorph.
+	self addMorphBack: current.
+
+
+]
+
 { #category : #initialization }
 ResizableToggleButton >> setDefaultLabel [
 	"Overridden to do nothing. I have no label by default, although a label can be added."
+
+]
+
+{ #category : #initialization }
+ResizableToggleButton >> setLabelColor: aColor [
+	"Sets all label colors to the given color."
+
+	self labelColorOn: aColor labelColorOff: aColor labelColorOver: aColor.
+
+]
+
+{ #category : #accessing }
+ResizableToggleButton >> toggleButtonMode: mode [
+	"If set to true, the button switches from on to off with a click, and the button remains in on mode until it is clicked again. If it is set to false, the button goes into on mode only when the mouse button is held down. toggleMode also disables changing the font color when in on mode."
+
+	toggleButtonMode := mode.
+
+]
+
+{ #category : #accessing }
+ResizableToggleButton >> toggleMode: mode [
+	"The same as ToggleButton's toggleMode. If set to true, clicking the button when turns it from on to off. If false, clicking the button when on does nothing."
+
+	toggleMode := mode.
+
+]
+
+{ #category : #private }
+ResizableToggleButton >> updateLayout [
+	"Update the label position within the button."
+
+	| x y top |
+	x := ((self width - label width) // 2) + hOffset.  "center by default"
+	justification = #left ifTrue: [x := hOffset].
+	justification = #right ifTrue: [x := self width - hOffset - label width].
+
+	y := ((self height / 2) - vOffset) rounded.
+
+	top := self top + 10.
+	(self submorphs size = 2)
+		ifTrue: [label position: self position + (x@y)]
+		ifFalse: [self submorphs reversed do: [:m |
+			(m isKindOf: ImageFrameMorph) ifFalse: [
+				m left: self left + ((self width - m width) // 2).
+				m top: top.
+				top := m bottom + 6]]].
+
+]
+
+{ #category : #'falta adaptar' }
+ResizableToggleButton >> updateSize [
+	"Set this button size based on the label size. Assume the label has already been set."
+
+	| trim contentsExtent |
+	trim := PhratchTranslator verticalTrimForFont: label font.
+	contentsExtent := 0@0.
+	self submorphsDo: [: m |
+		(m isKindOf: ImageFrameMorph) ifFalse: [
+			contentsExtent := (contentsExtent x max: m width)@(contentsExtent y + m height)]].
+	self extent: contentsExtent + padding - (0@trim).
+	vOffset := PhratchTranslator centerOffsetForButtonWithFont: label font.
+	self updateLayout.
 
 ]

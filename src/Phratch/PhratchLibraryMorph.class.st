@@ -45,7 +45,7 @@ PhratchLibraryMorph >> buildPanes [
 		color: Color transparent;
 		borderWidth: 0.
 
-	scrollPane := ScrollFrameMorph2 new
+	scrollPane := ScrollFrameMorph new
 		color: Color transparent;
 		contents: bin;
 		showHorizontalScrollbar: false.

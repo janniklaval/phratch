@@ -128,7 +128,7 @@ PhratchFrameMorph class >> buttonLabel: aString selector: aSymbolOrNil [
 	"Answer a big button with the given label."
 
 	| button |
-	button := ResizableToggleButton2 new
+	button := ResizableToggleButton new
 		offForm: (PhratchFrameMorph skinAt: #btn)
 			onForm: (PhratchFrameMorph skinAt: #btnPressed);
 		label: aString font: (PhratchFrameMorph getFont: #Button);

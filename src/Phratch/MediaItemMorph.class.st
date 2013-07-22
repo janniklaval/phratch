@@ -46,7 +46,7 @@ MediaItemMorph class >> initialize [
 MediaItemMorph >> addPlayButton [
 
 	| h |
-	playButton := ResizableToggleButton2 new
+	playButton := ResizableToggleButton new
 		offForm: (PhratchFrameMorph skinAt: #btn)
 		onForm: (PhratchFrameMorph skinAt: #btnPressed).
 
@@ -68,7 +68,7 @@ MediaItemMorph >> addPlayButton [
 MediaItemMorph >> addStopButton [
 
 	| h |
-	stopButton := ResizableToggleButton2 new
+	stopButton := ResizableToggleButton new
 		offForm: (PhratchFrameMorph skinAt: #btn)
 		onForm: (PhratchFrameMorph skinAt: #btnPressed).
 

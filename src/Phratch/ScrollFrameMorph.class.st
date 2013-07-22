@@ -1,13 +1,14 @@
 "
-I am a frame for scrollable contents. I can independently show or hide my horizontal and vertical scrollbars.
-
-
+This subclass of ScrollFrameMorph uses ScratchScrollBars.
 
 "
 Class {
 	#name : #ScrollFrameMorph,
 	#superclass : #BorderedMorph,
 	#instVars : [
+		'scrollBarStartInset',
+		'scrollBarEndInset',
+		'dragOffset',
 		'contents',
 		'hScrollbar',
 		'vScrollbar',
@@ -23,7 +24,7 @@ Class {
 	#category : #'Phratch-UI-Support'
 }
 
-{ #category : #autoscrolling }
+{ #category : #'scrollbar visibility' }
 ScrollFrameMorph >> abortDelay [
 	"private"
 
@@ -32,7 +33,7 @@ ScrollFrameMorph >> abortDelay [
 		delay := nil ]
 ]
 
-{ #category : #accessing }
+{ #category : #'scrollbar visibility' }
 ScrollFrameMorph >> contents [
 	"Answer my contents morph."
 
@@ -40,7 +41,7 @@ ScrollFrameMorph >> contents [
 
 ]
 
-{ #category : #accessing }
+{ #category : #'scrollbar visibility' }
 ScrollFrameMorph >> contents: aMorph [
 	"Replace my contents morph. The argument can be any morph. Typically it is a BorderedMorph or a PasteUpMorph."
 
@@ -65,17 +66,41 @@ ScrollFrameMorph >> contentsBounds [
 
 ]
 
+{ #category : #'scrolling by dragging' }
+ScrollFrameMorph >> dragContentsTo: aPoint [
+	|  hDiff vDiff |
+	hDiff := aPoint x - contents left - dragOffset x.
+	vDiff := aPoint y - contents top - dragOffset y.
+	self hScrollPixels: self hScrollPixels - hDiff;
+	vScrollPixels: self vScrollPixels - vDiff
+]
+
 { #category : #drawing }
 ScrollFrameMorph >> drawSubmorphsOn: aCanvas [
 	"If my contents has changed, fix it's extent and update my scrollbar ranges. Clip submorph drawing to my bounds."
 
+	| clipR |
 	contentsChanged ifTrue: [
 		self updateContentsExtent.
 		self updateScrollbars.
 		contentsChanged := false].
 
-	super drawSubmorphsOn: (aCanvas copyClipRect: self innerBounds).
+	"draw my contents morph clipped to my visible extent"
+	clipR := self innerBounds topLeft extent: self visibleExtent.
+	(aCanvas copyClipRect: clipR) fullDrawMorph: contents.
 
+	"draw all my submorphs other than my contents"
+	submorphs reverseDo:[:m |
+		(m ~~ contents) ifTrue: [aCanvas fullDrawMorph: m]].
+
+
+
+]
+
+{ #category : #'scrolling by dragging' }
+ScrollFrameMorph >> dropContents [
+	World activeHand showTemporaryCursor: nil.
+	dragOffset := nil
 ]
 
 { #category : #geometry }
@@ -84,27 +109,39 @@ ScrollFrameMorph >> extent: aPoint [
 
 	| inner w h |
 	super extent: (aPoint truncated max: self minWidth@self minHeight).
+
+	scrollBarStartInset ifNil: [
+		scrollBarStartInset := scrollBarEndInset := 0].  "needed during initialization"
+
 	inner := self innerBounds.
 
-	w := inner width.
-	vScrollbar owner = self ifTrue: [w := w - vbarInset].
-	hScrollbar position: inner left@(inner bottom - hbarInset).
+	w := inner width - scrollBarStartInset.
+	vScrollbar owner = self
+		ifTrue: [w := w - vbarInset]
+		ifFalse: [w := w - scrollBarEndInset].
+	hScrollbar position: (inner left + scrollBarStartInset)@(inner bottom - hbarInset).
+	hScrollbar width: w.
 	hScrollbar extent: w@hbarInset.
 
-	h := inner height.
-	hScrollbar owner = self ifTrue: [h := h - hbarInset].
-	vScrollbar position: (inner right - vbarInset)@inner top.
+	h := inner height - scrollBarStartInset.
+	hScrollbar owner = self
+		ifTrue: [h := h - hbarInset]
+		ifFalse: [h := h - scrollBarEndInset].
+	PhratchTranslator isRTL
+		ifTrue: [vScrollbar position: (inner left + 9)@(inner top + scrollBarStartInset)]
+		ifFalse: [vScrollbar position: (inner right - vbarInset)@(inner top + scrollBarStartInset)].
+	vScrollbar height: h.
 	vScrollbar extent: vbarInset@h.
 
 	cornerMorph position: (inner bottomRight - (vbarInset@hbarInset)).
 	cornerMorph extent: vbarInset@hbarInset.
-
+	
 	self updateContentsExtent.
 	self updateScrollbars.
 
 ]
 
-{ #category : #geometry }
+{ #category : #'scrollbar visibility' }
 ScrollFrameMorph >> fullBounds [
 	"Overridden to clip submorph hit detection to my bounds."
 
@@ -112,7 +149,17 @@ ScrollFrameMorph >> fullBounds [
 
 ]
 
-{ #category : #accessing }
+{ #category : #'scrolling by dragging' }
+ScrollFrameMorph >> grabContentsAt: aPoint [
+	self isScrollable ifTrue: [
+		World activeHand
+			newKeyboardFocus: self;
+			showTemporaryCursor: Cursor handClosed asXOCursorForm.
+		dragOffset := aPoint - (contents left @ contents top)]
+
+]
+
+{ #category : #'scrollbar visibility' }
 ScrollFrameMorph >> growthFraction: aNumber [
 	"Set the amount to grow when contents do not fit, expressed as a fraction of the current size. For example, 0.5 makes the contains pane 50% larger if any submorph extends over the edge."
 
@@ -120,7 +167,7 @@ ScrollFrameMorph >> growthFraction: aNumber [
 
 ]
 
-{ #category : #accessing }
+{ #category : #'scrollbar visibility' }
 ScrollFrameMorph >> hBarInset: anInteger [
 
 	hbarInset := anInteger.
@@ -165,6 +212,11 @@ ScrollFrameMorph >> hScrollRelative: aFloat [
 ]
 
 { #category : #'event handling' }
+ScrollFrameMorph >> handlesMouseDown: evt [
+	^ true
+]
+
+{ #category : #'event handling' }
 ScrollFrameMorph >> handlesMouseOverDragging: evt [
 	^true
 ]
@@ -173,31 +225,35 @@ ScrollFrameMorph >> handlesMouseOverDragging: evt [
 ScrollFrameMorph >> initialize [
 
 	super initialize.
-	self color: Color red.
-	hbarInset := 12.
-	vbarInset := 12.
+	
+	self borderWidth: 0.
+
+	self color: Color blue.
+	hbarInset := 30.
+	vbarInset := 25.
+	scrollBarStartInset := 10.
+	scrollBarEndInset := 14.
 	contentsChanged := false.
 	growthFraction := 0.6.  "amount to grow when contents do not fit as a fraction of the current size"
 
 	contents := PasteUpMorph new
-		color: Color red;
+		color: (Color gray: 0.9);
 		borderWidth: 0;
 		enableDragNDrop: true.
 
-	hScrollbar := ScrollBar new
-		model: self;
-		setValueSelector: #hScrollRelative:.
-	vScrollbar := ScrollBar new
-		model: self;
-		setValueSelector: #vScrollRelative:.
+	hScrollbar := PhratchScrollBar newHorizontal
+		target: self;
+		selector: #hScrollRelative:.
+	vScrollbar := PhratchScrollBar newVertical
+		target: self;
+		selector: #vScrollRelative:.
 	cornerMorph := BorderedMorph new
-		borderRaised; borderWidth: 2; color: hScrollbar color.
-
+		borderRaised; borderWidth: 2.
+		
 	contents position: self position + borderWidth.
 	self addMorph: contents.
 	self addMorph: hScrollbar.
 	self addMorph: vScrollbar.
-	self addMorph: cornerMorph.
 	self extent: 160@120.
 
 ]
@@ -220,20 +276,26 @@ ScrollFrameMorph >> isAlignmentMorph [
 
 ]
 
+{ #category : #'scrolling by dragging' }
+ScrollFrameMorph >> isBeingDragged [
+	"answer true if the receiver is currently being scrolled by means of dragging"
+	^dragOffset notNil
+]
+
+{ #category : #'scrolling by dragging' }
+ScrollFrameMorph >> isScrollable [
+	"private - answer true if the receiver is partially hidden and thus can be scrolled"
+
+	^(self findA: PhratchScrollBar) notNil and: [
+		(self ownerThatIsA: OffscreenWorldMorph) isNil ]
+]
+
 { #category : #geometry }
 ScrollFrameMorph >> layoutChanged [
 	"If my contents morph's layout has changed, record that fact."
 
 	super layoutChanged.
 	contents mayNeedLayout ifTrue: [contentsChanged := true].
-
-]
-
-{ #category : #layout }
-ScrollFrameMorph >> layoutInWidth: w height: h [
-	"Resize myself to the given width and height. Called during when I am in an AlignmentMorph."
-
-	self extent: w@h.
 
 ]
 
@@ -260,6 +322,12 @@ ScrollFrameMorph >> minWidth [
 ]
 
 { #category : #'event handling' }
+ScrollFrameMorph >> mouseDown: evt [ 
+	(owner isKindOf: PhratchFilePicker) ifTrue: [^owner mouseDown: evt].
+	evt redButtonPressed ifTrue: [ self grabContentsAt: evt cursorPoint ]
+]
+
+{ #category : #'event handling' }
 ScrollFrameMorph >> mouseEnterDragging: evt [
 	"Handle a mouseEnterDragging event. The mouse just entered my bounds with a button pressed or laden with submorphs."
 
@@ -270,35 +338,42 @@ ScrollFrameMorph >> mouseEnterDragging: evt [
 ]
 
 { #category : #'event handling' }
-ScrollFrameMorph >> mouseMoveDragging: evt [
-	"trigger autoscrolling"
-
-	(evt hand submorphs select: [:m |
-		contents wantsDroppedMorph: m event: evt ])
-	isEmpty ifFalse: [ 
-		self scrollTowardsEdge: (self nearestEdge: evt cursorPoint)]
-
+ScrollFrameMorph >> mouseMove: evt [ 
+	(owner isKindOf: PhratchFilePicker) ifTrue: [^owner mouseMove: evt].
+	dragOffset ifNotNil: [self dragContentsTo: evt cursorPoint]
 ]
 
-{ #category : #autoscrolling }
-ScrollFrameMorph >> nearestEdge: aPoint [
-	"private - answer a symbol indicating which edge aPoint is near to, nil if none is close"
+{ #category : #'event handling' }
+ScrollFrameMorph >> mouseUp: evt [
+	(owner isKindOf: PhratchFilePicker) ifTrue: [^owner mouseUp: evt].
+	self dropContents
+]
 
-	| cordon |
+{ #category : #scrolling }
+ScrollFrameMorph >> scrollMorphIntoView: aMorph [
 
-	"distance to the nearest edge within which automatic
-	scrolling will be triggered"
-	cordon := 55.
+	| offset |
+	(self bounds containsRect: aMorph fullBounds) ifTrue: [^ self].
 
-	(self findA: PhratchScrollBar) ifNil: [^nil ].
-	(self containsPoint: aPoint) ifFalse: [^nil ].
+	((aMorph fullBounds top < self top) and: [(aMorph fullBounds top < contents top) not]) ifTrue: [
+		offset := aMorph fullBounds top - contents top.
+		contents top: (self top + 3) - offset].
 
-	aPoint y < (self top + cordon) ifTrue: [^#top ].
-	aPoint y > (self bottom - cordon) ifTrue: [^#bottom ].
-	aPoint x < (self left + cordon) ifTrue: [^#left ].
-	aPoint x > (self right - cordon) ifTrue: [^#right ].
+	((aMorph fullBounds left < self left) and: [(aMorph fullBounds left < contents left) not]) ifTrue: [
+		offset := aMorph fullBounds left - contents left.
+		contents left: (self left + 3) - offset].
 
-	^nil
+	(aMorph fullBounds right > self right) ifTrue: [
+		offset := aMorph fullBounds right - contents left.
+		contents left: (self right - 3) - offset].
+
+	(aMorph fullBounds bottom > self bottom) ifTrue: [
+		offset := aMorph fullBounds bottom - contents top.
+		contents top: (self bottom - 3) - offset].
+
+	self updateContentsExtent.
+	self updateScrollbars.
+
 ]
 
 { #category : #scrolling }
@@ -320,42 +395,11 @@ ScrollFrameMorph >> scrollSubmorphIntoView: aMorph [
 
 ]
 
-{ #category : #autoscrolling }
-ScrollFrameMorph >> scrollTowardsEdge: aSymbol [
-	"private - autoscrolling"
+{ #category : #geometry }
+ScrollFrameMorph >> scrollbarStartInset: startInset endInset: endInset [
 
-	|step|
-
-	"the number of pixels to be scrolled in one pass:"
-	step := 10.
-
-	"lazy initialization"
-	hasWaited ifNil: [hasWaited := false ].
-
-	edge = aSymbol 	ifFalse: [ 
-		self abortDelay.
-		hasWaited := false.
-		edge := aSymbol.
-		edge ifNil: [^self ].
-		^delay := [(Delay forSeconds: 1) wait.
-			hasWaited := true.
-			self scrollTowardsEdge: (self nearestEdge: World activeHand cursorPoint)] bg].
-
-	hasWaited ifFalse: [	^self].
-
-	#left = aSymbol ifTrue: [ 
-		^self hScrollPixels: self hScrollPixels - step; 
-		abortDelay ].
-	#top = aSymbol ifTrue: [ 
-		^self vScrollPixels: self vScrollPixels - step; 
-		abortDelay  ].
-	#right = aSymbol ifTrue: [ 
-		^self hScrollPixels: self hScrollPixels + step; 
-		abortDelay  ].
-	#bottom = aSymbol ifTrue: [ 
-		^self vScrollPixels: self vScrollPixels + step; 
-		abortDelay  ]
-
+	scrollBarStartInset := startInset.
+	scrollBarEndInset := endInset.
 
 ]
 
@@ -363,13 +407,11 @@ ScrollFrameMorph >> scrollTowardsEdge: aSymbol [
 ScrollFrameMorph >> showHorizontalScrollbar: aBoolean [
 	"Show or hide my horizontal scrollbar."
 
+	aBoolean = (hScrollbar owner = self) ifTrue: [^ self].
+
 	aBoolean
-		ifTrue: [
-			self addMorph: hScrollbar.
-			vScrollbar owner = self ifTrue: [self addMorph: cornerMorph]]
-		ifFalse: [
-			hScrollbar delete.
-			cornerMorph delete].
+		ifTrue: [self addMorph: hScrollbar]
+		ifFalse: [hScrollbar delete].
 
 	self extent: self extent.
 
@@ -379,13 +421,11 @@ ScrollFrameMorph >> showHorizontalScrollbar: aBoolean [
 ScrollFrameMorph >> showVerticalScrollbar: aBoolean [
 	"Show or hide my vertical scrollbar."
 
+	aBoolean = (vScrollbar owner = self) ifTrue: [^ self].
+
 	aBoolean
-		ifTrue: [
-			self addMorph: vScrollbar.
-			hScrollbar owner = self ifTrue: [self addMorph: cornerMorph]]
-		ifFalse: [
-			vScrollbar delete.
-			cornerMorph delete].
+		ifTrue: [self addMorph: vScrollbar]
+		ifFalse: [vScrollbar delete].
 
 	self extent: self extent.
 

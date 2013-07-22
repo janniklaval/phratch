@@ -495,7 +495,7 @@ PhratchScriptEditorMorph >> initialize [
 
 	self addNameBox.
 
-	pageViewerMorph := ScrollFrameMorph2 new
+	pageViewerMorph := ScrollFrameMorph new
 		growthFraction: 0.1;
 		color: PhratchFrameMorph scriptsPaneColor.
 	self addMorph: (pageViewerMorph position: (self left @ (self top + topSectionHeight))).

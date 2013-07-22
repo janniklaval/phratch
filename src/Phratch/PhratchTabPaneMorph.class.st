@@ -14,7 +14,7 @@ Class {
 PhratchTabPaneMorph >> createTab: tabID withLabel: aString onForm: aForm1 offForm: aForm2 [
 
 	| button |
-	button := ResizableToggleButton2 new
+	button := ResizableToggleButton new
 		target: self;
 		actionSelector: #currentTab:;
 		toggleMode: false;
@@ -33,7 +33,7 @@ PhratchTabPaneMorph >> createTab: tabID withLabel: aString onForm: aForm1 offFor
 		self height: button height.
 		"if we just changed the height, then we must make sure all the previous tabs are aligned to the bottom"
 		self submorphs do: [:m |
-			(m isKindOf: ResizableToggleButton2) ifTrue: [
+			(m isKindOf: ResizableToggleButton) ifTrue: [
 				m height: self height; bottom: self bottom.
 				m label top: m label top]]].
 
@@ -69,7 +69,7 @@ PhratchTabPaneMorph >> drawSubmorphsOn: aCanvas [
 	clipC := aCanvas copyClipRect: myBox.
 
 	barWidth := self width - 7.
-	submorphs reverseDo:[:m | ((m isKindOf: ResizableToggleButton2) and: [m isOn])
+	submorphs reverseDo:[:m | ((m isKindOf: ResizableToggleButton) and: [m isOn])
 		ifTrue: [f := Form extent: (barWidth @ barForm height) depth: 32.
 				10 to: barWidth by: barForm width do: [:x | barForm displayOn: f at: x@0 rule: Form blend]].
 		f ifNotNil: [clipC translucentImage: f at: ((self left - 13) @ (m bottom - 5))].
@@ -94,7 +94,7 @@ PhratchTabPaneMorph >> initialize [
 PhratchTabPaneMorph >> lightUpCurrentTab [
 
 	(self submorphs) do: [:m |
-		(m isKindOf: ResizableToggleButton2) ifTrue: [
+		(m isKindOf: ResizableToggleButton) ifTrue: [
 			m arguments first = currentTab
 				ifTrue: [m setLabelColor: (Color r:(33/255) g:(33/255) b:(31/255)); on; comeToFront]
 				ifFalse: [m setLabelColor: (Color r:(88/255) g:(89/255) b:(93/255)); off]]].
@@ -106,7 +106,7 @@ PhratchTabPaneMorph >> setLabelForTab: tabID to: aString [
 
 	| theTab wInitial wDelta |
 	self submorphs do: [:m |
-		((m isKindOf: ResizableToggleButton2) and:
+		((m isKindOf: ResizableToggleButton) and:
 		 [m arguments first = tabID]) ifTrue: [
 			theTab := m.
 			wInitial := m width.
@@ -115,7 +115,7 @@ PhratchTabPaneMorph >> setLabelForTab: tabID to: aString [
 
 	theTab ifNotNil: [
 		self submorphs do: [:m |
-			((m isKindOf: ResizableToggleButton2) and: [m left > (theTab left)])
+			((m isKindOf: ResizableToggleButton) and: [m left > (theTab left)])
 				ifTrue: [
 					"scoot the others down if the tab's width changed"
 					m position: (m position) + (wDelta@0)]]].

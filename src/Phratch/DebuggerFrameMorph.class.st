@@ -67,7 +67,7 @@ DebuggerFrameMorph >> createButtons [
 	buttonRow addMorphBack: spacer fullCopy.
 
 	buttonRow submorphs do: [:b |
-		(b isKindOf: ResizableToggleButton2) ifTrue: [tabFields add: b]].
+		(b isKindOf: ResizableToggleButton) ifTrue: [tabFields add: b]].
 
 	cb := thread currentBlock.
 	cb nextBlock ifNil: [^jump isHidden: true].
@@ -174,7 +174,7 @@ DebuggerFrameMorph >> initialize [
 	self title: 'Debugger'.
 	resizeMorph := PhratchResizeMorph ofType: #corner.
 
-	scroller := ScrollFrameMorph2 new
+	scroller := ScrollFrameMorph new
 		growthFraction: 0.0;
 		color: Color transparent "PhratchFrameMorph scriptsPaneColor".
 

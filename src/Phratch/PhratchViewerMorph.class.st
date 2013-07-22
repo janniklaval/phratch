@@ -76,7 +76,7 @@ PhratchViewerMorph >> initialize [
 		topSectionHeight: 120.
 	self middleBarLeftMargin: 5 rightMargin: 0.
 	color := (Color r: 0.584 g: 0.603 b: 0.623).
-	pageViewer := ScrollFrameMorph2 new growthFraction: 0.1.
+	pageViewer := ScrollFrameMorph new growthFraction: 0.1.
 	self addMorphBack: (pageViewer position: self position + (0@120)).
 	self target: nil.
 	self extent: 214@500.
@@ -87,7 +87,7 @@ PhratchViewerMorph >> initialize [
 PhratchViewerMorph >> lightUpSelectorForCurrentCategory [
 
 	submorphs do: [:m |
-		(m isKindOf: ResizableToggleButton2) ifTrue: [
+		(m isKindOf: ResizableToggleButton) ifTrue: [
 			m arguments first = currentCategory
 				ifTrue: [m on]
 				ifFalse: [m off]]].
@@ -108,7 +108,7 @@ PhratchViewerMorph >> rebuildCategorySelectors [
 	catList := (((PhratchCategory allSubclasses select:[:e | e visible]) sort: [:e :f | e order < f order]) collect: [:c | c label] ) asArray.
 
 	"First, delete the old category buttons"
-	submorphs do: [:m | (m isKindOf: ResizableToggleButton2) ifTrue: [m delete]].
+	submorphs do: [:m | (m isKindOf: ResizableToggleButton) ifTrue: [m delete]].
 
 	"Create new buttons, keeping track of the maximum extent."
 	maxExtent := 75@0.
@@ -119,12 +119,12 @@ PhratchViewerMorph >> rebuildCategorySelectors [
 		overForm := (PhratchFrameMorph skinAt: (cat, 'Over')).
 		PhratchTranslator isRTL
 			ifTrue:[
-				b := ResizableToggleButton2 new
+				b := ResizableToggleButton new
 					offForm:	(offForm flipBy: #horizontal centerAt: offForm center)
 					onForm:		(onForm flipBy: #horizontal centerAt: onForm center)
 					overForm:	(overForm flipBy: #horizontal centerAt: overForm center)]
 			ifFalse:[
-				b := ResizableToggleButton2 new
+				b := ResizableToggleButton new
 					offForm:	offForm
 					onForm:		onForm
 					overForm:	overForm].

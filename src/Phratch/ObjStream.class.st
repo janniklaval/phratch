@@ -368,7 +368,7 @@ ObjStream class >> userClasses [
 		(176		ScrollingStringMorph)
 		(179		CreationEventHatMorph)
 				
-		(180		ScrollFrameMorph2)
+		(180		#ScrollFrameMorph)
 		(181		ListMultilineStringMorph)
 		(182		#PhratchScrollBar)
 		(185		UpdatingColorMorph)

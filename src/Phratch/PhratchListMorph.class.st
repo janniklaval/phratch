@@ -134,7 +134,7 @@ PhratchListMorph >> addLettersOf: anObject [
 { #category : #initialization }
 PhratchListMorph >> addScrollPane [
 
-	scrollPane := ScrollFrameMorph2 new
+	scrollPane := ScrollFrameMorph new
 		vBarInset: 16;
 		hBarInset: 18;
 		color: Color transparent;

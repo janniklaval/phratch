@@ -58,7 +58,7 @@ PhratchFilePicker >> buildButtons [
 		centering: #center;
 		color: Color transparent.
 	directoryBarArrowMorph := ImageMorph new form: (PhratchFrameMorph skinAt: #directoryBarArrow).
-	directoryBarMorph := ResizableToggleButton2 new
+	directoryBarMorph := ResizableToggleButton new
 		offForm: (PhratchFrameMorph skinAt: #directoryBar)
 		onForm: (PhratchFrameMorph skinAt: #directoryBar);
 		padding: 3@5.
@@ -107,7 +107,7 @@ PhratchFilePicker >> buildButtons [
 PhratchFilePicker >> buildContentsPane [
 	"Build a scroll pane to hold the directory contents."
 
-	contentsPaneMorph := ScrollFrameMorph2 new
+	contentsPaneMorph := ScrollFrameMorph new
 		color: self color;
 		contents: (Morph new color: self color);
 		showHorizontalScrollbar: false;
