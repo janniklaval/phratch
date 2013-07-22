@@ -757,14 +757,11 @@ PhratchFrameMorph >> aboutPhratch [
 		title: 'About Phratch';
 		withButtonsForYes: false no: false okay: true cancel: false.
 	dialogBox
-		message: 'Phratch 0.01
-Based on Build Your Own Blocks - an extension to Scratch
+		message: 'Phratch 1.0
 
-Copyright 2011 Brian Harvey and Jens Moenig
-bh@cs.berkeley.edu, jens@moenig.org
-All rights reserved
+Copyright (c) 2013 Jannik Laval.
 
-Based on SCRATCH
+Based on Scratch
 Copyright (C)  2009 Massachusetts Institute of Technology.
 All rights reserved.
 

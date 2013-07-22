@@ -13,6 +13,7 @@ PhratchInstaller class >> beginInstall [
 		inform:
 			'You are about to install Phratch.', String cr, 'This process will modify some Smalltalk system classes and might subsequently break other projects from this working image.', String cr , 'This is your last chance to abort the installation.'.
 "
+	self gotPhratchLicence ifFalse: [self getPhratchLicence].
 	self gotPhratchSkins ifFalse: [self getPhratchSkins].
 	self gotPhratchPlugins ifFalse: [self getPhratchPlugins]. 
 	self gotPhratchLocales ifFalse: [self getPhratchLocales].
@@ -62,6 +63,13 @@ PhratchInstaller class >> getPhratchHelp [
 ]
 
 { #category : #'as yet unclassified' }
+PhratchInstaller class >> getPhratchLicence [
+	Transcript cr; 
+		show: 'Downloading licence.txt'.
+	(FileStream newFileNamed: 'license.txt') nextPutAll: ((ZnHTTPSocketFacade httpGet: 'https://phratch.googlecode.com/files/license.txt'))
+]
+
+{ #category : #'as yet unclassified' }
 PhratchInstaller class >> getPhratchLocales [
 	Transcript cr; 
 		show: 'Downloading Local'.
@@ -106,6 +114,11 @@ PhratchInstaller class >> gotBYOBManual [
 { #category : #'as yet unclassified' }
 PhratchInstaller class >> gotPhratchHelp [
 	^ (FileSystem workingDirectory / 'Help') exists
+]
+
+{ #category : #'as yet unclassified' }
+PhratchInstaller class >> gotPhratchLicence [
+	^ (FileSystem workingDirectory / 'licence.txt') exists
 ]
 
 { #category : #'as yet unclassified' }
