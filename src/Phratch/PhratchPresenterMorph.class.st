@@ -52,7 +52,7 @@ PhratchPresenterMorph >> drawOn: aCanvas [
 	(aCanvas clipRect intersects: stageRect) ifTrue: [
 		offscreenWorld invalidRect: aCanvas clipRect.
 		offscreenWorld incrRedrawDouble: doubleSize].
-
+	
 ]
 
 { #category : #'button actions' }
@@ -343,7 +343,9 @@ PhratchPresenterMorph >> step [
 	stage step.
 	self stepSubmorphs.
 	offscreenWorld incrRedrawDouble: doubleSize.
-
+	
+	World fullRepaintNeeded.
+	
 	stage processesToRun size > 0
 		ifTrue: [flagButton on]
 		ifFalse: [flagButton off. self showPause].

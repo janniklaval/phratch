@@ -44,15 +44,16 @@ OffscreenWorldMorph >> incrRedrawDouble: doubleFlag [
 		m fullDrawOn: c.
 		doubleFlag
 			ifTrue: [
+				
 				p := (m center - m extent) + (2 * (r origin - m topLeft)).
-				screenR := p extent: 2 * f extent.
+				screenR := p extent: (2 * f extent).
 				(Display boundingBox containsRect: screenR) ifTrue: [
 					[
 						PhratchPlugin
 							primDouble: f bits w: f width h: f height
 							into: Display bits w: Display width h: Display height
-							x: screenR left y: screenR top.
-					] ifError: [].
+							x: (Display width - (f width*2))/2 y: (Display height - (f height*2))/2.
+					] ifError: [:e | Transcript show: e printString ].
 					Display forceToScreen: screenR]]
 			ifFalse: [
 				f displayOn: Display at: r topLeft rule: Form over]].
