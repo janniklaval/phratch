@@ -1922,7 +1922,7 @@ PhratchFrameMorph >> extractProjectFrom: aByteArray [
 
 ]
 
-{ #category : #'-- all --' }
+{ #category : #'as yet unclassified' }
 PhratchFrameMorph >> fileMenu: aMenuTitleMorph [
 
 	| menu |
@@ -2685,28 +2685,6 @@ PhratchFrameMorph >> loginPassword: aString [
 
 	loginPassword := aString.
 
-]
-
-{ #category : #compiler }
-PhratchFrameMorph >> makeExe [
-
-	| argStr delim |
-	justSaved ifFalse: [ 
-		self savePhratchProject ].
-	delim := FileSystem disk delimiter asString.
-	argStr := (PhratchFileChooserDialog getLastFolderForType: #project) fullName
-				, delim
-				, projectName.
-	Smalltalk os isWin32 ifTrue: [
-		^ OSProcess command: FileSystem workingDirectory fullName, delim, 'mak', delim, 'pack ', argStr ].
-	OSProcess command: 
-		'"'
-		, FileSystem workingDirectory fullName", delim, 'mak', delim, 'pack'"
-		, delim
-		, 'compile.sh" '
-		, '"'
-		, argStr
-		, '"'
 ]
 
 { #category : #intialization }
@@ -3886,8 +3864,6 @@ PhratchFrameMorph >> shareMenu: aMenuTitleMorph [
 
 	| menu stage |
 	menu := MenuMorph new defaultTarget: self.
-	menu add: 'Compile This Project' action: #makeExe.
-	menu addLine.
 	self addServerCommandsTo: menu.
 
 	stage := workPane.
