@@ -428,8 +428,9 @@ PhratchStageMorph >> drawPenTrailFor: aMorph from: oldPoint to: newPoint [
 PhratchStageMorph >> drawQuarterSizeOn: aCanvas [
 	"Draw myself and my submorphs to an offscreen canvas, then scale down to quarter size and draw that on the given canvas."
 
-	| r srcR c |
-	cachedForm ifNil: [cachedForm := Form extent: self extent depth: 32].
+	| r srcR c|
+
+	cachedForm ifNil: [cachedForm := Form extent: self extent depth: 32].	
 	r := aCanvas clipRect intersect: (bounds origin extent: bounds extent // 2).
 
 	srcR := ((r origin - bounds origin) * 2.0) truncated extent: (r extent * 2.0) rounded.
@@ -437,9 +438,9 @@ PhratchStageMorph >> drawQuarterSizeOn: aCanvas [
 		copyOrigin: self position negated
 		clipRect: srcR.
 	super fullDrawOn: c.
-
+	self updateAfterPopUp.
+	
 	PhratchPlugin halfSize: cachedForm into: Display srcPoint: srcR origin dstRect: r.
-
 "xxx
 	cachedForm unhibernate.
 	LowResPlugin
