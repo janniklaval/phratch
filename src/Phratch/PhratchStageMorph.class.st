@@ -78,8 +78,6 @@ PhratchStageMorph class >> blockSpecs [
 			('set horizontal pan to $Number$'		-	setHPanTo: 0)
 			('change vertical pan by $Number$'	-	changeVPanBy:)
 			('set vertical pan to $Number$'			-	setVPanTo: 0)
-			"('change zoom by $Number$'			-	changeZoomBy:)
-			('set zoom to $Number$'				-	setZoomTo:)"
 			=
 			('do with camera open'						c	doWithCamOpen)
 			('camera is open?'							b	cameraIsOpen)
