@@ -111,7 +111,7 @@ BYOBList >> lineCount [
 { #category : #'list ops' }
 BYOBList >> setLineAt: aNumber to: newContents [
 
-	contents at: aNumber put: newContents.
+	[contents at: aNumber put: newContents] ifError: [contents add: newContents].
 	self changed
 ]
 

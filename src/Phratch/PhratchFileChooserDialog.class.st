@@ -333,8 +333,8 @@ PhratchFileChooserDialog class >> userPhratchProjectsDir [
 		[(homeDir / phratchFolderName) ensureDirectory] ifError: []].
 
 	^ (homeDir / phratchFolderName) exists
-		ifTrue: [homeDir / phratchFolderName]
-		ifFalse: [homeDir]
+		ifTrue: [(homeDir / phratchFolderName) asFileReference]
+		ifFalse: [homeDir asFileReference]
 
 ]
 

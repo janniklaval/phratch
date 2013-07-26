@@ -426,7 +426,8 @@ CustomBlockDefinition >> parameterNamesInSpec: aString [
 	out := OrderedCollection new.
 	cmd do: [:each|
 		(each asString beginsWith: '$')
-			ifTrue: [out add: (each asString allButFirst allButLast)]].
+			ifTrue: [out add: (each asString allButFirst allButLast)]
+	].
 	^out asArray
 ]
 

@@ -118,7 +118,8 @@ ObjStream class >> fixedFormatClasses [
 		(11	ByteArray				getBytes:id:			putBytes:id:)
 		(12	SoundBuffer			getSoundBuf:id:		putSoundBuf:id:)
 		(13	Bitmap					getBitmap:id:		putBitmap:id:)
-											
+		"(14	UTF8					getBytes:id:			putBytes:id:)"
+		(14	String					getBytes:id:			putBytes:id:)								
 		(15	ByteString					getBytes:id:			putBytes:id:)			
 		(16	ByteSymbol				getBytes:id:			putBytes:id:)			
 																																			

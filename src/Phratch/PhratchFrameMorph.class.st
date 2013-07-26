@@ -848,7 +848,7 @@ PhratchFrameMorph >> addShortcutButtonsTo: rowMorph [
 
 	buttonSpecs := #(
 		"name		tool tip				selector"
-		"(language	'Set language'		languageMenu:)"
+		(language	'Set language'		languageMenu:)
 		(save		'Save this project'	#savePhratchProjectNoDialog)
 "		(share		'Share this project'	share)"
 	).
@@ -2977,7 +2977,8 @@ PhratchFrameMorph >> openPhratchProjectNamed: fName [
 		f := FileStream readOnlyFileNamedOrNil: fn.
 		f ifNil: [^ self inform: 'Could not read' withDetails: fName]].
 
-	[	projData := f binary contentsOfEntireFile.
+	[
+		projData := f binary contentsOfEntireFile.
 		newProj := self extractProjectFrom: projData.
 		projectInfo := self extractInfoFrom: projData.
 	] ifError: [:err :rcvr | ^ self inform: 'Could not read project; file may be damaged' withDetails: '(', err, ')'].

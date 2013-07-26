@@ -1100,6 +1100,88 @@ CommandBlockMorph >> numberArgFlags [
 
 ]
 
+{ #category : #private }
+CommandBlockMorph >> oldUncoloredArgMorphFor: specString [
+	"Answer an argument morph for the given argument specification string."
+
+	| code |
+	code := specString copyFrom: 2 to: specString size-1.
+	
+	$a			= code ifTrue: [^ AttributeArgMorph new choice: ''].
+	$b			= code ifTrue: [^ BooleanArgMorph new].
+	$c				= code ifTrue: [^ ColorArgMorph new showPalette: true].
+	$C		= code ifTrue: [^ ColorArgMorph new showPalette: false]. 
+	$d			= code ifTrue: [^ ExpressionArgMorphWithMenu new numExpression: '0'; menuSelector: #directionMenu].
+	$D				= code ifTrue: [^ ExpressionArgMorphWithMenu new numExpression: '48'; menuSelector: #midiDrumMenu].
+	$e				= code ifTrue: [^ EventTitleMorph new].
+	$f		= code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #mathFunctionNames; choice: #sqrt].
+	$3			= code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #constantNames].
+	$g				= code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #graphicEffectNames; choice: #color].
+	$4 		= code ifTrue: [^ ExpressionArgMorphWithMenu new stringExpression: 'a color'; menuSelector: #colorsMenu].
+	$H 		= code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #hookupSensorNames].
+	$h 		= code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #hookupBooleanSensorNames].
+	$I 		= code ifTrue: [^ ExpressionArgMorphWithMenu new numExpression: '1'; menuSelector: #midiInstrumentMenu].
+	$i 			= code ifTrue: [^ ExpressionArgMorphWithMenu new numExpression: '1'; menuSelector: #listIndexMenu].
+	$k 				= code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #keyNames; choice: 'space'].
+	$5 		= code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #namedColors; choice: #black].
+	$L 				= code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #listVarMenu].
+	$l 			= code ifTrue: [^ ChoiceOrExpressionArgMorph new getOptionsSelector: #costumeNames; choice: 'costume1'].
+	$m 				= code ifTrue: [^ SpriteArgMorph new].
+	$M 		= code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #motorNames].
+	$n 			= code ifTrue: [^ ExpressionArgMorph new numExpression: '10'].
+	$N 				= code ifTrue: [^ ExpressionArgMorphWithMenu new numExpression: '60'; menuSelector: #noteSelector].
+	$s 				= code ifTrue: [^ ExpressionArgMorph new stringExpression: ''].
+	$S 		= code ifTrue: [^ ChoiceOrExpressionArgMorph new getOptionsSelector: #soundNames; choice: 'pop'].
+	$6 			= code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #timeDates; choice: 'time'].
+	$7 		= code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #layoutStyles; choice: 'large'].
+	$v 			= code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #varNamesMenu; choice: ''].
+	$W 		= code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #motorDirection].
+	$x 		= code ifTrue: [^ ChoiceOrExpressionArgMorph new getOptionsSelector: #sceneNames; choice: ''].
+	$8 		= code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #newCostumeTypes; choice: 'camera'].
+	$y 			= code ifTrue: [^ ExpressionArgMorphWithMenu new numExpression: '1'; menuSelector: #listIndexForDeleteMenu].
+
+	$B  = code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #blockId; choice: ''].
+	"special args for BYOB"
+	$o  = code ifTrue: [ ^ CSlotMorph new "SpecialArgMorph new type: #command"].
+	$E  = code ifTrue: [ ^ CSlotMorph new "SpecialArgMorph new type: #command"].
+	$O  = code ifTrue: [ ^ MultiArgMorph type: #command].
+	$r  = code ifTrue: [ ^ OSlotMorph new receiver: receiver; type: #reporterslot; yourself "SpecialArgMorph new type: #reporter"].
+	$R  = code ifTrue: [ ^ MultiArgMorph type: #reporter].
+	$p  = code ifTrue: [ ^ OSlotMorph new receiver: receiver; type: #booleanslot; yourself "SpecialArgMorph new type: #predicate"].
+	$P  = code ifTrue: [ ^ MultiArgMorph type: #predicate].
+	$t  = code ifTrue: [ ^ SpecialArgMorph new type: #list].
+	$u  = code ifTrue: [ ^ MultiArgMorph type: #list].
+	$T  = code ifTrue: [ ^ ExpressionArgMorph new stringExpression: ''; isText: true.  "SpecialArgMorph new type: #text"].
+	$U  = code ifTrue: [ ^ MultiArgMorph type: #text].
+	$V  = code ifTrue: [ ^ MultiArgMorph type: #boolean].
+	$w  = code ifTrue: [ ^ MultiArgMorph type: #number].
+	$X  = code ifTrue: [ ^ MultiArgMorph type: #any].
+	$z  = code ifTrue: [ ^ VariableBlockMorph new 
+							isSpecialForm: true; 
+							selector: #getVar:;
+							commandSpec: '?'].
+	$Z  = code ifTrue: [ ^ SpecialArgMorph new type: #reporterslot].
+	$Y  = code ifTrue: [ ^ SpecialArgMorph new type: #booleanslot].
+	
+	$A = code ifTrue: [ ^ ChoiceArgMorph new options: {'with inputs' localized. 'with input list' localized}; choice: 'with inputs'].
+	$F  = code ifTrue: [ ^ ChoiceArgMorph new options: {'number' localized. 'text' localized. 'boolean' localized. 'list' localized. 'command' localized. 'reporter' localized. 'predicate' localized. 'object' localized}; choice: 'number' localized].
+
+	$G  = code ifTrue: [ ^ CArgSlotMorph new].
+	$J  = code ifTrue: [ ^ MultiArgMorph type: #loop].
+
+	$j  = code ifTrue: [ ^ UnevaluatedExpressionArgMorph new stringExpression: ''].
+	$q  = code ifTrue: [ ^ MultiArgMorph type: #unevaluated].
+	$Q  = code ifTrue: [ ^ UnevaluatedBooleanArgMorph new].
+	$K  = code ifTrue: [ ^ MultiArgMorph type: #unevaluatedBoolean].
+
+	$1  = code ifTrue: [ ^ SpecialArgMorph new type: #objSlot].
+	$2  = code ifTrue: [ ^ MultiArgMorph type: #objSlot].	
+	
+	$r  = code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #rotationStyleChanger; choice: 'normal'].
+			
+	^ ExpressionArgMorph new numExpression: '10'
+]
+
 { #category : #evaluation }
 CommandBlockMorph >> organizeArgs: argList [
 	"Answer an arugments array in which all arguments have been rearranged to the original English permutation"
@@ -1538,8 +1620,9 @@ CommandBlockMorph >> uncoloredArgMorphFor: specString [
 	"$2"'MAObjS' = code ifTrue: [ ^ MultiArgMorph type: #objSlot].	
 	
 	"$r"'Rotation' = code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #rotationStyleChanger; choice: 'normal'].
-			
-	^ ExpressionArgMorph new numExpression: '10'
+	
+	^self oldUncoloredArgMorphFor: specString.
+	"^ ExpressionArgMorph new numExpression: '10'"
 ]
 
 { #category : #private }
