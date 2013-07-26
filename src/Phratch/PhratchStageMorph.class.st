@@ -28,67 +28,6 @@ Class {
 	#category : #'Phratch-Objects'
 }
 
-{ #category : #'block specs' }
-PhratchStageMorph class >> blockSpecs [
-
-	| blocks |
-	blocks := #(
-		'sensing'
-			('ask $String$ and wait'			s	doAsk 'What''s your name?')
-			('ask $String$ in dialog'						-	showAskDialogWithText: 'What''s your name?')
-			('answer'					r	answer)
-			-
-			('show dialog $String$ with text $String$'	-	showInformDialog:withText: 'info' '')
-			-
-			('mouse x'					r	mouseX)
-			('mouse y'					r	mouseY)
-			('mouse down?'				b	mousePressed)
-			-
-			('key $Keys$ pressed?'			b	keyPressed: 'space')
-			('key pressed'								r	keyPressed)
-			-
-			('reset timer'				-	timerReset)
-			('timer'						r	timer)
-			-
-			('$Attributes$ of $Sprite$'					r	getAttribute:of:)
-			('get $Attributes$ of $Sprite$'				r	attribute:of:)
-			-
-			('loudness'					r	soundLevel)
-			('loud?'						b	isLoud)
-			~
-			('$SensorNames$ sensor value'			r	sensor: 'slider')
-			('sensor $SensorBooleans$?'				b	sensorPressed: 'button pressed')
-			=
-			('object $Sprite$'						r	getObject:)
-			('attribute $Attributes$'						r	get:)
-		'looks'
-			('switch to background $Costumes$'	-	showBackground: 'background1')
-			('next background'			-	nextBackground)
-			-
-			('replace background $Number$ with $NewCostume$'	-	replaceBackground:with: 1)
-			('add $NewCostume$ to backgrounds'			-	addBackgroundTyped:)
-			('background #'				r	backgroundIndex)
-			=
-			('change $Effects$ effect by $Number$'	-	changeGraphicEffect:by: 'color' 25)
-			('set $Effects$ effect to $Number$'		-	setGraphicEffect:to: 'color' 0)
-			('clear graphic effects'		-	filterReset)
-			('$Effects$ effect'							r	graphicEffectNamed: 'color')
-			-
-			('change horizontal pan by $Number$'	-	changeHPanBy:)
-			('set horizontal pan to $Number$'		-	setHPanTo: 0)
-			('change vertical pan by $Number$'	-	changeVPanBy:)
-			('set vertical pan to $Number$'			-	setVPanTo: 0)
-			=
-			('do with camera open'						c	doWithCamOpen)
-			('camera is open?'							b	cameraIsOpen)
-			('open camera'				-	openCamera)
-			('close camera'				-	closeDefinitivelyCamera)	
-	).
-
-	^ blocks, super blockSpecs
-
-]
-
 { #category : #'dropping/grabbing' }
 PhratchStageMorph >> acceptDroppingMorph: aMorph event: evt [
 
@@ -107,6 +46,7 @@ PhratchStageMorph >> acceptDroppingMorph: aMorph event: evt [
 
 { #category : #'panther actions' }
 PhratchStageMorph >> addBackgroundTyped: aString [
+	<phratchItem: 'add $NewCostume$ to backgrounds' kind: #- category: 'looks' defaultValues: #() subCategory: #a2>
 	self addCostumeTyped: aString.
 ]
 
@@ -197,7 +137,7 @@ PhratchStageMorph >> attributeNames [
 { #category : #'looks ops' }
 PhratchStageMorph >> backgroundIndex [
 	"Answer the index of my current costume."
-
+	<phratchItem: 'background #' kind: #r category: 'looks' defaultValues: #() subCategory: #a2>
 	^ self costumeIndex
 
 ]
@@ -232,7 +172,7 @@ PhratchStageMorph >> changeBackgroundIndexBy: aNumber [
 { #category : #'looks ops' }
 PhratchStageMorph >> changeHPanBy: amount [
 	"Change my horizontal pan by the given amount."
-
+	<phratchItem: 'change horizontal pan by $Number$' kind: #- category: 'looks' defaultValues: #() subCategory: #a4>
 	hPan := hPan + amount truncated.
 	self changed.
 
@@ -241,7 +181,7 @@ PhratchStageMorph >> changeHPanBy: amount [
 { #category : #'looks ops' }
 PhratchStageMorph >> changeVPanBy: amount [
 	"Change my vertical pan by the given amount."
-
+	<phratchItem: 'change vertical pan by $Number$' kind: #- category: 'looks' defaultValues: #() subCategory: #a4>
 	vPan := vPan + amount truncated.
 	self changed.
 
@@ -268,7 +208,7 @@ PhratchStageMorph >> clearAllVariables [
 { #category : #'pen support' }
 PhratchStageMorph >> clearPenTrails [
 	"Remove my pen trails Form. It will be recreated later if it is needed."
-
+	<phratchItem: 'clear pen trails' kind: #- category: 'pen' defaultValues: #() subCategory: #a5>
 	penTrailsForm := nil.
 	self changed.
 
@@ -873,7 +813,7 @@ PhratchStageMorph >> newScene [
 { #category : #'looks ops' }
 PhratchStageMorph >> nextBackground [
 	"Show the next background in my backgrounds list."
-
+	<phratchItem: 'next background' kind: #- category: 'looks' defaultValues: #() subCategory: #a1>
 	self nextCostume.
 
 ]
@@ -1121,7 +1061,7 @@ PhratchStageMorph >> removeTerminatedProcesses [
 
 { #category : #'panther actions' }
 PhratchStageMorph >> replaceBackground: name with: sel [
-
+	<phratchItem: 'replace background $Number$ with $NewCostume$' kind: #- category: 'looks' defaultValues: #(1) subCategory: #a2>
 	self replaceCostume: name with: sel.
 ]
 
@@ -1249,7 +1189,7 @@ PhratchStageMorph >> sensorBoard: aSensorBoardMorph [
 { #category : #'looks ops' }
 PhratchStageMorph >> setHPanTo: aNumber [
 	"Set my horizontal pan to the given offset."
-
+	<phratchItem: 'set horizontal pan to $Number$' kind: #- category: 'looks' defaultValues: #(0) subCategory: #a4>
 	hPan := aNumber truncated.
 	self changed.
 
@@ -1266,7 +1206,7 @@ PhratchStageMorph >> setTempoTo: aNumber [
 { #category : #'looks ops' }
 PhratchStageMorph >> setVPanTo: aNumber [
 	"Set my vertical pan to the given offset."
-
+	<phratchItem: 'set vertical pan to $Number$' kind: #- category: 'looks' defaultValues: #(0) subCategory: #a4>
 	vPan := aNumber truncated.
 	self changed.
 
@@ -1285,7 +1225,7 @@ PhratchStageMorph >> setZoomTo: percent [
 { #category : #'looks ops' }
 PhratchStageMorph >> showBackground: costumeNameOrIndex [
 	"This is lookLike: for the stage..."
-
+	<phratchItem: 'switch to background $Costumes$' kind: #- category: 'looks' defaultValues: #('background1') subCategory: #a1>
 	self lookLike: costumeNameOrIndex.
 
 ]

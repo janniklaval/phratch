@@ -80,26 +80,6 @@ PhratchSpriteMorph class >> blockSpecs [
 			('make draggable'				-	makeDrag)
 			('make undraggable'			-	makeNoDrag)
 			('draggable?'					b	isDraggable)
-		'pen'
-			('pen color'						r	penColor)
-			('pen hue'						r	penHue)
-			('pen shade'						r	penShade)
-			('pen size'						r	penSize)
-			=
-			('pen down'						-	putPenDown)
-			('pen up'						-	putPenUp)
-			-
-			('set pen color to $Color$'			-	penColor:)
-			('change pen color by $Number$'		-	changePenHueBy:)
-			('set pen color to $Number$'			-	setPenHueTo: 0)
-			-
-			('change pen shade by $Number$'		-	changePenShadeBy:)
-			('set pen shade to $Number$'			-	setPenShadeTo: 50)
-			-
-			('change pen size by $Number$'		-	changePenSizeBy: 1)
-			('set pen size to $Number$'				-	penSize: 1)
-			-
-			('stamp'							-	stampCostume)
 	).
 
 	blocks := blocks, #(
@@ -116,11 +96,6 @@ PhratchSpriteMorph class >> blockSpecs [
 			('say $String$'						-	say: 'Hello!')
 			('think $String$ for $Number$ secs'			t	think:duration:elapsed:from: 'Hmm...' 2)
 			('think $String$'						-	think: 'Hmm...')
-			-
-			('change $Effects$ effect by $Number$'		-	changeGraphicEffect:by: 'color' 25)
-			('set $Effects$ effect to $Number$'			-	setGraphicEffect:to: 'color' 0)
-			('clear graphic effects'			-	filterReset)
-			('$Effects$ effect'				r	graphicEffectNamed: 'color')
 			-
 			('change size by $Number$'			-	changeSizeBy:)
 			('set size to $Number$'				-	setSizeTo: 100)
@@ -145,49 +120,6 @@ PhratchSpriteMorph class >> blockSpecs [
 			-
 			('go to front'					-	comeToFront)
 			('go back $Number$ layers'			-	goBackByLayers: 1)
-			=
-			('do with camera open'			c	doWithCamOpen)
-			('camera is open?'				b	cameraIsOpen)
-			('open camera'				-	openCamera)
-			('close camera'				-	closeDefinitivelyCamera)
-		'sensing'
-			('sprite name'					r	objName)
-			('set sprite name to $String$'	-	setMyName:)
-			=
-			('touching $Sprite$?' 				b	touching:)
-			('touching color $ScreenColor$?' 			b	touchingColor:)
-			('color $ScreenColor$ is touching $ScreenColor$?'		b	color:sees:)
-			-
-			('ask $String$ and wait'				s	doAsk 'What''s your name?')
-			('ask $String$ in dialog'			-	showAskDialogWithText: 'What''s your name?')
-			('answer'						r	answer)
-			-
-			('show dialog $String$ with text $String$'	-	showInformDialog:withText: 'info' '')
-			('warn $String$' #- #warn: 'Invalid input')
-			=
-			('mouse x'						r	mouseX)
-			('mouse y'						r	mouseY)
-			('mouse down?'					b	mousePressed)
-			('key $Keys$ pressed?'				b	keyPressed: 'space')
-			('key pressed'					r	keyPressed)
-			-
-			('distance to $Sprite$'				r	distanceTo:)
-			('distance to x $Number$ y $Number$' #r #dist:and:)
-			-
-			('reset timer'					-	timerReset)
-			('timer'							r	timer)
-			-
-			('$Attributes$ of $Sprite$'						r	getAttribute:of:)
-			('get $Attributes$ of $Sprite$'					r	attribute:of:)
-			-
-			('loudness'						r	soundLevel)
-			('loud?'							b	isLoud)
-			~
-			('$SensorNames$ sensor value'				r	sensor: 'slider')
-			('sensor $SensorBooleans$?'					b	sensorPressed: 'button pressed')
-			=
-			('object $Sprite$'						r	getObject:)
-			('attribute $Attributes$'						r	get:)
 		).
 
 	^ blocks, super blockSpecs
@@ -417,7 +349,7 @@ PhratchSpriteMorph >> cacheRefPos [
 { #category : #'pen ops' }
 PhratchSpriteMorph >> changePenHueBy: aNumber [
 	"Change the pen hue by given number."
-
+	<phratchItem: 'change pen color by $Number$' kind: #- category: 'pen' defaultValues: #() subCategory: #a3>
 	self setPenHueTo: penHue + aNumber.
 
 
@@ -426,7 +358,7 @@ PhratchSpriteMorph >> changePenHueBy: aNumber [
 { #category : #'pen ops' }
 PhratchSpriteMorph >> changePenShadeBy: aNumber [
 	"Change the pen shade (lightness) by given number"
-
+	<phratchItem: 'change pen shade by $Number$' kind: #- category: 'pen' defaultValues: #() subCategory: #a3>
 	self setPenShadeTo: penShade + aNumber.
 
 ]
@@ -434,7 +366,7 @@ PhratchSpriteMorph >> changePenShadeBy: aNumber [
 { #category : #'pen ops' }
 PhratchSpriteMorph >> changePenSizeBy: aNumber [
 	"Change my pen width."
-
+	<phratchItem: 'change pen size by $Number$' kind: #- category: 'pen' defaultValues: #(1) subCategory: #a3>
 	self penSize: penSize + aNumber.
 
 ]
@@ -510,7 +442,7 @@ PhratchSpriteMorph >> choosePrototype [
 { #category : #'pen ops' }
 PhratchSpriteMorph >> clearPenTrails [
 	"Clear the pen trails layer."
-
+	<phratchItem: 'clear pen trails' kind: #- category: 'pen' defaultValues: #() subCategory: #a5>
 	| m |
 	(m := self ownerOrYourselfThatIsA: PhratchStageMorph)
 		ifNotNil: [m clearPenTrails].
@@ -554,7 +486,7 @@ PhratchSpriteMorph >> cloneMe [
 { #category : #'motion ops' }
 PhratchSpriteMorph >> color: sensitiveColor sees: soughtColor [
 	"Return true if any of my pixels of sensitiveColor intersect with pixels of soughtColor in the world."
-
+	<phratchItem: 'color $ScreenColor$ is touching $ScreenColor$?' kind: #b category: 'sensing' defaultValues: #() subCategory: #sensor>
 	| r myImage sensitivePixelsMask map index imageBelowMe result |
 	r := self bounds intersect: owner bounds.
 	r area = 0 ifTrue: [^ false].
@@ -653,6 +585,7 @@ PhratchSpriteMorph >> directionMenu [
 
 { #category : #'as yet unclassified' }
 PhratchSpriteMorph >> dist: t1 and: t2 [ 
+	<phratchItem: 'distance to x $Number$ y $Number$' kind: #r category: 'sensing' defaultValues: #(0 0) subCategory: #sensor>
     ^ (self xpos - t1 * (self xpos - t1) + (self ypos - t2 * (self ypos - t2))) abs sqrt
 ]
 
@@ -667,7 +600,7 @@ PhratchSpriteMorph >> distance: t1 X: t2 Y: t3 [
 { #category : #'motion ops' }
 PhratchSpriteMorph >> distanceTo: anObject [
 	"Answer the distance to the given sprite."
-
+	<phratchItem: 'distance to $Sprite$' kind: #r category: 'sensing' defaultValues: #() subCategory: #sensor>
 	| aSpriteOrSymbol |
 	aSpriteOrSymbol := self coerceSpriteArg: anObject.
 
@@ -1637,7 +1570,7 @@ PhratchSpriteMorph >> passiveYpos: aNumber [
 
 { #category : #'pen ops' }
 PhratchSpriteMorph >> penColor [
-
+	<phratchItem: 'pen color' kind: #r category: 'pen' defaultValues: #() subCategory: #a1>
 	^ penColor
 
 ]
@@ -1645,7 +1578,7 @@ PhratchSpriteMorph >> penColor [
 { #category : #'pen ops' }
 PhratchSpriteMorph >> penColor: aColor [
 	"Set my pen color."
-
+	<phratchItem: 'set pen color to $Color$' kind: #- category: 'pen' defaultValues: #() subCategory: #a3>
 	self undeleteAttribute: #penColor.
 	self passivePenColor: aColor
 ]
@@ -1672,7 +1605,7 @@ PhratchSpriteMorph >> penDown: aBoolean [
 
 { #category : #'BYOB attributes' }
 PhratchSpriteMorph >> penHue [
-
+	<phratchItem: 'pen hue' kind: #r category: 'pen' defaultValues: #() subCategory: #a1>
 	| att |
 	att := #penColor.
 	self prototype ifNotNil: [
@@ -1691,7 +1624,7 @@ PhratchSpriteMorph >> penPosition [
 
 { #category : #'BYOB attributes' }
 PhratchSpriteMorph >> penShade [
-
+	<phratchItem: 'pen shade' kind: #r category: 'pen' defaultValues: #() subCategory: #a1>
 	| att |
 	att := #penShade.
 	self prototype ifNotNil: [
@@ -1703,7 +1636,7 @@ PhratchSpriteMorph >> penShade [
 
 { #category : #'pen ops' }
 PhratchSpriteMorph >> penSize [
-
+	<phratchItem: 'pen size' kind: #r category: 'pen' defaultValues: #() subCategory: #a1>
 	| att |
 	att := #penSize.
 	self prototype ifNotNil: [
@@ -1717,7 +1650,7 @@ PhratchSpriteMorph >> penSize [
 { #category : #'pen ops' }
 PhratchSpriteMorph >> penSize: aNumber [
 	"Set my pen width."
-
+	<phratchItem: 'set pen size to $Number$' kind: #- category: 'pen' defaultValues: #(1) subCategory: #a3>
 	self undeleteAttribute: #penSize.
 	self passivePenSize: aNumber
 ]
@@ -1855,7 +1788,7 @@ PhratchSpriteMorph >> prototype: aSprite [
 { #category : #'pen ops' }
 PhratchSpriteMorph >> putPenDown [
 	"Put down my drawing pen (i.e. start drawing a pen trail)."
-
+	<phratchItem: 'pen down' kind: #- category: 'pen' defaultValues: #() subCategory: #a2>
 	self penDown: true.
 
 ]
@@ -1863,7 +1796,7 @@ PhratchSpriteMorph >> putPenDown [
 { #category : #'pen ops' }
 PhratchSpriteMorph >> putPenUp [
 	"Put up my drawing pen (i.e. stop drawing a pen trail)."
-
+	<phratchItem: 'pen up' kind: #- category: 'pen' defaultValues: #() subCategory: #a2>
 	self penDown: false.
 
 ]
@@ -2193,6 +2126,7 @@ PhratchSpriteMorph >> scenes [
 
 { #category : #'panther actions' }
 PhratchSpriteMorph >> setMyName: aName [
+	<phratchItem: 'set sprite name to $String$' kind: #- category: 'sensing' defaultValues: #() subCategory: #a1>
 	self objName: (aName asString).
 ]
 
@@ -2224,7 +2158,7 @@ PhratchSpriteMorph >> setPenColorFromCostumedNamed: costumeNameOrIndex x: x y: y
 { #category : #'pen ops' }
 PhratchSpriteMorph >> setPenHueTo: aNumber [
 	"Set the pen hue to given number between 0 and 200. (That makes 100 the 'maximum' distance away from the original color on the color wheel.)"
-
+	<phratchItem: 'set pen color to $Number$' kind: #- category: 'pen' defaultValues: #(0) subCategory: #a3>
 	self undeleteAttribute: #penColor.
 	self passiveSetPenHueTo: aNumber
 ]
@@ -2233,7 +2167,7 @@ PhratchSpriteMorph >> setPenHueTo: aNumber [
 PhratchSpriteMorph >> setPenShadeTo: aNumber [
 	"Set the pen shade (lightness) to given number between 0 and 100. A shade of 0 is black, 100 is white, and 50 is fully saturated color."
 	"Details: We don't want to get all the way to pure black or white, so we divide the range 0..50 by a number > 50 when computing the fraction of the original color to mix with black or white."
-
+	<phratchItem: 'set pen shade to $Number$' kind: #- category: 'pen' defaultValues: #(50) subCategory: #a3>
 	self undeleteAttribute: #penShade.
 	self passiveSetPenShadeTo: aNumber
 ]
@@ -2393,7 +2327,7 @@ PhratchSpriteMorph >> spreadToFollowers [
 { #category : #'pen ops' }
 PhratchSpriteMorph >> stampCostume [
 	"Stamp a copy of my current costume on the pen trails layer."
-
+	<phratchItem: 'stamp' kind: #- category: 'pen' defaultValues: #() subCategory: #a4>
 	| m |
 	self step.  "update costume if necessary"
 	(m := self ownerOrYourselfThatIsA: PhratchStageMorph)
@@ -2508,7 +2442,7 @@ PhratchSpriteMorph >> toggleRotationRule [
 PhratchSpriteMorph >> touching: anObject [
 	"Answer true if any visible part of me touches a visible part of the given sprite."
 	"Details: Currently uses the bounding box; should follow this up with comparison of visible pixels."
-
+	<phratchItem: 'touching $Sprite$?' kind: #b category: 'sensing' defaultValues: #() subCategory: #sensor>
 	| aSpriteOrSymbol stage intersection f1 f2 map oldVis result |
 	aSpriteOrSymbol := self coerceSpriteArg: anObject.
 
@@ -2556,7 +2490,7 @@ PhratchSpriteMorph >> touching: anObject [
 { #category : #accessing }
 PhratchSpriteMorph >> touchingColor: soughtColor [
 	"Answer true if any of my non-transparent pixels touch pixels of the given color in the world."
-
+	<phratchItem: 'touching color $ScreenColor$?' kind: #b category: 'sensing' defaultValues: #() subCategory: #sensor>
 	| r myImage sensitivePixelsMask map imageBelowMe result |
 	r := self bounds intersect: owner bounds.
 	r area = 0 ifTrue: [^ false].
@@ -2741,6 +2675,7 @@ PhratchSpriteMorph >> virtualScale: aPoint [
 
 { #category : #'as yet unclassified' }
 PhratchSpriteMorph >> warn: t1 [ 
+	<phratchItem: 'warn $String$' kind: #- category: 'sensing' defaultValues: #('Invalid input') subCategory: #a1>
     DialogBoxMorph warn: t1.
 	self updateAfterPopUp.
 ]

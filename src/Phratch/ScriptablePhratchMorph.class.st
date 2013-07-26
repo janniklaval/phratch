@@ -94,6 +94,10 @@ ScriptablePhratchMorph class >> blockSpecDict [
 
 { #category : #'block specs' }
 ScriptablePhratchMorph class >> blockSpecs [
+	"To obtain all the items of the menu, execute:
+	SystemNavigation default allCallsOn: #phratchItem:kind:category:defaultValues:subCategory: 
+	"
+
 	"Answer a collection of block specifications for the blocks that are common to all objects. Block specificatons (Arrays) are interspersed with category names (Strings). A block specification is an Array of the form: (<block spec string> <block type> <selector> [optional initial argument values]).
 
 	Explanation of flags:
@@ -286,8 +290,6 @@ ScriptablePhratchMorph class >> blockSpecs [
 			('$String$ as color'								g	stringAsColor: '#FFFFFF')
 			-
 			('color named $NamedColors$'					g	getNamedColor:)
-		'pen'
-			('clear'						-	clearPenTrails)
 	).
 	
 	
@@ -1308,7 +1310,7 @@ ScriptablePhratchMorph >> allVarNames [
 
 { #category : #'sensing ops' }
 ScriptablePhratchMorph >> answer [
-
+	<phratchItem: 'answer' kind: #r category: 'sensing' defaultValues: #() subCategory: #a1>
 	^ PhratchPrompterMorph lastAnswer
 
 ]
@@ -1414,7 +1416,7 @@ ScriptablePhratchMorph >> askForFileIO [
 { #category : #'BYOB OOP message passing' }
 ScriptablePhratchMorph >> attribute: attr of: anObject [
 	"Answer the variable or built-in attribute value for the given sprite. Answer zero if the given sprite does not have a built-in attribute or variable of the given name."
-
+	<phratchItem: 'get $Attributes$ of $Sprite$' kind: #r category: 'sensing' defaultValues: #() subCategory: #a3>
 	| aSpriteOrStage |
 	aSpriteOrStage := self coerceSpriteArg: anObject.
 
@@ -2358,7 +2360,7 @@ ScriptablePhratchMorph >> callMeWith: anArg [
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> cameraIsOpen [
-
+	<phratchItem: 'camera is open?' kind: #b category: 'looks' defaultValues: #() subCategory: #a9>
 	^ CameraPlugin cameraIsOpen: 1.
 ]
 
@@ -2373,7 +2375,7 @@ ScriptablePhratchMorph >> changeCostumeIndexBy: aNumber [
 { #category : #'looks ops' }
 ScriptablePhratchMorph >> changeGraphicEffect: effect by: aNumber [
 	"Change the given graphic effect by the given value."
-
+	<phratchItem: 'change $Effects$ effect by $Number$' kind: #- category: 'looks' defaultValues: #('color' 25) subCategory: #a3>
 
 	'blur' = effect ifTrue: [self blurEffect: self blurEffect + aNumber asNumberNoError].
 	'brightness' = effect ifTrue: [self brightnessEffect: self brightnessEffect + aNumber asNumberNoError].
@@ -2539,7 +2541,7 @@ ScriptablePhratchMorph >> closeCamera [
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> closeDefinitivelyCamera [
-
+	<phratchItem: 'close camera' kind: #- category: 'looks' defaultValues: #() subCategory: #a9>
 	^ self cameraIsOpen ifTrue: [
 		CameraOpenings := 0.
 		CameraPlugin closeCamera: 1].
@@ -3902,6 +3904,12 @@ ScriptablePhratchMorph >> doAnswer [
 
 ]
 
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> doAsk [
+	<phratchItem: 'ask $String$ and wait' kind: #s category: 'sensing' defaultValues: #('What''s your name?') subCategory: #a1>
+	
+]
+
 { #category : #byob }
 ScriptablePhratchMorph >> doBroadcastAndWait [
 	<phratchItem: 'broadcast $Event$ and wait' kind: #s category: 'control' defaultValues: #() subCategory: #broadcast>
@@ -4022,6 +4030,12 @@ ScriptablePhratchMorph >> doWaitUntil [
 	<phratchItem: 'wait until $Boolean$' kind: #s category: 'control' defaultValues: #() subCategory: #time>
 	^ nil
 
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> doWithCamOpen [
+	<phratchItem: 'do with camera open' kind: #c category: 'looks' defaultValues: #() subCategory: #a9>
+	
 ]
 
 { #category : #'event handling' }
@@ -4541,7 +4555,7 @@ ScriptablePhratchMorph >> factorial: t1 [
 
 { #category : #'looks ops' }
 ScriptablePhratchMorph >> filterReset [
-
+	<phratchItem: 'clear graphic effects' kind: #- category: 'looks' defaultValues: #() subCategory: #a3>
 	filterPack := nil.
 	self transparency: 0.
 	self costumeChanged.
@@ -4614,7 +4628,7 @@ ScriptablePhratchMorph >> form: aForm [
 
 { #category : #'BYOB object interface' }
 ScriptablePhratchMorph >> get: anObject [
-
+	<phratchItem: 'attribute $Attributes$' kind: #r category: 'sensing' defaultValues: #() subCategory: #a3>
 	| oi sel obj att block |
 
 	anObject = #null
@@ -4653,7 +4667,7 @@ ScriptablePhratchMorph >> getAttribute: attr [
 { #category : #'sensing ops' }
 ScriptablePhratchMorph >> getAttribute: attr of: anObject [
 	"Answer the variable or built-in attribute value for the given sprite. Answer zero if the given sprite does not have a built-in attribute or variable of the given name."
-
+	<phratchItem: '$Attributes$ of $Sprite$' kind: #r category: 'sensing' defaultValues: #() subCategory: #a3>
 	| aSpriteOrStage |
 	aSpriteOrStage := self coerceSpriteArg: anObject.
 	(aSpriteOrStage isKindOf: ScriptablePhratchMorph) ifFalse: [^ 0].
@@ -4705,6 +4719,7 @@ ScriptablePhratchMorph >> getNamedColor: aColorName [
 
 { #category : #'byob OOP' }
 ScriptablePhratchMorph >> getObject: anObject [
+	<phratchItem: 'object $Sprite$' kind: #r category: 'sensing' defaultValues: #() subCategory: #a3>
 	^ anObject
 ]
 
@@ -4776,7 +4791,7 @@ ScriptablePhratchMorph >> getVarOrListNamed: varName [
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> graphicEffectNamed: effect [
 "Answer the provided graphic effect"
-	
+	<phratchItem: '$Effects$ effect' kind: #r category: 'looks' defaultValues: #('color') subCategory: #a3>
 	filterPack ifNil: [filterPack := FilterPack new].
 
 	'blur' = effect ifTrue: [^ filterPack blur].
@@ -5559,7 +5574,7 @@ ScriptablePhratchMorph >> isInteger: t1 [
 
 { #category : #'sensing ops' }
 ScriptablePhratchMorph >> isLoud [
-
+	<phratchItem: 'loud?' kind: #b category: 'sensing' defaultValues: #() subCategory: #a4>
 	^ self class soundRecorder meterLevel > 30
 
 ]
@@ -5697,10 +5712,9 @@ ScriptablePhratchMorph >> keyNames [
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> keyPressed [
-	"Answer the currently pressed key.
-	
-	TODO: This needs to be rewritten to use Sensor keyboard or the like."
-
+	"Answer the currently pressed key."
+	<phratchItem: 'key pressed' kind: #r category: 'sensing' defaultValues: #() subCategory: #a2>
+	self flag: 'TODO: This needs to be rewritten to use Sensor keyboard or the like.'.
 	self keyNames do: [:ch |
 		(self keyPressed: ch) ifTrue: [^ ch]].
 	^ ''.
@@ -5708,7 +5722,7 @@ ScriptablePhratchMorph >> keyPressed [
 
 { #category : #'sensing ops' }
 ScriptablePhratchMorph >> keyPressed: keyName [
-
+	<phratchItem: 'key $Keys$ pressed?' kind: #b category: 'sensing' defaultValues: #('space') subCategory: #a2>
 	| ch |
 	ch := self asciiFor: keyName.
 	(Sensor keyPressed: ch) ifTrue: [^ true].
@@ -6454,14 +6468,14 @@ ScriptablePhratchMorph >> mouseHold: evt [
 
 { #category : #'sensing ops' }
 ScriptablePhratchMorph >> mousePressed [
-
+	<phratchItem: 'mouse down?' kind: #b category: 'sensing' defaultValues: #() subCategory: #a2>
 	^ Sensor redButtonPressed
 
 ]
 
 { #category : #'sensing ops' }
 ScriptablePhratchMorph >> mouseX [
-
+	<phratchItem: 'mouse x' kind: #r category: 'sensing' defaultValues: #() subCategory: #a2>
 	| s centerX |
 	DoubleSize ifTrue: [^ (Sensor lastMousePosition x - PhratchOrigin x) // 2].
 
@@ -6477,7 +6491,7 @@ ScriptablePhratchMorph >> mouseX [
 
 { #category : #'sensing ops' }
 ScriptablePhratchMorph >> mouseY [
-
+	<phratchItem: 'mouse y' kind: #r category: 'sensing' defaultValues: #() subCategory: #a2>
 	| s centerY |
 	DoubleSize ifTrue: [^ (Sensor lastMousePosition y - PhratchOrigin y) negated // 2].
 
@@ -6766,6 +6780,7 @@ ScriptablePhratchMorph >> onlyCostume: aForm [
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> openCamera [
+	<phratchItem: 'open camera' kind: #- category: 'looks' defaultValues: #() subCategory: #a9>
 	self cameraIsOpen ifFalse: [
 			(CameraPlugin openCamera: 1 width: 480 height: 360) ifNotNil: [
 				CameraPlugin waitForCameraStart.]
@@ -7518,7 +7533,7 @@ ScriptablePhratchMorph >> scriptsAsTuples: tuples [
 { #category : #'sensing ops' }
 ScriptablePhratchMorph >> sensor: sensorName [
 	"Answer the value of the given sensor, or zero if the sensorboard is not available."
-
+	<phratchItem: '$SensorNames$ sensor value' kind: #r category: 'sensing' defaultValues: #('slider') subCategory: #sensor>
 	| stage v sb |
 	(stage := self ownerThatIsA: PhratchStageMorph) ifNil: [^ 0].
 	stage phratchServer ifNotNil: [
@@ -7537,7 +7552,7 @@ ScriptablePhratchMorph >> sensor: sensorName [
 { #category : #'sensing ops' }
 ScriptablePhratchMorph >> sensorPressed: sensorName [
 	"Answer true if a button connected to the given input of the sensor board is pressed. That is, if the sensor value is less than 10. Answer false if the sensor board cannot be opened."
-
+	<phratchItem: 'sensor $SensorBooleans$?' kind: #b category: 'sensing' defaultValues: #('button pressed') subCategory: #sensor>
 	| stage sb |
 	(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNil: [^ false].
 	sb := stage sensorBoard.
@@ -7616,7 +7631,8 @@ ScriptablePhratchMorph >> setColor: colorName to: newValue [
 { #category : #'looks ops' }
 ScriptablePhratchMorph >> setGraphicEffect: effect to: aNumber [
 	"Set the given graphic effect to the given value."
-
+	<phratchItem: 'broadcast $Event$ and wait' kind: #- category: 'looks' defaultValues: #('color' 0) subCategory: #a3>
+	
 	'blur' = effect ifTrue: [self blurEffect: aNumber].
 	'brightness' = effect ifTrue: [self brightnessEffect: aNumber].
 	'fisheye' = effect ifTrue: [self fisheyeEffect: aNumber].
@@ -7793,6 +7809,7 @@ ScriptablePhratchMorph >> shareObject [
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> showAskDialogWithText: text [ 
+	<phratchItem: 'ask $String$ in dialog' kind: #- category: 'sensing' defaultValues: #('What''s your name?') subCategory: #a1>
 	"Show an information dialog with the given title and text."
 	PhratchPrompterMorph lastAnswer: (StringDialog ask: text).
 	
@@ -7841,6 +7858,7 @@ ScriptablePhratchMorph >> showColor: varName [
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> showInformDialog: title withText: text [ 
+	<phratchItem: 'show dialog $String$ with text $String$' kind: #- category: 'sensing' defaultValues: #('info' '') subCategory: #a1>
 	"Show an information dialog with the given title and text."
 	DialogBoxMorph inform: text title: title.
 	
@@ -7956,7 +7974,7 @@ ScriptablePhratchMorph >> soundFromIndex: aNumber [
 
 { #category : #'sensing ops' }
 ScriptablePhratchMorph >> soundLevel [
-
+	<phratchItem: 'loudness' kind: #r category: 'sensing' defaultValues: #() subCategory: #a4>
 	^ self class soundRecorder meterLevel
 
 ]
@@ -8293,7 +8311,7 @@ ScriptablePhratchMorph >> timeDates [
 
 { #category : #'sensing ops' }
 ScriptablePhratchMorph >> timer [
-
+	<phratchItem: 'timer' kind: #r category: 'sensing' defaultValues: #() subCategory: #timer>
 	| now |
 	now := Time millisecondClockValue.
 	TimerStartMSecs ifNil: [TimerStartMSecs := now].
@@ -8304,7 +8322,7 @@ ScriptablePhratchMorph >> timer [
 
 { #category : #'sensing ops' }
 ScriptablePhratchMorph >> timerReset [
-
+	<phratchItem: 'reset timer' kind: #- category: 'sensing' defaultValues: #() subCategory: #timer>
 	TimerStartMSecs := Time millisecondClockValue.
 
 ]
