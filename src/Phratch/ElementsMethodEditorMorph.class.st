@@ -158,6 +158,7 @@ ElementsMethodEditorMorph >> developmentMode [
 	ScriptablePhratchMorph noviceMode: false.
 	ElementsMethodEditorMorph warnIfNoSourcesFile: true.
 	ElementsMethodEditorMorph warnIfNoChangesFile: true.
+	UsersManager default currentUser canShowMorphHalo: true.
 
 
 ]

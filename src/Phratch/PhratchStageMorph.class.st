@@ -379,6 +379,26 @@ PhratchStageMorph >> deleteTerminatedClones [
 
 ]
 
+{ #category : #'as yet unclassified' }
+PhratchStageMorph >> drawNewCostume [
+
+	| oldCostumeName newName newImage |
+	oldCostumeName := costume mediaName.
+	newImage := ImageMedia new form: (Form extent:  (480.0@360.0) depth: 8).
+	newName := (self unusedMediaNameFromBaseName: self defaultImageMedia mediaName).
+ 	newImage mediaName: newName.
+	media addLast: newImage.
+	self updateMediaCategory.
+	self lookLike: newImage mediaName.
+	self editDrawingOldCostumeName: oldCostumeName deleteOnCancel: false.
+	
+	self undeleteAttribute: #costumes.
+	
+	self propagateCostumes
+
+
+]
+
 { #category : #drawing }
 PhratchStageMorph >> drawOn: aCanvas [
 	"Draw myself if my visibility is > 0. If my visibility is 1, draw using the normal 'paint' mode. Otherwise, draw using 'alpha' resulting in a partially transparent rendering."

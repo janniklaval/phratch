@@ -1922,7 +1922,7 @@ PhratchFrameMorph >> extractProjectFrom: aByteArray [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'-- all --' }
 PhratchFrameMorph >> fileMenu: aMenuTitleMorph [
 
 	| menu |
