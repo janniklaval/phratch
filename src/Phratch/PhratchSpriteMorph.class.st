@@ -39,91 +39,10 @@ Class {
 	#category : #'Phratch-Objects'
 }
 
-{ #category : #'block specs' }
-PhratchSpriteMorph class >> blockSpecs [
-
-	| blocks |
-	blocks := #(
-		'motion'
-			('Arrow key move with speed $Number$ ' #- #arrowMove:)
-			('move $Number$ steps'				-	forward:)
-			('turn $Number$ degrees'				-	turnRight: 15)	"icon shows turn direction"
-			('turn $Number$ degrees'				-	turnLeft: 15)	"icon shows turn direction"
-			-
-			('point in direction $Directions$'			-	heading: 90)
-			('point towards $Sprite$'				-	pointTowards:)
-			-
-			('go to x:$Number$ y:$Number$'				-	gotoX:y: 0 0)
-			('go to $Sprite$'						-	gotoSpriteOrMouse:)
-			('glide $Number$ secs to x:$Number$ y:$Number$'	t	glideSecs:toX:y:elapsed:from: 1 50 50)
-			('go $Number$ of the way to x: $Number$ y: $Number$' #- #distance:X:Y:)
-			('go in between x: $Number$ y: $Number$ and x: $Number$ y: $Number$' #- #betweenX:Y:X:Y:)
-			-
-			('change x by $Number$'				-	changeXposBy: 10)
-			('set x to $Number$'					-	xpos: 0)
-			('change y by $Number$'				-	changeYposBy: 10)
-			('set y to $Number$'					-	ypos: 0)
-			-
-			('if on edge, bounce'			-	bounceOffEdge)
-			('if touching $Sprite$ bounce' #- #bounceOffSprite:)
-			('if $Boolean$ bounce' #- #bounceIfBoolean:)
-			-
-			('set rotation style to $Rotation$' #- #rotationStyle:)
-			('rotation style' #r #rotationStyle)
-			('point at x:$Number$ y:$Number$' #- #pointToX:y:)
-			('point at random coordinate' #- #randxypos)
-			-
-			('x position'						r	xpos)
-			('y position'						r	ypos)
-			('direction'						r	heading)
-			=
-			('make draggable'				-	makeDrag)
-			('make undraggable'			-	makeNoDrag)
-			('draggable?'					b	isDraggable)
-	).
-
-	blocks := blocks, #(
-		'looks'
-			('switch to costume $Costumes$'			-	lookLike:)
-			('next costume'					-	nextCostume)
-			('costume #'						r	costumeIndex)
-			-
-			('replace costume $Number$ with $NewCostume$'	-	replaceCostume:with: 1)
-			('add $NewCostume$ to costumes'	-	addCostumeTyped:)
-			('delete costume $Number$'		-	deleteCostumeAt: 1)
-			=
-			('say $String$ for $Number$ secs'			t	say:duration:elapsed:from: 'Hello!' 2)
-			('say $String$'						-	say: 'Hello!')
-			('think $String$ for $Number$ secs'			t	think:duration:elapsed:from: 'Hmm...' 2)
-			('think $String$'						-	think: 'Hmm...')
-			-
-			('change size by $Number$'			-	changeSizeBy:)
-			('set size to $Number$'				-	setSizeTo: 100)
-			('size'							r	scale)
-			('height' #r #height)
-			('width' #r #width)
-			('area' #r #area)
-			('perimeter' #r #perimeter)
-			-
-			('change hStretch by $Number$'	-	changeStretchBy:)
-			('set hStretch to $Number$'		-	setStretchTo: 100)
-			('hStretch'						r	hScale)
-			('change vStretch by $Number$'	-	changeVStretchBy:)
-			('set vStretch to $Number$'		-	setVStretchTo: 100)
-			('vStretch'						r	vScale)
-			('h flip' #- #hFlip)
-			('v flip' #- #vFlip)
-			=
-			('show'							-	show)
-			('hide'							-	hide)
-			('visible?'						b	isVisible)
-			-
-			('go to front'					-	comeToFront)
-			('go back $Number$ layers'			-	goBackByLayers: 1)
-		).
-
-	^ blocks, super blockSpecs
-
+{ #category : #'as yet unclassified' }
+PhratchSpriteMorph >> addCostTyped: aString [
+	<phratchItem: 'add $NewCostume$ to costumes' kind: #- category: 'looks' defaultValues: #() subCategory: #a2>
+	self addCostumeTyped: aString.
 ]
 
 { #category : #nesting }
@@ -160,12 +79,14 @@ PhratchSpriteMorph >> allSubsprites [
 
 { #category : #'as yet unclassified' }
 PhratchSpriteMorph >> area [
+	<phratchItem: 'area' kind: #r category: 'looks' defaultValues: #() subCategory: #a4>
 ^self height * self width
 ]
 
 { #category : #'as yet unclassified' }
 PhratchSpriteMorph >> arrowMove: i1 [ 
 "Made using Scramble by Hardmath123"
+<phratchItem: 'Arrow key move with speed $Number$' kind: #- category: 'motion' defaultValues: #() subCategory: #a1>
 | t4 t3 t2 t1|
 
 t1:= 'up arrow'.
@@ -248,6 +169,7 @@ PhratchSpriteMorph >> attributeNames [
 
 { #category : #'as yet unclassified' }
 PhratchSpriteMorph >> betweenX: t1 Y: t2 X: t3 Y: t4 [
+<phratchItem: 'go in between x: $Number$ y: $Number$ and x: $Number$ y: $Number$' kind: #- category: 'motion' defaultValues: #() subCategory: #a3>
 | newX newY |
 
 newX:= (t1 + t3) / 2.
@@ -257,13 +179,14 @@ self referencePosition: newX @ newY
 
 { #category : #'as yet unclassified' }
 PhratchSpriteMorph >> bounceIfBoolean: condition [
+	<phratchItem: 'if $Boolean$ bounce' kind: #- category: 'motion' defaultValues: #() subCategory: #a5>
      condition ifTrue: [self turnRight: 180]
 ]
 
 { #category : #'motion ops' }
 PhratchSpriteMorph >> bounceOffEdge [
 	"Set my direction to bounce off the edge."
-
+	<phratchItem: 'if on edge, bounce' kind: #- category: 'motion' defaultValues: #() subCategory: #a5>
 	| myBox edgeBox dirX dirY |
 	owner ifNil: [^ self].
 	ownerSprite ifNotNil: [^ self].
@@ -289,6 +212,7 @@ PhratchSpriteMorph >> bounceOffEdge [
 
 { #category : #'as yet unclassified' }
 PhratchSpriteMorph >> bounceOffSprite: aName [ 
+	<phratchItem: 'if touching $Sprite$ bounce' kind: #- category: 'motion' defaultValues: #() subCategory: #a5>
     | sprite oldDir |
     sprite := self coerceSpriteArg: aName.
     (self touching: sprite)
@@ -374,7 +298,7 @@ PhratchSpriteMorph >> changePenSizeBy: aNumber [
 { #category : #'looks ops' }
 PhratchSpriteMorph >> changeSizeBy: delta [
 	"Change my size by the given delta."
-
+	<phratchItem: 'change size by $Number$' kind: #- category: 'looks' defaultValues: #() subCategory: #a4>
 	self setSizeTo: (self virtualScale + delta).
 
 ]
@@ -382,7 +306,7 @@ PhratchSpriteMorph >> changeSizeBy: delta [
 { #category : #'looks ops' }
 PhratchSpriteMorph >> changeStretchBy: delta [
 	"Change my aspect ratio by the given amount."
-
+	<phratchItem: 'change hStretch by $Number$' kind: #- category: 'looks' defaultValues: #() subCategory: #a5>
 	| currentStretch |
 	currentStretch := (100.0 * scalePoint x) / scalePoint y.
 	self setStretchTo: (currentStretch + delta).
@@ -392,7 +316,7 @@ PhratchSpriteMorph >> changeStretchBy: delta [
 { #category : #'panther actions' }
 PhratchSpriteMorph >> changeVStretchBy: delta [
 	"Change my aspect ratio by the given amount."
-
+	<phratchItem: 'change vStretch by $Number$' kind: #- category: 'looks' defaultValues: #() subCategory: #a5>
 	| currentVStretch |
 	currentVStretch := (100.0 * scalePoint y) / scalePoint x.
 	self setVStretchTo: (currentVStretch + delta).
@@ -401,7 +325,7 @@ PhratchSpriteMorph >> changeVStretchBy: delta [
 { #category : #'motion ops' }
 PhratchSpriteMorph >> changeXposBy: aNumber [
 	"Move right by the given amount."
-
+	<phratchItem: 'change x by $Number$' kind: #- category: 'motion' defaultValues: #(10) subCategory: #a4>
 	self xpos: self xpos + aNumber
 
 "
@@ -413,7 +337,7 @@ PhratchSpriteMorph >> changeXposBy: aNumber [
 { #category : #'motion ops' }
 PhratchSpriteMorph >> changeYposBy: aNumber [
 	"Move up by the given amount."
-
+	<phratchItem: 'change y by $Number$' kind: #- category: 'motion' defaultValues: #(10) subCategory: #a4>
 	self ypos: self ypos + aNumber
 
 "
@@ -522,6 +446,13 @@ PhratchSpriteMorph >> color: sensitiveColor sees: soughtColor [
 
 ]
 
+{ #category : #'as yet unclassified' }
+PhratchSpriteMorph >> comeToFront [
+
+	<phratchItem: 'go to front' kind: #- category: 'looks' defaultValues: #() subCategory: #a7>
+	^super comeToFront
+]
+
 { #category : #geometry }
 PhratchSpriteMorph >> containsPoint: aPoint [
 
@@ -559,6 +490,12 @@ PhratchSpriteMorph >> defaultImageMedia [
 
 ]
 
+{ #category : #'as yet unclassified' }
+PhratchSpriteMorph >> deleteCostAt: aNumber [
+	<phratchItem: 'delete costume $Number$' kind: #- category: 'looks' defaultValues: #(1) subCategory: #a2>
+	self deleteCostumeAt: aNumber.
+]
+
 { #category : #'panther actions' }
 PhratchSpriteMorph >> deleteMe [
 	<phratchItem: 'delete me if I am a clone' kind: #- category: 'control' defaultValues: #() subCategory: #self>
@@ -591,6 +528,7 @@ PhratchSpriteMorph >> dist: t1 and: t2 [
 
 { #category : #'as yet unclassified' }
 PhratchSpriteMorph >> distance: t1 X: t2 Y: t3 [ 
+	<phratchItem: 'go $Number$ of the way to x: $Number$ y: $Number$' kind: #- category: 'motion' defaultValues: #() subCategory: #a3>
     | newX newY |
     newX := t1 * 0.01 * (t2 - self xpos).
     newY := t1 * 0.01 * (t3 - self ypos).
@@ -742,7 +680,7 @@ PhratchSpriteMorph >> followNow [
 PhratchSpriteMorph >> forward: distance [
 	"Move the object forward (i.e., the direction of its heading) by the given distance.
 	Avoid infinite or NaN coordinates"
-
+	<phratchItem: 'move $Number$ steps' kind: #- category: 'motion' defaultValues: #() subCategory: #a1>
 	| radians deltaP newPos newX newY |
 	
 	radians := self rotationDegrees degreesToRadians.
@@ -859,7 +797,7 @@ PhratchSpriteMorph >> getRotationStyle [
 { #category : #'motion ops' }
 PhratchSpriteMorph >> glideSecs: duration toX: endX y: endY elapsed: elapsed from: startPoint [
 	"Interpolate my position from my current postion to the given x and y over the given duration. If startPoint is nil, just answer my current position; this sets the starting point for the interpolation."
-
+	<phratchItem: 'glide $Number$ secs to x:$Number$ y:$Number$' kind: #t category: 'motion' defaultValues: #(1 50 50) subCategory: #a3>
 	| fraction endPoint rPos |
 	startPoint ifNil: [
 		^ self referencePosition].
@@ -895,20 +833,14 @@ PhratchSpriteMorph >> glideSecs: duration toX: endX y: endY elapsed: elapsed fro
 { #category : #'looks ops' }
 PhratchSpriteMorph >> goBackByLayers: aNumber [
 	"Decrease my layer by (i.e., move me towards the back by) the given number of layers."
-
+	<phratchItem: 'go back $Number$ layers' kind: #- category: 'looks' defaultValues: #(1) subCategory: #a7>
 	self setLayerTo: self layer + aNumber truncated
-
-	"
-	owner ifNil: [^ self spread].
-	self layer: (owner submorphs indexOf: self) + aNumber truncated.
-	self spread
-	"
 ]
 
 { #category : #'motion ops' }
 PhratchSpriteMorph >> gotoSpriteOrMouse: anObject [
 	"Go to the given sprite or mouse position."
-
+	<phratchItem: 'go to $Sprite$' kind: #- category: 'motion' defaultValues: #() subCategory: #a3>
 	| x y len aSpriteOrSymbol p |
 	(anObject isKindOf: PhratchListMorph) ifTrue: [ "try to go the coordinates specified in a list"
 		x := self xpos.
@@ -932,17 +864,9 @@ PhratchSpriteMorph >> gotoSpriteOrMouse: anObject [
 
 { #category : #'motion ops' }
 PhratchSpriteMorph >> gotoX: x y: y [
-
+	<phratchItem: 'go to x:$Number$ y:$Number$' kind: #- category: 'motion' defaultValues: #(0 0) subCategory: #a3>
 	self xpos: x; ypos: y
 
-
-"
-	self holdSubsprites.
-	offset ifNotNil: [
-		offset := offset + (x@y - self referencePosition) ].
-	self referencePosition: x@y.
-	self releaseSubsprites.
-"
 ]
 
 { #category : #'motion ops' }
@@ -996,13 +920,14 @@ PhratchSpriteMorph >> grabFromScreen [
 
 { #category : #'as yet unclassified' }
 PhratchSpriteMorph >> hFlip [
+	<phratchItem: 'h flip' kind: #- category: 'looks' defaultValues: #() subCategory: #a5>
     costume form: (self form flipBy: #horizontal centerAt: 0 @ 0).
     self costumeChanged
 ]
 
 { #category : #'panther actions' }
 PhratchSpriteMorph >> hScale [
-
+	<phratchItem: 'hStretch' kind: #r category: 'looks' defaultValues: #() subCategory: #a5>
 	^ (100 * scalePoint x) rounded
 ]
 
@@ -1014,7 +939,7 @@ PhratchSpriteMorph >> hasSubsprites [
 { #category : #accessing }
 PhratchSpriteMorph >> heading [
 	"Answer my heading in degrees, a number between -180 and 180."
-
+	<phratchItem: 'direction' kind: #r category: 'motion' defaultValues: #() subCategory: #a7>
 	| result att |
 	att := #heading.
 	self prototype ifNotNil: [
@@ -1032,21 +957,23 @@ PhratchSpriteMorph >> heading [
 PhratchSpriteMorph >> heading: headingDegrees [
 	"Set my heading in degrees, where 0 degrees is facing up and the heading increases clockwise."
 	"Note: Our convention is that artwork is drawing facing to the right. Thus, a heading of 90 corresponds to a rotationDegrees of zero."
-
+	<phratchItem: 'point in direction $Directions$' kind: #- category: 'motion' defaultValues: #(90) subCategory: #a2>
 	self turn: headingDegrees asNumberNoError - self heading
 
+]
+
+{ #category : #'as yet unclassified' }
+PhratchSpriteMorph >> height [
+	<phratchItem: 'height' kind: #r category: 'looks' defaultValues: #() subCategory: #a4>
+^super height
 ]
 
 { #category : #'looks ops' }
 PhratchSpriteMorph >> hide [
 	"Make myself invisible."
-
+	<phratchItem: 'hide' kind: #- category: 'looks' defaultValues: #() subCategory: #a6>
 	self setHideFlagTo: true
 
-"
-	self isHidden: true.
-	self spread
-"
 ]
 
 { #category : #'sensing ops' }
@@ -1159,6 +1086,7 @@ PhratchSpriteMorph >> isClone: aBoolean [
 
 { #category : #'panther actions' }
 PhratchSpriteMorph >> isDraggable [
+	<phratchItem: 'draggable?' kind: #b category: 'motion' defaultValues: #() subCategory: #a8>
 	^ draggable.
 ]
 
@@ -1210,6 +1138,14 @@ PhratchSpriteMorph >> isRotatable [
 PhratchSpriteMorph >> isSprite [
 
 	^ true
+
+]
+
+{ #category : #'looks ops' }
+PhratchSpriteMorph >> isVisible [
+	"Make myself invisible."
+	<phratchItem: 'visible?' kind: #b category: 'looks' defaultValues: #() subCategory: #a6>
+	super isVisible
 
 ]
 
@@ -1300,7 +1236,7 @@ PhratchSpriteMorph >> layoutChanged [
 
 { #category : #'looks ops' }
 PhratchSpriteMorph >> lookLike: costumeName [
-
+	<phratchItem: 'switch to costume $Costumes$' kind: #- category: 'looks' defaultValues: #() subCategory: #a1>
 	self undeleteAttribute: #costumeIndex.
 	self passiveLookLike: costumeName.
 	costumeName isNumber ifFalse: [
@@ -1309,11 +1245,13 @@ PhratchSpriteMorph >> lookLike: costumeName [
 
 { #category : #'panther actions' }
 PhratchSpriteMorph >> makeDrag [
+	<phratchItem: 'make draggable' kind: #- category: 'motion' defaultValues: #() subCategory: #a8>
 	draggable := true.
 ]
 
 { #category : #'panther actions' }
 PhratchSpriteMorph >> makeNoDrag [
+	<phratchItem: 'make undraggable' kind: #- category: 'motion' defaultValues: #() subCategory: #a8>
 	draggable := false.
 ]
 
@@ -1322,6 +1260,15 @@ PhratchSpriteMorph >> multiplySizeBy: factor [
 	"Used by the magnifying glass tool. Multiply my scale by the given factor."
 
 	self setSizeTo: 100.0 * (self scalePoint x max: self scalePoint y) * factor.
+
+]
+
+{ #category : #'as yet unclassified' }
+PhratchSpriteMorph >> nextCost [
+	"Show the next costume in my costumes list."
+	<phratchItem: 'next costume' kind: #- category: 'looks' defaultValues: #() subCategory: #a1>
+	
+	self nextCostume.
 
 ]
 
@@ -1657,13 +1604,14 @@ PhratchSpriteMorph >> penSize: aNumber [
 
 { #category : #'as yet unclassified' }
 PhratchSpriteMorph >> perimeter [
+	<phratchItem: 'perimeter' kind: #r category: 'looks' defaultValues: #() subCategory: #a4>
 ^ (2 * self height) + (2 * self width)
 ]
 
 { #category : #'motion ops' }
 PhratchSpriteMorph >> pointToX: x y: y [
 	"Set my heading to point at the given point."
-
+	<phratchItem: 'point at x:$Number$ y:$Number$' kind: #- category: 'motion' defaultValues: #() subCategory: #a6>
 	| delta angle |
 	delta := (x@y) - self referencePosition.
 	angle := (delta x abs < 0.001)
@@ -1684,7 +1632,7 @@ PhratchSpriteMorph >> pointToX: x y: y [
 { #category : #'motion ops' }
 PhratchSpriteMorph >> pointTowards: anObject [
 	"Point toward the given sprite."
-
+	<phratchItem: 'point towards $Sprite$' kind: #- category: 'motion' defaultValues: #() subCategory: #a2>
 	| aSpriteOrSymbol p |
 	aSpriteOrSymbol := self coerceSpriteArg: anObject.
 
@@ -1803,6 +1751,7 @@ PhratchSpriteMorph >> putPenUp [
 
 { #category : #'as yet unclassified' }
 PhratchSpriteMorph >> randxypos [
+	<phratchItem: 'point at random coordinate' kind: #- category: 'motion' defaultValues: #() subCategory: #a6>
     self pointToX: (self randomFrom: -240 to: 240)
         y: (self randomFrom: -180 to: 180)
 ]
@@ -1893,6 +1842,12 @@ PhratchSpriteMorph >> removeSubsprite: aSprite [
 
 	subsprites remove: aSprite ifAbsent: [].
 	self makeVisible
+]
+
+{ #category : #'as yet unclassified' }
+PhratchSpriteMorph >> replaceCost: name with: sel [
+	<phratchItem: 'replace costume $Number$ with $NewCostume$' kind: #- category: 'looks' defaultValues: #(1) subCategory: #a2>
+	self replaceCostume: name with: sel.
 ]
 
 { #category : #'handle ops' }
@@ -2041,6 +1996,7 @@ PhratchSpriteMorph >> rotationDegrees: newRotationDegrees scalePoint: newScalePo
 
 { #category : #accessing }
 PhratchSpriteMorph >> rotationStyle [
+	<phratchItem: 'rotation style' kind: #r category: 'motion' defaultValues: #() subCategory: #a6>
     ^ rotationStyle
 ]
 
@@ -2050,7 +2006,7 @@ PhratchSpriteMorph >> rotationStyle: aSymbol [
 		#normal	-- smooth 360 degree rotation
 		#leftRight	-- flip about the vertical axis
 		#none		-- do not rotate"
-
+	<phratchItem: 'set rotation style to $Rotation$' kind: #- category: 'motion' defaultValues: #() subCategory: #a6>
 	rotationStyle := aSymbol.
 	self costumeChanged.
 	self positionTalkBubble.
@@ -2065,14 +2021,14 @@ PhratchSpriteMorph >> rotationStyleChanger [
 { #category : #'looks ops' }
 PhratchSpriteMorph >> say: aValue [
 	"Present a talk bubble with the given string."
-
+	<phratchItem: 'say $String$' kind: #- category: 'looks' defaultValues: #('Hello!') subCategory: #a3>
 	self bubble: aValue thinkFlag: false promptFlag: false.
 
 ]
 
 { #category : #'looks ops' }
 PhratchSpriteMorph >> say: stringOrNum duration: durationSecs elapsed: elapsedMSecs from: startPoint [
-
+	<phratchItem: 'say $String$ for $Number$ secs' kind: #t category: 'looks' defaultValues: #('Hello!' 2) subCategory: #a3>
 	startPoint ifNil: [^ self say: stringOrNum].  "first call, show talk bubble"
 	elapsedMSecs >= (1000 * durationSecs) ifTrue: [self sayNothing].  "clear bubble"
 
@@ -2091,7 +2047,7 @@ PhratchSpriteMorph >> sayNothing [
 
 { #category : #accessing }
 PhratchSpriteMorph >> scale [
-
+	<phratchItem: 'size' kind: #r category: 'looks' defaultValues: #() subCategory: #a4>
 	| att |
 	att := #size.
 	self prototype ifNotNil: [
@@ -2198,7 +2154,7 @@ PhratchSpriteMorph >> setScene: sceneName [
 { #category : #'looks ops' }
 PhratchSpriteMorph >> setSizeTo: percent [
 	"Set my size to the given percent of the original size. Limit the range to avoid accidentally making me invisibly tiny or really huge. Retain my aspect ratio (i.e., my stretch)."
-
+	<phratchItem: 'set size to $Number$' kind: #- category: 'looks' defaultValues: #(100) subCategory: #a4>
 	self undeleteAttribute: #size.
 	self passiveSetSizeTo: percent
 
@@ -2207,7 +2163,7 @@ PhratchSpriteMorph >> setSizeTo: percent [
 { #category : #'looks ops' }
 PhratchSpriteMorph >> setStretchTo: percent [
 	"Set x stretch percent relative to y. For example, a stretch of 200 stretches x by a factor of two relative to y while a stretch of 50 compresses x by a factor of two. As my stretch is changed, my x scale changes but my y scale remains the same."
-
+	<phratchItem: 'set hStretch to $Number$' kind: #- category: 'looks' defaultValues: #(100) subCategory: #a5>
 	| baseScale origExtent minStretch maxStretch newStretchFactor |
 	baseScale := scalePoint y.
 	origExtent := self costumeForm extent.
@@ -2221,7 +2177,7 @@ PhratchSpriteMorph >> setStretchTo: percent [
 { #category : #'panther actions' }
 PhratchSpriteMorph >> setVStretchTo: percent [
 	"Set x stretch percent relative to y. For example, a stretch of 200 stretches x by a factor of two relative to y while a stretch of 50 compresses x by a factor of two. As my stretch is changed, my x scale changes but my y scale remains the same."
-
+	<phratchItem: 'set vStretch to $Number$' kind: #- category: 'looks' defaultValues: #(100) subCategory: #a5>
 	| baseScale origExtent minStretch maxStretch newStretchFactor |
 	baseScale := scalePoint x.
 	origExtent := self costumeForm extent.
@@ -2234,13 +2190,9 @@ PhratchSpriteMorph >> setVStretchTo: percent [
 { #category : #'looks ops' }
 PhratchSpriteMorph >> show [
 	"Make myself visible."
-
+	<phratchItem: 'show' kind: #- category: 'looks' defaultValues: #() subCategory: #a6>
 	self setHideFlagTo: false
 
-"
-	self isHidden: false.
-	self spread
-"
 ]
 
 { #category : #'sensing ops' }
@@ -2419,14 +2371,14 @@ PhratchSpriteMorph >> subsprites [
 { #category : #'looks ops' }
 PhratchSpriteMorph >> think: aValue [
 	"Present a thought bubble with the given string."
-
+	<phratchItem: 'think $String$' kind: #- category: 'looks' defaultValues: #('Hmm...') subCategory: #a3>
 	self bubble: aValue thinkFlag: true promptFlag: false.
 
 ]
 
 { #category : #'looks ops' }
 PhratchSpriteMorph >> think: stringOrNum duration: durationSecs elapsed: elapsedMSecs from: startPoint [
-
+	<phratchItem: 'think $String$ for $Number$ secs' kind: #t category: 'looks' defaultValues: #('Hmm...' 2) subCategory: #a3>
 	startPoint ifNil: [^ self think: stringOrNum].  "first call, show think bubble"
 	elapsedMSecs >= (1000 * durationSecs) ifTrue: [self sayNothing].  "clear bubble"
 
@@ -2563,7 +2515,7 @@ PhratchSpriteMorph >> turnAwayFromEdge [
 { #category : #'motion ops' }
 PhratchSpriteMorph >> turnLeft: degrees [
 	"Turn counter-clockwise the given number of degrees."
-
+	<phratchItem: 'turn $Number$ degrees' kind: #- category: 'motion' defaultValues: #(15) subCategory: #a1>
 	| newPos |
 	self rotationDegrees: self rotationDegrees - degrees.
 
@@ -2578,6 +2530,7 @@ PhratchSpriteMorph >> turnLeft: degrees [
 
 { #category : #'motion ops' }
 PhratchSpriteMorph >> turnRight: degrees [
+	<phratchItem: 'turn $Number$ degrees' kind: #- category: 'motion' defaultValues: #(15) subCategory: #a1>
 	| newPos |
 	"Turn clockwise the given number of degrees."
 
@@ -2616,13 +2569,14 @@ PhratchSpriteMorph >> unhingeAll [
 
 { #category : #'as yet unclassified' }
 PhratchSpriteMorph >> vFlip [
+	<phratchItem: 'v flip' kind: #- category: 'looks' defaultValues: #() subCategory: #a5>
     costume form: (self form flipBy: #vertical centerAt: 0 @ 0).
     self costumeChanged
 ]
 
 { #category : #'panther actions' }
 PhratchSpriteMorph >> vScale [
-
+	<phratchItem: 'vStretch' kind: #r category: 'looks' defaultValues: #() subCategory: #a5>
 	^ (100 * scalePoint y) rounded
 ]
 
@@ -2687,9 +2641,15 @@ PhratchSpriteMorph >> whenSpriteCreated [
 
 ]
 
+{ #category : #'as yet unclassified' }
+PhratchSpriteMorph >> width [
+	<phratchItem: 'width' kind: #r category: 'looks' defaultValues: #() subCategory: #a4>
+^super width
+]
+
 { #category : #accessing }
 PhratchSpriteMorph >> xpos [
-
+	<phratchItem: 'x position' kind: #r category: 'motion' defaultValues: #() subCategory: #a7>
 	| att |
 	att := #xPosition.
 	self prototype ifNotNil: [
@@ -2702,14 +2662,14 @@ PhratchSpriteMorph >> xpos [
 
 { #category : #accessing }
 PhratchSpriteMorph >> xpos: aNumber [ 
-
+	<phratchItem: 'set x to $Number$' kind: #- category: 'motion' defaultValues: #(0) subCategory: #a4>
 	self undeleteAttribute: #xPosition.
 	self passiveXpos: aNumber
 ]
 
 { #category : #accessing }
 PhratchSpriteMorph >> ypos [
-
+	<phratchItem: 'y position' kind: #r category: 'motion' defaultValues: #() subCategory: #a7>
 	| att |
 	att := #yPosition.
 	self prototype ifNotNil: [
@@ -2722,7 +2682,7 @@ PhratchSpriteMorph >> ypos [
 
 { #category : #accessing }
 PhratchSpriteMorph >> ypos: aNumber [ 
-
+	<phratchItem: 'set y to $Number$' kind: #- category: 'motion' defaultValues: #(0) subCategory: #a4>
 	self undeleteAttribute: #yPosition.
 	self passiveYpos: aNumber
 ]

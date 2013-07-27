@@ -297,6 +297,12 @@ PhratchStageMorph >> deleteAllClones [
 
 ]
 
+{ #category : #'as yet unclassified' }
+PhratchStageMorph >> deleteCostAt: aNumber [
+	<phratchItem: 'delete background $Number$' kind: #- category: 'looks' defaultValues: #(1) subCategory: #a2>
+	self deleteCostumeAt: aNumber.
+]
+
 { #category : #'byob OOP' }
 PhratchStageMorph >> deleteSprite [
 	"override the inherited default method to do nothing"
