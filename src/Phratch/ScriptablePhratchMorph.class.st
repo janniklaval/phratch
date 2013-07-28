@@ -116,60 +116,7 @@ ScriptablePhratchMorph class >> blockSpecs [
 		W	when <condition> hat (obsolete)"
 
 	| blocks allPragmas |
-	blocks := #(
-		'operators'
-			('$Number$ + $Number$'						r	+ - -)
-			('$Number$ - $Number$'						r	- - -)
-			('$Number$ * $Number$'						r	* - -)
-			('$Number$ / $Number$'						r	/\/ - -)
-			-
-			('pick random $Number$ to $Number$'		r	randomFrom:to: 1 10)
-			('$Constants$'									r	numericConstant: 'pi')
-			('date/time: $TimeDates$'							r	returnW:)
-			-
-			('$String$ < $String$'						b	< '' '')
-			('$String$ = $String$'						b	= '' '')
-			('$String$ > $String$'						b	> '' '')
-			-
-			('$Boolean$ and $Boolean$'					b	&)
-			('$Boolean$ or $Boolean$'						b	|)
-			('not $Boolean$'						b	not)
-			-
-			('true'							b	getTrue)
-			('false'							b	getFalse)
-			-
-			('join $String$ $String$'					r	concatenate:with: 'hello ' 'world')
-			('letter $Number$ of $String$'				r	letter:of: 1 'world')
-			('length of $String$'					r	stringLength: 'world')
-			('letters $Number$ - $Number$ of $String$'		r	letters:through:of: 1 5 'hello world')
-			('index of $String$ starting at $Number$ in $String$'	r	indexOf:startingAt:in: 'o' 6 'hello world')
-			-
-			('ascii code of $String$'				r	asciiCodeOf: 'a')
-			('ascii $Number$ as letter'				r	asciiLetter: '65')
-			-
-			('$Number$ ^ $Number$'							r	n:toPower: - -)
-			('$Number$ mod $Number$'					r	\\ - -)
-			('round $Number$'						r	rounded -)
-			-
-			('$MathFunctions$ of $Number$'						r	computeFunction:of: 'sqrt' 10)
-			('factorial of $Number$' #r #factorial:)
-			('$Number$ is an integer?' #b #isInteger:)
-			('$Number$ is a Fibonacci number?' #b #isFibonacci:)
-			('$Number$ is prime?' #b #isPrime:)
-			-
-			('$String$ as boolean'							b	stringToBoolean: 'true')
-			('is $String$ a $Type$ ?'					b	isObject:type:)
-			('is $String$ nil?' #b #checkNil:)
-			=
-			('the script'						q	procedure)
-			('the script. Input names: $String$'			q	procedureWithArgs)
-			('the $SAReporter$ block'					Q	function)
-			('the $SAReporter$ block. Input names: $String$'		Q	functionWithArgs)
-			-
-			('duplicate'							r	spawn)
-			('set $Attributes$ to $String$'					- 	set:to:)
-			('delete $Sprite$'						-	deleteObject:)	
-	).
+	blocks := #().
 	
 	
 	"Add the block with the new method of declaration:"
@@ -189,7 +136,7 @@ ScriptablePhratchMorph class >> blockSpecs [
 			].
 	].
 
-	^ blocks, self obsoleteBlockSpecs
+	^ blocks
 	
 "'control'"
 			"-"
@@ -210,15 +157,15 @@ ScriptablePhratchMorph class >> blockSpecsArrayForTranslation [
 	"Answer an array that lists all the blocks and categories to be used as a guide to block translation."
 	"self blockSpecDictForTranslation"
 
-	| blocks all obsolete currentSpecs |
+	| blocks all currentSpecs |
 	currentSpecs := Set new.
 	PhratchSpriteMorph new blockCategories sort collect: [:cat |
 		blocks :=  (PhratchSpriteMorph new blocksFor: cat)
 			select: [:b | b isKindOf: CommandBlockMorph].
 		all := blocks collect: [:b | b commandSpec].
-		obsolete := ScriptablePhratchMorph obsoleteBlockSpecs collect: [:o | o first].
-		all :=  all select: [:p | (obsolete indexOf: p) = 0].
-		(cat beginsWith: 'obsolete') ifFalse:[currentSpecs add: cat].
+		"obsolete := ScriptablePhratchMorph obsoleteBlockSpecs collect: [:o | o first].
+		all :=  all select: [:p | (obsolete indexOf: p) = 0]."
+		"(cat beginsWith: 'obsolete') ifFalse:["currentSpecs add: cat"]".
 		currentSpecs addAll: all].
 	currentSpecs := currentSpecs asArray sort.
 	^ currentSpecs
@@ -238,8 +185,8 @@ ScriptablePhratchMorph class >> blockSpecsForTranslation [
 			ifTrue: [allSpecs add: el first]
 			ifFalse: [((el beginsWith: 'obsolete') or:[#('-' '~') includes: el])
 				ifFalse:[allSpecs add: el]]].
-	ScriptablePhratchMorph obsoleteBlockSpecs do: [:el |
-		(el isKindOf: Array) ifTrue: [allSpecs remove: el first ifAbsent: []]].
+	"ScriptablePhratchMorph obsoleteBlockSpecs do: [:el |
+		(el isKindOf: Array) ifTrue: [allSpecs remove: el first ifAbsent: []]]."
 	allSpecs
 		add: 'else';
 		add: 'variables';
@@ -434,64 +381,6 @@ ScriptablePhratchMorph class >> noviceMode: anObject [
 	NoviceMode := anObject
 ]
 
-{ #category : #'block specs' }
-ScriptablePhratchMorph class >> obsoleteBlockSpecs [
-	"Answer a list of specifications for the graphic filter blocks."
-
-	^ #(
-	'obsolete number blocks'
-		('abs $Number$'							r	abs -)
-		('sqrt $Number$'							r	sqrt -)
-	'obsolete sound blocks'
-		('rewind sound $SoundNames$'					-	rewindSound:)
-	'obsolete sprite motion blocks'
-		('point away from edge'				-	turnAwayFromEdge)
-		('glide x:$Number$ y:$Number$ in $Number$ secs'		t	gotoX:y:duration:elapsed:from: 50 50 1)
-	'obsolete sprite looks blocks'
-		('change costume by $Number$'			-	changeCostumeIndexBy: 1)
-		('change background by $Number$' 		-	changeBackgroundIndexBy: 1)
-		-
-		('change stretch by $Number$'				-	changeStretchBy:)
-		('set stretch to $Number$'					-	setStretchTo: 100)
-		-
-		('say nothing'						-	sayNothing)
-		-
-		('change visibility by $Number$'			-	changeVisibilityBy: -10)
-		('set visibility to $Number$'				-	setVisibilityTo: 100)
-	'obsolete image effects'
-		('change color-effect by $Number$'		-	changeHueShiftBy: 25)
-		('set color-effect to $Number$'				-	setHueShiftTo: 0)
-		-
-		('change fisheye by $Number$'			-	changeFisheyeBy: 10)
-		('set fisheye to $Number$'					-	setFisheyeTo: 0)
-		~
-		('change whirl by $Number$'				-	changeWhirlBy: 30)
-		('set whirl to $Number$'					-	setWhirlTo: 0)
-		-
-		('change pixelate by $Number$'			- 	changePixelateCountBy: 1)
-		('set pixelate to $Number$'					- 	setPixelateCountTo: 1)
-		~
-		('change mosaic by $Number$'				- 	changeMosaicCountBy: 1)
-		('set mosaic to $Number$'					- 	setMosaicCountTo: 1)
-		-
-		('change brightness-shift by $Number$'	-	changeBrightnessShiftBy: 10)
-		('set brightness-shift to $Number$'			-	setBrightnessShiftTo: 0)
-		~
-		('change saturation-shift by $Number$'	-	changeSaturationShiftBy: 10)
-		('set saturation-shift to $Number$'			-	setSaturationShiftTo: 0)
-		-
-		('change pointillize drop by $Number$'		-	changePointillizeSizeBy: 5)
-		('set pointillize drop to $Number$'			-	setPointillizeSizeTo: 0)
-		~
-		('change water ripple by $Number$'		-	changeWaterRippleBy: 5)
-		('set water ripple to $Number$'				-	setWaterRippleTo: 0)
-		-
-		('change blur by $Number$'				-	changeBlurBy: 1)
-		('set blur to $Number$'						-	setBlurTo: 0)
-	)
-
-]
-
 { #category : #'forms/sounds/icons' }
 ScriptablePhratchMorph class >> oldMeowPrefixReversed [
 
@@ -547,6 +436,60 @@ ScriptablePhratchMorph class >> stopSoundRecorder [
 
 	Recorder ifNotNil: [Recorder stopRecording; clearRecordedSound].
 
+
+]
+
+{ #category : #byob }
+ScriptablePhratchMorph >> & aBoolean [
+	<phratchItem: '$Boolean$ and $Boolean$' kind: #b category: 'operators' defaultValues: #() subCategory: #a4>
+
+]
+
+{ #category : #byob }
+ScriptablePhratchMorph >> * aNumber [
+	<phratchItem: '$Number$ * $Number$' kind: #r category: 'operators' defaultValues: #(- -) subCategory: #a1>
+
+]
+
+{ #category : #byob }
+ScriptablePhratchMorph >> + aNumber [
+	<phratchItem: '$Number$ + $Number$' kind: #r category: 'operators' defaultValues: #(- -) subCategory: #a1>
+
+]
+
+{ #category : #byob }
+ScriptablePhratchMorph >> - aNumber [
+	<phratchItem: '$Number$ - $Number$' kind: #r category: 'operators' defaultValues: #(- -) subCategory: #a1>
+
+]
+
+{ #category : #byob }
+ScriptablePhratchMorph >> /\/ aNumber [
+	<phratchItem: '$Number$ / $Number$' kind: #r category: 'operators' defaultValues: #(- -) subCategory: #a1>
+
+]
+
+{ #category : #byob }
+ScriptablePhratchMorph >> < aString [
+	<phratchItem: '$String$ < $String$' kind: #b category: 'operators' defaultValues: #('' '') subCategory: #a3>
+
+]
+
+{ #category : #byob }
+ScriptablePhratchMorph >> = anObject [ 
+	<phratchItem: '$String$ = $String$' kind: #b category: 'operators' defaultValues: #('' '') subCategory: #a3>
+	^super = anObject
+]
+
+{ #category : #byob }
+ScriptablePhratchMorph >> > aString [
+	<phratchItem: '$String$ > $String$' kind: #b category: 'operators' defaultValues: #('' '') subCategory: #a3>
+
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> \\ aNumber [
+	<phratchItem: '$Number$ mod $Number$' kind: #r category: 'operators' defaultValues: #(- -) subCategory: #a8>
 
 ]
 
@@ -1232,7 +1175,7 @@ ScriptablePhratchMorph >> asListElement: anObject [
 
 { #category : #byob }
 ScriptablePhratchMorph >> asciiCodeOf: aString [
-
+	<phratchItem: 'ascii code of $String$' kind: #r category: 'operators' defaultValues: #('a') subCategory: #a7>
 	| str |
 	str := aString.
 	str size = 1 ifFalse: [
@@ -1266,16 +1209,9 @@ ScriptablePhratchMorph >> asciiFor: keyName [
 
 { #category : #byob }
 ScriptablePhratchMorph >> asciiLetter: anInteger [
-
+	<phratchItem: 'ascii $Number$ as letter' kind: #r category: 'operators' defaultValues: #('65') subCategory: #a7>
 	| code |
 	code := anInteger asNumberNoError.
-
-"
-	(code isKindOf: Integer) ifFalse: [
-		^ self error: 'expecting an integer'].
-	(code < 0 or: [code > 255]) ifTrue: [
-		^ self error: 'expecting a number between 0 and 255'].
-"
 
 	^ String with: (Character value: code)
 ]
@@ -2356,7 +2292,8 @@ ScriptablePhratchMorph >> changed [
 
 { #category : #'as yet unclassified' }
 ScriptablePhratchMorph >> checkNil: str [
-^ str isNil
+	<phratchItem: 'is $String$ nil?' kind: #b category: 'operators' defaultValues: #() subCategory: #b1>
+	^ str isNil
 ]
 
 { #category : #'panther actions' }
@@ -2583,7 +2520,7 @@ ScriptablePhratchMorph >> comeToFront [
 { #category : #'other ops' }
 ScriptablePhratchMorph >> computeFunction: functionName of: aNumber [
 	"Return the result of computing the given mathematical function on the given number."
-
+	<phratchItem: '$MathFunctions$ of $Number$' kind: #r category: 'operators' defaultValues: #('sqrt' 10) subCategory: #a9>
 	'abs' = functionName ifTrue: [^ aNumber abs].
 	'sqrt' = functionName ifTrue: [^ aNumber sqrt].
 	'sin' = functionName ifTrue: [^ aNumber degreesToRadians sin].
@@ -2605,7 +2542,7 @@ ScriptablePhratchMorph >> computeFunction: functionName of: aNumber [
 { #category : #'string ops' }
 ScriptablePhratchMorph >> concatenate: arg1 with: arg2 [
 	"Concatenate two strings. Arguments are converted to strings."
-
+	<phratchItem: 'join $String$ $String$' kind: #r category: 'operators' defaultValues: #('hello ' 'world') subCategory: #a6>
 	^ arg1 asString, arg2 asString
 
 ]
@@ -3670,6 +3607,12 @@ ScriptablePhratchMorph >> deleteSprite: aSprite [
 	and lists - not sure how to accomplish this"
 ]
 
+{ #category : #'BYOB object interface' }
+ScriptablePhratchMorph >> deleteSpriteObj: anObject [
+	<phratchItem: 'delete $Sprite$' kind: #- category: 'operators' defaultValues: #() subCategory: #b3>
+	self deleteObject: anObject
+]
+
 { #category : #'byob OOP' }
 ScriptablePhratchMorph >> deleteSpriteQuickly [
 	"Delete the sprite and all watchers that are associated with it."
@@ -4419,6 +4362,7 @@ ScriptablePhratchMorph >> exportObject [
 
 { #category : #'as yet unclassified' }
 ScriptablePhratchMorph >> factorial: t1 [ 
+	<phratchItem: 'factorial of $Number$' kind: #r category: 'operators' defaultValues: #() subCategory: #a9>
     | answer t1store |
     t1 isInf ifTrue:[^0].
     t1 isNaN ifTrue:[^0].
@@ -4567,6 +4511,7 @@ ScriptablePhratchMorph >> getColor: colorName [
 
 { #category : #byob }
 ScriptablePhratchMorph >> getFalse [
+	<phratchItem: 'false' kind: #b category: 'operators' defaultValues: #() subCategory: #a5>
 	^false
 ]
 
@@ -4612,6 +4557,7 @@ ScriptablePhratchMorph >> getSpawnOf: anObject [
 
 { #category : #byob }
 ScriptablePhratchMorph >> getTrue [
+	<phratchItem: 'true' kind: #b category: 'operators' defaultValues: #() subCategory: #a5>
 	^true
 ]
 
@@ -5102,7 +5048,7 @@ ScriptablePhratchMorph >> indexOf: t1 List: t2 [
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> indexOf: subString startingAt: aNumber in: aString [
-
+	<phratchItem: 'index of $String$ starting at $Number$ in $String$' kind: #r category: 'operators' defaultValues: #('o' 6 'hello world') subCategory: #a6>
     ^ aString asString findString: subString startingAt: aNumber
 ]
 
@@ -5403,6 +5349,7 @@ ScriptablePhratchMorph >> isColorable [
 
 { #category : #'as yet unclassified' }
 ScriptablePhratchMorph >> isFibonacci: t1 [ 
+	<phratchItem: '$Number$ is a Fibonacci number?' kind: #b category: 'operators' defaultValues: #() subCategory: #a9>
     | fib1 fib2 oldfib2 fib3 oldfib3 |
                 t1 isInf ifTrue:[^false].
                 t1 isNaN ifTrue:[^false].
@@ -5452,6 +5399,7 @@ ScriptablePhratchMorph >> isHostingMesh [
 
 { #category : #'as yet unclassified' }
 ScriptablePhratchMorph >> isInteger: t1 [
+	<phratchItem: '$Number$ is an integer?' kind: #b category: 'operators' defaultValues: #() subCategory: #a9>
     ^ t1 = t1 rounded
 ]
 
@@ -5464,7 +5412,7 @@ ScriptablePhratchMorph >> isLoud [
 
 { #category : #byob }
 ScriptablePhratchMorph >> isObject: object type: type [
-
+	<phratchItem: 'is $String$ a $Type$ ?' kind: #b category: 'operators' defaultValues: #() subCategory: #b1>
 	'object' "localized" = type ifTrue: [
 		^ object isKindOf: ScriptablePhratchMorph].
 
@@ -5513,6 +5461,7 @@ ScriptablePhratchMorph >> isObject: object type: type [
 
 { #category : #'as yet unclassified' }
 ScriptablePhratchMorph >> isPrime: t1 [ 
+	<phratchItem: '$Number$ is prime?' kind: #b category: 'operators' defaultValues: #() subCategory: #a9>
     | divisor factor |
     t1 isInf ifTrue: [^ false].
     t1 isNaN ifTrue: [^ false].
@@ -5696,7 +5645,7 @@ ScriptablePhratchMorph >> leaveMesh [
 { #category : #'string ops' }
 ScriptablePhratchMorph >> letter: index of: anObject [
 	"Answer the ith letter of the given string. Answer the empty string if the index is out of bounds."
-
+	<phratchItem: 'letter $Number$ of $String$' kind: #r category: 'operators' defaultValues: #(1 'world') subCategory: #a6>
 	| s i |
 	s := anObject.
 
@@ -5730,7 +5679,7 @@ ScriptablePhratchMorph >> letterNum: letterNum of: aString [
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> letters: start through: end of: aString [
 	"Returns the letters in a string from the start index through the end index."
-	
+	<phratchItem: 'letters $Number$ - $Number$ of $String$' kind: #r category: 'operators' defaultValues: #(1 5 'hello world') subCategory: #a6>
 	^ aString asString copyFrom: (start max: 1) to: (end min: aString size).
 ]
 
@@ -6408,6 +6357,7 @@ ScriptablePhratchMorph >> mwait: duration elapsed: elapsed from: ignored [
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> n: aNumber toPower: aPower [
+	<phratchItem: '$Number$ ^ $Number$' kind: #r category: 'operators' defaultValues: #(- -) subCategory: #a8>
 	^ aNumber raisedTo: aPower
 ]
 
@@ -6474,6 +6424,12 @@ ScriptablePhratchMorph >> nextInstanceName [
 					ifTrue: [lastN := lastN max: digits asNumber]]]].
 
 	^ 'Sprite' localized, (lastN + 1) printString
+
+]
+
+{ #category : #byob }
+ScriptablePhratchMorph >> not [
+	<phratchItem: 'not $Boolean$' kind: #b category: 'operators' defaultValues: #() subCategory: #a4>
 
 ]
 
@@ -6575,6 +6531,7 @@ ScriptablePhratchMorph >> numberSort: t1 [
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> numericConstant: t1 [ 
+	<phratchItem: '$Constants$' kind: #r category: 'operators' defaultValues: #('pi') subCategory: #a2>
 	'pi' = t1 ifTrue: [^ Float pi].
 	'e' = t1 ifTrue: [^ Float e].
 	'newline' = t1 ifTrue: [^ String crlf].
@@ -7091,7 +7048,7 @@ ScriptablePhratchMorph >> quietCreateListNamed: listName [
 { #category : #'other ops' }
 ScriptablePhratchMorph >> randomFrom: start to: stop [
 	"Answer a random number within the given range. If both min and max are integers, the result is rounded to the nearest integer."
-
+	<phratchItem: 'pick random $Number$ to $Number$' kind: #r category: 'operators' defaultValues: #(1 10) subCategory: #a2>
 	| min max result |
 	min := start min: stop.
 	max := start max: stop.
@@ -7254,6 +7211,7 @@ ScriptablePhratchMorph >> rest: duration elapsed: elapsed from: ignored [
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> returnW: aTypeString [
+	<phratchItem: 'date/time: $TimeDates$' kind: #r category: 'operators' defaultValues: #() subCategory: #a2>
 	| time date |
 	time := Time now.
 	date := Date today.
@@ -7326,6 +7284,12 @@ ScriptablePhratchMorph >> rotationCenter: aPoint [
 
 	costume rotationCenter: aPoint.
 	self costumeChanged.
+
+]
+
+{ #category : #'panther actions' }
+ScriptablePhratchMorph >> rounded [
+	<phratchItem: 'round $Number$' kind: #r category: 'operators' defaultValues: #(-) subCategory: #a8>
 
 ]
 
@@ -7463,7 +7427,7 @@ ScriptablePhratchMorph >> serialized [
 
 { #category : #'BYOB object interface' }
 ScriptablePhratchMorph >> set: anObject to: aValue [
-
+	<phratchItem: 'set $Attributes$ to $String$' kind: #- category: 'operators' defaultValues: #() subCategory: #b3>
 	| oi sel obj att block arg |
 
 	oi := self objectInterface.
@@ -8131,7 +8095,7 @@ ScriptablePhratchMorph >> stringAsColor: aString [
 
 { #category : #'string ops' }
 ScriptablePhratchMorph >> stringLength: anObject [
-
+	<phratchItem: 'length of $String$' kind: #r category: 'operators' defaultValues: #('world') subCategory: #a6>
 	^ anObject asString size
 
 ]
@@ -8158,7 +8122,7 @@ ScriptablePhratchMorph >> stringSort: t1 [
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> stringToBoolean: aString [
 	"Answer the given string as a boolean."
-
+	<phratchItem: '$String$ as boolean' kind: #b category: 'operators' defaultValues: #('true') subCategory: #b1>
 	| s |
 	s := aString asString.
 	((s = '0') or: [s = '' or: [s = 'false']]) ifTrue: [^ false] ifFalse: [^ true].
@@ -9004,5 +8968,11 @@ ScriptablePhratchMorph >> zoomRectFrom: startRect to: finalRect [
 	(Delay forMilliseconds: 35) wait.
 	Display border: r width: 2 rule: Form reverse fillColor: Color gray.
 	Display forceDisplayUpdate.
+
+]
+
+{ #category : #byob }
+ScriptablePhratchMorph >> | aBoolean [
+	<phratchItem: '$Boolean$ or $Boolean$' kind: #b category: 'operators' defaultValues: #() subCategory: #a4>
 
 ]

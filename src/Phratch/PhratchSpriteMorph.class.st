@@ -702,6 +702,18 @@ PhratchSpriteMorph >> forward: distance [
 
 ]
 
+{ #category : #'as yet unclassified' }
+PhratchSpriteMorph >> function [
+
+	<phratchItem: 'the $SAReporter$ block' kind: #Q category: 'operators' defaultValues: #() subCategory: #b2>
+]
+
+{ #category : #'as yet unclassified' }
+PhratchSpriteMorph >> functionWithArgs [
+
+	<phratchItem: 'the $SAReporter$ block. Input names: $String$' kind: #Q category: 'operators' defaultValues: #() subCategory: #b2>
+]
+
 { #category : #private }
 PhratchSpriteMorph >> generateRotatedForm [
 	"Compute my rotatedForm and offsetWhenRotated."
@@ -1711,6 +1723,18 @@ PhratchSpriteMorph >> privateSubsprites: anOrderedCollection [
 	subsprites := anOrderedCollection
 ]
 
+{ #category : #'as yet unclassified' }
+PhratchSpriteMorph >> procedure [
+
+	<phratchItem: 'the script' kind: #q category: 'operators' defaultValues: #() subCategory: #b2>
+]
+
+{ #category : #'as yet unclassified' }
+PhratchSpriteMorph >> procedureWithArgs [
+
+	<phratchItem: 'the script. Input names: $String$' kind: #q category: 'operators' defaultValues: #() subCategory: #b2>
+]
+
 { #category : #'byob OOP' }
 PhratchSpriteMorph >> prototype [
 	^ prototype
@@ -2219,6 +2243,7 @@ PhratchSpriteMorph >> slideBackToFormerSituation: evt [
 { #category : #'byob OOP' }
 PhratchSpriteMorph >> spawn [
 
+	<phratchItem: 'duplicate' kind: #r category: 'operators' defaultValues: #() subCategory: #b3>
 	| stage child |
 "
 	(frame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNil: [^ nil].
