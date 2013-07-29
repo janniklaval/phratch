@@ -41,7 +41,15 @@ PhratchInstaller class >> beginInstall [
 
 { #category : #'as yet unclassified' }
 PhratchInstaller class >> downloadFileFromUrl: anUrl andUnzipIntoDirectory: aPath [
-	(ZipArchive new readFrom: (ZnHTTPSocketFacade httpGet: anUrl)) extractAllTo: (aPath)
+
+	UIManager default informUserDuring: 
+		[ :bar | 
+		(ZipArchive new readFrom: (ZnHTTPSocketFacade httpGet: anUrl)) 
+			extractAllTo: (aPath)
+			informing: bar 
+			overwrite: true
+			]
+	
 ]
 
 { #category : #'as yet unclassified' }
