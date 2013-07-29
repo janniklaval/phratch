@@ -13,13 +13,13 @@ PhratchInstaller class >> beginInstall [
 		inform:
 			'You are about to install Phratch.', String cr, 'This process will modify some Smalltalk system classes and might subsequently break other projects from this working image.', String cr , 'This is your last chance to abort the installation.'.
 "
-	self gotPhratchLicence ifFalse: [self getPhratchLicence].
-	self gotPhratchSkins ifFalse: [self getPhratchSkins].
-	self gotPhratchPlugins ifFalse: [self getPhratchPlugins]. 
-	self gotPhratchLocales ifFalse: [self getPhratchLocales].
-	self gotPhratchMedia ifFalse: [self getPhratchMedia].
-	self gotPhratchHelp ifFalse: [self getPhratchHelp].
-	self gotBYOBManual ifFalse: [self getBYOBManual].
+	| items |
+	items := OrderedCollection new.
+	items add: (StartupAction
+             name: 'Phratch external files'
+             code: [PhratchInstaller externalVerification.]).
+	StartupLoader default addAtStartupInPreferenceVersionFolder: items named: 'phratch.st'.
+	StartupLoader default loadStartupScript.
 
 	AbstractSound initialize.
 	SampledSound initialize.
@@ -42,6 +42,19 @@ PhratchInstaller class >> beginInstall [
 { #category : #'as yet unclassified' }
 PhratchInstaller class >> downloadFileFromUrl: anUrl andUnzipIntoDirectory: aPath [
 	(ZipArchive new readFrom: (ZnHTTPSocketFacade httpGet: anUrl)) extractAllTo: (aPath)
+]
+
+{ #category : #'as yet unclassified' }
+PhratchInstaller class >> externalVerification [
+	self halt.
+	PhratchInstaller gotPhratchLicence ifFalse: [PhratchInstaller getPhratchLicence].
+	PhratchInstaller gotPhratchSkins ifFalse: [PhratchInstaller getPhratchSkins].
+	PhratchInstaller gotPhratchPlugins ifFalse: [PhratchInstaller getPhratchPlugins]. 
+	PhratchInstaller gotPhratchLocales ifFalse: [PhratchInstaller getPhratchLocales].
+	PhratchInstaller gotPhratchMedia ifFalse: [PhratchInstaller getPhratchMedia].
+	PhratchInstaller gotPhratchHelp ifFalse: [PhratchInstaller getPhratchHelp].
+	PhratchInstaller gotBYOBManual ifFalse: [PhratchInstaller getBYOBManual].
+
 ]
 
 { #category : #'as yet unclassified' }
@@ -118,7 +131,7 @@ PhratchInstaller class >> gotPhratchHelp [
 
 { #category : #'as yet unclassified' }
 PhratchInstaller class >> gotPhratchLicence [
-	^ (FileSystem workingDirectory / 'licence.txt') exists
+	^ (FileSystem workingDirectory / 'license.txt') exists
 ]
 
 { #category : #'as yet unclassified' }

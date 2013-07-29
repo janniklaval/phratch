@@ -316,6 +316,7 @@ PhratchFrameMorph class >> meshServerEnabled: anObject [
 PhratchFrameMorph class >> open [
 "	InputEventSensor startUp."
 	"SoundPlayer initialize; shutDown; startUp. "
+		
 	^ self new startup openInWorld
 ]
 
