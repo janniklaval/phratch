@@ -46,7 +46,7 @@ PhratchInstaller class >> downloadFileFromUrl: anUrl andUnzipIntoDirectory: aPat
 
 { #category : #'as yet unclassified' }
 PhratchInstaller class >> externalVerification [
-	self halt.
+
 	PhratchInstaller gotPhratchLicence ifFalse: [PhratchInstaller getPhratchLicence].
 	PhratchInstaller gotPhratchSkins ifFalse: [PhratchInstaller getPhratchSkins].
 	PhratchInstaller gotPhratchPlugins ifFalse: [PhratchInstaller getPhratchPlugins]. 
