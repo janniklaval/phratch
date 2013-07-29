@@ -18,7 +18,7 @@ PhratchInstaller class >> beginInstall [
 	items add: (StartupAction
              name: 'Phratch external files'
              code: [PhratchInstaller externalVerification.]).
-	StartupLoader default addAtStartupInPreferenceVersionFolder: items named: 'phratch.st'.
+	StartupLoader default addAtStartupInImageDirectory: items.
 	StartupLoader default loadStartupScript.
 
 	AbstractSound initialize.
