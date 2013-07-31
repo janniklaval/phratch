@@ -124,7 +124,7 @@ PhratchInstaller class >> getPhratchSkins [
 		show: 'Downloading ScratchSkin'.
 	self
 		downloadFileFromUrl: 'https://phratch.googlecode.com/files/ScratchSkin.zip'
-		andUnzipIntoDirectory: FileSystem workingDirectory
+		andUnzipIntoDirectory: (FileSystem workingDirectory / 'ScratchSkin')
 ]
 
 { #category : #'as yet unclassified' }
