@@ -759,10 +759,14 @@ PhratchFrameMorph >> aboutPhratch [
 		withButtonsForYes: false no: false okay: true cancel: false.
 	dialogBox
 		message: 'Phratch 1.0
-
 Copyright (c) 2013 Jannik Laval.
+All rights reserved.
 
-Based on Scratch
+Phratch Logo and Phratch Robot images
+Copyright (c) 2013 Natacha Perrin.
+All rights reserved.
+
+Phratch is based on Scratch
 Copyright (C)  2009 Massachusetts Institute of Technology.
 All rights reserved.
 
