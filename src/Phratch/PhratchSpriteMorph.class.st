@@ -1157,7 +1157,7 @@ PhratchSpriteMorph >> isSprite [
 PhratchSpriteMorph >> isVisible [
 	"Make myself invisible."
 	<phratchItem: 'visible?' kind: #b category: 'looks' defaultValues: #() subCategory: #a6>
-	super isVisible
+	^super isVisible
 
 ]
 
