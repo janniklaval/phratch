@@ -702,7 +702,7 @@ ScriptablePhratchMorph >> addGenericVariableBlocksTo: page x: x y: startY [
 			vName := stage varNames first]
 		ifFalse: [
 			self varNames size = 0
-				ifTrue: [vName = ''  "^ y"]
+				ifTrue: [vName := ''  "^ y"]
 				ifFalse: [vName := self varNames first]].
 
 	vName ifNil: [vName := ''].
@@ -2317,7 +2317,7 @@ ScriptablePhratchMorph >> closeCamera [
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> closeDefinitivelyCamera [
 	<phratchItem: 'close camera' kind: #- category: 'looks' defaultValues: #() subCategory: #a9>
-	^ self cameraIsOpen ifTrue: [
+	self cameraIsOpen ifTrue: [
 		CameraOpenings := 0.
 		CameraPlugin closeCamera: 1].
 ]
@@ -3398,7 +3398,7 @@ ScriptablePhratchMorph >> deleteLine: lineNum ofList: listName [
 ScriptablePhratchMorph >> deleteList [
 	"Ask the user which list variable to delete, then remove it."
 
-	| sFrame stage menu choice |
+	| sFrame stage menu |
 	sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
 	sFrame ifNil: [^ self].
 
@@ -3609,7 +3609,7 @@ ScriptablePhratchMorph >> deleteSpriteQuickly [
 ScriptablePhratchMorph >> deleteVariable [
 	"Ask the user which user variable to delete, then remove it."
 
-	| sFrame stage menu choice |
+	| sFrame stage menu |
 	sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
 	sFrame ifNil: [^ self].
 
@@ -5099,7 +5099,6 @@ ScriptablePhratchMorph >> initFieldsFrom: anObjStream version: classVersion [
 ScriptablePhratchMorph >> initialize [
 
 	super initialize.
-	temporaryVariables := VariableFrame new. 
 	objName := self nextInstanceName.
 	vars := Dictionary new.
 	lists := Dictionary new.
@@ -5373,7 +5372,7 @@ ScriptablePhratchMorph >> isObject: object type: type [
 		(object isKindOf: Boolean) ifTrue: [^ false].
 		object isEmpty ifTrue: [^ false].
 		object do: [:c | 
-			c isDigit ifFalse: [(#($0 $. $-) includes: c) ifFalse: [^ false]]].
+			c isDigit ifFalse: [('0.-' includes: c) ifFalse: [^ false]]].
 		^ true].
 
 	'text' "localized" = type ifTrue: [
@@ -5382,7 +5381,7 @@ ScriptablePhratchMorph >> isObject: object type: type [
 		(object isKindOf: Boolean) ifTrue: [^ false].
 		object isEmpty ifTrue: [^ true].
 		object do: [:c | 
-			c isDigit ifFalse: [(#($0 $. $-) includes: c) ifFalse: [^ true]]].
+			c isDigit ifFalse: [('0.-' includes: c) ifFalse: [^ true]]].
 		^ false].
 
 	'boolean' "localized" = type ifTrue: [

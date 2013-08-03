@@ -13,7 +13,7 @@ ArgumentPlaceHolderMorph class >> dimensions [
 	^ 16@10
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #layout }
 ArgumentPlaceHolderMorph >> acceptDroppingMorph: aBlockMorph event: evt [
 	"This message is sent when a morph is dropped onto a morph that has agreed to accept the dropped morph by responding 'true' to the wantsDroppedMorph:Event: message. This default implementation just adds the given morph to the receiver."
 
@@ -63,7 +63,7 @@ ArgumentPlaceHolderMorph >> drawEmbeddedOn: aCanvas [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #drawing }
 ArgumentPlaceHolderMorph >> drawOn: aCanvas [
 	
 	isRaised
@@ -84,7 +84,7 @@ ArgumentPlaceHolderMorph >> drawRaisedOn: aCanvas [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 ArgumentPlaceHolderMorph >> handlesMouseDown: evt [
 	"Return true if this morph wants to receive mouseDown events (i.e., mouseDown:, mouseMove:, mouseUp:). The default response is false; subclasses that implement mouse messages should override this to return true." 
 
@@ -92,7 +92,7 @@ ArgumentPlaceHolderMorph >> handlesMouseDown: evt [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #Widgets }
 ArgumentPlaceHolderMorph >> handlesMouseOver: evt [
 	"Return true if I want to receive mouseEnterDragging: and mouseLeaveDragging: when the hand drags something over me (button up or button down), or when the mouse button is down but there is no mouseDown recipient. The default response is false; subclasses that implement mouse mouseEnterDragging messages should override this to return true."
 
@@ -104,7 +104,7 @@ ArgumentPlaceHolderMorph >> handlesMouseOver: evt [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 ArgumentPlaceHolderMorph >> handlesMouseOverDragging: evt [
 	"Return true if I want to receive mouseEnterDragging: and mouseLeaveDragging: when the hand drags something over me (button up or button down), or when the mouse button is down but there is no mouseDown recipient. The default response is false; subclasses that implement mouse mouseEnterDragging messages should override this to return true."
 
@@ -116,7 +116,7 @@ ArgumentPlaceHolderMorph >> handlesMouseOverDragging: evt [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 ArgumentPlaceHolderMorph >> initialize [
 	super initialize.
 	isRaised := false.
@@ -128,17 +128,17 @@ ArgumentPlaceHolderMorph >> initialize [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ArgumentPlaceHolderMorph >> labelFragment [
 	^labelFragment
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ArgumentPlaceHolderMorph >> labelFragment: aBlockLabelFragmen [
 	labelFragment := aBlockLabelFragmen
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 ArgumentPlaceHolderMorph >> mouseDown: evt [
 	"Handle a mouse down event"
 
@@ -158,7 +158,7 @@ ArgumentPlaceHolderMorph >> mouseDown: evt [
 	owner updateSpecWithDnDSpec
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 ArgumentPlaceHolderMorph >> mouseEnter: evt [
 
 	owner isFrozen 
@@ -168,7 +168,7 @@ ArgumentPlaceHolderMorph >> mouseEnter: evt [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 ArgumentPlaceHolderMorph >> mouseEnterDragging: evt [
 	"Handle a mouseEnterDragging event. The mouse just entered my bounds with a button pressed or laden with submorphs. This default implementation does nothing."
 
@@ -183,7 +183,7 @@ ArgumentPlaceHolderMorph >> mouseEnterDragging: evt [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 ArgumentPlaceHolderMorph >> mouseLeave: evt [
 
 	owner ifNil: [^ self].
@@ -194,7 +194,7 @@ ArgumentPlaceHolderMorph >> mouseLeave: evt [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 ArgumentPlaceHolderMorph >> mouseLeaveDragging: evt [
 	"Handle a mouseLeaveLaden event. The mouse just left my bounds with a button pressed or laden with submorphs. This default implementation does nothing."
 
@@ -215,7 +215,7 @@ ArgumentPlaceHolderMorph >> template [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'byob lambdas' }
 ArgumentPlaceHolderMorph >> updateFragment [
 
 	labelFragment
@@ -223,7 +223,7 @@ ArgumentPlaceHolderMorph >> updateFragment [
 		label: ''
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ArgumentPlaceHolderMorph >> vanish [
 
 	self
@@ -231,7 +231,7 @@ ArgumentPlaceHolderMorph >> vanish [
 		extent: 0@0
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'dropping/grabbing' }
 ArgumentPlaceHolderMorph >> wantsDroppedMorph: aMorph event: evt [
 	"Return true if the receiver wishes to accept the given morph, which is being dropped by a hand in response to the given event. The default implementation returns false.
 NOTE: the event is assumed to be in global (world) coordinates."

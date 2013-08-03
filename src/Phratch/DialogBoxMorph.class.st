@@ -48,7 +48,8 @@ DialogBoxMorph class >> ask: questionString [
 	dialogBox := self new
 		title: '?';
 		withButtonsForYes: true no: true okay: false cancel: false;
-		message: questionString.
+		message: questionString;
+		yourself.
 	^ dialogBox getUserResponse
 
 ]
@@ -62,7 +63,8 @@ DialogBoxMorph class >> askWithCancel: questionString [
 	dialogBox := self new
 		title: '?';
 		withButtonsForYes: true no: true okay: false cancel: true;
-		message: questionString.
+		message: questionString;
+		yourself.
 	^ dialogBox getUserResponse
 
 ]
@@ -91,7 +93,8 @@ DialogBoxMorph class >> inform: informationString title: titleString [
 	| dialogBox |
 	dialogBox := self new
 		withButtonsForYes: false no: false okay: true cancel: false;
-		title: titleString.
+		title: titleString;
+		yourself.
 	dialogBox
 		message: informationString
 		font: (StrikeFont fontName: 'VerdanaBold' size: 13).
@@ -125,7 +128,8 @@ DialogBoxMorph class >> informWithCancel: informationString [
 	| dialogBox |
 	dialogBox := self new
 		withButtonsForYes: false no: false okay: false cancel: true;
-		message: informationString.
+		message: informationString;
+		yourself.
 	^ dialogBox getUserResponse
 
 ]
@@ -139,7 +143,8 @@ DialogBoxMorph class >> warn: informationString [
 	dialogBox := self new
 		title: '!';
 		withButtonsForYes: false no: false okay: true cancel: false;
-		message: informationString.
+		message: informationString;
+		yourself.
 	^ dialogBox getUserResponse
 
 ]
@@ -231,7 +236,8 @@ DialogBoxMorph >> buttonLabel: labelString action: actionSelector [
 		label: labelString font: (PhratchFrameMorph getFont: #DialogBoxButton);
 		target: self;
 		actionSelector: actionSelector;
-		setLabelColor: (Color gray: 0.15)
+		setLabelColor: (Color gray: 0.15);
+		yourself
 
 ]
 
@@ -371,7 +377,8 @@ DialogBoxMorph >> fixLayoutForExtent: aPoint [
 
 	"add a bottom spacer to the tallest column"
 	bottomSpacer ifNil: [
-		bottomSpacer := (Morph new extent: (5@22); color: Color transparent).
+		bottomSpacer := (Morph new extent: (5@22); color: Color transparent;
+		yourself).
 		(shortcutColumn height > mainColumn height)
 			ifTrue: [shortcutColumn addMorphBack: bottomSpacer]
 			ifFalse: [(mainColumn height > fileInfoColumn height)
@@ -416,31 +423,36 @@ DialogBoxMorph >> initialize [
 		cellPositioning: #topCenter; 
 		centering: #center;
 		hResizing: #shrinkWrap;
-		vResizing: #shrinkWrap.
+		vResizing: #shrinkWrap;
+		yourself.
 	shortcutColumn := AlignmentMorph newColumn
 		color: Color transparent;
 		cellPositioning: #topCenter; 
 		centering: #center;
 		hResizing: #shrinkWrap;
-		vResizing: #shrinkWrap.
+		vResizing: #shrinkWrap;
+		yourself.
 	fileInfoColumn := AlignmentMorph newColumn
 		color: Color transparent;
 		cellPositioning: #topLeft;  
 		centering: #topLeft;
 		hResizing: #shrinkWrap;
-		vResizing: #shrinkWrap.
+		vResizing: #shrinkWrap;
+		yourself.
 	titleBin := AlignmentMorph newRow
 		color: Color transparent;
 		cellPositioning: #leftCenter; 
 		centering: #center;
 		hResizing: #spaceFill;
 		vResizing: #rigid;
-		height: 32.
+		height: 32;
+		yourself.
 	buttonRow := AlignmentMorph newRow
 		color: Color transparent;
 		hResizing: #shrinkWrap;
 		vResizing: #shrinkWrap;
-		height: 32.
+		height: 32;
+		yourself.
 
 	PhratchTranslator isRTL
 		ifTrue: [fileInfoColumn centering: #bottomRight]
@@ -496,7 +508,8 @@ DialogBoxMorph >> message: aMessage details: aDetailsString font: aStrikeFont [
 		color: Color transparent;
 		hResizing: #shrinkWrap;
 		vResizing: #shrinkWrap;
-		centering: #center.
+		centering: #center;
+		yourself.
 	lines := aMessage lines.
 	1 to: lines size do: [:n |
 		m := StringMorph
@@ -529,7 +542,8 @@ DialogBoxMorph >> message: aMessage font: aStrikeFont [
 		color: Color transparent;
 		hResizing: #shrinkWrap;
 		vResizing: #shrinkWrap;
-		centering: #center.
+		centering: #center;
+		yourself.
 	lines := aMessage lines.
 	1 to: lines size do: [:n |
 		m := StringMorph
@@ -564,11 +578,13 @@ DialogBoxMorph >> percentDone: aNumber [
 			extent: 104@16;
 			borderWidth: 1;
 			color: Color transparent;
-			borderColor: (Color gray: 0.5).
+			borderColor: (Color gray: 0.5);
+		yourself.
 		indicator := Morph new
 			extent: 0@12;
 			color: (Color r: 0.35 g: 0.50 b: 0.67);
-			position: percentMorph position + 2.
+			position: percentMorph position + 2;
+		yourself.
 		percentMorph addMorph: indicator.
 		percentMorph position: (self center x - (percentMorph width // 2) - 5)@(buttonRow top - 27).
 		mainColumn addMorph: percentMorph].
@@ -594,7 +610,8 @@ DialogBoxMorph >> shortcutButtonLabel: labelString action: actionSelector icon: 
 
 	button := ResizableToggleButton new
 		offForm: offForm
-		onForm: onForm.
+		onForm: onForm
+		overForm: overForm.
 
 	button addMorph: (ImageMorph new form: (PhratchFrameMorph skinAt: aSymbol)).
 
@@ -602,7 +619,8 @@ DialogBoxMorph >> shortcutButtonLabel: labelString action: actionSelector icon: 
 		label: labelString localized font: (PhratchFrameMorph getFont: #FolderShortcut);
 		target: self;
 		actionSelector: actionSelector;
-		setLabelColor: (Color gray: 0.15)).
+		setLabelColor: (Color gray: 0.15);
+		yourself).
 
 ]
 
@@ -649,7 +667,8 @@ DialogBoxMorph >> title: aString [
 
 	titleBin
 		addMorph: (AlignmentMorph newSpacer: Color transparent);
-		addMorph: (Morph new extent: (5@5); color: Color transparent);
+		addMorph: (Morph new extent: (5@5); color: Color transparent;
+		yourself);
 		addMorph: titleMorph;
 		addMorph: (AlignmentMorph newSpacer: Color transparent).
 
@@ -671,7 +690,8 @@ DialogBoxMorph >> withButtonsForYes: yesFlag no: noFlag okay: okayFlag cancel: c
 	"Note: The button row morph was created by initialize; I just replace its contents with a new collection of buttons."
 
 	| spacer |
-	spacer := Morph new extent: 10@5; color: Color transparent.
+	spacer := Morph new extent: 10@5; color: Color transparent;
+		yourself.
 	buttonRow removeAllMorphs.
 
 	buttonRow addMorphBack: (AlignmentMorph newSpacer: Color transparent).
@@ -703,7 +723,8 @@ DialogBoxMorph >> withButtonsForYes: yesFlag no: noFlag okay: okayFlag delete: d
 	"Note: The button row morph was created by initialize; I just replace its contents with a new collection of buttons."
 
 	| spacer |
-	spacer := Morph new extent: 10@5; color: Color transparent.
+	spacer := Morph new extent: 10@5; color: Color transparent;
+		yourself.
 	buttonRow removeAllMorphs.
 
 	buttonRow addMorphBack: (AlignmentMorph newSpacer: Color transparent).

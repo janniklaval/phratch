@@ -377,17 +377,13 @@ PhratchTranslator class >> fixAmbigousRTLPunctuation [
 	"In a right-to-left language such as Arabic, punctuation characters such as period can be treated as either right-to-left or left-to-right characters. When they appear at the beginning of a string, the directionality is ambiguous. We assume that translation strings that start with punctuation characters are intended to start in left-to-right mode. This method prefixes punctuation characters with the Unicode LTR mark character, U+200E."
 	"Note: Embedded colons are prefixed with the LTR mark everwhere that they appear since block translation strings are broken into component parts that can start with a colon."
 
-	| punctuation colon prefix |
-	punctuation := '.!%#' asByteArray.
-	colon := $: asciiValue.
-	prefix := String value:  16r200E.
 ]
 
 { #category : #'rendering menu' }
 PhratchTranslator class >> fontMenu [
 	"Present a menu of fonts."
 
-	| menu choice |
+	| menu |
 	RenderPlugin ifNil: [^ Beeper beep].
 	menu := MenuMorph new defaultTarget: self.
 	RenderPlugin getFontList do: [:fn | 
@@ -403,7 +399,7 @@ PhratchTranslator class >> fontMenu [
 PhratchTranslator class >> fontScaleMenu [
 	"Present a menu of font scales."
 
-	| menu choice s |
+	| menu s |
 	menu := MenuMorph new defaultTarget: self.
 	(0.8 to: 2.01 by: 0.1) do: [:n |
 		s := n printString, 'x'.

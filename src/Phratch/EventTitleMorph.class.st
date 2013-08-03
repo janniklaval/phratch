@@ -98,7 +98,8 @@ EventTitleMorph >> initialize [
 	labelMorph := StringMorph new
 		font: (PhratchFrameMorph getFont: #Arg);
 		forceUnicodeRendering: true;
-		color: Color white.
+		color: Color white;
+		yourself.
 	self addMorph: labelMorph.
 	self eventName: ''.
 
@@ -124,7 +125,7 @@ EventTitleMorph >> newEvent [
 EventTitleMorph >> presentMenu [
 	"Pop up a menu of choices."
 
-	| eventNames sFrame menu choice s be |
+	| eventNames sFrame menu be |
 	eventNames := #().
 
 	sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph.

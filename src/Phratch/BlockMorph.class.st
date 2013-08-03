@@ -98,13 +98,8 @@ BlockMorph class >> setLabelFont [
 BlockMorph class >> setLabelSize: aSelectedFontLabel [
 	"BlockMorph setLabelFont"
 
-	| menu fName fSize |
-	#normal = fName ifTrue: [
-		menu add: 10 printString
-			target: self  
-			selector: #setfont:size:
-			argument:  (Array with: 'VerdanaBoldNarrowSpace' with: 10)
-	] ifFalse:[ 
+	| menu |
+	
 		menu := MenuMorph new defaultTarget: self.
 		(StrikeFont sizesForFontName: aSelectedFontLabel) do: [:sz | 
 			menu add: sz printString 
@@ -112,7 +107,6 @@ BlockMorph class >> setLabelSize: aSelectedFontLabel [
 				selector: #setfont:size:
 				argumentList: (Array with: aSelectedFontLabel with: sz)
 		].
-	].
 	menu popUpInWorld.
 
 ]
@@ -502,7 +496,7 @@ BlockMorph >> contrastColor [
 						ifTrue: [ m contrastColor ] ] ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #copying }
 BlockMorph >> copyReceiver: aReceiver [
 
 	self allMorphsDo: [:each | (each isKindOf: CommandBlockMorph)  ifTrue:[each receiver: aReceiver ]  ]  
@@ -836,7 +830,7 @@ BlockMorph >> flushCachedForm [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'dropping/grabbing' }
 BlockMorph >> formerPosition: formerPosition [
 
 	formerPosition ifNil: [^ self "we need a formerPosition somehow (SPFA)"].

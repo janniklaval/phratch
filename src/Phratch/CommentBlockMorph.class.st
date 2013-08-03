@@ -72,7 +72,8 @@ CommentBlockMorph >> initialize [
 		font: (PhratchFrameMorph getFont: #CommentBlock);
 		contents: '';
 		width: 160;
-		color: (Color gray: 0.88).
+		color: (Color gray: 0.88);
+		yourself.
 	self addMorph: commentMorph.
 
 	showHideMorph := ImageMorph new form: (PhratchFrameMorph skinAt: #arrowOpenComment).

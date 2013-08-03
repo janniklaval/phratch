@@ -57,7 +57,8 @@ EventHatMorph >> forStartEvent [
 
 	parts := PhratchTranslator labelPartsFor: 'when $Sprite$ clicked'.
 
-	s := StringMorph new contents: parts first; font: (PhratchFrameMorph getFont: #Label); color: Color white.
+	s := StringMorph new contents: parts first; font: (PhratchFrameMorph getFont: #Label); color: Color white;
+		yourself.
 	self addMorphBack: s.
 
 	m := ImageMorph new form: (PhratchFrameMorph skinAt: #goButton).

@@ -115,7 +115,7 @@ PaletteFrameHeadMorph >> chooseClassForMethods [
 
 	packages := Dictionary new.
 	SystemOrganization categories asSortedCollection do: [:cat |
-		pkg := (cat asString findTokens: #( $- )) first.
+		pkg := (cat asString findTokens: #- ) first.
 		(packages includesKey: pkg)
 			ifFalse: [ packages at: pkg put: OrderedCollection new].
 		(packages at: pkg) add: cat].

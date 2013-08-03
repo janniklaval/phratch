@@ -7,7 +7,7 @@ Class {
 	#category : #'Phratch-Blocks'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 CSlotMorph >> acceptsDroppedReporters [
 
 	^ true
@@ -256,7 +256,7 @@ CSlotMorph >> fixBlockLayout [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 CSlotMorph >> handlesMouseDown: evt [
 
 	^false
@@ -309,7 +309,7 @@ CSlotMorph >> topBarHeight [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 CSlotMorph >> veryDeepFixupWith: deepCopier [
 	"If fields were weakly copied, fix them here.  If they were in the tree being copied, fix them up, otherwise point to the originals."
 

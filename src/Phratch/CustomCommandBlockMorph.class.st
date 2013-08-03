@@ -29,7 +29,7 @@ CustomCommandBlockMorph class >> codeOwner [
 	^ 'jens owns the byob code :-)'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 CustomCommandBlockMorph class >> owner [
 	^ 'jens'
 ]
@@ -105,11 +105,13 @@ CustomCommandBlockMorph >> addLabel [
 	self isReporter ifTrue: [
 		m := submorphs first.
 		((m isKindOf: ChoiceArgMorph) | (m isKindOf: SpriteArgMorph)) ifTrue: [  "add spacer"
-			self addMorphFront: (Morph new color: Color transparent; extent: 2@5)].
+			self addMorphFront: (Morph new color: Color transparent; extent: 2@5;
+		yourself)].
 
 		m := submorphs last.
 		((m isKindOf: ChoiceArgMorph) | (m isKindOf: SpriteArgMorph)) ifTrue: [  "add spacer"
-			self addMorphBack: (Morph new color: Color transparent; extent: 2@5)]].
+			self addMorphBack: (Morph new color: Color transparent; extent: 2@5;
+		yourself)]].
 
 	self addVariableTemplates.
 	self hideArgumentPlaceHolders
@@ -162,7 +164,8 @@ CustomCommandBlockMorph >> addLabelToNonTemplate [
 				argMorphs addLast: 	(VariableBlockMorph new 
 					isSpecialForm: true; 
 					selector: #getVar:;
-					commandSpec: pn)]
+					commandSpec: pn;
+		yourself)]
 			ifFalse: [argMorphs addLast: (self argMorphFor: (args at: argMorphs size + 1))]].
 
 	nextArgIndex := 1.
@@ -179,11 +182,13 @@ CustomCommandBlockMorph >> addLabelToNonTemplate [
 	(self isReporter and: [submorphs isEmpty not]) ifTrue: [
 		m := submorphs first.
 		((m isKindOf: ChoiceArgMorph) | (m isKindOf: SpriteArgMorph)) ifTrue: [  "add spacer"
-			self addMorphFront: (Morph new color: Color transparent; extent: 2@5)].
+			self addMorphFront: (Morph new color: Color transparent; extent: 2@5;
+		yourself)].
 
 		m := submorphs last.
 		((m isKindOf: ChoiceArgMorph) | (m isKindOf: SpriteArgMorph)) ifTrue: [  "add spacer"
-			self addMorphBack: (Morph new color: Color transparent; extent: 2@5)]].
+			self addMorphBack: (Morph new color: Color transparent; extent: 2@5;
+		yourself)]].
 
 	"now try restoring the former arguments (jens)"
 	1 to: argMorphs size do: [:i |
@@ -233,7 +238,7 @@ CustomCommandBlockMorph >> addVariableTemplates [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #variables }
 CustomCommandBlockMorph >> allVarNames [
 	^self definition allVarNames
 ]
@@ -273,7 +278,7 @@ CustomCommandBlockMorph >> asBlockTuple [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 CustomCommandBlockMorph >> blockAttachPoints: aSet [
 	"Answer a collection of possible attachment points for me. Each entry is an Association mapping a point to the morph to which a dropping block could be attached."
 
@@ -283,7 +288,7 @@ CustomCommandBlockMorph >> blockAttachPoints: aSet [
 		
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 CustomCommandBlockMorph >> category [
 
 	| def |
@@ -292,14 +297,14 @@ CustomCommandBlockMorph >> category [
 	^ def category
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 CustomCommandBlockMorph >> defaultArgs: defaultValues [
 	"Set the default values of my arguments from the given list."
 
 	self setDefaultArgs
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 CustomCommandBlockMorph >> definition [
 	^receiver definitionFor: self id
 ]
@@ -321,14 +326,14 @@ CustomCommandBlockMorph >> editSpec [
 	receiver editSpecId: self id
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'object i/o' }
 CustomCommandBlockMorph >> fieldsVersion [
 
 	^ 1
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'block enumerating' }
 CustomCommandBlockMorph >> firstBlockList [
 
 	self script
@@ -369,7 +374,7 @@ CustomCommandBlockMorph >> id [
 	^CustomBlockDefinition idFromSpec: userSpec
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'object i/o' }
 CustomCommandBlockMorph >> initFieldsFrom: anObjStream version: classVersion [
 
 	super initFieldsFrom: anObjStream version: classVersion.
@@ -380,7 +385,7 @@ CustomCommandBlockMorph >> initFieldsFrom: anObjStream version: classVersion [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 CustomCommandBlockMorph >> initialize [
 	super initialize.
 	isTemplate := false.
@@ -389,12 +394,12 @@ CustomCommandBlockMorph >> initialize [
 	self color: Color lightGray
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 CustomCommandBlockMorph >> isAtomic [
 	^self definition isAtomic
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #byob }
 CustomCommandBlockMorph >> isCustomBlock [
 	^true
 ]
@@ -409,7 +414,7 @@ CustomCommandBlockMorph >> isFrozen: bool [
 	isFrozen := bool
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 CustomCommandBlockMorph >> isFunction [
 	^ false
 ]
@@ -419,7 +424,7 @@ CustomCommandBlockMorph >> isPartsBin [
 	^isTemplate
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 CustomCommandBlockMorph >> isReporter [
 	^false
 ]
@@ -449,7 +454,7 @@ CustomCommandBlockMorph >> labelMorphFor: aString [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 CustomCommandBlockMorph >> parameterNames [
 	^self definition parameterNames
 ]
@@ -461,7 +466,7 @@ CustomCommandBlockMorph >> privateSetUserSpec: aString [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 CustomCommandBlockMorph >> remove [
 	|nb sm|
 	nb := self nextBlock.
@@ -491,7 +496,7 @@ CustomCommandBlockMorph >> removeVariableTemplates [
 	argMorphs := OrderedCollection new
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'menu - change set' }
 CustomCommandBlockMorph >> rename [
 
 	| def defs choice menu |
@@ -510,7 +515,7 @@ CustomCommandBlockMorph >> rename [
 	self userSpec: choice userSpec
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 CustomCommandBlockMorph >> replaceArgMorph: argMorph by: newMorph [
 
 	| def typ pname i val |
@@ -526,7 +531,7 @@ CustomCommandBlockMorph >> replaceArgMorph: argMorph by: newMorph [
 			ifFalse: [newMorph defaultValue: val]]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #byob }
 CustomCommandBlockMorph >> rightButtonMenu [
 
 	| menu choice |
@@ -576,12 +581,12 @@ CustomCommandBlockMorph >> rootForGrabOf: aMorph [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 CustomCommandBlockMorph >> script [
 	^self definition body
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 CustomCommandBlockMorph >> sequence [
 	^self firstBlockList
 ]
@@ -647,13 +652,13 @@ CustomCommandBlockMorph >> showPlaceHoldersNear: aLabelFragment [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #byob }
 CustomCommandBlockMorph >> start [
 	isTemplate ifTrue: [^self].
 	super start
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'object i/o' }
 CustomCommandBlockMorph >> storeFieldsOn: anObjStream [
 
 	super storeFieldsOn: anObjStream.
@@ -771,12 +776,12 @@ CustomCommandBlockMorph >> updateSpecWithDnDSpec [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 CustomCommandBlockMorph >> userSpec [
 	^userSpec
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 CustomCommandBlockMorph >> userSpec: aString [
 	| cat def |
 

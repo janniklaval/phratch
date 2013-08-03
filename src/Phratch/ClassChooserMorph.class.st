@@ -13,10 +13,10 @@ Class {
 { #category : #'as yet unclassified' }
 ClassChooserMorph >> chooseClass [
 
-	|menu list packages pkg pkgMenu catMenu |
+	|menu packages pkg pkgMenu catMenu |
 	packages := Dictionary new.
 	SystemOrganization categories asSortedCollection do: [:cat |
-		pkg := (cat asString findTokens: #( $- )) first.
+		pkg := (cat asString findTokens: #-) first.
 		(packages includesKey: pkg)
 			ifFalse: [ packages at: pkg put: OrderedCollection new].
 		(packages at: pkg) add: cat].
@@ -32,17 +32,10 @@ ClassChooserMorph >> chooseClass [
 				subMenu: pkgMenu."
 		menu add: eachPkg subMenu: pkgMenu ].
 
-
-
-"
-	list := SystemOrganization categories asSortedCollection.
-	list do: [:each|
-		menu add: (self wordsFrom: each asString) subMenu: (self menuForCategory: each)].
-"
 	menu popUpAt: button center x @ (self bottom + 5) forHand: World activeHand
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ClassChooserMorph >> class: aClass [
 	| classToSet |
 	classToSet := aClass.
@@ -73,33 +66,34 @@ ClassChooserMorph >> fitMorphs [
 	self extent: label bottomRight - self position
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ClassChooserMorph >> frame: aMorph [
 	frame := aMorph
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 ClassChooserMorph >> handlesMouseDown: evt [
 	^ true
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialize }
 ClassChooserMorph >> initialize [
 	super initialize.
 	self color: Color gray.
 	self addMorph: (button := TriangleButtonMorph new
 				target: self;
-				selector: #chooseClass)
+				selector: #chooseClass;
+		yourself)
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 ClassChooserMorph >> labelColor [
 	^Color white
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 ClassChooserMorph >> labelFont [
 	^StrikeFont fontName: 'VerdanaBold' size: 12
 ]
@@ -117,12 +111,12 @@ ClassChooserMorph >> menuForCategory: categoryName [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 ClassChooserMorph >> mouseDown: evt [
 	self chooseClass
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ClassChooserMorph >> selectedClass [
 	^class
 ]

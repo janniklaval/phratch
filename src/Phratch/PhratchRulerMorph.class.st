@@ -65,7 +65,6 @@ PhratchRulerMorph >> initialize [
 	min := 0.0.
 	max := 100.
 	marks := 20.0.
-	sigDigs := 1. 
 	graph := nil. "used specifically to coord with PhratchGraphMorph"
 
 	self borderWidth: 1.
@@ -90,7 +89,6 @@ PhratchRulerMorph >> min: aMin max: aMax [
 { #category : #accessing }
 PhratchRulerMorph >> sigDigs: aNumber [
 
-	sigDigs := aNumber truncated.
 	self changed.
 ]
 

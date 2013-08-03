@@ -11,22 +11,22 @@ Class {
 	#category : #'Phratch-UI-Support'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 BlockLabelFragment >> default [
 	^ default
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 BlockLabelFragment >> default: aValue [
 	default := aValue
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'submorphs-add/remove' }
 BlockLabelFragment >> delete [
 	isDeleted := true
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'initialize-release' }
 BlockLabelFragment >> initialize [
 
 	super initialize.
@@ -37,22 +37,22 @@ BlockLabelFragment >> initialize [
 	default := ''
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 BlockLabelFragment >> isDeleted [
 	^ isDeleted
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 BlockLabelFragment >> isInput [
 	^ isInput
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 BlockLabelFragment >> isInput: aBool [
 	isInput := aBool
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 BlockLabelFragment >> isLoop [
 
 	isInput ifFalse: [^ false].
@@ -60,7 +60,7 @@ BlockLabelFragment >> isLoop [
 	^ type = #loop
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 BlockLabelFragment >> isMultipleInput [
 
 	isInput ifFalse: [^ false].
@@ -68,7 +68,7 @@ BlockLabelFragment >> isMultipleInput [
 	^ type endsWith: 'List'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 BlockLabelFragment >> isTemplate [
 
 	isInput ifFalse: [^ false].
@@ -76,7 +76,7 @@ BlockLabelFragment >> isTemplate [
 	^ type = #template
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 BlockLabelFragment >> isUnevaluated [
 
 	isInput ifFalse: [^ false].
@@ -84,19 +84,19 @@ BlockLabelFragment >> isUnevaluated [
 	^ type beginsWith: 'unevaluated'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 BlockLabelFragment >> label [
 	^label
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 BlockLabelFragment >> label: aString [
 
 	label := aString
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 BlockLabelFragment >> spec [
 	| spec |
 	isDeleted ifTrue: [^''].
@@ -108,17 +108,17 @@ BlockLabelFragment >> spec [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 BlockLabelFragment >> type [
 	^type
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 BlockLabelFragment >> type: aSymbol [
 	type := aSymbol
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #updating }
 BlockLabelFragment >> updateLabel [
 
 	"make sure an ellipsis (...) is added to the label

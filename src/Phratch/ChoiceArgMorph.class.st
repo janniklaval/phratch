@@ -17,7 +17,7 @@ Class {
 	#category : #'Phratch-Blocks'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #other }
 ChoiceArgMorph >> acceptsDroppedReporters [
 	"Accept reporter blocks in list blocks"
 
@@ -52,7 +52,7 @@ ChoiceArgMorph >> acceptsDroppedReporters [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #byob }
 ChoiceArgMorph >> acceptsTypeOf: aBlockMorph [
 	"Answer true if I can accept a dropped reporter of the given type."
 
@@ -203,7 +203,8 @@ ChoiceArgMorph >> initialize [
 	labelMorph := StringMorph new
 		font: (PhratchFrameMorph getFont: #Arg);
 		forceUnicodeRendering: true;
-		color: Color white.
+		color: Color white;
+		yourself.
 	self addMorph: labelMorph.
 	menuIconMorph := ImageMorph new form: DropDownMenuForm.
 	self addMorphFront: menuIconMorph.
@@ -258,7 +259,7 @@ ChoiceArgMorph >> presentMenu [
 	optionList size = 0 ifTrue: [^ self].
 	doLocalization := (#(costumeNames soundNames varNamesMenu listVarMenu) includes: getOptionsSelector) not.
 	doLocalization ifFalse: [
-		doLocalization = (optionList = {'with inputs' localized. 'with input list' localized})].
+		doLocalization := (optionList = {'with inputs' localized. 'with input list' localized})].
 	menu := MenuMorph new defaultTarget: self.
 	optionList do: [:sym |
 		'-' = sym

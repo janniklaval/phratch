@@ -7,20 +7,20 @@ Class {
 	#category : #'Phratch-Blocks'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 CheckBoxArgMorph >> click: evt [
 
 	isChecked := isChecked not.
 	self changed.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #other }
 CheckBoxArgMorph >> defaultValue: aBoolean [
 
 	isChecked := aBoolean.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #drawing }
 CheckBoxArgMorph >> drawOn: aCanvas [
 
 	| left top checkBoxForm |
@@ -33,33 +33,33 @@ CheckBoxArgMorph >> drawOn: aCanvas [
 	aCanvas paintImage: checkBoxForm at: (self position + (left@top)).
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #evaluation }
 CheckBoxArgMorph >> evaluate [
 
 	^ isChecked
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 CheckBoxArgMorph >> handlesMouseDown: evt [
 
 	^ evt hand toolType isNil.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 CheckBoxArgMorph >> initialize [
 
 	super initialize.
 	isChecked := false.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 CheckBoxArgMorph >> mouseDown: evt [
 
 	evt hand waitForClicksOrDrag: self event: evt.
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 CheckBoxArgMorph >> preemptsMouseDown: evt [
 
 	^ true

@@ -499,7 +499,7 @@ ObjStream >> getArray: anObject id: classID [
 { #category : #'fixed format-reading' }
 ObjStream >> getAssoc: anObject id: classID [
 
-	| result key value newContents |
+	| result key value |
 	firstPass ifTrue: [
 		key := self readField.
 		value := self readField.
@@ -507,8 +507,8 @@ ObjStream >> getAssoc: anObject id: classID [
 		^ result].
 
 	"fix references"
-	newContents := ((self targetObjectFor: anObject key) -> (self targetObjectFor: anObject value)).
-	newContents.
+	((self targetObjectFor: anObject key) -> (self targetObjectFor: anObject value)).
+	
 
 ]
 

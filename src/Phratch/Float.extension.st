@@ -19,26 +19,25 @@ Float >> absFixedPrintBase10On: aStream [
 				ifTrue:
 					[r := significand * be * 2.
 					s := 2.
-					mPlus := be.
-					mMinus := be]
+					mPlus := be]
 				ifFalse:
 					[be1 := be * 2.
 					r := significand * be1 * 2.
 					s := 4.
-					mPlus := be1.
-					mMinus := be]]
+					mPlus := be1].
+				mMinus := be.]
 		ifFalse:
 			[(exp = MinValLogBase2) | (significand ~= 16r10000000000000)
 				ifTrue:
 					[r := significand * 2.
 					s := (1 << (exp negated)) * 2.
-					mPlus := 1.
-					mMinus := 1]
+					mPlus := 1]
 				ifFalse:
 					[r := significand * 4.
 					s := (1 << (exp negated + 1)) * 2.
 					mPlus := 2.
-					mMinus := 1]].
+					].
+				mMinus := 1].
 	baseExpEstimate >= 0
 		ifTrue: [s := s * (base raisedToInteger: baseExpEstimate)]
 		ifFalse:
@@ -83,7 +82,7 @@ Float >> printStringNoExponent [
 
 	| s |
 	self isNaN ifTrue: [^ 'NaN']. "check for NaN before sign"
-	self = 0.0 ifTrue: [^ '0.0'].
+	(self closeTo: 0.0) ifTrue: [^ '0.0'].
 	s := WriteStream on: (String new: 100).
 	self > 0.0
 		ifTrue: [self absFixedPrintBase10On: s]

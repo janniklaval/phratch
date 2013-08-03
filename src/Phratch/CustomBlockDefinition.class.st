@@ -90,7 +90,8 @@ CustomBlockDefinition >> answerBlock [
 	block := CommandBlockMorph new
 		commandSpec: spec;
 		isSpecialForm: true;
-		selector: #doAnswer.
+		selector: #doAnswer;
+		yourself.
 
 	(answer isKindOf: ReporterBlockMorph) ifTrue: [
 		^block replaceArgMorph: (block argumentAt: 1) by: answer ].
@@ -381,7 +382,8 @@ CustomBlockDefinition >> migrateBlockVars [
 			color: Color gray;
 			isSpecialForm: true;
 			minArgs: 1;
-			selector: #doDeclareVariables.
+			selector: #doDeclareVariables;
+		yourself.
 
 	vars := self varNames.
 		spec := 'script variables' localized.
@@ -391,7 +393,8 @@ CustomBlockDefinition >> migrateBlockVars [
 		vn := vars at: i.
 		blob := VariableBlockMorph new 
 				isSpecialForm: true;
-				commandSpec: vn  ";
+				commandSpec: vn;
+		yourself  ";
 				color: (ScriptablePhratchMorph blockColorFor: 'variables')".
 		dec replaceArgMorph: (dec argMorphs at: i) by: blob.
 		blockVars remove: vn ].

@@ -20,7 +20,8 @@ GraphMorph >> openWaveEditor [
 	editor := WaveEditor new
 		data: scaledData;
 		samplingRate: 11025;
-		perceivedFrequency: 220.0.
+		perceivedFrequency: 220.0;
+		yourself.
 	editor openInWorld.
 
 ]

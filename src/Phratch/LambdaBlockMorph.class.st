@@ -201,7 +201,8 @@ LambdaBlockMorph >> newChangeVarBlock: varName [
 		initChangerForVar: varName;
 		isSpecialForm: true;
 		receiver: initialFrame;	
-		selector: #changeBlockVar:by: ";
+		selector: #changeBlockVar:by:;
+		yourself ";
 		color: (ScriptablePhratchMorph blockColorFor: 'variables')".
 	block expressionArg stringExpression: '0'.
 	^ block
@@ -216,7 +217,8 @@ LambdaBlockMorph >> newSetVarBlock: varName [
 		initSetterForVar: varName;
 		isSpecialForm: true;
 		receiver: initialFrame;	
-		selector: #setBlockVar:to:  ";
+		selector: #setBlockVar:to:;
+		yourself  ";
 		color: (ScriptablePhratchMorph blockColorFor: 'variables')".
 	block expressionArg stringExpression: '0'.
 	^ block
@@ -231,7 +233,8 @@ LambdaBlockMorph >> newVarBlock: varName [
 		receiver: initialFrame;	
 		selector: #getBlockVar:;
 "		color: (ScriptablePhratchMorph blockColorFor: 'variables');"
-		commandSpec: varName
+		commandSpec: varName;
+		yourself
 
 ]
 
@@ -367,7 +370,8 @@ LambdaBlockMorph >> rightButtonMenu [
 		menu addIcon: (self newChangeVarBlock: vn) imageForm toolTip: nil action: #changeVar ]."
 
 vn := initialFrame varNamesMenu first.
-	(choice := menu localize; popUpInWorld) selectedValue ifNil: [^ self].
+	(choice := menu localize; popUpInWorld;
+		yourself) selectedValue ifNil: [^ self].
 	(choice isKindOf: Array) ifTrue: [
 		block := self newVarBlock: choice first.
 		World activeHand attachMorph: block.
@@ -417,7 +421,8 @@ LambdaBlockMorph >> showValue [
 
 	tooltip := (PhratchReporterToolTipMorph string: self morphToShow imageForm for: self)
 		left: self right;
-		bottom: self top.
+		bottom: self top;
+		yourself.
 	PhratchTranslator isRTL ifTrue: [tooltip right: self left].
 
 	w := self world.

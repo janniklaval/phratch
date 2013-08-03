@@ -51,7 +51,8 @@ LabelFragmentBlockMorph >> addLabel [
 		
 		m := submorphs last.
 		((m isKindOf: ChoiceArgMorph) | (m isKindOf: SpriteArgMorph)) ifTrue: [  "add spacer"
-			self addMorphBack: (Morph new color: Color transparent; extent: 2@5)]].
+			self addMorphBack: (Morph new color: Color transparent; extent: 2@5;
+		yourself)]].
 
 ]
 

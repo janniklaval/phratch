@@ -24,7 +24,7 @@ CReporterSlotMorph >> computeHighlightColors [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visualisation }
 CReporterSlotMorph >> displayForm [
 	^Form dotOfSize: 1
 ]
@@ -163,7 +163,7 @@ CReporterSlotMorph >> initialize [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'argument slot behavior' }
 CReporterSlotMorph >> isEmptySlot [
 	^ self nestedBlock isNil
 ]

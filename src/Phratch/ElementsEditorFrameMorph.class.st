@@ -51,9 +51,7 @@ ElementsEditorFrameMorph >> definition: aCustomBlockDefinition [
 
 	definition := aCustomBlockDefinition.
 	template := CustomCommandBlockMorph template.
-	template receiver: receiver.
 	template userSpec: definition userSpec.
-	bin addMorph:(template position: bin position + (10@10)).
 	self buildScript.
 	self buildVariables.
 	self buildAtomicityToggle.

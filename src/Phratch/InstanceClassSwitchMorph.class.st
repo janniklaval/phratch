@@ -36,13 +36,15 @@ InstanceClassSwitchMorph >> buildPanes [
 				target: self;
 				selector: #instance;
 				label: 'instance';
-				onColor: Color blue darker offColor: color.
+				onColor: Color blue darker offColor: color;
+		yourself.
 
 	class := ElementsToggleButtonMorph new
 				target: self;
 				selector: #class;
 				label: 'class';
-				onColor: Color magenta twiceDarker offColor: color.
+				onColor: Color magenta twiceDarker offColor: color;
+		yourself.
 
 	self
 		addMorph: instance;

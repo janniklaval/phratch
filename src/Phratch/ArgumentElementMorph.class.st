@@ -8,7 +8,7 @@ Class {
 	#category : #'Phratch-UI-Elements'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #layout }
 ArgumentElementMorph >> acceptDroppingMorph: aMorph event: evt [
 
 	self contentsForced: aMorph
@@ -36,12 +36,12 @@ ArgumentElementMorph >> asSmalltalk [
 	^'(', contents asSmalltalk, ')'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ArgumentElementMorph >> contents [
 	^contents
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ArgumentElementMorph >> contents: anElement [
 	contents ifNotNil: [contents delete].
 	anElement representsNil ifFalse: [
@@ -108,7 +108,7 @@ ArgumentElementMorph >> fit [
 		ifTrue: [owner fit]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 ArgumentElementMorph >> handlesMouseOverDragging: evt [
 	"Return true if I want to receive mouseEnterDragging: and mouseLeaveDragging: when the hand drags something over me (button up or button down), or when the mouse button is down but there is no mouseDown recipient. The default response is false; subclasses that implement mouse mouseEnterDragging messages should override this to return true."
 
@@ -133,7 +133,7 @@ ArgumentElementMorph >> initialize [
 	self fit
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 ArgumentElementMorph >> mouseEnterDragging: evt [
 	"Handle a mouseEnterDragging event. The mouse just entered my bounds with a button pressed or laden with submorphs. This default implementation does nothing."
 
@@ -148,7 +148,7 @@ ArgumentElementMorph >> mouseEnterDragging: evt [
 		ifTrue: [owner fit]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 ArgumentElementMorph >> mouseLeaveDragging: evt [
 	"Handle a mouseLeaveLaden event. The mouse just left my bounds with a button pressed or laden with submorphs. This default implementation does nothing."
 
@@ -189,7 +189,7 @@ ArgumentElementMorph >> unHilite [
 		self color: oldColor]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'dropping/grabbing' }
 ArgumentElementMorph >> wantsDroppedMorph: aMorph event: evt [
 
 	^contents isNil 

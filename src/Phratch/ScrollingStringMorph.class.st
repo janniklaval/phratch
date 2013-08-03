@@ -622,7 +622,7 @@ ScrollingStringMorph >> fontChangeName:fName size: fSize [
 { #category : #menu }
 ScrollingStringMorph >> fontMenu [
 
-	| menu fName fSize |
+	| menu |
 	menu := MenuMorph new defaultTarget: self.
 	StrikeFont fontNames do: [:fn | 
 		menu add: fn

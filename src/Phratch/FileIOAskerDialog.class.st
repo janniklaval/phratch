@@ -32,7 +32,8 @@ FileIOAskerDialog >> initialize [
 	
 	| spacer |
 	super initialize.
-	spacer := Morph new extent: 10@5; color: Color transparent.
+	spacer := Morph new extent: 10@5; color: Color transparent;
+		yourself.
 	self withButtonsForYes: true no: true okay: false cancel: false.
 	self title: 'Allow File I/O'.
 	self message: 'This Panther project is trying to use file I/O. While file I/O

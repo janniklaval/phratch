@@ -53,7 +53,8 @@ DebuggerFrameMorph >> createButtons [
 	"Note: The button row morph was created by initialize; I just replace its contents with a new collection of buttons."
 
 	| spacer jump cb |
-	spacer := Morph new extent: 10@5; color: Color transparent.
+	spacer := Morph new extent: 10@5; color: Color transparent;
+		yourself.
 	buttonRow removeAllMorphs.
 
 	buttonRow addMorphBack: (self buttonLabel: '>' action: #resume).
@@ -169,27 +170,23 @@ DebuggerFrameMorph >> hasVars [
 
 { #category : #'as yet unclassified' }
 DebuggerFrameMorph >> initialize [
-
 	super initialize.
-	self title: 'Debugger'.
+	self title: 'Debugger' translated.
 	resizeMorph := PhratchResizeMorph ofType: #corner.
-
 	scroller := ScrollFrameMorph new
 		growthFraction: 0.0;
-		color: Color transparent "PhratchFrameMorph scriptsPaneColor".
-
+		color: Color transparent;
+		yourself.	"PhratchFrameMorph scriptsPaneColor"
 	contentsMorph := ImageMorph new.
-	contentsFrame := Morph new color: Color transparent; extent: 150 @ 80.
+	contentsFrame := Morph new
+		color: Color transparent;
+		extent: 150 @ 80;
+		yourself.
 	scroller extent: contentsFrame extent.
 	contentsFrame addMorph: scroller.
 	scroller contents: contentsMorph.
-
 	mainColumn addMorph: contentsFrame.
-
-	self addMorph: resizeMorph.
-
-
-
+	self addMorph: resizeMorph
 ]
 
 { #category : #'as yet unclassified' }

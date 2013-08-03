@@ -64,7 +64,8 @@ BlockLabelFragmentDialog class >> on: aBlockLabelFragment category: aSymbol [
 		fragment: aBlockLabelFragment;
 		buildWidgets;
 		refresh;
-		toggleExpandIfInput.
+		toggleExpandIfInput;
+		yourself.
 	^ dialogBox getUserResponse
 
 ]
@@ -114,7 +115,7 @@ BlockLabelFragmentDialog >> buildSlotTypeChoices [
 	 | lineObject lineAny lineNumber lineText lineBoolean lineList lineCommand lineReporter linePredicate lineLoop lineUnevaluated lineUnevaluatedBoolean
 	picture label typeChooser picSize lineWidth typeLabel typeFont bg titleClr labelClr labelSingle
 	labelMultiple labelExternalized temp onForm offForm|
-
+ 
 	onForm :=  PhratchFrameMorph skinAt: #radioButtonOn.
 	offForm := PhratchFrameMorph skinAt: #radioButton.
 
@@ -469,7 +470,8 @@ BlockLabelFragmentDialog >> buildSlotTypeChoices [
 		addMorph: (defaultField := StringFieldMorph
 			new client: self;
 			borderWidth: 2;
-			color: "Color lightGray twiceLighter "(Color r: (211/255) g: (214/255) b: (216/255))).
+			color: "Color lightGray twiceLighter "(Color r: (211/255) g: (214/255) b: (216/255));
+		yourself).
 	defaultField
 		font: typeFont;
 		width: lineWidth;
@@ -477,7 +479,6 @@ BlockLabelFragmentDialog >> buildSlotTypeChoices [
 		isNumeric: fragment default isNumber;
 		contents: fragment default asString.
 
-	groupExtent := typeChooser extent.
 	slotShapesGroup := typeChooser.
 
 	multipleRadioButton := ToggleButton
@@ -521,7 +522,8 @@ BlockLabelFragmentDialog >> buildWidgets [
 	fragmentRadioButtons := AlignmentMorph newRow
 		color: Color transparent;
 		hResizing: #shrinkWrap;
-		vResizing: #shrinkWrap.
+		vResizing: #shrinkWrap;
+		yourself.
 	textRadioButton := ToggleButton
 		onForm: (PhratchFrameMorph skinAt: #radioButtonOn)
 		offForm: (PhratchFrameMorph skinAt: #radioButton).
@@ -535,13 +537,15 @@ BlockLabelFragmentDialog >> buildWidgets [
 		addMorphBack:
 			(Morph new
 				extent: 5 @ 5;
-				color: Color transparent).
+				color: Color transparent;
+		yourself).
 	fragmentRadioButtons addMorphBack: titleLabel.
 	fragmentRadioButtons
 		addMorphBack:
 			(Morph new
 				extent: 15 @ 5;
-				color: Color transparent).
+				color: Color transparent;
+		yourself).
 	inputRadioButton := textRadioButton fullCopy off.
 	inputLabel := ImageMorph new form: self inputButtonForm.
 	fragmentRadioButtons addMorphBack: inputRadioButton.
@@ -549,18 +553,21 @@ BlockLabelFragmentDialog >> buildWidgets [
 		addMorphBack:
 			(Morph new
 				extent: 5 @ 5;
-				color: Color transparent).
+				color: Color transparent;
+		yourself).
 	fragmentRadioButtons addMorphBack: inputLabel.	"label2"
 	fragmentRadioButtons
 		addMorphBack:
 			(Morph new
 				extent: 5 @ 5;
-				color: Color transparent).
+				color: Color transparent;
+		yourself).
 	slotShapeButton := IconicButton new
 		labelGraphic: (PhratchFrameMorph skinAt: #arrowOpenComment) borderWidth: 1;
 		actionSelector: #toggleExpand;
 		target: self;
-		actWhen: #buttonDown.
+		actWhen: #buttonDown;
+		yourself.
 	fragmentRadioButtons addMorphBack: slotShapeButton.
 	self buildSlotTypeChoices.
 	mainColumn
@@ -571,22 +578,26 @@ BlockLabelFragmentDialog >> buildWidgets [
 		addMorphBack:
 				(Morph new
 						extent: 5 @ 6;
-						color: Color transparent);
+						color: Color transparent;
+		yourself);
 		addMorphBack: typeinMorph;
 		addMorphBack:
 				(Morph new
 						extent: 5 @ 7;
-						color: Color transparent);
+						color: Color transparent;
+		yourself);
 		addMorphBack: fragmentRadioButtons;
 		addMorphBack:
 				(Morph new
 						extent: 5 @ 7;
-						color: Color transparent);
+						color: Color transparent;
+		yourself);
 		addMorphBack: slotShapesGroup;
 		addMorphBack:
 				(Morph new
 						extent: 5 @ 7;
-						color: Color transparent);
+						color: Color transparent;
+		yourself);
 		addMorphBack: buttonRow;
 		addMorphBack: bottomSpacer
 ]
@@ -667,8 +678,10 @@ BlockLabelFragmentDialog >> initialize [
 { #category : #drawing }
 BlockLabelFragmentDialog >> inputButtonForm [
 	| bg block |
-	block := VariableBlockMorph new commandSpec: 'Input name' localized; color: (ScriptablePhratchMorph blockColorFor: 'variables').
-	bg := LabelFragmentBlockMorph new commandSpec: '$ListIndex$'; color: (ScriptablePhratchMorph blockColorFor: category asString).
+	block := VariableBlockMorph new commandSpec: 'Input name' localized; color: (ScriptablePhratchMorph blockColorFor: 'variables');
+		yourself.
+	bg := LabelFragmentBlockMorph new commandSpec: '$ListIndex$'; color: (ScriptablePhratchMorph blockColorFor: category asString);
+		yourself.
 	bg replaceArgMorph: bg argMorphs first by: block.
 	^bg imageForm
 ]
@@ -680,7 +693,8 @@ BlockLabelFragmentDialog >> labelButtonForm [
 
 	block := LabelFragmentBlockMorph new 
 		color: (ScriptablePhratchMorph blockColorFor: category asString);
-		commandSpec: 'Title text' localized.
+		commandSpec: 'Title text' localized;
+		yourself.
 
 	^block imageForm
 
@@ -741,7 +755,8 @@ BlockLabelFragmentDialog >> slotShapeFormFor: type size: aPoint [
 
 	block := LabelFragmentBlockMorph new
 		color: (ScriptablePhratchMorph blockColorFor: category asString); 
-		commandSpec: '_', (specs at: type), '_'.
+		commandSpec: '_', (specs at: type), '_';
+		yourself.
 
 	(#(predicate boolean unevaluatedBoolean reporter typeInReporter command text loop reporterSlot) includes: type) ifTrue: [
 		block commandSpec: (specs at: type)].
@@ -753,7 +768,8 @@ BlockLabelFragmentDialog >> slotShapeFormFor: type size: aPoint [
 	block fixBlockLayout.
 	img := ImageMorph new form: block imageForm.
 
-	morph := Morph new color: Color transparent; extent: aPoint.
+	morph := Morph new color: Color transparent; extent: aPoint;
+		yourself.
 	morph addMorph: img.
 	img position: morph position + (morph extent - img extent // 2).
 	^ morph imageForm
@@ -777,17 +793,20 @@ BlockLabelFragmentDialog >> toggleExpand [
 				addMorphBack:
 						(Morph new
 								extent: 5 @ 6;
-								color: Color transparent);
+								color: Color transparent;
+		yourself);
 				addMorphBack: typeinMorph;
 				addMorphBack:
 						(Morph new
 								extent: 5 @ 7;
-								color: Color transparent);
+								color: Color transparent;
+		yourself);
 				addMorphBack: fragmentRadioButtons;
 				addMorphBack:
 						(Morph new
 								extent: 5 @ 7;
-								color: Color transparent);
+								color: Color transparent;
+		yourself);
 				addMorphBack: buttonRow;
 				addMorphBack: bottomSpacer ]
 		ifFalse: [ 
@@ -796,22 +815,26 @@ BlockLabelFragmentDialog >> toggleExpand [
 				addMorphBack:
 						(Morph new
 								extent: 5 @ 6;
-								color: Color transparent);
+								color: Color transparent;
+		yourself);
 				addMorphBack: typeinMorph;
 				addMorphBack:
 						(Morph new
 								extent: 5 @ 7;
-								color: Color transparent);
+								color: Color transparent;
+		yourself);
 				addMorphBack: fragmentRadioButtons;
 				addMorphBack:
 						(Morph new
 								extent: 5 @ 7;
-								color: Color transparent);
+								color: Color transparent;
+		yourself);
 				addMorphBack: slotShapesGroup;
 				addMorphBack:
 						(Morph new
 								extent: 5 @ 200;
-								color: Color transparent);
+								color: Color transparent;
+		yourself);
 				addMorphBack: buttonRow;
 				addMorphBack: bottomSpacer ].
 	self extent: mainColumn fullBounds extent + (60 @ 50).
@@ -947,12 +970,11 @@ BlockLabelFragmentDialog >> updateArity [
 	(fragment type endsWith: 'List')
 		ifTrue: [
 			multipleRadioButton on.
-			singleRadioButton off.
-			externalizedRadioButton off]
+			singleRadioButton off]
 		ifFalse: [
 			singleRadioButton on.
-			multipleRadioButton off.
-			externalizedRadioButton off]
+			multipleRadioButton off].
+	externalizedRadioButton off
 
 ]
 

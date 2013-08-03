@@ -47,13 +47,15 @@ KeyEventHatMorph >> initialize [
 
 	s := StringMorph new
 		contents: parts first; font: (PhratchFrameMorph getFont: #Label);
-		color: Color white.
+		color: Color white;
+		yourself.
 	self addMorphBack: s.
 
 	scriptNameMorph := ChoiceArgMorph new
 		getOptionsSelector: #keyNames;
 		options: ScriptablePhratchMorph new keyNames;
-		choice: 'space'.
+		choice: 'space';
+		yourself.
 	self addMorphBack: scriptNameMorph.
 
 	s := s fullCopy contents: parts second.

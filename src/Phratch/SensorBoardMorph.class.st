@@ -557,7 +557,7 @@ SensorBoardMorph >> selectMotor: anInteger [
 { #category : #'serial port' }
 SensorBoardMorph >> selectPort [
 
-	| menu choice |
+	| menu |
 	self stopReadingData.
 
 	self portNames size = 0 ifTrue: [^ DialogBoxMorph inform: 'No serial ports found'].
@@ -568,11 +568,7 @@ SensorBoardMorph >> selectPort [
 		selector: #openPort:
 		argument: n].
 	
-	"choice :=" menu invokeModal.
-	"self halt."
-	"choice ifNil: [^ self]."
-
-	"self openPort: choice."
+	menu invokeModal.
 	self startReadingData.
 	scanState := #on.
 

@@ -20,7 +20,8 @@ HelpDialog class >> showForm: aForm [
 		withButtonsForYes: false no: false okay: true cancel: false;
 		title: 'help';
 		helpForm: aForm;
-		extent: (aForm extent + (80@145)).
+		extent: (aForm extent + (80@145));
+		yourself.
 	^ dialog getUserResponse
 
 ]

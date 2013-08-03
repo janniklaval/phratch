@@ -284,7 +284,6 @@ PaintFrame >> clearRotationCenter [
 { #category : #'panther actions' }
 PaintFrame >> deleteCostumeOnCancel: aBoolean [
 
-	deleteCostumeOnCancel := aBoolean.
 ]
 
 { #category : #drawing }

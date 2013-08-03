@@ -19,13 +19,13 @@ Class {
 	#category : #'Phratch-UI-Dialogs'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #'initialize-release' }
 BlockEditorFrameMorph class >> initialize [
 	"BlockEditorFrameMorph initialize"
 	self resetDimensions
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 BlockEditorFrameMorph class >> minExtent [
 	^400 @ 300.
 ]
@@ -294,7 +294,8 @@ BlockEditorFrameMorph >> initialize [
 
 	sl := ScrollFrameMorph new
 		growthFraction: 0.0;
-		color: PhratchFrameMorph scriptsPaneColor.
+		color: PhratchFrameMorph scriptsPaneColor;
+		yourself.
 
 	bin := PhratchScriptsMorph new.
 	sl contents: bin.

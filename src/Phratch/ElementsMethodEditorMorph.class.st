@@ -10,7 +10,8 @@ Class {
 		'saver',
 		'fillScreenOn',
 		'currentMethod',
-		'currentClass'
+		'currentClass',
+		'methodModified'
 	],
 	#classVars : [
 		'WarnIfNoChangesFile',
@@ -98,7 +99,8 @@ ElementsMethodEditorMorph >> buildPanes [
 	p addMorph: m.
 
 	palette := ElementsPaletteFrameMorph new editorFrame: self; height: self height; arrangePanes.
-	saver := ElementsToggleButtonMorph new flat; label: 'save'; onColor: color offColor: color; target: self; selector: #saveCurrentMethod.
+	saver := ElementsToggleButtonMorph new flat; label: 'save'; onColor: color offColor: color; target: self; selector: #saveCurrentMethod;
+		yourself.
 	self
 		addMorph: classChooser;
 		addMorph: sideChooser;

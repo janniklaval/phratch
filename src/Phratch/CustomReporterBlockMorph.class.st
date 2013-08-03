@@ -85,11 +85,13 @@ CustomReporterBlockMorph >> addLabel [
 	self isReporter ifTrue: [
 		m := submorphs first.
 		((m isKindOf: ChoiceArgMorph) | (m isKindOf: SpriteArgMorph)) ifTrue: [  "add spacer"
-			self addMorphFront: (Morph new color: Color transparent; extent: 2@5)].
+			self addMorphFront: (Morph new color: Color transparent; extent: 2@5;
+		yourself)].
 
 		m := submorphs last.
 		((m isKindOf: ChoiceArgMorph) | (m isKindOf: SpriteArgMorph)) ifTrue: [  "add spacer"
-			self addMorphBack: (Morph new color: Color transparent; extent: 2@5)]].
+			self addMorphBack: (Morph new color: Color transparent; extent: 2@5;
+		yourself)]].
 
 	self addVariableTemplates.
 	self hideArgumentPlaceHolders
@@ -142,7 +144,8 @@ CustomReporterBlockMorph >> addLabelToNonTemplate [
 				argMorphs addLast: 	(VariableBlockMorph new 
 					isSpecialForm: true; 
 					selector: #getVar:;
-					commandSpec: pn)]
+					commandSpec: pn;
+		yourself)]
 			ifFalse: [argMorphs addLast: (self argMorphFor: (args at: argMorphs size + 1))]].
 
 	nextArgIndex := 1.
@@ -159,11 +162,13 @@ CustomReporterBlockMorph >> addLabelToNonTemplate [
 	(self isReporter and: [submorphs isEmpty not]) ifTrue: [
 		m := submorphs first.
 		((m isKindOf: ChoiceArgMorph) | (m isKindOf: SpriteArgMorph)) ifTrue: [  "add spacer"
-			self addMorphFront: (Morph new color: Color transparent; extent: 2@5)].
+			self addMorphFront: (Morph new color: Color transparent; extent: 2@5;
+		yourself)].
 
 		m := submorphs last.
 		((m isKindOf: ChoiceArgMorph) | (m isKindOf: SpriteArgMorph)) ifTrue: [  "add spacer"
-			self addMorphBack: (Morph new color: Color transparent; extent: 2@5)]].
+			self addMorphBack: (Morph new color: Color transparent; extent: 2@5;
+		yourself)]].
 
 	"now try restoring the former arguments (jens)"
 	1 to: argMorphs size do: [:i |
@@ -213,12 +218,12 @@ CustomReporterBlockMorph >> addVariableTemplates [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #variables }
 CustomReporterBlockMorph >> allVarNames [
 	^self definition allVarNames
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 CustomReporterBlockMorph >> answer [
 	self definition answer
 ]
@@ -258,27 +263,27 @@ CustomReporterBlockMorph >> asBlockTuple [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 CustomReporterBlockMorph >> canBecomeWatcher [
 
 	^ false
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 CustomReporterBlockMorph >> category [
 
 	^ self definition category
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 CustomReporterBlockMorph >> defaultArgs: defaultValues [
 	"Set the default values of my arguments from the given list."
 
 	self setDefaultArgs
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 CustomReporterBlockMorph >> definition [
 	^receiver definitionFor: self id
 ]
@@ -300,7 +305,7 @@ CustomReporterBlockMorph >> editSpec [
 	receiver editSpecId: self id
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #evaluation }
 CustomReporterBlockMorph >> evaluateWithArgs: rawArgs [
 	"Evalue this block with the given argument list."
 
@@ -309,14 +314,14 @@ CustomReporterBlockMorph >> evaluateWithArgs: rawArgs [
 	^phratchProc answer	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'object i/o' }
 CustomReporterBlockMorph >> fieldsVersion [
 
 	^ 1
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'block enumerating' }
 CustomReporterBlockMorph >> firstBlockList [
 
 	| list |
@@ -361,7 +366,7 @@ CustomReporterBlockMorph >> id [
 	^CustomBlockDefinition idFromSpec: userSpec
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'object i/o' }
 CustomReporterBlockMorph >> initFieldsFrom: anObjStream version: classVersion [
 
 	super initFieldsFrom: anObjStream version: classVersion.
@@ -372,7 +377,7 @@ CustomReporterBlockMorph >> initFieldsFrom: anObjStream version: classVersion [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 CustomReporterBlockMorph >> initialize [
 	super initialize.
 	isTemplate := false.
@@ -381,12 +386,12 @@ CustomReporterBlockMorph >> initialize [
 	self color: Color lightGray
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 CustomReporterBlockMorph >> isAtomic [
 	^self definition isAtomic
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #byob }
 CustomReporterBlockMorph >> isCustomBlock [
 	^true
 ]
@@ -401,7 +406,7 @@ CustomReporterBlockMorph >> isFrozen: bool [
 	isFrozen := bool
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 CustomReporterBlockMorph >> isFunction [
 	^ true
 ]
@@ -419,7 +424,7 @@ CustomReporterBlockMorph >> isPartsBin [
 	^isTemplate
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #other }
 CustomReporterBlockMorph >> isReporter [
 	^true
 ]
@@ -449,7 +454,7 @@ CustomReporterBlockMorph >> labelMorphFor: aString [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 CustomReporterBlockMorph >> parameterNames [
 	^self definition parameterNames
 ]
@@ -461,7 +466,7 @@ CustomReporterBlockMorph >> privateSetUserSpec: aString [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 CustomReporterBlockMorph >> remove [
 
 	self aboutToBeGrabbedBy: nil.
@@ -484,7 +489,7 @@ CustomReporterBlockMorph >> removeVariableTemplates [
 	argMorphs := OrderedCollection new
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'menu - change set' }
 CustomReporterBlockMorph >> rename [
 
 	| def defs choice menu |
@@ -501,7 +506,7 @@ CustomReporterBlockMorph >> rename [
 	self userSpec: choice userSpec
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 CustomReporterBlockMorph >> replaceArgMorph: argMorph by: newMorph [
 
 	| def typ pname i val |
@@ -517,7 +522,7 @@ CustomReporterBlockMorph >> replaceArgMorph: argMorph by: newMorph [
 			ifFalse: [newMorph defaultValue: val]]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #byob }
 CustomReporterBlockMorph >> rightButtonMenu [
 
 	| menu choice |
@@ -563,12 +568,12 @@ CustomReporterBlockMorph >> rootForGrabOf: aMorph [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 CustomReporterBlockMorph >> script [
 	^self definition body
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 CustomReporterBlockMorph >> sequence [
 	^self firstBlockList
 ]
@@ -634,7 +639,7 @@ CustomReporterBlockMorph >> showPlaceHoldersNear: aLabelFragment [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #other }
 CustomReporterBlockMorph >> showValue [
 
 	| gotError msg tooltip w worldBounds |
@@ -656,7 +661,8 @@ CustomReporterBlockMorph >> showValue [
 		msg := msg localized].
 	tooltip := (PhratchReporterToolTipMorph string: msg for: self)
 		left: self right;
-		bottom: self top.
+		bottom: self top;
+		yourself.
 	PhratchTranslator isRTL ifTrue: [tooltip right: self left].
 	gotError ifTrue: [tooltip messageColor: Color red darker].
 
@@ -673,7 +679,7 @@ CustomReporterBlockMorph >> showValue [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'object i/o' }
 CustomReporterBlockMorph >> storeFieldsOn: anObjStream [
 
 	super storeFieldsOn: anObjStream.
@@ -791,12 +797,12 @@ CustomReporterBlockMorph >> updateSpecWithDnDSpec [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 CustomReporterBlockMorph >> userSpec [
 	^userSpec
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 CustomReporterBlockMorph >> userSpec: aString [
 	| cat |
 
@@ -809,7 +815,7 @@ CustomReporterBlockMorph >> userSpec: aString [
 	self addLabel
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #copying }
 CustomReporterBlockMorph >> veryDeepFixupWith: deepCopier [
 	"If fields were weakly copied, fix them here.  If they were in the tree being copied, fix them up, otherwise point to the originals."
 
@@ -818,7 +824,7 @@ CustomReporterBlockMorph >> veryDeepFixupWith: deepCopier [
 		specParts := specParts collect: [:m | deepCopier references at: m ifAbsent: [m]]].
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #copying }
 CustomReporterBlockMorph >> veryDeepInner: deepCopier [
 	"Copy all of my instance variables.  Some need to be not copied at all, but shared.  	Warning!!  Every instance variable defined in this class must be handled.  We must also implement veryDeepFixupWith:.  See DeepCopier class comment."
 

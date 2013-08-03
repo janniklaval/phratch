@@ -17,7 +17,8 @@ MenuMorph >> addIcon: aForm tooltip: aString selector: aSymbol argument: arg [
 		setBalloonText: aString;
 		target: defaultTarget;
 		selector: aSymbol;
-		arguments: {arg}.
+		arguments: {arg};
+		yourself.
 	self addMorphBack: item.
 
 

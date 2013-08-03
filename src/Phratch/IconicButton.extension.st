@@ -7,7 +7,8 @@ IconicButton >> labelGraphic: aForm borderWidth: borderW [
 	| oldLabel graphic |
 	(oldLabel := self findA: SketchMorph) ifNotNil: [oldLabel delete].
 	graphic := SketchMorph withForm: aForm.
-	self addMorph: (graphic position: self position + borderW; lock).
+	self addMorph: (graphic position: self position + borderW; lock;
+		yourself).
 	self
 		color: Color transparent;
 		borderWidth: borderW;

@@ -10,7 +10,7 @@ Class {
 	#category : #'Phratch-Blocks'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #other }
 CommandScriptBlockMorph >> acceptsTypeOf: aBlockMorph [
 	"Answer true if I can accept a dropped reporter of the given type. Answer false by default."
 
@@ -103,7 +103,7 @@ CommandScriptBlockMorph >> asBlockTuple [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 CommandScriptBlockMorph >> attachBlock: aBlockMorph [
 	"Attach the given block to me. Assume the block has been positioned correctly."
 
@@ -112,7 +112,7 @@ CommandScriptBlockMorph >> attachBlock: aBlockMorph [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 CommandScriptBlockMorph >> attachBlockNested: aBlockMorph [
 	"Attach the given block to me. Assume the block has been positioned correctly."
 
@@ -123,7 +123,7 @@ CommandScriptBlockMorph >> attachBlockNested: aBlockMorph [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 CommandScriptBlockMorph >> blockAttachPoints: aSet [
 	"Answer a collection of possible attachment points for me. Each entry is an Association mapping a point to the morph to which a dropping command block could be attached."
 
@@ -141,7 +141,7 @@ CommandScriptBlockMorph >> blockAttachPoints: aSet [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #byob }
 CommandScriptBlockMorph >> blockWidth [
 	| maxWidth |
 	maxWidth := 0.
@@ -156,17 +156,17 @@ CommandScriptBlockMorph >> body [
 	^nestedBlock fullCopy
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'byob lambdas' }
 CommandScriptBlockMorph >> bodyLeft [
 	^self left
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'byob lambdas' }
 CommandScriptBlockMorph >> bodyRight [
 	^self fullBounds right
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 CommandScriptBlockMorph >> bracketThickness [
 
 	^ CBlockBracketThickness
@@ -179,7 +179,7 @@ CommandScriptBlockMorph >> canBecomeWatcher [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'geometry testing' }
 CommandScriptBlockMorph >> containsPoint: aPoint [
 
 	cachedForm ifNil: [self updateCachedForm].
@@ -374,7 +374,7 @@ CommandScriptBlockMorph >> drawVerticalBarOn: aCanvas [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'block enumerating' }
 CommandScriptBlockMorph >> firstBlockList [
 	"Answer an array containing the block sequence for my first (and only) nested block. (An if-then-else block would have a second block list.)"
 
@@ -386,7 +386,7 @@ CommandScriptBlockMorph >> firstBlockList [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 CommandScriptBlockMorph >> firstBlockList: aBlockMorph [
 	"Add the given block as my first nested block sequence. Delete the old nested blocks, if any."
 
@@ -478,7 +478,7 @@ CommandScriptBlockMorph >> isFunction [
 	^ false
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'class membership' }
 CommandScriptBlockMorph >> isKindOf: aClass [
 	aClass = CBlockMorph
 		ifTrue: [^true ].
@@ -490,20 +490,20 @@ CommandScriptBlockMorph >> nestedBlock [
 	^nestedBlock
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 CommandScriptBlockMorph >> nestedBlockAt: aPoint [
 
 	^ nestedBlock
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 CommandScriptBlockMorph >> nextBlock [
 
 	^nil
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 CommandScriptBlockMorph >> nonControlFlowSubmorphs [
 	"Answer a collection of submorphs minus any blocks that are part of the control flow. For example, command blocks omit their submorph that is the next block in the block sequence, C-blocks omit both their next block and the first block of their nested block list, etc."
 
@@ -532,7 +532,7 @@ CommandScriptBlockMorph >> removeItem [
 		self attachBlock: quoted ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 CommandScriptBlockMorph >> stretchHeight: aNumber [
 "
 	(stretchHeight = aNumber) ifTrue: [^ self].
@@ -542,7 +542,7 @@ CommandScriptBlockMorph >> stretchHeight: aNumber [
 "
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #other }
 CommandScriptBlockMorph >> tabFields [
 
 	| nst |
@@ -555,7 +555,7 @@ CommandScriptBlockMorph >> tabFields [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #drawing }
 CommandScriptBlockMorph >> topBarHeight [
 	"Answer the height of the top bar."
 

@@ -394,7 +394,7 @@ PhratchSoundEditor >> crop [
 	undoSel := graph selection copy.
 	undoSound := SampledSound samples: graph data samplingRate: samplingRate.
 	undoCursor := cursor.
-	undoScale := graph scale/PhratchGraphMorph MinScale.
+	undoScale := graph scale/PhratchGraphMorph minScale.
 
 	sel := graph data copyFrom: (selection at: 1) to: (selection at: 2).
 	graph data: sel.
@@ -403,7 +403,7 @@ PhratchSoundEditor >> crop [
 
 	"scales the botton viewer so that the data fits on the entire screen." 
 	(selection second - selection first)/graph data size >= 0.05
-		ifTrue: [PhratchGraphMorph MinScale: (viewer extent x/ graph data size min: 1). "the mult factor in all scales, the minimum scale allowed...to get this just do self scale: 1, since this multiplied by input"
+		ifTrue: [PhratchGraphMorph minScale: (viewer extent x/ graph data size min: 1). "the mult factor in all scales, the minimum scale allowed...to get this just do self scale: 1, since this multiplied by input"
 				viewer scale: 1.
 				graph scale: 1.
 				viewer startIndex: 1.
@@ -447,7 +447,7 @@ PhratchSoundEditor >> cut [
 	undoSound := SampledSound samples: graph data samplingRate: samplingRate.
 	undoSel := graph selection copy.
 	undoCursor := cursor.
-	undoScale := graph scale/PhratchGraphMorph MinScale.
+	undoScale := graph scale/PhratchGraphMorph minScale.
 
 	self copy.
 	data1 := graph data copyFrom: 1 to: (selection at: 1).
@@ -458,7 +458,7 @@ PhratchSoundEditor >> cut [
 		
 	"scales the botton viewer so that the data fits on the entire screen." 
 	((selection second - selection first)/graph data size asFloat) >= 0.05
-		ifTrue: [PhratchGraphMorph MinScale: (viewer extent x/ graph data size min: 1).
+		ifTrue: [PhratchGraphMorph minScale: (viewer extent x/ graph data size min: 1).
 				viewer scale: 1.
 				graph scale: undoScale.
 				viewer startIndex: 1.
@@ -686,7 +686,7 @@ PhratchSoundEditor >> paste [
 	undoSel := selection copy.
 	undoSound := SampledSound samples: graph data samplingRate: samplingRate.
 	undoCursor := cursor.
-	undoScale := graph scale/PhratchGraphMorph MinScale.
+	undoScale := graph scale/PhratchGraphMorph minScale.
 
 
 	((self selectionNil not) and: [(selection at: 2) - (selection at: 1) > 3])
@@ -700,7 +700,7 @@ PhratchSoundEditor >> paste [
 
 	"scales the botton viewer so that the data fits on the entire screen." 
 	(copy size)/graph data size >= 0.05
-		ifTrue: [PhratchGraphMorph MinScale: (viewer extent x/ graph data size min: 1).
+		ifTrue: [PhratchGraphMorph minScale: (viewer extent x/ graph data size min: 1).
 				viewer scale: 1.
 				graph scale: undoScale.
 				self fixSliderRange.
@@ -822,7 +822,7 @@ PhratchSoundEditor >> playFrom: start to: end [
 PhratchSoundEditor >> readFromFile [
 	"Read my samples from a file selected by the user."
 
-	| result menu |
+	| menu |
 	
 	menu := MenuMorph new defaultTarget: self.
 	#(aif aiff au wav) do:[:aVarName |
@@ -999,14 +999,13 @@ PhratchSoundEditor >> sound: aSampledSound [
 
 	"completeSnd is a version of the sound that is unaffected by the play mechanism.  This method is called when a SoundMorph brings up a SoundEditor. soundMorphSound is a copy of the initial sampledSound, used for saving and cancelling edits purposes.  It serves as a reference to the original sound so that we can actually change the sound in the soundMorph"
 
-	soundMorphSound := aSampledSound.
 	snd := aSampledSound copy.
 	completeSnd := snd copy.
 	graph cursor: 200.
 	samplingRate := snd originalSamplingRate.
 	origSamplingRate := snd originalSamplingRate.
 
-	PhratchGraphMorph MinScale: (graph extent x/completeSnd samples size).
+	PhratchGraphMorph minScale: (graph extent x/completeSnd samples size).
 
 	graph data: completeSnd samples.  "SHOULD IT BE COPY?/"
 	graph scale: 2.
@@ -1146,14 +1145,14 @@ PhratchSoundEditor >> undo [
 	tmpSound := SampledSound samples: graph data samplingRate: samplingRate.
 	tmpSel := graph selection copy.
 	tmpCursor := cursor.
-	tmpScale := graph scale/PhratchGraphMorph MinScale.
+	tmpScale := graph scale/PhratchGraphMorph minScale.
 
 	graph data: undoSound samples copy.
 	viewer data: graph data.
 	
 	"scales the botton viewer so that the data fits on the entire screen." 
 	(tmpSound samples size - graph data size) abs > 3
-		ifTrue: [PhratchGraphMorph MinScale: ((viewer extent x/ graph data size) min: 1).
+		ifTrue: [PhratchGraphMorph minScale: ((viewer extent x/ graph data size) min: 1).
 				viewer scale: 1.
 				graph scale: undoScale.
 				viewer startIndex: 1.

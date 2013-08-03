@@ -300,7 +300,7 @@ PhratchFileChooserDialog class >> setHomeDir: aStringOrNil [
 	"Set the home directory for this user. If the user name contains an asterisk, replace it with the name of logged in user."
 	"self setHomeDir: '/Users/*/Documents'"
 
-	| path root |
+	| path |
 	UserHomeFolder := nil.
 	aStringOrNil ifNotNil: [
 		path := self replaceAsteriskWithUserName: aStringOrNil.

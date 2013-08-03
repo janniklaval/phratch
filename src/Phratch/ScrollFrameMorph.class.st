@@ -330,8 +330,6 @@ ScrollFrameMorph >> mouseEnterDragging: evt [
 	"Handle a mouseEnterDragging event. The mouse just entered my bounds with a button pressed or laden with submorphs."
 
 	self abortDelay.
-	hasWaited := false.
-	edge := nil.
 
 ]
 

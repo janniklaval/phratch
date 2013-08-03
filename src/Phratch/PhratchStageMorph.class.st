@@ -667,7 +667,6 @@ PhratchStageMorph >> initialize [
 	sensorBoard := SensorBoardMorph new.
 	midiPortNum := -1.
 	notePlayerDict := Dictionary new.
-	obsoleteSavedState := nil.
 	sprites := OrderedCollection new.
 	showMotorBlocks := false.
 
@@ -866,7 +865,7 @@ PhratchStageMorph >> objName [
 PhratchStageMorph >> openMIDI [
 	"Prompt the user to select a MIDI port number, then open it."
 
-	| possiblePorts dir menu choice |
+	| possiblePorts dir menu |
 	self closeMIDI.
 	possiblePorts := (0 to: SimpleMIDIPort primPortCount - 1) select: [:i |
 		dir := SimpleMIDIPort primPortDirectionalityOf: i.
@@ -1071,7 +1070,7 @@ PhratchStageMorph >> replaceBackground: name with: sel [
 { #category : #'looks ops' }
 PhratchStageMorph >> rerecordScene [
 
-	| sceneName sceneList menu |
+	| sceneList menu |
 	sceneList := self sceneNames .
 	sceneList := sceneList copyFrom: 1 to: sceneList size - 3.
 	menu := MenuMorph new defaultTarget: self.

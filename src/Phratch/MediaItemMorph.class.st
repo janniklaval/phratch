@@ -101,14 +101,16 @@ MediaItemMorph >> buildRightSideMorph [
 		getSelector: #mediaName;
 		putSelector: #mediaName:;
 		position: (0@0);
-		target: self.
+		target: self;
+		yourself.
 
 	nameMorph width: (5 * nameMorph height) asInteger.
 	rightMorph addMorphBack: nameMorph.
 
 	infoMorph := (StringMorph contents: (media infoString))
 		font: (PhratchFrameMorph getFont: #MediaItemInfo);
-		position: nameMorph left + 2 @ (nameMorph bottom).
+		position: nameMorph left + 2 @ (nameMorph bottom);
+		yourself.
 	rightMorph addMorph: infoMorph.
 
 	media isSound
@@ -138,7 +140,8 @@ MediaItemMorph >> buildRightSideMorph [
 
 	soundSizeMorph := (StringMorph contents: '')
 		font: (PhratchFrameMorph getFont: #MediaItemInfo);
-		position: nameMorph right @ nameMorph bottom.
+		position: nameMorph right @ nameMorph bottom;
+		yourself.
 	rightMorph addMorph: soundSizeMorph.
 
 	soundSizeMorph
@@ -158,7 +161,8 @@ MediaItemMorph >> buildSubmorphs [
 	numberMorph := (StringMorph contents: '345')
 		font: (PhratchFrameMorph getFont: #MediaItemInfo);
 		color: Color white;
-		position: topRightInset.
+		position: topRightInset;
+		yourself.
 	self addMorph: numberMorph.
 	numberMorphTopRight := numberMorph topRight.
 
@@ -264,7 +268,8 @@ MediaItemMorph >> editSound [
 	sFrame ifNil: [^ self].
 	workPane := sFrame workPane.
 
-	editor := PhratchSoundEditor new client: phratchObj; sound: media sound.
+	editor := PhratchSoundEditor new client: phratchObj; sound: media sound;
+		yourself.
 	editor soundName: media mediaName.
 	editor position: workPane topLeft + (10@10).
 	workPane addMorph: editor.
@@ -520,14 +525,14 @@ MediaItemMorph >> step [
 				thumbnailMorph form: SoundIconOn.
 				infoMorph contents: media sound currentPosition hhmmss.
 				infoMorph color: Color white.
-				playButton on. 
-				stopButton off]
+				playButton on]
 			ifFalse: [
 				thumbnailMorph form: SoundIcon.
 				infoMorph contents: media infoString.
 				infoMorph color: Color black.
-				playButton off. 
-				stopButton off]].
+				playButton off].
+		stopButton off	
+		].
 
 ]
 

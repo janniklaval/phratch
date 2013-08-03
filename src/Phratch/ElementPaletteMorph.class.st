@@ -22,7 +22,8 @@ ElementPaletteMorph class >> basics [
 		addElement: (LiteralElementMorph new);
 "		addElement: (MessageElementMorph new selector: #new);"
 		addElement: MessageElementMorph new assign;
-		addElement: MessageElementMorph new yesNo
+		addElement: MessageElementMorph new yesNo;
+		yourself
 
 ]
 
@@ -55,7 +56,7 @@ ElementPaletteMorph class >> classes [
 { #category : #'as yet unclassified' }
 ElementPaletteMorph class >> currentPackageClasses: aClass [
 	| pal packages pkg |
-	pkg := ((SystemOrganization categoryOfElement: aClass name asSymbol) asString findTokens: #( $- )) first.
+	pkg := ((SystemOrganization categoryOfElement: aClass name asSymbol) asString findTokens: #- ) first.
 	packages := self packageClassesDict.
 	pal := self new.
 	(packages at: pkg) asSortedCollection do: [:class|
@@ -149,7 +150,7 @@ ElementPaletteMorph class >> packageClassesDict [
 	packages := Dictionary new.
 	ans := Dictionary new.
 	SystemOrganization categories asSortedCollection do: [:cat |
-		pkg := (cat asString findTokens: #( $- )) first.
+		pkg := (cat asString findTokens: #- ) first.
 		(packages includesKey: pkg) ifFalse: [
 				packages at: pkg put: OrderedCollection new.
 				ans at: pkg put: OrderedCollection new].

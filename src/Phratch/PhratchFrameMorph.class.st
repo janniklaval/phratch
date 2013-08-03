@@ -2494,18 +2494,6 @@ PhratchFrameMorph >> installNewProject: newWorkpane [
 { #category : #byob }
 PhratchFrameMorph >> isDevelopmentMode [
 
-	| args arg |
-
-	"PhratchPreferences noviceMode
-		ifTrue: [
-			args := OrderedCollection new.
-			2 to: 10 do: [:i |
-				arg := Smalltalk getSystemAttribute: i.
-				arg ifNotNil: [args add: arg ]].
-			args detect: [:each |
-				each asLowercase = 'dev'] ifNone: [^false].
-			^true]
-		ifFalse: [^ true]"
 	^true
 ]
 
@@ -2566,7 +2554,7 @@ PhratchFrameMorph >> keyStroke: evt [
 PhratchFrameMorph >> languageMenu: aToggleButtonMorph [
 	"Present a menu of possible languages for blocks."
 
-	| bullet menu choice |
+	| bullet menu |
 	
 	PhratchTranslator canRenderUnicode ifFalse: [
 		"try to find a Unicode plugin in case this is the first use after startup"
@@ -2585,7 +2573,7 @@ PhratchFrameMorph >> languageMenu: aToggleButtonMorph [
 						target: self 
 						selector: #setLanguage:
 						argument: lang]].
-	choice := menu invokeModalAt: aToggleButtonMorph bottomLeft + (0@10) in: World allowKeyboard: true. 
+	menu invokeModalAt: aToggleButtonMorph bottomLeft + (0@10) in: World allowKeyboard: true. 
 
 	self stopAll.
 	self recordLanguage: (PhratchTranslator currentLanguage).
@@ -3155,11 +3143,11 @@ PhratchFrameMorph >> printTupleList: anArray on: s [
 PhratchFrameMorph >> processDroppedFiles [
 	"Process any files that have been dropped onto me."
 
-	| droppedFiles m dropPoint fName |
+	| droppedFiles m fName |
 	droppedFiles := FileStream droppedFiles.
 	droppedFiles size = 0 ifTrue: [^ self].
 	(m := self viewerPane target) ifNil: [^ self].
-	dropPoint := droppedFiles first.
+	droppedFiles first.
 
 	(droppedFiles copyFrom: 2 to: droppedFiles size) do: [:file |
 		file close.
@@ -3841,7 +3829,7 @@ PhratchFrameMorph >> setLanguage: aString [
 PhratchFrameMorph >> setSingleStepping [
 	"Ask whether script should be single-stepped."
 
-	| menu mSecs |
+	| menu |
 	menu := MenuMorph new title: 'Single-step speed?'.
 	menu add: 'Turbo speed' 
 		target: self 

@@ -570,7 +570,7 @@ MultilineStringMorph >> font: aFont [
 { #category : #menu }
 MultilineStringMorph >> fontMenu [
 
-	| menu fName fSize |
+	| menu |
 	menu := MenuMorph new defaultTarget: self.
 	StrikeFont fontNames do: [:fn | 
 		menu add: fn

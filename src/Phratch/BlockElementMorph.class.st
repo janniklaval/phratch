@@ -8,20 +8,20 @@ Class {
 	#category : #'Phratch-UI-Elements'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #adding }
 BlockElementMorph >> addStep: aStepElement [
 	steps contents isNil 
 		ifTrue: [steps contents: aStepElement]
 		ifFalse: [steps contents addToLast: aStepElement]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #adding }
 BlockElementMorph >> addVarNames: aCollection [
 	palette addVarNames: aCollection
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #adding }
 BlockElementMorph >> addVariable [
 	|ans|
 
@@ -29,12 +29,12 @@ BlockElementMorph >> addVariable [
 	(ans size > 0) ifTrue: [self addVarNames: (Array with: (SyntaxElementMorph objectNameFrom: ans))]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #adding }
 BlockElementMorph >> addVariableNamed: aSymbol [
 	palette addVariableNamed: aSymbol
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #adding }
 BlockElementMorph >> addVariables [
 	|ans|
 
@@ -63,16 +63,15 @@ BlockElementMorph >> asSmalltalk [
 
 { #category : #'as yet unclassified' }
 BlockElementMorph >> contextMenu [
-	|m|
-	m := MenuMorph new.
-"	m add: 'duplicate' action: #duplicate. "
-	m add: 'delete' action: #throwAway.
-	m add: 'add variable...' action: #addVariable.
+	| m |
+	m := MenuMorph new.	"	m add: 'duplicate' action: #duplicate. "
+	m add: 'delete' translated action: #throwAway.
+	m add: 'add variable...' translated action: #addVariable.
 	m addLine.
-	m add: 'show code...' action: #showGeneratedSmalltalk.
-	m add: 'show result...' action: #showResult.
-	m add: 'evaluate' action: #evaluate.
-	^m
+	m add: 'show code...' translated action: #showGeneratedSmalltalk.
+	m add: 'show result...' translated action: #showResult.
+	m add: 'evaluate' translated action: #evaluate.
+	^ m
 ]
 
 { #category : #'as yet unclassified' }
@@ -133,7 +132,7 @@ BlockElementMorph >> rootForGrabOf: aMorph [
 	^super rootForGrabOf: aMorph
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 BlockElementMorph >> steps [
 	^steps contents
 ]

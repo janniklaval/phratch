@@ -132,8 +132,8 @@ PaintCanvas >> applyTransform [
 	degrees := transformDegrees.
 	transformHFlip ifTrue: [degrees := degrees negated].
 	transformVFlip ifTrue: [degrees := degrees negated].
-	degrees ~= 0.0 ifTrue: [f := f rotateBy: degrees].
-	transformScale ~= 1.0 ifTrue: [
+	(degrees closeTo: 0.0) not ifTrue: [f := f rotateBy: degrees].
+	(transformScale closeTo: 1.0) not ifTrue: [
 		f := f magnify: f boundingBox by: transformScale smoothing: 1].
 	transformHFlip ifTrue: [	f := f flipBy: #horizontal centerAt: f boundingBox center].
 	transformVFlip ifTrue: [	f := f flipBy: #vertical centerAt: f boundingBox center].

@@ -85,32 +85,6 @@ SyntaxElementMorph class >> test [
 ]
 
 { #category : #'as yet unclassified' }
-SyntaxElementMorph class >> testAllMethods [
-	"SyntaxElementMorph testAllMethods"
-
-	| eachClass methods original compiled element|
-	Smalltalk classNames do: [: className |
-		eachClass := Smalltalk classNamed: className.
-		methods := eachClass methodDict.
-		methods keysDo: [ :eachSelector|
-			(self isDecompilable: eachSelector class: eachClass)
-				ifTrue: [
-					original := methods at: eachSelector.
-					element := ((eachClass decompilerClass new)
-						decompile: eachSelector 
-						in: eachClass 
-						method: original) asSyntaxElement.
-					compiled := element asCompiledMethodForClass: eachClass.
-					original = compiled
-						ifTrue: [Transcript show:'.']
-						ifFalse: [Transcript cr; 
-							show: className asString, ' -> ', 
-								eachSelector printString; cr]]]]
-		
-		
-]
-
-{ #category : #'as yet unclassified' }
 SyntaxElementMorph class >> testAllOriginalMethods [
 
 	| eachClass methods original compiled text node|

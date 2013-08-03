@@ -71,7 +71,8 @@ FilterPack >> applyMosaicFilter [
 	tempForm := Form extent: (w * factor)@(h * factor) depth: 32.
 	warpBlt := (WarpBlt toForm: tempForm)
 		sourceForm: resultForm;
-		combinationRule: Form over.
+		combinationRule: Form over;
+		yourself.
 	pts := resultForm boundingBox corners.
 	0 to: factor - 1 do: [:i |
 		0 to: factor - 1 do: [:j |
@@ -81,7 +82,8 @@ FilterPack >> applyMosaicFilter [
 	"rescale into resultForm"
 	warpBlt := (WarpBlt toForm: resultForm)
 		sourceForm: tempForm;
-		combinationRule: Form over.
+		combinationRule: Form over;
+		yourself.
 	warpBlt
 		copyQuad: tempForm boundingBox corners
 		toRect: resultForm boundingBox.
@@ -103,7 +105,8 @@ FilterPack >> applyPixelateFilter [
 	warpBlt := (WarpBlt toForm: smallImage)
 		sourceForm: resultForm;
 		cellSize: 1;  "no smoothing"
-		combinationRule: Form over.
+		combinationRule: Form over;
+		yourself.
 	warpBlt copyQuad: resultForm boundingBox corners toRect: smallImage boundingBox.
 
 	"now, scale the small image back up to full size"
@@ -111,7 +114,8 @@ FilterPack >> applyPixelateFilter [
 	  source quad extent by one pixel"
 	warpBlt := (WarpBlt toForm: resultForm)
 		sourceForm: smallImage;
-		combinationRule: Form over.
+		combinationRule: Form over;
+		yourself.
 	warpBlt
 		copyQuad: (0@0 extent: smallImage extent - 1) corners
 		toRect: resultForm boundingBox.
@@ -137,7 +141,8 @@ FilterPack >> applyPointillizeFilter [
 		sourceForm: dot;
 		sourceRect: dot boundingBox;
 		combinationRule: 31;  "alpha paint with constant alpha"
-		colorMap: colorMap.
+		colorMap: colorMap;
+		yourself.
 
 	1 to: count do: [:i |
 		x := self rand \\ pointillizeForm width.

@@ -24,7 +24,8 @@ MenuMorphNG >> add: aString value: aValue [
 	|item|
 	item := ValuedMenuItemMorph new
 		contents: aString;
-		selectedValue: aValue.
+		selectedValue: aValue;
+		yourself.
 	self addMenuItem: item.
 ]
 
@@ -38,7 +39,8 @@ MenuMorphNG >> addIcon: aForm tooltip: aString value: aValue [
 		contents: '';
 		setBalloonText: aString;
 		target: defaultTarget;
-		selectedValue: aValue.
+		selectedValue: aValue;
+		yourself.
 	self addMenuItem: item.
 
 

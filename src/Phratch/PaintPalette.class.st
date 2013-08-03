@@ -564,10 +564,9 @@ PaintPalette >> updateOptionsPane [
 		self shapeFilling ifTrue: [b on].
 		(self mode = #oval)
 			ifTrue: [form := Form extent: 16@17 depth: 16.
-					(FormCanvas on: form) fillOval: form boundingBox color: self color1.
-					formMorph := ImageMorph new form: form; position: 7@5]
-			ifFalse: [form := Form extent: 16@17 depth: 8. form fillColor: self color1.
-					formMorph := ImageMorph new form: form; position: 7@5].
+					(FormCanvas on: form) fillOval: form boundingBox color: self color1]
+			ifFalse: [form := Form extent: 16@17 depth: 8. form fillColor: self color1].
+		formMorph := ImageMorph new form: form; position: 7@5.
 		b addMorph: formMorph.
 		options addMorphBack: b.
 		options addMorphBack: (Morph new extent: 5@2; color: Color transparent).
@@ -581,10 +580,9 @@ PaintPalette >> updateOptionsPane [
 		self shapeFilling ifFalse: [b on].
 		(self mode = #oval)
 			ifTrue: [form := Form extent: 16@17 depth: 16.
-					(FormCanvas on: form) frameOval: form boundingBox width: 2 color: self color1.
-					formMorph := ImageMorph new form: form; position: 7@5]
-			ifFalse: [form := Form extent: 16@17 depth: 8. form border: (0@0 extent: 16@17) width: 2 fillColor: self color1.
-					formMorph := ImageMorph new form: form; position: 7@5].
+					(FormCanvas on: form) frameOval: form boundingBox width: 2 color: self color1]
+			ifFalse: [form := Form extent: 16@17 depth: 8. form border: (0@0 extent: 16@17) width: 2 fillColor: self color1].
+		formMorph := ImageMorph new form: form; position: 7@5.
 		b addMorph: formMorph.
 		options addMorphBack: b].
 

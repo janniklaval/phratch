@@ -4,13 +4,13 @@ Class {
 	#category : #'Phratch-Blocks'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #other }
 CreationEventHatMorph >> eventName [
 
 	^ 'Phratch-CreationEvent'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 CreationEventHatMorph >> initialize [
 
 	| parts s |
@@ -19,7 +19,8 @@ CreationEventHatMorph >> initialize [
 
 	parts := PhratchTranslator labelPartsFor: 'when $Sprite$ created'.
 
-	s := StringMorph new contents: parts first; font: (PhratchFrameMorph getFont: #Label); color: Color white.
+	s := StringMorph new contents: parts first; font: (PhratchFrameMorph getFont: #Label); color: Color white;
+		yourself.
 	self addMorphBack: s.
 
 	self addMorphBack:
@@ -27,20 +28,21 @@ CreationEventHatMorph >> initialize [
 			font: (PhratchFrameMorph getFont: #Label);
 			color: Color white;
 			target: self;
-			getSelector: #receiverName).
+			getSelector: #receiverName;
+		yourself).
 
 	s := s fullCopy contents: parts second.
 	self addMorphBack: s.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #other }
 CreationEventHatMorph >> printHatNameOn: aStream [
 	"Append a human-readable string for this hat block's name to the given stream."
 
 	aStream nextPutAll: 'when ', self receiverName, ' created'; cr.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #other }
 CreationEventHatMorph >> receiverName [
 
 	(scriptOwner respondsTo: #objName)

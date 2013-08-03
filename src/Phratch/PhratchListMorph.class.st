@@ -442,7 +442,7 @@ PhratchListMorph >> convertTuplesToStacks [
 { #category : #'list ops' }
 PhratchListMorph >> createCell: anObject [
 
-	| readout cell font numberRight txt double |
+	| readout cell font numberRight txt |
 
 	txt := anObject.
 	(anObject isKindOf: String)

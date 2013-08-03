@@ -201,7 +201,8 @@ CommandBlockMorph >> addLabel [
 		
 		m := submorphs last.
 		((m isKindOf: ChoiceArgMorph) | (m isKindOf: SpriteArgMorph)) ifTrue: [  "add spacer"
-			self addMorphBack: (Morph new color: Color transparent; extent: 2@5)]].
+			self addMorphBack: (Morph new color: Color transparent; extent: 2@5;
+		yourself)]].
 
 ]
 
@@ -236,10 +237,12 @@ CommandBlockMorph >> adjustReporterLayoutForLambda [
 	lambdas do: [:l |
 		extra := distToLeft value: l.
 		extra > 0 ifTrue: [
-			self addMorphFront: (Morph new color: Color transparent; extent: extra@5)].
+			self addMorphFront: (Morph new color: Color transparent; extent: extra@5;
+		yourself)].
 		extra := distToRight value: l.
 		extra > 0 ifTrue: [
-			self addMorphBack: (Morph new color: Color transparent; extent: extra@5)]].
+			self addMorphBack: (Morph new color: Color transparent; extent: extra@5;
+		yourself)]].
 
 
 ]
@@ -374,7 +377,8 @@ CommandBlockMorph >> asLambda [
 		isSpecialForm: false;
 		minArgs: 1;
 		commandSpec: '.';
-		selector: #procedure.
+		selector: #procedure;
+		yourself.
 	lambda attachBlock: self.
 	^ lambda evaluate
 ]
@@ -1174,7 +1178,8 @@ CommandBlockMorph >> oldUncoloredArgMorphFor: specString [
 	$1  = code ifTrue: [ ^ SpecialArgMorph new type: #objSlot].
 	$2  = code ifTrue: [ ^ MultiArgMorph type: #objSlot].	
 	
-	$r  = code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #rotationStyleChanger; choice: 'normal'].
+	$r  = code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #rotationStyleChanger; choice: 'normal';
+		yourself].
 			
 	^ ExpressionArgMorph new numExpression: '10'
 ]
@@ -1654,7 +1659,7 @@ CommandBlockMorph >> varNamesMenu [
 	^ (objVars copyWith: #-), blockVars
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #copying }
 CommandBlockMorph >> veryDeepFixupWith: deepCopier [
 	"If fields were weakly copied, fix them here.  If they were in the tree being copied, fix them up, otherwise point to the originals."
 
@@ -1663,7 +1668,7 @@ CommandBlockMorph >> veryDeepFixupWith: deepCopier [
 	argMorphs := argMorphs collect: [:m | deepCopier references at: m ifAbsent: [m]]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #copying }
 CommandBlockMorph >> veryDeepInner: deepCopier [
 	"Copy all of my instance variables.  Some need to be not copied at all, but shared.  	Warning!!  Every instance variable defined in this class must be handled.  We must also implement veryDeepFixupWith:.  See DeepCopier class comment."
 

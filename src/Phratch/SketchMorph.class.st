@@ -181,7 +181,7 @@ SketchMorph >> generateRotatedForm [
 		ifTrue: [adjustedAngle := rotationDegrees]  "smooth rotation"
 		ifFalse: [adjustedAngle := 0.0].  "leftRight, upDown, none"
 
-	((adjustedAngle = 0.0) and: [1.0@1.0 = scalePoint])
+	((adjustedAngle closeTo: 0.0) and: [1.0@1.0 = scalePoint])
 		ifTrue: [  "no rotation or scaling; use original"
 			rotatedForm := originalForm.
 			offsetWhenRotated := 0@0]
@@ -238,7 +238,7 @@ SketchMorph >> initFieldsFrom: anObjStream version: classVersion [
 
 { #category : #initialization }
 SketchMorph >> initialize [
-
+	super initialize.
 	^ self initializeWith: ImageMorph defaultForm
 
 ]
@@ -312,7 +312,7 @@ SketchMorph >> penOnMyForm [
 { #category : #menu }
 SketchMorph >> readFromFile [
 
-	| result fileName |
+	|  fileName |
 	fileName := result directory pathName / result name.
 	self form: (Form fromFileNamed: fileName).
 
@@ -544,7 +544,7 @@ SketchMorph >> setRotationCenter [
 { #category : #menu }
 SketchMorph >> setRotationStyle [
 
-	| menu newStyle |
+	| menu |
 	menu := MenuMorph new defaultTarget: self.
 	#('rotate smoothly' 'left-right flip only' 'up-down flip only' 'don''t rotate')
 		with: #(normal leftRight upDown none)

@@ -76,12 +76,14 @@ LibraryItemMorph >> buildSubmorphs [
 
 	thumbnailMorph := ImageMorph new
 		form: (ColorForm extent: thumbWidth@thumbWidth depth: 16) fillWhite;
-		position: ((self width - thumbWidth) // 2) @ 0.
+		position: ((self width - thumbWidth) // 2) @ 0;
+		yourself.
 	self addMorph: thumbnailMorph.
 
 	nameMorph := StringMorph new
 		font: (PhratchFrameMorph getFont: #LibraryItemName);
-		position: 0 @ (thumbnailMorph bottom -2).
+		position: 0 @ (thumbnailMorph bottom -2);
+		yourself.
 	self addMorph: nameMorph.
 
 	self color: Color transparent.
@@ -503,28 +505,11 @@ LibraryItemMorph >> updateNameAndInfo [
 	nameMorph ifNotNil:[
 		(target isKindOf: ScriptablePhratchMorph) ifFalse: [
 			nameMorph contents: '<no object>'.
-			scriptCountMorph contents: ''.
 			^ self].
 
 		nameMorph contents = target objName ifFalse: [
 			nameMorph contents: self truncatedLabel.
 			nameMorph left: self left + ((self width - nameMorph width) // 2) + 1]].
-
-	scriptCountMorph ifNotNil: [
-		w := 0.
-		target scripts size > 0
-			ifTrue: [
-				w > 0 ifTrue: [w := w + 2].
-				scriptCountMorph contents: 'Scripts' localized, PhratchTranslator colonSuffix, ' ', target scripts size printString.
-				w := w + scriptCountMorph width + 2]
-			ifFalse: [
-				scriptCountMorph contents: ''].
-
-		"layout info morph row"
-		y := nameMorph bottom.
-		w > 0 ifTrue: [
-			scriptCountMorph position: (self left + ((self width - (scriptCountMorph width)) // 2))@y]].
-
 ]
 
 { #category : #initialization }

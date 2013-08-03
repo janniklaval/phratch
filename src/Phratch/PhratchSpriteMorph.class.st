@@ -727,7 +727,7 @@ PhratchSpriteMorph >> generateRotatedForm [
 	((srcForm width = 1) & (srcForm height = 1))
 		ifTrue: [adjustedAngle := 0.0].  "don't rotate a 1x1 costume"
 
-	((adjustedAngle = 0.0) and: [1.0@1.0 = scalePoint])
+	((adjustedAngle closeTo: 0.0) and: [1.0@1.0 = scalePoint])
 		ifTrue: [  "no rotation or scaling; use original"
 			rotatedForm := srcForm.
 			offsetWhenRotated := costume rotationCenter]
@@ -1320,7 +1320,7 @@ PhratchSpriteMorph >> passivePenColor: aColor [
 	penColor := aColor.
 	penHue := (penColor hue * 200.0) / 360.0.
 	b := penColor brightness.
-	b = 1.0
+	(b closeTo: 1.0)
 		ifTrue: [penShade := 50.0 + (50.0 * (1.0 - penColor saturation))]
 		ifFalse: [penShade := 50.0 * b].
 
@@ -1407,7 +1407,7 @@ PhratchSpriteMorph >> passiveSetPenShadeTo: aNumber [
 	penColor := Color h: (360.0 * penHue) / 200.0 s: 1.0 v: 1.0.
 	normalizeShade := penShade > 100.0 ifTrue: [200.0 - penShade] ifFalse: [penShade].
 
-	normalizeShade = 50.0 ifTrue: [^ self].  "pure color"
+	(normalizeShade closeTo: 50.0) ifTrue: [^ self].  "pure color"
 
 	scale := 1.0 / 60.0.
 	k := 1.0 - (50.0 * scale).
@@ -2523,12 +2523,12 @@ PhratchSpriteMorph >> turnAwayFromEdge [
 	delta := (PhratchFrameMorph workpaneExtent // 2) - refP abs.
 
 	(delta x < delta y) | (delta x < 0) ifTrue: [  "point dirX towards center"
-		dirX = 0.0 ifTrue: [dirX := 0.1].
+		(dirX closeTo: 0.0) ifTrue: [dirX := 0.1].
 		refP x > 0
 			ifTrue: [dirX := dirX abs negated]
 			ifFalse: [dirX := dirX abs]].
 	(delta y < delta x) | (delta y < 0) ifTrue: [  "point dirY towards center"
-		dirY = 0.0 ifTrue: [dirY := 0.1].
+		(dirY closeTo: 0.0) ifTrue: [dirY := 0.1].
 		refP y > 0
 			ifTrue: [dirY := dirY abs negated]
 			ifFalse: [dirY := dirY abs]].

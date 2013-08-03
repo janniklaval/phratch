@@ -68,13 +68,15 @@ OSlotMorph >> drawSlotOn: aCanvas [
 				aCanvas paintImage: ((argMorphs first imageForm withOutlineColor: dark width: 4) 
 					withHalfEmbeddedOutlineColor: dark)
 					at: (argMorphs first position - 5).
-				^self ]
+				]
 			ifFalse: [
 				aCanvas paintImage: ((argMorphs first imageForm withOutlineColor: dark width: 4) 
 					"withHalfEmbeddedOutlineColor: dark)"
 					withEmbeddedOutlineColor: dark width: 1)
 					at: (argMorphs first position - 5).
-				^self ]].
+				].
+			^self
+			].
 
 	aCanvas paintImage: (argMorphs first imageForm outlineEmbeddedAdjustedColor: dark) 
 		at: (argMorphs first position - 1)

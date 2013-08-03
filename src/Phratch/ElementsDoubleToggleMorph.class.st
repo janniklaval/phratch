@@ -34,7 +34,8 @@ ElementsDoubleToggleMorph >> initialize [
 	super initialize.
 	chooser := TriangleButtonMorph new
 				target: self;
-				selector: #test.
+				selector: #test;
+		yourself.
 	self addMorph: chooser.
 	self fitMorphs
 ]

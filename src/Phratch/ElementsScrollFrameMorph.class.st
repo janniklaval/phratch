@@ -162,19 +162,23 @@ ElementsScrollFrameMorph >> initialize [
 	contents := PasteUpMorph new
 		color: Color red;
 		borderWidth: 0;
-		enableDragNDrop: true.
+		enableDragNDrop: true;
+		yourself.
 
 	hScrollbar := ScrollBar new
 		model: self;
 		setValueSelector: #hScrollRelative:;
-		hasMenuButton: false.
+		hasMenuButton: false;
+		yourself.
 	vScrollbar := ScrollBar new
 		model: self;
 		setValueSelector: #vScrollRelative:;
-		hasMenuButton: false.
+		hasMenuButton: false;
+		yourself.
 
 	cornerMorph := BorderedMorph new
-		borderRaised; borderWidth: 1; color: hScrollbar color.
+		borderRaised; borderWidth: 1; color: hScrollbar color;
+		yourself.
 
 	contents position: self position + borderWidth.
 	self addMorph: contents.

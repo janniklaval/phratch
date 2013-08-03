@@ -35,7 +35,8 @@ HatBlockMorph >> click: evt [
 		evt shiftPressed ifFalse: [evt hand toolType: nil].
 		(owner isKindOf: PhratchBlockPaletteMorph) ifTrue: [^ self].  "ignore if in palette"
 		PhratchFrameMorph putInClipboard: self.
-		^ self stop; delete].
+		^ self stop; delete;
+		yourself].
 
 	super click: evt.
 
@@ -160,10 +161,8 @@ HatBlockMorph >> initFieldsFrom: anObjStream version: classVersion [
 		scriptNameMorph
 		indicatorMorph
 		scriptOwner
-		parameters
 		isClickable
 	) from: anObjStream.
-	parameters := nil.  "procedures with parameters are no longer supported"
 
 	"remove the indicator morph when reading in an older project"
 	indicatorMorph ifNotNil: [
@@ -184,7 +183,8 @@ HatBlockMorph >> initialize [
 		contents: 'script';
 		font: (PhratchFrameMorph getFont: #Label);
 		forceUnicodeRendering: true;
-		color: Color white.
+		color: Color white;
+		yourself.
 	self addMorph: scriptNameMorph.
 
 ]

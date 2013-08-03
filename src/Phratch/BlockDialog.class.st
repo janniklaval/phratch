@@ -29,7 +29,8 @@ BlockDialog class >> ask: questionString [
 		withButtonsForYes: false no: false okay: true cancel: true;
 		title: questionString;
 		message: 'category:' localized;
-		extent: 330@200.
+		extent: 330@200;
+		yourself.
 	^ dialogBox getUserResponse
 
 ]
@@ -42,7 +43,8 @@ BlockDialog class >> askWithCancel: questionString initialAnswer: aString [
 	dialogBox := self new
 		withButtonsForYes: false no: false okay: true cancel: true;
 		message: questionString;
-		initialAnswer: aString.
+		initialAnswer: aString;
+		yourself.
 	^ dialogBox getUserResponse
 
 ]
@@ -118,7 +120,8 @@ BlockDialog >> buildScopeRadioButtons [
 	scopeRadioButtons := AlignmentMorph newRow
 		color: Color transparent;
 		hResizing: #shrinkWrap;
-		vResizing: #shrinkWrap.
+		vResizing: #shrinkWrap;
+		yourself.
 
 	allSpritesRadioButton := ToggleButton
 		onForm: (PhratchFrameMorph skinAt: #radioButtonOn)
@@ -129,18 +132,23 @@ BlockDialog >> buildScopeRadioButtons [
 		actionSelector: #toggleSpriteSpecific.
 	label1 := StringMorph new
 		contents: ('For all sprites' localized);
-		font: (PhratchFrameMorph getFont: #NewVariableDialogBox).
+		font: (PhratchFrameMorph getFont: #NewVariableDialogBox);
+		yourself.
 	scopeRadioButtons addMorphBack: allSpritesRadioButton.
-	scopeRadioButtons addMorphBack: (Morph new extent: (5@5); color: Color transparent).
+	scopeRadioButtons addMorphBack: (Morph new extent: (5@5); color: Color transparent;
+		yourself).
 	scopeRadioButtons addMorphBack: label1.
-	scopeRadioButtons addMorphBack: (Morph new extent: (15@5); color: Color transparent).
+	scopeRadioButtons addMorphBack: (Morph new extent: (15@5); color: Color transparent;
+		yourself).
 
 	thisSpriteRadioButton := allSpritesRadioButton fullCopy off.
 	label2 := StringMorph new
 		contents: ('For this sprite only' localized);
-		font: (PhratchFrameMorph getFont: #NewVariableDialogBox).
+		font: (PhratchFrameMorph getFont: #NewVariableDialogBox);
+		yourself.
 	scopeRadioButtons addMorphBack: thisSpriteRadioButton.
-	scopeRadioButtons addMorphBack: (Morph new extent: (5@5); color: Color transparent).
+	scopeRadioButtons addMorphBack: (Morph new extent: (5@5); color: Color transparent;
+		yourself).
 	scopeRadioButtons addMorphBack: label2.
 
 	PhratchTranslator isRTL
@@ -155,12 +163,14 @@ BlockDialog >> buildScopeRadioButtons [
 BlockDialog >> buildTypeChooser [
 	| spacer |
 
-	spacer := (Morph new extent: (5@5); color: Color transparent).
+	spacer := (Morph new extent: (5@5); color: Color transparent;
+		yourself).
 
 	radioButtons := AlignmentMorph newRow
 		color: Color transparent;
 		hResizing: #shrinkWrap;
-		vResizing: #shrinkWrap.
+		vResizing: #shrinkWrap;
+		yourself.
 
 	commandBlockRadioButton := ToggleButton
 		onForm: self formTypeCommandOn
@@ -226,12 +236,14 @@ BlockDialog >> disableAllButCategory [
 		addMorphBack:
 				(Morph new
 						extent: 5 @ 7;
-						color: Color transparent);
+						color: Color transparent;
+		yourself);
 		addMorphBack: categoryChooser;
 		addMorphBack:
 				(Morph new
 						extent: 5 @ 75;
-						color: Color transparent);
+						color: Color transparent;
+		yourself);
 		addMorphBack: buttonRow;
 		addMorphBack: bottomSpacer
 ]
@@ -251,12 +263,15 @@ BlockDialog >> disableAllButCategoryAndShape [
 			ifFalse: [m delete]].
 
 	mainColumn
-		addMorphBack: (Morph new extent: (5@7); color: Color transparent);
+		addMorphBack: (Morph new extent: (5@7); color: Color transparent;
+		yourself);
 		addMorphBack: categoryChooser;
-		addMorphBack: (Morph new extent: (5@75); color: Color transparent);
+		addMorphBack: (Morph new extent: (5@75); color: Color transparent;
+		yourself);
 
 		addMorphBack: radioButtons;
-		addMorphBack: (Morph new extent: (5@7); color: Color transparent);
+		addMorphBack: (Morph new extent: (5@7); color: Color transparent;
+		yourself);
 
 		addMorphBack: buttonRow;
 		addMorphBack: bottomSpacer.
@@ -273,7 +288,8 @@ BlockDialog >> formTypeCommandOff [
 
 	^ (CommandBlockMorph new 
 			color: ((ScriptablePhratchMorph blockColorFor: category asString) mixed: 0.2 with: Color veryLightGray); 
-			commandSpec: 'command' localized) 
+			commandSpec: 'command' localized;
+		yourself) 
 		imageForm.
 
 ]
@@ -283,7 +299,8 @@ BlockDialog >> formTypeCommandOn [
 
 	^ (CommandBlockMorph new
 			color: (ScriptablePhratchMorph blockColorFor: category asString); 
-			commandSpec: 'command' localized) 
+			commandSpec: 'command' localized;
+		yourself) 
 		imageForm.
 
 ]
@@ -293,7 +310,8 @@ BlockDialog >> formTypeCommandOver [
 
 	^ (CommandBlockMorph new 
 			color: ((ScriptablePhratchMorph blockColorFor: category asString) mixed: 0.4 with: Color veryLightGray); 
-			commandSpec: 'command' localized) 
+			commandSpec: 'command' localized;
+		yourself) 
 		imageForm.
 
 ]
@@ -304,7 +322,8 @@ BlockDialog >> formTypePredicateOff [
 	^ (ReporterBlockMorph new 
 			isBoolean: true; 
 			color: ((ScriptablePhratchMorph blockColorFor: category asString) mixed: 0.2 with: Color veryLightGray); 
-			commandSpec: 'predicate' localized) 
+			commandSpec: 'predicate' localized;
+		yourself) 
 		imageForm.
 
 ]
@@ -315,7 +334,8 @@ BlockDialog >> formTypePredicateOn [
 	^ (ReporterBlockMorph new 
 			isBoolean: true; 
 			color: (ScriptablePhratchMorph blockColorFor: category asString); 
-			commandSpec: 'predicate' localized) 
+			commandSpec: 'predicate' localized;
+		yourself) 
 		imageForm.
 
 ]
@@ -326,7 +346,8 @@ BlockDialog >> formTypePredicateOver [
 	^ (ReporterBlockMorph new 
 			isBoolean: true; 
 			color: ((ScriptablePhratchMorph blockColorFor: category asString) mixed: 0.4 with: Color veryLightGray); 
-			commandSpec: 'predicate' localized) 
+			commandSpec: 'predicate' localized;
+		yourself) 
 		imageForm.
 ]
 
@@ -335,7 +356,8 @@ BlockDialog >> formTypeReporterOff [
 
 	^ (ReporterBlockMorph new 
 			color: ((ScriptablePhratchMorph blockColorFor: category asString) mixed: 0.2 with: Color veryLightGray); 
-			commandSpec: 'reporter' localized) 
+			commandSpec: 'reporter' localized;
+		yourself) 
 		imageForm.
 
 ]
@@ -343,7 +365,8 @@ BlockDialog >> formTypeReporterOff [
 { #category : #private }
 BlockDialog >> formTypeReporterOn [
 
-	^ (ReporterBlockMorph new color: (ScriptablePhratchMorph blockColorFor: category asString); commandSpec: 'reporter' localized) imageForm.
+	^ (ReporterBlockMorph new color: (ScriptablePhratchMorph blockColorFor: category asString); commandSpec: 'reporter' localized;
+		yourself) imageForm.
 
 ]
 
@@ -352,7 +375,8 @@ BlockDialog >> formTypeReporterOver [
 
 	^ (ReporterBlockMorph new 
 			color: ((ScriptablePhratchMorph blockColorFor: category asString) mixed: 0.4 with: Color veryLightGray); 
-			commandSpec: 'reporter' localized) 
+			commandSpec: 'reporter' localized;
+		yourself) 
 		imageForm.
 
 ]
@@ -364,7 +388,7 @@ BlockDialog >> getUserResponse [
 	newBlockSpec := super getUserResponse.
 	newBlockSpec size = 0 ifTrue: [^ #cancelled].
 	category  = #other ifTrue: [
-		category = #none ].
+		category := #none ].
 	^ Array with: newBlockSpec with: reporterBlockFlag with: booleanBlockFlag with: category with: spriteSpecificFlag
 
 ]
@@ -388,27 +412,32 @@ BlockDialog >> initialize [
 		addMorphBack:
 				(Morph new
 						extent: 5 @ 6;
-						color: Color transparent);
+						color: Color transparent;
+		yourself);
 		addMorphBack: categoryChooser;
 		addMorphBack:
 				(Morph new
 						extent: 5 @ 115;
-						color: Color transparent);
+						color: Color transparent;
+		yourself);
 		addMorphBack: radioButtons;
 		addMorphBack:
 				(Morph new
 						extent: 5 @ 7;
-						color: Color transparent);
+						color: Color transparent;
+		yourself);
 		addMorphBack: typeinMorph;
 		addMorphBack:
 				(Morph new
 						extent: 5 @ 7;
-						color: Color transparent);
+						color: Color transparent;
+		yourself);
 		addMorphBack: scopeRadioButtons;
 		addMorphBack:
 				(Morph new
 						extent: 5 @ 7;
-						color: Color transparent);
+						color: Color transparent;
+		yourself);
 		addMorphBack: buttonRow;
 		addMorphBack: bottomSpacer.
 	self category: category

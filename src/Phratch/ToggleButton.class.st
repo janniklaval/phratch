@@ -71,7 +71,6 @@ ToggleButton >> addCustomMenuItems: aCustomMenu hand: aHandMorph [
 { #category : #accessing }
 ToggleButton >> alphaOn: aBoolean [
 
-	alphaOn := aBoolean.
 ]
 
 { #category : #drawing }
@@ -195,7 +194,6 @@ ToggleButton >> initialize [
 	toggleMode := true.
 	isDisabled := false.
 	isOn := isOver := false.
-	alphaOn := false.
 
 ]
 

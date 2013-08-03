@@ -76,9 +76,9 @@ StringMorph >> storeFieldsOn: anObjStream [
 StringMorph >> stringExtent: aString [
 	"Answer the extent of the given string in my current font."
 
-	| s usingOSFont scanner |
+	| s scanner |
 	s := aString.
-	usingOSFont := font notNil and: [font isOSFont].
+	font notNil and: [font isOSFont].
 	scanner := MultiDisplayScanner quickPrintOn: Display box: Display boundingBox font: self font.
 	^ scanner stringExtent: s
 ]
@@ -94,14 +94,6 @@ StringMorph >> stringHeight: aString [
 { #category : #'*Phratch-Extensions' }
 StringMorph >> stringToDisplay [
 	"Answer the string that is displayed. In password mode, this will be all asterisks."
-
-	| n s |
-	"passwordMode ifNil: [passwordMode := false].
-	passwordMode ifTrue: [
-		n := (contents isKindOf: UTF8) ifTrue: [contents asUTF32 size] ifFalse: [contents size].
-		s := String new: n withAll: $*.
-		contents isUnicode ifTrue: [s := s asUTF8].
-		^ s]."
 
 	^ contents
 ]

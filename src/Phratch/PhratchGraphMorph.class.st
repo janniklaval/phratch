@@ -27,13 +27,13 @@ Class {
 }
 
 { #category : #'instance creation' }
-PhratchGraphMorph class >> MinScale [
+PhratchGraphMorph class >> minScale [
 
 	^MinScale
 ]
 
 { #category : #'instance creation' }
-PhratchGraphMorph class >> MinScale: aNumber [
+PhratchGraphMorph class >> minScale: aNumber [
 
 	"aNumber should be equal to: viewer extent x/ graph data size"
 	MinScale := aNumber asFloat.
@@ -311,7 +311,6 @@ PhratchGraphMorph >> initialize [
 	super initialize.
 	self color: (Color r: 0.8 g: 0.8 b: 0.6).
 	self borderWidth: 2.
-	playCursorColor := Color blue.
 	viewer := false.
 	selection := {nil. nil}.
 	scale := 1.0.
@@ -394,7 +393,7 @@ PhratchGraphMorph >> mouseUp: evt [
 { #category : #menu }
 PhratchGraphMorph >> readDataFromFile [
 
-	| result fName menu |
+	| menu |
 	menu := MenuMorph new defaultTarget: self.
 	#(aif aiff au wav) do:[:aVarName |
 		menu add: aVarName
@@ -459,7 +458,7 @@ PhratchGraphMorph >> selection: anArrayOrNil [
 { #category : #viewing }
 PhratchGraphMorph >> setScale [
 
-	| menu choice |
+	| menu |
 
 	menu := MenuMorph new defaultTarget: self.
 	menu add: '1x' target: self selector: #setScaleBy: argument: 1;

@@ -32,7 +32,8 @@ ElementsPaletteFrameMorph >> buildPanes [
 	header := PaletteFrameHeadMorph new frame: self.
 	palette := ElementsScrollFrameMorph new
 				color: Color gray;
-				borderColor: Color gray.
+				borderColor: Color gray;
+		yourself.
 	self
 		addMorph: header;
 		addMorph: palette.

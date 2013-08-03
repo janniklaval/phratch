@@ -77,7 +77,7 @@ ReturnElementMorph >> drawOn: aCanvas [
 { #category : #'as yet unclassified' }
 ReturnElementMorph >> fit [
 
-	| cw bw y|
+	| cw bw |
 	label ifNil: [^self].
 	bw := self borderWidth.
 	cw := self labelFont widthOf: $ .

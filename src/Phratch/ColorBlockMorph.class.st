@@ -4,7 +4,7 @@ Class {
 	#category : #'Phratch-Blocks'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #other }
 ColorBlockMorph >> acceptsTypeOf: aBlockMorph [
 	"Answer true if I can accept a dropped reporter of the given type. Answer false by default."
 
@@ -12,12 +12,13 @@ ColorBlockMorph >> acceptsTypeOf: aBlockMorph [
 	^ aBlockMorph isKindOf: ColorBlockMorph
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #watcher }
 ColorBlockMorph >> createWatcher [
 	"Return a new watcher for me."
 
 	| newWatcher |
-	newWatcher := WatcherMorph new isColor: true; buildReadout; setCategoryColor: self color.
+	newWatcher := WatcherMorph new isColor: true; buildReadout; setCategoryColor: self color;
+		yourself.
 	self argumentCount = 1
 		ifTrue: [newWatcher target: receiver selector: selector parameter: self args first]
 		ifFalse: [newWatcher target: receiver selector: selector parameter: nil].
@@ -25,7 +26,7 @@ ColorBlockMorph >> createWatcher [
 	^ newWatcher
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #drawing }
 ColorBlockMorph >> drawOn: aCanvas [ 
 
 	| right topY bottomY xInset c |
@@ -64,14 +65,13 @@ ColorBlockMorph >> drawOn: aCanvas [
 		
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 ColorBlockMorph >> initialize [
 
 	super initialize.
-	myColor := Color black.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #other }
 ColorBlockMorph >> showValue [
 
 	| gotError msg tooltip w worldBounds |
@@ -84,11 +84,13 @@ ColorBlockMorph >> showValue [
 	msg := msg localized.
 	tooltip := (PhratchReporterToolTipMorph string: msg for: self)
 		left: self right;
-		bottom: self top.
+		bottom: self top;
+		yourself.
 	PhratchTranslator isRTL ifTrue: [tooltip right: self left].
 	gotError
 		ifTrue: [tooltip messageColor: Color red darker]
-		ifFalse: [tooltip addMorphFront: (BorderedMorph new color: self evaluate; position: (tooltip position + (6@2)); extent: 12@12; borderWidth: 1); extent: (24@17)].
+		ifFalse: [tooltip addMorphFront: (BorderedMorph new color: self evaluate; position: (tooltip position + (6@2)); extent: 12@12; borderWidth: 1;
+		yourself); extent: (24@17)].
 	w := self world.
 	w addMorphFront: tooltip.
 	((worldBounds := w bounds) containsRect: tooltip bounds) ifFalse:

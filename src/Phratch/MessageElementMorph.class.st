@@ -66,7 +66,8 @@ MessageElementMorph >> asSmalltalk [
 	^ws
 		nextPutString: receiver asSmalltalk, ' ';
 		nextPutString: self keywordsAndArgs;
-		contents
+		contents;
+		yourself
 ]
 
 { #category : #'as yet unclassified' }
@@ -139,7 +140,8 @@ MessageElementMorph >> cascadeCode [
 	^ws
 		nextPutString: self keywordsAndArgs;
 		cr; 
-		contents
+		contents;
+		yourself
 ]
 
 { #category : #'as yet unclassified' }
