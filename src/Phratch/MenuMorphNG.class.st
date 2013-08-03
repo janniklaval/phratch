@@ -1,9 +1,6 @@
 Class {
 	#name : #MenuMorphNG,
 	#superclass : #MenuMorph,
-	#instVars : [
-		'selectedValue'
-	],
 	#category : #'Phratch-UI-Dialogs'
 }
 

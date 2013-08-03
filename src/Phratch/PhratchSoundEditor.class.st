@@ -58,7 +58,6 @@ Class {
 		'volume',
 		'snd',
 		'completeSnd',
-		'soundMorphSound',
 		'copy',
 		'time',
 		'scrollDelta',
@@ -486,7 +485,7 @@ PhratchSoundEditor >> data: newData [
 
 { #category : #accessing }
 PhratchSoundEditor >> endPlaying [
-
+ 
 	^endPlaying.
 ]
 
@@ -503,7 +502,7 @@ PhratchSoundEditor >> faster [
 
 { #category : #'graph ops' }
 PhratchSoundEditor >> fixSliderRange [
-
+ 
 	slider maxVal: (1 -(slider sliderThickness/slider extent x)).
 	^slider
 ]
@@ -737,7 +736,7 @@ PhratchSoundEditor >> playAfterCursor [
 
 	| sel currSel |
 	graph data size < 2 ifTrue: [^ self].
-	
+	 
 
 	sel := ((selection at: 1) notNil and: [(selection at: 2) - (selection at: 1) > 3]).
 	sel ifTrue: [currSel := graph data copyFrom: (selection at: 1) asInteger to: (selection at: 2) asInteger. playCursor := selection at: 1.
@@ -787,14 +786,14 @@ PhratchSoundEditor >> playAll [
 ]
 
 { #category : #accessing }
-PhratchSoundEditor >> playCursor [
+PhratchSoundEditor >> playCursor [ 
 	
 	^playCursor.
 ]
 
 { #category : #accessing }
 PhratchSoundEditor >> playCursor: aNumber [
-
+ 
 	graph data ifNil: [^self].
 
 	"allows the graph to set where the playing cursor is"
@@ -920,7 +919,7 @@ PhratchSoundEditor >> saveToFile [
 
 { #category : #accessing }
 PhratchSoundEditor >> scrollTime: relativeValue [
-
+ 
 	graph startIndex: relativeValue*(graph data size).
 
 	viewer flushCachedForm; changed.
@@ -1178,7 +1177,7 @@ PhratchSoundEditor >> undo [
 
 { #category : #other }
 PhratchSoundEditor >> updateSlider [
-
+ 
 	"this is the order that these methods have to be called in order to update slider!!!"
 	graph computeSlider.  
 	self fixSliderRange.
@@ -1187,7 +1186,7 @@ PhratchSoundEditor >> updateSlider [
 
 { #category : #accessing }
 PhratchSoundEditor >> updateSliderValue [
-
+ 
 	slider setScaledValue: ((graph startIndex/graph data size min: slider maxVal) max: 0).
 
 
@@ -1198,6 +1197,6 @@ PhratchSoundEditor >> updateSliderValue [
 
 { #category : #accessing }
 PhratchSoundEditor >> viewer [
-
+ 
 	^viewer.
 ]

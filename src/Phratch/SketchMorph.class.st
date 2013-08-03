@@ -74,7 +74,7 @@ SketchMorph >> clearExtent: aPoint fillColor: aColor [
 
 { #category : #geometry }
 SketchMorph >> containsPoint: aPoint [
-
+ 
 	^ (self bounds containsPoint: aPoint) and:
 	  [(self rotatedForm isTransparentAt: aPoint - bounds origin) not]
 
@@ -157,7 +157,7 @@ SketchMorph >> fieldsVersion [
 
 { #category : #accessing }
 SketchMorph >> form [
-
+ 
 	^ originalForm
 
 ]
@@ -337,14 +337,14 @@ SketchMorph >> recolorPixelsOfColor: evt [
 
 { #category : #accessing }
 SketchMorph >> referencePosition [
-
+ 
 	^ (bounds origin - offsetWhenRotated) + rotationCenter
 
 ]
 
 { #category : #accessing }
 SketchMorph >> referencePosition: aPoint [
-
+ 
 	self position: (aPoint - rotationCenter) + offsetWhenRotated.
 
 ]
@@ -370,7 +370,7 @@ SketchMorph >> revealPenStrokes [
 
 { #category : #accessing }
 SketchMorph >> rotatedForm [
-
+ 
 	rotatedForm ifNil: [self layoutChanged].
 	^ rotatedForm
 
@@ -378,7 +378,7 @@ SketchMorph >> rotatedForm [
 
 { #category : #accessing }
 SketchMorph >> rotationCenter [
-
+ 
 	^ rotationCenter
 
 ]
@@ -393,7 +393,7 @@ SketchMorph >> rotationCenter: aPoint [
 
 { #category : #accessing }
 SketchMorph >> rotationDegrees [
-
+ 
 	^ rotationDegrees
 
 ]
@@ -420,7 +420,7 @@ SketchMorph >> rotationDegrees: newRotationDegrees scalePoint: newScalePoint [
 
 { #category : #accessing }
 SketchMorph >> rotationStyle [
-
+ 
 	^ rotationStyle
 
 ]
@@ -447,7 +447,7 @@ SketchMorph >> saveAsBMP [
 	| formToSave  fileName |
 	formToSave := originalForm asFormOfDepth: 32.
 
-	fileName := UIManager request: 'File name?'.
+	fileName := UIManager default request: 'File name?'.
 	fileName size = 0 ifTrue: [^ self].
 	(fileName asLowercase endsWith: '.bmp') ifFalse: [
 		fileName := fileName, '.bmp'].
@@ -469,7 +469,7 @@ SketchMorph >> saveAsGIF [
 with some loss of quality. Continue?') ifFalse: [^ self].
 			formToSave := originalForm asFormOfDepth: 8]].
 
-	fileName := UIManager request: 'File name?'.
+	fileName := UIManager default request: 'File name?'.
 	fileName size = 0 ifTrue: [^ self].
 	(fileName asLowercase endsWith: '.gif') ifFalse: [
 		fileName := fileName, '.gif'].
@@ -487,10 +487,10 @@ SketchMorph >> saveAsJPEG [
 	formToSave depth < 16 ifTrue: [
 		formToSave := originalForm asFormOfDepth: 16].
 
-	quality := UIManager request: 'JPEG Quality (1-100):' initialAnswer: '50'.
+	quality := UIManager default request: 'JPEG Quality (1-100):' initialAnswer: '50'.
 	((quality size = 0) or: [quality first isDigit not]) ifTrue: [^ self].
 
-	fileName := UIManager request: 'File name?'.
+	fileName := UIManager default request: 'File name?'.
 	fileName size = 0 ifTrue: [^ self].
 	(fileName asLowercase endsWith: '.jpg') ifFalse: [
 		fileName := fileName, '.jpg'].

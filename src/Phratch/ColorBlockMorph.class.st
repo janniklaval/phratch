@@ -1,9 +1,6 @@
 Class {
 	#name : #ColorBlockMorph,
 	#superclass : #ReporterBlockMorph,
-	#instVars : [
-		'myColor'
-	],
 	#category : #'Phratch-Blocks'
 }
 

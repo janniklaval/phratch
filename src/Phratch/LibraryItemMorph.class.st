@@ -9,7 +9,6 @@ Class {
 		'target',
 		'thumbnailMorph',
 		'nameMorph',
-		'scriptCountMorph',
 		'isSelected',
 		'rolloverOn',
 		'lastUpdateMSecs',
@@ -371,7 +370,6 @@ LibraryItemMorph >> rightButtonMenu [
 		menu add: 'clone' action: #spawn.
 		menu add: 'parent...' action: #choosePrototype.
 		self target instances size > 0 ifTrue: [
-			self haltOnce.
 			menu add: 'children...' action: [self childrenMenu]].
 		self target isNested ifTrue: [
 			menu addLine ].

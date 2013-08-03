@@ -78,7 +78,7 @@ BlockMorph class >> initialize [
 BlockMorph class >> setLabelFont [
 	"BlockMorph setLabelFont"
 
-	| menu fName fSize |
+	| menu |
 	menu := MenuMorph new defaultTarget: self.
 	StrikeFont fontNames do: [:fn | 
 		menu add: fn 
@@ -205,22 +205,21 @@ BlockMorph >> blockAttachPoints: aSet [
 
 	| nextB result |
 	result := #().
-	(self isKindOf: HatBlockMorph) ifFalse: [
-		PhratchTranslator isRTL
-			ifTrue: [result := result copyWith: (self topRight -> self)]
-			ifFalse: [result := result copyWith: (self topLeft -> self)]].
+	(self isKindOf: HatBlockMorph)
+		ifFalse: [ 
+			result := PhratchTranslator isRTL
+				ifTrue: [ result copyWith: self topRight -> self ]
+				ifFalse: [ result copyWith: self topLeft -> self ] ].
 	nextB := self nextBlock.
-	nextB ifNil:[
-		self isStopOrForever ifFalse: [
-			PhratchTranslator isRTL
-				ifTrue: [result := result copyWith: (self bottomRight -> self)]
-				ifFalse: [result := result copyWith: (self bottomLeft -> self)]]].
-
 	nextB
-		ifNotNil: [nextB blockAttachPoints: aSet].
-
-	aSet addAll: result.
-
+		ifNil: [ 
+			self isStopOrForever
+				ifFalse: [ 
+					result := PhratchTranslator isRTL
+						ifTrue: [ result copyWith: self bottomRight -> self ]
+						ifFalse: [ result copyWith: self bottomLeft -> self ] ] ].
+	nextB ifNotNil: [ nextB blockAttachPoints: aSet ].
+	aSet addAll: result
 ]
 
 { #category : #accessing }
@@ -303,86 +302,106 @@ BlockMorph >> closestAttachTargetIn: newOwner [
 
 	| xThresh yThresh attachPoints best bestDist targetP dist ref topUsed bottomUsed |
 	xThresh := 65.
-	((self isKindOf: CBlockMorph) and: [(self nestedBlockAt: (self top + self topBarHeight)) isNil])
-		ifTrue: [yThresh := 25]
-		ifFalse: [yThresh := 14].
+	yThresh := ((self isKindOf: CBlockMorph) and: [ (self nestedBlockAt: self top + self topBarHeight) isNil ])
+		ifTrue: [ 25 ]
+		ifFalse: [ 14 ].
 	topUsed := false.
 	bottomUsed := false.
-
-	attachPoints := OrderedCollection new:100.
-	(newOwner allMorphs reject: [:m | m == newOwner ]) do: [:m |
-		((m ~~ self) and:
-		 [(m ~~ (self bottomBlock)) and:
-		 [(m ~~ (self topBlock)) and:
-		 [(m ~~ (self owner)) and:
-		 [(m isKindOf: BlockMorph) and:
-		 [m isReporter not | (m isKindOf: CommandScriptBlockMorph)]]]]]) ifTrue: [
-			m blockAttachPoints: attachPoints]].
-
-	((self isKindOf: HatBlockMorph) or: [(self ownerOrYourselfThatIsA: HatBlockMorph) ~= nil]) ifTrue: [
-		"if I am a HatBlock or the bottom block of a HatBlock stack, I can only attach to the top block of a stack"
-		attachPoints := attachPoints select: [:assoc |
-			(assoc value owner = newOwner) and:
-			[assoc key y = assoc value top]]].
-
-	(self isStop or:[self bottomBlock isStop]) ifTrue: [
-		"I am a stop block; I can't attach to the top of a stack"
-		attachPoints := attachPoints select: [:assoc |
-			assoc key y ~= assoc value top]].
-
-	(self topBlock isForever not and: [self bottomBlock isForever]) ifTrue: [
-		"My bottom block is a forever; I can't attach to the top of a stack"
-		attachPoints := attachPoints select: [:assoc |
-			assoc key y ~= assoc value top]].
-
+	attachPoints := OrderedCollection new: 100.
+	(newOwner allMorphs reject: [ :m | m == newOwner ])
+		do: [ :m | 
+			(m ~~ self
+				and: [ 
+					m ~~ self bottomBlock
+						and: [ 
+							m ~~ self topBlock
+								and: [ m ~~ self owner and: [ (m isKindOf: BlockMorph) and: [ m isReporter not | (m isKindOf: CommandScriptBlockMorph) ] ] ] ] ])
+				ifTrue: [ m blockAttachPoints: attachPoints ] ].
+	((self isKindOf: HatBlockMorph) or: [ (self ownerOrYourselfThatIsA: HatBlockMorph) ~= nil ])
+		ifTrue: [ 
+			"if I am a HatBlock or the bottom block of a HatBlock stack, I can only attach to the top block of a stack"
+			attachPoints := attachPoints select: [ :assoc | assoc value owner = newOwner and: [ assoc key y = assoc value top ] ] ].
+	(self isStop or: [ self bottomBlock isStop ])
+		ifTrue: [ 
+			"I am a stop block; I can't attach to the top of a stack"
+			attachPoints := attachPoints select: [ :assoc | assoc key y ~= assoc value top ] ].
+	(self topBlock isForever not and: [ self bottomBlock isForever ])
+		ifTrue: [ 
+			"My bottom block is a forever; I can't attach to the top of a stack"
+			attachPoints := attachPoints select: [ :assoc | assoc key y ~= assoc value top ] ].
 	best := nil.
 	bestDist := 10000.
-	attachPoints do: [:assoc |
-		targetP := assoc key.
-		PhratchTranslator isRTL
-			ifTrue: [ref := self right]
-			ifFalse: [ref := self left].
-		((ref - targetP x) abs < xThresh)
-			ifTrue: [
-				(((self top - targetP y) abs < yThresh) or: [self nextBlock isNil and: [(self bottom - targetP y) abs < yThresh]])
-					ifTrue: [  "targetP is within sticking range"
-						PhratchTranslator isRTL
-							ifTrue: [dist := (self topRight - targetP) r]
-							ifFalse: [dist := (self position - targetP) r].
-						dist < bestDist ifTrue: [
-							((self top - targetP y) abs < yThresh) ifTrue: [topUsed := true. bottomUsed := false].
-							(self nextBlock isNil and: [(self bottom - targetP y) abs < yThresh]) ifTrue: [topUsed := false. bottomUsed := true].
-							best := assoc.
-							bestDist := dist]]]].
-
-	"special case for the auto-wrapping of c-shaped/if-else blocks"
-	(self isKindOf: CBlockMorph) ifTrue: [
-	best ifNotNil: [
-		bottomUsed ifTrue: [
-				(best value owner isKindOf: BlockMorph) ifTrue: [
-				self stretchHeight: 0. ^ best := nil]].
-		(self isStopOrForever or:[self bottomBlock isStopOrForever]) ifTrue: [
-			bottomUsed ifTrue: [
-					self stretchHeight: 0.
-					^ best := nil]].
-		((best key y = best value top) and: [((self isForever or:[self bottomBlock isForever])) and: [(self nestedBlockAt: (best key y)) isNil not]])
-					ifTrue: [self stretchHeight: 0. ^ best := nil].
-		(self nestedBlockAt: (best key y)) ifNil: [
-			bottomUsed ifTrue: [
-					self stretchHeight: 0.
-					(best key y = best value bottom) ifTrue: [^ best := nil].
-					((best key y = best value top) and: [(best value owner isKindOf: BlockMorph)]) ifTrue: [^ best := nil].
-					((best key y = best value bottom) and: [(best value owner isKindOf: BlockMorph) not]) ifTrue: [^ best := nil]].
-			topUsed ifTrue: [
-				((best key y = best value bottom) and: [best value nextBlock isNil not]) ifTrue: [self stretchHeight: 0. ^ best := nil].
-				"((best key y = best value top) and: [(best value owner isKindOf: BlockMorph)]) ifTrue: [self stretchHeight: 0. ^ best := nil]."
-				(best key y = best value top) ifTrue: [self stretchHeight: best value fullBounds height - 17. ^ best]].
-			self stretchHeight: 0]].
-	best ifNil: [
-		self stretchHeight: 0]].
-
-	 ^ best
-
+	attachPoints
+		do: [ :assoc | 
+			targetP := assoc key.
+			ref := PhratchTranslator isRTL
+				ifTrue: [ self right ]
+				ifFalse: [ self left ].
+			(ref - targetP x) abs < xThresh
+				ifTrue: [ 
+					((self top - targetP y) abs < yThresh or: [ self nextBlock isNil and: [ (self bottom - targetP y) abs < yThresh ] ])
+						ifTrue: [ 
+							"targetP is within sticking range"
+							dist := PhratchTranslator isRTL
+								ifTrue: [ (self topRight - targetP) r ]
+								ifFalse: [ (self position - targetP) r ].
+							dist < bestDist
+								ifTrue: [ 
+									(self top - targetP y) abs < yThresh
+										ifTrue: [ 
+											topUsed := true.
+											bottomUsed := false ].
+									(self nextBlock isNil and: [ (self bottom - targetP y) abs < yThresh ])
+										ifTrue: [ 
+											topUsed := false.
+											bottomUsed := true ].
+									best := assoc.
+									bestDist := dist ] ] ] ].	"special case for the auto-wrapping of c-shaped/if-else blocks"
+	(self isKindOf: CBlockMorph)
+		ifTrue: [ 
+			best
+				ifNotNil: [ 
+					bottomUsed
+						ifTrue: [ 
+							(best value owner isKindOf: BlockMorph)
+								ifTrue: [ 
+									self stretchHeight: 0.
+									^  nil ] ].
+					(self isStopOrForever or: [ self bottomBlock isStopOrForever ])
+						ifTrue: [ 
+							bottomUsed
+								ifTrue: [ 
+									self stretchHeight: 0.
+									^  nil ] ].
+					(best key y = best value top
+						and: [ (self isForever or: [ self bottomBlock isForever ]) and: [ (self nestedBlockAt: best key y) isNil not ] ])
+						ifTrue: [ 
+							self stretchHeight: 0.
+							^  nil ].
+					(self nestedBlockAt: best key y)
+						ifNil: [ 
+							bottomUsed
+								ifTrue: [ 
+									self stretchHeight: 0.
+									best key y = best value bottom
+										ifTrue: [ ^  nil ].
+									(best key y = best value top and: [ best value owner isKindOf: BlockMorph ])
+										ifTrue: [ ^ nil ].
+									(best key y = best value bottom and: [ (best value owner isKindOf: BlockMorph) not ])
+										ifTrue: [ ^ nil ] ].
+							topUsed
+								ifTrue: [ 
+									(best key y = best value bottom and: [ best value nextBlock isNil not ])
+										ifTrue: [ 
+											self stretchHeight: 0.
+											^  nil ].	"((best key y = best value top) and: [(best value owner isKindOf: BlockMorph)]) ifTrue: [self stretchHeight: 0. ^ best := nil]."
+									best key y = best value top
+										ifTrue: [ 
+											self stretchHeight: best value fullBounds height - 17.
+											^ best ] ].
+							self stretchHeight: 0 ] ].
+			best ifNil: [ self stretchHeight: 0 ] ].
+	^ best
 ]
 
 { #category : #accessing }
@@ -441,43 +460,46 @@ BlockMorph >> computeHighlightColors [
 
 { #category : #byob }
 BlockMorph >> contrastColor [
-
 	| ob |
-
 	isContrasted := false.
-	originalColor ifNotNil: [
-		color := originalColor ].
-	Contrast = #off ifTrue: [
-		self isDeletedAttribute ifFalse: [
-			^ self ]].
-	self isDeletedAttribute 
-		ifTrue: [^ color := color twiceLighter]
-		ifFalse: [
+	originalColor ifNotNil: [ color := originalColor ].
+	Contrast = #off
+		ifTrue: [ 
+			self isDeletedAttribute
+				ifFalse: [ ^ self ] ].
+	self isDeletedAttribute
+		ifTrue: [ ^ color := color twiceLighter ]
+		ifFalse: [ 
 			ob := self outerLoop.
-			ob ifNil: [ 
-				self isReporter
-					ifTrue: [
-						(owner isKindOf: MultiArgMorph)
-							ifTrue: [ob := owner owner]
-							ifFalse: [ob := owner]]
-					ifFalse: [
-						((owner isKindOf: ProcedureHatBlockMorph) and: [owner nextBlock ~= self])
-							ifTrue: [ob := owner]]]].
-	ob ifNil: [^ self ].
-	ob color = color ifTrue: [
-		originalColor := color.
-		#slight = Contrast ifTrue: [ ^ color := color slightlyLighter ].
-		#normal = Contrast ifTrue: [ ^ color := color lighter ].
-		#strong = Contrast ifTrue: [
-			isContrasted := true.
-			color := color twiceLighter " lighter slightlyLighter "]].
-
-	submorphs do: [:m | (m isKindOf: StringMorph)
-		ifTrue: [m color: self labelColor ]
-		ifFalse: [ (m isKindOf: MultiArgMorph)
-			ifTrue: [m contrastColor]]].	
-
-
+			ob
+				ifNil: [ 
+					self isReporter
+						ifTrue: [ 
+							ob := (owner isKindOf: MultiArgMorph)
+								ifTrue: [ owner owner ]
+								ifFalse: [ owner ] ]
+						ifFalse: [ 
+							((owner isKindOf: ProcedureHatBlockMorph) and: [ owner nextBlock ~= self ])
+								ifTrue: [ ob := owner ] ] ] ].
+	ob ifNil: [ ^ self ].
+	ob color = color
+		ifTrue: [ 
+			originalColor := color.
+			#slight = Contrast
+				ifTrue: [ ^ color := color slightlyLighter ].
+			#normal = Contrast
+				ifTrue: [ ^ color := color lighter ].
+			#strong = Contrast
+				ifTrue: [ 
+					isContrasted := true.
+					color := color twiceLighter	" lighter slightlyLighter " ] ].
+	submorphs
+		do: [ :m | 
+			(m isKindOf: StringMorph)
+				ifTrue: [ m color: self labelColor ]
+				ifFalse: [ 
+					(m isKindOf: MultiArgMorph)
+						ifTrue: [ m contrastColor ] ] ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -871,7 +893,7 @@ BlockMorph >> fullDrawOn: aCanvas [
 BlockMorph >> handleReporterDrop [
 	"This block, a reporter, has just been dropped. Try to embed it in a command block."
 
-	| scriptsMorph editorMorph argM argOwner trgt tp|
+	| scriptsMorph editorMorph argM argOwner trgt|
 	scriptsMorph := self ownerOrYourselfThatIsA: PhratchScriptsMorph.
 	editorMorph := self ownerOrYourselfThatIsA: BlockEditorFrameMorph.
 	trgt := scriptsMorph ifNil: [editorMorph].
@@ -1526,7 +1548,6 @@ BlockMorph >> phratchProc: aPhratchProcess [
 	hadError := false.
 	phratchProc := aPhratchProcess.
 	self changed.
-
 ]
 
 { #category : #accessing }

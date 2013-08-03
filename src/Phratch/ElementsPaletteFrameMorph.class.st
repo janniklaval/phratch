@@ -95,7 +95,7 @@ ElementsPaletteFrameMorph >> createClassVar [
 		ifTrue: [current := currentClass theNonMetaClass ]
 		ifFalse: [current := currentClass ].
 
-	varName := UIManager request: 'variable name:' initialAnswer: ''.
+	varName := UIManager default request: 'variable name:' initialAnswer: ''.
 	varName isEmpty ifTrue: [^self].
 	current addClassVarName: varName.
 	self refresh		
@@ -105,7 +105,7 @@ ElementsPaletteFrameMorph >> createClassVar [
 ElementsPaletteFrameMorph >> createGlobalVar [
 	|varName |
 
-	varName := UIManager request: 'variable name:' initialAnswer: ''.
+	varName := UIManager default request: 'variable name:' initialAnswer: ''.
 	varName isEmpty ifTrue: [^self].
 	varName := SyntaxElementMorph classNameFrom: varName.
 	(Smalltalk includesKey: varName asSymbol)
@@ -121,7 +121,7 @@ ElementsPaletteFrameMorph >> createInstVar [
 		ifTrue: [current := currentClass theNonMetaClass ]
 		ifFalse: [current := currentClass ].
 
-	varName := UIManager request: 'variable name:' initialAnswer: ''.
+	varName := UIManager default request: 'variable name:' initialAnswer: ''.
 	varName isEmpty ifTrue: [^self].
 	varName := SyntaxElementMorph objectNameFrom: varName.
 	current addInstVarName: varName.
@@ -135,9 +135,9 @@ ElementsPaletteFrameMorph >> createSubclass [
 		ifTrue: [current := currentClass theNonMetaClass ]
 		ifFalse: [current := currentClass ].
 
-	className := UIManager request: 'class name:' initialAnswer: ''.
+	className := UIManager default request: 'class name:' initialAnswer: ''.
 	className isEmpty ifTrue: [^self].
-	categoryName := UIManager request: 'category:' initialAnswer: 'UserObjects'.
+	categoryName := UIManager default request: 'category:' initialAnswer: 'UserObjects'.
 	categoryName isEmpty ifTrue: [^self].
 
 	className := SyntaxElementMorph classNameFrom: className.

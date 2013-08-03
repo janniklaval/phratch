@@ -210,11 +210,6 @@ SyntaxElementMorph >> borderWidth [
 ]
 
 { #category : #'as yet unclassified' }
-SyntaxElementMorph >> changed [
-	super changed
-]
-
-{ #category : #'as yet unclassified' }
 SyntaxElementMorph >> contextMenu [
 
 	^nil

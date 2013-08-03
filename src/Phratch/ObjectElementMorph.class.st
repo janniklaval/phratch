@@ -31,7 +31,7 @@ ObjectElementMorph >> contextMenu [
 ObjectElementMorph >> editLabel [
 	|ans|
 
-	ans := UIManager request: 'rename:' initialAnswer: label contents.
+	ans := UIManager  default request: 'rename:' initialAnswer: label contents.
 	(ans size > 0) ifTrue: [self label: ans]
 ]
 

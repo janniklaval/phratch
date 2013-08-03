@@ -16,7 +16,6 @@ Class {
 		'lastPosition',
 		'sliderMin',
 		'sliderMax',
-		'unused',
 		'phratchSlider',
 		'isColor'
 	],

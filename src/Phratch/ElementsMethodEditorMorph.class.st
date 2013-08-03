@@ -8,7 +8,6 @@ Class {
 		'palette',
 		'editor',
 		'saver',
-		'methodModified',
 		'fillScreenOn',
 		'currentMethod',
 		'currentClass'

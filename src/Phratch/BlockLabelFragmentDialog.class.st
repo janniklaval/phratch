@@ -10,7 +10,6 @@ Class {
 		'category',
 		'isCollapsed',
 		'slotShapesGroup',
-		'groupExtent',
 		'radioObject',
 		'radioAny',
 		'radioNumber',
@@ -518,14 +517,11 @@ BlockLabelFragmentDialog >> buildSlotTypeChoices [
 
 { #category : #initialization }
 BlockLabelFragmentDialog >> buildWidgets [
-
-
 	| titleLabel inputLabel |
 	fragmentRadioButtons := AlignmentMorph newRow
 		color: Color transparent;
 		hResizing: #shrinkWrap;
 		vResizing: #shrinkWrap.
-
 	textRadioButton := ToggleButton
 		onForm: (PhratchFrameMorph skinAt: #radioButtonOn)
 		offForm: (PhratchFrameMorph skinAt: #radioButton).
@@ -533,45 +529,66 @@ BlockLabelFragmentDialog >> buildWidgets [
 		on;
 		target: self;
 		actionSelector: #toggleIsInput.
-
 	titleLabel := ImageMorph new form: self labelButtonForm.
 	fragmentRadioButtons addMorphBack: textRadioButton.
-	fragmentRadioButtons addMorphBack: (Morph new extent: (5@5); color: Color transparent).
+	fragmentRadioButtons
+		addMorphBack:
+			(Morph new
+				extent: 5 @ 5;
+				color: Color transparent).
 	fragmentRadioButtons addMorphBack: titleLabel.
-	fragmentRadioButtons addMorphBack: (Morph new extent: (15@5); color: Color transparent).
-
+	fragmentRadioButtons
+		addMorphBack:
+			(Morph new
+				extent: 15 @ 5;
+				color: Color transparent).
 	inputRadioButton := textRadioButton fullCopy off.
 	inputLabel := ImageMorph new form: self inputButtonForm.
 	fragmentRadioButtons addMorphBack: inputRadioButton.
-	fragmentRadioButtons addMorphBack: (Morph new extent: (5@5); color: Color transparent).
-	fragmentRadioButtons addMorphBack: inputLabel "label2".
-
-
-	fragmentRadioButtons addMorphBack: (Morph new extent: (5@5); color: Color transparent).
-
+	fragmentRadioButtons
+		addMorphBack:
+			(Morph new
+				extent: 5 @ 5;
+				color: Color transparent).
+	fragmentRadioButtons addMorphBack: inputLabel.	"label2"
+	fragmentRadioButtons
+		addMorphBack:
+			(Morph new
+				extent: 5 @ 5;
+				color: Color transparent).
 	slotShapeButton := IconicButton new
 		labelGraphic: (PhratchFrameMorph skinAt: #arrowOpenComment) borderWidth: 1;
 		actionSelector: #toggleExpand;
 		target: self;
 		actWhen: #buttonDown.
 	fragmentRadioButtons addMorphBack: slotShapeButton.
-
 	self buildSlotTypeChoices.
-
-	mainColumn submorphsDo: [: m |
-		((m = messageLineMorphs) not) ifTrue: [m delete]].
 	mainColumn
-		addMorphBack: (Morph new extent: (5@6); color: Color transparent);
+		submorphsDo: [ :m | 
+			m = messageLineMorphs
+				ifFalse: [ m delete ] ].
+	mainColumn
+		addMorphBack:
+				(Morph new
+						extent: 5 @ 6;
+						color: Color transparent);
 		addMorphBack: typeinMorph;
-		addMorphBack: (Morph new extent: (5@7); color: Color transparent);
+		addMorphBack:
+				(Morph new
+						extent: 5 @ 7;
+						color: Color transparent);
 		addMorphBack: fragmentRadioButtons;
-		addMorphBack: (Morph new extent: (5@7); color: Color transparent);
+		addMorphBack:
+				(Morph new
+						extent: 5 @ 7;
+						color: Color transparent);
 		addMorphBack: slotShapesGroup;
-		addMorphBack: (Morph new extent: (5@7); color: Color transparent);
+		addMorphBack:
+				(Morph new
+						extent: 5 @ 7;
+						color: Color transparent);
 		addMorphBack: buttonRow;
-		addMorphBack: bottomSpacer.
-
-
+		addMorphBack: bottomSpacer
 ]
 
 { #category : #accessing }
@@ -745,45 +762,61 @@ BlockLabelFragmentDialog >> slotShapeFormFor: type size: aPoint [
 
 { #category : #interaction }
 BlockLabelFragmentDialog >> toggleExpand [
-
 	isCollapsed := isCollapsed not.
-
 	isCollapsed
-		ifTrue: [slotShapeButton labelGraphic: (PhratchFrameMorph skinAt: #arrowClosedComment) ]
-		ifFalse: [slotShapeButton labelGraphic: (PhratchFrameMorph skinAt: #arrowOpenComment)].
-
-	mainColumn submorphsDo: [: m |
-		((m = messageLineMorphs) not) ifTrue: [m delete]].
-
+		ifTrue: [ slotShapeButton labelGraphic: (PhratchFrameMorph skinAt: #arrowClosedComment) ]
+		ifFalse: [ slotShapeButton labelGraphic: (PhratchFrameMorph skinAt: #arrowOpenComment) ].
+	mainColumn
+		submorphsDo: [ :m | 
+			m = messageLineMorphs
+				ifFalse: [ m delete ] ].
 	isCollapsed
 		ifTrue: [ 
-			typeinMorph width: 250. 
+			typeinMorph width: 250.
 			mainColumn
-			addMorphBack: (Morph new extent: (5@6); color: Color transparent);
-			addMorphBack: typeinMorph;
-			addMorphBack: (Morph new extent: (5@7); color: Color transparent);
-			addMorphBack: fragmentRadioButtons;
-			addMorphBack: (Morph new extent: (5@7); color: Color transparent);
-			addMorphBack: buttonRow;
-			addMorphBack: bottomSpacer]
-		ifFalse: [
-			typeinMorph width: 550. 
+				addMorphBack:
+						(Morph new
+								extent: 5 @ 6;
+								color: Color transparent);
+				addMorphBack: typeinMorph;
+				addMorphBack:
+						(Morph new
+								extent: 5 @ 7;
+								color: Color transparent);
+				addMorphBack: fragmentRadioButtons;
+				addMorphBack:
+						(Morph new
+								extent: 5 @ 7;
+								color: Color transparent);
+				addMorphBack: buttonRow;
+				addMorphBack: bottomSpacer ]
+		ifFalse: [ 
+			typeinMorph width: 550.
 			mainColumn
-			addMorphBack: (Morph new extent: (5@6); color: Color transparent);
-			addMorphBack: typeinMorph;
-			addMorphBack: (Morph new extent: (5@7); color: Color transparent);
-			addMorphBack: fragmentRadioButtons;
-			addMorphBack: (Morph new extent: (5@7); color: Color transparent);
-			addMorphBack: slotShapesGroup;
-			addMorphBack: (Morph new extent: (5@200); color: Color transparent);
-			addMorphBack: buttonRow;
-			addMorphBack: bottomSpacer.
-			].
-
-	self extent: mainColumn fullBounds extent + (60@50).
-
-	fragment isInput ifTrue: [self class isExpanded: isCollapsed not].
-
+				addMorphBack:
+						(Morph new
+								extent: 5 @ 6;
+								color: Color transparent);
+				addMorphBack: typeinMorph;
+				addMorphBack:
+						(Morph new
+								extent: 5 @ 7;
+								color: Color transparent);
+				addMorphBack: fragmentRadioButtons;
+				addMorphBack:
+						(Morph new
+								extent: 5 @ 7;
+								color: Color transparent);
+				addMorphBack: slotShapesGroup;
+				addMorphBack:
+						(Morph new
+								extent: 5 @ 200;
+								color: Color transparent);
+				addMorphBack: buttonRow;
+				addMorphBack: bottomSpacer ].
+	self extent: mainColumn fullBounds extent + (60 @ 50).
+	fragment isInput
+		ifTrue: [ self class isExpanded: isCollapsed not ]
 ]
 
 { #category : #interaction }

@@ -12,14 +12,10 @@ Class {
 	#name : #PhratchGraphMorph,
 	#superclass : #GraphMorph,
 	#instVars : [
-		'playCursorColor',
-		'playing',
 		'selection',
 		'scale',
 		'ruler',
 		'viewer',
-		'trueCalls',
-		'falseCalls',
 		'negVals',
 		'posVals',
 		'editor'
@@ -65,7 +61,7 @@ PhratchGraphMorph >> addRuler [
 PhratchGraphMorph >> adjustSelection [
 	"Adjust the selection, if any, to the current cursor position. Do nothing if there is no selection."
 
-	editor selectionNil ifTrue: [^ self].
+	editor selectionNil ifTrue: [^ self]. 
 	editor selection: editor cursor scd: editor startSelection.
 
 
@@ -79,10 +75,10 @@ PhratchGraphMorph >> calculateDataArray [
 	negVals := OrderedCollection new.
 	posVals := OrderedCollection new.
 
-	data isEmpty ifTrue: [^ self].
+	data isEmpty ifTrue: [^ self]. 
 	currIndex:= neg:=pos := 0.
 
-	(1 to: data size) do: [ :i |
+	1 to: data size do: [ :i |
 		((i * scale) truncated > currIndex)
 			ifTrue: [
 			
@@ -111,7 +107,7 @@ PhratchGraphMorph >> customScale [
 	"Called when the user wants to input a scale value."
 
 	| answer |
-	answer := UIManager request: 'Please type desired scale:' initialAnswer: '2x'.
+	answer := UIManager default request: 'Please type desired scale:' initialAnswer: '2x'.
 	answer size = 0 ifTrue: [^ self].
 	answer := answer copyWithout: $x.
 	self zoom: answer asNumber.
@@ -123,7 +119,7 @@ PhratchGraphMorph >> drawCursorOn: aCanvas [
 
 	| ptr x r c |
 	ptr := (editor cursor asInteger max: 1) min: data size.
-	c := cursorColor.
+	c := cursorColor. 
 	((ptr > 1) and: [ptr < data size]) ifTrue: [
 		(data at: ptr) sign ~= (data at: ptr + 1) sign
 			ifTrue: [c := cursorColorAtZeroCrossings]].
@@ -148,7 +144,7 @@ PhratchGraphMorph >> drawDataOn: aCanvas [
 	maxVal = minVal ifTrue: [yScale := 1.] 
 					ifFalse: [yScale := (bounds height - (2 * borderWidth)) asFloat / (maxVal - minVal)].
 	baseLine := bounds bottom - borderWidth + (minVal * yScale) truncated.
-
+ 
 	left := 0. right := 10.
 	x := bounds left + borderWidth.
 
@@ -181,7 +177,7 @@ PhratchGraphMorph >> drawOn: aCanvas [
 { #category : #private }
 PhratchGraphMorph >> drawPlayCursorOn: aCanvas [
 
-	| ptr x r c |
+	| ptr x r c | 
 
 	editor playCursor ifNil: [^self].
 	(editor endPlaying ~= data size) & (editor playCursor >= (editor endPlaying)) ifTrue: [^self].
@@ -208,7 +204,7 @@ PhratchGraphMorph >> drawSelectionOn: aCanvas [
 	v1 := (editor graph startIndex asInteger max: 1) min: data size.
 	v2 := v1 + (bounds width/(editor graph scale)) min: data size.
 	
-
+ 
 	offsetX := bounds left + borderWidth.
 	x := (offsetX + ((selection first - startIndex)*scale)).
 	y := bounds top + borderWidth.
@@ -275,7 +271,7 @@ PhratchGraphMorph >> drawViewOn: aCanvas [
 	"highlights the part of the graph morph we're viewing."
 	| y ex start x |
 
-	viewer ifFalse: [^self].
+	viewer ifFalse: [^self]. 
 	
 	
 	start := ((editor graph startIndex*bounds width)/data size) truncated min: data size.
@@ -293,13 +289,13 @@ PhratchGraphMorph >> drawViewOn: aCanvas [
 { #category : #accessing }
 PhratchGraphMorph >> editor [
 
-	^editor
+	^editor 
 ]
 
 { #category : #accessing }
 PhratchGraphMorph >> editor: aSoundEditor [
 
-	editor := aSoundEditor.
+	editor := aSoundEditor. 
 ]
 
 { #category : #events }
@@ -334,7 +330,7 @@ PhratchGraphMorph >> mouseDown: evt [
 	 x := evt cursorPoint x - (bounds left + borderWidth).
 
 	s := editor startSelection.
-	editor startSelection: editor cursor.  
+	editor startSelection: editor cursor.   
 	editor cursor: startIndex + (x/scale).
 		
 	evt shiftPressed
@@ -362,7 +358,7 @@ PhratchGraphMorph >> mouseMove: evt [
 	"Updates the cursor position as the mouse moves.  Adjusts the selection only if the mouse is currently being pressed"
 	| x w |
 
-	x := evt cursorPoint x - (bounds left + borderWidth).
+	x := evt cursorPoint x - (bounds left + borderWidth). 
 	w := self width - (2 * borderWidth).
 
 	(viewer not and: [x < 0]) ifTrue: [
@@ -391,7 +387,7 @@ PhratchGraphMorph >> mouseUp: evt [
 
 	((editor selectionNil not) and: [(selection at: 2) - (selection at: 1) <=3])
 		ifTrue: [editor selection: nil.
-				editor startSelection: nil.].
+				editor startSelection: nil.]. 
 
 ]
 
@@ -431,7 +427,7 @@ PhratchGraphMorph >> scale: aNumber [
 
 	"setting the absolute scale of how the graph is display.  It is relative to MinScale, the minimum scale possible, which is the scale value of the viewer."
 
-	aNumber < 1 ifTrue: [^self].
+	aNumber < 1 ifTrue: [^self]. 
 	scale := (aNumber*MinScale) asFloat min: 1.
 	
 	self calculateDataArray.
@@ -492,7 +488,7 @@ PhratchGraphMorph >> stepTime [
 ]
 
 { #category : #viewing }
-PhratchGraphMorph >> viewSelection [
+PhratchGraphMorph >> viewSelection [ 
 
 	| diff |
 	selection ifNil: [^self].
@@ -516,11 +512,11 @@ PhratchGraphMorph >> viewer: aBoolean [
 
 	viewer := aBoolean. "whether or not this graphMorph is the viewer graph Morph"
 	
-	viewer ifFalse: [self color: Color white.].
+	viewer ifFalse: [self color: Color white.]. 
 ]
 
 { #category : #viewing }
-PhratchGraphMorph >> zoom: aNumber [
+PhratchGraphMorph >> zoom: aNumber [ 
 
 	scale := ((scale*aNumber asFloat) max: MinScale asFloat) min: 1.
 	

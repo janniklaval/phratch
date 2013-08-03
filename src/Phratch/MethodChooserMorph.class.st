@@ -10,7 +10,7 @@ Class {
 { #category : #'as yet unclassified' }
 MethodChooserMorph >> addCategory [
 	| ans |
-	ans := UIManager request: 'new category:' initialAnswer: ''.
+	ans := UIManager default request: 'new category:' initialAnswer: ''.
 	(ans size > 0) ifFalse: [^self].
 	class organization addCategory: ans
 ]

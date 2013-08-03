@@ -113,22 +113,20 @@ StringFieldMorph >> characterOffsetForXOffset: screenX [
 				ifFalse: [^ isLTR ifTrue: [i] ifFalse: [i - 1]]]].
 
 	"x is not within any x-range"
+	best := 1.
 	x < 0
 		ifTrue: [  "x is left of the entire string; find left-most char index"
-			best := 1.
 			1 to: xRanges size do: [:i |
 				p := xRanges at: i.
 				p first < (xRanges at: best) first ifTrue: [best := i]].
-			best = 1 ifTrue: [best := 0].
-			^ best]
+			]
 		ifFalse: [  "x is right of entire string; find right-most char index"
-			best := 1.
 			1 to: xRanges size do: [:i |
 				p := xRanges at: i.
 				p last > (xRanges at: best) last ifTrue: [best := i]].
-			best = 1 ifTrue: [best := 0].
-			^ best].
-
+			].
+	best = 1 ifTrue: [best := 0].
+	^ best
 
 ]
 

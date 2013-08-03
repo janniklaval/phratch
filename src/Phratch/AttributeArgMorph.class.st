@@ -87,22 +87,20 @@ AttributeArgMorph >> options [
 	"Answer my set of attributes."
 
 	| target list blockIds |
-	((owner isKindOf: CommandBlockMorph) and:
-	 [owner selector = #getAttribute:of:]) ifFalse: [^ #()].
-
+	((owner isKindOf: CommandBlockMorph) and: [ owner selector = #getAttribute:of: ])
+		ifFalse: [ ^ #() ].
 	((owner argumentAt: 2) isKindOf: SpriteArgMorph)
-		ifFalse: [^ #()].
-
-	(target := (owner argumentAt: 2) evaluate) ifNil: [^ #()].
-	(target isKindOf: ScriptablePhratchMorph) ifFalse: [^ #()].
-	target varNames size > 0
-		ifTrue: [list := target attributeNames, #(-), target varNames]
-		ifFalse: [list := target attributeNames].
+		ifFalse: [ ^ #() ].
+	(target := (owner argumentAt: 2) evaluate) ifNil: [ ^ #() ].
+	(target isKindOf: ScriptablePhratchMorph)
+		ifFalse: [ ^ #() ].
+	list := target varNames size > 0
+		ifTrue: [ target attributeNames , #(#-) , target varNames ]
+		ifFalse: [ target attributeNames ].
 	blockIds := target allLocalBlockIds.
-	blockIds isEmpty ifFalse: [
-		list := list,  #(-), blockIds ].
+	blockIds isEmpty
+		ifFalse: [ list := list , #(#-) , blockIds ].
 	^ list
-
 ]
 
 { #category : #byob }
@@ -141,49 +139,50 @@ AttributeArgMorph >> presentMenu [
 
 	| optionList doLocalization menu option target blockIds |
 	self isBYOBattributeArg
-		ifTrue: [^ self presentAttributesMenu].
-	optionList := #(''), self options.
-	optionList size = 0 ifTrue: [^ self].
-	doLocalization := (#(costumeNames soundNames varNamesMenu listVarMenu) includes: getOptionsSelector) not.
+		ifTrue: [ ^ self presentAttributesMenu ].
+	optionList := #('') , self options.
+	optionList size = 0
+		ifTrue: [ ^ self ].
+	doLocalization := (#(#costumeNames #soundNames #varNamesMenu #listVarMenu) includes: getOptionsSelector) not.
 	menu := MenuMorph new defaultTarget: self.
 	target := self target.
-	target ifNil: [^ self].
+	target ifNil: [ ^ self ].
 	blockIds := target allLocalBlockIds.
-	optionList do: [:sym |
-		'-' = sym
-			ifTrue: [menu addLine]
-			ifFalse: [
-				doLocalization
-					ifTrue: [option := sym localized]
-					ifFalse: [option := sym].
-				((#(hookupSensorNames hookupBooleanSensorNames) includes: getOptionsSelector) and:
-				 [(#(connected resistance) includes: sym)])
-					ifTrue: [#(A B C D) do: [:c |
-						self owner isBooleanReporter
-							ifFalse: [
-								menu
-								 	add: (option, '-', c)
-									target: self 
-									selector: #choice:
-									argument: (option, '-', c)]
-							ifTrue: [
-								menu
-								 	add: (c, ' ', option)
-									target: self 
-									selector: #choice:
-									argument: (c, ' ' ,sym)]
-								]]
-					ifFalse: [ 
-						(blockIds includes: sym)
-							ifTrue: [ menu addIcon: (target lambda: sym) imageForm
-										toolTip: nil
-										action: sym ]
-							ifFalse: [
-								menu
-								 	add: (String withAll: option)
-									target: self 
-									selector: #choice:
-									argument: (sym)]]]].
+	optionList
+		do: [ :sym | 
+			'-' = sym
+				ifTrue: [ menu addLine ]
+				ifFalse: [ 
+					option := doLocalization
+						ifTrue: [ sym localized ]
+						ifFalse: [ sym ].
+					((#(#hookupSensorNames #hookupBooleanSensorNames) includes: getOptionsSelector)
+						and: [ #(#connected #resistance) includes: sym ])
+						ifTrue: [ 
+							#(#A #B #C #D)
+								do: [ :c | 
+									self owner isBooleanReporter
+										ifFalse: [ 
+											menu
+												add: option , '-' , c
+												target: self
+												selector: #choice:
+												argument: option , '-' , c ]
+										ifTrue: [ 
+											menu
+												add: c , ' ' , option
+												target: self
+												selector: #choice:
+												argument: c , ' ' , sym ] ] ]
+						ifFalse: [ 
+							(blockIds includes: sym)
+								ifTrue: [ menu addIcon: (target lambda: sym) imageForm toolTip: nil action: sym ]
+								ifFalse: [ 
+									menu
+										add: (String withAll: option)
+										target: self
+										selector: #choice:
+										argument: sym ] ] ] ].
 	menu popUpInWorld
 ]
 
@@ -254,28 +253,23 @@ AttributeArgMorph >> universalAttributeChoice: aSymbol [
 	| oi frame palette block label |
 	frame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
 	oi := owner receiver objectInterface.
-
 	choice := aSymbol.
-	choice = #null
-		ifTrue: [label := '']
-		ifFalse: [label := (oi at: aSymbol) value fourth].
-
+	label := choice = #null
+		ifTrue: [ '' ]
+		ifFalse: [ (oi at: aSymbol) value fourth ].
 	labelMorph isHidden: false.
 	label := label asString.
 	labelMorph contents: label localized.
 	labelMorph position: self position + borderWidth + (3 @ -1).
-	self extent: (labelMorph extent + (16@2) + borderWidth).
-
-	menuIconMorph position: (self right - borderWidth - 10)@(self top + borderWidth + 4).
-
-	(owner isKindOf: BlockMorph) ifTrue: [
-		(owner respondsTo: #addLabel)
-			ifTrue: [owner addLabel]
-			ifFalse: [owner fixBlockLayout]].
-
-	(palette := self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph) ifNil: [^ self].
-	(block := self ownerOrYourselfThatIsA: BlockMorph) ifNil: [^ self].
-
-	block isReporter ifTrue: [palette updateWatcherButtonsForFrame: frame].
-
+	self extent: labelMorph extent + (16 @ 2) + borderWidth.
+	menuIconMorph position: (self right - borderWidth - 10) @ (self top + borderWidth + 4).
+	(owner isKindOf: BlockMorph)
+		ifTrue: [ 
+			(owner respondsTo: #addLabel)
+				ifTrue: [ owner addLabel ]
+				ifFalse: [ owner fixBlockLayout ] ].
+	(palette := self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph) ifNil: [ ^ self ].
+	(block := self ownerOrYourselfThatIsA: BlockMorph) ifNil: [ ^ self ].
+	block isReporter
+		ifTrue: [ palette updateWatcherButtonsForFrame: frame ]
 ]

@@ -35,7 +35,7 @@ PhratchFilePickerImageEntry >> computeThumbnail [
 	| fName fContents f scale |
 	entryIsDirectory ifTrue: [^ self].
 	thumbnailForm ifNotNil: [^ self].
-self haltOnce.
+
 	[	fName := (directory / entryName) fullName.
 		fContents := (FileStream readOnlyFileNamed: fName) binary contentsOfEntireFile.
 		f := ColorForm fromBinaryStream: (ReadStream on: fContents)

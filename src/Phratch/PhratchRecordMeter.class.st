@@ -3,8 +3,7 @@ Class {
 	#superclass : #Morph,
 	#instVars : [
 		'lineForm',
-		'level',
-		'meter'
+		'level'
 	],
 	#category : #'Phratch-Sound'
 }

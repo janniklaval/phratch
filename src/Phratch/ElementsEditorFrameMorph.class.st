@@ -8,9 +8,7 @@ Class {
 		'resizeMorph',
 		'resizeOffset',
 		'definition',
-		'template',
-		'receiver',
-		'bin'
+		'template'
 	],
 	#classVars : [
 		'UserPos',

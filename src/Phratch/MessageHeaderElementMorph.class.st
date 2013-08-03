@@ -41,7 +41,7 @@ MessageHeaderElementMorph >> editSelector [
 	|ans parms tokens|
 
 	parms := OrderedCollection new.
-	ans := UIManager request: 'selector:' initialAnswer: selector.
+	ans := UIManager default request: 'selector:' initialAnswer: selector.
 	ans isEmpty ifTrue: [^self].
 	ans := (SyntaxElementMorph selectorFrom: ans) asString.
 	(ans includes: ($:)) ifFalse: [

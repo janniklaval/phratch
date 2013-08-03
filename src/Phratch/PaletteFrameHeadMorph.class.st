@@ -2,7 +2,6 @@ Class {
 	#name : #PaletteFrameHeadMorph,
 	#superclass : #Morph,
 	#instVars : [
-		'classChooser',
 		'basics',
 		'variables',
 		'classes',

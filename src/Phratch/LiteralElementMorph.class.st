@@ -2,8 +2,7 @@ Class {
 	#name : #LiteralElementMorph,
 	#superclass : #SyntaxElementMorph,
 	#instVars : [
-		'textBox',
-		'contents'
+		'textBox'
 	],
 	#category : #'Phratch-UI-Elements'
 }

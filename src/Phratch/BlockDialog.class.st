@@ -56,78 +56,60 @@ BlockDialog class >> isOpen [
 
 { #category : #initialization }
 BlockDialog >> buildCategoryChooser [
-
 	| catList maxExtent buttons label offForm onForm overForm b pad leftColumnX rightColumnX x y catButtonsExtent |
-	catList := #(
-		motion		control
-		looks		sensing
-		sound		operators
-		pen			variables
-		other		list).
-
+	catList := #(#motion #control #looks #sensing #sound #operators #pen #variables #other #list).
 	categoryChooser := ImageFrameMorph new.
-	categoryChooser initFromForm: (PhratchFrameMorph skinAt: #paintOptionsBackground).
-
-	"Create new buttons, keeping track of the maximum extent."
-	maxExtent := 75@0.
-	buttons := catList collect: [:cat |
-		label := (PhratchTranslator translationFor: cat asString) capitalized.
-
-		(#(other list) includes: cat)
-			ifTrue:[
-				offForm := (PhratchFrameMorph skinAt: #variables).
-				onForm := (PhratchFrameMorph skinAt: #variablesPressed).
-				overForm := (PhratchFrameMorph skinAt: #variablesOver)]
-			ifFalse: [
-				offForm := (PhratchFrameMorph skinAt: cat).
-				onForm := (PhratchFrameMorph skinAt: (cat, 'Pressed')).
-				overForm := (PhratchFrameMorph skinAt: (cat, 'Over'))].
-
-		PhratchTranslator isRTL
-			ifTrue:[
-				b := ResizableToggleButton new
-					offForm:	(offForm flipBy: #horizontal centerAt: offForm center)
-					onForm:		(onForm flipBy: #horizontal centerAt: onForm center)
-					overForm:	(overForm flipBy: #horizontal centerAt: overForm center)]
-			ifFalse:[
-				b := ResizableToggleButton new
-					offForm:	offForm
-					onForm:		onForm
-					overForm:	overForm].
-		b
-			label: label font: (PhratchFrameMorph getFont: #Category);
-			setLabelColor: Color white;
-			target: self;
-			actionSelector: #category:;
-			arguments: (Array with: cat);
-			toggleButtonMode: true;
-			toggleMode: false.
-		PhratchTranslator isRTL
-			ifTrue:[b rightJustifyInset: 10]
-			ifFalse:[b leftJustifyInset: 10].
-		maxExtent := maxExtent max: (b extent + (3 @ (-6))).
-		b].
-
-	"calculate catButtonsExtent"
-	pad := 15. "padding on left, right, and betwen the button columns"
-	catButtonsExtent := ((2 * maxExtent x) + (3 * pad)) @ (((catList size // 2) * (maxExtent y + 6)) + 25).
-
-	"place the buttons"
+	categoryChooser initFromForm: (PhratchFrameMorph skinAt: #paintOptionsBackground).	"Create new buttons, keeping track of the maximum extent."
+	maxExtent := 75 @ 0.
+	buttons := catList
+		collect: [ :cat | 
+			label := (PhratchTranslator translationFor: cat asString) capitalized.
+			(#(#other #list) includes: cat)
+				ifTrue: [ 
+					offForm := PhratchFrameMorph skinAt: #variables.
+					onForm := PhratchFrameMorph skinAt: #variablesPressed.
+					overForm := PhratchFrameMorph skinAt: #variablesOver ]
+				ifFalse: [ 
+					offForm := PhratchFrameMorph skinAt: cat.
+					onForm := PhratchFrameMorph skinAt: cat , 'Pressed'.
+					overForm := PhratchFrameMorph skinAt: cat , 'Over' ].
+			b := PhratchTranslator isRTL
+				ifTrue: [ 
+					ResizableToggleButton new
+						offForm: (offForm flipBy: #horizontal centerAt: offForm center)
+						onForm: (onForm flipBy: #horizontal centerAt: onForm center)
+						overForm: (overForm flipBy: #horizontal centerAt: overForm center) ]
+				ifFalse: [ ResizableToggleButton new offForm: offForm onForm: onForm overForm: overForm ].
+			b
+				label: label font: (PhratchFrameMorph getFont: #Category);
+				setLabelColor: Color white;
+				target: self;
+				actionSelector: #category:;
+				arguments: (Array with: cat);
+				toggleButtonMode: true;
+				toggleMode: false.
+			PhratchTranslator isRTL
+				ifTrue: [ b rightJustifyInset: 10 ]
+				ifFalse: [ b leftJustifyInset: 10 ].
+			maxExtent := maxExtent max: b extent + (3 @ -6).
+			b ].	"calculate catButtonsExtent"
+	pad := 15.	"padding on left, right, and betwen the button columns"
+	catButtonsExtent := (2 * maxExtent x + (3 * pad)) @ (catList size // 2 * (maxExtent y + 6) + 25).	"place the buttons"
 	leftColumnX := self left + 12 + pad.
 	rightColumnX := leftColumnX + maxExtent x + pad.
 	x := leftColumnX.
 	y := categoryChooser top + 17.
-	1 to: buttons size do: [:i |
+	1 to: buttons size do: [ :i | 
 		b := buttons at: i.
 		b extent: maxExtent.
-		categoryChooser addMorph: (b position: x@y).
+		categoryChooser addMorph: (b position: x @ y).
 		i even
-			ifTrue: [x := leftColumnX. y := y + b height + 6]
-			ifFalse: [x := rightColumnX]].
-
+			ifTrue: [ 
+				x := leftColumnX.
+				y := y + b height + 6 ]
+			ifFalse: [ x := rightColumnX ] ].
 	categoryChooser width: catButtonsExtent x + 25.
-	categoryChooser height: catButtonsExtent y.
-
+	categoryChooser height: catButtonsExtent y
 ]
 
 { #category : #initialization }
@@ -236,16 +218,22 @@ BlockDialog >> category: aString [
 
 { #category : #initialization }
 BlockDialog >> disableAllButCategory [
-
-	mainColumn submorphsDo: [: m |
-		((m = messageLineMorphs) not) ifTrue: [m delete]].
 	mainColumn
-		addMorphBack: (Morph new extent: (5@7); color: Color transparent);
+		submorphsDo: [ :m | 
+			m = messageLineMorphs
+				ifFalse: [ m delete ] ].
+	mainColumn
+		addMorphBack:
+				(Morph new
+						extent: 5 @ 7;
+						color: Color transparent);
 		addMorphBack: categoryChooser;
-		addMorphBack: (Morph new extent: (5@75); color: Color transparent);
+		addMorphBack:
+				(Morph new
+						extent: 5 @ 75;
+						color: Color transparent);
 		addMorphBack: buttonRow;
-		addMorphBack: bottomSpacer.
-
+		addMorphBack: bottomSpacer
 ]
 
 { #category : #initialization }
@@ -383,36 +371,47 @@ BlockDialog >> getUserResponse [
 
 { #category : #initialization }
 BlockDialog >> initialize [
-
 	super initialize.
 	reporterBlockFlag := false.
 	booleanBlockFlag := false.
 	type := #none.
 	category := #other.
 	spriteSpecificFlag := false.
-
 	self buildTypeChooser.
 	self buildCategoryChooser.
 	self buildScopeRadioButtons.
-
-	mainColumn submorphsDo: [: m |
-		((m = messageLineMorphs) not) ifTrue: [m delete]].
 	mainColumn
-		addMorphBack: (Morph new extent: (5@6); color: Color transparent);
+		submorphsDo: [ :m | 
+			m = messageLineMorphs
+				ifFalse: [ m delete ] ].
+	mainColumn
+		addMorphBack:
+				(Morph new
+						extent: 5 @ 6;
+						color: Color transparent);
 		addMorphBack: categoryChooser;
-		addMorphBack: (Morph new extent: (5@115); color: Color transparent);
+		addMorphBack:
+				(Morph new
+						extent: 5 @ 115;
+						color: Color transparent);
 		addMorphBack: radioButtons;
-		addMorphBack: (Morph new extent: (5@7); color: Color transparent);
+		addMorphBack:
+				(Morph new
+						extent: 5 @ 7;
+						color: Color transparent);
 		addMorphBack: typeinMorph;
-		addMorphBack: (Morph new extent: (5@7); color: Color transparent);
+		addMorphBack:
+				(Morph new
+						extent: 5 @ 7;
+						color: Color transparent);
 		addMorphBack: scopeRadioButtons;
-		addMorphBack: (Morph new extent: (5@7); color: Color transparent);
+		addMorphBack:
+				(Morph new
+						extent: 5 @ 7;
+						color: Color transparent);
 		addMorphBack: buttonRow;
 		addMorphBack: bottomSpacer.
-
-	self category: category.
-
-
+	self category: category
 ]
 
 { #category : #private }

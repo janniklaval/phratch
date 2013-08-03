@@ -135,8 +135,6 @@ ReporterBlockMorph >> drawBooleanOn: aCanvas [
 		or: [(s isKindOf: MultiArgMorph) 
 			and: [#(loop reporterSlot) includes: s type]]]].
 
-	cArgs isEmpty 
-		ifFalse: [
 			cArgs do: [:ca |
 				relevant := ca bounds.
 				(ca isKindOf: MultiArgMorph) ifTrue: [
@@ -144,7 +142,7 @@ ReporterBlockMorph >> drawBooleanOn: aCanvas [
 				t := OrderedCollection new.
 				l do: [:pair |
 					self addAreasOf: pair first outside: (relevant insetBy: 3) color: pair second to: t].
-			l := t]].
+			l := t].
 	
 	l do: [:pair |
 		aCanvas fillRectangle: pair first color: pair second ].
@@ -188,8 +186,6 @@ ReporterBlockMorph >> drawNumericOn: aCanvas [
 		or: [(s isKindOf: MultiArgMorph) 
 			and: [#(loop reporterSlot) includes: s type]]]].
 
-	cArgs isEmpty 
-		ifFalse: [
 			cArgs do: [:ca |
 				relevant := ca bounds.
 				(ca isKindOf: MultiArgMorph) ifTrue: [
@@ -197,7 +193,7 @@ ReporterBlockMorph >> drawNumericOn: aCanvas [
 				t := OrderedCollection new.
 				l do: [:pair |
 					self addAreasOf: pair first outside: (relevant insetBy: 3) color: pair second to: t].
-			l := t]].
+			l := t].
 	
 	l do: [:pair |
 		aCanvas fillRectangle: pair first color: pair second ].

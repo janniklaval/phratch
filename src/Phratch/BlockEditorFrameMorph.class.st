@@ -2,8 +2,6 @@ Class {
 	#name : #BlockEditorFrameMorph,
 	#superclass : #DialogBoxMorph,
 	#instVars : [
-		'headerMorph',
-		'bodyMorph',
 		'hat',
 		'answerField',
 		'definition',
@@ -46,12 +44,11 @@ BlockEditorFrameMorph class >> setUserPos: aPoint size: anExtent [
 
 { #category : #'as yet unclassified' }
 BlockEditorFrameMorph >> adjustExtentToAnswerField [
-
 	| answerExt newExt |
 	answerExt := self minExtentForAnswer.
-	answerExt > self extent
-		ifTrue: [ newExt := answerExt min: World extent ]
-		ifFalse: [ newExt := self extent ].
+	newExt := answerExt > self extent
+		ifTrue: [ answerExt min: World extent ]
+		ifFalse: [ self extent ].
 	self extent: newExt
 ]
 
@@ -408,12 +405,6 @@ BlockEditorFrameMorph >> mouseUp: evt [
 { #category : #'as yet unclassified' }
 BlockEditorFrameMorph >> phratchFrame [
 	^receiver ownerOrYourselfThatIsA: PhratchFrameMorph
-]
-
-{ #category : #'as yet unclassified' }
-BlockEditorFrameMorph >> position: aPoint [
-
-	super position: aPoint.
 ]
 
 { #category : #'as yet unclassified' }

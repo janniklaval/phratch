@@ -2,8 +2,7 @@ Class {
 	#name : #InterpreterPlugin,
 	#superclass : #Object,
 	#instVars : [
-		'interpreterProxy',
-		'moduleName'
+		'interpreterProxy'
 	],
 	#category : #'Phratch-Primitives-Plugins'
 }

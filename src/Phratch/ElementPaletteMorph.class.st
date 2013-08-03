@@ -2,8 +2,7 @@ Class {
 	#name : #ElementPaletteMorph,
 	#superclass : #Morph,
 	#instVars : [
-		'elements',
-		'variables'
+		'elements'
 	],
 	#category : #'Phratch-UI-Support'
 }

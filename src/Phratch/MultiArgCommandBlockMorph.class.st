@@ -88,8 +88,7 @@ MultiArgCommandBlockMorph >> adjustInternals [
 				sdict
 					at: #doRun put: #doRunBlockWithArgs;
 					at: #doFork put: #doForkBlockWithArgs;
-					at: #doReport put: #doCallBlockWithArgs;
-					yourself]
+					at: #doReport put: #doCallBlockWithArgs]
 			ifFalse: [
 				sdict
 					at: #doRunBlockWithArgs put: #doRun;
@@ -97,8 +96,7 @@ MultiArgCommandBlockMorph >> adjustInternals [
 					at: #doForkBlockWithArgs put: #doFork;
 					at: #doForkBlockWithArgList put: #doFork;
 					at: #doCallBlockWithArgs put: #doReport;
-					at: #doCallBlockWithArgList put: #doReport;
-					yourself]].
+					at: #doCallBlockWithArgList put: #doReport]].
 
 	receiver ifNil: [^ self ].
 	newSelector := sdict at: selector ifAbsent: [ selector].

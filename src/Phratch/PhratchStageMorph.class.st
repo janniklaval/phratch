@@ -17,7 +17,6 @@ Class {
 		'midiPortNum',
 		'midiPort',
 		'notePlayerDict',
-		'obsoleteSavedState',
 		'sprites',
 		'isQuarterSize',
 		'cachedForm',
@@ -1009,15 +1008,13 @@ PhratchStageMorph >> processesToRun [
 	"Answer a collection of processes to run. Filter out any processes for objects have been picked up. Always return a copy of the processes list."
 
 	| result m |
-	result := runningBlocks collect: [:b | b phratchProc].
-	result := result select: [:proc | proc notNil].
-
-	World activeHand submorphs size > 0 ifTrue: [
-		m := World activeHand submorphs first.
-		result := result select: [:proc | (proc includesReceiver: m) not]].
-
+	result := runningBlocks collect: [ :b | b phratchProc ].
+	result := result select: [ :proc | proc notNil ].
+	World activeHand submorphs size > 0
+		ifTrue: [ 
+			m := World activeHand submorphs first.
+			result := result reject: [ :proc | proc includesReceiver: m ] ].
 	^ result
- 
 ]
 
 { #category : #byob }
@@ -1629,8 +1626,7 @@ PhratchStageMorph >> unlockedMorphsAt: aPoint addTo: mList [
 	(self containsPoint: aPoint) ifFalse: [^ mList]. "quick elimination"
 	p := self position + (2 * (aPoint - self position)).
 
-	submorphs size > 0 ifTrue: [
-		submorphs do: [:m | m unlockedMorphsAt: p addTo: mList]].
+	submorphs do: [:m | m unlockedMorphsAt: p addTo: mList].
 	mList addLast: self.
 
 	^ mList

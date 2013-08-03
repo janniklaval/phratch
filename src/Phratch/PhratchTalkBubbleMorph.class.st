@@ -100,15 +100,14 @@ PhratchTalkBubbleMorph >> message: aString [
 
 	| maxWidth xOffset |
 	
+	maxWidth := 145.
 	(aString isKindOf: String)
 		ifTrue: [
-			maxWidth := 145.
 			contentsMorph
 				width: maxWidth;
 				contents: aString trimBoth;
 				fitContents ]
 		ifFalse: [
-			maxWidth := 145.
 			contentsMorph := aString.
 			self addMorphFront: contentsMorph ].
 

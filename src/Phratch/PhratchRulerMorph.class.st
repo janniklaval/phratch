@@ -5,8 +5,7 @@ Class {
 		'max',
 		'min',
 		'marks',
-		'graph',
-		'sigDigs'
+		'graph'
 	],
 	#category : #'Phratch-Sound'
 }

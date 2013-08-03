@@ -1,26 +1,6 @@
 Class {
 	#name : #TextBoxElementMorph,
 	#superclass : #ArgumentElementMorph,
-	#instVars : [
-		'doResizing',
-		'insetX',
-		'heightPadding',
-		'stringMorph',
-		'insetY',
-		'selectionColor',
-		'selectionEnd',
-		'selectionStart',
-		'undoState',
-		'blinkState',
-		'lastContents',
-		'isKeyboardFocus',
-		'acceptWhenFocusLost',
-		'frame',
-		'isNumeric',
-		'client',
-		'dragStartIndex',
-		'isEditable'
-	],
 	#category : #'Phratch-UI-Elements'
 }
 

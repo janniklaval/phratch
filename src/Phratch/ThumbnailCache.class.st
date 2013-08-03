@@ -38,12 +38,9 @@ ThumbnailCache >> filesToUpdate [
 	"Answer a list of image files that need to have their thumbnails updated."
 
 	| extensions imageFiles |
-	extensions := #(gif jpeg jpg bmp png sprite) asSet.
-	imageFiles := directory fileNames select: [:fn |
-		extensions includes: (directory / fn) extension asSymbol].
-
-	^ imageFiles select: [:fn | (dict includesKey: fn) not].
-
+	extensions := #(#gif #jpeg #jpg #bmp #png #sprite) asSet.
+	imageFiles := directory fileNames select: [ :fn | extensions includes: (directory / fn) extension asSymbol ].
+	^ imageFiles reject: [ :fn | dict includesKey: fn ]
 ]
 
 { #category : #other }

@@ -1,9 +1,6 @@
 Class {
 	#name : #PrimitiveElementMorph,
 	#superclass : #StepElementMorph,
-	#instVars : [
-		'textBox'
-	],
 	#category : #'Phratch-UI-Elements'
 }
 

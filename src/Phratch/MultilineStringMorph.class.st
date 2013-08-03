@@ -447,22 +447,18 @@ MultilineStringMorph >> drawSelectionOn: aCanvas [
 
 { #category : #drawing }
 MultilineStringMorph >> drawString: aString at: aPoint on: aCanvas [
-
 	| s |
 	s := aString.
-	suppressAntiAliasing ifNil: [suppressAntiAliasing := false].
-	renderWithSqueak ifNil: [renderWithSqueak := false].
-
-	"allows costume textboxes using old fonts to be rendered:"
-	(renderWithSqueak and: [font isOSFont not]) ifTrue: [s := s].
-
+	suppressAntiAliasing ifNil: [ suppressAntiAliasing := false ].
+	renderWithSqueak ifNil: [ renderWithSqueak := false ].	"allows costume textboxes using old fonts to be rendered:"
+	(renderWithSqueak and: [ font isOSFont not ])
+		ifTrue: [  ].
 	aCanvas
 		text: s
-		bounds: (aPoint extent: 10000@10000)
+		bounds: (aPoint extent: 10000 @ 10000)
 		font: font
-		kern:0
-		color: textColor.
-
+		kern: 0
+		color: textColor
 ]
 
 { #category : #drawing }

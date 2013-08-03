@@ -447,15 +447,12 @@ PhratchScriptEditorMorph >> fullDrawOn: aCanvas [
 	myBox := bounds truncated.
 	clipC := aCanvas copyClipRect: myBox.
 
+	self drawOn: clipC.
+	self drawSubmorphsOn: clipC.
 	frameInFront
-		ifTrue: [
-			self drawOn: clipC.
-			self drawSubmorphsOn: clipC.
+		ifTrue: [		
 			self drawFrameOn: clipC.
-			aCanvas fullDrawMorph: tabPaneMorph]
-		ifFalse: [
-			self drawOn: clipC.
-			self drawSubmorphsOn: clipC].
+			aCanvas fullDrawMorph: tabPaneMorph].
 
 ]
 

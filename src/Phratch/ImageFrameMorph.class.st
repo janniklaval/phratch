@@ -183,14 +183,11 @@ ImageFrameMorph >> fullDrawOn: aCanvas [
 	myBox := bounds truncated.
 	clipC := aCanvas copyClipRect: myBox.
 
+	self drawOn: clipC.
+	self drawSubmorphsOn: clipC.
 	frameInFront
 		ifTrue: [
-			self drawOn: clipC.
-			self drawSubmorphsOn: clipC.
-			self drawFrameOn: clipC]
-		ifFalse: [
-			self drawOn: clipC.
-			self drawSubmorphsOn: clipC].
+			self drawFrameOn: clipC].
 
 ]
 

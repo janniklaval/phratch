@@ -6,7 +6,6 @@ Class {
 	#name : #WatcherReadoutFrameMorph,
 	#superclass : #BorderedMorph,
 	#instVars : [
-		'frameLayoutNeeded',
 		'complexObject'
 	],
 	#category : #'Phratch-UI-Watchers'

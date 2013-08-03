@@ -264,11 +264,7 @@ ChoiceArgMorph >> presentMenu [
 		'-' = sym
 			ifTrue: [menu addLine]
 			ifFalse: [
-				doLocalization
-					ifTrue: [ option := sym localized]
-					ifFalse: [ PhratchTranslator useSqueakRendering & doLocalization
-						ifTrue: [ option := sym localized]
-						ifFalse: [option := sym localized]].
+				option := sym localized.
 
 				((#(hookupSensorNames hookupBooleanSensorNames) includes: getOptionsSelector) and:
 				 [(#(connected resistance) includes: sym)])

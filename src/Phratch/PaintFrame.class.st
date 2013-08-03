@@ -45,8 +45,7 @@ Class {
 		'setRotationCenterMorph',
 		'setRotationCenterButton',
 		'colorPickerButton',
-		'phratchFrame',
-		'deleteCostumeOnCancel'
+		'phratchFrame'
 	],
 	#classVars : [
 		'ColorPicker',

@@ -17,9 +17,7 @@ Class {
 		'vbarInset',
 		'contentsChanged',
 		'growthFraction',
-		'edge',
-		'delay',
-		'hasWaited'
+		'delay'
 	],
 	#category : #'Phratch-UI-Support'
 }

@@ -241,7 +241,7 @@ PhratchLibraryMorph >> makeNewSpriteButtons: aPhratchFrameMorph [
 			setProperty: #balloonText toValue: (spec at: 3) localized.
 		button].
 
-	butonExtent := PhratchFrameMorph isXO ifTrue: [37@27] ifFalse: [37@27].
+	butonExtent := 37@27.
 	x := 0.
 	buttons do: [:b |
 		b extent: butonExtent.

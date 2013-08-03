@@ -9,7 +9,6 @@ Class {
 		'trueBlock',
 		'falseBlock',
 		'nextBlock',
-		'elseLabel',
 		'elseBarY',
 		'topBarBottom',
 		'blockBottom',

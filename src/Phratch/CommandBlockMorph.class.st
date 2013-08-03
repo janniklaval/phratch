@@ -25,10 +25,7 @@ Class {
 		'titleMorph',
 		'receiver',
 		'selector',
-		'isReporter',
 		'isTimed',
-		'wantsName',
-		'wantsPossession',
 		'numberArgFlags',
 		'key',
 		'stopFrame'
@@ -952,8 +949,8 @@ CommandBlockMorph >> initialize [
 { #category : #byob }
 CommandBlockMorph >> isCShape [
 
-	^ (argMorphs detect: [:am | 
-		am isKindOf: CArgSlotMorph] ifNone: [nil]) notNil
+	^ argMorphs contains: [:am | 
+		am isKindOf: CArgSlotMorph]
 ]
 
 { #category : #accessing }
@@ -1293,7 +1290,6 @@ CommandBlockMorph >> replaceArgMorph: oldMorph by: newMorph [
 CommandBlockMorph >> rightButtonMenu [
 
 	| menu sFrame choice spec |
-	self haltOnce.
 	menu := MenuMorphNG new defaultTarget: self.
 	menu add: 'help' value: #presentHelpScreen.
 

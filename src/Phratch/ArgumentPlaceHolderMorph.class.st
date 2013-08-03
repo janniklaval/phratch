@@ -240,6 +240,6 @@ NOTE: the event is assumed to be in global (world) coordinates."
 	template := self template.
 	template ifNil: [^ false].
 
-	^((aMorph isKindOf: VariableBlockMorph) and: [aMorph isSpecialForm]) and: [
-		(template parameterNames includes: aMorph variable) not]
+	^(aMorph isKindOf: VariableBlockMorph) and: [aMorph isSpecialForm and: [
+		(template parameterNames includes: aMorph variable) not]]
 ]

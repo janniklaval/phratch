@@ -26,7 +26,6 @@ Class {
 		'fontAscent',
 		'fontHeight',
 		'spaceWidth',
-		'charOffset',
 		'basePix',
 		'lineForms'
 	],

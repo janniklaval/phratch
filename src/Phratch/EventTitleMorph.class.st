@@ -68,13 +68,6 @@ EventTitleMorph >> eventName: aString [
 			ifFalse: [owner fixBlockLayout]]
 ]
 
-{ #category : #'object i/o' }
-EventTitleMorph >> fieldsVersion [
-
-	^ super fieldsVersion
-
-]
-
 { #category : #accessing }
 EventTitleMorph >> fixArgLayout [
 	"Set my color to my owner's color."

@@ -23,7 +23,6 @@ Class {
 		'topBarMorph',
 		'directoryBarArrowMorph',
 		'phratchInfoClient',
-		'phratchServers',
 		'phratchProjectFetcher'
 	],
 	#category : #'Phratch-UI-Dialogs'

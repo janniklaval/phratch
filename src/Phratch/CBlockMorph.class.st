@@ -40,30 +40,28 @@ CBlockMorph >> asBlockTuple [
 		at: 1 put: #byob;
 		at: 2 put: self rcvr;
 		at: 3 put: selector.
-
 	argList := argMorphs.
 	argList := self organizeArgs: argList.
-	1 to: argList size do: [:i |
+	1 to: argList size do: [ :i | 
 		arg := argList at: i.
 		(arg isKindOf: ArgMorph)
-			ifTrue: [(arg isKindOf: ExpressionArgMorph)
-				ifTrue: [
-					val := arg getExpression.
-					arg isNumberExpression
-						ifTrue: [val = ' '
-							ifTrue: [eval := val]
-							ifFalse: [eval := val asNumberNoError]]
-						ifFalse: [eval := arg evaluate]]
-				ifFalse: [eval := arg evaluate].
-				blockTuple at: i + 3 put: eval]
-			ifFalse: [blockTuple at: i + 3 put: arg asBlockTuple]].
-
+			ifTrue: [ 
+				(arg isKindOf: ExpressionArgMorph)
+					ifTrue: [ 
+						val := arg getExpression.
+						arg isNumberExpression
+							ifTrue: [ 
+								eval := val = ' '
+									ifTrue: [ val ]
+									ifFalse: [ val asNumberNoError ] ]
+							ifFalse: [ eval := arg evaluate ] ]
+					ifFalse: [ eval := arg evaluate ].
+				blockTuple at: i + 3 put: eval ]
+			ifFalse: [ blockTuple at: i + 3 put: arg asBlockTuple ] ].
 	nestedBlock
-		ifNil: [blockTuple at: blockTuple size put: nil]
-		ifNotNil: [blockTuple at: blockTuple size put: nestedBlock tupleSequence].
-
+		ifNil: [ blockTuple at: blockTuple size put: nil ]
+		ifNotNil: [ blockTuple at: blockTuple size put: nestedBlock tupleSequence ].
 	^ blockTuple
-
 ]
 
 { #category : #private }
@@ -96,27 +94,27 @@ CBlockMorph >> blockAttachPoints: aSet [
 	"Answer a collection of possible attachment points for me. Each entry is an Association mapping a point to the morph to which a dropping command block could be attached."
 
 	| result |
-
 	result := #().
-	(self isKindOf: HatBlockMorph) ifFalse: [
-		PhratchTranslator isRTL
-			ifTrue: [result := result copyWith: (self topRight -> self)]
-			ifFalse: [result := result copyWith: (self topLeft -> self)]].
-
+	(self isKindOf: HatBlockMorph)
+		ifFalse: [ 
+			result := PhratchTranslator isRTL
+				ifTrue: [ result copyWith: self topRight -> self ]
+				ifFalse: [ result copyWith: self topLeft -> self ] ].
 	nestedBlock
-		ifNil: [PhratchTranslator isRTL
-			ifTrue: [result := result copyWith: ((self topRight + (-12@(self topBarHeight + 7))) -> self)]
-			ifFalse: [result := result copyWith: ((self topLeft + (12@(self topBarHeight + 7))) -> self)]]
-		ifNotNil: [nestedBlock blockAttachPoints: aSet].
-
+		ifNil: [ 
+			result := PhratchTranslator isRTL
+				ifTrue: [ result copyWith: self topRight + (-12 @ (self topBarHeight + 7)) -> self ]
+				ifFalse: [ result copyWith: self topLeft + (12 @ (self topBarHeight + 7)) -> self ] ]
+		ifNotNil: [ nestedBlock blockAttachPoints: aSet ].
 	nextBlock
-		ifNil: [self isStopOrForever ifFalse: [PhratchTranslator isRTL
-			ifTrue: [result := result copyWith: (self bottomRight -> self)]
-			ifFalse: [result := result copyWith: (self bottomLeft -> self)]]]
-		ifNotNil: [nextBlock blockAttachPoints: aSet].
-
-	aSet addAll: result.
-
+		ifNil: [ 
+			self isStopOrForever
+				ifFalse: [ 
+					result := PhratchTranslator isRTL
+						ifTrue: [ result copyWith: self bottomRight -> self ]
+						ifFalse: [ result copyWith: self bottomLeft -> self ] ] ]
+		ifNotNil: [ nextBlock blockAttachPoints: aSet ].
+	aSet addAll: result
 ]
 
 { #category : #'encapsulated scripts' }

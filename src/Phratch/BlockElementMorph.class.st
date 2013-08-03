@@ -25,7 +25,7 @@ BlockElementMorph >> addVarNames: aCollection [
 BlockElementMorph >> addVariable [
 	|ans|
 
-	ans := UIManager request: 'add variable:'.
+	ans := UIManager default request: 'add variable:'.
 	(ans size > 0) ifTrue: [self addVarNames: (Array with: (SyntaxElementMorph objectNameFrom: ans))]
 ]
 
@@ -38,7 +38,7 @@ BlockElementMorph >> addVariableNamed: aSymbol [
 BlockElementMorph >> addVariables [
 	|ans|
 
-	ans := UIManager request: 'add variables:'.
+	ans := UIManager default request: 'add variables:'.
 	(ans size > 0) ifTrue: [self addVarNames: (ans findTokens: ' ')]
 ]
 
@@ -82,32 +82,24 @@ BlockElementMorph >> evaluate [
 
 { #category : #'as yet unclassified' }
 BlockElementMorph >> fit [
-	| bw bw2 cw handle x y|
+	| bw bw2 cw handle x y |
 	bw := self borderWidth.
 	bw2 := bw * 2.
 	cw := self labelFont widthOf: $ .
 	handle := cw * 2.
-
-	palette position: (self left + handle) @ (self top).
-	(palette height = 0)
-		ifTrue: [y := self top + (bw * 3)]
-		ifFalse: [y := palette bottom].
-	
-
+	palette position: (self left + handle) @ self top.
+	y := palette height = 0
+		ifTrue: [ self top + (bw * 3) ]
+		ifFalse: [ palette bottom ].
 	steps position: (self left + bw2 + handle) @ y.
-
-	x := (steps right + bw2) max: palette right.
-
+	x := steps right + bw2 max: palette right.
 	self width: x - self left.
-	(palette height = 0)
+	palette height = 0
 		ifTrue: [ self height: steps height + (self borderWidth * 5) ]
-		ifFalse: [self height: steps height + palette height + (bw2) ].
-
+		ifFalse: [ self height: steps height + palette height + bw2 ].
 	self refreshVarColors.
-
 	(owner respondsTo: #fit)
-		ifTrue: [owner fit]
-
+		ifTrue: [ owner fit ]
 ]
 
 { #category : #'as yet unclassified' }

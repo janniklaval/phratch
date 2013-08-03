@@ -152,9 +152,8 @@ MessageElementMorph >> contextMenu [
 		ifTrue: [
 			m add: 'rename...' action: #editSelector.
 			arguments isEmpty ifTrue: [
-				m add: 'add argument' action: #beBinary ].
-			m addLine ]
-		ifFalse: [m addLine ].
+				m add: 'add argument' action: #beBinary ]]
+	m addLine.
 	m add: 'show code...' action: #showGeneratedSmalltalk.
 	m add: 'show result...' action: #showResult.
 	m add: 'evaluate' action: #evaluate.
@@ -165,7 +164,7 @@ MessageElementMorph >> contextMenu [
 MessageElementMorph >> editSelector [
 	|ans|
 
-	ans := UIManager request: 'selector:' initialAnswer: selector.
+	ans := UIManager default request: 'selector:' initialAnswer: selector.
 	(ans size > 0) ifTrue: [self selector: ans]
 ]
 
@@ -428,7 +427,7 @@ MessageElementMorph >> isLabelFirst [
 
 { #category : #'as yet unclassified' }
 MessageElementMorph >> isStacked [
-	^((#(
+	^(#(
 		'isNil:'
 		'ifNil:'
 		'ifNotNil:'
@@ -448,11 +447,11 @@ MessageElementMorph >> isStacked [
 		'or:'
 		'and:'
 	)
-	includes: selector) or: [
+	includes: selector) or: [(
 	(arguments select: [:arg | 
 		arg contents isKindOf: BlockElementMorph])
-			size > 0 ]) or: [ selector notNil and: [
-				(selector findTokens: ':') size > 3] ]
+			size > 0) or: [ selector notNil and: [
+				(selector findTokens: ':') size > 3] ]]
 
 ]
 

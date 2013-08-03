@@ -568,7 +568,6 @@ PhratchServer >> sendSprite: aPhratchSpriteMorph [
 
 	| msg |
 	msg := self spriteMessageFor: aPhratchSpriteMorph.
-	self halt.
 	peerSockets copy do: [:sock |
 		sock isConnected
 			ifTrue: [

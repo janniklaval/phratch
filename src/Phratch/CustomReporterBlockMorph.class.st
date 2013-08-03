@@ -204,8 +204,7 @@ CustomReporterBlockMorph >> addVariableTemplates [
 			commandSpec: (parms at: i);
 			updateFragment;
 			parameterType: (self definition typeOf: (parms at: i));
-			parameterDefaultValue: (self definition defaultOf: (parms at: i));
-			yourself.
+			parameterDefaultValue: (self definition defaultOf: (parms at: i)).
 		idx := specParts indexOf: (self argumentAt: i).
 		idx > 0 ifTrue: [ specParts at: idx put: varBlock].
 		self replaceArgMorph: (self argumentAt: i) by: varBlock.
@@ -411,8 +410,8 @@ CustomReporterBlockMorph >> isFunction [
 CustomReporterBlockMorph >> isInterestedIn: aMorph [
 
 	isTemplate ifFalse: [^ false].
-	^((aMorph isKindOf: VariableBlockMorph) and: [aMorph isSpecialForm]) and: [
-		(self parameterNames includes: aMorph variable) not]
+	^(aMorph isKindOf: VariableBlockMorph) and: [aMorph isSpecialForm and: [
+		(self parameterNames includes: aMorph variable) not]]
 ]
 
 { #category : #template }

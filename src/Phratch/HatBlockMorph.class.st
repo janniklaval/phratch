@@ -9,9 +9,7 @@ Class {
 	#instVars : [
 		'scriptNameMorph',
 		'indicatorMorph',
-		'scriptOwner',
-		'parameters',
-		'isClickable'
+		'scriptOwner'
 	],
 	#category : #'Phratch-Blocks'
 }

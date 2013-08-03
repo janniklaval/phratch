@@ -168,7 +168,7 @@ MessageSocket >> nextMessage [
 			isHttp ifTrue: 
 				[sz := 2048.
 				 inBuf := ByteArray new: sz.
-				 (1 to: 4) do: [:i | inBuf byteAt: i put: (inSizeBuf byteAt: i)].	
+				 1 to: 4 do: [:i | inBuf byteAt: i put: (inSizeBuf byteAt: i)].	
 				 inIndex := 5]
 			ifFalse: [ 
 				sz > 1000000 ifTrue: [ sz := 1000000. "msg size over a megabyte; check available space"

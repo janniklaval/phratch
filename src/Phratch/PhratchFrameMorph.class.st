@@ -39,7 +39,6 @@ Class {
 		'lastViewMode',
 		'viewModeButtonsPanel',
 		'toolbarPanel',
-		'lastWeDoPoll',
 		'quitFlag'
 	],
 	#classVars : [
@@ -1043,9 +1042,7 @@ PhratchFrameMorph >> checkBoxLabelled: aString marked: aBool width: anInt [
 		ifFalse: [pic := PhratchFrameMorph skinAt: #watcherButton].
 	box := ImageMorph new form: pic. 
 	
-	PhratchTranslator useSqueakRendering
-		ifTrue: [cnts := ' ', aString localized]
-		ifFalse: [cnts := ' ', aString localized].
+	cnts := ' ', aString localized.
 
 	label := StringMorph contents: cnts font: PhratchFrameMorph standardMenuFont.
 	line := Morph new color: Color transparent.

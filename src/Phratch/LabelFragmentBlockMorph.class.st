@@ -104,8 +104,7 @@ LabelFragmentBlockMorph >> drawOn: aCanvas [
 		topY := topY - 1].
 
 	cArgs := self nonControlFlowSubmorphs select: [:s | (s isKindOf: CArgSlotMorph) or: [s isKindOf: CReporterSlotMorph]].
-	cArgs isEmpty 
-		ifFalse: [
+	
 			cArgs do: [:ca |
 				t := OrderedCollection new.
 				l do: [:pair |
@@ -115,7 +114,7 @@ LabelFragmentBlockMorph >> drawOn: aCanvas [
 			clip := (self right + 4 - (self height // 2) @ self top) corner: self bottomRight.
 			l do: [:pair |
 				self addAreasOf: pair first outside: clip color: pair second to: t].
-			l := t].
+			l := t.
 	
 	l do: [:pair |
 		aCanvas fillRectangle: pair first color: pair second ].

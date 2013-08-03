@@ -224,8 +224,7 @@ CustomCommandBlockMorph >> addVariableTemplates [
 			commandSpec: (parms at: i);
 			updateFragment;
 			parameterType: (self definition typeOf: (parms at: i));
-			parameterDefaultValue: (self definition defaultOf: (parms at: i));
-			yourself.
+			parameterDefaultValue: (self definition defaultOf: (parms at: i)).
 		idx := specParts indexOf: (self argumentAt: i).
 		idx > 0 ifTrue: [ specParts at: idx put: varBlock].
 		self replaceArgMorph: (self argumentAt: i) by: varBlock.

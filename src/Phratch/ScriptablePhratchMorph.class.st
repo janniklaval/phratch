@@ -13,7 +13,6 @@ Class {
 	#name : #ScriptablePhratchMorph,
 	#superclass : #Morph,
 	#instVars : [
-		'flags',
 		'objName',
 		'vars',
 		'lists',
@@ -29,7 +28,6 @@ Class {
 		'sceneStates',
 		'customBlocks',
 		'deletedAttributes',
-		'temporaryVariables',
 		'colors',
 		'createdBlocks'
 	],
@@ -153,26 +151,6 @@ ScriptablePhratchMorph class >> blockSpecs [
 ]
 
 { #category : #'translation support' }
-ScriptablePhratchMorph class >> blockSpecsArrayForTranslation [
-	"Answer an array that lists all the blocks and categories to be used as a guide to block translation."
-	"self blockSpecDictForTranslation"
-
-	| blocks all currentSpecs |
-	currentSpecs := Set new.
-	PhratchSpriteMorph new blockCategories sort collect: [:cat |
-		blocks :=  (PhratchSpriteMorph new blocksFor: cat)
-			select: [:b | b isKindOf: CommandBlockMorph].
-		all := blocks collect: [:b | b commandSpec].
-		"obsolete := ScriptablePhratchMorph obsoleteBlockSpecs collect: [:o | o first].
-		all :=  all select: [:p | (obsolete indexOf: p) = 0]."
-		"(cat beginsWith: 'obsolete') ifFalse:["currentSpecs add: cat"]".
-		currentSpecs addAll: all].
-	currentSpecs := currentSpecs asArray sort.
-	^ currentSpecs
-
-]
-
-{ #category : #'translation support' }
 ScriptablePhratchMorph class >> blockSpecsForTranslation [
 	"Answer a collection blocks for translation. Obsolete blocks are removed."
 
@@ -193,25 +171,6 @@ ScriptablePhratchMorph class >> blockSpecsForTranslation [
 		add: 'set $Variable$ to $Number$';
 		add: 'change $Variable$ by $Number$'.
 	^ allSpecs asArray sort
-
-]
-
-{ #category : #'translation support' }
-ScriptablePhratchMorph class >> blockSpecsStringForTranslation [
-	"Answer a String that lists all the blocks and categories to be used as a guide to block translation."
-
-	| out blocks pairs key |
-	out := WriteStream on: (String new: 10000).
-	PhratchSpriteMorph new blockCategories sort collect: [:cat |
-		out nextPutAll: '-	', cat; cr.
-		blocks :=  (PhratchSpriteMorph new blocksFor: cat)
-			select: [:b | b isKindOf: CommandBlockMorph].
-		pairs := blocks collect: [:b |
-			key := b selector collect: [:ch | ch = $: ifTrue: [$_] ifFalse: [ch]].
-			Array with: key with: b commandSpec].
-		pairs sort: [:p1 :p2 | p1 first < p2 first].
-		pairs do: [:p | out nextPutAll: p first; tab; nextPutAll: p last; cr]].
-	^ out contents
 
 ]
 
@@ -2965,8 +2924,7 @@ ScriptablePhratchMorph >> costumes [
 	"this will at some future time answer first class costumes,
 	for now it's just the costume names"
 
-	^ PhratchListMorph on: ((media select: [:m | 
-		m isSound not]) collect: [:c | c mediaName])
+	^ PhratchListMorph on: ((media reject: [ :m | m isSound ]) collect: [ :c | c mediaName ])
 ]
 
 { #category : #blocks }
@@ -3508,32 +3466,29 @@ ScriptablePhratchMorph >> deleteMedia: itemToDelete [
 
 	| oldIndex costumesBefore costumesAfter newCostume |
 	oldIndex := media indexOf: itemToDelete.
-	media remove: itemToDelete ifAbsent: [].
-	itemToDelete isSound ifTrue: [itemToDelete sound pause].
-
-	itemToDelete == costume ifTrue: [
-		"select the costume just before or after the costume being deleted"
-		costumesBefore := (media copyFrom: 1 to: oldIndex - 1) select: [:item | item isSound not].
-		costumesAfter := (media copyFrom: oldIndex to: media size) select: [:item | item isSound not].
-		costumesBefore size > 0
-			ifTrue: [newCostume := costumesBefore last]
-			ifFalse: [
-				costumesAfter size > 0
-					ifTrue: [newCostume := costumesAfter first]
-					ifFalse: [media addLast: (newCostume := itemToDelete)]].
-		self lookLike: newCostume mediaName].
-
+	media remove: itemToDelete ifAbsent: [  ].
+	itemToDelete isSound
+		ifTrue: [ itemToDelete sound pause ].
+	itemToDelete == costume
+		ifTrue: [ 
+			"select the costume just before or after the costume being deleted"
+			costumesBefore := (media copyFrom: 1 to: oldIndex - 1) reject: [ :item | item isSound ].
+			costumesAfter := (media copyFrom: oldIndex to: media size) reject: [ :item | item isSound ].
+			costumesBefore size > 0
+				ifTrue: [ newCostume := costumesBefore last ]
+				ifFalse: [ 
+					costumesAfter size > 0
+						ifTrue: [ newCostume := costumesAfter first ]
+						ifFalse: [ media addLast: (newCostume := itemToDelete) ] ].
+			self lookLike: newCostume mediaName ].
 	self updateMediaCategory.
-
-	itemToDelete isSound 
-		ifTrue: [
+	itemToDelete isSound
+		ifTrue: [ 
 			self undeleteAttribute: #sounds.
-			self propagateSounds]
-		ifFalse: [
+			self propagateSounds ]
+		ifFalse: [ 
 			self undeleteAttribute: #costumes.
-			self propagateCostumes]
-		
-
+			self propagateCostumes ]
 ]
 
 { #category : #'BYOB object interface' }
@@ -5054,23 +5009,19 @@ ScriptablePhratchMorph >> indexOf: subString startingAt: aNumber in: aString [
 
 { #category : #'BYOB attributes' }
 ScriptablePhratchMorph >> inheritCostumesNow [
-
 	| att idx |
 	att := #costumes.
-	self prototype ifNil: [^ self].
-	(self deletedAttributes includes: att) ifFalse: [^ self].
-
+	self prototype ifNil: [ ^ self ].
+	(self deletedAttributes includes: att)
+		ifFalse: [ ^ self ].
 	idx := self costumeIndex.
-	media := media reject: [:item |
-		item isSound not].
-
-	self prototype media do: [:item |
-		item isSound ifFalse: [
-			media addLast: item copy]].
-
+	media := media select: [ :item | item isSound ].
+	self prototype media
+		do: [ :item | 
+			item isSound
+				ifFalse: [ media addLast: item copy ] ].
 	self passiveLookLike: idx.
 	self updateMediaCategory.
-
 	self propagateCostumes
 ]
 
@@ -8446,7 +8397,7 @@ ScriptablePhratchMorph >> varNames [
 	lst := vars keys asSet.
 	self prototype ifNotNil: [
 		lst addAll: self prototype varNames ].
-self haltOnce.
+
 	^ lst asSet asArray
 
 ]
