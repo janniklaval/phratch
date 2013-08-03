@@ -150,7 +150,7 @@ CReporterSlotMorph >> fixBlockLayout [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 CReporterSlotMorph >> initialize [
 	super initialize.
 	isSpecialForm := true.
@@ -168,7 +168,7 @@ CReporterSlotMorph >> isEmptySlot [
 	^ self nestedBlock isNil
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'argument slot behavior' }
 CReporterSlotMorph >> nestedBlock [
 	self args ifNil: [^ nil].
 	self args size < 1 ifTrue: [^ nil].

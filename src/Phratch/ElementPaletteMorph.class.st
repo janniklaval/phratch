@@ -43,7 +43,7 @@ ElementPaletteMorph class >> classVarsFor: aClass [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ElementPaletteMorph class >> classes [
 	| pal |
 	pal := self new.
@@ -65,7 +65,7 @@ ElementPaletteMorph class >> currentPackageClasses: aClass [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ElementPaletteMorph class >> globals [
 	| pal |
 	pal := self new.
@@ -91,12 +91,12 @@ ElementPaletteMorph class >> instVarsFor: aClass [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 ElementPaletteMorph class >> labelColor [
 	^Color darkGray twiceDarker
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 ElementPaletteMorph class >> labelFont [
 	^StrikeFont fontName: 'Verdana' size: 9
 ]
@@ -162,7 +162,7 @@ ElementPaletteMorph class >> packageClassesDict [
 	^ans
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #adding }
 ElementPaletteMorph >> addElement: anElement [
 	|maxWidth|
 	self addMorph: anElement.
@@ -177,21 +177,21 @@ ElementPaletteMorph >> addElement: anElement [
 	self width: maxWidth
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialize }
 ElementPaletteMorph >> initialize [
 	super initialize.
 	elements := OrderedCollection new.
 	color := Color gray.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'*Phratch-Extensions' }
 ElementPaletteMorph >> isPartsBin [
 
 	^ true
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'*Phratch-Extensions' }
 ElementPaletteMorph >> rootForGrabOf: aMorph [
 	"I act like a parts bin; answer a new copy of the morph being extracted."
 

@@ -131,7 +131,7 @@ WatcherMorph >> evaluate [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 WatcherMorph >> eventHandler [ 
 	self assureExtension.
 	^ super eventHandler
@@ -406,7 +406,7 @@ WatcherMorph >> replace: argStr with: translatedArg in: s [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 WatcherMorph >> replaceArgIn: aString with: arg [
 
 	| i str |

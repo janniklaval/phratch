@@ -18,13 +18,13 @@ Class {
 	#category : #'Phratch-UI-Dialogs'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #'initialize-release' }
 DebuggerFrameMorph class >> initialize [
 	"DebuggerFrameMorph initialize"
 	self resetDimensions
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 DebuggerFrameMorph class >> minExtent [
 	^350 @ 180.
 ]
@@ -41,13 +41,13 @@ DebuggerFrameMorph class >> setUserPos: aPoint size: anExtent [
 	UserSize := anExtent.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #geometry }
 DebuggerFrameMorph >> centerOnScreen [
 	super centerOnScreen.
 	self updateResizeMorph
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #intialization }
 DebuggerFrameMorph >> createButtons [
 	"Replace my current buttons with the ones specified."
 	"Note: The button row morph was created by initialize; I just replace its contents with a new collection of buttons."
@@ -77,7 +77,7 @@ DebuggerFrameMorph >> createButtons [
 			ifFalse: [jump isHidden: true]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #geometry }
 DebuggerFrameMorph >> extent: aPoint [
 	
 	| newExtent min|
@@ -100,7 +100,7 @@ DebuggerFrameMorph >> extent: aPoint [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #geometry }
 DebuggerFrameMorph >> fixLayoutForExtent: aPoint [
 
 	super fixLayoutForExtent: aPoint.
@@ -119,7 +119,7 @@ DebuggerFrameMorph >> fixLayoutForExtent: aPoint [
 	self updateResizeMorph
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #interaction }
 DebuggerFrameMorph >> getUserResponse [
 	"Wait for the user to respond, then report their response. The symbol #cancel is returned if the user wishes to cancel the operation. True/false is returned if they respond yes/no, and a string is returned if this this a string input dialog and they don't cancel."
 	"Details: This is invoked synchronously from the caller. In order to keep processing inputs and updating the screen while waiting for the user to respond, this method has its own version of the World's event loop."
@@ -143,7 +143,7 @@ DebuggerFrameMorph >> getUserResponse [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 DebuggerFrameMorph >> handlesMouseDown: evt [
 	^true
 ]
@@ -168,7 +168,7 @@ DebuggerFrameMorph >> hasVars [
 	^ false
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 DebuggerFrameMorph >> initialize [
 	super initialize.
 	self title: 'Debugger' translated.
@@ -189,13 +189,13 @@ DebuggerFrameMorph >> initialize [
 	self addMorph: resizeMorph
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'BYOB-pause/resume' }
 DebuggerFrameMorph >> jumpOver [
 	thread jumpOver.
 	self yes
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'dropping/grabbing' }
 DebuggerFrameMorph >> justDroppedInto: aMorph event: evt [
 	"Never embed myself in a morph (e.g. the Stage)."
 
@@ -204,7 +204,7 @@ DebuggerFrameMorph >> justDroppedInto: aMorph event: evt [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #nesting }
 DebuggerFrameMorph >> keepOnScreen [
 
 	| min |
@@ -232,7 +232,7 @@ DebuggerFrameMorph >> keepOnScreen [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 DebuggerFrameMorph >> mouseDown: evt [
 	"Handle a mouse click. Left button either drags or performs click action. Right button brings up a menu."
 
@@ -244,7 +244,7 @@ DebuggerFrameMorph >> mouseDown: evt [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 DebuggerFrameMorph >> mouseMove: evt [
 
 	resizeOffset ifNotNil: [
@@ -253,14 +253,14 @@ DebuggerFrameMorph >> mouseMove: evt [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 DebuggerFrameMorph >> mouseUp: evt [
 
 	resizeOffset := nil.
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'instance creation' }
 DebuggerFrameMorph >> on: aPhratchProcess [
 
 	thread := aPhratchProcess.
@@ -292,7 +292,7 @@ DebuggerFrameMorph >> rememberUserDimensions [
 	self class setUserPos: self position size: self extent
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #handling }
 DebuggerFrameMorph >> resume [
 	thread resume.
 	self yes
@@ -307,7 +307,7 @@ DebuggerFrameMorph >> snapToUserDimensions [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'stepping and presenter' }
 DebuggerFrameMorph >> step [
 	resizeOffset notNil | (owner isKindOf: HandMorph)
 		ifTrue: [^self ].
@@ -321,7 +321,7 @@ DebuggerFrameMorph >> stepNext [
 	self yes
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'initailize-release' }
 DebuggerFrameMorph >> updateContents [
 
 	| block rcvr lbl |
@@ -384,7 +384,7 @@ DebuggerFrameMorph >> varMenu [
 	menu popUpAt: ((varButton left + (varButton width - mw // 2)) @ (varButton top - mh)) inWorld: World
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #interaction }
 DebuggerFrameMorph >> yes [
 	"Yes button was pressed."
 

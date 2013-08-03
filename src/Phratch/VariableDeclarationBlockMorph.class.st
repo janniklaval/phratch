@@ -25,12 +25,12 @@ VariableDeclarationBlockMorph >> addItem [
 	self replaceArgMorph: (self argumentAt: pos) by: varBlock.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 VariableDeclarationBlockMorph >> args [
 	^argMorphs
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 VariableDeclarationBlockMorph >> defaultArgs: anArray [
  	"override my superclass, do nothing"
 ]
@@ -43,12 +43,12 @@ VariableDeclarationBlockMorph >> deleteVariableTemplate: aVarBlockMorph [
 	self commandSpec: (commandSpec copyFrom: 1 to: commandSpec size - 3)
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'parts bin' }
 VariableDeclarationBlockMorph >> isPartsBin [
 	^true
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'events-processing' }
 VariableDeclarationBlockMorph >> mouseDownPriority [
 
 	^ 0
@@ -80,7 +80,7 @@ VariableDeclarationBlockMorph >> renameParm: old to: new [
 	^true
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'dropping/grabbing' }
 VariableDeclarationBlockMorph >> rootForGrabOf: aMorph [
 
 	| root |
@@ -98,7 +98,7 @@ VariableDeclarationBlockMorph >> rootForGrabOf: aMorph [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 VariableDeclarationBlockMorph >> variables [
 	^argMorphs collect: [:a |
 		a variable ]

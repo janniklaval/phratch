@@ -52,7 +52,7 @@ BlockEditorFrameMorph >> adjustExtentToAnswerField [
 	self extent: newExt
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 BlockEditorFrameMorph >> allBlocks [
 	| all ans |
 	all := OrderedCollection new.
@@ -139,7 +139,7 @@ BlockEditorFrameMorph >> buildScript [
 		hat nextBlock: b]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'expression types' }
 BlockEditorFrameMorph >> cascade [
 	| sf match findMatch |
 	sf := self phratchFrame.
@@ -154,19 +154,19 @@ BlockEditorFrameMorph >> cascade [
 		findMatch value]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #geometry }
 BlockEditorFrameMorph >> centerOnScreen [
 
 	super centerOnScreen.
 	self updateResizeMorph
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 BlockEditorFrameMorph >> definition [
 	^definition
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 BlockEditorFrameMorph >> definition: aCustomBlockDefinition [
 
 	| def |
@@ -194,7 +194,7 @@ BlockEditorFrameMorph >> definition: aCustomBlockDefinition [
 	self buildAnswerField.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #geometry }
 BlockEditorFrameMorph >> extent: aPoint [
 	
 	| w newExtent min|
@@ -220,7 +220,7 @@ BlockEditorFrameMorph >> extent: aPoint [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #geometry }
 BlockEditorFrameMorph >> fixLayoutForExtent: aPoint [
 
 	| bFrame bScroller |
@@ -240,7 +240,7 @@ BlockEditorFrameMorph >> fixLayoutForExtent: aPoint [
 	self updateResizeMorph
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #interaction }
 BlockEditorFrameMorph >> getUserResponse [
 	"Wait for the user to respond, then report their response. The symbol #cancel is returned if the user wishes to cancel the operation. True/false is returned if they respond yes/no, and a string is returned if this this a string input dialog and they don't cancel."
 	"Details: This is invoked synchronously from the caller. In order to keep processing inputs and updating the screen while waiting for the user to respond, this method has its own version of the World's event loop."
@@ -266,17 +266,17 @@ BlockEditorFrameMorph >> getUserResponse [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 BlockEditorFrameMorph >> handlesMouseDown: evt [
 	^true
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 BlockEditorFrameMorph >> hat [
 	^hat
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 BlockEditorFrameMorph >> initialize [
 	| line container sl |
 
@@ -311,7 +311,7 @@ BlockEditorFrameMorph >> initialize [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #byob }
 BlockEditorFrameMorph >> instancesOf: aCustomBlockId [
 
 	| binInstances ansInstances |
@@ -331,7 +331,7 @@ BlockEditorFrameMorph >> instancesOf: aCustomBlockId [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'dropping/grabbing' }
 BlockEditorFrameMorph >> justDroppedInto: aMorph event: evt [
 	"Never embed myself in a morph (e.g. the Stage)."
 
@@ -340,7 +340,7 @@ BlockEditorFrameMorph >> justDroppedInto: aMorph event: evt [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #nesting }
 BlockEditorFrameMorph >> keepOnScreen [
 
 	| min |
@@ -375,7 +375,7 @@ BlockEditorFrameMorph >> minExtentForAnswer [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 BlockEditorFrameMorph >> mouseDown: evt [
 	"Handle a mouse click. Left button either drags or performs click action. Right button brings up a menu."
 
@@ -387,7 +387,7 @@ BlockEditorFrameMorph >> mouseDown: evt [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 BlockEditorFrameMorph >> mouseMove: evt [
 
 	resizeOffset ifNotNil: [
@@ -396,19 +396,19 @@ BlockEditorFrameMorph >> mouseMove: evt [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 BlockEditorFrameMorph >> mouseUp: evt [
 
 	resizeOffset := nil.
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #scripts }
 BlockEditorFrameMorph >> phratchFrame [
 	^receiver ownerOrYourselfThatIsA: PhratchFrameMorph
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 BlockEditorFrameMorph >> receiver: aScriptablePhratchMorph [
 	receiver := aScriptablePhratchMorph
 ]
@@ -427,7 +427,7 @@ BlockEditorFrameMorph >> snapToUserDimensions [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'stepping and presenter' }
 BlockEditorFrameMorph >> step [
 	resizeOffset notNil | (owner isKindOf: HandMorph)
 		ifTrue: [^self ].
@@ -435,19 +435,19 @@ BlockEditorFrameMorph >> step [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 BlockEditorFrameMorph >> template [
 	^template
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 BlockEditorFrameMorph >> toggleAtomicity [
 	definition toggleAtomicity.
 	self updateAtomicityToggle
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #stepping }
 BlockEditorFrameMorph >> topArgMorphAt: aRectangle exclude: aMorph [
 	"Give feedback about possible drop targets."
 
@@ -471,7 +471,7 @@ BlockEditorFrameMorph >> updateResizeMorph [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'dropping/grabbing' }
 BlockEditorFrameMorph >> wantsDroppedMorph: aMorph event: evt [
 
 	(answerField isKindOf: ReporterBlockDropTargetMorph) 
@@ -479,7 +479,7 @@ BlockEditorFrameMorph >> wantsDroppedMorph: aMorph event: evt [
 	^answerField wantsDroppedMorph: aMorph event: evt	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #interaction }
 BlockEditorFrameMorph >> yes [
 	"Yes button was pressed."
 	| stage sf |

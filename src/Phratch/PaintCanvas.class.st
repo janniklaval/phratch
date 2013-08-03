@@ -860,17 +860,17 @@ PaintCanvas >> installCursorInHand: h [
 	palette showRotationCenter ifTrue: [^ self].
 
 	mode := palette mode.
-	#eyedropper = mode ifTrue: [h showTemporaryCursor: Cursor eyeDropper asXOCursorForm].
-	#fill = mode ifTrue: [h showTemporaryCursor: Cursor paintBucket asXOCursorForm].
-	(#(line oval rect) includes: mode) ifTrue: [h showTemporaryCursor: Cursor crossHair asXOCursorForm].
+	#eyedropper = mode ifTrue: [h showTemporaryCursor: Cursor eyeDropper].
+	#fill = mode ifTrue: [h showTemporaryCursor: Cursor paintBucket].
+	(#(line oval rect) includes: mode) ifTrue: [h showTemporaryCursor: Cursor crossHair].
 
 	(#(stamp move) includes: mode) ifTrue: [
 		moveOrStampForm
-			ifNil: [h showTemporaryCursor: Cursor crossHair asXOCursorForm]
+			ifNil: [h showTemporaryCursor: Cursor crossHair]
 			ifNotNil: [
 				#stamp = mode
 					ifTrue: [h showTemporaryCursor: Cursor blank]
-					ifFalse: [h showTemporaryCursor: Cursor handOpen asXOCursorForm]]].
+					ifFalse: [h showTemporaryCursor: Cursor handOpen]]].
 
 	#erase = mode ifTrue: [
 		cursor := self brushCursorSize: palette brushSize color: Color transparent.
@@ -1078,7 +1078,7 @@ PaintCanvas >> moveToolMouseDown: aPoint [
 	self startMove.
 
 	dragOffset := aPoint - selectionRect origin.
-	World activeHand showTemporaryCursor: Cursor handClosed asXOCursorForm.
+	World activeHand showTemporaryCursor: Cursor handClosed.
 	self changed.
 
 ]
@@ -1512,16 +1512,16 @@ PaintCanvas >> step [
 	(bounds containsPoint: screenP) ifFalse: [^ self].
 
 	palette mode = #move ifTrue: [
-		selectionRect ifNil: [h showTemporaryCursor: Cursor crossHair asXOCursorForm].
+		selectionRect ifNil: [h showTemporaryCursor: Cursor crossHair].
 		(selectionRect notNil and: [Sensor anyButtonPressed not]) ifTrue: [
 			(selectionRect containsPoint: canvasP)
-				ifTrue: [h showTemporaryCursor: Cursor handOpen asXOCursorForm]
-				ifFalse: [h showTemporaryCursor: Cursor crossHair asXOCursorForm]]].
+				ifTrue: [h showTemporaryCursor: Cursor handOpen]
+				ifFalse: [h showTemporaryCursor: Cursor crossHair]]].
 
 	palette mode = #text ifTrue: [
 		(self textHandleContainsPoint: canvasP)
-			ifTrue: [h showTemporaryCursor: Cursor handOpen asXOCursorForm]
-			ifFalse: [h showTemporaryCursor: Cursor normal asXOCursorForm]].
+			ifTrue: [h showTemporaryCursor: Cursor handOpen]
+			ifFalse: [h showTemporaryCursor: Cursor normal]].
 
 ]
 

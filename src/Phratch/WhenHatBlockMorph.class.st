@@ -146,7 +146,7 @@ WhenHatBlockMorph >> triggered [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #other }
 WhenHatBlockMorph >> veryDeepFixupWith: deepCopier [
 	"If fields were weakly copied, fix them here.  If they were in the tree being copied, fix them up, otherwise point to the originals."
 

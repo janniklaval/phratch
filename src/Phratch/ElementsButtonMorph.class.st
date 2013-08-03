@@ -8,59 +8,59 @@ Class {
 	#category : #'Phratch-UI-Support'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #drawing }
 ElementsButtonMorph >> borderColorDark [
 	^color twiceDarker
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #drawing }
 ElementsButtonMorph >> borderColorLight [
 	^color twiceLighter lighter
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #drawing }
 ElementsButtonMorph >> borderColorVeryDark [
 	^color twiceDarker darker
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #drawing }
 ElementsButtonMorph >> borderColorVeryLight [
 	^color twiceLighter twiceLighter lighter
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ElementsButtonMorph >> borderWidth [
 	^1
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 ElementsButtonMorph >> handlesMouseDown: evt [
 	^ true
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 ElementsButtonMorph >> labelColor [
 	^Color white
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 ElementsButtonMorph >> labelFont [
 	^StrikeFont fontName: 'VerdanaBold' size: 12
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 ElementsButtonMorph >> mouseDown: evt [
 	target perform: selector
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ElementsButtonMorph >> selector: aSelector [
 	selector := aSelector
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ElementsButtonMorph >> target: anObject [
 	target := anObject
 ]

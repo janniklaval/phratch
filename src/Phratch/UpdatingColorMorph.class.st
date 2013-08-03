@@ -11,25 +11,25 @@ Class {
 	#category : #'Phratch-UI-Watchers'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 UpdatingColorMorph >> fieldsVersion [
 
 	^ 1
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 UpdatingColorMorph >> getSelector [
 
 	^ selector.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 UpdatingColorMorph >> getSelector: sym [
 
 	selector := sym asString asSymbol.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 UpdatingColorMorph >> initFieldsFrom: anObjStream version: classVersion [
 
 	super initFieldsFrom: anObjStream version: classVersion.
@@ -42,7 +42,7 @@ UpdatingColorMorph >> initFieldsFrom: anObjStream version: classVersion [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 UpdatingColorMorph >> initialize [
 
 	super initialize.
@@ -52,19 +52,19 @@ UpdatingColorMorph >> initialize [
 	borderWidth := 1.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 UpdatingColorMorph >> parameter [
 
 	^ parameter
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 UpdatingColorMorph >> parameter: a [
 
 	parameter := a.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'target access' }
 UpdatingColorMorph >> readFromTarget [
 	"Answer the formatted string for the value read from my target. If the target or selector are nil, or if the value is the same as the last value read, answer my current contents."
 
@@ -78,26 +78,26 @@ UpdatingColorMorph >> readFromTarget [
 		^ nil].
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'stepping and presenter' }
 UpdatingColorMorph >> step [
 
 	super step.
 	self readFromTarget.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 UpdatingColorMorph >> stepTime [
 
 	^ stepTime ifNil: [100] ifNotNil: [stepTime].
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 UpdatingColorMorph >> stepTime: anInteger [
 
 	stepTime := anInteger asInteger.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 UpdatingColorMorph >> storeFieldsOn: anObjStream [
 
 	super storeFieldsOn: anObjStream.
@@ -109,12 +109,12 @@ UpdatingColorMorph >> storeFieldsOn: anObjStream [
 	) on: anObjStream.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 UpdatingColorMorph >> target [
 	^ target
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 UpdatingColorMorph >> target: anObject [
 
 	target := anObject

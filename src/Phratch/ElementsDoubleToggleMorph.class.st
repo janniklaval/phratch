@@ -7,7 +7,7 @@ Class {
 	#category : #'Phratch-UI-Support'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ElementsDoubleToggleMorph >> chooser: aSelector [
 	chooser selector: aSelector
 ]
@@ -40,19 +40,19 @@ ElementsDoubleToggleMorph >> initialize [
 	self fitMorphs
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ElementsDoubleToggleMorph >> selector: anObject [
 	super selector: anObject.
 	chooser selector: anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ElementsDoubleToggleMorph >> target: anObject [
 	super target: anObject.
 	chooser target: anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 ElementsDoubleToggleMorph >> test [
 	self inform: 'Hi'
 ]

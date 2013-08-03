@@ -10,7 +10,7 @@ Class {
 	#category : #'Phratch-UI-Support'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #layout }
 ElementsPaletteFrameMorph >> acceptDroppingMorph: aMorph event: evt [
 	"This message is sent when a morph is dropped onto a morph that has agreed to accept the dropped morph by responding 'true' to the wantsDroppedMorph:Event: message. This default implementation just adds the given morph to the receiver."
 
@@ -27,7 +27,7 @@ ElementsPaletteFrameMorph >> arrangePanes [
 		extent: self width @ (self height - header height)
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 ElementsPaletteFrameMorph >> buildPanes [
 	header := PaletteFrameHeadMorph new frame: self.
 	palette := ElementsScrollFrameMorph new
@@ -39,7 +39,7 @@ ElementsPaletteFrameMorph >> buildPanes [
 		addMorph: palette.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'instance creation' }
 ElementsPaletteFrameMorph >> class: aClass [
 	currentClass := aClass.
 	header adjustToClass: currentClass.
@@ -154,7 +154,7 @@ ElementsPaletteFrameMorph >> createSubclass [
 		
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ElementsPaletteFrameMorph >> currentClass [
 	^currentClass
 ]
@@ -173,7 +173,7 @@ ElementsPaletteFrameMorph >> currentMethodsClass [
 	^Smalltalk at: name asSymbol
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ElementsPaletteFrameMorph >> editorFrame: aMorph [
 	editorFrame := aMorph
 ]
@@ -187,14 +187,14 @@ ElementsPaletteFrameMorph >> globalVarMenu [
 	^menu
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 ElementsPaletteFrameMorph >> handlesMouseDown: evt [
 	"Return true if this morph wants to receive mouseDown events (i.e., mouseDown:, mouseMove:, mouseUp:). The default response is false; subclasses that implement mouse messages should override this to return true." 
 
 	^ true
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialize }
 ElementsPaletteFrameMorph >> initialize [
 	super initialize.
 	currentClass := Object.
@@ -228,7 +228,7 @@ ElementsPaletteFrameMorph >> methodMenu [
 	^menu
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 ElementsPaletteFrameMorph >> mouseDown: evt [
 	"Handle a mouse down event."
 
@@ -237,7 +237,7 @@ ElementsPaletteFrameMorph >> mouseDown: evt [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 ElementsPaletteFrameMorph >> refresh [
 	| choice |
 	choice := header choice.
@@ -280,7 +280,7 @@ ElementsPaletteFrameMorph >> refresh [
 		palette contents: (ElementPaletteMorph messagesFor: header methodsClass) ].
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'menu - class' }
 ElementsPaletteFrameMorph >> removeClass [
 	| class |
 	class := self selectClass.
@@ -289,7 +289,7 @@ ElementsPaletteFrameMorph >> removeClass [
 		self removeClass: class ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #removing }
 ElementsPaletteFrameMorph >> removeClass: aClass [
 
 		(editorFrame currentClass = aClass)
@@ -316,7 +316,7 @@ ElementsPaletteFrameMorph >> removeGlobalVar [
 		self refresh ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 ElementsPaletteFrameMorph >> removeInstVar [
 	| var |
 	var := self selectInstVar.
@@ -325,7 +325,7 @@ ElementsPaletteFrameMorph >> removeInstVar [
 		self refresh ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #transforming }
 ElementsPaletteFrameMorph >> removeMethod [
 	| sel |
 	sel := self selectSelector.
@@ -391,7 +391,7 @@ ElementsPaletteFrameMorph >> selectSelector [
 	^ menu selectedValue.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'dropping/grabbing' }
 ElementsPaletteFrameMorph >> wantsDroppedMorph: aMorph event: evt [
 	"Return true if the receiver wishes to accept the given morph, which is being dropped by a hand in response to the given event. The default implementation returns false.
 NOTE: the event is assumed to be in global (world) coordinates."

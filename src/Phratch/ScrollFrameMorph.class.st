@@ -152,7 +152,7 @@ ScrollFrameMorph >> grabContentsAt: aPoint [
 	self isScrollable ifTrue: [
 		World activeHand
 			newKeyboardFocus: self;
-			showTemporaryCursor: Cursor handClosed asXOCursorForm.
+			showTemporaryCursor: Cursor handClosed.
 		dragOffset := aPoint - (contents left @ contents top)]
 
 ]

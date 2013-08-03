@@ -115,7 +115,7 @@ StepHolderElementMorph >> fitMethod [
 		ifTrue: [owner fit]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 StepHolderElementMorph >> mouseEnterDragging: evt [
 	"Handle a mouseEnterDragging event. The mouse just entered my bounds with a button pressed or laden with submorphs. This default implementation does nothing."
 
@@ -130,7 +130,7 @@ StepHolderElementMorph >> mouseEnterDragging: evt [
 			ifTrue: [owner fit]]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'dropping/grabbing' }
 StepHolderElementMorph >> wantsDroppedMorph: aMorph event: evt [
 
 	^contents isNil & (aMorph isKindOf: StepElementMorph) & (self ownerThatIsA: ElementPaletteMorph) isNil

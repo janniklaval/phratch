@@ -92,28 +92,28 @@ TranslucentImageMorph >> drawOn: aCanvas [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 TranslucentImageMorph >> initialize [
 
 	super initialize.
 	transparency := 1.0.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 TranslucentImageMorph >> mouseLeave: evt [
 
 	PhratchToolTipMorph clearToolTips.
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 TranslucentImageMorph >> transparency [
 
 	^ transparency
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 TranslucentImageMorph >> transparency: aNumber [
 
 	transparency := aNumber.

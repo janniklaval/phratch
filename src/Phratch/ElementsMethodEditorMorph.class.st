@@ -40,7 +40,7 @@ ElementsMethodEditorMorph class >> warnIfNoSourcesFile: anObject [
 	WarnIfNoSourcesFile := anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #menu }
 ElementsMethodEditorMorph >> about [
 	self inform: '- Elements -
 
@@ -84,7 +84,7 @@ ElementsMethodEditorMorph >> arrangePanes [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 ElementsMethodEditorMorph >> buildPanes [
 	| p m |
 	classChooser := ClassChooserMorph new frame: self; class: Object.
@@ -131,7 +131,7 @@ ElementsMethodEditorMorph >> contextMenu [
 	^m
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ElementsMethodEditorMorph >> currentClass [
 	^currentClass
 ]
@@ -164,7 +164,7 @@ ElementsMethodEditorMorph >> developmentMode [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 ElementsMethodEditorMorph >> handlesMouseDown: evt [
 	"Return true if this morph wants to receive mouseDown events (i.e., mouseDown:, mouseMove:, mouseUp:). The default response is false; subclasses that implement mouse messages should override this to return true." 
 
@@ -172,7 +172,7 @@ ElementsMethodEditorMorph >> handlesMouseDown: evt [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialize }
 ElementsMethodEditorMorph >> initialize [
 	fillScreenOn := false.
 	methodModified := false.
@@ -209,7 +209,7 @@ ElementsMethodEditorMorph >> maximize [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ElementsMethodEditorMorph >> methodModified [
 	methodModified := true.
 	saver isHidden: false.
@@ -234,7 +234,7 @@ ElementsMethodEditorMorph >> methodUnmodified [
 	saver isHidden: true
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 ElementsMethodEditorMorph >> mouseDown: evt [
 	"Handle a mouse down event."
 
@@ -257,7 +257,7 @@ ElementsMethodEditorMorph >> onMethod: aSelector ofClass: aClass [
 "	self refresh"
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 ElementsMethodEditorMorph >> refresh [
 	self methodTemplate
 ]
@@ -277,7 +277,7 @@ ElementsMethodEditorMorph >> saveCurrentMethod [
 	palette refresh
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #actions }
 ElementsMethodEditorMorph >> saveImage [
 
 	self userMode.
@@ -288,7 +288,7 @@ ElementsMethodEditorMorph >> saveImage [
 	World activeHand saveAndQuit
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'class list' }
 ElementsMethodEditorMorph >> selectClass: aClass [
 	editor ifNil: [^self].
 	(currentClass = aClass)
@@ -302,7 +302,7 @@ ElementsMethodEditorMorph >> selectClass: aClass [
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 ElementsMethodEditorMorph >> selectMethod: aSelector [
 	| myMethod temps se |
 
@@ -330,14 +330,14 @@ ElementsMethodEditorMorph >> selectMethod: aSelector [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'stepping and presenter' }
 ElementsMethodEditorMorph >> step [
 	fillScreenOn 
 		ifTrue: [self maximize]
 		ifFalse: [^self arrangePanes].
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 ElementsMethodEditorMorph >> stepTime [
 	^0
 ]

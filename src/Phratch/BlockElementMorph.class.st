@@ -47,7 +47,7 @@ BlockElementMorph >> allVariableNames [
 	^self variableNames
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #converting }
 BlockElementMorph >> asSmalltalk [
 	| ws vn|
 	ws := WriteStream on: String new.
@@ -74,12 +74,12 @@ BlockElementMorph >> contextMenu [
 	^ m
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #evaluation }
 BlockElementMorph >> evaluate [
 	^Compiler evaluate: self asSmalltalk, ' value'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 BlockElementMorph >> fit [
 	| bw bw2 cw handle x y |
 	bw := self borderWidth.
@@ -101,7 +101,7 @@ BlockElementMorph >> fit [
 		ifTrue: [ owner fit ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialize }
 BlockElementMorph >> initialize [
 	super initialize.
 	color := Color paleBlue darker.

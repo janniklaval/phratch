@@ -118,7 +118,7 @@ PaintColorPicker >> mouseDown: evt [
 { #category : #'event handling' }
 PaintColorPicker >> mouseEnter: evt [
 
-	evt hand showTemporaryCursor: Cursor eyeDropper asXOCursorForm.
+	evt hand showTemporaryCursor: Cursor eyeDropper.
 
 ]
 

@@ -9,30 +9,30 @@ Class {
 	#category : #'Phratch-UI-Elements'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #layout }
 StepElementMorph >> acceptDroppingMorph: aMorph event: evt [
 
 	self next: aMorph
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #adding }
 StepElementMorph >> addExpression [
 	expression := ArgumentElementMorph new.
 "	expression color: color muchLighter."
 	self addMorphFront: expression.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #adding }
 StepElementMorph >> addToLast: anElement [
 	self stack last next: anElement
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #converting }
 StepElementMorph >> asSmalltalk [
 	expression ifNotNil: [^expression asSmalltalk]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 StepElementMorph >> borderWidth [
 	^1
 
@@ -51,7 +51,7 @@ StepElementMorph >> contextMenu [
 	^m
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #drawing }
 StepElementMorph >> drawOn: aCanvas [ 
 
 	|r bw indent dent bw2 bw3 |
@@ -120,17 +120,17 @@ StepElementMorph >> drawOn: aCanvas [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 StepElementMorph >> expression [
 	^expression contents
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 StepElementMorph >> expression: anElement [
 	expression contents: anElement
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 StepElementMorph >> fit [
 
 	| cw handle bw x y|
@@ -154,7 +154,7 @@ StepElementMorph >> fit [
 		ifTrue: [owner fit]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 StepElementMorph >> handlesMouseOverDragging: evt [
 	"Return true if I want to receive mouseEnterDragging: and mouseLeaveDragging: when the hand drags something over me (button up or button down), or when the mouse button is down but there is no mouseDown recipient. The default response is false; subclasses that implement mouse mouseEnterDragging messages should override this to return true."
 
@@ -176,7 +176,7 @@ StepElementMorph >> hilite [
 			ifTrue: [each unHilite ]]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialize }
 StepElementMorph >> initialize [
 	super initialize.
 	color := Color lightGreen twiceDarker.
@@ -184,24 +184,24 @@ StepElementMorph >> initialize [
 	self fit.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 StepElementMorph >> isLast [
 	^next isNil
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 StepElementMorph >> labelFont [
 	^StrikeFont fontName: 'Verdana' size: 10
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 StepElementMorph >> last [
 	self isLast
 		ifTrue: [^self]
 		ifFalse: [^next last]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 StepElementMorph >> mouseEnterDragging: evt [
 	"Handle a mouseEnterDragging event. The mouse just entered my bounds with a button pressed or laden with submorphs. This default implementation does nothing."
 
@@ -213,19 +213,19 @@ StepElementMorph >> mouseEnterDragging: evt [
 			self hilite ].
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 StepElementMorph >> mouseLeaveDragging: evt [
 	"Handle a mouseLeaveLaden event. The mouse just left my bounds with a button pressed or laden with submorphs. This default implementation does nothing."
 
 	self unHilite
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 StepElementMorph >> next [
 	^next
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 StepElementMorph >> next: anElement [
 	next := anElement.
 	self addMorphFront: next.
@@ -247,7 +247,7 @@ StepElementMorph >> representsNil [
 	^self isLast & expression contents isNil
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'debugger access' }
 StepElementMorph >> stack [
 	| list step |
 	list := OrderedCollection with: self.
@@ -278,7 +278,7 @@ StepElementMorph >> unHilite [
 		self color: oldColor]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'dropping/grabbing' }
 StepElementMorph >> wantsDroppedMorph: aMorph event: evt [
 
 	^next isNil & (aMorph isKindOf: self class) & (self ownerThatIsA: ElementPaletteMorph) isNil

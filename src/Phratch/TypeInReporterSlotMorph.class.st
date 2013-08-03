@@ -4,7 +4,7 @@ Class {
 	#category : #'Phratch-Blocks'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #'stack/tuple conversion' }
 TypeInReporterSlotMorph >> asBlockTuple [
 	"Answer a tuple (Array) describing this block and its arguments."
 
@@ -23,7 +23,7 @@ TypeInReporterSlotMorph >> asBlockTuple [
 	^ blockTuple
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'argument slot behavior' }
 TypeInReporterSlotMorph >> evaluate [
 
 	"empty slot and implicit values need yet to be supported"
@@ -56,7 +56,7 @@ TypeInReporterSlotMorph >> evaluate [
 "
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 TypeInReporterSlotMorph >> initialize [
 	super initialize.
 	self selector: #typeInLambda.
@@ -65,7 +65,7 @@ TypeInReporterSlotMorph >> initialize [
 		removeElementMorph delete]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'argument slot behavior' }
 TypeInReporterSlotMorph >> isEmptySlot [
 
 	(argMorphs first isKindOf: ExpressionArgMorph) ifTrue: [

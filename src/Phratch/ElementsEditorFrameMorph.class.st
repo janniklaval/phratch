@@ -17,13 +17,13 @@ Class {
 	#category : #'Phratch-UI-Dialogs'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #'initialize-release' }
 ElementsEditorFrameMorph class >> initialize [
 	"BlockEditorFrameMorph initialize"
 	self resetDimensions
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ElementsEditorFrameMorph class >> minExtent [
 	^500 @ 400.
 ]
@@ -40,13 +40,13 @@ ElementsEditorFrameMorph class >> setUserPos: aPoint size: anExtent [
 	UserSize := anExtent.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #geometry }
 ElementsEditorFrameMorph >> centerOnScreen [
 	super centerOnScreen.
 	self updateResizeMorph
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ElementsEditorFrameMorph >> definition: aCustomBlockDefinition [
 
 	definition := aCustomBlockDefinition.
@@ -58,7 +58,7 @@ ElementsEditorFrameMorph >> definition: aCustomBlockDefinition [
 	self buildAnswerField.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #geometry }
 ElementsEditorFrameMorph >> extent: aPoint [
 	
 	| w newExtent min|
@@ -83,7 +83,7 @@ ElementsEditorFrameMorph >> extent: aPoint [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #geometry }
 ElementsEditorFrameMorph >> fixLayoutForExtent: aPoint [
 
 	super fixLayoutForExtent: aPoint.
@@ -97,7 +97,7 @@ ElementsEditorFrameMorph >> fixLayoutForExtent: aPoint [
 	self updateResizeMorph
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #interaction }
 ElementsEditorFrameMorph >> getUserResponse [
 	"Wait for the user to respond, then report their response. The symbol #cancel is returned if the user wishes to cancel the operation. True/false is returned if they respond yes/no, and a string is returned if this this a string input dialog and they don't cancel."
 	"Details: This is invoked synchronously from the caller. In order to keep processing inputs and updating the screen while waiting for the user to respond, this method has its own version of the World's event loop."
@@ -130,12 +130,12 @@ ElementsEditorFrameMorph >> getUserResponse [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 ElementsEditorFrameMorph >> handlesMouseDown: evt [
 	^true
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 ElementsEditorFrameMorph >> initialize [
 	super initialize.
 	self title: 'Elements Editor'.
@@ -151,7 +151,7 @@ ElementsEditorFrameMorph >> initialize [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'dropping/grabbing' }
 ElementsEditorFrameMorph >> justDroppedInto: aMorph event: evt [
 	"Never embed myself in a morph (e.g. the Stage)."
 
@@ -160,7 +160,7 @@ ElementsEditorFrameMorph >> justDroppedInto: aMorph event: evt [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #nesting }
 ElementsEditorFrameMorph >> keepOnScreen [
 
 	| min |
@@ -188,7 +188,7 @@ ElementsEditorFrameMorph >> keepOnScreen [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 ElementsEditorFrameMorph >> mouseDown: evt [
 	"Handle a mouse click. Left button either drags or performs click action. Right button brings up a menu."
 
@@ -200,7 +200,7 @@ ElementsEditorFrameMorph >> mouseDown: evt [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 ElementsEditorFrameMorph >> mouseMove: evt [
 
 	resizeOffset ifNotNil: [
@@ -209,7 +209,7 @@ ElementsEditorFrameMorph >> mouseMove: evt [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 ElementsEditorFrameMorph >> mouseUp: evt [
 
 	resizeOffset := nil.
@@ -241,7 +241,7 @@ ElementsEditorFrameMorph >> snapToUserDimensions [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'stepping and presenter' }
 ElementsEditorFrameMorph >> step [
 	resizeOffset notNil | (owner isKindOf: HandMorph)
 		ifTrue: [^self ].
@@ -256,7 +256,7 @@ ElementsEditorFrameMorph >> updateResizeMorph [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #interaction }
 ElementsEditorFrameMorph >> yes [
 	"Yes button was pressed."
 	SyntaxElementMorph allSubInstances do: [:element |

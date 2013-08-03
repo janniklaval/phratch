@@ -11,7 +11,7 @@ Class {
 	#category : #'Phratch-Blocks'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 CustomReporterBlockMorph class >> template [
 	^self new isTemplate: true
 ]

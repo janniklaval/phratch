@@ -4,7 +4,7 @@ Class {
 	#category : #'Phratch-Blocks'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #evaluation }
 UnevaluatedBooleanArgMorph >> evaluate [
 
 	"empty slot and implicit values need yet to be supported"

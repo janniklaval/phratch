@@ -16,7 +16,7 @@ SyntaxElementMorph class >> classNameFrom: aUserString [
 		c = $ ]) capitalized
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'instance creation' }
 SyntaxElementMorph class >> fromString: aString [
 
 	|strg method compiler|
@@ -33,7 +33,7 @@ SyntaxElementMorph class >> fromString: aString [
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 SyntaxElementMorph class >> isDecompilable: selector class: class [
 
 	|  original compiled text node|
@@ -79,12 +79,12 @@ SyntaxElementMorph class >> selectorFrom: aUserString [
 	^ws contents asSymbol
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 SyntaxElementMorph class >> test [
 	1 even ifTrue:[] ifFalse:[^'yes']
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 SyntaxElementMorph class >> testAllOriginalMethods [
 
 	| eachClass methods original compiled text node|
@@ -137,7 +137,7 @@ SyntaxElementMorph class >> wordsFrom: camelCase [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'dropping/grabbing' }
 SyntaxElementMorph >> aboutToBeGrabbedBy: aHand [
 
 	(owner isKindOf: ArgumentElementMorph)
@@ -152,32 +152,32 @@ SyntaxElementMorph >> aboutToBeGrabbedBy: aHand [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #converting }
 SyntaxElementMorph >> asSmalltalk [
 	^''
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #drawing }
 SyntaxElementMorph >> borderColorDark [
 	^color twiceDarker
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #drawing }
 SyntaxElementMorph >> borderColorLight [
 	^color twiceLighter lighter
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #drawing }
 SyntaxElementMorph >> borderColorVeryDark [
 	^color twiceDarker darker
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #drawing }
 SyntaxElementMorph >> borderColorVeryLight [
 	^color twiceLighter twiceLighter lighter
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 SyntaxElementMorph >> borderWidth [
 	^1
 
@@ -189,7 +189,7 @@ SyntaxElementMorph >> contextMenu [
 	^nil
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #drawing }
 SyntaxElementMorph >> drawOn: aCanvas [ 
 
 	|r bw |
@@ -224,17 +224,17 @@ SyntaxElementMorph >> drawOn: aCanvas [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #copying }
 SyntaxElementMorph >> duplicate [
 	World activeHand addMorph: super fullCopy
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #evaluation }
 SyntaxElementMorph >> evaluate [
 	^Compiler evaluate: self asSmalltalk
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 SyntaxElementMorph >> fit [
 	self extent: label extent + (self borderWidth * 2).
 	self width: (self width + (self labelFont widthOf: $ )).
@@ -244,14 +244,14 @@ SyntaxElementMorph >> fit [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 SyntaxElementMorph >> handlesMouseDown: evt [
 	"Return true if this morph wants to receive mouseDown events (i.e., mouseDown:, mouseMove:, mouseUp:). The default response is false; subclasses that implement mouse messages should override this to return true." 
 
 	^ true
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialize }
 SyntaxElementMorph >> initialize [
 	super initialize.
 	color := Color red
@@ -266,7 +266,7 @@ SyntaxElementMorph >> invokeContextMenu [
 		choice ifNotNil: [self perform: choice] ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 SyntaxElementMorph >> isRenameable [
 	| editor |
 	editor := (self ownerThatIsA: ElementsMethodEditorMorph).
@@ -274,13 +274,13 @@ SyntaxElementMorph >> isRenameable [
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 SyntaxElementMorph >> label [
 	^name
 	"^label contents"
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 SyntaxElementMorph >> label: aString [
 
 	name := aString.
@@ -293,17 +293,17 @@ SyntaxElementMorph >> label: aString [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 SyntaxElementMorph >> labelColor [
 	^Color white
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 SyntaxElementMorph >> labelFont [
 	^StrikeFont fontName: 'Verdana' size: 10
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 SyntaxElementMorph >> mouseDown: evt [
 	"Handle a mouse down event."
 
@@ -313,7 +313,7 @@ SyntaxElementMorph >> mouseDown: evt [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 SyntaxElementMorph >> name [
 	^name
 ]

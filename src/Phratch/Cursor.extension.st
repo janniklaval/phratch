@@ -1,15 +1,6 @@
 Extension { #name : #Cursor }
 
 { #category : #'*Phratch-Extensions' }
-Cursor class >> asXOCursorForm [
-]
-
-{ #category : #'*Phratch' }
-Cursor >> asXOCursorForm [
-	^self
-]
-
-{ #category : #'*Phratch-Extensions' }
 Cursor class >> eyeDropper [
 	"Cursor eyeDropper showWhile: [Sensor waitButton]"
 

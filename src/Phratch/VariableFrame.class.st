@@ -10,12 +10,12 @@ Class {
 	#category : #'Phratch-UI-Support'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 VariableFrame class >> forNames: aCollection [
 	^self new forNames: aCollection
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'class initialization' }
 VariableFrame class >> initialize [
 
 	"VariableFrame initialize"
@@ -24,26 +24,26 @@ VariableFrame class >> initialize [
 	ScopeContrast := false.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 VariableFrame class >> maxNestingDepth [
 	"kludge alert!"
 
 	^ 100
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'class initialization' }
 VariableFrame class >> scopeContrast [
 
 	^ ScopeContrast
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'class initialization' }
 VariableFrame class >> scopeContrast: bool [
 
 	ScopeContrast := bool
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #variables }
 VariableFrame class >> variableBlockColor [
 
 	ScopeContrast
@@ -53,14 +53,14 @@ VariableFrame class >> variableBlockColor [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #adding }
 VariableFrame >> add: varName [
 	vars at: varName put: 0
 
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #variables }
 VariableFrame >> changeVar: varName by: increment [
 	"Change the value of the given variable of this object by the given amount."
 
@@ -70,7 +70,7 @@ VariableFrame >> changeVar: varName by: increment [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'byob lambdas' }
 VariableFrame >> convertStacksToTuples [
 
 	| obj isCyclic |
@@ -93,7 +93,7 @@ VariableFrame >> convertStacksToTuples [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'byob lambdas' }
 VariableFrame >> convertTuplesToStacks [
 
 	"format conventions:
@@ -158,20 +158,20 @@ VariableFrame >> convertTuplesToStacks [
 			obj convertTuplesToStacks ]]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'object i/o' }
 VariableFrame >> fieldsVersion [
 
 	^ 1
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 VariableFrame >> forNames: aCollectionOfStrings [
 	aCollectionOfStrings do:[:eachVarName |
 		vars at: eachVarName put: 0 ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #variables }
 VariableFrame >> getVar: varName [
 	"Answer the value of the given user variable of this object, or 0 if the variable has been deleted."
 
@@ -179,7 +179,7 @@ VariableFrame >> getVar: varName [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #variables }
 VariableFrame >> getVar: varName block: aVariableBlockMorph [
 	"Answer the value of the given user variable of this object, or 0 if the variable has been deleted."
 
@@ -187,7 +187,7 @@ VariableFrame >> getVar: varName block: aVariableBlockMorph [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'object i/o' }
 VariableFrame >> initFieldsFrom: anObjStream version: classVersion [
 	"Set my instance variables from the given object stream."
 
@@ -197,13 +197,13 @@ VariableFrame >> initFieldsFrom: anObjStream version: classVersion [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'initialize-release' }
 VariableFrame >> initialize [
 	super initialize.
 	vars := Dictionary new.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 VariableFrame >> interpretStringAsNumberIfPossible: anObject [
 	"If the argument is a string that can be interpreted as a number, such as '123', then return it's value as a number. Otherwise, return the original object."
 
@@ -230,7 +230,7 @@ VariableFrame >> interpretStringAsNumberIfPossible: anObject [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 VariableFrame >> isMaxNestedAt: int [
 	"kludge-alert!"
 
@@ -241,7 +241,7 @@ VariableFrame >> isMaxNestedAt: int [
 	^ false
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 VariableFrame >> isReferencing: aVarFrame [
 
 	| obj |
@@ -266,7 +266,7 @@ VariableFrame >> isReferencing: aVarFrame [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 VariableFrame >> references: obj [
 	"kludge-alert: answer true if any part of me contains a reference to obj"
 
@@ -278,12 +278,12 @@ VariableFrame >> references: obj [
 	^ false
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #removing }
 VariableFrame >> remove: varName [
 	vars removeKey: varName
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 VariableFrame >> renameVar: old to: new [
 
 	| value |
@@ -295,13 +295,13 @@ VariableFrame >> renameVar: old to: new [
 	vars at: new put: value
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 VariableFrame >> scope [
 
 	^self varNamesMenu
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #variables }
 VariableFrame >> setVar: varName to: newValue [
 	"Set the value of the given variable of this object to the given value."
 
@@ -312,7 +312,7 @@ VariableFrame >> setVar: varName to: newValue [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'object i/o' }
 VariableFrame >> storeFieldsOn: anObjStream [
 
 	self storeFieldsNamed: #(
@@ -322,18 +322,18 @@ VariableFrame >> storeFieldsOn: anObjStream [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #variables }
 VariableFrame >> varNamesMenu [
 	^vars keys asSortedCollection asArray
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #variables }
 VariableFrame >> variableBlockColor [
 
 	^ self class variableBlockColor
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 VariableFrame >> vars [
 	"private"
 	^ vars

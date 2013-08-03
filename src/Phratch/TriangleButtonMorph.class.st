@@ -4,27 +4,27 @@ Class {
 	#category : #'Phratch-UI-Support'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #drawing }
 TriangleButtonMorph >> borderColorDark [
 	^owner color twiceDarker
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #drawing }
 TriangleButtonMorph >> borderColorLight [
 	^owner color twiceLighter lighter
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #drawing }
 TriangleButtonMorph >> borderColorVeryDark [
 	^owner color twiceDarker darker
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #drawing }
 TriangleButtonMorph >> borderColorVeryLight [
 	^owner color twiceLighter twiceLighter lighter
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #drawing }
 TriangleButtonMorph >> drawOn: aCanvas [
 	aCanvas
 		line: self topLeft + 1 to: (self topRight + (-1@1)) color: self borderColorVeryLight;

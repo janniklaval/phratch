@@ -7,7 +7,7 @@ Class {
 	#category : #'Phratch-UI-Support'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #widgets }
 BlockLabelFragmentMorph >> handlesMouseDown: evt [
 	"Return true if this morph wants to receive mouseDown events (i.e., mouseDown:, mouseMove:, mouseUp:). The default response is false; subclasses that implement mouse messages should override this to return true." 
 
@@ -15,14 +15,14 @@ BlockLabelFragmentMorph >> handlesMouseDown: evt [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #widgets }
 BlockLabelFragmentMorph >> handlesMouseOver: evt [
 
 	^ true
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 BlockLabelFragmentMorph >> handlesMouseOverDragging: evt [
 	"Return true if this morph wants to receive mouseDown events (i.e., mouseDown:, mouseMove:, mouseUp:). The default response is false; subclasses that implement mouse messages should override this to return true." 
 
@@ -30,23 +30,23 @@ BlockLabelFragmentMorph >> handlesMouseOverDragging: evt [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 BlockLabelFragmentMorph >> initialize [
 	super initialize.
 	labelFragment := BlockLabelFragment new
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 BlockLabelFragmentMorph >> labelFragment [
 	^labelFragment
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 BlockLabelFragmentMorph >> labelFragment: fragment [
 	labelFragment := fragment
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #widgets }
 BlockLabelFragmentMorph >> mouseDown: evt [
 	"Handle a mouse down event"
 
@@ -69,7 +69,7 @@ BlockLabelFragmentMorph >> mouseDown: evt [
 	owner updateSpecWithDnDSpec
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 BlockLabelFragmentMorph >> mouseEnter: evt [
 
 	owner isFrozen 
@@ -78,7 +78,7 @@ BlockLabelFragmentMorph >> mouseEnter: evt [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 BlockLabelFragmentMorph >> mouseEnterDragging: evt [
 
 	owner isFrozen 
@@ -86,7 +86,7 @@ BlockLabelFragmentMorph >> mouseEnterDragging: evt [
 	owner showPlaceHoldersNear: self
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 BlockLabelFragmentMorph >> mouseLeave: evt [
 
 	owner isFrozen 
@@ -94,7 +94,7 @@ BlockLabelFragmentMorph >> mouseLeave: evt [
 	self color: Color white
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 BlockLabelFragmentMorph >> mouseLeaveDragging: evt [
 
 	(owner notNil and: [owner isFrozen])
@@ -102,7 +102,7 @@ BlockLabelFragmentMorph >> mouseLeaveDragging: evt [
 	self color: Color white
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'byob lambdas' }
 BlockLabelFragmentMorph >> updateFragment [
 
 	labelFragment

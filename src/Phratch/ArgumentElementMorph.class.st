@@ -14,7 +14,7 @@ ArgumentElementMorph >> acceptDroppingMorph: aMorph event: evt [
 	self contentsForced: aMorph
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #converting }
 ArgumentElementMorph >> asSmalltalk [
 
 	contents ifNil: [^'nil '].
@@ -52,7 +52,7 @@ ArgumentElementMorph >> contents: anElement [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #other }
 ArgumentElementMorph >> contentsForced: anElement [
 	contents ifNotNil: [contents delete].
 	contents := anElement.
@@ -63,7 +63,7 @@ ArgumentElementMorph >> contentsForced: anElement [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #drawing }
 ArgumentElementMorph >> drawOn: aCanvas [ 
 
 	|r bw|
@@ -92,7 +92,7 @@ ArgumentElementMorph >> drawOn: aCanvas [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 ArgumentElementMorph >> fit [
 	| h |
 	contents isNil
@@ -120,13 +120,13 @@ ArgumentElementMorph >> handlesMouseOverDragging: evt [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #other }
 ArgumentElementMorph >> hilite [
 	oldColor := color.
 	self color: Color white
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialize }
 ArgumentElementMorph >> initialize [
 	super initialize.
 	color := Color veryVeryLightGray.
@@ -156,14 +156,14 @@ ArgumentElementMorph >> mouseLeaveDragging: evt [
 	self unHilite
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #other }
 ArgumentElementMorph >> removeContents [
 	contents ifNotNil: [ contents := nil ].
 	self fit.
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #other }
 ArgumentElementMorph >> rootForGrabOf: aMorph [
 	"Answer the root of the morph structure to be picked up when the given morph is grabbed."
 
@@ -182,7 +182,7 @@ ArgumentElementMorph >> rootForGrabOf: aMorph [
 "
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #other }
 ArgumentElementMorph >> unHilite [
 
 	oldColor ifNotNil: [

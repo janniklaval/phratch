@@ -4,7 +4,7 @@ Class {
 	#category : #'Phratch-UI-Elements'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 TextBoxElementMorph >> contents [
 	^label contents
 ]
@@ -35,7 +35,7 @@ TextBoxElementMorph >> initialize [
 	self fit
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 TextBoxElementMorph >> label: aString [
 	label ifNil: [
 		label := StringElementMorph contents: aString font: self labelFont.
@@ -56,7 +56,7 @@ TextBoxElementMorph >> labelFont [
 	^StrikeFont fontName: 'Verdana' size: 9
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #widgets }
 TextBoxElementMorph >> layoutChanged [
 
 	super layoutChanged.
@@ -84,7 +84,7 @@ TextBoxElementMorph >> resizeToLabel [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'dropping/grabbing' }
 TextBoxElementMorph >> wantsDroppedMorph: aMorph event: evt [
 
 	^false

@@ -11,7 +11,7 @@ Class {
 	#category : #'Phratch-UI-Support'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #drawing }
 ElementsToggleButtonMorph >> drawOn: aCanvas [ 
 
 	|r bw |
@@ -72,7 +72,7 @@ ElementsToggleButtonMorph >> flat [
 	specialEffect := false
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialize }
 ElementsToggleButtonMorph >> initialize [
 	super initialize.
 	specialEffect := true.
@@ -85,12 +85,12 @@ ElementsToggleButtonMorph >> initialize [
 	self toggle
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 ElementsToggleButtonMorph >> isOn [
 	^on
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ElementsToggleButtonMorph >> label: aString [
 
 	label ifNil: [
@@ -102,30 +102,30 @@ ElementsToggleButtonMorph >> label: aString [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 ElementsToggleButtonMorph >> labelFont [
 	^StrikeFont fontName: 'VerdanaBold' size: 10
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ElementsToggleButtonMorph >> off [
 	on := false.
 	self color: offColor
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ElementsToggleButtonMorph >> on [
 	on := true.
 	self color: onColor
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ElementsToggleButtonMorph >> onColor: onc offColor: offc [
 	onColor := onc.
 	offColor := offc
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #actions }
 ElementsToggleButtonMorph >> toggle [
 	self fitMorphs.
 	on ifTrue: [^self off].

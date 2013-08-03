@@ -27,7 +27,7 @@ FileIOAskerDialog >> forPhratchFrame: aPhratchFrameMorph [
 	phratchFrame := aPhratchFrameMorph
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 FileIOAskerDialog >> initialize [
 	
 	| spacer |

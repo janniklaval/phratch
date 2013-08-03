@@ -14,7 +14,7 @@ CSlotMorph >> acceptsDroppedReporters [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #other }
 CSlotMorph >> acceptsTypeOf: aBlockMorph [
 	"Answer true if I can accept a dropped reporter of the given type. Answer false by default."
 
@@ -37,7 +37,7 @@ CSlotMorph >> acceptsTypeOf: aBlockMorph [
 		) includes: aBlockMorph selector]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 CSlotMorph >> blockAttachPoints: aSet [
 	"Answer a collection of possible attachment points for me. Each entry is an Association mapping a point to the morph to which a dropping command block could be attached."
 
@@ -272,7 +272,7 @@ CSlotMorph >> implicitValue: anObject [
 	implicitValue := anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 CSlotMorph >> initialize [
 	super initialize.
 	isSpecialForm := true.

@@ -34,7 +34,7 @@ CustomCommandBlockMorph class >> owner [
 	^ 'jens'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 CustomCommandBlockMorph class >> template [
 	^self new isTemplate: true
 ]

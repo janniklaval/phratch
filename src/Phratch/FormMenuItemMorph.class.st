@@ -7,7 +7,7 @@ Class {
 	#category : #'Phratch-UI-Dialogs'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #drawing }
 FormMenuItemMorph >> drawOn: aCanvas [
 	| selectionColor px py |
 	isSelected & isEnabled
@@ -30,19 +30,19 @@ FormMenuItemMorph >> drawOn: aCanvas [
 		
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #geometry }
 FormMenuItemMorph >> extent: aPoint [
 
 	super extent: (aPoint truncated max: self minWidth@self minHeight).
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 FormMenuItemMorph >> form: aForm [
 
 	form := aForm
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #layout }
 FormMenuItemMorph >> minHeight [
 
 	form ifNotNil: [^ form height + 2].
@@ -50,7 +50,7 @@ FormMenuItemMorph >> minHeight [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #layout }
 FormMenuItemMorph >> minWidth [
 
 	form ifNotNil: [^form width + 2].

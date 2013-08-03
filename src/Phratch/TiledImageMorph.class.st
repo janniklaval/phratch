@@ -7,7 +7,7 @@ Class {
 	#category : #'Phratch-UI-Support'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #drawing }
 TiledImageMorph >> drawOn: aCanvas [
 	"Draw myself by painting my tile form repeatedly to cover my extent."
 
@@ -23,7 +23,7 @@ TiledImageMorph >> drawOn: aCanvas [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialize }
 TiledImageMorph >> initialize [
 
 	super initialize.
@@ -31,14 +31,14 @@ TiledImageMorph >> initialize [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 TiledImageMorph >> tileForm [
 
 	^ tileForm
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 TiledImageMorph >> tileForm: aForm [
 
 	tileForm := aForm.
