@@ -12,7 +12,7 @@ Class {
 	#category : #'Phratch-Blocks'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #adding }
 LambdaBlockMorph >> addVariable [
 
 	| ans |
@@ -26,7 +26,7 @@ LambdaBlockMorph >> addVariable [
 	self rightButtonMenu
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #variables }
 LambdaBlockMorph >> allVarNames [
 	^ (parameters, variables) asSortedCollection
 ]
@@ -44,44 +44,40 @@ LambdaBlockMorph >> bind: varName to: varFrame as: alias [
 					alias: alias ]]]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 LambdaBlockMorph >> body [
 	self subclassResponsibility
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #byob }
 LambdaBlockMorph >> checkBoxLabelled: aString marked: aBool width: anInt [
 	"answer a form consisting of a checkbox and a label - used for the EDIT menu in BYOB"
 
 	| box label pic line cnts |
-	aBool
-		ifTrue: [pic := PhratchFrameMorph skinAt: #watcherButtonPressed]
-		ifFalse: [pic := PhratchFrameMorph skinAt: #watcherButton].
-	box := ImageMorph new form: pic. 
-	
-	cnts := ' ', aString localized.
-
+	pic := aBool
+		ifTrue: [ PhratchFrameMorph skinAt: #watcherButtonPressed ]
+		ifFalse: [ PhratchFrameMorph skinAt: #watcherButton ].
+	box := ImageMorph new form: pic.
+	cnts := ' ' , aString localized.
 	label := StringMorph contents: cnts font: PhratchFrameMorph standardMenuFont.
 	line := Morph new color: Color transparent.
 	line height: (box height max: label height).
 	line width: (box width + label width max: anInt).
 	box left: line left.
-	box top: line top + (line height - box height // 2).
+	box top: line top + ((line height - box height) // 2).
 	label left: box right.
-	label top: line top + (line height - label height // 2).
+	label top: line top + ((line height - label height) // 2).
 	line addMorph: box.
 	line addMorph: label.
 	^ line imageForm
-
-
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 LambdaBlockMorph >> declarations [
 	^declarations
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 LambdaBlockMorph >> declarations: aDictionary [
 	declarations := aDictionary
 ]
@@ -140,12 +136,7 @@ LambdaBlockMorph >> fixInitialFrame [
 			m receiver: initialFrame ]]
 ]
 
-{ #category : #'as yet unclassified' }
-LambdaBlockMorph >> initialFrame: aVariableFrame [
-	initialFrame := aVariableFrame
-]
-
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 LambdaBlockMorph >> initialize [
 	super initialize.
 	type := #none.
@@ -156,32 +147,32 @@ LambdaBlockMorph >> initialize [
 	initialFrame := VariableFrame new
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 LambdaBlockMorph >> isAtomic [
 	^ isAtomic
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 LambdaBlockMorph >> isAtomic: aBoolean [
 	isAtomic := aBoolean
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 LambdaBlockMorph >> isBooleanFunction [
 	self subclassResponsibility
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 LambdaBlockMorph >> isFunction [
 	self subclassResponsibility
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #byob }
 LambdaBlockMorph >> isLambdaForm [
 	^true
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'parts bin' }
 LambdaBlockMorph >> isPartsBin [
 	^true
 ]
@@ -193,7 +184,7 @@ LambdaBlockMorph >> morphToShow [
 	^ImageMorph new form:  self displayForm
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'instance-creation' }
 LambdaBlockMorph >> newChangeVarBlock: varName [
 
 	| block |
@@ -209,7 +200,7 @@ LambdaBlockMorph >> newChangeVarBlock: varName [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'instance-creation' }
 LambdaBlockMorph >> newSetVarBlock: varName [
 
 	| block |
@@ -225,7 +216,7 @@ LambdaBlockMorph >> newSetVarBlock: varName [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'instance-creation' }
 LambdaBlockMorph >> newVarBlock: varName [
 
 	^ VariableBlockMorph new
@@ -238,13 +229,13 @@ LambdaBlockMorph >> newVarBlock: varName [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 LambdaBlockMorph >> optimized [
 	^ (self fullCopy)
 		fixInitialFrame
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 LambdaBlockMorph >> parameterNames [
 	^ parameters
 ]
@@ -270,12 +261,12 @@ LambdaBlockMorph >> parameterTopBlock [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 LambdaBlockMorph >> parameters [
 	^ parameters
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 LambdaBlockMorph >> parameters: anOrderedCollection [
 	 parameters := anOrderedCollection
 ]
@@ -298,19 +289,6 @@ LambdaBlockMorph >> removeLastArg [
 ]
 
 { #category : #'as yet unclassified' }
-LambdaBlockMorph >> removeVariable [
-	| menu |
-	menu := MenuMorph new defaultTarget: self.
-	variables asSortedCollection do:[:aVarName |
-		menu add: aVarName
-			target: self 
-			selector: #removeVariable:
-			argument: aVarName.	
-	].
-	menu localize; popUpInWorld.
-]
-
-{ #category : #'as yet unclassified' }
 LambdaBlockMorph >> removeVariable: aVariable [
 	variables remove: aVariable.
 	initialFrame remove: aVariable.
@@ -330,7 +308,7 @@ LambdaBlockMorph >> renameParm: old to: new [
 	^true
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #byob }
 LambdaBlockMorph >> rightButtonMenu [
 
 	| menu choice block vn atomic |
@@ -391,7 +369,7 @@ vn := initialFrame varNamesMenu first.
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'dropping/grabbing' }
 LambdaBlockMorph >> rootForGrabOf: aMorph [
 
 	| root |
@@ -409,7 +387,7 @@ LambdaBlockMorph >> rootForGrabOf: aMorph [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 LambdaBlockMorph >> sequence [
 	^self body blockSequence
 ]
@@ -436,13 +414,13 @@ LambdaBlockMorph >> showValue [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 LambdaBlockMorph >> toggleAtomicity [
 
 	isAtomic := isAtomic not
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 LambdaBlockMorph >> type [
 	"currently BYOB supports the following first class types:
 
@@ -460,7 +438,7 @@ LambdaBlockMorph >> type [
 	^ type
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 LambdaBlockMorph >> type: aSymbol [
 
 	"currently BYOB supports the following first class types:
@@ -492,12 +470,12 @@ LambdaBlockMorph >> updateReferencesUsing: aDictionary [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 LambdaBlockMorph >> variables [
 	^ variables
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 LambdaBlockMorph >> variables: anOrderedCollection [
 	 variables := anOrderedCollection
 ]

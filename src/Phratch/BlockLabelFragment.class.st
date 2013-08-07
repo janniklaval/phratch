@@ -38,11 +38,6 @@ BlockLabelFragment >> initialize [
 ]
 
 { #category : #accessing }
-BlockLabelFragment >> isDeleted [
-	^ isDeleted
-]
-
-{ #category : #accessing }
 BlockLabelFragment >> isInput [
 	^ isInput
 ]

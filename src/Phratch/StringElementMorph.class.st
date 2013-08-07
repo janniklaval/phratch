@@ -4,7 +4,7 @@ Class {
 	#category : #'Phratch-UI-Elements'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #editing }
 StringElementMorph >> launchMiniEditor: evt [
 
 	| textMorph |

@@ -5,44 +5,40 @@ Class {
 		'text',
 		'type',
 		'minArgCount',
-		'defaultArgCount',
 		'isWrapping'
 	],
 	#category : #'Phratch-Blocks'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 MultiArgMorph class >> type: aSymbol [
 	^ self new
 		type: aSymbol;
 		text: '';
-		buildControls
+		buildControls; 
+		yourself
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #adding }
 MultiArgMorph >> addArg: aBlockOrValue [
-
 	| newMorph newSubs |
-	((aBlockOrValue isKindOf: CommandBlockMorph) or: [
-		aBlockOrValue isKindOf: ArgMorph])
-		ifTrue: [newMorph := aBlockOrValue]
-		ifFalse: [newMorph := self newSlot].
-	newMorph owner ifNotNil: [
-		newMorph owner privateRemoveMorph: newMorph].
+	newMorph := ((aBlockOrValue isKindOf: CommandBlockMorph) or: [ aBlockOrValue isKindOf: ArgMorph ])
+		ifTrue: [ aBlockOrValue ]
+		ifFalse: [ self newSlot ].
+	newMorph owner ifNotNil: [ newMorph owner privateRemoveMorph: newMorph ].
 	newMorph layoutChanged.
 	newMorph privateOwner: self.
 	newSubs := Array new: submorphs size + 1.
-	1 to: submorphs size - 2 do: [:i |
-		newSubs at: i put: (submorphs at: i) ].
+	1 to: submorphs size - 2 do: [ :i | newSubs at: i put: (submorphs at: i) ].
 	newSubs at: submorphs size - 1 put: newMorph.
 	newSubs at: submorphs size put: self lessButton.
 	newSubs at: submorphs size + 1 put: self moreButton.
 	submorphs := newSubs.
 	newMorph changed.
-	self layoutChanged	
+	self layoutChanged
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #adding }
 MultiArgMorph >> addArgSlot [
 
 	(owner isKindOf: BlockMorph) ifTrue: [
@@ -52,7 +48,7 @@ MultiArgMorph >> addArgSlot [
 	fixArgLayout
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #other }
 MultiArgMorph >> argMorphToReplace: aBlock [
 	^ self newSlot
 ]
@@ -73,29 +69,19 @@ MultiArgMorph >> buildControls [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 MultiArgMorph >> color [
 	(owner respondsTo: #color) ifTrue: [
 		^owner color]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #byob }
 MultiArgMorph >> contrastColor [
 	submorphs do: [:m |	(m isKindOf: BlockMorph)
 		ifTrue: [ m contrastColor ]]
 ]
 
-{ #category : #'as yet unclassified' }
-MultiArgMorph >> defaultArgCount [
-	^ defaultArgCount
-]
-
-{ #category : #'as yet unclassified' }
-MultiArgMorph >> defaultArgCount: anInt [
-	defaultArgCount := anInt
-]
-
-{ #category : #'as yet unclassified' }
+{ #category : #other }
 MultiArgMorph >> defaultValue: aPhratchListMorph [
 	"Set my default value"
 
@@ -122,14 +108,14 @@ MultiArgMorph >> defaultValue: aPhratchListMorph [
 		
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #protocol }
 MultiArgMorph >> elements [
 	^ submorphs reject: [:sm |
 		(sm isKindOf: ImageMorph)
 		or: [sm isKindOf: StringMorph]]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #evaluation }
 MultiArgMorph >> evaluate [
 	 | list |
 
@@ -146,123 +132,83 @@ MultiArgMorph >> evaluate [
 	^list	
 ]
 
-{ #category : #'-- all --' }
+{ #category : #other }
 MultiArgMorph >> fixArgLayout [
-
 	| maxHeight x space shouldHide lines line left maxX parts w y mh h isMultiC |
-
-	shouldHide := (submorphs size - 3 > minArgCount) not.
+	shouldHide := submorphs size - 3 <= minArgCount.
 	self lessButton isHidden: shouldHide.
 	self label isHidden: shouldHide.
-	isMultiC := #(loop reporterSlot) includes: type.
-	lines := OrderedCollection new.
-
-
-	"distribute parts horizontally and cut up into lines"
-
+	isMultiC := #(#loop #reporterSlot) includes: type.
+	lines := OrderedCollection new.	"distribute parts horizontally and cut up into lines"
 	line := OrderedCollection new.
 	x := self left.
 	left := x.
 	maxX := x.
 	space := 4.
-
-	isMultiC ifTrue: [
-		self width: 50 ].
-
-	parts := submorphs select: [:sm| sm isVisible and: [(sm isKindOf: StringMorph) not]].
-
-	parts do: [:m |
-	(m isKindOf: ReporterBlockMorph) & isMultiC
-		ifTrue: [ "in this case just break up into lines, don't distribute yet"
-			m left: self left.
-			lines add: (OrderedCollection with: m).
-			m fixBlockLayout.
-			((m isKindOf: CArgSlotMorph) or: [m isKindOf: CReporterSlotMorph]) ifTrue: [
-				m width: self width].
-			maxX := maxX max: left + m width.
-			x := left ]
-		ifFalse: [
-			(x - left > 300 and: [m ~~ submorphs last]) ifTrue: [
-				lines add: line.
-				line := OrderedCollection new.
-				x := left].
-			(m isKindOf: BlockMorph) ifTrue: [m fixBlockLayout].
-			(m isKindOf: ArgMorph) ifTrue: [m fixArgLayout].
-
-			m left: x.
-			(m right - left > 300 and: [line isEmpty not and: [m ~~ submorphs last]])
-				ifTrue: [
-					lines add: line.
-					line := OrderedCollection new.
-					m left: left.
-					line add: m.
-					x := left]
-				ifFalse: [ line add: m].
-				x := x + m fullBounds width + space.
-				maxX := maxX max: x]].
-
-	x = left ifFalse: [
-		lines add: line].
+	isMultiC
+		ifTrue: [ self width: 50 ].
+	parts := submorphs select: [ :sm | sm isVisible and: [ (sm isKindOf: StringMorph) not ] ].
+	parts
+		do: [ :m | 
+			(m isKindOf: ReporterBlockMorph) & isMultiC
+				ifTrue: [ 
+					"in this case just break up into lines, don't distribute yet"
+					m left: self left.
+					lines add: (OrderedCollection with: m).
+					m fixBlockLayout.
+					((m isKindOf: CArgSlotMorph) or: [ m isKindOf: CReporterSlotMorph ])
+						ifTrue: [ m width: self width ].
+					maxX := maxX max: left + m width.
+					x := left ]
+				ifFalse: [ 
+					(x - left > 300 and: [ m ~~ submorphs last ])
+						ifTrue: [ 
+							lines add: line.
+							line := OrderedCollection new.
+							x := left ].
+					(m isKindOf: BlockMorph)
+						ifTrue: [ m fixBlockLayout ].
+					(m isKindOf: ArgMorph)
+						ifTrue: [ m fixArgLayout ].
+					m left: x.
+					(m right - left > 300 and: [ line isEmpty not and: [ m ~~ submorphs last ] ])
+						ifTrue: [ 
+							lines add: line.
+							line := OrderedCollection new.
+							m left: left.
+							line add: m.
+							x := left ]
+						ifFalse: [ line add: m ].
+					x := x + m fullBounds width + space.
+					maxX := maxX max: x ] ].
+	x = left
+		ifFalse: [ lines add: line ].
 	w := maxX - self left max: 4.
-
-	isWrapping := lines size > 1.
-
-	"distribute lines vertically"
-
+	isWrapping := lines size > 1.	"distribute lines vertically"
 	space := 0.
 	y := self top.
-	isWrapping & isMultiC not ifTrue: [
-		space := 1.
-		y := self top + 2].
-	lines do: [:eachLine |
-		maxHeight := 10.
-		eachLine do: [:m |
-			((m isKindOf: ReporterBlockMorph)
-			and: [m isBlockTemplate and: [m isEmptySlot not]])
-				ifTrue: [mh := m height + 7]
-				ifFalse: [mh := m height].
-			maxHeight := mh max: maxHeight].
-		eachLine do: [:m |
-			m top: y + (maxHeight - m height // 2)].
-		y := y + maxHeight + space].
+	isWrapping & isMultiC not
+		ifTrue: [ 
+			space := 1.
+			y := self top + 2 ].
+	lines
+		do: [ :eachLine | 
+			maxHeight := 10.
+			eachLine
+				do: [ :m | 
+					mh := ((m isKindOf: ReporterBlockMorph) and: [ m isBlockTemplate and: [ m isEmptySlot not ] ])
+						ifTrue: [ m height + 7 ]
+						ifFalse: [ m height ].
+					maxHeight := mh max: maxHeight ].
+			eachLine do: [ :m | m top: y + ((maxHeight - m height) // 2) ].
+			y := y + maxHeight + space ].
 	h := y - self top + space.
-
 	self extent: w @ h.
-
 	self layoutChanged.
-	owner ifNotNil: [owner layoutChanged].
-
-
+	owner ifNotNil: [ owner layoutChanged ]
 ]
 
-{ #category : #'as yet unclassified' }
-MultiArgMorph >> fixArgLayoutNoWrap [
-
-	| maxHeight newWidth x space shouldHide visible |
-
-	x := self left.
-	space := 4.
-	shouldHide := (submorphs size - 3 > minArgCount) not.
-	self lessButton isHidden: shouldHide.
-	self label isHidden: shouldHide.
-	visible := submorphs select: [:sm| sm isVisible].
-	maxHeight := (visible collect: [:sm | sm height]) max.
-	visible do: [: sm |
-		(sm = self label or: [| e | e := self elements. e isEmpty or: [sm = e first]]) 
-			ifTrue: [ x := x - 2]
-			ifFalse: [ x := x + space].
-		sm position: x @ (self top + (maxHeight - sm height // 2)).
-		sm changed.
-		x := x + sm width].
-	newWidth := x - self left.
-	self extent: newWidth @ maxHeight.
-	self layoutChanged.
-	owner ifNotNil: [owner layoutChanged].
-
-
-]
-
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 MultiArgMorph >> handlesMouseDown: evt [
 
 	| more less |
@@ -273,7 +219,7 @@ MultiArgMorph >> handlesMouseDown: evt [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 MultiArgMorph >> initialize [
 
 	super initialize.
@@ -288,25 +234,25 @@ MultiArgMorph >> initialize [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #byob }
 MultiArgMorph >> isEmptySlot [
 
 
 	^self elements isEmpty
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 MultiArgMorph >> isLambdaForm [
 	^false
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 MultiArgMorph >> isWrapping [
 	^isWrapping
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 MultiArgMorph >> label [
 	^ submorphs first
 ]
@@ -318,18 +264,20 @@ MultiArgMorph >> lessButton [
 
 { #category : #'as yet unclassified' }
 MultiArgMorph >> listValue [
-	 | list item |
+	| list item |
 	list := PhratchListMorph new.
 	list listName: '' target: nil.
-	self elements do: [:each |
-		(each isKindOf: ReporterBlockMorph)
-			ifTrue: [item := each]
-			ifFalse: [each isEmptySlot
-				ifTrue: [item := nil]
-				ifFalse: [item := each evaluate]].
-		list insertLine: (ScriptablePhratchMorph new asListElement: item) at: (list lineCount + 1) ].
+	self elements
+		do: [ :each | 
+			item := (each isKindOf: ReporterBlockMorph)
+				ifTrue: [ each ]
+				ifFalse: [ 
+					each isEmptySlot
+						ifTrue: [ nil ]
+						ifFalse: [ each evaluate ] ].
+			list insertLine: (ScriptablePhratchMorph new asListElement: item) at: list lineCount + 1 ].
 	list updateCountMorph.
-	^list	
+	^ list
 ]
 
 { #category : #'as yet unclassified' }
@@ -345,22 +293,12 @@ MultiArgMorph >> loopsWidth: anInteger [
 
 ]
 
-{ #category : #'as yet unclassified' }
-MultiArgMorph >> minArgCount [
-	^ minArgCount
-]
-
-{ #category : #'as yet unclassified' }
-MultiArgMorph >> minArgCount: anInt [
-	minArgCount := anInt
-]
-
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 MultiArgMorph >> moreButton [
 	^ submorphs at: submorphs size
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 MultiArgMorph >> mouseDown: evt [
 	"Handle a mouse click. Left button either drags or performs click action. Right button brings up a menu."
 
@@ -374,7 +312,7 @@ MultiArgMorph >> mouseDown: evt [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'instance-creation' }
 MultiArgMorph >> newSlot [
 
 	| specs slot |
@@ -431,7 +369,7 @@ MultiArgMorph >> removeArgSlot [
 	self fixArgLayout
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 MultiArgMorph >> replaceArgMorph: oldArg by: newArg [
 
 	self replaceSubmorph: oldArg by: newArg
@@ -446,7 +384,7 @@ MultiArgMorph >> showError [
 		owner showError]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 MultiArgMorph >> tabFields [
 
 	| fields |
@@ -459,17 +397,17 @@ MultiArgMorph >> tabFields [
 	^ fields
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 MultiArgMorph >> text [
 	^ text
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 MultiArgMorph >> text: aString [
 	text := aString
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'block enumerating' }
 MultiArgMorph >> topBlock [
 
 	(owner isKindOf: BlockMorph) ifTrue: [
@@ -483,12 +421,12 @@ MultiArgMorph >> transparentRect [
 	^ self position corner: (self right@submorphs last top)
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 MultiArgMorph >> type [
 	^type
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 MultiArgMorph >> type: aSymbol [
 
 	"currently BYOB supports the following first class types:

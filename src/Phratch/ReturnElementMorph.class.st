@@ -4,7 +4,7 @@ Class {
 	#category : #'Phratch-UI-Elements'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #adding }
 ReturnElementMorph >> addLabel [
 	label := StringMorph contents: ' ^' font: self labelFont.
 	label color: self labelColor.
@@ -12,12 +12,12 @@ ReturnElementMorph >> addLabel [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #converting }
 ReturnElementMorph >> asSmalltalk [
 	^'^ ',super asSmalltalk
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #drawing }
 ReturnElementMorph >> drawOn: aCanvas [ 
 
 	|r bw indent dent bw2 bw3 |
@@ -74,7 +74,7 @@ ReturnElementMorph >> drawOn: aCanvas [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 ReturnElementMorph >> fit [
 
 	| cw bw |
@@ -94,7 +94,7 @@ ReturnElementMorph >> fit [
 		ifTrue: [owner fit]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialize }
 ReturnElementMorph >> initialize [
 	super initialize.
 	color := Color red twiceDarker.
@@ -102,7 +102,7 @@ ReturnElementMorph >> initialize [
 	self fit.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'dropping/grabbing' }
 ReturnElementMorph >> wantsDroppedMorph: aMorph event: evt [
 
 	^false

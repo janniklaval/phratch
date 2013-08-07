@@ -40,19 +40,18 @@ PhratchPresenterMorph >> buttons [
 
 { #category : #drawing }
 PhratchPresenterMorph >> drawOn: aCanvas [
-
 	| stageRect |
 	stageRect := Rectangle
 		center: stage center
-		extent: (doubleSize ifTrue: [2 * stage extent] ifFalse: [stage extent]).
-
-	(self bounds areasOutside: stageRect) do: [:r |
-		aCanvas fillRectangle: r color: color].
-
-	(aCanvas clipRect intersects: stageRect) ifTrue: [
-		offscreenWorld invalidRect: aCanvas clipRect.
-		offscreenWorld incrRedrawDouble: doubleSize].
-	
+		extent:
+			(doubleSize
+				ifTrue: [ 2 * stage extent ]
+				ifFalse: [ stage extent ]).
+	(self bounds areasOutside: stageRect) do: [ :r | aCanvas fillRectangle: r color: color ].
+	(aCanvas clipRect intersects: stageRect)
+		ifFalse: [ ^ self ].
+	offscreenWorld invalidRect: aCanvas clipRect.
+	offscreenWorld incrRedrawDouble: doubleSize
 ]
 
 { #category : #'button actions' }
@@ -276,16 +275,15 @@ PhratchPresenterMorph >> processKeyboardEvents [
 PhratchPresenterMorph >> processWhenConditions [
 	"Trigger any 'when <condition>' hats."
 
-	| objList |
-	true ifTrue: [^ self].  "disabled"
-	objList := stage submorphs select: [:m | m isKindOf: ScriptablePhratchMorph].
+	^ self.  "disabled"
+	"objList := stage submorphs select: [:m | m isKindOf: ScriptablePhratchMorph].
 	objList := objList copyWith: stage.
 	objList do: [:obj |
 		obj scripts do: [:hat |
 			(hat isMemberOf: WhenHatBlockMorph) ifTrue: [
 				(hat hasRunningProcess not and: [hat evaluateCondition]) ifTrue: [
 					hat start; layoutChanged]]]].
-
+"
 ]
 
 { #category : #'button actions' }

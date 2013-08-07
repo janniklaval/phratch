@@ -114,34 +114,25 @@ MovieMedia >> currentFrame: frameIndex [
 ]
 
 { #category : #'movie ops' }
-MovieMedia >> currentSeconds [
-
-	self movieFileIsOpen ifFalse: [^ 0].
-	sound ifNotNil: [^ sound soundPosition * sound duration].
-	^ movieFile currentSeconds: 0.
-
-]
-
-{ #category : #'movie ops' }
 MovieMedia >> currentSeconds: seconds [
 	"Jump to the given seconds offset."
 
 	| fraction totalFrames totalSecs |
-	sound ifNotNil: [
-		fraction := ((seconds asFloat / sound duration) max: 0.0) min: 1.0.
-		sound soundPosition: seconds asFloat / sound duration].
-
-	(movieFile notNil and: [movieFile hasVideo]) ifTrue: [
-		totalFrames := movieFile videoFrames: 0.
-		fraction ifNil: [
-			totalSecs := totalFrames asFloat / (movieFile videoFrameRate: 0).
-			totalSecs > 0
-				ifTrue: [fraction := seconds / totalSecs]
-				ifFalse: [fraction := 0]].
-		self showFrame: fraction * totalFrames].
-
-	lastFrameMSecs := Time millisecondClockValue.
-
+	sound
+		ifNotNil: [ 
+			fraction := (seconds asFloat / sound duration max: 0.0) min: 1.0.
+			sound soundPosition: seconds asFloat / sound duration ].
+	(movieFile notNil and: [ movieFile hasVideo ])
+		ifTrue: [ 
+			totalFrames := movieFile videoFrames: 0.
+			fraction
+				ifNil: [ 
+					totalSecs := totalFrames asFloat / (movieFile videoFrameRate: 0).
+					fraction := totalSecs > 0
+						ifTrue: [ seconds / totalSecs ]
+						ifFalse: [ 0 ] ].
+			self showFrame: fraction * totalFrames ].
+	lastFrameMSecs := Time millisecondClockValue
 ]
 
 { #category : #accessing }
@@ -153,29 +144,9 @@ MovieMedia >> fade [
 ]
 
 { #category : #accessing }
-MovieMedia >> fade: aNumber [
-	"Set the opacity of the fade color. The range is 0-100, where 0 means no fade and 100 means the fade color completely hides the image."
-
-	| newFade |
-	newFade := ((aNumber asFloat min: 100.0) max: 0.0) truncated.
-	newFade = fade ifTrue: [^ self].
-	fade := newFade.
-	self renderingChanged.
-
-]
-
-{ #category : #accessing }
 MovieMedia >> fadeColor [
 
 	^ fadeColor
-
-]
-
-{ #category : #accessing }
-MovieMedia >> fadeColor: aColor [
-
-	fadeColor := aColor.
-	self renderingChanged.
 
 ]
 
@@ -201,18 +172,6 @@ MovieMedia >> form [
 ]
 
 { #category : #'movie ops' }
-MovieMedia >> forwardSeconds: aNumber [
-	"Go forward the given number of seconds. Go backward if the argument is negative. Wrap at the ends."
-
-	| newFrame |
-	newFrame := currentFrame + ((1000.0 * aNumber) // msecsPerFrame).
-	(newFrame < 1 or: [newFrame > self frameCount]) ifTrue: [
-		newFrame := ((newFrame - 1) \\ self frameCount) + 1].
-	self currentFrame: newFrame.
-
-]
-
-{ #category : #'movie ops' }
 MovieMedia >> frameCount [
 
 	movieFile ifNil: [^ 1].
@@ -226,16 +185,6 @@ MovieMedia >> frameCount [
 MovieMedia >> hPan [
 
 	^ hPan
-
-]
-
-{ #category : #accessing }
-MovieMedia >> hPan: aNumber [
-	"Set the left-right pan of my movie. Zero is centered."
-
-	hPan = aNumber ifTrue: [^ self].
-	hPan := aNumber.
-	self renderingChanged.
 
 ]
 
@@ -306,22 +255,17 @@ MovieMedia >> isPlaying [
 MovieMedia >> loadFile: relativeFilePath [
 	"Load an image or movie from the file with the given name. If the movie has sound, this intializes the sound as well."
 
-	self basicLoadFile: relativeFilePath.
-
-	"reset fade, pan, zoom, and sound"
+	self basicLoadFile: relativeFilePath.	"reset fade, pan, zoom, and sound"
 	fade := 100.
 	zoom := 100.
-	hPan := vPan := 0.
-
-	"set frame rate"
-	movieFile ifNotNil: [
-		movieFile hasVideo
-			ifTrue: [msecsPerFrame := 1000.0 / (movieFile videoFrameRate: 0)]
-			ifFalse: [msecsPerFrame := 1000]].  "audio only"
-
+	hPan := vPan := 0.	"set frame rate"
+	movieFile
+		ifNotNil: [ 
+			msecsPerFrame := movieFile hasVideo
+				ifTrue: [ 1000.0 / (movieFile videoFrameRate: 0) ]
+				ifFalse: [ 1000 ] ].	"audio only"
 	outForm := origForm deepCopy.
-	self showFrame: 1.
-
+	self showFrame: 1
 ]
 
 { #category : #stepping }
@@ -390,10 +334,10 @@ MovieMedia >> renderingChanged [
 MovieMedia >> resumePlaying [
 	"This method is called when switching costumes. If I was playing when I was switched out, resume playing."
 
-	moviePlaying ifTrue: [
-		moviePlaying := false.
-		self startPlaying].
-
+	moviePlaying
+		ifFalse: [ ^ self ].
+	moviePlaying := false.
+	self startPlaying
 ]
 
 { #category : #accessing }
@@ -432,38 +376,36 @@ MovieMedia >> sound [
 
 { #category : #'movie ops' }
 MovieMedia >> startPlaying [
-
 	| frameIndex |
-	self isPlaying ifTrue: [^ self].
-
+	self isPlaying
+		ifTrue: [ ^ self ].
 	self stopPlaying.
-	movieFile = nil ifTrue: [^ self].
-
-	movieFile hasAudio ifTrue: [
-		movieFile hasVideo ifTrue: [
-			currentFrame >= (self frameCount - 3) ifTrue: [  "start over if very close to end"
-				currentFrame := 1].
-
-			sound reset.
-			sound soundPosition: currentFrame / self frameCount.
-			frameIndex := sound millisecondsSinceStart // msecsPerFrame.
-			"MPEGFile plugin can crash on seeks to last few frames, so limit max frameIndex:"
-			frameIndex := (frameIndex max: 1) min: ((movieFile videoFrames: 0) - 3).
- 
-			movieFile videoSetFrame: frameIndex - 1 stream: 0.
-			self showFrame: frameIndex].
-
+	movieFile isNil
+		ifTrue: [ ^ self ].
+	movieFile hasAudio
+		ifTrue: [ 
+			movieFile hasVideo
+				ifTrue: [ 
+					currentFrame >= (self frameCount - 3)
+						ifTrue: [ 
+							"start over if very close to end"
+							currentFrame := 1 ].
+					sound reset.
+					sound soundPosition: currentFrame / self frameCount.
+					frameIndex := sound millisecondsSinceStart // msecsPerFrame.	"MPEGFile plugin can crash on seeks to last few frames, so limit max frameIndex:"
+					frameIndex := (frameIndex max: 1) min: (movieFile videoFrames: 0) - 3.
+					movieFile videoSetFrame: frameIndex - 1 stream: 0.
+					self showFrame: frameIndex ].
 			SoundPlayer stopReverb.
-			sound resumePlaying]
-		ifFalse: [
-			movieFile hasVideo ifTrue: [
-				frameIndex := (currentFrame max: 0) min: ((movieFile videoFrames: 0) - 3).
- 				movieFile videoSetFrame: frameIndex stream: 0].
-			sound := nil].
-
+			sound resumePlaying ]
+		ifFalse: [ 
+			movieFile hasVideo
+				ifTrue: [ 
+					frameIndex := (currentFrame max: 0) min: (movieFile videoFrames: 0) - 3.
+					movieFile videoSetFrame: frameIndex stream: 0 ].
+			sound := nil ].
 	lastFrameMSecs := Time millisecondClockValue.
-	moviePlaying := true.
-
+	moviePlaying := true
 ]
 
 { #category : #stepping }
@@ -471,22 +413,24 @@ MovieMedia >> step [
 	"If I have a movie file and it is playing, advance to the next frame if it is time."
 
 	| now deltaT newFrame |
-	moviePlaying ifFalse: [^ self].
-	self movieFileIsOpen ifFalse: [
-		moviePlaying := false.
-		^ self].
-
-	movieFile hasVideo ifFalse: [^ self].  "no video"
-	sound ifNotNil: [^ self advanceFrameWithSound].  "sync frame rate to sound"
-
+	moviePlaying
+		ifFalse: [ ^ self ].
+	self movieFileIsOpen
+		ifFalse: [ 
+			moviePlaying := false.
+			^ self ].
+	movieFile hasVideo
+		ifFalse: [ ^ self ].	"no video"
+	sound ifNotNil: [ ^ self advanceFrameWithSound ].	"sync frame rate to sound"
 	now := Time millisecondClockValue.
 	deltaT := now - lastFrameMSecs.
-	(deltaT < 0 or: [deltaT >= msecsPerFrame]) ifTrue: [
-		newFrame := currentFrame + (deltaT // msecsPerFrame).
-		newFrame > self frameCount ifTrue: [newFrame := 1].
-		self showFrame: newFrame.
-		lastFrameMSecs := now].
-
+	(deltaT < 0 or: [ deltaT >= msecsPerFrame ])
+		ifFalse: [ ^ self ].
+	newFrame := currentFrame + (deltaT // msecsPerFrame).
+	newFrame > self frameCount
+		ifTrue: [ newFrame := 1 ].
+	self showFrame: newFrame.
+	lastFrameMSecs := now
 ]
 
 { #category : #'movie ops' }
@@ -608,16 +552,6 @@ MovieMedia >> vPan [
 ]
 
 { #category : #accessing }
-MovieMedia >> vPan: aNumber [
-	"Set the up-down pan of my movie. Zero is centered."
-
-	vPan = aNumber ifTrue: [^ self].
-	vPan := aNumber.
-	self renderingChanged.
-
-]
-
-{ #category : #accessing }
 MovieMedia >> zoom [
 	"Answer my zoom. 100 is normal size, 200 is double size, 50 is half size."
 
@@ -631,8 +565,8 @@ MovieMedia >> zoom: aNumber [
 
 	| newZoom |
 	newZoom := (aNumber truncated min: 2000) max: 1.
-	newZoom = zoom ifFalse: [
-		zoom := newZoom.
-		self renderingChanged].
-
+	newZoom = zoom
+		ifTrue: [ ^ self ].
+	zoom := newZoom.
+	self renderingChanged
 ]

@@ -73,12 +73,6 @@ PhratchRulerMorph >> initialize [
 ]
 
 { #category : #accessing }
-PhratchRulerMorph >> marks: aNumber [
-	marks := aNumber.
-	self changed.
-]
-
-{ #category : #accessing }
 PhratchRulerMorph >> min: aMin max: aMax [
 
 	min := aMin.
@@ -86,27 +80,17 @@ PhratchRulerMorph >> min: aMin max: aMax [
 	self changed.
 ]
 
-{ #category : #accessing }
-PhratchRulerMorph >> sigDigs: aNumber [
-
-	self changed.
-]
-
 { #category : #stepping }
 PhratchRulerMorph >> step [
-	
 	| graphStart graphEnd |
-	graph ifNil: [^self].
-
+	graph ifNil: [ ^ self ].
 	self extent x = graph extent x
-		ifFalse: [self extent: (graph extent x)@(self extent y).].
-
-
+		ifFalse: [ self extent: graph extent x @ self extent y ].
 	graphStart := graph startIndex min: graph data size.
-	graphEnd := graphStart + (graph bounds width/graph scale) min: graph data size.
-	
-	(min = graphStart and:[ max = graphEnd])
-		ifFalse: [ min := graphStart.
-				  max := graphEnd truncated.
-				  self changed.].
+	graphEnd := graphStart + (graph bounds width / graph scale) min: graph data size.
+	(min = graphStart and: [ max = graphEnd ])
+		ifTrue: [ ^ self ].
+	min := graphStart.
+	max := graphEnd truncated.
+	self changed
 ]

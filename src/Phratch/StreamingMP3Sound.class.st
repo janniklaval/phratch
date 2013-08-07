@@ -50,19 +50,16 @@ StreamingMP3Sound >> createMixer [
 	"Create a mixed sound consisting of sampled sounds with one sound buffer's worth of samples. The sound has the same sampling rate and number of channels as the MPEG or MP3 file."
 
 	| channels pan snd |
-	mpegFile ifNil: [^ self error: 'No MPEG or MP3 file'].
+	mpegFile ifNil: [ ^ self error: 'No MPEG or MP3 file' ].
 	channels := mpegFile audioChannels: mpegStreamIndex.
 	streamSamplingRate := mpegFile audioSampleRate: mpegStreamIndex.
 	mixer := MixedSound new.
-	1 to: channels do: [:c |
-		channels = 1
-			ifTrue: [pan := leftRight]
-			ifFalse: [pan := (c - 1) asFloat / (channels - 1)].
-		snd := SampledSound
-			samples: (SoundBuffer newMonoSampleCount: 2)  "buffer size will be adjusted dynamically"
-			samplingRate: streamSamplingRate.
-		mixer add: snd pan: pan volume: volume].
-
+	1 to: channels do: [ :c | 
+		pan := channels = 1
+			ifTrue: [ leftRight ]
+			ifFalse: [ (c - 1) asFloat / (channels - 1) ].
+		snd := SampledSound samples: (SoundBuffer newMonoSampleCount: 2) samplingRate: streamSamplingRate.	"buffer size will be adjusted dynamically"
+		mixer add: snd pan: pan volume: volume ]
 ]
 
 { #category : #accessing }
@@ -209,17 +206,6 @@ StreamingMP3Sound >> samplesRemaining [
 
 ]
 
-{ #category : #converting }
-StreamingMP3Sound >> saveAsFileNamed: newFileName compressionType: compressionTypeString [
-	"Store this MP3 sound in a SunAudio file with the given name using the given compression type."
-
-	| outFile |
-	outFile := (FileStream newFileNamed: newFileName) binary.
-	self storeSunAudioOn: outFile compressionType: compressionTypeString.
-	outFile close.
-
-]
-
 { #category : #accessing }
 StreamingMP3Sound >> setPan: newPan volume: newVol for: channel [
 	"Set the left-right balance and volume for the given channel."
@@ -240,26 +226,17 @@ StreamingMP3Sound >> setPan: newPan volume: newVol for: channel [
 ]
 
 { #category : #accessing }
-StreamingMP3Sound >> soundPosition [
-	"Answer the relative position of sound playback as a number between 0.0 and 1.0."
-
-	self mpegFileIsOpen ifFalse: [^ 0.0].
-	mpegFile hasAudio ifFalse: [^ 0.0].
-	^ (mpegFile audioGetSample: 0) asFloat / totalSamples
-
-]
-
-{ #category : #accessing }
 StreamingMP3Sound >> soundPosition: fraction [
 	"Jump to the position the given fraction through the sound file. The argument is a number between 0.0 and 1.0."
 
 	| sampleIndex |
-	self mpegFileIsOpen ifFalse: [^ self].
-	mpegFile hasAudio ifTrue: [
-		sampleIndex := ((totalSamples * fraction) truncated max: 0) min: totalSamples.
-		mpegFile audioSetSample: 0 stream: 0.  "work around for library bug: first seek to zero"
-		mpegFile audioSetSample: sampleIndex stream: 0].
-
+	self mpegFileIsOpen
+		ifFalse: [ ^ self ].
+	mpegFile hasAudio
+		ifFalse: [ ^ self ].
+	sampleIndex := ((totalSamples * fraction) truncated max: 0) min: totalSamples.
+	mpegFile audioSetSample: 0 stream: 0.	"work around for library bug: first seek to zero"
+	mpegFile audioSetSample: sampleIndex stream: 0
 ]
 
 { #category : #converting }
@@ -267,65 +244,57 @@ StreamingMP3Sound >> storeSunAudioOn: aBinaryStream compressionType: compression
 	"Store myself on the given stream as a monophonic sound compressed with the given type of compression. The sampling rate is reduced to 22050 samples/second if it is higher."
 
 	| fmt inBufSize samplesPerFrame codec inBuf compressed outSamplingRate audioWriter doDownSampling samplesRemaining outBuf counts byteCount |
-	self pause; reset.  "stop playing and return to beginning"
-
+	self
+		pause;
+		reset.	"stop playing and return to beginning"
 	fmt := SunAudioFileWriter formatCodeForCompressionType: compressionName.
 	inBufSize := 64000.
 	samplesPerFrame := 1.
 	codec := SunAudioFileWriter codecForFormatCode: fmt.
-	codec ifNotNil: [
-		samplesPerFrame := codec samplesPerFrame.
-		inBufSize := inBufSize roundUpTo: (2 * samplesPerFrame).
-		compressed := ByteArray new:
-			(inBufSize // samplesPerFrame) * codec bytesPerEncodedFrame].
+	codec
+		ifNotNil: [ 
+			samplesPerFrame := codec samplesPerFrame.
+			inBufSize := inBufSize roundUpTo: 2 * samplesPerFrame.
+			compressed := ByteArray new: inBufSize // samplesPerFrame * codec bytesPerEncodedFrame ].
 	inBuf := SoundBuffer newMonoSampleCount: inBufSize.
 	outSamplingRate := streamSamplingRate.
 	doDownSampling := false.
-	streamSamplingRate = 44100 ifTrue: [
-		doDownSampling := true.
-		outSamplingRate := 22050].
-
-	"write audio header"
+	streamSamplingRate = 44100
+		ifTrue: [ 
+			doDownSampling := true.
+			outSamplingRate := 22050 ].	"write audio header"
 	audioWriter := SunAudioFileWriter onStream: aBinaryStream.
-	audioWriter writeHeaderSamplingRate: outSamplingRate format: fmt.
-
-	"convert and write sound data"
-	'Storing audio...' displayProgressAt: Sensor cursorPoint
-		from: 0 to: totalSamples during: [:bar |
+	audioWriter writeHeaderSamplingRate: outSamplingRate format: fmt.	"convert and write sound data"
+	'Storing audio...'
+		displayProgressAt: Sensor cursorPoint
+		from: 0
+		to: totalSamples
+		during: [ :bar | 
 			samplesRemaining := totalSamples.
-			[samplesRemaining > 0] whileTrue: [
-				bar value: totalSamples - samplesRemaining.
-				samplesRemaining < inBuf monoSampleCount ifTrue: [
-					inBuf := SoundBuffer newMonoSampleCount:
-						(samplesRemaining roundUpTo: 2 * samplesPerFrame)].
-				mpegFile audioReadBuffer: inBuf stream: 0 channel: 0.
-				doDownSampling
-					ifTrue: [outBuf := inBuf downSampledLowPassFiltering: true]
-					ifFalse: [outBuf := inBuf].
-				codec
-					ifNil: [audioWriter appendSamples: outBuf]
-					ifNotNil: [
-						counts := codec
-							encodeFrames: (outBuf size // samplesPerFrame)
-							from: outBuf at: 1
-							into: compressed at: 1.
-						byteCount := counts last.
-						byteCount = compressed size
-							ifTrue: [audioWriter appendBytes: compressed]
-							ifFalse: [audioWriter appendBytes: (compressed copyFrom: 1 to: byteCount)]].
-				samplesRemaining := samplesRemaining - inBuf monoSampleCount]].
-
-	"update audio header"
-	audioWriter updateHeaderDataSize.
-
-]
-
-{ #category : #accessing }
-StreamingMP3Sound >> streamSamplingRate [
-	"Answer the sampling rate of the MP3 stream."
-
-	^ streamSamplingRate
-
+			[ samplesRemaining > 0 ]
+				whileTrue: [ 
+					bar value: totalSamples - samplesRemaining.
+					samplesRemaining < inBuf monoSampleCount
+						ifTrue: [ inBuf := SoundBuffer newMonoSampleCount: (samplesRemaining roundUpTo: 2 * samplesPerFrame) ].
+					mpegFile audioReadBuffer: inBuf stream: 0 channel: 0.
+					outBuf := doDownSampling
+						ifTrue: [ inBuf downSampledLowPassFiltering: true ]
+						ifFalse: [ inBuf ].
+					codec
+						ifNil: [ audioWriter appendSamples: outBuf ]
+						ifNotNil: [ 
+							counts := codec
+								encodeFrames: outBuf size // samplesPerFrame
+								from: outBuf
+								at: 1
+								into: compressed
+								at: 1.
+							byteCount := counts last.
+							byteCount = compressed size
+								ifTrue: [ audioWriter appendBytes: compressed ]
+								ifFalse: [ audioWriter appendBytes: (compressed copyFrom: 1 to: byteCount) ] ].
+					samplesRemaining := samplesRemaining - inBuf monoSampleCount ] ].	"update audio header"
+	audioWriter updateHeaderDataSize
 ]
 
 { #category : #accessing }

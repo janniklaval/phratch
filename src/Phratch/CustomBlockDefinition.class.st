@@ -18,7 +18,7 @@ Class {
 	#category : #'Phratch-UI-Support'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #access }
 CustomBlockDefinition class >> idFromSpec: aUserSpecOrCommandSpec [
 
 	|cmd out|
@@ -30,19 +30,6 @@ CustomBlockDefinition class >> idFromSpec: aUserSpecOrCommandSpec [
 			ifFalse: [out nextPutAll: each asString].
 		out space ].
 	^out contents withoutTrailingBlanks
-]
-
-{ #category : #accessing }
-CustomBlockDefinition >> addBlockVariable [
-
-	| ans |
-	ans := StringDialog askWithCancel: 'New Block Variable Name' initialAnswer: ''.
-	ans isEmpty ifTrue: [^false].
-	(self allVarNames includes: ans) ifTrue: [
-		DialogBoxMorph warn: 'This block variable name already exists'.
-		^false ].
-	blockVars add: ans.
-	^true
 ]
 
 { #category : #accessing }
@@ -82,28 +69,23 @@ CustomBlockDefinition >> answer: aBlockOrNumber [
 { #category : #accessing }
 CustomBlockDefinition >> answerBlock [
 	| spec block |
-
-	#boolean = type
-		ifTrue: [spec := 'answer $Boolean$']
-		ifFalse: [spec := 'answer $String$'].
-	
+	spec := #boolean = type
+		ifTrue: [ 'answer $Boolean$' ]
+		ifFalse: [ 'answer $String$' ].
 	block := CommandBlockMorph new
 		commandSpec: spec;
 		isSpecialForm: true;
 		selector: #doAnswer;
 		yourself.
-
-	(answer isKindOf: ReporterBlockMorph) ifTrue: [
-		^block replaceArgMorph: (block argumentAt: 1) by: answer ].
-
-	#boolean = type ifTrue: [^block].
-
-	answer ifNil: [answer := ''].
-
+	(answer isKindOf: ReporterBlockMorph)
+		ifTrue: [ ^ block replaceArgMorph: (block argumentAt: 1) by: answer ].
+	#boolean = type
+		ifTrue: [ ^ block ].
+	answer ifNil: [ answer := '' ].
 	(answer isKindOf: Array)
-		ifTrue: [ block argMorphs first stringExpression: '']
-		ifFalse: [block argMorphs first stringExpression: answer ].
-	^block
+		ifTrue: [ block argMorphs first stringExpression: '' ]
+		ifFalse: [ block argMorphs first stringExpression: answer ].
+	^ block
 ]
 
 { #category : #accessing }
@@ -111,12 +93,6 @@ CustomBlockDefinition >> blockColor [
 	#none = category
 		ifTrue: [^ Color lightGray]
 		ifFalse: [^ ScriptablePhratchMorph blockColorFor: category]
-]
-
-{ #category : #accessing }
-CustomBlockDefinition >> blockVars: aCollection [
-
-	blockVars := aCollection asSet
 ]
 
 { #category : #accessing }
@@ -225,19 +201,6 @@ CustomBlockDefinition >> defaults [
 { #category : #accessing }
 CustomBlockDefinition >> defaults: aDictionary [
 	defaults := aDictionary
-]
-
-{ #category : #accessing }
-CustomBlockDefinition >> deleteBlockVariable [
-	| ans |
-	ans := MenuMorph new defaultTarget: self.
-	self varNames do:[:aVarName |
-		ans add: aVarName
-			target: blockVars 
-			selector: #remove:
-			argument: aVarName
-	].
-	ans localize; popUpInWorld.
 ]
 
 { #category : #'object i/o' }
@@ -363,13 +326,6 @@ CustomBlockDefinition >> isReporter [
 	"deprecated, kept for BYOB legacy support"
 
 	^isReporter
-]
-
-{ #category : #deprecated }
-CustomBlockDefinition >> isReporter: aBoolean [
-	"deprecated, kept for BYOB legacy support"
-
-	isReporter := aBoolean
 ]
 
 { #category : #migrating }

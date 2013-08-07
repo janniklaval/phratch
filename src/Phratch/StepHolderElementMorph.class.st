@@ -4,7 +4,7 @@ Class {
 	#category : #'Phratch-UI-Elements'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #converting }
 StepHolderElementMorph >> asSmalltalk [
 	|stack ws|
 	contents ifNil: [^''].
@@ -17,7 +17,7 @@ StepHolderElementMorph >> asSmalltalk [
 	^ws contents
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #drawing }
 StepHolderElementMorph >> drawOn: aCanvas [ 
 
 	|r bw indent dent bw2 bw3 |
@@ -85,7 +85,7 @@ StepHolderElementMorph >> drawOn: aCanvas [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 StepHolderElementMorph >> fit [
 	| h |
 
@@ -104,7 +104,7 @@ StepHolderElementMorph >> fit [
 		ifTrue: [owner fit]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 StepHolderElementMorph >> fitMethod [
 	| h |
 	h := MessageElementMorph labelFont height.
@@ -120,14 +120,15 @@ StepHolderElementMorph >> mouseEnterDragging: evt [
 	"Handle a mouseEnterDragging event. The mouse just entered my bounds with a button pressed or laden with submorphs. This default implementation does nothing."
 
 	| m |
-	evt hand hasSubmorphs ifFalse: [^self].
+	evt hand hasSubmorphs
+		ifFalse: [ ^ self ].
 	m := evt hand submorphs first.
 	(self wantsDroppedMorph: m event: evt)
-		ifTrue: [
-			self extent: m stackExtent  + (self borderWidth * 2).
-			self hilite .
-			(owner respondsTo: #fit)
-			ifTrue: [owner fit]]
+		ifFalse: [ ^ self ].
+	self extent: m stackExtent + (self borderWidth * 2).
+	self hilite.
+	(owner respondsTo: #fit)
+		ifTrue: [ owner fit ]
 ]
 
 { #category : #'dropping/grabbing' }

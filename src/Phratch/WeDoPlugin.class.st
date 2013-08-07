@@ -30,15 +30,17 @@ WeDoPlugin class >> closeIfInactive [
 	"Close the WeDo if data is not received for a while. This allows the WeDo to be re-opened when it is unplugged and then plugged in again."
 
 	| msecs inactiveMSecs |
-	LastReadTime ifNil: [^ self].  "not open"
+	LastReadTime ifNil: [ ^ self ].	"not open"
 
 	msecs := Time millisecondClockValue.
-	LastReadTime > msecs ifTrue: [LastReadTime := Time millisecondClockValue].  "clock wrap"
+	LastReadTime > msecs
+		ifTrue: [ LastReadTime := Time millisecondClockValue ].	"clock wrap"
 
 	inactiveMSecs := msecs - LastReadTime.
-	inactiveMSecs > 2000 ifTrue: [
-		self closePort.
-		LastReadTime := nil].
+	inactiveMSecs > 2000
+		ifFalse: [ ^ self ].
+	self closePort.
+	LastReadTime := nil
 
 ]
 
@@ -144,11 +146,13 @@ WeDoPlugin class >> motorADirection: aNumber [
 		 0 - reverse current direction
 		 1 - clockwise (this way)"
 
-	aNumber = 0
-		ifTrue: [MotorADirection := MotorADirection negated]
-		ifFalse: [MotorADirection := (aNumber < 0) ifTrue: [-1] ifFalse: [1]].
-
-	self updateMotors.
+	MotorADirection := aNumber = 0
+		ifTrue: [ MotorADirection negated ]
+		ifFalse: [ 
+			aNumber < 0
+				ifTrue: [ -1 ]
+				ifFalse: [ 1 ] ].
+	self updateMotors
 
 ]
 
@@ -197,11 +201,13 @@ WeDoPlugin class >> motorBDirection: aNumber [
 		 0 - reverse current direction
 		 1 - clockwise (this way)"
 
-	aNumber = 0
-		ifTrue: [MotorBDirection := MotorBDirection negated]
-		ifFalse: [MotorBDirection := (aNumber < 0) ifTrue: [-1] ifFalse: [1]].
-
-	self updateMotors.
+	MotorBDirection := aNumber = 0
+		ifTrue: [ MotorBDirection negated ]
+		ifFalse: [ 
+			aNumber < 0
+				ifTrue: [ -1 ]
+				ifFalse: [ 1 ] ].
+	self updateMotors
 
 ]
 
@@ -288,22 +294,6 @@ WeDoPlugin class >> readInto: buffer [
 
 	<primitive: 'primRead' module: 'WeDoPlugin'>
 	^ 0
-
-]
-
-{ #category : #other }
-WeDoPlugin class >> resetWeDo [
-	"self resetWeDo"
-
-	self sendStatus: 128 motorA: 0 motorB: 0.
-	self sendStatus: 8 motorA: 0 motorB: 0.
-	self sendStatus: 64 motorA: 0 motorB: 0.
-
-	self turnOffMotors.
-	MotorADirection := 1.
-	MotorBDirection := 1.
-	MotorAPower := 100.
-	MotorBPower := 100.
 
 ]
 

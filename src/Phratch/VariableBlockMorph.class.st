@@ -298,11 +298,6 @@ VariableBlockMorph >> labelFragment [
 ]
 
 { #category : #'byob lambdas' }
-VariableBlockMorph >> labelFragment: aBlockLabelFragment [
-	labelFragment := aBlockLabelFragment
-]
-
-{ #category : #'byob lambdas' }
 VariableBlockMorph >> mouseEnter: evt [
 
 	owner isFrozen 

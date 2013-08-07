@@ -22,11 +22,6 @@ StepElementMorph >> addExpression [
 	self addMorphFront: expression.
 ]
 
-{ #category : #adding }
-StepElementMorph >> addToLast: anElement [
-	self stack last next: anElement
-]
-
 { #category : #converting }
 StepElementMorph >> asSmalltalk [
 	expression ifNotNil: [^expression asSmalltalk]
@@ -38,17 +33,16 @@ StepElementMorph >> borderWidth [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #menu }
 StepElementMorph >> contextMenu [
-	|m|
-	m := MenuMorph new.
-"	m add: 'duplicate' action: #duplicate. "
-	m add: 'delete' action: #throwAway.
+	| m |
+	m := MenuMorph new.	"	m add: 'duplicate' action: #duplicate. "
+	m add: 'delete' translated action: #throwAway.
 	m addLine.
-	m add: 'show code...' action: #showGeneratedSmalltalk.
-	m add: 'show result...' action: #showResult.
-	m add: 'evaluate' action: #evaluate.
-	^m
+	m add: 'show code...' translated action: #showGeneratedSmalltalk.
+	m add: 'show result...' translated action: #showResult.
+	m add: 'evaluate' translated action: #evaluate.
+	^ m
 ]
 
 { #category : #drawing }
@@ -166,7 +160,7 @@ StepElementMorph >> handlesMouseOverDragging: evt [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #other }
 StepElementMorph >> hilite [
 
 	oldColor := color.
@@ -233,7 +227,7 @@ StepElementMorph >> next: anElement [
 	self unHilite
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'dropping/grabbing' }
 StepElementMorph >> removeNext [
 	| holder |
 	next ifNotNil: [next := nil ].
@@ -241,7 +235,7 @@ StepElementMorph >> removeNext [
 	holder ifNotNil: [holder fit]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 StepElementMorph >> representsNil [
 
 	^self isLast & expression contents isNil
@@ -259,7 +253,7 @@ StepElementMorph >> stack [
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 StepElementMorph >> stackExtent [
 	| w h |
 	w := self width.
@@ -271,7 +265,7 @@ StepElementMorph >> stackExtent [
 	^w@h
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #other }
 StepElementMorph >> unHilite [
 
 	oldColor ifNotNil: [

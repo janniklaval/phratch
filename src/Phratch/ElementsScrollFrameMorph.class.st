@@ -216,14 +216,6 @@ ElementsScrollFrameMorph >> layoutChanged [
 
 ]
 
-{ #category : #layout }
-ElementsScrollFrameMorph >> layoutInWidth: w height: h [
-	"Resize myself to the given width and height. Called during when I am in an AlignmentMorph."
-
-	self extent: w@h.
-
-]
-
 { #category : #scrolling }
 ElementsScrollFrameMorph >> maxScroll [
 	"Answer a point representing the maximum horizontal and vertical scroll offsets in pixels."

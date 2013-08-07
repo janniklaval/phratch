@@ -78,33 +78,32 @@ IfElseBlockMorph >> blockAttachPoints: aSet [
 
 	| result |
 	result := #().
-	self = self topBlock ifTrue: [result := result copyWith: self topLeft -> self].
-
-	(self isKindOf: HatBlockMorph) ifFalse: [
-		PhratchTranslator isRTL
-			ifTrue: [result := result copyWith: (self topRight -> self)]
-			ifFalse: [result := result copyWith: (self topLeft -> self)]].
-
+	self = self topBlock
+		ifTrue: [ result := result copyWith: self topLeft -> self ].
+	(self isKindOf: HatBlockMorph)
+		ifFalse: [ 
+			result := PhratchTranslator isRTL
+				ifTrue: [ result copyWith: self topRight -> self ]
+				ifFalse: [ result copyWith: self topLeft -> self ] ].
 	trueBlock
-		ifNil: [PhratchTranslator isRTL
-			ifTrue: [result := result copyWith: ((self right - 12)@(self top + self topBarHeight + 7)) -> self]
-			ifFalse: [result := result copyWith: (self topLeft + (12@(self topBarHeight + 7))) -> self]]
-		ifNotNil: [trueBlock blockAttachPoints: aSet].
-
+		ifNil: [ 
+			result := PhratchTranslator isRTL
+				ifTrue: [ result copyWith: (self right - 12) @ (self top + self topBarHeight + 7) -> self ]
+				ifFalse: [ result copyWith: self topLeft + (12 @ (self topBarHeight + 7)) -> self ] ]
+		ifNotNil: [ trueBlock blockAttachPoints: aSet ].
 	falseBlock
-		ifNil: [PhratchTranslator isRTL
-			ifTrue: [result := result copyWith: ((self right - 12)@(self top + elseBarY + self elseBarHeight + 9)) -> self]
-			ifFalse: [result := result copyWith: (self topLeft + (12@(elseBarY + self elseBarHeight + 9))) -> self]]
-		ifNotNil: [falseBlock blockAttachPoints: aSet].
-
+		ifNil: [ 
+			result := PhratchTranslator isRTL
+				ifTrue: [ result copyWith: (self right - 12) @ (self top + elseBarY + self elseBarHeight + 9) -> self ]
+				ifFalse: [ result copyWith: self topLeft + (12 @ (elseBarY + self elseBarHeight + 9)) -> self ] ]
+		ifNotNil: [ falseBlock blockAttachPoints: aSet ].
 	nextBlock
-		ifNil: [PhratchTranslator isRTL
-			ifTrue: [result := result copyWith: self bottomRight -> self]
-			ifFalse: [result := result copyWith: self bottomLeft -> self]]
-		ifNotNil: [nextBlock blockAttachPoints: aSet].
-
-	aSet addAll: result.
-
+		ifNil: [ 
+			result := PhratchTranslator isRTL
+				ifTrue: [ result copyWith: self bottomRight -> self ]
+				ifFalse: [ result copyWith: self bottomLeft -> self ] ]
+		ifNotNil: [ nextBlock blockAttachPoints: aSet ].
+	aSet addAll: result
 ]
 
 { #category : #byob }

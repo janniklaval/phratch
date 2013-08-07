@@ -42,7 +42,7 @@ BlockEditorFrameMorph class >> setUserPos: aPoint size: anExtent [
 	UserSize := anExtent.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'dropping/grabbing' }
 BlockEditorFrameMorph >> adjustExtentToAnswerField [
 	| answerExt newExt |
 	answerExt := self minExtentForAnswer.
@@ -67,14 +67,14 @@ BlockEditorFrameMorph >> allBlocks [
 	^ all
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 BlockEditorFrameMorph >> allBlocksFor: id [
 	^ self allBlocks select: [:b |
 		b isCustomBlock and: [
 			b id = id]]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #build }
 BlockEditorFrameMorph >> buildAnswerField [
 	| spacer ans |
 
@@ -96,7 +96,7 @@ BlockEditorFrameMorph >> buildAnswerField [
 	mainColumn replaceSubmorph: spacer by: answerField.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #build }
 BlockEditorFrameMorph >> buildAtomicityToggle [
 
 	| labelFont  |
@@ -127,7 +127,7 @@ BlockEditorFrameMorph >> buildAtomicityToggle [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #build }
 BlockEditorFrameMorph >> buildScript [
 	|nb b|
 	nb := hat nextBlock.
@@ -368,7 +368,7 @@ BlockEditorFrameMorph >> keepOnScreen [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #build }
 BlockEditorFrameMorph >> minExtentForAnswer [
 	answerField ifNil: [^self class minExtent].
 	^ answerField extent + (60 @ 180) min: World extent.
@@ -413,12 +413,12 @@ BlockEditorFrameMorph >> receiver: aScriptablePhratchMorph [
 	receiver := aScriptablePhratchMorph
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #build }
 BlockEditorFrameMorph >> rememberUserDimensions [
 	self class setUserPos: self position size: self extent
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #interaction }
 BlockEditorFrameMorph >> snapToUserDimensions [
 
 	self extent: UserSize.
@@ -456,7 +456,7 @@ BlockEditorFrameMorph >> topArgMorphAt: aRectangle exclude: aMorph [
 	^answerField topArgMorphAt: aRectangle exclude: aMorph
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #stepping }
 BlockEditorFrameMorph >> updateAtomicityToggle [
 	definition isAtomic
 		ifTrue: [atomicityToggle on]
@@ -464,7 +464,7 @@ BlockEditorFrameMorph >> updateAtomicityToggle [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #stepping }
 BlockEditorFrameMorph >> updateResizeMorph [
 	resizeMorph ifNotNil: [
 		resizeMorph position: self bottomRight - bottomRightForm width ]

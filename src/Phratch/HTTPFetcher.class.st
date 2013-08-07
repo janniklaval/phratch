@@ -21,7 +21,7 @@ Class {
 	#category : #'Phratch-Networking'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 HTTPFetcher class >> test: n [
 	"self test: 5"
 
@@ -83,16 +83,13 @@ HTTPFetcher >> checkFirstLine [
 
 	| data i firstLine tokens err |
 	data := downloadedData contents.
-	i := data indexOf: 13 ifAbsent: [^ self abort: 'bad HTTP header'].
+	i := data indexOf: 13 ifAbsent: [ ^ self abort: 'bad HTTP header' ].
 	firstLine := (data copyFrom: 1 to: i - 1) asString.
-
 	tokens := firstLine findTokens: ' '.
-	(tokens size > 2 and:
-	 [(tokens at: 2) size > 0 and:
-	 [(tokens at: 2) first = $2]]) ifFalse: [
-		err := firstLine copyFrom: ((tokens at: 1) size + (tokens at: 2) size + 2) to: firstLine size.
-		^ self abort: err].
-
+	(tokens size > 2 and: [ (tokens at: 2) size > 0 and: [ (tokens at: 2) first = $2 ] ])
+		ifTrue: [ ^ self ].
+	err := firstLine copyFrom: (tokens at: 1) size + (tokens at: 2) size + 2 to: firstLine size.
+	^ self abort: err
 ]
 
 { #category : #private }
@@ -153,14 +150,6 @@ HTTPFetcher >> failureReason [
 
 	status == #failure ifFalse: [^ ''].
 	^ failureReason
-
-]
-
-{ #category : #status }
-HTTPFetcher >> failureReason: aString [
-	"Set the failure reason."
-
-	failureReason := aString.
 
 ]
 
@@ -272,27 +261,14 @@ HTTPFetcher >> performWithErrorRecovery: aSymbol [
 
 ]
 
-{ #category : #accessing }
-HTTPFetcher >> portNumber: anInteger [
-	"Set the port number. This defaults to 80, the standard HTTP port number."
-
-	portNumber := anInteger.
-
-]
-
 { #category : #printing }
 HTTPFetcher >> printOn: aStream [
-
-	aStream nextPutAll: 'HTTPFetcher(', status printString, ' ', totalMSecs printString, ')'.
-
-]
-
-{ #category : #accessing }
-HTTPFetcher >> rawData [
-	"Answer the raw downloaded data (a ByteArray), which includes the HTTP header. Answer whatever data has been received even if the download failed or is still in progress."
-
-	^ downloadedData contents
-
+	aStream
+		nextPutAll: 'HTTPFetcher(';
+		nextPutAll: status printString;
+		nextPutAll: ' ';
+		nextPutAll: totalMSecs printString;
+		nextPutAll: ')'
 ]
 
 { #category : #private }
@@ -390,12 +366,5 @@ HTTPFetcher >> succeeded [
 	"Answer true if the download completed successfully."
 
 	^ status == #succeeded
-
-]
-
-{ #category : #accessing }
-HTTPFetcher >> totalMSecs [
-
-	^ totalMSecs
 
 ]

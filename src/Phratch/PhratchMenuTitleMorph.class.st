@@ -22,13 +22,6 @@ PhratchMenuTitleMorph class >> closeAllMenus [
 ]
 
 { #category : #'as yet unclassified' }
-PhratchMenuTitleMorph class >> deactivateMenuBar [
-
-	MenuBarIsActive := false.
-
-]
-
-{ #category : #'as yet unclassified' }
 PhratchMenuTitleMorph class >> menuBarIsActive [
 
 	^ MenuBarIsActive ifNil: [MenuBarIsActive := false].

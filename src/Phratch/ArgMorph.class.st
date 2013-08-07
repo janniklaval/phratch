@@ -83,6 +83,12 @@ ArgMorph >> drawHLineFrom: startX to: endX y: yOffset color: c on: aCanvas [
 
 ]
 
+{ #category : #other }
+ArgMorph >> evaluate [
+
+	self subclassResponsibility
+]
+
 { #category : #'object i/o' }
 ArgMorph >> fieldsVersion [
 
@@ -93,11 +99,6 @@ ArgMorph >> fieldsVersion [
 { #category : #other }
 ArgMorph >> fixArgLayout [
 	"Fix my layout. This default implementation does nothing."
-]
-
-{ #category : #byob }
-ArgMorph >> implicitValue [
-	^ implicitValue
 ]
 
 { #category : #byob }
@@ -156,13 +157,16 @@ ArgMorph >> printArgOn: aStream [
 	"Print this argument morph on the given stream."
 
 	| v |
-	self labelMorph ifNotNil: [
-		v := self evaluate.
-		(v isKindOf: String)
-			ifTrue: [aStream nextPutAll: '"', v, '"']
-			ifFalse: [aStream nextPutAll: v asString]].
-
-
+	self labelMorph
+		ifNotNil: [ 
+			v := self evaluate.
+			(v isKindOf: String)
+				ifTrue: [ 
+					aStream
+						nextPutAll: '"';
+						nextPutAll: v;
+						nextPutAll: '"' ]
+				ifFalse: [ aStream nextPutAll: v asString ] ]
 ]
 
 { #category : #'object i/o' }

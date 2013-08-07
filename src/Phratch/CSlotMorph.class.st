@@ -263,11 +263,6 @@ CSlotMorph >> handlesMouseDown: evt [
 ]
 
 { #category : #'argument slot behavior' }
-CSlotMorph >> implicitValue [
-	^ implicitValue
-]
-
-{ #category : #'argument slot behavior' }
 CSlotMorph >> implicitValue: anObject [
 	implicitValue := anObject
 ]

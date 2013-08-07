@@ -18,7 +18,8 @@ NewVariableDialog class >> ask: questionString [
 	dialogBox := self new
 		withButtonsForYes: false no: false okay: true cancel: true;
 		message: questionString;
-		extent: 330@200.
+		extent: 330@200; 
+		yourself.
 	^ dialogBox getUserResponse
 
 ]
@@ -31,7 +32,8 @@ NewVariableDialog class >> askWithCancel: questionString initialAnswer: aString 
 	dialogBox := self new
 		withButtonsForYes: false no: false okay: true cancel: true;
 		message: questionString;
-		initialAnswer: aString.
+		initialAnswer: aString; 
+		yourself.
 	^ dialogBox getUserResponse
 
 ]
@@ -48,16 +50,14 @@ NewVariableDialog >> getUserResponse [
 
 { #category : #initialization }
 NewVariableDialog >> initialize [
-
 	| label1 label2 |
 	super initialize.
 	spriteSpecificFlag := false.
-
 	radioButtons := AlignmentMorph newRow
 		color: Color transparent;
 		hResizing: #shrinkWrap;
-		vResizing: #shrinkWrap.
-
+		vResizing: #shrinkWrap; 
+		yourself.
 	allSpritesRadioButton := ToggleButton
 		onForm: (PhratchFrameMorph skinAt: #radioButtonOn)
 		offForm: (PhratchFrameMorph skinAt: #radioButton).
@@ -66,37 +66,66 @@ NewVariableDialog >> initialize [
 		target: self;
 		actionSelector: #toggleSpriteSpecific.
 	label1 := StringMorph new
-		contents: ('For all sprites' localized);
-		font: (PhratchFrameMorph getFont: #NewVariableDialogBox).
+		contents: 'For all sprites' localized;
+		font: (PhratchFrameMorph getFont: #NewVariableDialogBox); 
+		yourself.
 	radioButtons addMorphBack: allSpritesRadioButton.
-	radioButtons addMorphBack: (Morph new extent: (5@5); color: Color transparent).
+	radioButtons
+		addMorphBack:
+			(Morph new
+				extent: 5 @ 5;
+				color: Color transparent; 
+		yourself).
 	radioButtons addMorphBack: label1.
-	radioButtons addMorphBack: (Morph new extent: (15@5); color: Color transparent).
-
+	radioButtons
+		addMorphBack:
+			(Morph new
+				extent: 15 @ 5;
+				color: Color transparent; 
+		yourself).
 	thisSpriteRadioButton := allSpritesRadioButton fullCopy off.
 	label2 := StringMorph new
-		contents: ('For this sprite only' localized);
-		font: (PhratchFrameMorph getFont: #NewVariableDialogBox).
+		contents: 'For this sprite only' localized;
+		font: (PhratchFrameMorph getFont: #NewVariableDialogBox); 
+		yourself.
 	radioButtons addMorphBack: thisSpriteRadioButton.
-	radioButtons addMorphBack: (Morph new extent: (5@5); color: Color transparent).
+	radioButtons
+		addMorphBack:
+			(Morph new
+				extent: 5 @ 5;
+				color: Color transparent; 
+		yourself).
 	radioButtons addMorphBack: label2.
-
 	PhratchTranslator isRTL
-		ifTrue: [radioButtons submorphs reversed do: [:m |
-			m delete.
-			radioButtons addMorphBack: m]].
-
-	mainColumn submorphsDo: [: m |
-		((m = messageLineMorphs) not) ifTrue: [m delete]].
+		ifTrue: [ 
+			radioButtons submorphs reversed
+				do: [ :m | 
+					m delete.
+					radioButtons addMorphBack: m ] ].
 	mainColumn
-		addMorphBack: (Morph new extent: (5@6); color: Color transparent);
+		submorphsDo: [ :m | 
+			m = messageLineMorphs
+				ifFalse: [ m delete ] ].
+	mainColumn
+		addMorphBack:
+				(Morph new
+						extent: 5 @ 6;
+						color: Color transparent; 
+		yourself);
 		addMorphBack: typeinMorph;
-		addMorphBack: (Morph new extent: (5@7); color: Color transparent);
+		addMorphBack:
+				(Morph new
+						extent: 5 @ 7;
+						color: Color transparent; 
+		yourself);
 		addMorphBack: radioButtons;
-		addMorphBack: (Morph new extent: (5@7); color: Color transparent);
+		addMorphBack:
+				(Morph new
+						extent: 5 @ 7;
+						color: Color transparent; 
+		yourself);
 		addMorphBack: buttonRow;
-		addMorphBack: bottomSpacer.
-
+		addMorphBack: bottomSpacer
 ]
 
 { #category : #private }

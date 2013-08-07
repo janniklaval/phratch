@@ -25,7 +25,7 @@ SpriteHandleMorph class >> resize: aSprite [
 		type: #resize;
 		form: (PhratchFrameMorph skinAt: #spriteResize); 
 		target: aSprite;
-		setBalloonText: 'drag to resize' localized.
+		setBalloonText: 'drag to resize' localized; yourself.
 	^ Current
 
 ]
@@ -171,13 +171,11 @@ SpriteHandleMorph >> mouseUp: evt [
 
 { #category : #'sprite handling' }
 SpriteHandleMorph >> resizeTarget [
-
-	| factor  tb|
+	| factor tb |
 	tb := self targetBounds.
-	reversed
-		ifTrue: [ factor := (self center x - tb center x) / (tb left - tb center x) ]
-		ifFalse: [ factor := (self center x - tb center x) / (tb right - tb center x) ].
-
+	factor := reversed
+		ifTrue: [ (self center x - tb center x) / (tb left - tb center x) ]
+		ifFalse: [ (self center x - tb center x) / (tb right - tb center x) ].
 	target multiplySizeBy: factor
 ]
 

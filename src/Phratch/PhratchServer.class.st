@@ -73,28 +73,6 @@ Class {
 }
 
 { #category : #utilities }
-PhratchServer class >> getIPAddressFromServer [
-	"Attempt to get my IP address from the AddressServer in bounded time. Returns nil if unsuccessful."
-	"[self getIPAddressFromServer] msecs"
-
-	| serverAddr sock msg |
-	serverAddr := #(18 85 18 78) asByteArray.
-	sock := MessageSocket new.
-	sock connectTo: serverAddr port: 54330 waitSecs: 4.
-	sock isConnected ifFalse: [^ nil].
-	sock sendMessage: 'lookup'.
-	20 timesRepeat: [
-		sock sendData.
-		(msg := sock nextMessage) ifNotNil: [sock destroy. ^ msg].
-		(Delay forMilliseconds: 100) wait].
-
-	"timed out"
-	sock destroy.
-	^ nil
-
-]
-
-{ #category : #utilities }
 PhratchServer class >> portNumber [
 	"Answer the port number for the Phratch server."
 
@@ -149,37 +127,35 @@ PhratchServer >> dispatch: aString from: requestSock [
 	"Dispatch an incoming command from a remote Phratch."
 
 	| cmd op |
-	aString size = 0 ifTrue: [
-		requestSock sendMessage: 'version "PhratchServer 0.1 alpha"'.
-		^ self].
-
+	aString size = 0
+		ifTrue: [ 
+			requestSock sendMessage: 'version "PhratchServer 0.1 alpha"'.
+			^ self ].
 	op := self opcodeFrom: aString.
-	op size = 0 ifTrue: [^ self].
-	(#('broadcast' 'sensor-update' 'peer-name' 'send-vars' 'sprite') includes: op) ifFalse: [^ self].
-
-
-	'sprite' = op ifTrue: [
-		cmd := self parseMixedMsg: aString.
-		self doSprite: cmd from: requestSock.
-		^ self resend: aString toPeersExcept: requestSock].
-
+	op size = 0
+		ifTrue: [ ^ self ].
+	(#('broadcast' 'sensor-update' 'peer-name' 'send-vars' 'sprite') includes: op)
+		ifFalse: [ ^ self ].
+	'sprite' = op
+		ifTrue: [ 
+			cmd := self parseMixedMsg: aString.
+			self doSprite: cmd from: requestSock.
+			^ self resend: aString toPeersExcept: requestSock ].
 	cmd := self parse: aString.
-
-	'broadcast' = op ifTrue: [
-		self doBroadcast: cmd from: requestSock.
-		^ self resend: aString toPeersExcept: requestSock].
-
-	'sensor-update' = op ifTrue: [
-		self doSensorUpdate: cmd from: requestSock.
-		^ self resend: aString toPeersExcept: requestSock].
-
-	'peer-name' = op ifTrue: [^ self doPeerName: cmd from: requestSock].
-
-	'send-vars' = op ifTrue: [
-		self doSendVars: cmd from: requestSock.
-		^ self resend: aString toPeersExcept: requestSock].
-
-
+	'broadcast' = op
+		ifTrue: [ 
+			self doBroadcast: cmd from: requestSock.
+			^ self resend: aString toPeersExcept: requestSock ].
+	'sensor-update' = op
+		ifTrue: [ 
+			self doSensorUpdate: cmd from: requestSock.
+			^ self resend: aString toPeersExcept: requestSock ].
+	'peer-name' = op
+		ifTrue: [ ^ self doPeerName: cmd from: requestSock ].
+	'send-vars' = op
+		ifFalse: [ ^ self ].
+	self doSendVars: cmd from: requestSock.
+	^ self resend: aString toPeersExcept: requestSock
 ]
 
 { #category : #'private-incoming commands' }
@@ -245,21 +221,6 @@ PhratchServer >> doSprite: cmd from: requestSock [
 
 ]
 
-{ #category : #S4A }
-PhratchServer >> doVarsUpdate: cmd from: requestSock [
-    "Handle a sensor update command: vars-update [<vars-name> <vars-value>]"
-
-    | i sName sValue |
-    i := 2.	
-    [i < cmd size] whileTrue: [
-        sName := (cmd at: i).
-        sValue := cmd at: i + 1.
-        "(sName isKindOf: String)
-          ifTrue: [stage vars at: sName put: sValue]".
-      stage setVar: sName to:  sValue.
-        i := i + 2].
-]
-
 { #category : #'server control' }
 PhratchServer >> endPhratchSession [
 	"Close all sockets. If I am hosting, this will end the session for everyone. If I am only a client, then I will leave the session but the session itself can continue to exist."
@@ -289,28 +250,6 @@ PhratchServer >> isHosting [
 
 	^ serverSocket notNil
 
-]
-
-{ #category : #'server control' }
-PhratchServer >> joinSessionAt: ipAddressString [
-	"Add an outgoing connection to the given address. Fail if a connection cannot be made in bounded amount of time. Answer true if the connection was added successfully."
-
-	| addr sock ok |
-	addr := NetNameResolver addressForName: ipAddressString timeout: 5.
-	sock := MessageSocket new.
-	ok := sock connectTo: addr port: PhratchServer portNumber waitSecs: 5.
-	ok ifFalse: [sock destroy. ^ false].
-
-	sock sendMessage: 'peer-name ', userName.
-	peerSockets add: sock.
-	^ true
-
-]
-
-{ #category : #S4A }
-PhratchServer >> listComands [
-^(stage allEventNames 
-	inject:'broadcast ' into: [:sum :each | sum,'"', each,'"',' ']  )
 ]
 
 { #category : #'private-incoming commands' }
@@ -543,23 +482,20 @@ PhratchServer >> sendOutgoingCommands [
 	"Send broadcasts and variable updates to my peers."
 
 	| varUpdateMsg |
-	self someVariableHasChanged
-		ifTrue: [varUpdateMsg := self variableUpdateMessage]
-		ifFalse: [varUpdateMsg := nil].
-
-	peerSockets copy do: [:sock |
-		sock isConnected
-			ifTrue: [
-				varUpdateMsg ifNotNil: [sock sendMessage: varUpdateMsg].
-				outgoingBroadcasts do: [:evt | sock sendMessage: (self broadcastMessageFor: evt)].
-				sock sendData]
-			ifFalse: [
-				sock destroy.
-				peerSockets remove: sock ifAbsent: []]].
-
-	self recordVariableValues.
-
-
+	varUpdateMsg := self someVariableHasChanged
+		ifTrue: [ self variableUpdateMessage ]
+		ifFalse: [ nil ].
+	peerSockets copy
+		do: [ :sock | 
+			sock isConnected
+				ifTrue: [ 
+					varUpdateMsg ifNotNil: [ sock sendMessage: varUpdateMsg ].
+					outgoingBroadcasts do: [ :evt | sock sendMessage: (self broadcastMessageFor: evt) ].
+					sock sendData ]
+				ifFalse: [ 
+					sock destroy.
+					peerSockets remove: sock ifAbsent: [  ] ] ].
+	self recordVariableValues
 ]
 
 { #category : #'private-sprites' }

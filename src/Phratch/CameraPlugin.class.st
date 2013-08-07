@@ -94,31 +94,6 @@ CameraPlugin class >> packedFrameExtent: cameraNum [
 
 ]
 
-{ #category : #test }
-CameraPlugin class >> videoTest [
-	"A quick test of video input. Displays video on the screen until the mouse is pressed."
-	"self videoTest"
-
-	| f n startTime frameCount msecs fps |
-	(CameraPlugin openCamera: 1 width: 320 height: 240) ifNil: [^ self inform: 'no camera'].
-	self waitForCameraStart.
-	(self frameExtent: 1) x = 0 ifTrue: [^ self inform: 'no camera'].
-	f := Form extent: (CameraPlugin frameExtent: 1) depth: 32.
-	frameCount := 0.
-	startTime := nil.
-	[Sensor anyButtonPressed] whileFalse: [
-		n := CameraPlugin getFrameForCamera: 1 into: f bits.
-		n > 0 ifTrue: [
-			startTime ifNil: [startTime := Time millisecondClockValue].
-			frameCount := frameCount + 1.
-			f display]].
-	Sensor waitNoButton.
-	msecs := Time millisecondClockValue - startTime.
-	CameraPlugin closeCamera: 1.
-	fps := (frameCount * 1000) // msecs.
-	^ frameCount printString, ' frames at ', fps printString, ' frames/sec'
-]
-
 { #category : #'camera ops' }
 CameraPlugin class >> waitForCameraStart [
 	"Wait for the camera to get it's first frame (indicated by a non-zero frame extent. Timeout after a few seconds."
@@ -139,23 +114,20 @@ CameraPlugin >> primCameraName [
 	self export: true.
 	self var: 'nameStr' declareC: 'char* nameStr'.
 	self var: 'dst' declareC: 'char* dst'.
-
 	cameraNum := interpreterProxy stackIntegerValue: 0.
-	interpreterProxy failed ifTrue: [^ 0].
-
+	interpreterProxy failed
+		ifTrue: [ ^ 0 ].
 	nameStr := self cCode: 'CameraName(cameraNum)'.
-	nameStr = nil ifTrue: [
-		interpreterProxy success: false.
-		^ 0].
-
+	nameStr isNil
+		ifTrue: [ 
+			interpreterProxy success: false.
+			^ 0 ].
 	count := self cCode: '(int) strlen(nameStr)'.
 	resultOop := interpreterProxy instantiateClass: interpreterProxy classString indexableSize: count.
 	dst := self cCoerce: (interpreterProxy firstIndexableField: resultOop) to: 'char *'.
-	0 to: count - 1 do: [:i | dst at: i put: (nameStr at: i)].
-
-	interpreterProxy pop: 2 thenPush: resultOop.  "pop arg and rcvr, push result"
+	0 to: count - 1 do: [ :i | dst at: i put: (nameStr at: i) ].
+	interpreterProxy pop: 2 thenPush: resultOop.	"pop arg and rcvr, push result"
 	^ 0
-
 ]
 
 { #category : #primitives }

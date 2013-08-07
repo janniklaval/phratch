@@ -175,16 +175,6 @@ PhratchScriptsMorph >> mouseEnterDragging: evt [
 ]
 
 { #category : #'event handling' }
-PhratchScriptsMorph >> mouseHold: evt [
-
-	| m |
-	(m := self ownerOrYourselfThatIsA: PhratchScriptEditorMorph) ifNil: [^ self].
-	(m target notNil and: [m currentCategory = 'Scripts'])
-		ifTrue: [m scriptsMenu: evt hand position].
-
-]
-
-{ #category : #'event handling' }
 PhratchScriptsMorph >> mouseMove: evt [ 
 	owner mouseMove: evt
 ]
@@ -211,20 +201,21 @@ PhratchScriptsMorph >> recordNestedStack: aBlockMorph [
 
 { #category : #'event handling' }
 PhratchScriptsMorph >> rightButtonMenu [
-
 	| menu be |
 	menu := MenuMorph new defaultTarget: self.
-	menu add: 'clean up' action: #cleanUp.
-	menu add: 'save picture of scripts' action: #saveScriptsToImage.
+	menu add: 'clean up' translated action: #cleanUp.
+	menu add: 'save picture of scripts' translated action: #saveScriptsToImage.
 	be := self ownerOrYourselfThatIsA: BlockEditorFrameMorph.
-	be ifNotNil: [ be definition varNames size > 0 ifTrue: [
-		menu add: 'turn block variables into script variables' action: #migrateBlockVars]].
-	menu add: 'undo last drop' action: #undoLastDrop.
+	be
+		ifNotNil: [ 
+			be definition varNames size > 0
+				ifTrue: [ menu add: 'turn block variables into script variables' translated action: #migrateBlockVars ] ].
+	menu add: 'undo last drop' translated action: #undoLastDrop.
 	menu addLine.
-	menu add: 'make a block' action: #makeNewBlock.
-
-	menu localize; invokeModal.
-
+	menu add: 'make a block' translated action: #makeNewBlock.
+	menu
+		localize;
+		invokeModal
 ]
 
 { #category : #screenshot }

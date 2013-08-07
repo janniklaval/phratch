@@ -2,13 +2,12 @@ Class {
 	#name : #ProcedureHatBlockMorph,
 	#superclass : #HatBlockMorph,
 	#instVars : [
-		'argMorph',
-		'lastState'
+		'argMorph'
 	],
 	#category : #'Phratch-Blocks'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #'instance creation' }
 ProcedureHatBlockMorph class >> on: aBlockMorph [
 	^self new template: aBlockMorph
 ]
@@ -84,14 +83,14 @@ ProcedureHatBlockMorph >> fixBlockLayout [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #widgets }
 ProcedureHatBlockMorph >> handlesMouseOver: evt [
 
 	^ self argMorph isKindOf: BlockMorph
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 ProcedureHatBlockMorph >> handlesMouseOverDragging: evt [
 
 	^  self argMorph isKindOf: BlockMorph
@@ -117,31 +116,31 @@ ProcedureHatBlockMorph >> initialize [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 ProcedureHatBlockMorph >> mouseDown: evt [
 
 	argMorph editSpec
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 ProcedureHatBlockMorph >> mouseEnter: evt [
 
 	self argMorph showEdgePlaceHolders
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 ProcedureHatBlockMorph >> mouseEnterDragging: evt [
 
 	"self argMorph showArgumentPlaceHolders"
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 ProcedureHatBlockMorph >> mouseLeave: evt [
 
 		self argMorph hideArgumentPlaceHolders
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 ProcedureHatBlockMorph >> mouseLeaveDragging: evt [
 
 	self argMorph hideArgumentPlaceHolders
@@ -177,7 +176,7 @@ ProcedureHatBlockMorph >> replaceArgMorph: oldMorph by: newMorph [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #other }
 ProcedureHatBlockMorph >> rootForGrabOf: aMorph [
 
 	(owner isKindOf: PhratchScriptsMorph) ifTrue: [^nil].
@@ -185,21 +184,9 @@ ProcedureHatBlockMorph >> rootForGrabOf: aMorph [
 	^ super rootForGrabOf: aMorph
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'instance creation' }
 ProcedureHatBlockMorph >> template: aBlock [
 	self replaceArgMorph: self argMorph by: aBlock
-]
-
-{ #category : #other }
-ProcedureHatBlockMorph >> triggered [
-	"Answer true if my condition has just become true."
-
-	| condition |
-	condition := self evaluateCondition.
-	condition & lastState not ifTrue: [lastState := true. ^ true].  "trigger on false->true transition"
-	lastState := condition.
-	^ false
-
 ]
 
 { #category : #'as yet unclassified' }

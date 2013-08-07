@@ -41,31 +41,43 @@ CommandBlockMorph class >> argPermutationForSpec: spec withTranslation: translat
 	| parsedSpec parsedTranslatedSpec parsedSpecArgs parsedTranslatedSpecArgs permutation a copiesSize n originalPermutation |
 
 	parsedSpec := CommandBlockMorph parseCommandSpec: spec.
-	parsedSpecArgs := parsedSpec select: [:s | CommandBlockMorph isArgSpec: s].
+	parsedSpecArgs := parsedSpec select: [ :s | CommandBlockMorph isArgSpec: s ].
 	parsedTranslatedSpec := CommandBlockMorph parseCommandSpec: translatedSpec.
-	parsedTranslatedSpecArgs := parsedTranslatedSpec select: [:s | CommandBlockMorph isArgSpec: s].
+	parsedTranslatedSpecArgs := parsedTranslatedSpec select: [ :s | CommandBlockMorph isArgSpec: s ].
 
 	permutation := #().
-	1 to: parsedSpecArgs size do: [:i | permutation := permutation copyWith: i].
-	originalPermutation := permutation.
-
-	"no change"
-	(parsedSpecArgs = parsedTranslatedSpecArgs) ifTrue: [
-			^ originalPermutation].
-
-	"otherwise, calculate permutation"
-	1 to: parsedSpecArgs size do: [:i |
+	1 to: parsedSpecArgs size do: [ :i | permutation := permutation copyWith: i ].
+	originalPermutation := permutation.	"no change"
+	parsedSpecArgs = parsedTranslatedSpecArgs
+		ifTrue: [ ^ originalPermutation ].	"otherwise, calculate permutation"
+	1 to: parsedSpecArgs size do: [ :i | 
 		a := parsedSpecArgs at: i.
-		copiesSize := (parsedSpecArgs select: [:s | (s = a)]) size.
-		(copiesSize = 1)
-			ifTrue:[permutation at: i put: (parsedTranslatedSpecArgs indexOf: a
-				ifAbsent: [Transcript show: 'Permutation failed: ', spec.
-						^ originalPermutation])]
-			ifFalse:["count copies until now"
-				n := ((parsedSpecArgs copyFrom: 1 to: i) select: [:s | (s = a)]) size.
-				permutation at: i put: (parsedTranslatedSpecArgs indexOf: (a,n asString)
-					ifAbsent: [Transcript show: 'Permutation failed: ', spec.
-						^ originalPermutation])]].
+		copiesSize := (parsedSpecArgs select: [ :s | s = a ]) size.
+		copiesSize = 1
+			ifTrue: [ 
+				permutation
+					at: i
+					put:
+						(parsedTranslatedSpecArgs
+							indexOf: a
+							ifAbsent: [ 
+								Transcript
+									show: 'Permutation failed: ';
+									show: spec.
+								^ originalPermutation ]) ]
+			ifFalse: [ 
+				"count copies until now"
+				n := ((parsedSpecArgs copyFrom: 1 to: i) select: [ :s | s = a ]) size.
+				permutation
+					at: i
+					put:
+						(parsedTranslatedSpecArgs
+							indexOf: a , n asString
+							ifAbsent: [ 
+								Transcript
+									show: 'Permutation failed: ';
+									show: spec.
+								^ originalPermutation ]) ] ].
 	^ permutation
 
 ]
@@ -130,121 +142,77 @@ CommandBlockMorph >> addCommandIcons [
 	"Add additional icons to certain blocks. Do nothing if this isn't one of those blocks."
 
 	| f m |
-	#turnLeft: = selector ifTrue: [
-		f := PhratchFrameMorph skinAt: #turnCCW ifAbsent: [^ self].
-		m := self firstSubmorph delete.
-		self addMorphFront: (ImageMorph new form: f).
-		self addMorphFront: m].
-
-	#turnRight: = selector ifTrue: [
-		f := PhratchFrameMorph skinAt: #turnCW ifAbsent: [^ self].
-		m := self firstSubmorph delete.
-		self addMorphFront: (ImageMorph new form: f).
-		self addMorphFront: m].
-
-	#stopAll = selector ifTrue: [
-		f := PhratchFrameMorph skinAt: #stopButton ifAbsent: [^ self].
-		self addMorphBack: (ImageMorph new form: f)].
-
+	#turnLeft: = selector
+		ifTrue: [ 
+			f := PhratchFrameMorph skinAt: #turnCCW ifAbsent: [ ^ self ].
+			m := self firstSubmorph delete.
+			self addMorphFront: (ImageMorph new form: f).
+			self addMorphFront: m ].
+	#turnRight: = selector
+		ifTrue: [ 
+			f := PhratchFrameMorph skinAt: #turnCW ifAbsent: [ ^ self ].
+			m := self firstSubmorph delete.
+			self addMorphFront: (ImageMorph new form: f).
+			self addMorphFront: m ].
+	#stopAll = selector
+		ifFalse: [ ^ self ].
+	f := PhratchFrameMorph skinAt: #stopButton ifAbsent: [ ^ self ].
+	self addMorphBack: (ImageMorph new form: f)
 ]
 
 { #category : #private }
 CommandBlockMorph >> addLabel [
 	"Add a label for my command and arguments. This is the method that really creates the whole block."
+
 	"Details: We remove all the pieces of this block, and then reassemble them, being careful not to destroy any argument morphs that we might still want to use. This is helpful if someone adds/removes parameters from a hat block."
 
-	| tokens args nextArgIndex m next slot |
-
-	commandSpec ifNil: [^ self].
-
-	"we make sure not to remove the next block."
-	next := self nextBlock.
-	self removeAllMorphsIn: (self submorphs reject: [:t | t = next]).
-
-	tokens := CommandBlockMorph parseCommandSpec: commandSpec.
-	args := tokens select: [:s | CommandBlockMorph isArgSpec: s].
-
-	"remove any excess arg morphs from the list."
-	[argMorphs size > args size] whileTrue: [
-		m := argMorphs last.
-		argMorphs remove: m.
-
-		"if the argument we're throwing out is anything complicated, we'd like to keep it around in the world."
-		(m isKindOf: BlockMorph) ifTrue: [m openInWorld]].
-
-	"create new arg morphs."
-	[argMorphs size < args size] whileTrue: [
-		argMorphs addLast: (self argMorphFor: (args at: argMorphs size + 1))].
-
-	nextArgIndex := 1.
-
-	tokens do: [:s |
-		(CommandBlockMorph isArgSpec: s)
-			ifTrue:	[ "check if the arg type has changed (jens)"
-				m := argMorphs at: nextArgIndex.
-				(m isKindOf: ArgMorph) ifTrue: [
-					slot := self uncoloredArgMorphFor: s.
-					m class = slot class ifFalse: [
-						m := slot.
-						argMorphs at: nextArgIndex put: m]].
-				nextArgIndex := nextArgIndex + 1]
-			ifFalse:	[
-				m := self labelMorphFor: s].
-		self addMorphBack: m].
-
-	self isReporter ifTrue: [
-
-		"attempt to embed ReporterScripts more gracefully. Has some issues, 
+	"attempt to embed ReporterScripts more gracefully. Has some issues, 
 		commented out for now, (jens)"
-		
-		"self adjustReporterLayoutForLambda."
-		
-		m := submorphs last.
-		((m isKindOf: ChoiceArgMorph) | (m isKindOf: SpriteArgMorph)) ifTrue: [  "add spacer"
-			self addMorphBack: (Morph new color: Color transparent; extent: 2@5;
-		yourself)]].
 
-]
+	"self adjustReporterLayoutForLambda."
 
-{ #category : #byob }
-CommandBlockMorph >> adjustReporterLayoutForLambda [
-
-	"this method must be called *after* #addLine has been completed (jens)"
-
-	| lambdas distToLeft distToRight extra |
-
-	distToLeft := [:lambda |
-			| edgeDist extraDist |
-			edgeDist := lambda left - self left.
-			extraDist := lambda height // 2.7 - edgeDist.
-			extraDist > 0
-				ifTrue: [extraDist]
-				ifFalse: [0]].
-
-	distToRight := [:lambda |
-			| edgeDist extraDist |
-			edgeDist := self right - lambda right.
-			edgeDist > 0
-				ifTrue: [extraDist := lambda height // 2.7 - edgeDist]
-				ifFalse: [extraDist := extraDist abs + (lambda height // 2.7)].
-			extraDist > 0
-				ifTrue: [extraDist]
-				ifFalse: [0]].
-	
-	lambdas := argMorphs select:[:a |
-			a isKindOf: CommandScriptBlockMorph ].
-
-	lambdas do: [:l |
-		extra := distToLeft value: l.
-		extra > 0 ifTrue: [
-			self addMorphFront: (Morph new color: Color transparent; extent: extra@5;
-		yourself)].
-		extra := distToRight value: l.
-		extra > 0 ifTrue: [
-			self addMorphBack: (Morph new color: Color transparent; extent: extra@5;
-		yourself)]].
-
-
+	| tokens args nextArgIndex m next slot |
+	commandSpec ifNil: [ ^ self ].	"we make sure not to remove the next block."
+	next := self nextBlock.
+	self removeAllMorphsIn: (self submorphs reject: [ :t | t = next ]).
+	tokens := CommandBlockMorph parseCommandSpec: commandSpec.
+	args := tokens select: [ :s | CommandBlockMorph isArgSpec: s ].	"remove any excess arg morphs from the list."
+	[ argMorphs size > args size ]
+		whileTrue: [ 
+			m := argMorphs last.
+			argMorphs remove: m.	"if the argument we're throwing out is anything complicated, we'd like to keep it around in the world."
+			(m isKindOf: BlockMorph)
+				ifTrue: [ m openInWorld ] ].	"create new arg morphs."
+	[ argMorphs size < args size ] whileTrue: [ argMorphs addLast: (self argMorphFor: (args at: argMorphs size + 1)) ].
+	nextArgIndex := 1.
+	tokens
+		do: [ :s | 
+			(CommandBlockMorph isArgSpec: s)
+				ifTrue: [ 
+					"check if the arg type has changed (jens)"
+					m := argMorphs at: nextArgIndex.
+					(m isKindOf: ArgMorph)
+						ifTrue: [ 
+							slot := self uncoloredArgMorphFor: s.
+							m class = slot class
+								ifFalse: [ 
+									m := slot.
+									argMorphs at: nextArgIndex put: m ] ].
+					nextArgIndex := nextArgIndex + 1 ]
+				ifFalse: [ m := self labelMorphFor: s ].
+			self addMorphBack: m ].
+	self isReporter
+		ifFalse: [ ^ self ].
+	m := submorphs last.
+	(m isKindOf: ChoiceArgMorph) | (m isKindOf: SpriteArgMorph)
+		ifTrue: [ 
+			"add spacer"
+			self
+				addMorphBack:
+					(Morph new
+						color: Color transparent;
+						extent: 2 @ 5;
+						yourself) ]
 ]
 
 { #category : #private }
@@ -331,41 +299,44 @@ CommandBlockMorph >> asBlockTuple [
 	"Answer a tuple (Array) describing this block and its arguments."
 
 	| blockTuple argList arg val eval |
-	
 	blockTuple := Array new: argMorphs size + 3.
 	blockTuple
 		at: 1 put: #byob;
 		at: 2 put: self rcvr;
 		at: 3 put: selector.
-
 	argList := argMorphs.
 	argList := self organizeArgs: argList.
-	((#(+ - / * =) includes: selector) and: [PhratchTranslator isRTLMath]) "RTLMath operators are RTL"
-		ifTrue: [argList := argList reversed].
-	1 to: argList size do: [:i |
+	((#(#+ #- #/ #* #=) includes: selector) and: [ PhratchTranslator isRTLMath ])
+		ifTrue: [ argList := argList reversed ].	"RTLMath operators are RTL"
+	1 to: argList size do: [ :i | 
 		arg := argList at: i.
 		(arg isKindOf: ArgMorph) | (arg isKindOf: EventTitleMorph)
-			ifTrue: [(arg isKindOf: MultiArgMorph)
-				ifTrue: [ blockTuple at: i + 3 put: arg listValue convertStacksToTuples] "a list"
-				ifFalse: [ ((arg isKindOf: CSlotMorph) or: [arg isKindOf: OSlotMorph])
-					ifTrue: [blockTuple at: i + 3 put: arg asBlockTuple]
-					ifFalse: [(arg isKindOf: ExpressionArgMorph)
-						ifTrue: [
-							val := arg getExpression.
-							arg isNumberExpression
-								ifTrue: [val = ' '
-									ifTrue: [eval := val]
-									ifFalse: [(arg evaluate isKindOf: Symbol)	" special case for special values in list blocks (first, last, any)"
-										ifTrue: [eval := arg evaluate]
-										ifFalse: [eval := val asNumberNoError]]]
-								ifFalse: [eval := arg evaluate]]
-						ifFalse: [ (arg isKindOf: SpriteArgMorph)
-							ifTrue: [eval := arg getChoice]
-							ifFalse: [eval := arg evaluate]].
-						blockTuple at: i + 3 put: eval]]]
-			ifFalse: [blockTuple at: i + 3 put: arg asBlockTuple]].
+			ifTrue: [ 
+				(arg isKindOf: MultiArgMorph)
+					ifTrue: [ blockTuple at: i + 3 put: arg listValue convertStacksToTuples ]
+					ifFalse: [ 
+						((arg isKindOf: CSlotMorph) or: [ arg isKindOf: OSlotMorph ])
+							ifTrue: [ blockTuple at: i + 3 put: arg asBlockTuple ]
+							ifFalse: [ 
+								(arg isKindOf: ExpressionArgMorph)
+									ifTrue: [ 
+										val := arg getExpression.
+										eval := arg isNumberExpression
+											ifTrue: [ 
+												val = ' '
+													ifTrue: [ val ]
+													ifFalse: [ 
+														(arg evaluate isKindOf: Symbol)
+															ifTrue: [ arg evaluate ]
+															ifFalse: [ val asNumberNoError ]	" special case for special values in list blocks (first, last, any)" ] ]
+											ifFalse: [ arg evaluate ] ]
+									ifFalse: [ 
+										eval := (arg isKindOf: SpriteArgMorph)
+											ifTrue: [ arg getChoice ]
+											ifFalse: [ arg evaluate ] ].
+								blockTuple at: i + 3 put: eval ] ]	"a list" ]
+			ifFalse: [ blockTuple at: i + 3 put: arg asBlockTuple ] ].
 	^ blockTuple
-
 ]
 
 { #category : #byob }
@@ -418,17 +389,6 @@ CommandBlockMorph >> canBecomeWatcher [
 	   ((#(not atRandom abs rounded lineCountOfList: stringLength: keyPressed: numericConstant: true false returnW: objName stringToBoolean: reportVar: contentsOfList: reportColor:) includes: selector) not) &
 	   (i > selector asString size)
 
-]
-
-{ #category : #menus }
-CommandBlockMorph >> changeSelector: aSelector [
-	| spec |
-	self selector: aSelector.
-	(#(#+ #- #* #/ #\\) includes: aSelector)
-		ifTrue: [ spec := '$Number$' , aSelector , '$Number$' ]
-		ifFalse:[(#(< = >) includes: aSelector) ifTrue: [spec := '$String$' , aSelector , '$String$']
-		                                                        ifFalse:   [ spec := '$Boolean$' , aSelector , '$Boolean$' ]].
-	self commandSpec: spec
 ]
 
 { #category : #evaluation }
@@ -614,75 +574,65 @@ CommandBlockMorph >> evaluate [
 { #category : #evaluation }
 CommandBlockMorph >> evaluateInfixWithArgs: rawArgs [
 	"Evalue an infix operator with the given arguments list. Special case for comparison operatores when both operands are strings. Reverse order of comparison operands in RTL languages."
+
 	"Note: The strings 'true' and 'false' in either English or the current language are equal to the boolean value that they name."
 
 	| args result arg1 arg2 |
-
 	args := rawArgs.
-	#= = selector ifTrue: [
-		"special case: check for equality between a boolean and the special strings 'true' or 'false'"
-		((args first isKindOf: String) and: [args second isKindOf: Boolean]) ifTrue: [
-			(args first = 'true') ifTrue: [^ args second = true].
-			(args first = 'false') ifTrue: [^ args second = false].
-			(args first = (PhratchTranslator translationFor: 'true')) ifTrue: [^ args second = true].
-			(args first = (PhratchTranslator translationFor: 'false')) ifTrue: [^ args second = false]].
-		((args first isKindOf: Boolean) and: [args second isKindOf: String]) ifTrue: [
-			(args second = 'true') ifTrue: [^ args first = true].
-			(args second = 'false') ifTrue: [^ args first = false].
-			(args second = (PhratchTranslator translationFor: 'true')) ifTrue: [^ args first = true].
-			(args second = (PhratchTranslator translationFor: 'false')) ifTrue: [^ args first = false]]].
-
-	(#(< = >) includes: selector)
-		ifTrue: [((args first isKindOf: String) or: [args second isKindOf: String])
-			ifTrue: [
-				arg1 := receiver interpretStringAsNumberIfPossible: args first.
-				arg2 := receiver interpretStringAsNumberIfPossible: args second.
-				((arg1 isKindOf: String) and: [arg2 isKindOf: String]) ifTrue: [
-					result := args first compare: args second.
-					#< = selector ifTrue: [^ result = 1].
-					#= = selector ifTrue: [^ result = 2].
-					#> = selector ifTrue: [^ result = 3]].
-				((arg1 isKindOf: Number) and: [arg2 isKindOf: Number]) ifTrue: [
-					^ arg1 perform: selector with: arg2].
-				^ false]
-			ifFalse: [
-				(args first isKindOf: PhratchListMorph)
-					ifTrue: [^ args first equals: args second].
-				(args second isKindOf: PhratchListMorph)
-					ifTrue: [^ args second equals: args first]]]
-		ifFalse: [(PhratchTranslator isRTLMath and: [((selector = #\\) not)]) ifTrue: [args := args reversed]]. "RTLMath operators are RTL"
-
-	(#(& |) includes: selector) ifTrue: [^ args first perform: selector with: args second].
-
-	((args first isKindOf: ScriptablePhratchMorph) or: [args second isKindOf: ScriptablePhratchMorph])
-		ifTrue: [^ args first = args second].
-
+	#= = selector
+		ifTrue: [ 
+			"special case: check for equality between a boolean and the special strings 'true' or 'false'"
+			((args first isKindOf: String) and: [ args second isKindOf: Boolean ])
+				ifTrue: [ 
+					args first = 'true'
+						ifTrue: [ ^ args second = true ].
+					args first = 'false'
+						ifTrue: [ ^ args second = false ].
+					args first = (PhratchTranslator translationFor: 'true')
+						ifTrue: [ ^ args second = true ].
+					args first = (PhratchTranslator translationFor: 'false')
+						ifTrue: [ ^ args second = false ] ].
+			((args first isKindOf: Boolean) and: [ args second isKindOf: String ])
+				ifTrue: [ 
+					args second = 'true'
+						ifTrue: [ ^ args first = true ].
+					args second = 'false'
+						ifTrue: [ ^ args first = false ].
+					args second = (PhratchTranslator translationFor: 'true')
+						ifTrue: [ ^ args first = true ].
+					args second = (PhratchTranslator translationFor: 'false')
+						ifTrue: [ ^ args first = false ] ] ].
+	(#(#< #= #>) includes: selector)
+		ifTrue: [ 
+			((args first isKindOf: String) or: [ args second isKindOf: String ])
+				ifTrue: [ 
+					arg1 := receiver interpretStringAsNumberIfPossible: args first.
+					arg2 := receiver interpretStringAsNumberIfPossible: args second.
+					((arg1 isKindOf: String) and: [ arg2 isKindOf: String ])
+						ifTrue: [ 
+							result := args first compare: args second.
+							#< = selector
+								ifTrue: [ ^ result = 1 ].
+							#= = selector
+								ifTrue: [ ^ result = 2 ].
+							#> = selector
+								ifTrue: [ ^ result = 3 ] ].
+					((arg1 isKindOf: Number) and: [ arg2 isKindOf: Number ])
+						ifTrue: [ ^ arg1 perform: selector with: arg2 ].
+					^ false ]
+				ifFalse: [ 
+					(args first isKindOf: PhratchListMorph)
+						ifTrue: [ ^ args first equals: args second ].
+					(args second isKindOf: PhratchListMorph)
+						ifTrue: [ ^ args second equals: args first ] ] ]
+		ifFalse: [ 
+			(PhratchTranslator isRTLMath and: [ selector ~= #\\ ])
+				ifTrue: [ args := args reversed ] ].	"RTLMath operators are RTL"
+	(#(#& #|) includes: selector)
+		ifTrue: [ ^ args first perform: selector with: args second ].
+	((args first isKindOf: ScriptablePhratchMorph) or: [ args second isKindOf: ScriptablePhratchMorph ])
+		ifTrue: [ ^ args first = args second ].
 	^ args first asNumberNoError perform: selector with: args second asNumberNoError
-
-]
-
-{ #category : #evaluation }
-CommandBlockMorph >> evaluateKeyPressedWithArgs: args [
-	| code theKey |
-	theKey:= self key.
-
-	args first size = 1 ifTrue: [ code := args first first asciiValue ].
-
-	args first = 'space'
-		ifTrue: [ code := 32 ].
-	args first = 'up arrow'
-		ifTrue: [ code := 30 ].
-	args first = 'down arrow'
-		ifTrue: [ code := 31 ].
-	args first = 'right arrow'
-		ifTrue: [ code := 29 ].
-	args first = 'left arrow'
-		ifTrue: [ code := 28 ].
-
-	key := nil.
-	
-	^ code = theKey
-
 ]
 
 { #category : #evaluation }
@@ -721,61 +671,70 @@ CommandBlockMorph >> fixBlockLayoutNoWrap [
 	"Update the positions of my submorphs."
 
 	| isFirst h x minXForArgs hAdjust nextB w oldPos oldExtent space |
-	blockLayoutNeeded ifFalse: [^ self].
+	blockLayoutNeeded
+		ifFalse: [ ^ self ].
 	space := 4.
-	self isCustomBlock ifTrue: [
-		self isTemplate ifTrue: [ space := 2 ]].
+	self isCustomBlock
+		ifTrue: [ 
+			self isTemplate
+				ifTrue: [ space := 2 ] ].
 	super fixBlockLayout.
 	oldPos := self position.
 	oldExtent := self extent.
 	hAdjust := 4.
-
 	isFirst := true.
-	h := 14.  "minimum height"
-	self nonControlFlowSubmorphs do: [:m |
-		(m isKindOf: BlockMorph) ifTrue: [m fixBlockLayout].
-		(m isKindOf: ArgMorph) ifTrue: [m fixArgLayout].
-		(isFirst and: [(m isKindOf: StringMorph) not]) ifTrue: [
-			"extra space when an arg overlaps with notch"
-			h := h max: m height + 3.
-			hAdjust := 1].
-		isFirst := false.
-		((m isKindOf: CommandBlockMorph) and: [m isBlockTemplate])
-			ifTrue: [h := h max: (m height + 2)]
-			ifFalse: [h := h max: m height]].
-
-	((self isKindOf: CBlockMorph) or: [self isKindOf: IfElseBlockMorph])
-		ifTrue: [minXForArgs := self left + PuzzleInset + PuzzleWidth + 8]
-		ifFalse: [minXForArgs := self left].
-
+	h := 14.	"minimum height"
+	self nonControlFlowSubmorphs
+		do: [ :m | 
+			(m isKindOf: BlockMorph)
+				ifTrue: [ m fixBlockLayout ].
+			(m isKindOf: ArgMorph)
+				ifTrue: [ m fixArgLayout ].
+			(isFirst and: [ (m isKindOf: StringMorph) not ])
+				ifTrue: [ 
+					"extra space when an arg overlaps with notch"
+					h := h max: m height + 3.
+					hAdjust := 1 ].
+			isFirst := false.
+			h := ((m isKindOf: CommandBlockMorph) and: [ m isBlockTemplate ])
+				ifTrue: [ h max: m height + 2 ]
+				ifFalse: [ h max: m height ] ].
+	minXForArgs := ((self isKindOf: CBlockMorph) or: [ self isKindOf: IfElseBlockMorph ])
+		ifTrue: [ self left + PuzzleInset + PuzzleWidth + 8 ]
+		ifFalse: [ self left ].
 	h := h + 10.
-	self isReporter ifTrue: [h := h - 2. hAdjust := 2].
-	self isStop ifTrue: [h := h - 5. hAdjust := 0].
-
+	self isReporter
+		ifTrue: [ 
+			h := h - 2.
+			hAdjust := 2 ].
+	self isStop
+		ifTrue: [ 
+			h := h - 5.
+			hAdjust := 0 ].
 	x := self left + 5.
-	self nonControlFlowSubmorphs do: [:m |
-		(m isKindOf: StringMorph)
-			ifTrue: [(m isKindOf: BlockLabelFragmentMorph) 
-				ifFalse: [m color: self labelColor]]
-			ifFalse: [x := x max: minXForArgs].
-		m position: x@(self top + (((h - hAdjust) - m height) // 2)).
-		x := x + m width + space].
-
-	w := (x - self left) max: 37.
-	((self isKindOf: CBlockMorph) or:
-	 [self isKindOf: IfElseBlockMorph])
-		ifTrue: [w := w max: 71].
+	self nonControlFlowSubmorphs
+		do: [ :m | 
+			(m isKindOf: StringMorph)
+				ifTrue: [ 
+					(m isKindOf: BlockLabelFragmentMorph)
+						ifFalse: [ m color: self labelColor ] ]
+				ifFalse: [ x := x max: minXForArgs ].
+			m position: x @ (self top + ((h - hAdjust - m height) // 2)).
+			x := x + m width + space ].
+	w := x - self left max: 37.
+	((self isKindOf: CBlockMorph) or: [ self isKindOf: IfElseBlockMorph ])
+		ifTrue: [ w := w max: 71 ].
 	self extent: w @ h.
-	PhratchTranslator isRTL ifTrue: [
-		self left: oldPos x + (oldExtent x - self width)].
-
-	(nextB := self nextBlock) ifNotNil: [
-		(self isKindOf: CBlockMorph) ifFalse: [
-			PhratchTranslator isRTL
-				ifTrue: [nextB position: (self right - nextB width)@(self bottom - 4)]
-				ifFalse: [nextB position: self left@(self bottom - 4)]].
-		nextB fixBlockLayout].
-
+	PhratchTranslator isRTL
+		ifTrue: [ self left: oldPos x + (oldExtent x - self width) ].
+	(nextB := self nextBlock)
+		ifNotNil: [ 
+			(self isKindOf: CBlockMorph)
+				ifFalse: [ 
+					PhratchTranslator isRTL
+						ifTrue: [ nextB position: (self right - nextB width) @ (self bottom - 4) ]
+						ifFalse: [ nextB position: self left @ (self bottom - 4) ] ].
+			nextB fixBlockLayout ]
 ]
 
 { #category : #byob }
@@ -783,115 +742,106 @@ CommandBlockMorph >> fixBlockLayoutWrap [
 	"Update the positions of my submorphs."
 
 	| parts lines line h x y minXForArgs nextB w space left maxX maxHeight mh |
-
-	(self isCustomBlock and: [self isTemplate]) ifTrue: [^ self fixBlockLayoutNoWrap].
-	blockLayoutNeeded ifFalse: [^ self].
-
+	(self isCustomBlock and: [ self isTemplate ])
+		ifTrue: [ ^ self fixBlockLayoutNoWrap ].
+	blockLayoutNeeded
+		ifFalse: [ ^ self ].
 	cachedForm := nil.
 	cachedFeedbackForm := nil.
-
 	parts := self nonControlFlowSubmorphs.
-	lines := OrderedCollection new.
-
-
-	"distribute parts horizontally and cut up into lines"
-
+	lines := OrderedCollection new.	"distribute parts horizontally and cut up into lines"
 	line := OrderedCollection new.
 	x := self left + 5.
 	left := x.
 	maxX := x.
 	minXForArgs := self left.
 	space := 4.
-
-	parts do: [:m |
-	((m isKindOf: CArgSlotMorph) or: [(m isKindOf: CReporterSlotMorph) or: [(m isKindOf: MultiArgMorph) and: [m isWrapping]]])
-		ifTrue: [ 
-			line isEmpty ifFalse: [
-				lines add: line].
-			m left: "self" left.
-			lines add: (OrderedCollection with: m).
-			(m isKindOf: MultiArgMorph)
-				ifTrue: [m fixArgLayout]
-				ifFalse: [m fixBlockLayout].
-			((m isKindOf: CArgSlotMorph) or: [m isKindOf: CReporterSlotMorph])
-				ifTrue: [m width: 40].
-			line := OrderedCollection new.
-			maxX := maxX max: left + m width.
-			x := left ]
-		ifFalse: [
-			x - left > 400 ifTrue: [
-				lines add: line.
-				line := OrderedCollection new.
-				x := left].
-			(m isKindOf: BlockMorph) ifTrue: [m fixBlockLayout].
-			(m isKindOf: ArgMorph) ifTrue: [m fixArgLayout].
-			(m isKindOf: StringMorph)
-				ifTrue: [m color: self labelColor]
-				ifFalse: [x := x max: minXForArgs].
-
-			m left: x.
-			(m fullBounds right - left > 400 and: [line isEmpty not])
-				ifTrue: [
-					lines add: line.
+	parts
+		do: [ :m | 
+			((m isKindOf: CArgSlotMorph)
+				or: [ (m isKindOf: CReporterSlotMorph) or: [ (m isKindOf: MultiArgMorph) and: [ m isWrapping ] ] ])
+				ifTrue: [ 
+					line isEmpty
+						ifFalse: [ lines add: line ].
+					m left: left.	"self"
+					lines add: (OrderedCollection with: m).
+					(m isKindOf: MultiArgMorph)
+						ifTrue: [ m fixArgLayout ]
+						ifFalse: [ m fixBlockLayout ].
+					((m isKindOf: CArgSlotMorph) or: [ m isKindOf: CReporterSlotMorph ])
+						ifTrue: [ m width: 40 ].
 					line := OrderedCollection new.
-					m left: left.
-					line add: m.
-					x := left]
-				ifFalse: [ line add: m].
-				x := x + m fullBounds width + space.
-			maxX := maxX max: x]].
-	x = left ifFalse: [
-		lines add: line].
-	w := maxX - self left max: 37.
-
-	"distribute lines vertically"
-
+					maxX := maxX max: left + m width.
+					x := left ]
+				ifFalse: [ 
+					x - left > 400
+						ifTrue: [ 
+							lines add: line.
+							line := OrderedCollection new.
+							x := left ].
+					(m isKindOf: BlockMorph)
+						ifTrue: [ m fixBlockLayout ].
+					(m isKindOf: ArgMorph)
+						ifTrue: [ m fixArgLayout ].
+					(m isKindOf: StringMorph)
+						ifTrue: [ m color: self labelColor ]
+						ifFalse: [ x := x max: minXForArgs ].
+					m left: x.
+					(m fullBounds right - left > 400 and: [ line isEmpty not ])
+						ifTrue: [ 
+							lines add: line.
+							line := OrderedCollection new.
+							m left: left.
+							line add: m.
+							x := left ]
+						ifFalse: [ line add: m ].
+					x := x + m fullBounds width + space.
+					maxX := maxX max: x ] ].
+	x = left
+		ifFalse: [ lines add: line ].
+	w := maxX - self left max: 37.	"distribute lines vertically"
 	space := 2.
-	y := self top + 2 "4" "space".
-	lines do: [:eachLine |
-		maxHeight := 14.
-		eachLine do: [:m |
-			((m isKindOf: ReporterBlockMorph)
-			and: [m isBlockTemplate 
-			or: [((m isKindOf: CArgSlotMorph) or: [m isKindOf: OSlotMorph]) and: [m isEmptySlot not]]])
-				ifTrue: [ m == eachLine first
-					ifTrue: [mh :=  m height + 10]
-					ifFalse: [mh := m height + 5]]
-				ifFalse: [ ((m isKindOf: CArgSlotMorph) or: [m isKindOf: OSlotMorph])
-					ifTrue: [mh := m height + 5]
-					ifFalse: [mh := m height]].
-			maxHeight := mh max: maxHeight.
-			((m isKindOf: CArgSlotMorph) or: [m isKindOf: CReporterSlotMorph]) ifTrue: [
-				maxHeight := m height - 4]].
-		eachLine do: [:m |
-			m top: y + (maxHeight - m height // 2) + 1].
-		y := y + maxHeight + space].
-
-	"adjust CArgSlots"
-
-	parts do: [:m |
-		((m isKindOf: CArgSlotMorph) or: [m isKindOf: CReporterSlotMorph])
-			ifTrue: [m width: w - 5]].
-
-	self isStop
-		ifTrue: [h := y - self top + space]
-		ifFalse: [h := y - self top + space + 4.].
-
-	parts size > 0 ifTrue: [
-		((parts last isKindOf: CArgSlotMorph) or: [(parts last isKindOf: CReporterSlotMorph)]) ifTrue: [
-			h := h + space + 5]].
-	
-	self extent: w @ h.
-
-	"adjust Multi-CArgSlots"
-
-	parts do: [:m | (m isKindOf: MultiArgMorph)
-		ifTrue: [m loopsWidth: w - 5]].
-
-	(nextB := self nextBlock) ifNotNil: [
-		nextB position: self left@(self bottom - 4).
-		nextB fixBlockLayout].
-
+	y := self top + 2.	"4"	"space"
+	lines
+		do: [ :eachLine | 
+			maxHeight := 14.
+			eachLine
+				do: [ :m | 
+					mh := ((m isKindOf: ReporterBlockMorph)
+						and: [ m isBlockTemplate or: [ ((m isKindOf: CArgSlotMorph) or: [ m isKindOf: OSlotMorph ]) and: [ m isEmptySlot not ] ] ])
+						ifTrue: [ 
+							m == eachLine first
+								ifTrue: [ m height + 10 ]
+								ifFalse: [ m height + 5 ] ]
+						ifFalse: [ 
+							((m isKindOf: CArgSlotMorph) or: [ m isKindOf: OSlotMorph ])
+								ifTrue: [ m height + 5 ]
+								ifFalse: [ m height ] ].
+					maxHeight := mh max: maxHeight.
+					((m isKindOf: CArgSlotMorph) or: [ m isKindOf: CReporterSlotMorph ])
+						ifTrue: [ maxHeight := m height - 4 ] ].
+			eachLine do: [ :m | m top: y + ((maxHeight - m height) // 2) + 1 ].
+			y := y + maxHeight + space ].	"adjust CArgSlots"
+	parts
+		do: [ :m | 
+			((m isKindOf: CArgSlotMorph) or: [ m isKindOf: CReporterSlotMorph ])
+				ifTrue: [ m width: w - 5 ] ].
+	h := self isStop
+		ifTrue: [ y - self top + space ]
+		ifFalse: [ y - self top + space + 4 ].
+	parts size > 0
+		ifTrue: [ 
+			((parts last isKindOf: CArgSlotMorph) or: [ parts last isKindOf: CReporterSlotMorph ])
+				ifTrue: [ h := h + space + 5 ] ].
+	self extent: w @ h.	"adjust Multi-CArgSlots"
+	parts
+		do: [ :m | 
+			(m isKindOf: MultiArgMorph)
+				ifTrue: [ m loopsWidth: w - 5 ] ].
+	(nextB := self nextBlock)
+		ifNotNil: [ 
+			nextB position: self left @ (self bottom - 4).
+			nextB fixBlockLayout ]
 ]
 
 { #category : #accessing }
@@ -953,7 +903,7 @@ CommandBlockMorph >> initialize [
 { #category : #byob }
 CommandBlockMorph >> isCShape [
 
-	^ argMorphs contains: [:am | 
+	^ argMorphs anySatisfy: [:am | 
 		am isKindOf: CArgSlotMorph]
 ]
 
@@ -1237,13 +1187,13 @@ CommandBlockMorph >> rcvr [
 	"answer a String description of my receiver which can be used in a tuple"
 
 	| rcvr |
-	(receiver isKindOf: ScriptablePhratchMorph)
-		ifTrue: [(receiver isKindOf: PhratchStageMorph)
-			ifTrue: [rcvr := 'Stage']
-			ifFalse: [rcvr := receiver objName]]
-		ifFalse: [ rcvr := '' ].
-	^rcvr
-
+	rcvr := (receiver isKindOf: ScriptablePhratchMorph)
+		ifTrue: [ 
+			(receiver isKindOf: PhratchStageMorph)
+				ifTrue: [ 'Stage' ]
+				ifFalse: [ receiver objName ] ]
+		ifFalse: [ '' ].
+	^ rcvr
 ]
 
 { #category : #accessing }

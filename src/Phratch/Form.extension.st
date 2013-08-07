@@ -16,31 +16,34 @@ Form >> colorReduced8Bit [
 	tally := self tallyPixelValues asArray.
 	tallyDepth := (tally size log: 2) asInteger.
 	colorCount := 0.
-	tally do: [:n | n > 0 ifTrue: [colorCount := colorCount + 1]].
-	(tally at: 1) = 0 ifTrue: [colorCount := colorCount + 1].  "include transparent even if it's not used"
-	colorCount > 256 ifTrue: [^ self].  "cannot reduce"
-	newForm := ColorForm extent: self extent depth: 8.
-
-	"build an array of just the colors used, and a color map to translate
+	tally
+		do: [ :n | 
+			n > 0
+				ifTrue: [ colorCount := colorCount + 1 ] ].
+	(tally at: 1) = 0
+		ifTrue: [ colorCount := colorCount + 1 ].	"include transparent even if it's not used"
+	colorCount > 256
+		ifTrue: [ ^ self ].	"cannot reduce"
+	newForm := ColorForm extent: self extent depth: 8.	"build an array of just the colors used, and a color map to translate
 	 old pixel values to their indices into this color array"
 	cm := Bitmap new: tally size.
 	oldPixelValues := self colormapIfNeededForDepth: 32.
 	newFormColors := Array new: colorCount.
 	newFormColors at: 1 put: Color transparent.
 	nextColorIndex := 2.
-	2 to: cm size do: [:i |
-		(tally at: i) > 0 ifTrue: [
-			oldPixelValues = nil
-				ifTrue: [c := Color colorFromPixelValue: i - 1 depth: tallyDepth]
-				ifFalse: [c := Color colorFromPixelValue: (oldPixelValues at: i) depth: 32].
-			newFormColors at: nextColorIndex put: c.
-			cm at: i put: nextColorIndex - 1.  "pixel values are zero-based indices"
-			nextColorIndex := nextColorIndex + 1]].
-
-	"copy pixels into new ColorForm, mapping to new pixel values"
-	newForm copyBits: self boundingBox
+	2 to: cm size do: [ :i | 
+		(tally at: i) > 0
+			ifTrue: [ 
+				c := oldPixelValues isNil
+					ifTrue: [ Color colorFromPixelValue: i - 1 depth: tallyDepth ]
+					ifFalse: [ Color colorFromPixelValue: (oldPixelValues at: i) depth: 32 ].
+				newFormColors at: nextColorIndex put: c.
+				cm at: i put: nextColorIndex - 1.	"pixel values are zero-based indices"
+				nextColorIndex := nextColorIndex + 1 ] ].	"copy pixels into new ColorForm, mapping to new pixel values"
+	newForm
+		copyBits: self boundingBox
 		from: self
-		at: 0@0
+		at: 0 @ 0
 		clippingBox: self boundingBox
 		rule: Form over
 		fillColor: nil
@@ -370,24 +373,18 @@ Form >> toThumbnail: extent borderWidth: borderWidth borderColor: backgroundColo
 	| result e r p |
 	result := Form extent: extent depth: 16.
 	result fillColor: backgroundColor.
-	result border: result boundingBox width: borderWidth.
-
-	"calculate the rectangle to be used by the thumbnail image"
-	self width > self height
-		ifTrue: [e := result width @ ((self height * result width) // self width)]
-		ifFalse: [e := ((self width * result height) // self height) @ result height].
+	result border: result boundingBox width: borderWidth.	"calculate the rectangle to be used by the thumbnail image"
+	e := self width > self height
+		ifTrue: [ result width @ (self height * result width // self width) ]
+		ifFalse: [ (self width * result height // self height) @ result height ].
 	p := (result extent - e) // 2.
 	r := p extent: e.
-
 	(WarpBlt toForm: result)
 		sourceForm: self;
-		cellSize: 2;  "do smoothing; this also installs a colormap"
+		cellSize: 2;
 		combinationRule: Form over;
-		copyQuad: self boundingBox innerCorners toRect: (r insetBy: (borderWidth + 1)).
-
+		copyQuad: self boundingBox innerCorners toRect: (r insetBy: borderWidth + 1).	"do smoothing; this also installs a colormap"
 	^ result
-
-
 ]
 
 { #category : #'*Phratch' }

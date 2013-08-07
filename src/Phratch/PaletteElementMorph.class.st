@@ -7,13 +7,13 @@ Class {
 	#category : #'Phratch-UI-Elements'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #adding }
 PaletteElementMorph >> addVarNames: aCollectionOfSymbols [
 	aCollectionOfSymbols do: [:each|
 		self addVariableNamed: each asSymbol ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #adding }
 PaletteElementMorph >> addVariableNamed: aSymbol [
 
 	| v |
@@ -24,13 +24,13 @@ PaletteElementMorph >> addVariableNamed: aSymbol [
 	self fit
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #drawing }
 PaletteElementMorph >> drawOn: aCanvas [ 
 
 ^self
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 PaletteElementMorph >> fit [
 	| x y bw2|
 	bw2 := self borderWidth * 2.
@@ -54,7 +54,7 @@ PaletteElementMorph >> fit [
 		ifTrue: [^owner fit]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialize }
 PaletteElementMorph >> initialize [
 	super initialize.
 	variables := Dictionary new.
@@ -62,7 +62,7 @@ PaletteElementMorph >> initialize [
 	self fit
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'*Phratch-Extensions' }
 PaletteElementMorph >> isPartsBin [
 
 	^ true
@@ -83,7 +83,7 @@ PaletteElementMorph >> removeVariable: element [
 	self fit
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'*Phratch-Extensions' }
 PaletteElementMorph >> rootForGrabOf: aMorph [
 	"I act like a parts bin; answer a new copy of the morph being extracted."
 

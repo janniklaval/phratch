@@ -106,37 +106,29 @@ ScrollFrameMorph >> extent: aPoint [
 	"After setting my size, position and size my scrollbars and grow box. Also update my contents and scrollbar ranges."
 
 	| inner w h |
-	super extent: (aPoint truncated max: self minWidth@self minHeight).
-
-	scrollBarStartInset ifNil: [
-		scrollBarStartInset := scrollBarEndInset := 0].  "needed during initialization"
-
+	super extent: (aPoint truncated max: self minWidth @ self minHeight).
+	scrollBarStartInset ifNil: [ scrollBarStartInset := scrollBarEndInset := 0 ].	"needed during initialization"
 	inner := self innerBounds.
-
 	w := inner width - scrollBarStartInset.
-	vScrollbar owner = self
-		ifTrue: [w := w - vbarInset]
-		ifFalse: [w := w - scrollBarEndInset].
-	hScrollbar position: (inner left + scrollBarStartInset)@(inner bottom - hbarInset).
+	w := vScrollbar owner = self
+		ifTrue: [ w - vbarInset ]
+		ifFalse: [ w - scrollBarEndInset ].
+	hScrollbar position: (inner left + scrollBarStartInset) @ (inner bottom - hbarInset).
 	hScrollbar width: w.
-	hScrollbar extent: w@hbarInset.
-
+	hScrollbar extent: w @ hbarInset.
 	h := inner height - scrollBarStartInset.
-	hScrollbar owner = self
-		ifTrue: [h := h - hbarInset]
-		ifFalse: [h := h - scrollBarEndInset].
+	h := hScrollbar owner = self
+		ifTrue: [ h - hbarInset ]
+		ifFalse: [ h - scrollBarEndInset ].
 	PhratchTranslator isRTL
-		ifTrue: [vScrollbar position: (inner left + 9)@(inner top + scrollBarStartInset)]
-		ifFalse: [vScrollbar position: (inner right - vbarInset)@(inner top + scrollBarStartInset)].
+		ifTrue: [ vScrollbar position: (inner left + 9) @ (inner top + scrollBarStartInset) ]
+		ifFalse: [ vScrollbar position: (inner right - vbarInset) @ (inner top + scrollBarStartInset) ].
 	vScrollbar height: h.
-	vScrollbar extent: vbarInset@h.
-
-	cornerMorph position: (inner bottomRight - (vbarInset@hbarInset)).
-	cornerMorph extent: vbarInset@hbarInset.
-	
+	vScrollbar extent: vbarInset @ h.
+	cornerMorph position: inner bottomRight - (vbarInset @ hbarInset).
+	cornerMorph extent: vbarInset @ hbarInset.
 	self updateContentsExtent.
-	self updateScrollbars.
-
+	self updateScrollbars
 ]
 
 { #category : #'scrollbar visibility' }
@@ -149,12 +141,12 @@ ScrollFrameMorph >> fullBounds [
 
 { #category : #'scrolling by dragging' }
 ScrollFrameMorph >> grabContentsAt: aPoint [
-	self isScrollable ifTrue: [
-		World activeHand
-			newKeyboardFocus: self;
-			showTemporaryCursor: Cursor handClosed.
-		dragOffset := aPoint - (contents left @ contents top)]
-
+	self isScrollable
+		ifFalse: [ ^ self ].
+	World activeHand
+		newKeyboardFocus: self;
+		showTemporaryCursor: Cursor handClosed.
+	dragOffset := aPoint - (contents left @ contents top)
 ]
 
 { #category : #'scrollbar visibility' }
@@ -347,29 +339,27 @@ ScrollFrameMorph >> mouseUp: evt [
 
 { #category : #scrolling }
 ScrollFrameMorph >> scrollMorphIntoView: aMorph [
-
 	| offset |
-	(self bounds containsRect: aMorph fullBounds) ifTrue: [^ self].
-
-	((aMorph fullBounds top < self top) and: [(aMorph fullBounds top < contents top) not]) ifTrue: [
-		offset := aMorph fullBounds top - contents top.
-		contents top: (self top + 3) - offset].
-
-	((aMorph fullBounds left < self left) and: [(aMorph fullBounds left < contents left) not]) ifTrue: [
-		offset := aMorph fullBounds left - contents left.
-		contents left: (self left + 3) - offset].
-
-	(aMorph fullBounds right > self right) ifTrue: [
-		offset := aMorph fullBounds right - contents left.
-		contents left: (self right - 3) - offset].
-
-	(aMorph fullBounds bottom > self bottom) ifTrue: [
-		offset := aMorph fullBounds bottom - contents top.
-		contents top: (self bottom - 3) - offset].
-
+	(self bounds containsRect: aMorph fullBounds)
+		ifTrue: [ ^ self ].
+	(aMorph fullBounds top < self top and: [ aMorph fullBounds top >= contents top ])
+		ifTrue: [ 
+			offset := aMorph fullBounds top - contents top.
+			contents top: self top + 3 - offset ].
+	(aMorph fullBounds left < self left and: [ aMorph fullBounds left >= contents left ])
+		ifTrue: [ 
+			offset := aMorph fullBounds left - contents left.
+			contents left: self left + 3 - offset ].
+	aMorph fullBounds right > self right
+		ifTrue: [ 
+			offset := aMorph fullBounds right - contents left.
+			contents left: self right - 3 - offset ].
+	aMorph fullBounds bottom > self bottom
+		ifTrue: [ 
+			offset := aMorph fullBounds bottom - contents top.
+			contents top: self bottom - 3 - offset ].
 	self updateContentsExtent.
-	self updateScrollbars.
-
+	self updateScrollbars
 ]
 
 { #category : #scrolling }

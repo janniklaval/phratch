@@ -153,22 +153,19 @@ PhratchPrompterMorph >> isDone [
 
 { #category : #accessing }
 PhratchPrompterMorph >> question: aString [
-
-	(aString isKindOf: Morph) 
-		ifTrue: [
+	(aString isKindOf: Morph)
+		ifTrue: [ 
 			| frm |
-			(aString respondsTo: #displayForm)
-				ifTrue: [frm := aString displayForm]
-				ifFalse: [frm := aString imageForm].
-			questionMorph := ImageMorph new form: frm]
-		ifFalse: [
+			frm := (aString respondsTo: #displayForm)
+				ifTrue: [ aString displayForm ]
+				ifFalse: [ aString imageForm ].
+			questionMorph := ImageMorph new form: frm ]
+		ifFalse: [ 
 			questionMorph := StringMorph new
 				contents: aString asString;
-				font: (PhratchFrameMorph getFont: #DialogBoxButton)].
-
+				font: (PhratchFrameMorph getFont: #DialogBoxButton) ].
 	self addMorph: questionMorph.
-	self height: questionMorph height + typeinMorph height + 16.
-
+	self height: questionMorph height + typeinMorph height + 16
 ]
 
 { #category : #accessing }

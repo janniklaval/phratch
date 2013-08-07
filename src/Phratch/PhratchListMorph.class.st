@@ -47,13 +47,6 @@ Class {
 }
 
 { #category : #'instance creation' }
-PhratchListMorph class >> deepCopyFrom: anArray [
-	^self deepCopyFrom: anArray from: 1 to: anArray size
-
-
-]
-
-{ #category : #'instance creation' }
 PhratchListMorph class >> deepCopyFrom: anArray from: start to: stop [
 
 	| ans converter element |
@@ -107,7 +100,7 @@ PhratchListMorph class >> with: anObject [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #comparing }
 PhratchListMorph >> = another [
 
 	^ self == another
@@ -119,16 +112,6 @@ PhratchListMorph >> aboutToBeGrabbedBy: aHand [
 	self listOwner
 		ifNil: [^ self]
 		ifNotNil: [^ nil]
-]
-
-{ #category : #'list ops' }
-PhratchListMorph >> addLettersOf: anObject [
-
-	anObject asString do: [:ch |
-		cellMorphs addLast: (self createCell: (String with: ch))].
-
-	self noteChangeAtIndex: cellMorphs size.
-
 ]
 
 { #category : #initialization }
@@ -185,7 +168,6 @@ PhratchListMorph >> asArray [
 
 { #category : #'byob lambdas' }
 PhratchListMorph >> asReferenceTuple [
-
 	" answer an array describing the receiver in an abstract way
 	format conventions:
 
@@ -206,20 +188,17 @@ PhratchListMorph >> asReferenceTuple [
 					converted to tuples in place"
 
 	| stage rcvr ref |
-
-	target isNil ifTrue: [
-		stage := PhratchFrameMorph someInstance workPane.
-		ref := stage referenceToList: self.
-		ref ifNil: [^nil].
-		^(Array with: #variableList), ref].
-
+	target isNil
+		ifTrue: [ 
+			stage := PhratchFrameMorph someInstance workPane.
+			ref := stage referenceToList: self.
+			ref ifNil: [ ^ nil ].
+			^ (Array with: #variableList) , ref ].
 	stage := target ownerOrYourselfThatIsA: PhratchStageMorph.
-	target == stage
-		ifTrue: [rcvr := 'Stage']
-		ifFalse: [rcvr := target objName].
-	^ Array with: #namedList with: rcvr with: listName	
-
-		
+	rcvr := target == stage
+		ifTrue: [ 'Stage' ]
+		ifFalse: [ target objName ].
+	^ Array with: #namedList with: rcvr with: listName
 ]
 
 { #category : #'list ops' }
@@ -264,24 +243,22 @@ PhratchListMorph >> concatenatedLines [
 
 { #category : #'list ops' }
 PhratchListMorph >> contains: anObject [
-
 	| s isComplex |
-	isComplex := (anObject isKindOf: ScriptablePhratchMorph) 
-				| (anObject isKindOf: PhratchListMorph) 
-				| (anObject isKindOf: CommandBlockMorph).
-
-	isComplex ifTrue: [
-		cellMorphs do: [:m |
-			m complexObject = anObject ifTrue: [^ true]].
-		^ false].
-
+	isComplex := (anObject isKindOf: ScriptablePhratchMorph) | (anObject isKindOf: PhratchListMorph)
+		| (anObject isKindOf: CommandBlockMorph).
+	isComplex
+		ifTrue: [ 
+			cellMorphs
+				do: [ :m | 
+					m complexObject = anObject
+						ifTrue: [ ^ true ] ].
+			^ false ].
 	s := anObject asString.
-	cellMorphs do: [:m |
-		m complexObject = anObject ifTrue: [^ true ].
-		s = m firstSubmorph contents ifTrue: [^ true]].
-
-	^ false
-
+	^ cellMorphs
+		anySatisfy: [ :m | 
+			m complexObject = anObject
+				ifTrue: [ ^ true ].
+			s = m firstSubmorph contents ]
 ]
 
 { #category : #'byob lambdas' }
@@ -321,7 +298,6 @@ PhratchListMorph >> convertBlockTuplesToStacksFor: aScriptablePhratchMorph [
 
 { #category : #'byob lambdas' }
 PhratchListMorph >> convertStacksToTuples [
-
 	"format conventions:
 
 		block: 
@@ -345,34 +321,33 @@ PhratchListMorph >> convertStacksToTuples [
 
 					converted to tuples in place"
 
-
 	| obj rcvr ref |
-
-	cellMorphs do: [:m | obj := m complexObject.
-
-		(obj isKindOf: BlockMorph) ifTrue: [
-			(obj receiver isKindOf: ScriptablePhratchMorph)
-				ifTrue: [(obj receiver isKindOf: PhratchStageMorph)
-					ifTrue: [rcvr := 'Stage']
-					ifFalse: [rcvr := obj receiver objName]]
-				ifFalse: [ rcvr := '' ].
-			m complexObject: (Array with: #block with: rcvr with: obj tupleSequence) ].
-
-		(obj isKindOf: self class) ifTrue: [ 
-			ref := obj asReferenceTuple.
-			ref isNil
-				ifTrue: [ obj convertStacksToTuples]
-				ifFalse: [ m complexObject: ref]].
-
-		(obj isKindOf: ScriptablePhratchMorph) ifTrue: [ 
-			ref := obj asReferenceTuple.
-			m complexObject: ref]].
-
+	cellMorphs
+		do: [ :m | 
+			obj := m complexObject.
+			(obj isKindOf: BlockMorph)
+				ifTrue: [ 
+					rcvr := (obj receiver isKindOf: ScriptablePhratchMorph)
+						ifTrue: [ 
+							(obj receiver isKindOf: PhratchStageMorph)
+								ifTrue: [ 'Stage' ]
+								ifFalse: [ obj receiver objName ] ]
+						ifFalse: [ '' ].
+					m complexObject: (Array with: #block with: rcvr with: obj tupleSequence) ].
+			(obj isKindOf: self class)
+				ifTrue: [ 
+					ref := obj asReferenceTuple.
+					ref isNil
+						ifTrue: [ obj convertStacksToTuples ]
+						ifFalse: [ m complexObject: ref ] ].
+			(obj isKindOf: ScriptablePhratchMorph)
+				ifTrue: [ 
+					ref := obj asReferenceTuple.
+					m complexObject: ref ] ]
 ]
 
 { #category : #'byob lambdas' }
 PhratchListMorph >> convertTuplesToStacks [
-
 	"format conventions:
 
 		sprite:
@@ -403,51 +378,42 @@ PhratchListMorph >> convertTuplesToStacks [
 					converted to tuples in place"
 
 	| obj rcvr block stage |
-
-	cellMorphs do: [:m | obj := m complexObject.
-
-		(obj isKindOf: Array) ifTrue: [
-
-			target isNil
-				ifTrue: [ stage := PhratchFrameMorph someInstance workPane]
-				ifFalse: [stage := target ownerOrYourselfThatIsA: PhratchStageMorph ].
-
-			obj second = 'Stage'
-				ifTrue: [rcvr := stage ]
-				ifFalse: [rcvr := stage coerceSpriteArg: obj second ].
-
-			#block = obj first ifTrue: [
-				block := stage stackFromTupleList: obj third receiver: rcvr.
-				m complexObject: block ].
-
-			#namedList = obj first ifTrue: [
-				m complexObject: (stage listNamed: obj third targetName: obj second)].
-
-			#variableList = obj first ifTrue: [
-				m complexObject: (stage listInVarNamed: obj third targetName: obj second)].
-
-			#stage = obj first ifTrue: [
-				m complexObject: stage].	
-
-			#sprite = obj first ifTrue: [
-				m complexObject: (stage coerceSpriteArg: obj second)]].
-
-		(obj isKindOf: self class) ifTrue: [
-			obj convertTuplesToStacks.
-			m complexObject: obj]].
-
+	cellMorphs
+		do: [ :m | 
+			obj := m complexObject.
+			(obj isKindOf: Array)
+				ifTrue: [ 
+					stage := target isNil
+						ifTrue: [ PhratchFrameMorph someInstance workPane ]
+						ifFalse: [ target ownerOrYourselfThatIsA: PhratchStageMorph ].
+					rcvr := obj second = 'Stage'
+						ifTrue: [ stage ]
+						ifFalse: [ stage coerceSpriteArg: obj second ].
+					#block = obj first
+						ifTrue: [ 
+							block := stage stackFromTupleList: obj third receiver: rcvr.
+							m complexObject: block ].
+					#namedList = obj first
+						ifTrue: [ m complexObject: (stage listNamed: obj third targetName: obj second) ].
+					#variableList = obj first
+						ifTrue: [ m complexObject: (stage listInVarNamed: obj third targetName: obj second) ].
+					#stage = obj first
+						ifTrue: [ m complexObject: stage ].
+					#sprite = obj first
+						ifTrue: [ m complexObject: (stage coerceSpriteArg: obj second) ] ].
+			(obj isKindOf: self class)
+				ifTrue: [ 
+					obj convertTuplesToStacks.
+					m complexObject: obj ] ].
 	self updateContents
 ]
 
 { #category : #'list ops' }
 PhratchListMorph >> createCell: anObject [
-
 	| readout cell font numberRight txt |
-
 	txt := anObject.
 	(anObject isKindOf: String)
-		ifFalse: [txt := anObject printString].
-
+		ifFalse: [ txt := anObject printString ].
 	font := PhratchFrameMorph getFont: #Watcher.
 	readout := ListMultilineStringMorph new
 		borderWidth: 0;
@@ -455,36 +421,28 @@ PhratchListMorph >> createCell: anObject [
 		textColor: Color white;
 		growWithText: true;
 		contents: txt font: font.
-	readout height: ((PhratchTranslator stringExtent: 'A' font: font) y) + 6.
+	readout height: (PhratchTranslator stringExtent: 'A' font: font) y + 6.
+	numberRight := PhratchTranslator isRTL
+		ifTrue: [ self right - 5 ]
+		ifFalse: [ self left + self largestIndexWidth + 6 ].
 	PhratchTranslator isRTL
-		ifTrue: [numberRight := self right - 5]
-		ifFalse: [numberRight := self left + self largestIndexWidth + 6].
-	PhratchTranslator isRTL
-		ifTrue: [readout width: self right - self left - self largestIndexWidth - 33]
-		ifFalse: [readout width: self right - numberRight - 25].
-
+		ifTrue: [ readout width: self right - self left - self largestIndexWidth - 33 ]
+		ifFalse: [ readout width: self right - numberRight - 25 ].
 	cell := WatcherReadoutFrameMorph new
 		color: ScriptablePhratchMorph listBlockColor;
 		extent: readout extent + 3;
 		addMorphBack: readout.
-
-	(anObject isKindOf: String) ifFalse: [
-		cell complexObject: anObject ].
-
-	cell position: scrollPane contents bottomLeft.
-
-	"avoid recursive lists"
-
-	anObject = self ifFalse: [scrollPane contents addMorph: cell].
-
-"
+	(anObject isKindOf: String)
+		ifFalse: [ cell complexObject: anObject ].
+	cell position: scrollPane contents bottomLeft.	"avoid recursive lists"
+	anObject = self
+		ifFalse: [ scrollPane contents addMorph: cell ].	"
 	double := scrollPane contents allMorphs detect: [:m | cell allMorphs includes: m] ifNone: [nil].
 	double ifNil: [
 		scrollPane contents addMorph: cell]
 		ifNotNil: [].
 "
 	^ cell
-
 ]
 
 { #category : #'dropping/grabbing' }
@@ -986,7 +944,7 @@ PhratchListMorph >> noteChangeAtIndex: index [
 
 ]
 
-{ #category : #'-- all --' }
+{ #category : #private }
 PhratchListMorph >> noteChangeForReadingAtIndex: index [
 
 	lastActivityIndex := index.	
@@ -1041,76 +999,64 @@ PhratchListMorph >> references: anObject [
 
 { #category : #'event handling' }
 PhratchListMorph >> rightButtonMenu [
-
 	| menu |
 	menu := MenuMorph new defaultTarget: self.
-	menu add: 'export' action: #exportList.
-	menu add: 'import' action: #importList.
+	menu add: 'export' translated action: #exportList.
+	menu add: 'import' translated action: #importList.
 	menu addLine.
-	menu add: 'hide' action: #delete.
-
+	menu add: 'hide' translated action: #delete.
 	menu localize.
-	menu labels at: 2 put: 
-		((menu labels at: 2) contents copyFrom: 1 to: (menu labels at: 2) contents size - 1), PhratchTranslator ellipsesSuffix.
-	menu invokeModal.
+	menu labels
+		at: 2
+		put:
+			((menu labels at: 2) contents copyFrom: 1 to: (menu labels at: 2) contents size - 1) , PhratchTranslator ellipsesSuffix.
+	menu invokeModal
 ]
 
 { #category : #private }
 PhratchListMorph >> scrollActiveCellIntoView [
-
 	| cell page newTop |
 	lastActivityIndex := lastActivityIndex within: 1 and: cellMorphs size.
 	cell := cellMorphs at: lastActivityIndex.
 	page := scrollPane contents.
-	(scrollPane bounds containsRect: cell bounds) ifFalse: [
-		newTop := (scrollPane bounds center y) - (cell top - page top).
-		newTop := newTop max: (scrollPane bottom - (cellMorphs last bottom - page top) - 3).
-		newTop := newTop min: scrollPane top.
-		page top: newTop].
-
+	(scrollPane bounds containsRect: cell bounds)
+		ifTrue: [ ^ self ].
+	newTop := scrollPane bounds center y - (cell top - page top).
+	newTop := newTop max: scrollPane bottom - (cellMorphs last bottom - page top) - 3.
+	newTop := newTop min: scrollPane top.
+	page top: newTop
 ]
 
 { #category : #'list ops' }
 PhratchListMorph >> setLineAt: aNumber to: newContents [
-
 	| index cell obj |
-
-	(newContents isKindOf: self class) ifTrue: [
-		(newContents containsRecursive: self) ifTrue: [
-			self error: 'attempting to create a recursive list']].
-
-	index := aNumber asInteger.
-	(index > 0 and: [index <= cellMorphs size]) ifFalse: [
-		lastActivityError := true.
-		^ self].
-
 	(newContents isKindOf: self class)
-	| (newContents isKindOf: Morph)
-	| (newContents isKindOf: Array)
-	| (newContents isKindOf: Boolean)
-
-		ifTrue: [obj := newContents]
-		ifFalse: [ obj := newContents asString ].
-	
+		ifTrue: [ 
+			(newContents containsRecursive: self)
+				ifTrue: [ self error: 'attempting to create a recursive list' ] ].
+	index := aNumber asInteger.
+	(index > 0 and: [ index <= cellMorphs size ])
+		ifFalse: [ 
+			lastActivityError := true.
+			^ self ].
+	obj := (newContents isKindOf: self class) | (newContents isKindOf: Morph) | (newContents isKindOf: Array)
+		| (newContents isKindOf: Boolean)
+		ifTrue: [ newContents ]
+		ifFalse: [ newContents asString ].
 	cell := cellMorphs at: index.
-
 	(cell complexObject respondsTo: #delete)
-		ifTrue: [cell complexObject delete].
-
+		ifTrue: [ cell complexObject delete ].
 	(obj isKindOf: String)
 		ifTrue: [ 
 			cell complexObject: nil.
 			cell firstSubmorph contents: obj ]
-		ifFalse: [
+		ifFalse: [ 
 			cell firstSubmorph contents: ''.
 			cell complexObject: obj ].
-
 	cell changed.
 	self noteChangeAtIndex: index.
 	list setLineAt: aNumber to: newContents.
 	lastUpdated := list lastChanged
-
-
 ]
 
 { #category : #private }
@@ -1246,65 +1192,59 @@ PhratchListMorph >> updateContents [
 	"Update and layout my contents."
 
 	| page numberRight cellWidth inset x y listOwner |
-
 	listOwner := self listOwner.
-	listOwner ifNotNil: [
-"		listOwner noteChangeAtIndex: (listOwner indexOf: self)]."
-		listOwner updateContentsRecursive].
-
-	cellMorphs size = 0 ifTrue: [^ self showEmpty].
-
+	listOwner
+		ifNotNil: [ 
+			"		listOwner noteChangeAtIndex: (listOwner indexOf: self)]."
+			listOwner updateContentsRecursive ].
+	cellMorphs size = 0
+		ifTrue: [ ^ self showEmpty ].
 	emptyMorph delete.
-
 	page := scrollPane contents.
 	page changed.
-
-	PhratchTranslator isRTL
-		ifTrue: [numberRight := self right - 5]
-		ifFalse: [numberRight := self left + self largestIndexWidth + 6].
-
-	"word-wrap cell contents and fix cell extents, if needed"
-	PhratchTranslator isRTL
-		ifTrue: [cellWidth := self right - self left - self largestIndexWidth - 33]
-		ifFalse: [cellWidth := self right - numberRight - 25].
+	numberRight := PhratchTranslator isRTL
+		ifTrue: [ self right - 5 ]
+		ifFalse: [ self left + self largestIndexWidth + 6 ].	"word-wrap cell contents and fix cell extents, if needed"
+	cellWidth := PhratchTranslator isRTL
+		ifTrue: [ self right - self left - self largestIndexWidth - 33 ]
+		ifFalse: [ self right - numberRight - 25 ].
 	inset := 3.
-	cellMorphs do: [:cell |
-
-		(cell complexObject isKindOf: Morph)
-			ifTrue: [ (cell complexObject respondsTo: #displayForm)
-				ifTrue: [cell extent: cell complexObject displayForm extent +(10@10)]
-				ifFalse: [(cell complexObject respondsTo: #thumbnailImageForm)
-					ifTrue: [cell extent: cell complexObject thumbnailImageForm extent + (10@10)]
-					ifFalse: [cell extent: cell complexObject fullBounds extent +(10@10)]]]
-			ifFalse: [
-				((cell width ~= cellWidth) or: [cell extent ~= (cell firstSubmorph extent + inset)]) ifTrue: [
-				cell firstSubmorph width: cellWidth - inset.
-				cell extent: cell firstSubmorph extent + inset]]].
-
-	"position cells"
-	PhratchTranslator isRTL
-		ifTrue: [x := self left + 26]
-		ifFalse: [x := numberRight + 4].
+	cellMorphs
+		do: [ :cell | 
+			(cell complexObject isKindOf: Morph)
+				ifTrue: [ 
+					(cell complexObject respondsTo: #displayForm)
+						ifTrue: [ cell extent: cell complexObject displayForm extent + (10 @ 10) ]
+						ifFalse: [ 
+							(cell complexObject respondsTo: #thumbnailImageForm)
+								ifTrue: [ cell extent: cell complexObject thumbnailImageForm extent + (10 @ 10) ]
+								ifFalse: [ cell extent: cell complexObject fullBounds extent + (10 @ 10) ] ] ]
+				ifFalse: [ 
+					(cell width ~= cellWidth or: [ cell extent ~= (cell firstSubmorph extent + inset) ])
+						ifTrue: [ 
+							cell firstSubmorph width: cellWidth - inset.
+							cell extent: cell firstSubmorph extent + inset ] ] ].	"position cells"
+	x := PhratchTranslator isRTL
+		ifTrue: [ self left + 26 ]
+		ifFalse: [ numberRight + 4 ].
 	y := page top + 3.
-	cellMorphs do: [:cell |
-		cell position: x@y.
-		y := y + cell height - 1].
-
+	cellMorphs
+		do: [ :cell | 
+			cell position: x @ y.
+			y := y + cell height - 1 ].
 	self updateIndices: numberRight.
-
 	page extent: (self width - (2 * borderWidth)) @ (y + 3).
-
-	lastActivityIndex ifNotNil: [
- 		(lastActivityIndex between: 1 and: cellMorphs size) ifTrue: [
-			(numberMorphs at: lastActivityIndex) color: (Color white).
-			highlightActive := true].
-		self scrollActiveCellIntoView.
-		lastActivityIndex := nil].
+	lastActivityIndex
+		ifNotNil: [ 
+			(lastActivityIndex between: 1 and: cellMorphs size)
+				ifTrue: [ 
+					(numberMorphs at: lastActivityIndex) color: Color white.
+					highlightActive := true ].
+			self scrollActiveCellIntoView.
+			lastActivityIndex := nil ].
 	scrollPane updateScrollbars.
 	scrollPane updateScrollbars.
-
-	listLayoutNeeded := false.
-
+	listLayoutNeeded := false
 ]
 
 { #category : #'list ops' }
@@ -1312,63 +1252,53 @@ PhratchListMorph >> updateContentsForReading [
 	"Update and layout my contents."
 
 	| page numberRight cellWidth inset x y listOwner |
-
 	listOwner := self listOwner.
-	listOwner ifNotNil: [
-		listOwner noteChangeAtIndex: (listOwner indexOf: self)].
-"		listOwner updateContentsRecursive]."
-
-	cellMorphs size = 0 ifTrue: [^ self showEmpty].
-
+	listOwner ifNotNil: [ listOwner noteChangeAtIndex: (listOwner indexOf: self) ].	"		listOwner updateContentsRecursive]."
+	cellMorphs size = 0
+		ifTrue: [ ^ self showEmpty ].
 	emptyMorph delete.
-
 	page := scrollPane contents.
 	page changed.
-
-	PhratchTranslator isRTL
-		ifTrue: [numberRight := self right - 5]
-		ifFalse: [numberRight := self left + self largestIndexWidth + 6].
-
-	"word-wrap cell contents and fix cell extents, if needed"
-	PhratchTranslator isRTL
-		ifTrue: [cellWidth := self right - self left - self largestIndexWidth - 33]
-		ifFalse: [cellWidth := self right - numberRight - 25].
+	numberRight := PhratchTranslator isRTL
+		ifTrue: [ self right - 5 ]
+		ifFalse: [ self left + self largestIndexWidth + 6 ].	"word-wrap cell contents and fix cell extents, if needed"
+	cellWidth := PhratchTranslator isRTL
+		ifTrue: [ self right - self left - self largestIndexWidth - 33 ]
+		ifFalse: [ self right - numberRight - 25 ].
 	inset := 3.
-	cellMorphs do: [:cell |
-
-		(cell complexObject isKindOf: Morph)
-			ifTrue: [ (cell complexObject respondsTo: #displayForm)
-				ifTrue: [cell extent: cell complexObject displayForm extent +(10@10)]
-				ifFalse: [cell extent: cell complexObject fullBounds extent +(10@10)]]
-			ifFalse: [
-				((cell width ~= cellWidth) or: [cell extent ~= (cell firstSubmorph extent + inset)]) ifTrue: [
-				cell firstSubmorph width: cellWidth - inset.
-				cell extent: cell firstSubmorph extent + inset]]].
-
-	"position cells"
-	PhratchTranslator isRTL
-		ifTrue: [x := self left + 26]
-		ifFalse: [x := numberRight + 4].
+	cellMorphs
+		do: [ :cell | 
+			(cell complexObject isKindOf: Morph)
+				ifTrue: [ 
+					(cell complexObject respondsTo: #displayForm)
+						ifTrue: [ cell extent: cell complexObject displayForm extent + (10 @ 10) ]
+						ifFalse: [ cell extent: cell complexObject fullBounds extent + (10 @ 10) ] ]
+				ifFalse: [ 
+					(cell width ~= cellWidth or: [ cell extent ~= (cell firstSubmorph extent + inset) ])
+						ifTrue: [ 
+							cell firstSubmorph width: cellWidth - inset.
+							cell extent: cell firstSubmorph extent + inset ] ] ].	"position cells"
+	x := PhratchTranslator isRTL
+		ifTrue: [ self left + 26 ]
+		ifFalse: [ numberRight + 4 ].
 	y := page top + 3.
-	cellMorphs do: [:cell |
-		cell position: x@y.
-		y := y + cell height - 1].
-
+	cellMorphs
+		do: [ :cell | 
+			cell position: x @ y.
+			y := y + cell height - 1 ].
 	self updateIndices: numberRight.
-
 	page extent: (self width - (2 * borderWidth)) @ (y + 3).
-
-	lastActivityIndex ifNotNil: [
- 		(lastActivityIndex between: 1 and: cellMorphs size) ifTrue: [
-			(numberMorphs at: lastActivityIndex) color: (Color white).
-			highlightActive := true].
-		self scrollActiveCellIntoView.
-		lastActivityIndex := nil].
+	lastActivityIndex
+		ifNotNil: [ 
+			(lastActivityIndex between: 1 and: cellMorphs size)
+				ifTrue: [ 
+					(numberMorphs at: lastActivityIndex) color: Color white.
+					highlightActive := true ].
+			self scrollActiveCellIntoView.
+			lastActivityIndex := nil ].
 	scrollPane updateScrollbars.
 	scrollPane updateScrollbars.
-
-	listLayoutNeeded := false.
-
+	listLayoutNeeded := false
 ]
 
 { #category : #private }
@@ -1376,60 +1306,53 @@ PhratchListMorph >> updateContentsRecursive [
 	"Update and layout my contents and those of my children."
 
 	| page numberRight cellWidth inset x y |
-
-	cellMorphs size = 0 ifTrue: [^ self showEmpty].
+	cellMorphs size = 0
+		ifTrue: [ ^ self showEmpty ].
 	emptyMorph delete.
-
 	page := scrollPane contents.
 	page changed.
-
-	PhratchTranslator isRTL
-		ifTrue: [numberRight := self right - 5]
-		ifFalse: [numberRight := self left + self largestIndexWidth + 6].
-
-	"word-wrap cell contents and fix cell extents, if needed"
-	PhratchTranslator isRTL
-		ifTrue: [cellWidth := self right - self left - self largestIndexWidth - 33]
-		ifFalse: [cellWidth := self right - numberRight - 25].
+	numberRight := PhratchTranslator isRTL
+		ifTrue: [ self right - 5 ]
+		ifFalse: [ self left + self largestIndexWidth + 6 ].	"word-wrap cell contents and fix cell extents, if needed"
+	cellWidth := PhratchTranslator isRTL
+		ifTrue: [ self right - self left - self largestIndexWidth - 33 ]
+		ifFalse: [ self right - numberRight - 25 ].
 	inset := 3.
-	cellMorphs do: [:cell |
-
-		(cell complexObject isKindOf: Morph)
-			ifTrue: [ 
-				(cell complexObject respondsTo: #displayForm)
-					ifTrue: [cell extent: cell complexObject displayForm extent +(10@10)]
-					ifFalse: [cell extent: cell complexObject fullBounds extent +(10@10)].
-				(cell complexObject isKindOf: self class)
-					ifTrue: [cell complexObject updateContentsRecursive]]
-			ifFalse: [
-				((cell width ~= cellWidth) or: [cell extent ~= (cell firstSubmorph extent + inset)]) ifTrue: [
-				cell firstSubmorph width: cellWidth - inset.
-				cell extent: cell firstSubmorph extent + inset]]].
-
-	"position cells"
-	PhratchTranslator isRTL
-		ifTrue: [x := self left + 26]
-		ifFalse: [x := numberRight + 4].
+	cellMorphs
+		do: [ :cell | 
+			(cell complexObject isKindOf: Morph)
+				ifTrue: [ 
+					(cell complexObject respondsTo: #displayForm)
+						ifTrue: [ cell extent: cell complexObject displayForm extent + (10 @ 10) ]
+						ifFalse: [ cell extent: cell complexObject fullBounds extent + (10 @ 10) ].
+					(cell complexObject isKindOf: self class)
+						ifTrue: [ cell complexObject updateContentsRecursive ] ]
+				ifFalse: [ 
+					(cell width ~= cellWidth or: [ cell extent ~= (cell firstSubmorph extent + inset) ])
+						ifTrue: [ 
+							cell firstSubmorph width: cellWidth - inset.
+							cell extent: cell firstSubmorph extent + inset ] ] ].	"position cells"
+	x := PhratchTranslator isRTL
+		ifTrue: [ self left + 26 ]
+		ifFalse: [ numberRight + 4 ].
 	y := page top + 3.
-	cellMorphs do: [:cell |
-		cell position: x@y.
-		y := y + cell height - 1].
-
+	cellMorphs
+		do: [ :cell | 
+			cell position: x @ y.
+			y := y + cell height - 1 ].
 	self updateIndices: numberRight.
-
 	page extent: (self width - (2 * borderWidth)) @ (y + 3).
-
-	lastActivityIndex ifNotNil: [
- 		(lastActivityIndex between: 1 and: cellMorphs size) ifTrue: [
-			(numberMorphs at: lastActivityIndex) color: (Color white).
-			highlightActive := true].
-		self scrollActiveCellIntoView.
-		lastActivityIndex := nil].
+	lastActivityIndex
+		ifNotNil: [ 
+			(lastActivityIndex between: 1 and: cellMorphs size)
+				ifTrue: [ 
+					(numberMorphs at: lastActivityIndex) color: Color white.
+					highlightActive := true ].
+			self scrollActiveCellIntoView.
+			lastActivityIndex := nil ].
 	scrollPane updateScrollbars.
 	scrollPane updateScrollbars.
-
-	listLayoutNeeded := false.
-
+	listLayoutNeeded := false
 ]
 
 { #category : #stepping }
@@ -1444,10 +1367,10 @@ PhratchListMorph >> updateCountMorph [
 PhratchListMorph >> updateIndexHighlight [
 	"Update the highlighted index."
 
-	highlightActive ifTrue: [
-		numberMorphs do: [:m | m color: self indexColor].
-		highlightActive := false].
-
+	highlightActive
+		ifFalse: [ ^ self ].
+	numberMorphs do: [ :m | m color: self indexColor ].
+	highlightActive := false
 ]
 
 { #category : #private }
@@ -1488,14 +1411,12 @@ PhratchListMorph >> updateTitle [
 	"Update my title if I am owned by a sprite and the sprite name changes."
 
 	| s |
-	listName ifNil: [^ self].
-
-	(target isKindOf: PhratchSpriteMorph)
-		ifTrue: [s := target objName, ' ', listName]
-		ifFalse: [s := listName].
-
-	titleMorph contents = s ifFalse: [
-		titleMorph contents: s.
-		self fixLayout].
-
+	listName ifNil: [ ^ self ].
+	s := (target isKindOf: PhratchSpriteMorph)
+		ifTrue: [ target objName , ' ' , listName ]
+		ifFalse: [ listName ].
+	titleMorph contents = s
+		ifTrue: [ ^ self ].
+	titleMorph contents: s.
+	self fixLayout
 ]

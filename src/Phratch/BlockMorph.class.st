@@ -15,19 +15,15 @@ Class {
 		'blockLayoutNeeded',
 		'cachedForm',
 		'cachedFeedbackForm',
-		'copyTooltip',
 		'lastLayoutTime',
 		'originalColor',
-		'isContrasted',
 		'phratchProc'
 	],
 	#classVars : [
-		'ArgFont',
 		'CBlockBracketThickness',
 		'Contrast',
 		'DebugMenu',
 		'LabelColor',
-		'LabelFont',
 		'PuzzleInset',
 		'PuzzleWidth'
 	],
@@ -35,25 +31,8 @@ Class {
 }
 
 { #category : #'class initialization' }
-BlockMorph class >> contrast [
-	^ Contrast
-]
-
-{ #category : #'class initialization' }
-BlockMorph class >> contrastNormal [
-	Contrast := #normal.
-	BlockMorph allInstancesDo: [:b | b changed ].
-]
-
-{ #category : #'class initialization' }
 BlockMorph class >> contrastOff [
 	Contrast := #off.
-	BlockMorph allInstancesDo: [:b | b changed ].
-]
-
-{ #category : #'class initialization' }
-BlockMorph class >> contrastSlight [
-	Contrast := #slight.
 	BlockMorph allInstancesDo: [:b | b changed ].
 ]
 
@@ -74,61 +53,17 @@ BlockMorph class >> initialize [
 	DebugMenu := true.
 ]
 
-{ #category : #'class initialization' }
-BlockMorph class >> setLabelFont [
-	"BlockMorph setLabelFont"
-
-	| menu |
-	menu := MenuMorph new defaultTarget: self.
-	StrikeFont fontNames do: [:fn | 
-		menu add: fn 
-			target: self  
-			selector: #setLabelSize:
-			argument: fn.
-		menu add: fn action: fn].
-	menu addLine.
-	menu add: 'normal' 
-		target: self  
-		selector: #setLabelSize:
-		argument: #normal.
-	menu popUpInWorld.
-]
-
-{ #category : #'class initialization' }
-BlockMorph class >> setLabelSize: aSelectedFontLabel [
-	"BlockMorph setLabelFont"
-
-	| menu |
-	
-		menu := MenuMorph new defaultTarget: self.
-		(StrikeFont sizesForFontName: aSelectedFontLabel) do: [:sz | 
-			menu add: sz printString 
-				target: self  
-				selector: #setfont:size:
-				argumentList: (Array with: aSelectedFontLabel with: sz)
-		].
-	menu popUpInWorld.
-
-]
-
-{ #category : #'class initialization' }
-BlockMorph class >> setfont:fName size: fSize [
-
-	LabelFont := StrikeFont fontName: fName size: fSize.
-]
-
 { #category : #'dropping/grabbing' }
 BlockMorph >> aboutToBeGrabbedBy: aHandMorph [
 	"If I'm being used as an argument, replace myself with an appropriate argument morph. Copied from WatcherMorph."
 
-	| m |
-	(owner isKindOf: CommandBlockMorph) 
-	| (owner isKindOf: WhenHatBlockMorph)
-	| (owner isKindOf: MultiArgMorph) ifTrue: [
-		"if I was being used as argument, replace myself with a generic argument morph"
-		m := owner argMorphToReplace: self. 
-		m ifNotNil: [owner replaceArgMorph: self by: m]].
+	"if I was being used as argument, replace myself with a generic argument morph"
 
+	| m |
+	(owner isKindOf: CommandBlockMorph) | (owner isKindOf: WhenHatBlockMorph) | (owner isKindOf: MultiArgMorph)
+		ifFalse: [ ^ self ].
+	m := owner argMorphToReplace: self.
+	m ifNotNil: [ owner replaceArgMorph: self by: m ]
 ]
 
 { #category : #accessing }
@@ -156,14 +91,6 @@ BlockMorph >> addAreasOf: outerRect outside: innerRect color: col to: coll [
 					and: [(pair first left > innerRect left)
 					and: [pair first top < innerRect bottom]]])
 					or: [pair first left > innerRect right]])
-]
-
-{ #category : #accessing }
-BlockMorph >> addCopyTooltip: aMorph [
-
-	copyTooltip := aMorph.
-	self addMorph: copyTooltip.
-
 ]
 
 { #category : #byob }
@@ -311,7 +238,7 @@ BlockMorph >> closestAttachTargetIn: newOwner [
 							m ~~ self topBlock
 								and: [ m ~~ self owner and: [ (m isKindOf: BlockMorph) and: [ m isReporter not | (m isKindOf: CommandScriptBlockMorph) ] ] ] ] ])
 				ifTrue: [ m blockAttachPoints: attachPoints ] ].
-	((self isKindOf: HatBlockMorph) or: [ (self ownerOrYourselfThatIsA: HatBlockMorph) ~= nil ])
+	((self isKindOf: HatBlockMorph) or: [ (self ownerOrYourselfThatIsA: HatBlockMorph) notNil ])
 		ifTrue: [ 
 			"if I am a HatBlock or the bottom block of a HatBlock stack, I can only attach to the top block of a stack"
 			attachPoints := attachPoints select: [ :assoc | assoc value owner = newOwner and: [ assoc key y = assoc value top ] ] ].
@@ -360,25 +287,25 @@ BlockMorph >> closestAttachTargetIn: newOwner [
 							(best value owner isKindOf: BlockMorph)
 								ifTrue: [ 
 									self stretchHeight: 0.
-									^  nil ] ].
+									^ nil ] ].
 					(self isStopOrForever or: [ self bottomBlock isStopOrForever ])
 						ifTrue: [ 
 							bottomUsed
 								ifTrue: [ 
 									self stretchHeight: 0.
-									^  nil ] ].
+									^ nil ] ].
 					(best key y = best value top
 						and: [ (self isForever or: [ self bottomBlock isForever ]) and: [ (self nestedBlockAt: best key y) isNil not ] ])
 						ifTrue: [ 
 							self stretchHeight: 0.
-							^  nil ].
+							^ nil ].
 					(self nestedBlockAt: best key y)
 						ifNil: [ 
 							bottomUsed
 								ifTrue: [ 
 									self stretchHeight: 0.
 									best key y = best value bottom
-										ifTrue: [ ^  nil ].
+										ifTrue: [ ^ nil ].
 									(best key y = best value top and: [ best value owner isKindOf: BlockMorph ])
 										ifTrue: [ ^ nil ].
 									(best key y = best value bottom and: [ (best value owner isKindOf: BlockMorph) not ])
@@ -388,7 +315,7 @@ BlockMorph >> closestAttachTargetIn: newOwner [
 									(best key y = best value bottom and: [ best value nextBlock isNil not ])
 										ifTrue: [ 
 											self stretchHeight: 0.
-											^  nil ].	"((best key y = best value top) and: [(best value owner isKindOf: BlockMorph)]) ifTrue: [self stretchHeight: 0. ^ best := nil]."
+											^ nil ].	"((best key y = best value top) and: [(best value owner isKindOf: BlockMorph)]) ifTrue: [self stretchHeight: 0. ^ best := nil]."
 									best key y = best value top
 										ifTrue: [ 
 											self stretchHeight: best value fullBounds height - 17.
@@ -494,12 +421,6 @@ BlockMorph >> contrastColor [
 				ifFalse: [ 
 					(m isKindOf: MultiArgMorph)
 						ifTrue: [ m contrastColor ] ] ]
-]
-
-{ #category : #copying }
-BlockMorph >> copyReceiver: aReceiver [
-
-	self allMorphsDo: [:each | (each isKindOf: CommandBlockMorph)  ifTrue:[each receiver: aReceiver ]  ]  
 ]
 
 { #category : #private }
@@ -933,70 +854,84 @@ BlockMorph >> handleReporterDrop [
 
 { #category : #'event handling' }
 BlockMorph >> handleTool: toolName hand: hand [
-
 	| myStack myOwner sFrame varToDelete |
-	toolName = 'CopyTool' ifTrue: [
-		Sensor shiftPressed ifFalse: [hand toolType: nil].
-		(owner isKindOf: PhratchBlockPaletteMorph) ifTrue: [^ self].  "ignore if in palette"
-		^ self duplicate].
-
-	toolName = 'CutTool' ifTrue: [
-		Sensor shiftPressed ifFalse: [hand toolType: nil].
-		(self topBlock owner isKindOf: PhratchScriptsMorph) ifTrue: [
+	toolName = 'CopyTool'
+		ifTrue: [ 
+			Sensor shiftPressed
+				ifFalse: [ hand toolType: nil ].
+			(owner isKindOf: PhratchBlockPaletteMorph)
+				ifTrue: [ ^ self ].	"ignore if in palette"
+			^ self duplicate ].
+	toolName = 'CutTool'
+		ifFalse: [ ^ self ].
+	Sensor shiftPressed
+		ifFalse: [ hand toolType: nil ].
+	(self topBlock owner isKindOf: PhratchScriptsMorph)
+		ifTrue: [ 
 			myStack := self nextBlock.
 			myOwner := self owner.
-			myStack ifNotNil: [
-				(myOwner isKindOf: CBlockMorph)
-					ifTrue: [ 
-					"	copiedStack := myStack shallowCopy.
+			myStack
+				ifNotNil: [ 
+					(myOwner isKindOf: CBlockMorph)
+						ifTrue: [ 
+							"	copiedStack := myStack shallowCopy.
 						self topBlock owner addMorph: copiedStack.
 						[myStack top > myOwner bottom] whileTrue: [
 							myStack position: (myStack left)@(myStack top - 1).
 							self world displayWorldSafely].
 						copiedStack delete."
-						myOwner attachBlock: myStack]
-					ifFalse: [
-						(myOwner isKindOf: PhratchScriptsMorph)
-							ifTrue: [myOwner addMorph: myStack]
-							ifFalse: [
-							"	copiedStack := myStack shallowCopy.
+							myOwner attachBlock: myStack ]
+						ifFalse: [ 
+							(myOwner isKindOf: PhratchScriptsMorph)
+								ifTrue: [ myOwner addMorph: myStack ]
+								ifFalse: [ 
+									"	copiedStack := myStack shallowCopy.
 								(self topBlock owner) addMorph: copiedStack.
 								[myStack top > myOwner bottom] whileTrue: [
 									myStack position: (myStack left)@(myStack top - 1).
 									self world displayWorldSafely].
 								copiedStack delete."
-								myOwner attachBlock: myStack]]].
-
-				self isReporter ifTrue: [
-					owner ifNotNil: [(owner isKindOf: CustomCommandBlockMorph)
-						ifTrue: [ owner isTemplate ifTrue: [
-							owner removeParameter: self.
-							^self]]].
-					self aboutToBeGrabbedBy: hand].
-				PhratchFrameMorph putInClipboard: self.
-				self delete.
-				(myOwner isKindOf: PhratchScriptsMorph) ifTrue: [myOwner step].
-				^ self]
-		ifFalse: [
+									myOwner attachBlock: myStack ] ] ].
+			self isReporter
+				ifTrue: [ 
+					owner
+						ifNotNil: [ 
+							(owner isKindOf: CustomCommandBlockMorph)
+								ifTrue: [ 
+									owner isTemplate
+										ifTrue: [ 
+											owner removeParameter: self.
+											^ self ] ] ].
+					self aboutToBeGrabbedBy: hand ].
+			PhratchFrameMorph putInClipboard: self.
+			self delete.
+			(myOwner isKindOf: PhratchScriptsMorph)
+				ifTrue: [ myOwner step ].
+			^ self ]
+		ifFalse: [ 
 			sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
-			sFrame ifNil: [^self].
-			((owner isKindOf: PhratchBlockPaletteMorph) and:
-			 [sFrame viewerPane currentCategory = #variables]) ifTrue: [
-				(self isKindOf: SetterBlockMorph) ifTrue: [
-					self variable ifNotNil: [
-						varToDelete := self variable.
-						(self confirm: 'Really delete variable: ', varToDelete, '?') ifFalse: [^ self].
-						self receiver deleteVariable: varToDelete]].
-				(self isKindOf: VariableBlockMorph) ifTrue: [
-					varToDelete := self commandSpec.
-					(self confirm: 'Really delete variable: ', varToDelete, '?') ifFalse: [^ self].
-					self receiver deleteVariable: varToDelete].
-				((varToDelete notNil) and: [sFrame notNil]) ifTrue: [
-					sFrame workPane deleteVariable: varToDelete.
-					sFrame viewerPane categoryChanged: 'variables']]].
-	^ self].
-
-
+			sFrame ifNil: [ ^ self ].
+			((owner isKindOf: PhratchBlockPaletteMorph) and: [ sFrame viewerPane currentCategory = #variables ])
+				ifTrue: [ 
+					(self isKindOf: SetterBlockMorph)
+						ifTrue: [ 
+							self variable
+								ifNotNil: [ 
+									varToDelete := self variable.
+									(self confirm: 'Really delete variable: ' , varToDelete , '?')
+										ifFalse: [ ^ self ].
+									self receiver deleteVariable: varToDelete ] ].
+					(self isKindOf: VariableBlockMorph)
+						ifTrue: [ 
+							varToDelete := self commandSpec.
+							(self confirm: 'Really delete variable: ' , varToDelete , '?')
+								ifFalse: [ ^ self ].
+							self receiver deleteVariable: varToDelete ].
+					(varToDelete notNil and: [ sFrame notNil ])
+						ifTrue: [ 
+							sFrame workPane deleteVariable: varToDelete.
+							sFrame viewerPane categoryChanged: 'variables' ] ] ].
+	^ self
 ]
 
 { #category : #'event handling' }
@@ -1123,11 +1058,6 @@ BlockMorph >> isCShape [
 ]
 
 { #category : #byob }
-BlockMorph >> isContrasted [
-	^isContrasted ifNil: [isContrasted := false]
-]
-
-{ #category : #byob }
 BlockMorph >> isContrasted: bool [
 	isContrasted := bool
 ]
@@ -1139,34 +1069,24 @@ BlockMorph >> isCustomBlock [
 
 { #category : #byob }
 BlockMorph >> isDeletedAttribute [
-
 	| sel rcv oi |
-	(self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph)
-		ifNil: [^ false].
-	(self respondsTo: #selector) ifFalse: [
-		^ false].
+	(self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph) ifNil: [ ^ false ].
+	(self respondsTo: #selector)
+		ifFalse: [ ^ false ].
 	sel := self selector.
-	(self respondsTo: #receiver) ifFalse: [
-		^ false].
+	(self respondsTo: #receiver)
+		ifFalse: [ ^ false ].
 	rcv := self receiver.
-	(rcv isKindOf: ScriptablePhratchMorph) 
-		ifFalse: [^ false].
-
-	((self isKindOf: VariableBlockMorph) 
-	or: [self isKindOf: ListContentsBlockMorph]) ifTrue: [
-		^ (rcv allVarNames includes: self commandSpec) not].
-
-	self isCustomBlock ifTrue: [
-		^ rcv inheritedBlockIds includes: self id].
-
-	sel = #get: ifTrue: [
-		 ^ rcv deletedAttributes includes: (self argumentAt: 1) choice].
-		
+	(rcv isKindOf: ScriptablePhratchMorph)
+		ifFalse: [ ^ false ].
+	((self isKindOf: VariableBlockMorph) or: [ self isKindOf: ListContentsBlockMorph ])
+		ifTrue: [ ^ (rcv allVarNames includes: self commandSpec) not ].
+	self isCustomBlock
+		ifTrue: [ ^ rcv inheritedBlockIds includes: self id ].
+	sel = #get:
+		ifTrue: [ ^ rcv deletedAttributes includes: (self argumentAt: 1) choice ].
 	oi := rcv objectInterface.
-	rcv deletedAttributes do: [:att |
-		(oi at: att) second = sel ifTrue: [
-			^ true]].
-	^ false
+	^ rcv deletedAttributes anySatisfy: [ :att | (oi at: att) second = sel ]
 ]
 
 { #category : #accessing }
@@ -1211,13 +1131,6 @@ BlockMorph >> isInheritableAttribute [
 { #category : #byob }
 BlockMorph >> isLambdaForm [
 	^false
-]
-
-{ #category : #byob }
-BlockMorph >> isNestedCShape [
-
-	^ self outerLoop notNil
-
 ]
 
 { #category : #accessing }
@@ -1404,13 +1317,6 @@ BlockMorph >> mouseDown: evt [
 
 ]
 
-{ #category : #'event handling' }
-BlockMorph >> mouseHold: evt [
-
-	self rightButtonMenu.
-
-]
-
 { #category : #byob }
 BlockMorph >> nests: aBlock [
 	^ false
@@ -1568,18 +1474,19 @@ BlockMorph >> printCodeOn: aStream indent: indent [
 
 { #category : #private }
 BlockMorph >> printCodeSubmorph: aMorph on: aStream [
-
-	(aMorph isKindOf: ArgMorph) ifTrue: [aMorph printArgOn: aStream].
-	(aMorph isKindOf: BlockMorph) ifTrue: [
-		aStream nextPut: $(.
-		aMorph printCodeOn: aStream indent: 0.
-		aStream skip: -1.  "remove carriage return"
-		aStream nextPut: $)].
-	(aMorph isKindOf: StringMorph) ifTrue: [
-		((aMorph contents = '?') | (aMorph contents = '%'))
-			ifTrue: [aStream skip: -1].	"remove space before ? or %"
-		aStream nextPutAll: aMorph contents].
-
+	(aMorph isKindOf: ArgMorph)
+		ifTrue: [ aMorph printArgOn: aStream ].
+	(aMorph isKindOf: BlockMorph)
+		ifTrue: [ 
+			aStream nextPut: $(.
+			aMorph printCodeOn: aStream indent: 0.
+			aStream skip: -1.	"remove carriage return"
+			aStream nextPut: $) ].
+	(aMorph isKindOf: StringMorph)
+		ifFalse: [ ^ self ].
+	aMorph contents = '?' | (aMorph contents = '%')
+		ifTrue: [ aStream skip: -1 ].	"remove space before ? or %"
+	aStream nextPutAll: aMorph contents
 ]
 
 { #category : #byob }
@@ -1619,14 +1526,6 @@ BlockMorph >> refreshAttributeArgs [
 BlockMorph >> rejectDropEvent: evt [
 	"we should only reject drops if they're not blocks, variables, etc. Should check it out better"
 	^false
-]
-
-{ #category : #accessing }
-BlockMorph >> removeCopyTooltip [
-
-	copyTooltip delete.
-	copyTooltip := nil.
-
 ]
 
 { #category : #byob }

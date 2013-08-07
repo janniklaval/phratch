@@ -56,49 +56,6 @@ ObjStream class >> equalityTest: inObj [
 
 ]
 
-{ #category : #testing }
-ObjStream class >> fixedFormatClassTests [
-	"Test conversions for fixed-format objects."
-	"self initialize; fixedFormatClassTests"
-
-	| shared |
-	self equalityTest: #().
-	self equalityTest: #(1 2 3).
-	self equalityTest: (Array with: nil with: true with: false).
-	self equalityTest: #(123 -123 123456 -123456 123456789000 -123456789000 3.14159).
-	self equalityTest: 'hello'.
-	self equalityTest: 'hello' asSymbol.
-	self equalityTest: #(1 2 3) asByteArray.
-	self equalityTest: (String withAll: 'hello').
-
-	self equalityTest: (SoundBuffer fromArray: #(1 2 3 4)).
-	self equalityTest: (Bitmap withAll: #(0 1 2 2147483647 2147483648 4294967295)).
-
-	self equalityTest: #(1 2 3) asOrderedCollection.
-	self equalityTest: #(1 2 3) asSet.
-	self equalityTest: (IdentitySet new addAll: #(1 2 3); yourself).
-	self equalityTest: (Dictionary new at: 1 put: 'a'; at: 'b' put: 2; yourself).
-	self equalityTest: (IdentityDictionary new at: 1 put: 'a'; at: 'b' put: 2; yourself).
-
-	self equalityTest: (Color gray: 0.3).
-	self equalityTest: (Color red alpha: 0.5).
-	self equalityTest: 2 @ 3.14159.
-	self equalityTest: (0@0 extent: 2.5).
-	self formEqualityTest: (Form fromDisplay: (0@0 extent: 10)).
-	self formEqualityTest: ((Form fromDisplay: (0@0 extent: 10)) colorReduced).
-
-	shared := #Shared.
-	self equalityTest: (Point x: shared y: shared).
-	self equalityTest: ((Point x: shared y: shared) corner: (Point x: shared y: shared)).
-	self equalityTest: (OrderedCollection with: shared with: shared).
-	self equalityTest: (Array with: shared with: (Set new add: shared; yourself)).
-	self equalityTest: (Dictionary new at: shared put: shared; at: 'b' put: shared; yourself).
-	self equalityTest: (IdentityDictionary new at: shared put: shared; at: 'b' put: shared; yourself).
-
-	self inform: 'Fixed-format tests passed.'.
-
-]
-
 { #category : #'class initialization' }
 ObjStream class >> fixedFormatClasses [
 	"Answer an array of records for fixed-format classes."
@@ -162,6 +119,12 @@ ObjStream class >> formEqualityTest: inForm [
 		inForm colors = outForm colors
 			ifFalse: [self error: 'output colors are not equal to input colors']].
 
+]
+
+{ #category : #'class initialization' }
+ObjStream class >> iDToClassEntry [
+
+	^IDToClassEntry
 ]
 
 { #category : #'class initialization' }
@@ -230,71 +193,6 @@ ObjStream class >> serializeAndDeserialize: anObject [
 	stream := WriteStream on: ByteArray new.
 	ObjStream new storeObj: anObject on: stream showProgress: false.
 	^ ObjStream new readObjFrom: (ReadStream on: stream contents)
-
-]
-
-{ #category : #testing }
-ObjStream class >> tallyPhratchObjectsFrom: aDirectory [
-	"Tally the object class ID's for all Phratch projects in the given directory into the given array."
-	"self tallyPhratchObjectsFrom: FileDirectory default"
-
-	| classIDCounts objTable id result count cName |
-	classIDCounts := Array new: 256 withAll: 0.
-	aDirectory fileNames do: [:fn |
-		((fn endsWith: '.sb') | (fn endsWith: '.ypr')) ifTrue: [
-			objTable := self phratchObjectsFrom: (aDirectory fullNameFor: fn).
-			objTable do: [:entry |
-				id := entry at: 2.
-				classIDCounts at: id put: (classIDCounts at: id) + 1]]].
-
-	result := WriteStream on: String new.
-	1 to: classIDCounts size do: [:i |
-		count := classIDCounts at: i.
-		count > 0 ifTrue: [
-			cName := (IDToClassEntry at: i) at: 2.
-			result nextPutAll: cName, '	', count printString; cr]].
-	^ result contents
-
-]
-
-{ #category : #testing }
-ObjStream class >> tallyPhratchObjectsFromFile: aFileName [
-	"Read the Phratch project from the file with the given name and tally it's object class IDs."
-
-	| classIDCounts objTable id result count cName |
-	classIDCounts := Array new: 256 withAll: 0.
-	objTable := self phratchObjectsFrom: aFileName.
-	objTable do: [:entry |
-		id := entry at: 2.
-		classIDCounts at: id put: (classIDCounts at: id) + 1].
-
-	result := WriteStream on: String new.
-	1 to: classIDCounts size do: [:i |
-		count := classIDCounts at: i.
-		count > 0 ifTrue: [
-			cName := (IDToClassEntry at: i) at: 2.
-			result nextPutAll: cName, '	', count printString; cr]].
-	^ result contents
-
-
-]
-
-{ #category : #testing }
-ObjStream class >> userClassTests [
-	"Test conversions for fixed-format objects."
-	"self initialize; userClassTests"
-
-	| userClassList suspectClasses |
-	userClassList := self userClasses collect: [:rec | Smalltalk at: rec second].
-	userClassList := userClassList reject: [:cl | (cl inheritsFrom: BlockMorph) | (cl inheritsFrom: ArgMorph)].
-	userClassList do: [:cl | self serializeAndDeserialize: cl new].
-
-	suspectClasses := userClassList select: [:cl |
-		(cl includesSelector: #fieldsVersion) not and: [cl instVarNames size > 0]].
-	suspectClasses size > 0 ifTrue: [^ self error: 'not all classes implement #fieldsVersion'].
-
-	self inform: 'User class tests passed.'.
-
 
 ]
 
@@ -390,44 +288,6 @@ ObjStream class >> userClasses [
 
 	)
 
-
-]
-
-{ #category : #testing }
-ObjStream class >> writeTestFile [
-	"self writeTestFile"
-
-	| all objects s |
-	all := OrderedCollection new.
-	all add: true.
-	all add: false.
-	all add: 12345.
-	all add: 123.
-	all add: 123456789123456789.
-	all add: -123456789123456789.
-	all add: 123.546.
-	all add: 'This is a string.'.
-	all add: #thisIsASymbol.
-	all add: #(100 101 102 253 254 255) asByteArray.
-	all add: ScriptablePhratchMorph popSound samples.
-	all add: (ImageMorph defaultForm asFormOfDepth: 32) bits.
-	all add: (Array with: 1 with: 2 with: 3).
-	all add: (Array with: 1 with: 2 with: 3) asOrderedCollection.
-	all add: (Array with: 1 with: 2 with: 3) asSet.
-	all add: (IdentitySet withAll: (Array with: 1 with: 2 with: 3)).
-	all add: (Dictionary new at: 'John' put: 'Maloney'; at: 'Lise' put: 'Kreps'; yourself).
-	all add: (IdentityDictionary new at: #John put: 'Maloney'; at: #Lise put: 'Kreps'; yourself).
-	all add: (Color gray: 0.5).
-	all add: (Color red alpha: 0.5).
-	all add: 1@2.0.
-	all add: (9.5@20 extent: 30@40).
-	all add: (ImageMorph defaultForm asFormOfDepth: 32).
-	all add: ImageMorph defaultForm.
-
-	objects := (Array with: nil), all asArray.
-	s := (FileStream newFileNamed: 'test.obj') binary.
-	self new storeObj: objects on: s.
-	s close.
 
 ]
 
@@ -635,7 +495,8 @@ ObjStream >> getForm: anObject id: classID [
 		bits := self readField.
 		result := (self classForID: classID) basicNew
 			setExtent: w@h depth: d bits: bits;
-			offset: offset.
+			offset: offset; 
+		yourself.
 		(result class = ColorForm) ifTrue: [result privateColors: self readField].
 		^ result].
 
@@ -713,15 +574,17 @@ ObjStream >> getSoundBuf: anObject id: classID [
 ObjStream >> initializeUserDefinedFields: objectRecord [
 	"If the given object record designates a user-defined object, ask that object to initialiize itself from its fields list. Otherwise, do nothing."
 
+	"user defined class"
+
 	| obj classID classVersion |
 	obj := objectRecord at: 1.
 	classID := objectRecord at: 2.
-	classID > ObjectReferenceID ifTrue: [  "user defined class"
-		classVersion := objectRecord at: 3.
-		fields := objectRecord at: 4.
-		fieldIndex := 0.
-		obj initFieldsFrom: self version: classVersion].
-
+	classID > ObjectReferenceID
+		ifFalse: [ ^ self ].
+	classVersion := objectRecord at: 3.
+	fields := objectRecord at: 4.
+	fieldIndex := 0.
+	obj initFieldsFrom: self version: classVersion
 ]
 
 { #category : #'entry points' }
@@ -801,15 +664,15 @@ ObjStream >> putCollection: anObject id: classID [
 
 { #category : #'fixed format-writing' }
 ObjStream >> putColor: anObject id: classID [
-
 	| a |
-	firstPass ifTrue: [^ self].
+	firstPass
+		ifTrue: [ ^ self ].
 	stream nextPut: classID.
 	stream uint32: anObject privateRGB.
-	anObject class = TranslucentColor ifTrue: [
-		a := (anObject privateAlpha asInteger min: 255) max: 0.
-		stream nextPut: a].
-
+	anObject class = TranslucentColor
+		ifFalse: [ ^ self ].
+	a := (anObject privateAlpha asInteger min: 255) max: 0.
+	stream nextPut: a
 ]
 
 { #category : #'fixed format-writing' }
@@ -902,16 +765,16 @@ ObjStream >> putRect: anObject id: classID [
 
 { #category : #'fixed format-writing' }
 ObjStream >> putSmallInt: anObject id: classID [
-
-	firstPass ifTrue: [^ self].
-	((-32768 <= anObject) and: [anObject <= 32767])
-		ifTrue: [  "optimization for integers that fit into 16 bits"
+	firstPass
+		ifTrue: [ ^ self ].
+	(anObject between: -32768 and: 32767)
+		ifTrue: [ 
+			"optimization for integers that fit into 16 bits"
 			stream nextPut: classID + 1.
-			stream int16: anObject]
-		ifFalse: [
+			stream int16: anObject ]
+		ifFalse: [ 
 			stream nextPut: classID.
-			stream int32: anObject].
-
+			stream int32: anObject ]
 ]
 
 { #category : #'fixed format-writing' }

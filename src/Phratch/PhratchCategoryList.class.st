@@ -4,24 +4,24 @@ Class {
 	#category : #'Phratch-Categories'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PhratchCategoryList class >> color [
 	^(Color h: 18 s: 0.92 v: 0.85)
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'class initialization' }
 PhratchCategoryList class >> initialize [ 	
 	"self initialize"
 	super initialize.
-	Visible  := false.
+	visible  := false.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PhratchCategoryList class >> label [
 	^'list'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PhratchCategoryList class >> order [
 	^0
 ]

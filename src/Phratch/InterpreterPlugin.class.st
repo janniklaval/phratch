@@ -34,18 +34,3 @@ InterpreterPlugin class >> moduleName [
 	^ self name asString
 
 ]
-
-{ #category : #initialize }
-InterpreterPlugin >> setInterpreter: anInterpreter [ 
-	"Note: This is coded so that is can be run from Squeak."
-
-	| ok |
-	self export: true.
-	self var: #anInterpreter type: #'struct VirtualMachine*'.
-	interpreterProxy := anInterpreter.
-	ok := self cCode: 'interpreterProxy->majorVersion() == VM:=PROXY:=MAJOR'.
-	ok == false ifTrue: [^ false].
-	ok := self cCode: 'interpreterProxy->minorVersion() >= VM:=PROXY:=MINOR'.
-	^ ok
-
-]

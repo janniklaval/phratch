@@ -30,7 +30,6 @@ Class {
 		'projectInfo',
 		'author',
 		'loginName',
-		'loginPassword',
 		'watcherPositions',
 		'shuffledCostumeNames',
 		'justSaved',
@@ -48,7 +47,6 @@ Class {
 		'DefaultSprite',
 		'Fonts',
 		'FontsXO',
-		'IsXO',
 		'MeshServerEnabled',
 		'PhratchServers',
 		'PhratchSkin',
@@ -69,58 +67,6 @@ Class {
 	],
 	#category : #'Phratch-UI-Panes'
 }
-
-{ #category : #byob }
-PhratchFrameMorph class >> addSlotShapesToSkin [
-
-	"PhratchFrameMorph addSlotShapesToSkin"
-	"ImageMorph new form: (PhratchFrameMorph skinAt: #typeCommand); openInWorld"
-
-	| block form big slot halfList |
-
-	"typeCommand"
-	form := Form fromFileNamed: 'command_new.png'.
-	form replaceColor: Color black withColor: Color transparent.
-	self skin at: #typeCommand put: (form withEmbeddedOutlineColor: Color darkGray width: 1).
-
-	"typePredicate"
-	form := Form fromFileNamed: 'predicate_new.png'.
-	form replaceColor: Color black withColor: Color transparent.
-	self skin at: #typePredicate put: (form withEmbeddedOutlineColor: Color darkGray width: 1).
-
-	"typeReporter"
-	form := Form fromFileNamed: 'reporter_new.png'.
-	form replaceColor: Color black withColor: Color transparent.
-	self skin at: #typeReporter put: (form withEmbeddedOutlineColor: Color darkGray width: 1).
-
-	"typeList"
-	block := ReporterBlockMorph new color: (ScriptablePhratchMorph blockColorFor: 'list'); commandSpec: '$String$'.
-	slot := block argMorphs first.
-	slot extent: 7 @ 4.
-	form := slot imageForm.
-	form replaceColor: (form colorAt: 2@2) withColor: (ScriptablePhratchMorph blockColorFor: 'list').
-	halfList := slot extent + 1.
-	big := Form extent: halfList x @ (halfList y * 2) depth: 8.
-	(WarpBlt toForm: big)
-		sourceForm: form;
-		cellSize: 2; 
-		combinationRule: Form paint;
-		copyQuad: form boundingBox corners toRect: form boundingBox.
-	(WarpBlt toForm: big)
-		sourceForm: form;
-		cellSize: 2; 
-		combinationRule: Form paint;
-		copyQuad: form boundingBox corners toRect: (form boundingBox translateBy: 0@(halfList y)).
-	self skin at: #typeList put: ((big withOutlineColor: Color white width: 2) withEmbeddedOutlineColor: Color darkGray width: 1).
-
-	"typeText"
-	block := ReporterBlockMorph new color: Color lightGray; commandSpec: '$String$'.
-	block argMorphs first stringExpression: '     '.
-	form := block argMorphs first imageForm.
-	self skin at: #typeText put: form. 
-
-
-]
 
 { #category : #'falta adaptar' }
 PhratchFrameMorph class >> buttonLabel: aString selector: aSymbolOrNil [
@@ -144,19 +90,11 @@ PhratchFrameMorph class >> cameraMode [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'initialize-release' }
 PhratchFrameMorph class >> close [
 	"Close Phratch window but don't quit Pharo"
 
 	PhratchFrameMorph allInstancesDo: [ :i | i delete ]
-]
-
-{ #category : #utilities }
-PhratchFrameMorph class >> colorToTrack [
-
-	^ Color red
-
-
 ]
 
 { #category : #utilities }
@@ -288,27 +226,9 @@ PhratchFrameMorph class >> isXO [
 
 ]
 
-{ #category : #'scratch skin' }
-PhratchFrameMorph class >> isXO: aBoolean [
-	"Set the current skin style to #XO if the argument is true, normal otherwise."
-	"self isXO: true"
-	"self isXO: false"
-
-	IsXO := aBoolean.
-
-	"aBoolean ifTrue: [(Preferences setMenuFontTo: (StrikeFont fontName: #VerdanaBold size: 18))]
-			ifFalse: [(Preferences restoreDefaultFonts)]." "annoying for development"
-
-]
-
 { #category : #accessing }
 PhratchFrameMorph class >> meshServerEnabled [
 	^ MeshServerEnabled  ifNil: [ MeshServerEnabled := true ]
-]
-
-{ #category : #accessing }
-PhratchFrameMorph class >> meshServerEnabled: anObject [
-	MeshServerEnabled := anObject
 ]
 
 { #category : #utilities }
@@ -329,90 +249,6 @@ PhratchFrameMorph class >> palettePaneColor [
 
 ]
 
-{ #category : #byob }
-PhratchFrameMorph class >> parseDownloadDatabase: fileName [
-	"Parse the HTML file for the Phratch download database."
-	"self parseDownloadDatabase: 'mlist.html'"
-	"To list downloads by date:
-		(db collect: [:r | r first upTo: Character space]) asBag sortedElements"
-
-	| raw lines inTable s records r |
-	raw := (FileStream oldFileNamed: fileName) contentsOfEntireFile.
-	lines := OrderedCollection new.
-	inTable := false.
-	raw lines do: [:ln |
-		s := ln trimBoth.
-		s = '</table>' ifTrue: [inTable := false].
-		inTable ifTrue: [lines addLast: s].
-		s = '<table>' ifTrue: [inTable := true]].
-
-	records := OrderedCollection new.
-	lines := ReadStream on: lines.
-	[lines atEnd] whileFalse: [ | ln |
-		ln := lines next.
-		ln = '<tr>' ifTrue: [
-			r := self parseRecordFrom: lines.
-			r size > 0 ifTrue: [records addLast: r asArray]]].
-
-	^ records asArray
-
-
-]
-
-{ #category : #utilities }
-PhratchFrameMorph class >> parseRecordFrom: lineStream [
-	"An HTML table record from the given stream of lines."
-
-	| rec ln buf |
-	rec := OrderedCollection new.
-	[true] whileTrue: [
-		ln := lineStream next.
-		ln = '</tr>' ifTrue: [^ rec].
-		(ln beginsWith: '<td>') ifTrue: [
-			buf := ln copyFrom: 5 to: ln size.
-			[lineStream atEnd | (buf endsWith: '</td>')] whileFalse: [buf := buf, ' ', lineStream next].
-			buf := buf copyFrom: 1 to: buf size - 5.
-			rec addLast: buf]].
-	^ rec
-
-]
-
-{ #category : #utilities }
-PhratchFrameMorph class >> patchWindowsVM: vmFileName quitMessage: aString [
-	"Modify the Squeak application (the .exe file) for Windows to display the given string when you quit. You must start with a copy of the original VM, not one that has already been modified. This file will be modified in place, so make sure you keep a copy of the original! The string is truncated to 27 characters since it must fit into the space of the original quit message."
-
-	| orig firstOrigByte replacement f found startPos |
-	orig := 'Quit Squeak without saving?' asByteArray.
-	firstOrigByte := orig first.
-
-	replacement := aString asByteArray copyFrom: 1 to: (aString size min: orig size).
-	replacement size < orig size ifTrue: [  "pad with zeros to the same size as the original"
-		replacement := replacement, (ByteArray new: orig size - replacement size withAll: 0)].
-
-	f := (FileStream oldFileNamed: vmFileName) binary.
-
-	found := false.
-	[f atEnd | found] whileFalse: [
-		[f atEnd not and: [f next ~= firstOrigByte]] whileTrue.  "scan for first byte"
-		startPos := f position - 1.
-		f position: startPos.
-		found := true.
-		1 to: orig size do: [:i | f next = (orig at: i) ifFalse: [found := false]]].
-
-	found ifTrue: [  "over-write the original message with the replacement"
-		f position: startPos.
-		replacement do: [:byte | f nextPut: byte]].
-
-	f position: f size.  "position to end of file to avoid possible file truncation"
-	f close.
-
-	found
-		ifTrue: [self inform: 'New quit message installed']
-		ifFalse: [self inform: 'Original quit message not found; no change made'].
-
-
-]
-
 { #category : #utilities }
 PhratchFrameMorph class >> phratchServers [
 
@@ -424,18 +260,6 @@ PhratchFrameMorph class >> phratchServers [
 PhratchFrameMorph class >> putInClipboard: anObject [
 	
 	Clipboard := anObject.
-]
-
-{ #category : #utilities }
-PhratchFrameMorph class >> quitFromMenu [
-	"The user is using the application menu to quit from Phratch. If there is an open Phratch window, ask the user about saving the project. Otherwise, confirm that the user really wants to quit."
-
-	| phratchWindow |
-	phratchWindow := World submorphs detect: [:m | (m isKindOf: self)] ifNone: [nil].
-	phratchWindow
-		ifNil: [World hands first quitSession]
-		ifNotNil: [phratchWindow quitPhratch].
-
 ]
 
 { #category : #utilities }
@@ -452,40 +276,36 @@ PhratchFrameMorph class >> readShareServerEntry [
 	ShareServerPath := '/services/upload'.
 	SupportServer := ShareServer.
 	SupportServerPath := '/support'.
-	PhratchServers := #(
-"xxx
+	PhratchServers := #().	"xxx
 		('LTC Scratch Server'		'ltc.smm.org'			'/scratch/')
 		('MIT Scratch Server'		'web.media.mit.edu'		'/~jmaloney/mit_scratch/')
 xxx"
-	).
-
-	(FileSystem  workingDirectory /  'servers.txt') exists ifFalse: [^ self].
-	[s := (FileStream readOnlyFileNamed: 'servers.txt') contentsOfEntireFile] ifError: [^ self].
-	entryList := HtmlChunker parseTabbedString: s.
-
-	"collect Scratch servers for open dialog"
-	servers := entryList select: [:entry | (entry first beginsWith: '*share*') not].
-	servers do: [:entry |
-		entry size >= 3 ifTrue: [
-			key := entry first asLowercase.
-			PhratchServers := PhratchServers reject: [:e | e first asLowercase = key].
-			PhratchServers := PhratchServers copyWith: entry]].
-	PhratchServers sort: [:e1 :e2 | (e1 first compare: e2 first) <= 2].
-
-	shareExists := true.
-	"if there is a file *share* entry, it overrides the default Share server"
-	zentry := entryList detect: [:e | (e first beginsWith: '*share*')] ifNone: [shareExists := false].
-	shareExists ifTrue: [
-		zentry size >= 3 ifTrue: [
-			ShareServer := zentry at: 2.
-			ShareServerPath := zentry at: 3]].
-
-	"if there is a file *support* entry, it overrides the default Support server"
-	zentry := entryList detect: [:e | (e first beginsWith: '*support*')] ifNone: [^ self].
-	zentry size >= 3 ifTrue: [
-		SupportServer := zentry at: 2.
-		SupportServerPath := zentry at: 3].
-
+	(FileSystem workingDirectory / 'servers.txt') exists
+		ifFalse: [ ^ self ].
+	[ s := (FileStream readOnlyFileNamed: 'servers.txt') contentsOfEntireFile ] ifError: [ ^ self ].
+	entryList := HtmlChunker parseTabbedString: s.	"collect Scratch servers for open dialog"
+	servers := entryList reject: [ :entry | entry first beginsWith: '*share*' ].
+	servers
+		do: [ :entry | 
+			entry size >= 3
+				ifTrue: [ 
+					key := entry first asLowercase.
+					PhratchServers := PhratchServers reject: [ :e | e first asLowercase = key ].
+					PhratchServers := PhratchServers copyWith: entry ] ].
+	PhratchServers sort: [ :e1 :e2 | (e1 first compare: e2 first) <= 2 ].
+	shareExists := true.	"if there is a file *share* entry, it overrides the default Share server"
+	zentry := entryList detect: [ :e | e first beginsWith: '*share*' ] ifNone: [ shareExists := false ].
+	shareExists
+		ifTrue: [ 
+			zentry size >= 3
+				ifTrue: [ 
+					ShareServer := zentry at: 2.
+					ShareServerPath := zentry at: 3 ] ].	"if there is a file *support* entry, it overrides the default Support server"
+	zentry := entryList detect: [ :e | e first beginsWith: '*support*' ] ifNone: [ ^ self ].
+	zentry size >= 3
+		ifFalse: [ ^ self ].
+	SupportServer := zentry at: 2.
+	SupportServerPath := zentry at: 3
 ]
 
 { #category : #'scratch skin' }
@@ -559,26 +379,19 @@ PhratchFrameMorph class >> setVisibleDrives: driveListString [
 
 	| in drive |
 	VisibleDrives := nil.
-	driveListString ifNil: [^ self].
+	driveListString ifNil: [ ^ self ].
 
 	VisibleDrives := OrderedCollection new.
 	in := ReadStream on: driveListString.
-	[in atEnd] whileFalse: [
-		in skipSeparators.
-		drive := (in upTo: $,) trimBoth.
-		drive size > 0 ifTrue: [VisibleDrives addLast: drive asUppercase]].
-
-	VisibleDrives size > 0
-		ifTrue: [VisibleDrives := VisibleDrives asArray]
-		ifFalse: [VisibleDrives := nil].
-
-]
-
-{ #category : #utilities }
-PhratchFrameMorph class >> shareServer [
-	"Answer the name of the Phratch project sharing server."
-
-	^ ShareServer
+	[ in atEnd ]
+		whileFalse: [ 
+			in skipSeparators.
+			drive := (in upTo: $,) trimBoth.
+			drive size > 0
+				ifTrue: [ VisibleDrives addLast: drive asUppercase ] ].
+	VisibleDrives := VisibleDrives size > 0
+		ifTrue: [ VisibleDrives asArray ]
+		ifFalse: [ nil ]
 
 ]
 
@@ -617,34 +430,8 @@ PhratchFrameMorph class >> standardButtonFont [
 ]
 
 { #category : #accessing }
-PhratchFrameMorph class >> standardButtonFont: anObject [
-	StandardButtonFont := anObject
-]
-
-{ #category : #accessing }
 PhratchFrameMorph class >> standardMenuFont [
 	^ StandardMenuFont ifNil: [ StandardMenuFont := StandardFonts defaultFont ]
-]
-
-{ #category : #accessing }
-PhratchFrameMorph class >> standardMenuFont: anObject [
-	StandardMenuFont := anObject
-]
-
-{ #category : #utilities }
-PhratchFrameMorph class >> supportServer [
-	"Answer the name of the Phratch support site server."
-
-	^ SupportServer
-
-]
-
-{ #category : #utilities }
-PhratchFrameMorph class >> supportServerPath [
-	"Answer the path of the Phratch support site server."
-
-	^ SupportServerPath
-
 ]
 
 { #category : #accessing }
@@ -657,35 +444,6 @@ PhratchFrameMorph class >> takeOverScreen: anObject [
 	TakeOverScreen := anObject
 ]
 
-{ #category : #'as yet unclassified' }
-PhratchFrameMorph class >> updateSkinFrom: aDirectory [
-	"Read the Forms for my skin from the given directory and update them in myskin dictionary."
-	"When in XO mode, entries in SkinXO override the corresponding entries in Skin."
-	"self updateSkinFrom: (FileDirectory default directoryNamed: 'skinRestore')"
-
-	| dict img i xoDict |
-	dict := Dictionary new.
-	xoDict := Dictionary new.
-	aDirectory fileNames do: [:fn |
-		|fn1|
-		fn1:= fn.
-		Cursor read showWhile: [
-			img := [Form fromFileNamed: (aDirectory / fn1) fullName] ifError: [Transcript cr; show: 'error'. nil]].
-		img ifNotNil: [
-			i := fn1 findLast: [:c | c = $.].
-			i = 0 ifFalse: [fn1 := fn1 copyFrom: 1 to: i - 1].
-			(fn1 asLowercase endsWith: '_xo')
-				ifTrue: [xoDict at: (fn1 copyFrom: 1 to: fn1 size - 3) asSymbol put: img]
-				ifFalse: [dict at: fn1 asSymbol put: img]]].
-	dict keys do: [:key| Transcript cr; show: key. PhratchSkin at: key put: (dict at: key)].
-	xoDict keys do: [:key| PhratchSkinXO at: key put: (xoDict at: key)].
-
-	img := self skin at: #scriptsPaneTexture ifAbsent: [nil].
-	(img notNil and: [img depth ~= 32]) ifTrue: [
-		self skin at: #scriptsPaneTexture put: (img asFormOfDepth: 32)].
-
-]
-
 { #category : #utilities }
 PhratchFrameMorph class >> useErrorCatcher [
 
@@ -696,17 +454,6 @@ PhratchFrameMorph class >> useErrorCatcher [
 { #category : #accessing }
 PhratchFrameMorph class >> useLargeFonts [
 	^ UseLargeFonts ifNil: [ UseLargeFonts := false ]
-]
-
-{ #category : #accessing }
-PhratchFrameMorph class >> useLargeFonts: anObject [
-	UseLargeFonts := anObject
-]
-
-{ #category : #utilities }
-PhratchFrameMorph class >> vanity [
-
-	^ 'BYOB ', self version, ' (C) Brian Harvey & Jens Mnig'
 ]
 
 { #category : #utilities }
@@ -723,13 +470,6 @@ PhratchFrameMorph class >> version: aString [
 
 	Version := aString.
 	VersionDate := Date today printFormat: #(3 2 1 $- 1 1).
-
-]
-
-{ #category : #utilities }
-PhratchFrameMorph class >> versionDate [
-
-	^ VersionDate
 
 ]
 
@@ -751,13 +491,16 @@ PhratchFrameMorph class >> workpaneExtent [
 
 { #category : #'menu/button actions' }
 PhratchFrameMorph >> aboutPhratch [
-
 	| dialogBox |
 	dialogBox := DialogBoxMorph new
-		title: 'About Phratch';
-		withButtonsForYes: false no: false okay: true cancel: false.
+		title: 'About Phratch' translated;
+		withButtonsForYes: false
+			no: false
+			okay: true
+			cancel: false.
 	dialogBox
-		message: 'Phratch 1.0
+		message:
+			'Phratch 1.0
 Copyright (c) 2013 Jannik Laval.
 All rights reserved.
 
@@ -781,11 +524,12 @@ for license, see license.txt in folder.
 Please report bugs to https://code.google.com/p/phratch/issues/list.
 '
 		font: (PhratchFrameMorph getFont: #AboutPhratch).
-
-	dialogBox setBalloonText: ((CommandBlockMorph new color: (ScriptablePhratchMorph blockColorFor: 'control'); commandSpec: 'B Y $OSReporter$ B')) asLambda displayForm.
-
-	dialogBox getUserResponse.
-
+	dialogBox
+		setBalloonText:
+			(CommandBlockMorph new
+				color: (ScriptablePhratchMorph blockColorFor: 'control');
+				commandSpec: 'B Y $OSReporter$ B') asLambda displayForm.
+	dialogBox getUserResponse
 ]
 
 { #category : #other }
@@ -811,35 +555,6 @@ PhratchFrameMorph >> addAndView: aSpriteMorph [
 	aSpriteMorph startStepping.
 	workPane sprites addLast: aSpriteMorph.
 	self view: aSpriteMorph tab: 'Scripts' category: 'motion'.
-
-]
-
-{ #category : #byob }
-PhratchFrameMorph >> addBlockEditor: aBlockEditor [
-	blockEditors add: aBlockEditor
-]
-
-{ #category : #'menu/button actions' }
-PhratchFrameMorph >> addServerCommandsTo: menu [
-	"Add Phratch server commands to the given menu."
-
-	| endCmd |
-	PhratchFrameMorph meshServerEnabled ifFalse: [^ self].
-
-	menu addLine.
-	(workPane phratchServer notNil and:
-	 [workPane phratchServer sessionInProgress])
-		ifTrue: [
-			menu add: 'Show IP Address' action: #showNetworkAddress.
-			endCmd := workPane phratchServer isHosting
-				ifTrue: ['Stop Hosting Mesh']
-				ifFalse: ['Leave Mesh'].
-			menu add: endCmd action: #exitPhratchSession]
-		ifFalse: [
-			menu add: 'Host Mesh' action: #startHostingPhratchSession.
-			menu add: 'Join Mesh' action: #joinPhratchSession].
-	^menu
-
 
 ]
 
@@ -907,18 +622,28 @@ PhratchFrameMorph >> addSpriteMorph [
 
 { #category : #'falta adaptar' }
 PhratchFrameMorph >> allBlocksString [
-
 	| s stacks |
 	s := WriteStream on: (String new: 10000).
-	((Array with: workPane), self phratchObjects) do: [:obj |
-		stacks := (obj blocksBin isKindOf: Collection) ifFalse:[obj blocksBin submorphs select: [:m | m isKindOf: BlockMorph]].
-		stacks size > 0 ifTrue: [
-			s nextPutAll: 'All stacks for ', obj objName, ':'; cr; cr.
-			stacks do: [:blocks | self printTupleList: blocks tupleSequence on: s. s cr; cr].
-			s cr]].
-
+	(Array with: workPane) , self phratchObjects
+		do: [ :obj | 
+			stacks := (obj blocksBin isKindOf: Collection)
+				ifFalse: [ obj blocksBin submorphs select: [ :m | m isKindOf: BlockMorph ] ].
+			stacks size > 0
+				ifTrue: [ 
+					s
+						nextPutAll: 'All stacks for ';
+						nextPutAll: obj objName;
+						nextPutAll: ':';
+						cr;
+						cr.
+					stacks
+						do: [ :blocks | 
+							self printTupleList: blocks tupleSequence on: s.
+							s
+								cr;
+								cr ].
+					s cr ] ].
 	^ s contents
-
 ]
 
 { #category : #'falta adaptar' }
@@ -1001,12 +726,6 @@ PhratchFrameMorph >> canonicalizeImagesQuality: qualityOrNil saveOriginal: saveF
 ]
 
 { #category : #'menu/button actions' }
-PhratchFrameMorph >> canonicalizeSoundsBits: bitsPerSample [
-
-	^self canonicalizeSoundsBits: bitsPerSample saveOriginal: false
-]
-
-{ #category : #'menu/button actions' }
 PhratchFrameMorph >> canonicalizeSoundsBits: bitsPerSample saveOriginal: saveFlag [
 
 	| count unique match |
@@ -1037,42 +756,22 @@ PhratchFrameMorph >> checkBoxLabelled: aString marked: aBool width: anInt [
 	"answer a form consisting of a checkbox and a label - used for the EDIT menu in BYOB"
 
 	| box label pic line cnts |
-	aBool
-		ifTrue: [pic := PhratchFrameMorph skinAt: #watcherButtonPressed]
-		ifFalse: [pic := PhratchFrameMorph skinAt: #watcherButton].
-	box := ImageMorph new form: pic. 
-	
-	cnts := ' ', aString localized.
-
+	pic := aBool
+		ifTrue: [ PhratchFrameMorph skinAt: #watcherButtonPressed ]
+		ifFalse: [ PhratchFrameMorph skinAt: #watcherButton ].
+	box := ImageMorph new form: pic.
+	cnts := ' ' , aString localized.
 	label := StringMorph contents: cnts font: PhratchFrameMorph standardMenuFont.
 	line := Morph new color: Color transparent.
 	line height: (box height max: label height).
 	line width: (box width + label width max: anInt).
 	box left: line left.
-	box top: line top + (line height - box height // 2).
+	box top: line top + ((line height - box height) // 2).
 	label left: box right.
-	label top: line top + (line height - label height // 2).
+	label top: line top + ((line height - label height) // 2).
 	line addMorph: box.
 	line addMorph: label.
 	^ line imageForm
-]
-
-{ #category : #stepping }
-PhratchFrameMorph >> checkForWeDo [
-	"Check for WeDo, and show motor blocks if it is found."
-	"Note: Polling on Vista can take several hundred milliseconds, so reduce polling to just a few times per minute."
-"
-	| now |
-	now := Time millisecondClockValue.
-	(lastWeDoPoll isNil or: [lastWeDoPoll > now]) ifTrue: [lastWeDoPoll := 0].
-	((now - lastWeDoPoll) < 15000) ifTrue: [^ self]. ""don't poll too often"
-"	lastWeDoPoll := now.
-	WeDoPlugin readInputs.
-	WeDoPlugin isOpen ifTrue: [
-		workPane showMotorBlocks ifTrue: [^ self].
-		self showMotorBlocks.
-		WeDoPlugin readInputs]."
-
 ]
 
 { #category : #byob }
@@ -1180,22 +879,12 @@ PhratchFrameMorph >> compressImages [
 
 ]
 
-{ #category : #uploading }
-PhratchFrameMorph >> compressMediaForUpload [
-	"Compress my media prior to uploading this project."
-
-	self canonicalizeSoundsBits: 4 saveOriginal: true.
-	self canonicalizeImagesQuality: 90 saveOriginal: true.
-
-
-]
-
 { #category : #'menu/button actions' }
 PhratchFrameMorph >> compressSounds [
-
 	| menu bitsPerSample count |
-	menu := MenuMorph new title: 'Sound quality:'; defaultTarget: self.
-	"menu add: 'High (biggest)'
+	menu := MenuMorph new
+		title: 'Sound quality:' translated;
+		defaultTarget: self.	"menu add: 'High (biggest)'
 		target: self 
 		selector: #canonicalizeSoundsBits:saveOriginal:
 		argumentList: (Array with: 5 with: false).
@@ -1214,9 +903,9 @@ PhratchFrameMorph >> compressSounds [
 	menu addLine.
 	menu add: 'cancel' action: nil.
 	count := menu localize; invokeModal."
-	
-	
-	menu := MenuMorphNG new title: 'Sound quality:'; defaultTarget: self.
+	menu := MenuMorphNG new
+		title: 'Sound quality:' translated;
+		defaultTarget: self.
 	menu add: 'High (biggest)' value: 5.
 	menu add: 'Normal' value: 4.
 	menu add: 'Low' value: 3.
@@ -1224,11 +913,12 @@ PhratchFrameMorph >> compressSounds [
 	menu addLine.
 	menu add: 'cancel' value: nil.
 	menu localize.
-	(bitsPerSample := menu invokeModal; selectedValue) ifNil: [^ self].
-
+	(bitsPerSample := menu
+		invokeModal;
+		selectedValue) ifNil: [ ^ self ].
 	count := self canonicalizeSoundsBits: bitsPerSample saveOriginal: false.
 	scriptsPane categoryChanged: 'Sounds'.
-	DialogBoxMorph inform: 'Sounds compressed' withDetails: count printString.
+	DialogBoxMorph inform: 'Sounds compressed' withDetails: count printString
 ]
 
 { #category : #'tools (no longer used)' }
@@ -1537,32 +1227,6 @@ PhratchFrameMorph >> deletingWatcher [
 
 ]
 
-{ #category : #buttonActions }
-PhratchFrameMorph >> developersMenu [
-	"Present the Phratch developer's menu."
-
-	| menu |
-
-	self isDevelopmentMode ifFalse: [^ self].
-
-	self world activeHand toolType: nil.
-	Cursor normal show.
-	menu :=MenuMorph new defaultTarget: self.
-
-	fillScreenFlag
-		ifTrue: [menu add: 'turn fill screen off' action: #fillScreenOff]
-		ifFalse: [menu add: 'turn fill screen on' action: #fillScreenOn].
-	UseErrorCatcher
-		ifTrue: [menu add: 'turn error catching off' action: #toggleErrorCatcher]
-		ifFalse: [menu add: 'turn error catching on' action: #toggleErrorCatcher].
-
-	menu addLine.
-	menu add: 'save image for end-user' action: #saveImageForEndUser.
- 
-	menu popUpInWorld
-
-]
-
 { #category : #drawing }
 PhratchFrameMorph >> drawOn: aCanvas [
 	"Optimization: Don't draw myself at all since I am completely tiled."
@@ -1751,14 +1415,6 @@ PhratchFrameMorph >> enterQuarterMode [
 
 ]
 
-{ #category : #private }
-PhratchFrameMorph >> enterQuarterModeIfSmallScreen [
-
-	(Display width >= 980) & (Display height >= 555) ifTrue: [^ self].
-	viewMode = #normal ifTrue: [self enterQuarterMode].
-
-]
-
 { #category : #'menu/button actions' }
 PhratchFrameMorph >> exitPhratchSession [
 	"Close all connections to remote collaborators."
@@ -1924,44 +1580,41 @@ PhratchFrameMorph >> extractProjectFrom: aByteArray [
 
 ]
 
-{ #category : #'-- all --' }
+{ #category : #'menu/button actions' }
 PhratchFrameMorph >> fileMenu: aMenuTitleMorph [
-
 	| menu |
 	menu := MenuMorph new defaultTarget: self.
-	menu add: 'New' action: #newPhratchProject.
-	menu add: 'Open' action: #openPhratchProject.
-	menu add: 'Save' action: #savePhratchProjectNoDialog.
-	menu add: 'Save As' action: #savePhratchProject.
+	menu add: 'New' translated action: #newPhratchProject.
+	menu add: 'Open' translated action: #openPhratchProject.
+	menu add: 'Save' translated action: #savePhratchProjectNoDialog.
+	menu add: 'Save As' translated action: #savePhratchProject.
 	menu addLine.
-	menu add: 'Import Project' action: #importPhratchProject.
-	menu add: 'Export Sprite' action: #exportSprite.
+	menu add: 'Import Project' translated action: #importPhratchProject.
+	menu add: 'Export Sprite' translated action: #exportSprite.
 	menu addLine.
-	menu add: 'Project Notes' action: #editNotes.
-
-	Sensor shiftPressed ifTrue: [  "developer menu"
-		menu addLine.
-		menu add: 'Write Project Summary' action: #writeSummaryFile.
-		menu add: 'Write Multiple Project Summaries' action: #writeMultipleSummaries.
-		menu addLine.
-		fillScreenFlag
-			ifTrue: [
-				menu add: 'Exit User Mode' action: #fillScreenOff]
-			ifFalse: [
-				menu add: 'Enter User Mode' action: #fillScreenOn.
-				menu add: 'Save Image in User Mode' action: #saveImageForEndUser]].
-
+	menu add: 'Project Notes' translated action: #editNotes.
+	Sensor shiftPressed
+		ifTrue: [ 
+			"developer menu"
+			menu addLine.
+			menu add: 'Write Project Summary' translated action: #writeSummaryFile.
+			menu add: 'Write Multiple Project Summaries' translated action: #writeMultipleSummaries.
+			menu addLine.
+			fillScreenFlag
+				ifTrue: [ menu add: 'Exit User Mode' translated action: #fillScreenOff ]
+				ifFalse: [ 
+					menu add: 'Enter User Mode' translated action: #fillScreenOn.
+					menu add: 'Save Image in User Mode' translated action: #saveImageForEndUser ] ].
 	menu addLine.
-	menu add: 'Quit' action: #quitPhratch.
+	menu add: 'Quit' translated action: #quitPhratch.
 	menu localize.
-	
-	#(2 4 5 6 7) do: [:n |
-		menu labels at: n put:
-			((menu labels at: n) contents copyFrom: 1 to: (menu labels at: n) contents size - 1), PhratchTranslator ellipsesSuffix].
-
-	menu popUpAt: aMenuTitleMorph bottomLeft + (0@10) inWorld: World.
-
-
+	#(2 4 5 6 7)
+		do: [ :n | 
+			menu labels
+				at: n
+				put:
+					((menu labels at: n) contents copyFrom: 1 to: (menu labels at: n) contents size - 1) , PhratchTranslator ellipsesSuffix ].
+	menu popUpAt: aMenuTitleMorph bottomLeft + (0 @ 10) inWorld: World
 ]
 
 { #category : #'menu/button actions' }
@@ -2010,32 +1663,6 @@ PhratchFrameMorph >> fillScreenOn [
 	Paragraph insertionPointColor: (Color r: 0.353 g: 0.607 b: 0.788).
 	self updateProjectName.
 	self step.
-
-]
-
-{ #category : #'falta adaptar' }
-PhratchFrameMorph >> fixByteReversedSounds [
-	"See if the current project contains any byte-reversed copies of one of the standard sounds. If it does, byte-reverse all sounds. This is a workaround for a bug in Phratch 1.0 that did not upload sounds in big-endian order."
-
-	| allSoundBuffers badMeowPrefix badPopPrefix foundBadSound |
-	allSoundBuffers := IdentitySet new.
-	self allProjectMedia do: [:media |
-		media isSound ifTrue: [
-			allSoundBuffers add: media sound samples]].
-	allSoundBuffers remove: ScriptablePhratchMorph meowSound samples ifAbsent: [].
-	allSoundBuffers remove: ScriptablePhratchMorph popSound samples ifAbsent: [].
-
-	badMeowPrefix := ScriptablePhratchMorph oldMeowPrefixReversed.
-	badPopPrefix := (ScriptablePhratchMorph popSound samples copyFrom: 1 to: 100) reverseEndiannessStereo: false.
-	foundBadSound := false.
-	allSoundBuffers do: [:buf |
-		foundBadSound ifFalse: [
-			((buf beginsWith: badMeowPrefix) or:
-			 [buf beginsWith: badPopPrefix])
-				ifTrue: [foundBadSound := true]]].
-
-	foundBadSound ifTrue: [
-		allSoundBuffers do: [:buf | buf reverseEndiannessStereo: false]].
 
 ]
 
@@ -2187,20 +1814,6 @@ PhratchFrameMorph >> fullDrawOn: aCanvas [
 
 ]
 
-{ #category : #'falta adaptar' }
-PhratchFrameMorph >> getLoginName [
-	"Ask the user for their name name and record their answer in 'loginName'."
-
-	| s |
-	s := StringDialog
-		askWithCancel: 'User name:'
-		initialAnswer: loginName.
-	s size = 0 ifTrue: [^ ''].
-	loginName := s.
-	^ s
-
-]
-
 { #category : #'event handling' }
 PhratchFrameMorph >> handlesKeyboard: evt [
 	^ true
@@ -2215,26 +1828,25 @@ PhratchFrameMorph >> handlesMouseDown: evt [
 
 { #category : #'menu/button actions' }
 PhratchFrameMorph >> helpMenu: aMenuTitleMorph [
-
 	| menu |
 	menu := MenuMorph new defaultTarget: self.
-	menu add: 'Phratch Website' action: #launchWebsite.
+	menu add: 'Phratch Website' translated action: #launchWebsite.
 	menu addLine.
-	menu add: 'Scratch Help Page' action: #launchHelpPage.
-	menu add: 'Help Screens' action: #launchAllHelpScreens.
+	menu add: 'Scratch Help Page' translated action: #launchHelpPage.
+	menu add: 'Help Screens' translated action: #launchAllHelpScreens.
 	menu addLine.
-	menu add: 'BYOB Reference Manual' action: #openBYOBManual.
-	menu add: 'Panther Tutorials' action: #openPantherTutorials.
+	menu add: 'BYOB Reference Manual' translated action: #openBYOBManual.
+	menu add: 'Panther Tutorials' translated action: #openPantherTutorials.
 	menu addLine.
-	menu add: 'About Phratch' action: #aboutPhratch.
-
+	menu add: 'About Phratch' translated action: #aboutPhratch.
 	menu localize.
-
-	#(1 2 3 4 5 6) do: [:n |
-		menu labels at: n put:
-			((menu labels at: n) contents copyFrom: 1 to: (menu labels at: n) contents size - 1), PhratchTranslator ellipsesSuffix].
-
-	menu popUpAt: aMenuTitleMorph bottomLeft + (0@10) inWorld: World.
+	#(1 2 3 4 5 6)
+		do: [ :n | 
+			menu labels
+				at: n
+				put:
+					((menu labels at: n) contents copyFrom: 1 to: (menu labels at: n) contents size - 1) , PhratchTranslator ellipsesSuffix ].
+	menu popUpAt: aMenuTitleMorph bottomLeft + (0 @ 10) inWorld: World
 ]
 
 { #category : #'menu/button actions' }
@@ -2242,28 +1854,6 @@ PhratchFrameMorph >> hideMotorBlocks [
 
 	workPane showMotorBlocks: false.
 	viewerPane refresh.
-
-]
-
-{ #category : #geometry }
-PhratchFrameMorph >> hidePalette: hidePalette [
-	"Hide or show the blocks palette."
-
-	hidePalette = viewerPane owner isNil ifTrue: [^ self].  "no change"
-
-	hidePalette
-		ifTrue: [
-			viewerPane delete.
-			scriptsPane
-				initFrontFromForm: (PhratchFrameMorph skinAt: #blocksPaletteFrameTransparent2) topSectionHeight: 90;
-				middleBarLeftMargin: 5 rightMargin: 0]
-		ifFalse: [
-			self addMorph: viewerPane.
-			scriptsPane
-				initFrontFromForm: (PhratchFrameMorph skinAt: #scriptPaneFrameTransparent2) topSectionHeight: 90;
-				middleBarLeftMargin: 0 rightMargin: 0].
-
-	scriptsPane color: (Color r: 149/255 g: 154/255 b: 159/255).
 
 ]
 
@@ -2466,6 +2056,7 @@ PhratchFrameMorph >> installNewProject: newWorkpane [
 
 	scriptsPane tabPane currentTab: 'Scripts'.
 	libraryPane clearLibrary.
+	
 	workPane clearPenTrails.
 	"self updateProjectName".
 	PhratchProcess blockHighlightMSecs: 1.
@@ -2497,7 +2088,7 @@ PhratchFrameMorph >> isDevelopmentMode [
 	^true
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #classification }
 PhratchFrameMorph >> isHandMorph [
 	^fillScreenFlag
 ]
@@ -2505,23 +2096,6 @@ PhratchFrameMorph >> isHandMorph [
 { #category : #byob }
 PhratchFrameMorph >> isTurbo [
 	^ PhratchProcess blockHighlightMSecs < 1
-]
-
-{ #category : #'menu/button actions' }
-PhratchFrameMorph >> joinPhratchSession [
-	"Join another Phratch user or a Phratch-compatible remote application."
-
-	| server addrString ok |
-	server := PhratchServer new.
-	server stage: workPane.
-	workPane phratchServer: server.
-
-	addrString := StringDialog askWithCancel: 'IP address:'.
-	addrString size = 0 ifTrue: [^ self].
-
-	ok := workPane phratchServer joinSessionAt: addrString.
-	ok ifFalse: [DialogBoxMorph warn: 'Could not connect to ', addrString].
-
 ]
 
 { #category : #byob }
@@ -2619,14 +2193,6 @@ PhratchFrameMorph >> launchHelpPage [
 ]
 
 { #category : #'menu/button actions' }
-PhratchFrameMorph >> launchPhratchWebsite [
-
-	self world displayWorldSafely.
-	Cursor wait showWhile: [PhratchPlugin primOpenURL: 'http://', PhratchFrameMorph shareServer].
-
-]
-
-{ #category : #'menu/button actions' }
 PhratchFrameMorph >> launchWebsite [
 
 	self world displayWorldSafely.
@@ -2656,83 +2222,63 @@ PhratchFrameMorph >> loginName [
 
 ]
 
-{ #category : #accessing }
-PhratchFrameMorph >> loginName: aString [
-
-	loginName := aString.
-
-]
-
-{ #category : #accessing }
-PhratchFrameMorph >> loginPassword [
-
-	^ loginPassword
-
-]
-
-{ #category : #accessing }
-PhratchFrameMorph >> loginPassword: aString [
-
-	loginPassword := aString.
-
-]
-
 { #category : #intialization }
 PhratchFrameMorph >> makeXYReadout [
 	"Make and answer an x-y readout."
 
 	| normalFont boldFont panel spaceWidth labelX readoutX labelY readoutY |
-	normalFont := (PhratchFrameMorph getFont: #XYReadout).
-	boldFont := (PhratchFrameMorph getFont: #XYReadoutBold).
-
-	(PhratchTranslator renderScale ~= 1) ifTrue: [
-		"force fonts to be fixed size:"
-		normalFont := StrikeFont
-			osFontName: normalFont name
-			size: normalFont pointSize / PhratchTranslator renderScale asFloat.
-		boldFont := StrikeFont
-			osFontName: boldFont name
-			size: boldFont pointSize / PhratchTranslator renderScale asFloat].
-
+	normalFont := PhratchFrameMorph getFont: #XYReadout.
+	boldFont := PhratchFrameMorph getFont: #XYReadoutBold.
+	PhratchTranslator renderScale ~= 1
+		ifTrue: [ 
+			"force fonts to be fixed size:"
+			normalFont := StrikeFont
+				osFontName: normalFont name
+				size: normalFont pointSize / PhratchTranslator renderScale asFloat.
+			boldFont := StrikeFont osFontName: boldFont name size: boldFont pointSize / PhratchTranslator renderScale asFloat ].
 	panel := Morph new color: (Color r: 0.753 g: 0.764 b: 0.776).
-
-	PhratchTranslator isRTL
-		ifTrue: [labelX := StringMorph new font: normalFont; contents: ':x']
-		ifFalse: [labelX := StringMorph new font: normalFont; contents: 'x:'].
+	labelX := PhratchTranslator isRTL
+		ifTrue: [ 
+			StringMorph new
+				font: normalFont;
+				contents: ':x' ]
+		ifFalse: [ 
+			StringMorph new
+				font: normalFont;
+				contents: 'x:' ].
 	readoutX := UpdatingStringMorph new
-		target: self; getSelector: #mouseX;
+		target: self;
+		getSelector: #mouseX;
 		forceUnicodeRendering: true;
 		font: boldFont;
 		stepTime: 150;
 		growable: false.
 	readoutX width: (readoutX stringWidth: '-1000').
-	PhratchTranslator isRTL
-		ifTrue: [labelY := labelX fullCopy contents: ':y']
-		ifFalse: [labelY := labelX fullCopy contents: 'y:'].
+	labelY := PhratchTranslator isRTL
+		ifTrue: [ labelX fullCopy contents: ':y' ]
+		ifFalse: [ labelX fullCopy contents: 'y:' ].
 	readoutY := readoutX fullCopy getSelector: #mouseY.
-
 	spaceWidth := ((readoutX stringWidth: ' ') * 0.8) asInteger.
-
 	PhratchTranslator isRTL
-		ifTrue: [readoutY rightJustify: true.
-			panel addMorph: (readoutY position: 0@0).
-			panel addMorph: (labelY position: ((readoutY topRight) + (spaceWidth@0))).]
-		ifFalse: [panel addMorph: (labelX position: 0@0).
-			panel addMorph: (readoutX position: ((labelX topRight) + (spaceWidth@0)))].
-
+		ifTrue: [ 
+			readoutY rightJustify: true.
+			panel addMorph: (readoutY position: 0 @ 0).
+			panel addMorph: (labelY position: readoutY topRight + (spaceWidth @ 0)) ]
+		ifFalse: [ 
+			panel addMorph: (labelX position: 0 @ 0).
+			panel addMorph: (readoutX position: labelX topRight + (spaceWidth @ 0)) ].
 	PhratchTranslator isRTL
-		ifTrue: [readoutX rightJustify: true.
-			panel addMorph: (readoutX position: (labelY right@labelY top) + (spaceWidth@0)).
-			panel addMorph: (labelX position: ((readoutX topRight) + (spaceWidth@0)))]
-		ifFalse: [panel addMorph: (labelY position: (labelX right + readoutX width + 8)@(labelX top)).
-			panel addMorph: (readoutY position: ((labelY topRight) + (spaceWidth@0)))].
-	
+		ifTrue: [ 
+			readoutX rightJustify: true.
+			panel addMorph: (readoutX position: labelY right @ labelY top + (spaceWidth @ 0)).
+			panel addMorph: (labelX position: readoutX topRight + (spaceWidth @ 0)) ]
+		ifFalse: [ 
+			panel addMorph: (labelY position: (labelX right + readoutX width + 8) @ labelX top).
+			panel addMorph: (readoutY position: labelY topRight + (spaceWidth @ 0)) ].
 	PhratchTranslator isRTL
-		ifTrue: [panel extent: ((labelX right) max: (labelY right))@(labelY bottom)]
-		ifFalse: [panel extent: ((readoutX right) max: (readoutY right))@(labelY bottom)].
-
+		ifTrue: [ panel extent: (labelX right max: labelY right) @ labelY bottom ]
+		ifFalse: [ panel extent: (readoutX right max: readoutY right) @ labelY bottom ].
 	^ panel
-
 ]
 
 { #category : #'event handling' }
@@ -2844,14 +2390,6 @@ PhratchFrameMorph >> nextSurpriseCostumeName [
 		ifFalse: [^ shuffledCostumeNames removeFirst].
 ]
 
-{ #category : #'tools (no longer used)' }
-PhratchFrameMorph >> normalTool [
-
-	self paintingInProgress ifTrue: [^ Beeper beep].
-	self world activeHand toolType: nil.
-
-]
-
 { #category : #byob }
 PhratchFrameMorph >> notEditingBlock [
 	blockEditors size = 0 ifTrue: [^true].
@@ -2909,49 +2447,35 @@ PhratchFrameMorph >> openPantherTutorials [
 
 ]
 
-{ #category : #'falta adaptar' }
-PhratchFrameMorph >> openPhratchDroppedProjectNamed: fName [
-	"Open a Phratch project with the given name that was dropped on the Phratch window."
-
-	| response |
-	self closeMediaEditorsAndDialogs ifFalse: [^ self].
-	self stopAll.
-
-	(justSaved or: [self projectIsEmpty]) ifFalse: [
-		"ask the user if they want to save the current project"
-		response := DialogBoxMorph askWithCancel: 'Save the current project?'.
-		response = #cancelled ifTrue: [^ self].
-		response ifTrue: [self savePhratchProjectNoDialog]].
-
-	self openPhratchProjectNamed: fName.
-
-]
-
 { #category : #'file read/write' }
 PhratchFrameMorph >> openPhratchProject [
 	"Allow the user to select a project to open, then open that project."
 
 	| response newProj |
-	self closeMediaEditorsAndDialogs ifFalse: [^ self].
+	self closeMediaEditorsAndDialogs
+		ifFalse: [ ^ self ].
 	self stopAll.
-	(justSaved or: [self projectIsEmpty]) ifFalse: [
-		"ask the user if they want to save the current project"
-		response := DialogBoxMorph askWithCancel: 'Save the current project?'.
-		response = #cancelled ifTrue: [^ self].
-		response ifTrue: [self savePhratchProjectNoDialog]].
-
+	(justSaved or: [ self projectIsEmpty ])
+		ifFalse: [ 
+			"ask the user if they want to save the current project"
+			response := DialogBoxMorph askWithCancel: 'Save the current project?'.
+			response = #cancelled
+				ifTrue: [ ^ self ].
+			response
+				ifTrue: [ self savePhratchProjectNoDialog ] ].
 	response := PhratchFileChooserDialog openPhratchFileFor: self.
-	response = #cancelled ifTrue: [^ self].
-
-	(response isKindOf: FileReference) ifTrue: [  "read the contents of a local file"
-		^ self openPhratchProjectNamed: response].
-
-	(response isKindOf: ByteArray) ifTrue: [
-		[projectInfo := self extractInfoFrom: response] ifError: [projectInfo := Dictionary new].
-		[newProj := self extractProjectFrom: response] ifError: [^ self].
-		self installNewProject: newProj.
-		projectDirectory := PhratchFileChooserDialog getDefaultFolderForType: #project].
-
+	response = #cancelled
+		ifTrue: [ ^ self ].
+	(response isKindOf: FileReference)
+		ifTrue: [ 
+			"read the contents of a local file"
+			^ self openPhratchProjectNamed: response ].
+	(response isKindOf: ByteArray)
+		ifFalse: [ ^ self ].
+	[ projectInfo := self extractInfoFrom: response ] ifError: [ projectInfo := Dictionary new ].
+	[ newProj := self extractProjectFrom: response ] ifError: [ ^ self ].
+	self installNewProject: newProj.
+	projectDirectory := PhratchFileChooserDialog getDefaultFolderForType: #project
 ]
 
 { #category : #'falta adaptar' }
@@ -2989,11 +2513,13 @@ PhratchFrameMorph >> ownerChanged [
 	"The receiver's owner has changed its layout.
 	Since this method is called synchronously in the
 	ui, delete the receiver if there are any excpetions."
+
 	super ownerChanged.
-	fillScreenFlag ifTrue:  [
-		self position: 0@0.
+	fillScreenFlag
+		ifFalse: [ ^ self ].
+	self position: 0 @ 0.
 	self isSticky: true.
-	self extent: Display extent. ]
+	self extent: Display extent
 ]
 
 { #category : #'menu/button actions' }
@@ -3140,28 +2666,6 @@ PhratchFrameMorph >> printTupleList: anArray on: s [
 ]
 
 { #category : #stepping }
-PhratchFrameMorph >> processDroppedFiles [
-	"Process any files that have been dropped onto me."
-
-	| droppedFiles m fName |
-	droppedFiles := FileStream droppedFiles.
-	droppedFiles size = 0 ifTrue: [^ self].
-	(m := self viewerPane target) ifNil: [^ self].
-	droppedFiles first.
-
-	(droppedFiles copyFrom: 2 to: droppedFiles size) do: [:file |
-		file close.
-		fName := file fullName.
-		((fName asLowercase endsWith: '.scratch') | (fName asLowercase endsWith: '.sb') | (fName asLowercase endsWith: '.ypr'))
-			ifTrue: [self openPhratchDroppedProjectNamed: fName]
-			ifFalse: [
-				((fName asLowercase endsWith: '.sprite') | (fName asLowercase endsWith: '.ysp'))
-					ifTrue: [self importSpriteOrProject: fName]
-					ifFalse: [m importMedia: fName]]].
-
-]
-
-{ #category : #stepping }
 PhratchFrameMorph >> processKeyboardEvents [
 
 	| evt ch |
@@ -3217,23 +2721,15 @@ PhratchFrameMorph >> processSettingsFile [
 PhratchFrameMorph >> processWhenConditions [
 	"Trigger any 'when <condition>' hats."
 
-	| objList |
-	true ifTrue: [^ self].  "disabled"
-	objList := workPane submorphs select: [:m | m isKindOf: ScriptablePhratchMorph].
+	^ self.  "disabled"
+	"objList := workPane submorphs select: [:m | m isKindOf: ScriptablePhratchMorph].
 	objList := objList copyWith: workPane.
 	objList do: [:obj |
 		obj scripts do: [:hat |
 			(hat isMemberOf: WhenHatBlockMorph) ifTrue: [
 				(hat hasRunningProcess not and: [hat evaluateCondition]) ifTrue: [
 					hat start; layoutChanged]]]].
-
-]
-
-{ #category : #accessing }
-PhratchFrameMorph >> projectComment [
-
-	^ projectInfo at: 'comment' ifAbsent: ['']
-
+"
 ]
 
 { #category : #'view mode' }
@@ -3333,8 +2829,7 @@ PhratchFrameMorph >> projectName: aString [
 
 { #category : #byob }
 PhratchFrameMorph >> purgeBlockEditors [
-	blockEditors := blockEditors reject: [:each | 
-		each isInWorld not]
+	blockEditors := blockEditors select: [ :each | each isInWorld ]
 ]
 
 { #category : #'menu/button actions' }
@@ -3424,22 +2919,29 @@ PhratchFrameMorph >> rebuildUIForNewLanguage [
 { #category : #byob }
 PhratchFrameMorph >> recordBlockContrast: anInteger [
 	"Record my language in the settings file."
+
 	"PhratchFrameMorph new recordLanguage: 'English'"
 
 	| fName f sz settings all |
 	fName := (FileSystem workingDirectory / 'BYOB.ini') fullName.
 	f := FileStream concreteStream new open: fName forWrite: true.
-	f ifNil: [^ self].
+	f ifNil: [ ^ self ].
 	sz := f size.
 	settings := (f next: sz) lines.
-	settings := settings reject: [:s | s asLowercase beginsWith: 'blockcontrast='].
-	settings := settings reject: [:s | all := s asByteArray asSet. (all size = 1) and: [all asArray first = 0]].
-	settings := settings copyWith: ('BlockContrast=', anInteger printString).
+	settings := settings reject: [ :s | s asLowercase beginsWith: 'blockcontrast=' ].
+	settings := settings
+		reject: [ :s | 
+			all := s asByteArray asSet.
+			all size = 1 and: [ all asArray first = 0 ] ].
+	settings := settings copyWith: 'BlockContrast=' , anInteger printString.
 	f position: 0.
-	settings do: [:s | f nextPutAll: s, String crlf].
-	[f position < sz] whileTrue: [f nextPut: 0 asCharacter].
-	f close.
-
+	settings
+		do: [ :s | 
+			f
+				nextPutAll: s;
+				nextPutAll: String crlf ].
+	[ f position < sz ] whileTrue: [ f nextPut: 0 asCharacter ].
+	f close
 ]
 
 { #category : #byob }
@@ -3449,58 +2951,51 @@ PhratchFrameMorph >> recordKeepOnStage: anInteger [
 	| fName f sz settings all |
 	fName := (FileSystem workingDirectory / 'BYOB.ini') fullName.
 	f := FileStream concreteStream new open: fName forWrite: true.
-	f ifNil: [^ self].
+	f ifNil: [ ^ self ].
 	sz := f size.
 	settings := (f next: sz) lines.
-	settings := settings reject: [:s | s asLowercase beginsWith: 'keepspritesonstage='].
-	settings := settings reject: [:s | all := s asByteArray asSet. (all size = 1) and: [all asArray first = 0]].
-	settings := settings copyWith: ('KeepSpritesOnStage=', anInteger printString).
+	settings := settings reject: [ :s | s asLowercase beginsWith: 'keepspritesonstage=' ].
+	settings := settings
+		reject: [ :s | 
+			all := s asByteArray asSet.
+			all size = 1 and: [ all asArray first = 0 ] ].
+	settings := settings copyWith: 'KeepSpritesOnStage=' , anInteger printString.
 	f position: 0.
-	settings do: [:s | f nextPutAll: s, String crlf].
-	[f position < sz] whileTrue: [f nextPut: 0 asCharacter].
-	f close.
-
+	settings
+		do: [ :s | 
+			f
+				nextPutAll: s;
+				nextPutAll: String crlf ].
+	[ f position < sz ] whileTrue: [ f nextPut: 0 asCharacter ].
+	f close
 ]
 
 { #category : #private }
 PhratchFrameMorph >> recordLanguage: aString [
 	"Record my language in the settings file."
+
 	"PhratchFrameMorph new recordLanguage: 'English'"
 
 	| fName f sz settings all |
 	fName := (FileSystem workingDirectory / 'BYOB.ini') fullName.
 	f := FileStream concreteStream new open: fName forWrite: true.
-	f ifNil: [^ self].
+	f ifNil: [ ^ self ].
 	sz := f size.
 	settings := (f next: sz) lines.
-	settings := settings reject: [:s | s asLowercase beginsWith: 'language='].
-	settings := settings reject: [:s | all := s asByteArray asSet. (all size = 1) and: [all asArray first = 0]].
-	settings := settings copyWith: ('Language=', aString).
+	settings := settings reject: [ :s | s asLowercase beginsWith: 'language=' ].
+	settings := settings
+		reject: [ :s | 
+			all := s asByteArray asSet.
+			all size = 1 and: [ all asArray first = 0 ] ].
+	settings := settings copyWith: 'Language=' , aString.
 	f position: 0.
-	settings do: [:s | f nextPutAll: s, String crlf].
-	[f position < sz] whileTrue: [f nextPut: 0 asCharacter].
-	f close.
-
-]
-
-{ #category : #byob }
-PhratchFrameMorph >> recordScopeContrast: anInteger [
-	"Record a setting in the settings file."
-
-	| fName f sz settings all |
-	fName := (FileSystem workingDirectory / 'BYOB.ini') fullName.
-	f := FileStream concreteStream new open: fName forWrite: true.
-	f ifNil: [^ self].
-	sz := f size.
-	settings := (f next: sz) lines.
-	settings := settings reject: [:s | s asLowercase beginsWith: 'scopecontrast='].
-	settings := settings reject: [:s | all := s asByteArray asSet. (all size = 1) and: [all asArray first = 0]].
-	settings := settings copyWith: ('ScopeContrast=', anInteger printString).
-	f position: 0.
-	settings do: [:s | f nextPutAll: s, String crlf].
-	[f position < sz] whileTrue: [f nextPut: 0 asCharacter].
-	f close.
-
+	settings
+		do: [ :s | 
+			f
+				nextPutAll: s;
+				nextPutAll: String crlf ].
+	[ f position < sz ] whileTrue: [ f nextPut: 0 asCharacter ].
+	f close
 ]
 
 { #category : #byob }
@@ -3508,39 +3003,25 @@ PhratchFrameMorph >> recordThreadSafeMode: anInteger [
 	"Record a setting in the settings file."
 
 	| fName f sz settings all |
-	fName :=( FileSystem workingDirectory / 'BYOB.ini') fullName.
-	f := FileStream concreteStream new open: fName forWrite: true.
-	f ifNil: [^ self].
-	sz := f size.
-	settings := (f next: sz) lines.
-	settings := settings reject: [:s | s asLowercase beginsWith: 'threadsafemode='].
-	settings := settings reject: [:s | all := s asByteArray asSet. (all size = 1) and: [all asArray first = 0]].
-	settings := settings copyWith: ('ThreadSafeMode=', anInteger printString).
-	f position: 0.
-	settings do: [:s | f nextPutAll: s, String crlf].
-	[f position < sz] whileTrue: [f nextPut: 0 asCharacter].
-	f close.
-
-]
-
-{ #category : #byob }
-PhratchFrameMorph >> recordTranslucentDragging: anInteger [
-	"Record a setting in the settings file."
-
-	| fName f sz settings all |
 	fName := (FileSystem workingDirectory / 'BYOB.ini') fullName.
 	f := FileStream concreteStream new open: fName forWrite: true.
-	f ifNil: [^ self].
+	f ifNil: [ ^ self ].
 	sz := f size.
 	settings := (f next: sz) lines.
-	settings := settings reject: [:s | s asLowercase beginsWith: 'translucentdragging='].
-	settings := settings reject: [:s | all := s asByteArray asSet. (all size = 1) and: [all asArray first = 0]].
-	settings := settings copyWith: ('TranslucentDragging=', anInteger printString).
+	settings := settings reject: [ :s | s asLowercase beginsWith: 'threadsafemode=' ].
+	settings := settings
+		reject: [ :s | 
+			all := s asByteArray asSet.
+			all size = 1 and: [ all asArray first = 0 ] ].
+	settings := settings copyWith: 'ThreadSafeMode=' , anInteger printString.
 	f position: 0.
-	settings do: [:s | f nextPutAll: s, String crlf].
-	[f position < sz] whileTrue: [f nextPut: 0 asCharacter].
-	f close.
-
+	settings
+		do: [ :s | 
+			f
+				nextPutAll: s;
+				nextPutAll: String crlf ].
+	[ f position < sz ] whileTrue: [ f nextPut: 0 asCharacter ].
+	f close
 ]
 
 { #category : #byob }
@@ -3573,57 +3054,10 @@ PhratchFrameMorph >> refreshBlocks [
 
 ]
 
-{ #category : #byob }
-PhratchFrameMorph >> removeBlockEditor: aBlockEditor [
-	blockEditors remove: aBlockEditor
-]
-
-{ #category : #uploading }
-PhratchFrameMorph >> removeLastHistoryEntry [
-	"Remove the last entry in the project history. This is done if an upload attempt fails or is cancelled."
-
-	| lines s |
-	lines := (projectInfo at: 'history' ifAbsent: ['']) lines.
-	lines size = 0 ifTrue: [^ self].
-
-	lines := lines copyFrom: 1 to: lines size - 1.
-
-	s := WriteStream on: (String new: 1000).
-	lines do: [:entry | s nextPutAll: entry; cr].
-	projectInfo at: 'history' put: s contents.
-
-]
-
 { #category : #'menu/button actions' }
 PhratchFrameMorph >> renderingMenu [
 
 	PhratchTranslator renderingMenu.
-
-]
-
-{ #category : #'menu/button actions' }
-PhratchFrameMorph >> resaveAllProjects [
-	"Resave all the projects in the given directory (to recompress them)."
-
-	| dir |
-	dir := PhratchFileChooserDialog chooseFolder: FileSystem workingDirectory.
-	dir = #cancelled ifTrue: [^ self].
-
-	dir allFileNamesDo: [:fn |
-		((fn asLowercase endsWith: '.sb') and:
-		 [(fn endsWith: '-2.sb') not]) ifTrue: [
-			self openPhratchProjectNamed: fn.
-			World doOneCycleNoInput.
-"			projectName := (fn copyFrom: 1 to: fn size - 3), '-3.sb'."
-			self writePhratchProject]].
-
-]
-
-{ #category : #uploading }
-PhratchFrameMorph >> revertToUncompressedMedia [
-	"Revert to uncomprssed media after uploading this project."
-
-	self allProjectMedia do: [:m | m revertToUncompressed].
 
 ]
 
@@ -3733,21 +3167,6 @@ PhratchFrameMorph >> scriptsPane [
 ]
 
 { #category : #'falta adaptar' }
-PhratchFrameMorph >> scriptsStringForUpload [
-
-	| s scripts |
-	s := WriteStream on: (String new: 10000).
-	((Array with: workPane), self phratchObjects) do: [:obj |
-		scripts := obj blocksBin submorphs select: [:m | m isKindOf: HatBlockMorph].
-		scripts size > 0 ifTrue: [
-			s nextPutAll: 'Scripts for ', obj objName, ':'; cr; cr.
-			scripts do: [:hat | self printTupleList: hat tupleSequence on: s. s cr].
-			s cr]].
-	^ s contents
-
-]
-
-{ #category : #'falta adaptar' }
 PhratchFrameMorph >> setDefaultSprite [
 	"Look for default sprite in Media directory. If none found, use the DefaultCatSprite"
 
@@ -3826,62 +3245,6 @@ PhratchFrameMorph >> setLanguage: aString [
 ]
 
 { #category : #'menu/button actions' }
-PhratchFrameMorph >> setSingleStepping [
-	"Ask whether script should be single-stepped."
-
-	| menu |
-	menu := MenuMorph new title: 'Single-step speed?'.
-	menu add: 'Turbo speed' 
-		target: self 
-		selector: #blockHighlightMSecs:
-		argument: 0.
-	menu add: 'Normal' 
-		target: self 
-		selector: #blockHighlightMSecs:
-		argument: 1.
-	menu add: 'Flash blocks (fast)' 
-		target: self 
-		selector: #blockHighlightMSecs:
-		argument: 30.
-	menu add: 'Flash blocks (slow)' 
-		target: self 
-		selector: #blockHighlightMSecs:
-		argument: 200.
-	menu localize; invokeModal: true.
-]
-
-{ #category : #'menu/button actions' }
-PhratchFrameMorph >> shareMenu: aMenuTitleMorph [
-
-	| menu stage |
-	menu := MenuMorph new defaultTarget: self.
-	self addServerCommandsTo: menu.
-
-	stage := workPane.
-	stage ifNotNil: [
-		(stage phratchServer notNil and: 
-		[stage phratchServer sessionInProgress])
-			ifTrue: [
-				menu add: 'Share this sprite' action: #shareSprite ]].
-	menu localize.
-
-	#(1) do: [:n |
-		menu labels at: n put:
-			((menu labels at: n) contents copyFrom: 1 to: (menu labels at: n) contents size - 1), PhratchTranslator ellipsesSuffix].
-
-	menu popUpAt: (aMenuTitleMorph bottomLeft + (0@10)) inWorld: World.
-
-
-]
-
-{ #category : #byob }
-PhratchFrameMorph >> shareSprite [
-
-	scriptsPane target shareObject.
-
-]
-
-{ #category : #'menu/button actions' }
 PhratchFrameMorph >> shoutGo [
 	"Broadcasts the start event to all objects and processes."
 
@@ -3900,23 +3263,6 @@ PhratchFrameMorph >> showMotorBlocks [
 	workPane showMotorBlocks: true.
 	viewerPane currentCategory: 'motion'.
 	viewerPane pageViewer vScrollRelative: 1.0.
-]
-
-{ #category : #'menu/button actions' }
-PhratchFrameMorph >> showNetworkAddress [
-	"Display my IP address. This is a temporary feature to allow connected multiple Phratch computers in a peer-to-peer configuration without the help of a presence server."
-
-	| localAddr wanAddr msg |
-	Socket initializeNetwork.
-	localAddr := NetNameResolver localHostAddress.
-	wanAddr := nil.
-
-	msg := NetNameResolver stringFromAddress: localAddr.
-	(wanAddr notNil and: [wanAddr ~= localAddr]) ifTrue: [
-		msg := msg, String cr, 'Internet:   ', (NetNameResolver stringFromAddress: wanAddr)].
-
-	DialogBoxMorph inform: msg title: 'IP Address'.
-
 ]
 
 { #category : #byob }
@@ -3979,27 +3325,6 @@ PhratchFrameMorph >> showWatcher: watcher [
 	workPane addMorph: watcher.
 	watcher world ifNotNil: [watcher world startSteppingSubmorphsOf: watcher].
 
-
-]
-
-{ #category : #'scat-additions' }
-PhratchFrameMorph >> stageMorph [
-"Horrid? Yes! But working!"
-	 ^ self submorphs detect: [:each | each isKindOf: PhratchStageMorph]
-]
-
-{ #category : #'menu/button actions' }
-PhratchFrameMorph >> startHostingPhratchSession [
-	"Start running the Phratch server, allowing Phratch and other applications to interact with this Phratch remotely."
-
-	| server |
-	workPane phratchServer ifNil: [
-		server := PhratchServer new.
-		server stage: workPane.
-		workPane phratchServer: server].
-
-	workPane phratchServer startHosting.
-	self showNetworkAddress.
 
 ]
 
@@ -4072,6 +3397,7 @@ PhratchFrameMorph >> startup [
 		^ self].
 
 	viewerPane currentCategory: 'motion'.
+	
 	self setDefaultSprite.
 	self newPhratchProject.
 
@@ -4194,9 +3520,9 @@ PhratchFrameMorph >> toggleErrorCatcher [
 PhratchFrameMorph >> toggleKeepSpritesOnStage [
 	| choice |
 	ScriptablePhratchMorph keepOnStage: ScriptablePhratchMorph keepOnStage not.
-	ScriptablePhratchMorph keepOnStage
-		ifTrue: [choice := 1]
-		ifFalse: [choice := 0].
+	choice := ScriptablePhratchMorph keepOnStage
+		ifTrue: [ 1 ]
+		ifFalse: [ 0 ].
 	self recordKeepOnStage: choice
 ]
 
@@ -4210,17 +3536,6 @@ PhratchFrameMorph >> togglePause [
 ]
 
 { #category : #byob }
-PhratchFrameMorph >> toggleScopeContrast [
-	| choice |
-	VariableFrame scopeContrast: VariableFrame scopeContrast not.
-	VariableFrame scopeContrast
-		ifTrue: [choice := 1]
-		ifFalse: [choice := 0].
-	self refreshBlocks.
-	self recordScopeContrast: choice
-]
-
-{ #category : #byob }
 PhratchFrameMorph >> toggleShowMotorBlocks [
 
 	workPane showMotorBlocks
@@ -4228,34 +3543,14 @@ PhratchFrameMorph >> toggleShowMotorBlocks [
 		ifFalse: [self showMotorBlocks]
 ]
 
-{ #category : #'menu/button actions' }
-PhratchFrameMorph >> toggleSingleStepping [
-	"Toggle single stepping."
-
-	PhratchProcess blockHighlightMSecs <= 1
-		ifTrue: [PhratchProcess blockHighlightMSecs: 60]
-		ifFalse: [PhratchProcess blockHighlightMSecs: 1].
-
-]
-
 { #category : #byob }
 PhratchFrameMorph >> toggleThreadSafeMode [
 	| choice |
 	EventHatMorph threadSafeMode: EventHatMorph threadSafeMode not.
-	EventHatMorph threadSafeMode
-		ifTrue: [choice := 1]
-		ifFalse: [choice := 0].
+	choice := EventHatMorph threadSafeMode
+		ifTrue: [ 1 ]
+		ifFalse: [ 0 ].
 	self recordThreadSafeMode: choice
-]
-
-{ #category : #byob }
-PhratchFrameMorph >> toggleTranslucentDragging [
-	| choice |
-	HandMorph translucentWhenDragging: HandMorph translucentWhenDragging not.
-	HandMorph translucentWhenDragging
-		ifTrue: [choice := 1]
-		ifFalse: [choice := 0].
-	self recordTranslucentDragging: choice
 ]
 
 { #category : #byob }
@@ -4264,14 +3559,6 @@ PhratchFrameMorph >> toggleTurboMode [
 	self isTurbo ifTrue: [
 		^ PhratchProcess blockHighlightMSecs: 1].
 	PhratchProcess blockHighlightMSecs: 0
-]
-
-{ #category : #byob }
-PhratchFrameMorph >> toggleZebraColoring [
-
-	BlockMorph contrast = #off
-		ifTrue: [self blockContrastStrong]
-		ifFalse: [self blockContrastOff]
 ]
 
 { #category : #byob }
@@ -4288,7 +3575,7 @@ PhratchFrameMorph >> undoTool [
 	self paintingInProgress ifTrue: [^ Beeper beep].
 	Clipboard ifNil: [^ self beep].
 	self activeHand toolType: nil.
-	m := Clipboard fullCopy.
+	m := Clipboard copy.
 	((m isKindOf: BlockMorph) and: [m isCustomBlock and: [m definition isNil]])
 		ifTrue: [^ self beep].
 	"Reset clipboard to empty since an undo just happened"
@@ -4302,7 +3589,7 @@ PhratchFrameMorph >> undoTool [
 
 	(m isKindOf: PhratchSpriteMorph) ifTrue: [  "sprite; add to stage"
 		m filterReset; show.
-		m objName: Clipboard objName.
+		m objName: m objName.
 		Clipboard := nil.
 		oldName := m objName.
 		self addAndView: m.
@@ -4360,27 +3647,29 @@ PhratchFrameMorph >> unusedPositionForWatcher [
 	"Return an unused watcher position on the stage."
 
 	| watchers positions rowH x y newX |
-	watchers := (watcherPositions values collect: [:r | r first]) select: [:w | w notNil].
-	positions := watchers collect: [:w | w position].
-
-	(watchers size > 0)
-		ifTrue: [rowH := (watchers at: 1) height]
-		ifFalse: [rowH := 25].
+	watchers := (watcherPositions values collect: [ :r | r first ]) select: [ :w | w notNil ].
+	positions := watchers collect: [ :w | w position ].
+	rowH := watchers size > 0
+		ifTrue: [ (watchers at: 1) height ]
+		ifFalse: [ 25 ].
 	x := workPane left + 10.
 	y := workPane top + 10.
-	[positions includes: (x@y)] whileTrue: [
-		y := y + rowH.
-		(y > (workPane bottom - rowH)) ifTrue: [  "start a new column"
-			newX := 0.
-			watchers do: [:w |
-				w left < (x + 20) ifTrue: [newX := newX max: w right + 4]].
-			newX > (workPane right - 20) ifTrue: [
-				^ ((10 to: 400) atRandom) @ ((10 to: 330) atRandom)].  "no free location"
-			x := newX.
-			y := workPane top + 10]].
-
-	^ x@y
-
+	[ positions includes: x @ y ]
+		whileTrue: [ 
+			y := y + rowH.
+			y > (workPane bottom - rowH)
+				ifTrue: [ 
+					"start a new column"
+					newX := 0.
+					watchers
+						do: [ :w | 
+							w left < (x + 20)
+								ifTrue: [ newX := newX max: w right + 4 ] ].
+					newX > (workPane right - 20)
+						ifTrue: [ ^ (10 to: 400) atRandom @ (10 to: 330) atRandom ].	"no free location"
+					x := newX.
+					y := workPane top + 10 ] ].
+	^ x @ y
 ]
 
 { #category : #'file read/write' }
@@ -4523,18 +3812,15 @@ PhratchFrameMorph >> updateProjectName [
 	"Update the project name display in the Phratch title bar."
 
 	| s |
-	projectName ifNil: [projectName := ''].
-	projectName := (self nameFromFileName: projectName).
-	projectName := projectName, '.ypr'.
+	projectName ifNil: [ projectName := '' ].
+	projectName := self nameFromFileName: projectName.
+	projectName := projectName , '.ypr'.
 	projectTitleMorph contents: projectName.
-
-	projectTitleMorph contents size > 0
-		ifTrue: [s := projectTitleMorph contents, '- PHR']
-		ifFalse: [s := 'PHR ', Version asString].
+	s := projectTitleMorph contents size > 0
+		ifTrue: [ projectTitleMorph contents , '- PHR' ]
+		ifFalse: [ 'PHR ' , Version asString ].
 	PhratchPlugin primSetWindowTitle: s.
-
-	self fixLayout.
-
+	self fixLayout
 ]
 
 { #category : #'falta adaptar' }
@@ -4661,13 +3947,6 @@ PhratchFrameMorph >> workPane [
 
 ]
 
-{ #category : #accessing }
-PhratchFrameMorph >> workPane: aWorkPane [
-
-	workPane := aWorkPane 
-
-]
-
 { #category : #'menu/button actions' }
 PhratchFrameMorph >> writeMultipleSummaries [
 	"Write the summary for all Phratch projects in a given folder."
@@ -4775,52 +4054,6 @@ PhratchFrameMorph >> writePhratchProject [
 
 ]
 
-{ #category : #'falta adaptar' }
-PhratchFrameMorph >> writePhratchProjectOn: aStream [
-	"Write this Phratch project in a serialized form on the given stream."
-
-	| oldScriptsTarget oldTab oldViewerCategory oldPosition storeError |
-	self stopAll.
-	self world ifNotNil: [self world activeHand newKeyboardFocus: nil].  "terminates active editor"
-
-	oldScriptsTarget := scriptsPane target.
-	oldTab := scriptsPane tabPane currentTab.
-	oldViewerCategory := viewerPane currentCategory.
-	scriptsPane target: nil.
-
-	workPane updateSpritesList.
-	oldPosition := workPane position.
-	workPane delete; position: 0@0.
-	self updatePenPositions.
-
-	ScriptablePhratchMorph buildBlockSpecDictionary.
-	workPane allMorphsDo: [:m |
-		(m isKindOf: ScriptablePhratchMorph) ifTrue: [
-			m blocksBin allMorphsDo: [:b |
-				(b isKindOf: BlockMorph) ifTrue: [b stop]].
-			m convertStacksToTuples]].
-
-	storeError := nil.
-	[	aStream nextPutAll: 'PhratchV01' asByteArray.
-		self storeProjectInfoOn: aStream.
-		ObjStream new storeObj: workPane on: aStream.
-	] ifError: [:err :rcvr | storeError := err].
-
-	workPane allMorphsDo: [:m |
-		(m isKindOf: ScriptablePhratchMorph) ifTrue: [
-			m convertTuplesToStacks]].
-
-	self addMorph: (workPane position: oldPosition).
-	oldScriptsTarget ifNil: [oldScriptsTarget := workPane].
-	oldScriptsTarget viewBlocksAndScripts.
-	scriptsPane tabPane currentTab: oldTab.
-	viewerPane currentCategory: oldViewerCategory.
-	self updatePenPositions.
-
-	storeError ifNotNil: [self error: storeError].
-
-]
-
 { #category : #'menu/button actions' }
 PhratchFrameMorph >> writeSummaryFile [
 	"Write a summary of this project to a file."
@@ -4836,49 +4069,83 @@ PhratchFrameMorph >> writeSummaryFile: fullFile [
 	| s sprites f fName fullFileName |
 	s := WriteStream on: (String new: 10000).
 	fullFileName := fullFile fullName.
-	s nextPutAll: 'Project: ', self projectName; crlf.
-	fullFileName size > 0 ifTrue: [s nextPutAll: 'Location: ', fullFileName; crlf].
-	(projectInfo includesKey: 'author') ifTrue: [
-		s nextPutAll: 'Author: ', (projectInfo at: 'author'); crlf].
-	(projectInfo includesKey: 'phratch-version') ifTrue: [
-		s nextPutAll: 'Scratch: ', (projectInfo at: 'phratch-version'); crlf].
-	(projectInfo includesKey: 'comment') ifTrue: [
-		s nextPutAll: 'Notes:'; crlf.
-		(projectInfo at: 'comment') lines do: [:l | s nextPutAll: '    ', l; crlf].
-		s crlf].
-	(projectInfo includesKey: 'history') ifTrue: [
-		s nextPutAll: 'History:'; crlf.
-		(projectInfo at: 'history') lines do: [:l | s nextPutAll: '    ', l; crlf].
-		s crlf].
-
+	s
+		nextPutAll: 'Project: ';
+		nextPutAll: self projectName;
+		crlf.
+	fullFileName size > 0
+		ifTrue: [ 
+			s
+				nextPutAll: 'Location: ';
+				nextPutAll: fullFileName;
+				crlf ].
+	(projectInfo includesKey: 'author')
+		ifTrue: [ 
+			s
+				nextPutAll: 'Author: ';
+				nextPutAll: (projectInfo at: 'author');
+				crlf ].
+	(projectInfo includesKey: 'phratch-version')
+		ifTrue: [ 
+			s
+				nextPutAll: 'Scratch: ';
+				nextPutAll: (projectInfo at: 'phratch-version');
+				crlf ].
+	(projectInfo includesKey: 'comment')
+		ifTrue: [ 
+			s
+				nextPutAll: 'Notes:';
+				crlf.
+			(projectInfo at: 'comment') lines
+				do: [ :l | 
+					s
+						nextPutAll: '    ';
+						nextPutAll: l;
+						crlf ].
+			s crlf ].
+	(projectInfo includesKey: 'history')
+		ifTrue: [ 
+			s
+				nextPutAll: 'History:';
+				crlf.
+			(projectInfo at: 'history') lines
+				do: [ :l | 
+					s
+						nextPutAll: '    ';
+						nextPutAll: l;
+						crlf ].
+			s crlf ].
 	self writeSummaryTotalsOn: s.
-	s nextPutAll: '--------'; crlf.
+	s
+		nextPutAll: '--------';
+		crlf.
 	workPane printSummaryOn: s.
-	sprites := workPane submorphs select: [:m | m isKindOf: PhratchSpriteMorph].
-	sprites do: [:m |
-		s skip: -2.  "remove last crlf"
-		s nextPutAll: '--------'; crlf.
-		m printSummaryOn: s].
-	s nextPutAll: '--------'; crlf.
-
+	sprites := workPane submorphs select: [ :m | m isKindOf: PhratchSpriteMorph ].
+	sprites
+		do: [ :m | 
+			s skip: -2.	"remove last crlf"
+			s
+				nextPutAll: '--------';
+				crlf.
+			m printSummaryOn: s ].
+	s
+		nextPutAll: '--------';
+		crlf.
 	TextEditor new clipboardTextPut: s contents asText.
-
 	fName := fullFileName.
 	fullFileName size = 0
-		ifTrue: [
+		ifTrue: [ 
 			fName := PhratchFileChooserDialog
 				chooseNewFileDefault: self uniqueSummaryFileName
 				title: 'File Name?'
 				type: #projectSummary.
-			fName = #cancelled ifTrue: [^ self]]
-		ifFalse: [
-			fName := self uniqueSummaryFileName].
-
-	f := StandardFileStream newPhratchFileNamed: (fullFile parent) / fName.
-	f ifNil: [^ self].
+			fName = #cancelled
+				ifTrue: [ ^ self ] ]
+		ifFalse: [ fName := self uniqueSummaryFileName ].
+	f := StandardFileStream newPhratchFileNamed: fullFile parent / fName.
+	f ifNil: [ ^ self ].
 	f nextPutAll: s contents.
-	f close.
-
+	f close
 ]
 
 { #category : #'menu/button actions' }
@@ -4886,23 +4153,39 @@ PhratchFrameMorph >> writeSummaryTotalsOn: aStream [
 	"Write the totals for this project on the given stream."
 
 	| sprites uniqueCostumes uniqueSounds stackCount |
-	sprites := workPane submorphs select: [:m | m isKindOf: ScriptablePhratchMorph].
+	sprites := workPane submorphs select: [ :m | m isKindOf: ScriptablePhratchMorph ].
 	sprites := sprites asArray copyWith: workPane.
 	uniqueCostumes := IdentitySet new: 100.
 	uniqueSounds := IdentitySet new: 100.
 	stackCount := 0.
-	sprites do: [:m |
-		m media do: [:item |
-			item isImage ifTrue: [uniqueCostumes add: item form].
-			item isSound ifTrue: [uniqueSounds add: item sound]].
-		stackCount := stackCount + m blocksBin submorphCount].
-
-	aStream nextPutAll: 'Totals: '; crlf.
-	aStream nextPutAll: '    Sprites: ', (sprites size - 1) printString; crlf.
-	aStream nextPutAll: '    Stacks: ', stackCount printString; crlf.
-	aStream nextPutAll: '    Unique costumes: ', uniqueCostumes size printString; crlf.
-	aStream nextPutAll: '    Unique sounds: ', uniqueSounds size printString; crlf.
-
+	sprites
+		do: [ :m | 
+			m media
+				do: [ :item | 
+					item isImage
+						ifTrue: [ uniqueCostumes add: item form ].
+					item isSound
+						ifTrue: [ uniqueSounds add: item sound ] ].
+			stackCount := stackCount + m blocksBin submorphCount ].
+	aStream
+		nextPutAll: 'Totals: ';
+		crlf.
+	aStream
+		nextPutAll: '    Sprites: ';
+		nextPutAll: (sprites size - 1) printString;
+		crlf.
+	aStream
+		nextPutAll: '    Stacks: ';
+		nextPutAll: stackCount printString;
+		crlf.
+	aStream
+		nextPutAll: '    Unique costumes: ';
+		nextPutAll: uniqueCostumes size printString;
+		crlf.
+	aStream
+		nextPutAll: '    Unique sounds: ';
+		nextPutAll: uniqueSounds size printString;
+		crlf
 ]
 
 { #category : #'tools (no longer used)' }

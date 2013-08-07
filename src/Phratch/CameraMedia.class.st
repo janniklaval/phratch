@@ -59,12 +59,6 @@ CameraMedia >> form [
 ]
 
 { #category : #accessing }
-CameraMedia >> frameExtent [
-	^ frameExtent
-
-]
-
-{ #category : #accessing }
 CameraMedia >> frameExtent: aPoint [
 
 	frameExtent := aPoint.
@@ -166,13 +160,11 @@ CameraMedia >> rotationCenter [
 
 { #category : #playing }
 CameraMedia >> suspendPlaying [
-
-	cameraNum > 0 ifTrue: [
-		CameraPlugin closeCamera: cameraNum.
-		frameForm := prevFrameForm := historyForm :=  nil.
-		cameraNum := -1].
-
-
+	cameraNum > 0
+		ifFalse: [ ^ self ].
+	CameraPlugin closeCamera: cameraNum.
+	frameForm := prevFrameForm := historyForm := nil.
+	cameraNum := -1
 ]
 
 { #category : #accessing }

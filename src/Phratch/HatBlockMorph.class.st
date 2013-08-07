@@ -14,6 +14,12 @@ Class {
 	#category : #'Phratch-Blocks'
 }
 
+{ #category : #'as yet unclassified' }
+HatBlockMorph >> asBlockTuple [
+
+	self subclassResponsibility 
+]
+
 { #category : #private }
 HatBlockMorph >> blockAttachPoints: aSet [
 	"Answer a collection of possible attachment points for me. Each entry is an Association mapping a point to the morph to which a dropping block could be attached."
@@ -109,41 +115,46 @@ HatBlockMorph >> fixBlockLayout [
 	"Update the positions of my submorphs."
 
 	| x centerY nextB nonBlockSubmorphs oldExtent oldPos |
-	blockLayoutNeeded ifFalse: [^ self].
+	blockLayoutNeeded
+		ifFalse: [ ^ self ].
 	super fixBlockLayout.
 	oldExtent := self extent.
 	oldPos := self position.
-
-	PhratchTranslator isRTL
-		ifTrue: [x := self right - 8]
-		ifFalse: [x := self left + 8].
+	x := PhratchTranslator isRTL
+		ifTrue: [ self right - 8 ]
+		ifFalse: [ self left + 8 ].
 	centerY := self top + 25.
-	self nonControlFlowSubmorphs do: [:m |
-		(m isKindOf: ArgMorph) ifTrue: [m fixArgLayout].
-		PhratchTranslator isRTL
-			ifTrue: [m position: (x - m width)@(centerY - (m height // 2)). 
-				x := x - m width - 5]
-			ifFalse: [m position: x@(centerY - (m height // 2)). 
-				x := x + m width + 5]].
+	self nonControlFlowSubmorphs
+		do: [ :m | 
+			(m isKindOf: ArgMorph)
+				ifTrue: [ m fixArgLayout ].
+			PhratchTranslator isRTL
+				ifTrue: [ 
+					m position: (x - m width) @ (centerY - (m height // 2)).
+					x := x - m width - 5 ]
+				ifFalse: [ 
+					m position: x @ (centerY - (m height // 2)).
+					x := x + m width + 5 ] ].
 	PhratchTranslator isRTL
-		ifTrue: [x := x - 4.
-			self width: ((self right - x) max: self hatTopForm width)]
-		ifFalse: [x + x + 4.
-			self width: ((x - self left) max: self hatTopForm width)].
-	PhratchTranslator isRTL ifTrue: [
-		self left: oldPos x + (oldExtent x - self width)].
-
-	nonBlockSubmorphs := self submorphs select: [:m |
-		(m isKindOf: BlockMorph) not or: [m isKindOf: ArgMorph]].
-	self height: self hatTopForm height + (nonBlockSubmorphs inject: CBlockBracketThickness into: [:h :m | h max: (m height + 8)]).
-
-	(nextB := self nextBlock) ifNotNil: [
-		PhratchTranslator isRTL
-			ifTrue: [nextB right: self right]
-			ifFalse: [nextB left: self left].
-		nextB top: self bottom - 4.
-		nextB fixBlockLayout].
-
+		ifTrue: [ 
+			x := x - 4.
+			self width: (self right - x max: self hatTopForm width) ]
+		ifFalse: [ 
+			x + x + 4.
+			self width: (x - self left max: self hatTopForm width) ].
+	PhratchTranslator isRTL
+		ifTrue: [ self left: oldPos x + (oldExtent x - self width) ].
+	nonBlockSubmorphs := self submorphs select: [ :m | (m isKindOf: BlockMorph) not or: [ m isKindOf: ArgMorph ] ].
+	self
+		height:
+			self hatTopForm height + (nonBlockSubmorphs inject: CBlockBracketThickness into: [ :h :m | h max: m height + 8 ]).
+	(nextB := self nextBlock)
+		ifNotNil: [ 
+			PhratchTranslator isRTL
+				ifTrue: [ nextB right: self right ]
+				ifFalse: [ nextB left: self left ].
+			nextB top: self bottom - 4.
+			nextB fixBlockLayout ]
 ]
 
 { #category : #private }
@@ -220,9 +231,10 @@ HatBlockMorph >> printCodeOn: aStream indent: indent [
 HatBlockMorph >> printHatNameOn: aStream [
 	"Append a human-readable string for this hat block's name to the given stream."
 
-	aStream nextPutAll: 'to ', scriptNameMorph contents; cr.
-
-
+	aStream
+		nextPutAll: 'to ';
+		nextPutAll: scriptNameMorph contents;
+		cr
 ]
 
 { #category : #accessing }
@@ -281,7 +293,7 @@ HatBlockMorph >> storeFieldsOn: anObjStream [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #copying }
 HatBlockMorph >> veryDeepFixupWith: deepCopier [
 	"If fields were weakly copied, fix them here.  If they were in the tree being copied, fix them up, otherwise point to the originals."
 
@@ -289,7 +301,7 @@ HatBlockMorph >> veryDeepFixupWith: deepCopier [
 	scriptOwner := deepCopier references at: scriptOwner ifAbsent: [scriptOwner].
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #copying }
 HatBlockMorph >> veryDeepInner: deepCopier [
 	"Copy all of my instance variables.  Some need to be not copied at all, but shared.  	Warning!!  Every instance variable defined in this class must be handled.  We must also implement veryDeepFixupWith:.  See DeepCopier class comment."
 

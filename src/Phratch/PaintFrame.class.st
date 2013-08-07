@@ -55,21 +55,17 @@ Class {
 }
 
 { #category : #'instance creation' }
-PaintFrame class >> clearColorPickers [
-	"self clearColorPickers"
-
-	ColorPicker := SquareColorPicker := nil.
-
-]
-
-{ #category : #'instance creation' }
 PaintFrame class >> new [
 
 	^ super new
-		withButtonsForYes: false no: false okay: true cancel: true;
-		title: 'Paint Editor';
-		extent: 800@490;
-		fixLayout
+		withButtonsForYes: false
+			no: false
+			okay: true
+			cancel: true;
+		title: 'Paint Editor' translated;
+		extent: 800 @ 490;
+		fixLayout;
+		yourself
 
 ]
 
@@ -81,7 +77,8 @@ PaintFrame >> addButtons [
 		color: Color transparent;
 		vResizing: #rigid;
 		width: 233;
-		inset: 0.
+		inset: 0; 
+		yourself.
 
 	b := self makeButtonLabel: 'Import' selector:  #import.
 	b setProperty: #balloonText toValue: 'Import an image on top of your current canvas' localized.
@@ -93,14 +90,16 @@ PaintFrame >> addButtons [
 		label: 'Clear' localized font: (PhratchFrameMorph getFont: #PaintUtilityButton);
 		target: canvasMorph;
 		actionSelector: #eraseAll;
-		setProperty: #balloonText toValue: 'Clear canvas' localized.
+		setProperty: #balloonText toValue: 'Clear canvas' localized; 
+		yourself.
 	fileButtons addMorphBack: (AlignmentMorph newSpacer: Color transparent).
 	fileButtons addMorphBack: b.
 
 	canvasButtons := AlignmentMorph newRow
 		color: Color transparent;
 		vResizing: #shrinkWrap;
-		inset: 0.
+		inset: 0; 
+		yourself.
 
 	b := self makeButtonLabel: 'Undo' selector:  #undo.
 	b setProperty: #balloonText toValue: 'Undo' localized.
@@ -126,14 +125,16 @@ PaintFrame >> addColorChoosers [
 		ColorPicker := PaintColorPicker new initFromForm: (PhratchFrameMorph skinAt: #paintCanvasFrame);
 			selector: #color1:;
 			selector2: #color2:;
-			extent: 120@108].
+			extent: 120@108; 
+		yourself].
 	colorPicker := ColorPicker fullCopy target: canvasMorph palette.
 
 	SquareColorPicker ifNil: [
 		SquareColorPicker := PaintColorSquarePicker new initFromForm: (PhratchFrameMorph skinAt: #paintCanvasFrame);
 			selector: #color1:;
 			selector2: #color2:;
-			extent: 120@108].
+			extent: 120@108; 
+		yourself].
 	colorSquarePicker := SquareColorPicker fullCopy target: canvasMorph palette.
 
 	colorPickerButton := ToggleButton
@@ -157,15 +158,18 @@ PaintFrame >> addScrollbarsAndBevel [
 	self addMorph: (
 		hScrollbar := PhratchScrollBar newHorizontal
 			target: canvasMorph;
-			selector: #scrollFractionX:).
+			selector: #scrollFractionX:; 
+		yourself).
 	self addMorph: (
 		vScrollbar := PhratchScrollBar newVertical
 			target: canvasMorph;
-			selector: #scrollFractionY:).
+			selector: #scrollFractionY:; 
+		yourself).
 	self addMorphBack: (
 		canvasFrame := ImageFrameMorph new
 			initFromForm: (PhratchFrameMorph skinAt: #paintCanvasFrame);
-			extent: canvasMorph extent + (8@8)).
+			extent: canvasMorph extent + (8@8); 
+		yourself).
 
 ]
 
@@ -178,7 +182,8 @@ PaintFrame >> addSetRotationCenterButton [
 		cellPositioning: #leftCenter;
 		color: Color transparent;
 		hResizing: #shrinkWrap;
-		centering: #center.
+		centering: #center; 
+		yourself.
 
 	"make components"
 	setRotationCenterButton := ToggleButton
@@ -188,7 +193,8 @@ PaintFrame >> addSetRotationCenterButton [
 		target: paletteMorph;
 		actionSelector: #toggleRotationPoint;
 		setProperty: #balloonText toValue: 'Position the cross-hair to set the rotation center' localized.
-	spacer := Morph new extent: 6@3; color: Color transparent.
+	spacer := Morph new extent: 6@3; color: Color transparent; 
+		yourself.
 	setRotationLabel := StringMorph contents: 'Set costume center' localized.
 	font := (PhratchFrameMorph getFont: #PaintSetRotationCenter).
 	setRotationLabel font: font; color: Color gray darker.
@@ -231,7 +237,8 @@ PaintFrame >> addTransformButtons [
 	specs do: [:n |
 		n = #-
 			ifTrue: [
-				transformButtons addMorphBack: (Morph new extent: 3@10; color: Color transparent)]
+				transformButtons addMorphBack: (Morph new extent: 3@10; color: Color transparent; 
+		yourself)]
 			ifFalse: [
 				b := ToggleButton new
 					onForm: (PhratchFrameMorph skinAt: ((n at: 1), 'ButtonPressed'))
@@ -241,7 +248,8 @@ PaintFrame >> addTransformButtons [
 					isMomentary: true;
 					toggleMode: false;
 					actionSelector: (n at: 2);
-					setProperty: #balloonText toValue: (n at: 3) localized.
+					setProperty: #balloonText toValue: (n at: 3) localized; 
+		yourself.
 				transformButtons addMorphBack: b]].
 
 	self addMorph: transformButtons.
@@ -308,42 +316,36 @@ PaintFrame >> exitPaintEditor [
 
 { #category : #other }
 PaintFrame >> export [
-
 	| triple form textBox fName f |
 	triple := self newFormTextBoxAndRegPoint.
-	triple ifNil: [^ Beeper beep].  "empty drawing"
+	triple ifNil: [ ^ Beeper beep ].	"empty drawing"
 	form := triple first.
 	textBox := triple second.
-	(textBox isNil or: [textBox contents isEmpty]) ifFalse: [
-		form := form deepCopy.
-		textBox drawTextOn: (FormCanvas on: form)].
-
+	(textBox isNil or: [ textBox contents isEmpty ])
+		ifFalse: [ 
+			form := form deepCopy.
+			textBox drawTextOn: (FormCanvas on: form) ].
 	fName := ''.
-	fName := PhratchFileChooserDialog
-		chooseNewFileDefault: fName
-		title: 'File Name?'
-		type: #costume.
-	fName = #cancelled ifTrue: [^ self].
-	fName size = 0 ifTrue: [^ self].
-
-	"make sure that file can be created"
+	fName := PhratchFileChooserDialog chooseNewFileDefault: fName title: 'File Name?' type: #costume.
+	fName = #cancelled
+		ifTrue: [ ^ self ].
+	fName size = 0
+		ifTrue: [ ^ self ].	"make sure that file can be created"
 	f := StandardFileStream newPhratchFileNamed: fName.
-	f ifNil: [^ self].
+	f ifNil: [ ^ self ].
 	f close.
-	
 	f delete.
-
-	form colorsUsed size < 255 ifTrue: [
-		(fName asLowercase endsWith: '.gif')
-			ifTrue: [fName := fName]
-			ifFalse: [fName := fName, '.gif'].
-		GIFReadWriter putForm: form colorReduced8Bit onFileNamed: fName.
-		^ self].
-	(fName asLowercase endsWith: '.bmp')
-		ifTrue: [fName := fName]
-		ifFalse: [fName := fName, '.bmp'].
-	(form asFormOfDepth: 32) writeBMPFileNamed: fName.
-
+	form colorsUsed size < 255
+		ifTrue: [ 
+			fName := (fName asLowercase endsWith: '.gif')
+				ifTrue: [ fName ]
+				ifFalse: [ fName , '.gif' ].
+			GIFReadWriter putForm: form colorReduced8Bit onFileNamed: fName.
+			^ self ].
+	fName := (fName asLowercase endsWith: '.bmp')
+		ifTrue: [ fName ]
+		ifFalse: [ fName , '.bmp' ].
+	(form asFormOfDepth: 32) writeBMPFileNamed: fName
 ]
 
 { #category : #geometry }
@@ -400,7 +402,8 @@ PaintFrame >> initialize [
 	self addMorph: (
 		canvasMorph := PaintCanvas new
 			extent: PhratchFrameMorph workpaneExtent;
-			editForm: ((Form extent: PaintCanvas canvasExtent depth: 32) fillColor: Color transparent)).
+			editForm: ((Form extent: PaintCanvas canvasExtent depth: 32) fillColor: Color transparent); 
+		yourself).
 	buttonRow ifNotNil: [
 		buttonRow delete.
 		self addMorph: buttonRow].
@@ -415,16 +418,18 @@ PaintFrame >> initialize [
 
 { #category : #other }
 PaintFrame >> justDroppedInto: aMorph event: evt [
+	"almost off the screen; re-center"
 
 	| r |
 	super justDroppedInto: aMorph event: evt.
-	owner = World ifFalse: [^ self].
-
+	owner = World
+		ifFalse: [ ^ self ].
 	r := self bounds intersect: World bounds.
-	(r width > 50) & (r height > 50) ifFalse: [  "almost off the screen; re-center"
-		self position: World bounds center - (self extent // 2).
-		self bottom > World bottom ifTrue: [self top: World bottom - (self height - 20)]].
-
+	r width > 50 & (r height > 50)
+		ifTrue: [ ^ self ].
+	self position: World bounds center - (self extent // 2).
+	self bottom > World bottom
+		ifTrue: [ self top: World bottom - (self height - 20) ]
 ]
 
 { #category : #initialization }
@@ -437,7 +442,8 @@ PaintFrame >> makeButtonLabel: aString selector: sel [
 			onForm: (PhratchFrameMorph skinAt: #paintUtilityButtonPressed);
 		label: aString localized font: font;
 		target: canvasMorph;
-		actionSelector: sel
+		actionSelector: sel; 
+		yourself
 
 ]
 
@@ -449,7 +455,8 @@ PaintFrame >> makeZoomBar [
 		color: Color transparent;
 		centering: #bottomRight;
 		hResizing: #shrinkWrap;
-		vResizing: #shrinkWrap.
+		vResizing: #shrinkWrap; 
+		yourself.
 
 	#(out in) do: [:n |
 		b := ToggleButton
@@ -474,7 +481,8 @@ PaintFrame >> makeZoomBar [
 					arguments: (Array with: scale);
 					setProperty: #balloonText toValue: scale asString, 'x'.
 				zoomBar addMorphBack: t.
-				zoomBar addMorphBack: (Morph new extent: 2@2; color: Color transparent)]]].
+				zoomBar addMorphBack: (Morph new extent: 2@2; color: Color transparent; 
+		yourself)]]].
 
 	zoomBar privateFullBounds: nil; fullBounds.
 

@@ -14,8 +14,7 @@ Class {
 		'readoutMorphs',
 		'penReadout',
 		'currentCategory',
-		'tabPaneMorph',
-		'deleteButton'
+		'tabPaneMorph'
 	],
 	#category : #'Phratch-UI-Panes'
 }
@@ -34,29 +33,6 @@ PhratchScriptEditorMorph >> addComment: anEvent [
 PhratchScriptEditorMorph >> addCustomBlock [
 
 	self target addCustomBlock
-]
-
-{ #category : #private }
-PhratchScriptEditorMorph >> addDeleteButton [
-	"Add button to delete sprite."
-
-	self deleteDeleteButton.
-
-	deleteButton := ToggleButton
-		onForm: (PhratchFrameMorph skinAt: #deleteSprite)
-		offForm: (PhratchFrameMorph skinAt: #deleteSprite)
-		overForm: (PhratchFrameMorph skinAt: #deleteSprite).
-
-	deleteButton
-		target: self;
-		actionSelector: #deleteSprite;
-		setBalloonText: 'Delete this sprite' localized;
-		actWhen: #buttonUp;
-		isMomentary: true;
-		position: (lockButton right + 27)@(nameMorph top + ((nameMorph height - deleteButton height) / 2)).
-
-	self addMorph: deleteButton.
-
 ]
 
 { #category : #private }
@@ -102,53 +78,49 @@ PhratchScriptEditorMorph >> addReadouts [
 	| x y label readout s |
 	self deleteReadouts.
 	readoutMorphs := OrderedCollection new.
-
 	x := nameMorph left.
 	y := nameMorph bottom + 5.
-
-	#(('x' xpos) ('y' ypos)('direction' heading)) do: [:spec |
-
-		(PhratchTranslator isRTL and: [(spec at: 1) = 'x' or: [(spec at: 1) = 'y']])
-			ifTrue: [s := (':', spec first)]
-			ifFalse: [s := (spec first localized, PhratchTranslator colonSuffix)].
-
-		label := StringMorph new
-			contents: s;
-			font: (PhratchFrameMorph getFont: #XYReadout);
-			position: x@y.
-
-		readout := (UpdatingStringMorph on: self target selector: spec second)
-			font: (PhratchFrameMorph getFont: #XYReadoutBold);
-			forceUnicodeRendering: true;
-			color: (Color gray: 0.2);
-			contents: '-000';  "this sets the readout size"
-			growable: false;
-			stepTime: 100;
-			position: (label right + 4)@y.
-
-		PhratchTranslator isRTL ifTrue:[
-			readout rightJustify: true].
-
-		self addMorph: label; addMorph: readout.
-		readoutMorphs add: label; add: readout.
-
-		readout startStepping.
-		x := readout right + 2].
-
-	PhratchTranslator isRTL ifTrue: [
-		readoutMorphs reversed do: [: m |
-			readoutMorphs remove: m.
-			readoutMorphs add: m]].
-
-	penReadout := Morph new extent: 15@5.
-	penReadout position: (lockButton right + 4)@(nameMorph top + ((nameMorph height - penReadout height) / 2));
+	#(#('x' #xpos) #('y' #ypos) #('direction' #heading))
+		do: [ :spec | 
+			s := (PhratchTranslator isRTL and: [ (spec at: 1) = 'x' or: [ (spec at: 1) = 'y' ] ])
+				ifTrue: [ ':' , spec first ]
+				ifFalse: [ spec first localized , PhratchTranslator colonSuffix ].
+			label := StringMorph new
+				contents: s;
+				font: (PhratchFrameMorph getFont: #XYReadout);
+				position: x @ y.
+			readout := (UpdatingStringMorph on: self target selector: spec second)
+				font: (PhratchFrameMorph getFont: #XYReadoutBold);
+				forceUnicodeRendering: true;
+				color: (Color gray: 0.2);
+				contents: '-000';
+				growable: false;
+				stepTime: 100;
+				position: (label right + 4) @ y.	"this sets the readout size"
+			PhratchTranslator isRTL
+				ifTrue: [ readout rightJustify: true ].
+			self
+				addMorph: label;
+				addMorph: readout.
+			readoutMorphs
+				add: label;
+				add: readout.
+			readout startStepping.
+			x := readout right + 2 ].
+	PhratchTranslator isRTL
+		ifTrue: [ 
+			readoutMorphs reversed
+				do: [ :m | 
+					readoutMorphs remove: m.
+					readoutMorphs add: m ] ].
+	penReadout := Morph new extent: 15 @ 5.
+	penReadout
+		position: (lockButton right + 4) @ (nameMorph top + ((nameMorph height - penReadout height) / 2));
 		color: Color transparent.
 	self addMorph: penReadout.
 	readoutMorphs add: penReadout.
 	penReadout startStepping.
-
-	readoutMorphs := readoutMorphs asArray.
-
+	readoutMorphs := readoutMorphs asArray
 ]
 
 { #category : #private }
@@ -189,42 +161,35 @@ PhratchScriptEditorMorph >> addRotationButtons [
 
 { #category : #'menu/button ops' }
 PhratchScriptEditorMorph >> animateRotationStyle [
-
 	| style thumbForm wasFlipped currentRotation pen center rotatedForm doFlip |
 	style := self target rotationStyle.
-
 	thumbnailMorph updateThumbnail.
 	thumbForm := thumbnailMorph form deepCopy.
 	currentRotation := self target rotationDegrees rounded.
-	wasFlipped := ((currentRotation \\ 360) >= 90) & ((currentRotation \\ 360) <= 270).
-
+	wasFlipped := currentRotation \\ 360 between: 90 and: 270.
 	thumbnailMorph showDirection: false.
-
 	pen := (PhratchPen newOnForm: thumbnailMorph form) color: Color white.
 	center := thumbnailMorph form center.
-	currentRotation to: currentRotation + 360 by: 12 do: [:i |
-		rotatedForm := thumbForm.  "no rotation by default"
-		style = #normal ifTrue: [rotatedForm := thumbForm rotateBy: i].
-		style = #leftRight ifTrue: [
-			doFlip := ((i \\ 360) >= 90) & ((i \\ 360) <= 270).
-			wasFlipped ifTrue: [doFlip := doFlip not].
-			doFlip ifTrue: [rotatedForm := thumbForm flipBy: #horizontal centerAt: 0@0]].
-
+	currentRotation to: currentRotation + 360 by: 12 do: [ :i | 
+		rotatedForm := thumbForm.	"no rotation by default"
+		style = #normal
+			ifTrue: [ rotatedForm := thumbForm rotateBy: i ].
+		style = #leftRight
+			ifTrue: [ 
+				doFlip := i \\ 360 between: 90 and: 270.
+				wasFlipped
+					ifTrue: [ doFlip := doFlip not ].
+				doFlip
+					ifTrue: [ rotatedForm := thumbForm flipBy: #horizontal centerAt: 0 @ 0 ] ].
 		thumbnailMorph form fill: thumbnailMorph form boundingBox fillColor: Color transparent.
-		rotatedForm
-			displayOn: thumbnailMorph form
-			at: (thumbnailMorph extent - rotatedForm extent) // 2
-			rule: Form paint.
+		rotatedForm displayOn: thumbnailMorph form at: (thumbnailMorph extent - rotatedForm extent) // 2 rule: Form paint.
 		pen place: center.
 		pen goto: center + (Point r: 22 degrees: i).
 		thumbnailMorph changed.
-
 		World displayWorldSafely.
-		(Delay forMilliseconds: 20) wait].
-
+		(Delay forMilliseconds: 20) wait ].
 	thumbnailMorph showDirection: true.
-	thumbnailMorph updateThumbnail.
-
+	thumbnailMorph updateThumbnail
 ]
 
 { #category : #accessing }
@@ -318,16 +283,6 @@ PhratchScriptEditorMorph >> currentCategory: aString [
 
 	self world ifNotNil: [self world startSteppingSubmorphsOf: pageViewerMorph contents].
 
-
-]
-
-{ #category : #private }
-PhratchScriptEditorMorph >> deleteDeleteButton [
-	"Delete my delete button."
-
-	deleteButton ifNotNil: [
-		deleteButton delete.
-		deleteButton := nil].
 
 ]
 
@@ -439,32 +394,20 @@ PhratchScriptEditorMorph >> fullDrawOn: aCanvas [
 	"Draw my frame in front of my submorphs."
 
 	| clipC |
-	self visible ifFalse: [^ self].
-	(self hasProperty: #errorOnDraw) ifTrue:[^ self drawErrorOn: aCanvas].
-	(aCanvas isVisible: self fullBounds) ifFalse: [^ self].
-
-	"myBox has integer position and extent and has a potentially inset bottom"
+	self visible
+		ifFalse: [ ^ self ].
+	(self hasProperty: #errorOnDraw)
+		ifTrue: [ ^ self drawErrorOn: aCanvas ].
+	(aCanvas isVisible: self fullBounds)
+		ifFalse: [ ^ self ].	"myBox has integer position and extent and has a potentially inset bottom"
 	myBox := bounds truncated.
 	clipC := aCanvas copyClipRect: myBox.
-
 	self drawOn: clipC.
 	self drawSubmorphsOn: clipC.
 	frameInFront
-		ifTrue: [		
-			self drawFrameOn: clipC.
-			aCanvas fullDrawMorph: tabPaneMorph].
-
-]
-
-{ #category : #accessing }
-PhratchScriptEditorMorph >> getTabTop [
-	"Used by PhratchFrameMorph when creating the tab pane. This returns the y position of where the top of the tabs should align. This situation is unfortunate (tabs should probaby be part of PhratchScriptEditorMorph), but we'll fix it later."
-
-	PhratchFrameMorph isXO ifTrue: [^ thumbnailMorph bottom + 20].
-	(readoutMorphs size > 0)
-		ifTrue: [^ (readoutMorphs at: 1) bottom + 6]
-		ifFalse: [^ nameMorph bottom + 5 + (PhratchTranslator stringExtent: '0' font: (PhratchFrameMorph getFont: #XYReadoutBold)) y + 6].
-
+		ifFalse: [ ^ self ].
+	self drawFrameOn: clipC.
+	aCanvas fullDrawMorph: tabPaneMorph
 ]
 
 { #category : #'event handling' }
@@ -510,10 +453,10 @@ PhratchScriptEditorMorph >> initialize [
 PhratchScriptEditorMorph >> mouseEnterDragging: evt [
 	"Switch the tabs to script if a block is current being dragged"
 
-	(currentCategory = 'Scripts') ifFalse:[
-		self currentCategory: 'Scripts'.
-		tabPaneMorph currentTab: 'Scripts'].
-
+	currentCategory = 'Scripts'
+		ifTrue: [ ^ self ].
+	self currentCategory: 'Scripts'.
+	tabPaneMorph currentTab: 'Scripts'
 ]
 
 { #category : #stepping }
@@ -541,21 +484,19 @@ PhratchScriptEditorMorph >> scriptsMenu: aPosition [
 	"Present a menu of Phratch script operations."
 
 	| menu choice |
-	self target ifNil: [^ self].
+	self target ifNil: [ ^ self ].
 	menu := MenuMorph new defaultTarget: self.
-	menu add: 'clean up' action: #cleanUp.
-	menu add: 'save picture of scripts' action: #saveScriptsToImage.
-	menu add: 'add comment' action: #addComment:.
-	menu add: 'undo last drop' action: #undoDrop.
+	menu add: 'clean up' translated action: #cleanUp.
+	menu add: 'save picture of scripts' translated action: #saveScriptsToImage.
+	menu add: 'add comment' translated action: #addComment:.
+	menu add: 'undo last drop' translated action: #undoDrop.
 	menu addLine.
-	menu add: 'make a block' action: #addCustomBlock.
-
+	menu add: 'make a block' translated action: #addCustomBlock.
 	choice := menu localize invokeModal: true.
-	choice ifNil: [^ self].
+	choice ifNil: [ ^ self ].
 	choice = #addComment:
-		ifTrue: [self perform: choice with: aPosition]
-		ifFalse: [self perform: choice].
-
+		ifTrue: [ self perform: choice with: aPosition ]
+		ifFalse: [ self perform: choice ]
 ]
 
 { #category : #'menu/button ops' }
@@ -578,17 +519,21 @@ PhratchScriptEditorMorph >> setRotationStyle: aSymbol [
 PhratchScriptEditorMorph >> showOrHideReadouts [
 	"If this is a sprite, show the position and direction readouts and the rotation style buttons. Otherwise, hide them."
 
-	self deleteRotationButtons; deleteLockButton; deleteReadouts.
-
+	self
+		deleteRotationButtons;
+		deleteLockButton;
+		deleteReadouts.
 	nameMorph
 		font: nameMorph font;
 		width: nameMorph height * 4;
 		rightJustify: PhratchTranslator isRTL.
-
-	(self target isKindOf: PhratchSpriteMorph) ifTrue: [
-		self addRotationButtons; addLockButton; addReadouts.
-		World ifNotNil: [World startSteppingSubmorphsOf: self]].
-
+	(self target isKindOf: PhratchSpriteMorph)
+		ifFalse: [ ^ self ].
+	self
+		addRotationButtons;
+		addLockButton;
+		addReadouts.
+	World ifNotNil: [ World startSteppingSubmorphsOf: self ]
 ]
 
 { #category : #stepping }

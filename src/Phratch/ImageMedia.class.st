@@ -60,32 +60,25 @@ ImageMedia >> exportFilename: fileName for: stageOrSprite [
 	"Export my image to a file with the given name. Save sprite costumes as GIF's, dropping color resolution if necessary."
 
 	| myForm f fName |
-	myForm := self compositeForm.
-
-	"save as GIF if image has under 256 colors"
-	((myForm depth <= 8) or: [myForm couldBeColorReduced]) ifTrue: [
-		f := myForm colorReduced8Bit.
-		(fileName asLowercase endsWith: '.gif')
-			ifTrue: [fName := fileName]
-			ifFalse: [fName := fileName, '.gif'].
-		GIFReadWriter putForm: f onFileNamed: fName.
-		^ self].
-
-	"otherwise, save as BMP to retain color resolution"
-	(fileName asLowercase endsWith: '.bmp')
-		ifTrue: [fName := fileName]
-		ifFalse: [fName := fileName, '.bmp'].
-
+	myForm := self compositeForm.	"save as GIF if image has under 256 colors"
+	(myForm depth <= 8 or: [ myForm couldBeColorReduced ])
+		ifTrue: [ 
+			f := myForm colorReduced8Bit.
+			fName := (fileName asLowercase endsWith: '.gif')
+				ifTrue: [ fileName ]
+				ifFalse: [ fileName , '.gif' ].
+			GIFReadWriter putForm: f onFileNamed: fName.
+			^ self ].	"otherwise, save as BMP to retain color resolution"
+	fName := (fileName asLowercase endsWith: '.bmp')
+		ifTrue: [ fileName ]
+		ifFalse: [ fileName , '.bmp' ].
 	(stageOrSprite isKindOf: PhratchSpriteMorph)
-		ifTrue: [
+		ifTrue: [ 
 			f := Form extent: myForm extent depth: 32.
-			f fillColor: Color white.  "BMP cannot handle transparency; use white as BG color"
-			myForm displayOn: f at: form offset negated rule: Form paint]
-		ifFalse: [
-			f := myForm asFormOfDepth: 32].
-
-	f writeBMPFileNamed: fileName.
-
+			f fillColor: Color white.	"BMP cannot handle transparency; use white as BG color"
+			myForm displayOn: f at: form offset negated rule: Form paint ]
+		ifFalse: [ f := myForm asFormOfDepth: 32 ].
+	f writeBMPFileNamed: fileName
 ]
 
 { #category : #'object i/o' }
@@ -230,19 +223,16 @@ ImageMedia >> jpegCompressIfPossibleQuality: quality saveOriginal: saveFlag [
 	"Attempt to compress my form using JPEG at the given quality level. if saveFlag is true and I was not previously compressed, save my original (pre-compression) image so that compression can be undone later (e.g. after uploading the project)."
 
 	| wasCompressed |
-	saveFlag & quality notNil
-		ifTrue: [savedForm := form]
-		ifFalse: [savedForm := nil].
-
+	savedForm := saveFlag & quality notNil
+		ifTrue: [ form ]
+		ifFalse: [ nil ].
 	wasCompressed := self jpegCompressIfPossibleQuality: quality.
-
-	wasCompressed & saveFlag not ifTrue: [
-		"show the result of doing the compression"
-		form := FastJPEG uncompress: jpegBytes.
-		compositeForm := nil].
-
+	wasCompressed & saveFlag not
+		ifTrue: [ 
+			"show the result of doing the compression"
+			form := FastJPEG uncompress: jpegBytes.
+			compositeForm := nil ].
 	^ wasCompressed
-
 ]
 
 { #category : #accessing }
@@ -270,18 +260,6 @@ ImageMedia >> mediaType [
 	"Answer a string describing this type of media."
 
 	^ 'image'
-
-]
-
-{ #category : #other }
-ImageMedia >> revertToUncompressed [
-	"Revert to my original, uncompressed Form after compression with the 'saveOriginal' flag."
-
-	savedForm ifNotNil: [
-		form := savedForm.
-		compositeForm := nil.
-		jpegBytes := nil.
-		savedForm := nil].
 
 ]
 
@@ -368,19 +346,13 @@ ImageMedia >> thumbnailFormExtent: extent [
 
 	| f compositeF scale shrunk |
 	f := (ColorForm extent: extent depth: 16) fillColor: Color transparent.
-	form ifNotNil: [
-		compositeF := self compositeForm.
-		scale := (f width / compositeF width) min: (f height / compositeF height).
-		scale < 1
-			ifTrue: [
-				shrunk := (compositeF asFormOfDepth: 16)
-					magnify: compositeF boundingBox
-					by: scale
-					smoothing: 2]
-			ifFalse: [
-				shrunk := compositeF].
-
-		shrunk displayOn: f at: (f extent - shrunk extent) // 2 rule: Form paint].
+	form
+		ifNotNil: [ 
+			compositeF := self compositeForm.
+			scale := f width / compositeF width min: f height / compositeF height.
+			shrunk := scale < 1
+				ifTrue: [ (compositeF asFormOfDepth: 16) magnify: compositeF boundingBox by: scale smoothing: 2 ]
+				ifFalse: [ compositeF ].
+			shrunk displayOn: f at: (f extent - shrunk extent) // 2 rule: Form paint ].
 	^ f
-
 ]

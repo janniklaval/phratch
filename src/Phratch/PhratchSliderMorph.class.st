@@ -138,15 +138,6 @@ PhratchSliderMorph >> target: anObject [
 ]
 
 { #category : #private }
-PhratchSliderMorph >> updateActionSelector [
-
-	slider
-		actionSelector: #setVar:to:;
-		arguments: (Array with: variable).
-
-]
-
-{ #category : #private }
 PhratchSliderMorph >> updateSliderPosition [
 	"Set my slider position to the variable's current value"
 

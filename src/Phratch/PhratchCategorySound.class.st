@@ -4,17 +4,17 @@ Class {
 	#category : #'Phratch-Categories'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PhratchCategorySound class >> color [
 	^(Color h: 296 s: 0.66 v: 0.85)
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PhratchCategorySound class >> label [
 	^'sound'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PhratchCategorySound class >> order [
 	^5
 ]

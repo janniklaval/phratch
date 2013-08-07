@@ -20,7 +20,7 @@ Class {
 	#category : #'Phratch-Tests'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #adding }
 PhratchFileTests >> addBlock: blockSpec toSprite: aSprite [
 	"blockSpec is something like: #('move $Number$ steps' - forward:)"
 	| block |
@@ -29,35 +29,35 @@ PhratchFileTests >> addBlock: blockSpec toSprite: aSprite [
 	^ block
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #useful }
 PhratchFileTests >> firstSprite [
 	^ window workPane submorphs first.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #useful }
 PhratchFileTests >> openProject: fileName [
 	window openPhratchProjectNamed: window projectDirectory / fileName
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #useful }
 PhratchFileTests >> saveProject: fileName [
 	window projectName: fileName.
 	window writePhratchProject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #running }
 PhratchFileTests >> setUp [
 	window := PhratchFrameMorph open
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #running }
 PhratchFileTests >> tearDown [
 	"Close any open Phratch windows"
 	PhratchFrameMorph close.
 	window := nil
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 PhratchFileTests >> testNewProject [
 	"Test that newPhratchProject clears out changes"
 
@@ -77,7 +77,7 @@ PhratchFileTests >> testNewProject [
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 PhratchFileTests >> testSave [
 	"Test a simple save, with a sprite name change, and that reloading the saved file works."
 
@@ -98,7 +98,7 @@ PhratchFileTests >> testSave [
 	self assert: sprite objName = 'A sprite'.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 PhratchFileTests >> testSaveAgain [
 	"Test repeated saves, with a sprite name change, and that reloading the saved file works. 
 	
@@ -130,7 +130,7 @@ PhratchFileTests >> testSaveAgain [
 	self assert: sprite objName = 'TopCat'.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 PhratchFileTests >> testSaveBlocks [
 	"Create a few blocks and check they can be saved and loaded.
 	To create blocks we use sprite blockFromSpec: passing in a array of symbols from the blockSpec class method."
@@ -151,7 +151,7 @@ PhratchFileTests >> testSaveBlocks [
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 PhratchFileTests >> testSaveWithVariable [
 	"Test that saving scripts with variables works. 
 	Currently this fails as variables are loaded back with name replaced by int."

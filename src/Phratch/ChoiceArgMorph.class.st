@@ -299,8 +299,10 @@ ChoiceArgMorph >> presentMenu [
 ChoiceArgMorph >> printArgOn: aStream [
 	"Print this argument morph on the given stream."
 
-	aStream nextPutAll: '"', self labelMorph contents, '"'.
-
+	aStream
+		nextPutAll: '"';
+		nextPutAll: self labelMorph contents;
+		nextPutAll: '"'
 ]
 
 { #category : #accessing }

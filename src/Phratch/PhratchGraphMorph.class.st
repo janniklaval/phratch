@@ -116,52 +116,48 @@ PhratchGraphMorph >> customScale [
 
 { #category : #private }
 PhratchGraphMorph >> drawCursorOn: aCanvas [
-
 	| ptr x r c |
 	ptr := (editor cursor asInteger max: 1) min: data size.
-	c := cursorColor. 
-	((ptr > 1) and: [ptr < data size]) ifTrue: [
-		(data at: ptr) sign ~= (data at: ptr + 1) sign
-			ifTrue: [c := cursorColorAtZeroCrossings]].
+	c := cursorColor.
+	(ptr > 1 and: [ ptr < data size ])
+		ifTrue: [ 
+			(data at: ptr) sign ~= (data at: ptr + 1) sign
+				ifTrue: [ c := cursorColorAtZeroCrossings ] ].
 	r := self innerBounds.
-	x := r left + ((ptr - startIndex)*scale).
-	((x >= r left) and: [x <= r right]) ifTrue: [
-		aCanvas fillRectangle: (x@r top corner: x + 1@r bottom) color: c].
-
+	x := r left + ((ptr - startIndex) * scale).
+	(x between: r left and: r right)
+		ifTrue: [ aCanvas fillRectangle: (x @ r top corner: (x + 1) @ r bottom) color: c ]
 ]
 
 { #category : #private }
 PhratchGraphMorph >> drawDataOn: aCanvas [
-
 	| x start end left right yScale baseLine top bottom |
 	super drawOn: aCanvas.
-
-	viewer ifTrue: [self drawViewOn: aCanvas.].
+	viewer
+		ifTrue: [ self drawViewOn: aCanvas ].
 	self drawSelectionOn: aCanvas.
-
-	(posVals isNil) ifTrue: [^ self].
-
-	maxVal = minVal ifTrue: [yScale := 1.] 
-					ifFalse: [yScale := (bounds height - (2 * borderWidth)) asFloat / (maxVal - minVal)].
+	posVals isNil
+		ifTrue: [ ^ self ].
+	yScale := maxVal = minVal
+		ifTrue: [ 1 ]
+		ifFalse: [ (bounds height - (2 * borderWidth)) asFloat / (maxVal - minVal) ].
 	baseLine := bounds bottom - borderWidth + (minVal * yScale) truncated.
- 
-	left := 0. right := 10.
+	left := 0.
+	right := 10.
 	x := bounds left + borderWidth.
-
-	start := (startIndex*scale) truncated min: data size max: 1.
+	start := (startIndex * scale) truncated min: data size max: 1.
 	end := start + bounds width min: data size.
-
-	start to: end do: [:i |
-		i > posVals size ifTrue: [^self].
-					
-		left := x truncated. right := x + 1.
-		right > (bounds right - borderWidth) ifTrue: [^ self].
-
-		top := baseLine min: (baseLine - (yScale*(posVals at: i))) truncated.
-		bottom := (baseLine max: baseLine - (yScale*(negVals at: i))) truncated.
-											
-		aCanvas fillRectangle: (left@top corner: right@bottom) color: dataColor.
-		x := x + 1].
+	start to: end do: [ :i | 
+		i > posVals size
+			ifTrue: [ ^ self ].
+		left := x truncated.
+		right := x + 1.
+		right > (bounds right - borderWidth)
+			ifTrue: [ ^ self ].
+		top := baseLine min: (baseLine - (yScale * (posVals at: i))) truncated.
+		bottom := (baseLine max: baseLine - (yScale * (negVals at: i))) truncated.
+		aCanvas fillRectangle: (left @ top corner: right @ bottom) color: dataColor.
+		x := x + 1 ]
 ]
 
 { #category : #drawing }
@@ -176,19 +172,16 @@ PhratchGraphMorph >> drawOn: aCanvas [
 
 { #category : #private }
 PhratchGraphMorph >> drawPlayCursorOn: aCanvas [
-
-	| ptr x r c | 
-
-	editor playCursor ifNil: [^self].
-	(editor endPlaying ~= data size) & (editor playCursor >= (editor endPlaying)) ifTrue: [^self].
-
+	| ptr x r c |
+	editor playCursor ifNil: [ ^ self ].
+	editor endPlaying ~= data size & (editor playCursor >= editor endPlaying)
+		ifTrue: [ ^ self ].
 	ptr := (editor playCursor asInteger max: 1) min: data size.
 	c := cursorColor.
 	r := self innerBounds.
-	x := r left + ((ptr - startIndex)*scale).
-	((x >= r left) and: [x <= r right]) ifTrue: [
-		aCanvas fillRectangle: (x@r top corner: x + 1@r bottom) color: c].
-
+	x := r left + ((ptr - startIndex) * scale).
+	(x between: r left and: r right)
+		ifTrue: [ aCanvas fillRectangle: (x @ r top corner: (x + 1) @ r bottom) color: c ]
 ]
 
 { #category : #private }
@@ -353,41 +346,37 @@ PhratchGraphMorph >> mouseDown: evt [
 
 { #category : #events }
 PhratchGraphMorph >> mouseMove: evt [
-
 	"Updates the cursor position as the mouse moves.  Adjusts the selection only if the mouse is currently being pressed"
+
 	| x w |
-
-	x := evt cursorPoint x - (bounds left + borderWidth). 
+	x := evt cursorPoint x - (bounds left + borderWidth).
 	w := self width - (2 * borderWidth).
-
-	(viewer not and: [x < 0]) ifTrue: [
-		editor cursor: startIndex + (x /scale).
-		self adjustSelection.
-		editor slider setValue: (startIndex/data size).
-		^ self startIndex: self editor cursor].
-	(viewer not and: [x > w]) ifTrue: [
-		editor cursor: startIndex + (x /scale).
-		self adjustSelection.
-		editor slider setValue: (startIndex/data size).
-		^ self startIndex: editor cursor - (w/scale) truncated.
-		"^ editor cursor = data size
+	(viewer not and: [ x < 0 ])
+		ifTrue: [ 
+			editor cursor: startIndex + (x / scale).
+			self adjustSelection.
+			editor slider setValue: startIndex / data size.
+			^ self startIndex: self editor cursor ].
+	(viewer not and: [ x > w ])
+		ifTrue: [ 
+			editor cursor: startIndex + (x / scale).
+			self adjustSelection.
+			editor slider setValue: startIndex / data size.
+			^ self startIndex: editor cursor - (w / scale) truncated	"^ editor cursor = data size
 			ifTrue: [ self startIndex: editor cursor - (w/(scale*2)) truncated.]
-			ifFalse: [ self startIndex: editor cursor - (w/scale) truncated.]."].
-
-
-	evt anyButtonPressed 
-		ifTrue: [editor cursor: (startIndex + (x/scale) truncated).
-				self adjustSelection.]
-
+			ifFalse: [ self startIndex: editor cursor - (w/scale) truncated.]." ].
+	evt anyButtonPressed
+		ifFalse: [ ^ self ].
+	editor cursor: startIndex + (x / scale) truncated.
+	self adjustSelection
 ]
 
 { #category : #events }
 PhratchGraphMorph >> mouseUp: evt [
-
-	((editor selectionNil not) and: [(selection at: 2) - (selection at: 1) <=3])
-		ifTrue: [editor selection: nil.
-				editor startSelection: nil.]. 
-
+	(editor selectionNil not and: [ (selection at: 2) - (selection at: 1) <= 3 ])
+		ifFalse: [ ^ self ].
+	editor selection: nil.
+	editor startSelection: nil
 ]
 
 { #category : #menu }
@@ -472,7 +461,7 @@ PhratchGraphMorph >> setScale [
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #viewing }
 PhratchGraphMorph >> setScaleBy: choice [
 
 	choice = #customScale 

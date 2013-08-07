@@ -8,7 +8,7 @@ Class {
 	#category : #'Phratch-UI-Support'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #drawing }
 PhratchConnectorMorph >> drawOn: aCanvas [
 
 	(point1 isNil | point2 isNil) ifTrue: [^ self].
@@ -16,7 +16,7 @@ PhratchConnectorMorph >> drawOn: aCanvas [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'instance creation' }
 PhratchConnectorMorph >> from: p1 to: p2 [
 
 	| left right top bottom |
@@ -36,7 +36,7 @@ PhratchConnectorMorph >> from: p1 to: p2 [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'*Phratch-Extensions' }
 PhratchConnectorMorph >> rootForGrabOf: aMorph [
 	"prevent the receiver from being picked up"
 

@@ -10,13 +10,13 @@ Class {
 	#category : #'Phratch-Tests'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #running }
 PhratchFrameTest >> tearDown [
 	"Close any open Phratch windows"
 	PhratchFrameMorph close
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 PhratchFrameTest >> testOpen [
 	| window |
 	PhratchFrameMorph open.
@@ -25,7 +25,7 @@ PhratchFrameTest >> testOpen [
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 PhratchFrameTest >> testOpenAndClose [
 	PhratchFrameMorph open.
 	PhratchFrameMorph close.

@@ -4,22 +4,22 @@ Class {
 	#category : #'Phratch-Categories'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PhratchCategorySensing class >> color [
 	^(Color h: 200 s: 0.98 v: 0.86)
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PhratchCategorySensing class >> label [
 	^'sensing'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PhratchCategorySensing class >> order [
 	^4
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #drawing }
 PhratchCategorySensing class >> viewerPageFor: aScriptablePhratchMorph [ 
 
 	| bin x y |

@@ -140,65 +140,20 @@ FastJPEG class >> uncompress: aByteArray doDithering: ditherFlag [
 	| jpegDecompressStruct jpegErrorMgr2Struct w h result |
 	jpegDecompressStruct := ByteArray new: self primJPEGDecompressStructSize.
 	jpegErrorMgr2Struct := ByteArray new: self primJPEGErrorMgr2StructSize.
-	self 
-		primJPEGReadHeader: jpegDecompressStruct 
-		fromByteArray: aByteArray
-		errorMgr: jpegErrorMgr2Struct.
+	self primJPEGReadHeader: jpegDecompressStruct fromByteArray: aByteArray errorMgr: jpegErrorMgr2Struct.
 	w := self primImageWidth: jpegDecompressStruct.
 	h := self primImageHeight: jpegDecompressStruct.
 
-	(ditherFlag and: [w odd not])  "odd width images of depth 16 do not work"
-		ifTrue: [result := Form extent: w@h depth: 16]
-		ifFalse: [result := Form extent: w@h depth: 32].
-
-	self primJPEGReadImage: jpegDecompressStruct
+	result := (ditherFlag and: [ w odd not ])
+		ifTrue: [ Form extent: w @ h depth: 16 ]
+		ifFalse: [ Form extent: w @ h depth: 32 ].	"odd width images of depth 16 do not work"
+	self
+		primJPEGReadImage: jpegDecompressStruct
 		fromByteArray: aByteArray
 		onForm: result
 		doDithering: ditherFlag
 		errorMgr: jpegErrorMgr2Struct.
 
 	^ result
-
-]
-
-{ #category : #'image operations' }
-FastJPEG class >> uncompress: aByteArray into: aForm [
-	"Uncompress an image from the given ByteArray into the given Form. Fail if the given Form has the wrong dimensions or depth < 16. If aForm has depth 16, do ordered dithering."
-
-	self uncompress: aByteArray
-		into: aForm
-		doDithering: (aForm depth = 16).
-
-]
-
-{ #category : #'image operations' }
-FastJPEG class >> uncompress: aByteArray into: aForm doDithering: ditherFlag [
-	"Uncompress an image from the given ByteArray into the given Form. Fail if aForm has the wrong dimensions or depth < 16. If aForm has depth 16 and ditherFlag = true, do ordered dithering."
-
-	| jpegDecompressStruct jpegErrorMgr2Struct w h |
-	aForm unhibernate.
-	jpegDecompressStruct := ByteArray new: self primJPEGDecompressStructSize.
-	jpegErrorMgr2Struct := ByteArray new: self primJPEGErrorMgr2StructSize.
-	self 
-		primJPEGReadHeader: jpegDecompressStruct 
-		fromByteArray: aByteArray
-		errorMgr: jpegErrorMgr2Struct.
-	w := self primImageWidth: jpegDecompressStruct.
-	h := self primImageHeight: jpegDecompressStruct.
-	((aForm width = w) & (aForm height = h)) ifFalse: [
-		^ self error: 'form dimensions do not match'].
-
-	"odd width images of depth 16 give problems; avoid them"
-	w odd
-		ifTrue: [
-			aForm depth = 32 ifFalse: [^ self error: 'must use depth 32 with odd width']]
-		ifFalse: [
-			((aForm depth = 16) | (aForm depth = 32)) ifFalse: [^ self error: 'must use depth 16 or 32']].
-
-	self primJPEGReadImage: jpegDecompressStruct
-		fromByteArray: aByteArray
-		onForm: aForm
-		doDithering: ditherFlag
-		errorMgr: jpegErrorMgr2Struct.
 
 ]

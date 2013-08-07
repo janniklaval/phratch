@@ -12,25 +12,22 @@ Class {
 
 { #category : #intialization }
 PhratchTalkBubbleMorph >> bePrompt: aBoolean [
-
 	self initFromForm: (PhratchFrameMorph skinAt: #promptBubbleFrame).
-	aBoolean
-		ifTrue: [leftPointerForm := (PhratchFrameMorph skinAt: #promptBubblePointer)]
-		ifFalse: [leftPointerForm := (PhratchFrameMorph skinAt: #talkBubbleTalkPointer)].
+	leftPointerForm := aBoolean
+		ifTrue: [ PhratchFrameMorph skinAt: #promptBubblePointer ]
+		ifFalse: [ PhratchFrameMorph skinAt: #talkBubbleTalkPointer ].
 	rightPointerForm := leftPointerForm flipBy: #horizontal centerAt: leftPointerForm center.
-	self changed.
-
+	self changed
 ]
 
 { #category : #intialization }
 PhratchTalkBubbleMorph >> beThoughtBubble: aBoolean [
 	"If true, then be a thought bubble. Otherwise, be a talk bubble."
 
-	aBoolean
-		ifTrue: [leftPointerForm := (PhratchFrameMorph skinAt: #talkBubbleThinkPointer)]
-		ifFalse: [leftPointerForm := (PhratchFrameMorph skinAt: #talkBubbleTalkPointer)].
-	rightPointerForm := leftPointerForm flipBy: #horizontal centerAt: leftPointerForm center.
-
+	leftPointerForm := aBoolean
+		ifTrue: [ PhratchFrameMorph skinAt: #talkBubbleThinkPointer ]
+		ifFalse: [ PhratchFrameMorph skinAt: #talkBubbleTalkPointer ].
+	rightPointerForm := leftPointerForm flipBy: #horizontal centerAt: leftPointerForm center
 ]
 
 { #category : #drawing }
@@ -117,14 +114,6 @@ PhratchTalkBubbleMorph >> message: aString [
 		ifTrue: [3]
 		ifFalse: [((self width - contentsMorph width) // 2) + 3].
 	contentsMorph position: self position + (xOffset @ 5).
-
-]
-
-{ #category : #accessing }
-PhratchTalkBubbleMorph >> noPointer [
-	"Use no pointer at all."
-
-	leftPointerForm := rightPointerForm := Form extent: 0@leftPointerForm height depth: 1.
 
 ]
 

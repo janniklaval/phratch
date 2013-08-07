@@ -18,7 +18,7 @@ ElementsPaletteFrameMorph >> acceptDroppingMorph: aMorph event: evt [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 ElementsPaletteFrameMorph >> arrangePanes [
 	header position: self position;
 		width: self width;
@@ -46,25 +46,25 @@ ElementsPaletteFrameMorph >> class: aClass [
 	self refresh
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #menu }
 ElementsPaletteFrameMorph >> classMenu [
-	|menu|
+	| menu |
 	menu := MenuMorph new defaultTarget: self.
-	menu add: 'create a subclass...' action: #createSubclass.
-	menu add: 'remove a class...' action: #removeClass.
-	^menu
+	menu add: 'create a subclass...' translated action: #createSubclass.
+	menu add: 'remove a class...' translated action: #removeClass.
+	^ menu
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #menu }
 ElementsPaletteFrameMorph >> classVarMenu [
-	|menu|
+	| menu |
 	menu := MenuMorph new defaultTarget: self.
-	menu add: 'add a class variable...' action: #createClassVar.
-	menu add: 'remove a variable...' action: #removeClassVar.
-	^menu
+	menu add: 'add a class variable...' translated action: #createClassVar.
+	menu add: 'remove a variable...' translated action: #removeClassVar.
+	^ menu
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #menu }
 ElementsPaletteFrameMorph >> contextMenu [
 	| choice |
 	choice := header choice.
@@ -89,20 +89,20 @@ ElementsPaletteFrameMorph >> contextMenu [
 	(#methodsClass = choice) ifTrue: [^nil ].
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #creation }
 ElementsPaletteFrameMorph >> createClassVar [
-	|varName current|
-	currentClass isMeta
-		ifTrue: [current := currentClass theNonMetaClass ]
-		ifFalse: [current := currentClass ].
-
+	| varName current |
+	current := currentClass isMeta
+		ifTrue: [ currentClass theNonMetaClass ]
+		ifFalse: [ currentClass ].
 	varName := UIManager default request: 'variable name:' initialAnswer: ''.
-	varName isEmpty ifTrue: [^self].
+	varName isEmpty
+		ifTrue: [ ^ self ].
 	current addClassVarName: varName.
-	self refresh		
+	self refresh
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #creation }
 ElementsPaletteFrameMorph >> createGlobalVar [
 	|varName |
 
@@ -115,43 +115,40 @@ ElementsPaletteFrameMorph >> createGlobalVar [
 	self refresh		
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #creation }
 ElementsPaletteFrameMorph >> createInstVar [
-	|varName current|
-	currentClass isMeta
-		ifTrue: [current := currentClass theNonMetaClass ]
-		ifFalse: [current := currentClass ].
-
+	| varName current |
+	current := currentClass isMeta
+		ifTrue: [ currentClass theNonMetaClass ]
+		ifFalse: [ currentClass ].
 	varName := UIManager default request: 'variable name:' initialAnswer: ''.
-	varName isEmpty ifTrue: [^self].
+	varName isEmpty
+		ifTrue: [ ^ self ].
 	varName := SyntaxElementMorph objectNameFrom: varName.
 	current addInstVarName: varName.
-	self refresh		
+	self refresh
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #creation }
 ElementsPaletteFrameMorph >> createSubclass [
-	|className categoryName current newClass|
-	currentClass isMeta
-		ifTrue: [current := currentClass theNonMetaClass ]
-		ifFalse: [current := currentClass ].
-
+	| className categoryName current newClass |
+	current := currentClass isMeta
+		ifTrue: [ currentClass theNonMetaClass ]
+		ifFalse: [ currentClass ].
 	className := UIManager default request: 'class name:' initialAnswer: ''.
-	className isEmpty ifTrue: [^self].
+	className isEmpty
+		ifTrue: [ ^ self ].
 	categoryName := UIManager default request: 'category:' initialAnswer: 'UserObjects'.
-	categoryName isEmpty ifTrue: [^self].
-
+	categoryName isEmpty
+		ifTrue: [ ^ self ].
 	className := SyntaxElementMorph classNameFrom: className.
-
-	newClass := current subclass: className asSymbol
+	newClass := current
+		subclass: className asSymbol
 		instanceVariableNames: ''
 		classVariableNames: ''
 		poolDictionaries: ''
 		category: categoryName.
-
 	editorFrame selectClass: newClass
-
-		
 ]
 
 { #category : #accessing }
@@ -159,7 +156,7 @@ ElementsPaletteFrameMorph >> currentClass [
 	^currentClass
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ElementsPaletteFrameMorph >> currentMethodsClass [
 	
 	| name |
@@ -178,13 +175,13 @@ ElementsPaletteFrameMorph >> editorFrame: aMorph [
 	editorFrame := aMorph
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #menu }
 ElementsPaletteFrameMorph >> globalVarMenu [
-	|menu|
+	| menu |
 	menu := MenuMorph new defaultTarget: self.
-	menu add: 'add a global variable...' action: #createGlobalVar.
-	menu add: 'remove a variable...' action: #removeGlobalVar.
-	^menu
+	menu add: 'add a global variable...' translated action: #createGlobalVar.
+	menu add: 'remove a variable...' translated action: #removeGlobalVar.
+	^ menu
 ]
 
 { #category : #'event handling' }
@@ -204,28 +201,28 @@ ElementsPaletteFrameMorph >> initialize [
 	self refresh
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #menu }
 ElementsPaletteFrameMorph >> instanceVarMenu [
-	|menu|
+	| menu |
 	menu := MenuMorph new defaultTarget: self.
-	menu add: 'add an instance variable...' action: #createInstVar.
-	menu add: 'remove a variable...' action: #removeInstVar.
-	^menu
+	menu add: 'add an instance variable...' translated action: #createInstVar.
+	menu add: 'remove a variable...' translated action: #removeInstVar.
+	^ menu
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #menu }
 ElementsPaletteFrameMorph >> invokeContextMenu [
 	|m |
 	m := self contextMenu.
 	m ifNotNil: [m popUpNearHand]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #menu }
 ElementsPaletteFrameMorph >> methodMenu [
-	|menu|
+	| menu |
 	menu := MenuMorph new defaultTarget: self.
-	menu add: 'remove a method...' action: #removeMethod.
-	^menu
+	menu add: 'remove a method...' translated action: #removeMethod.
+	^ menu
 ]
 
 { #category : #'event handling' }
@@ -298,7 +295,7 @@ ElementsPaletteFrameMorph >> removeClass: aClass [
 		self refresh 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #removing }
 ElementsPaletteFrameMorph >> removeClassVar [
 	| var |
 	var := self selectClassVar.
@@ -307,7 +304,7 @@ ElementsPaletteFrameMorph >> removeClassVar [
 		self refresh ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #removing }
 ElementsPaletteFrameMorph >> removeGlobalVar [
 	| var |
 	var := self selectGlobalVar.
@@ -334,7 +331,7 @@ ElementsPaletteFrameMorph >> removeMethod [
 		self refresh ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #selecting }
 ElementsPaletteFrameMorph >> selectClass [
 
 	| menu |
@@ -345,7 +342,7 @@ ElementsPaletteFrameMorph >> selectClass [
 	^ menu selectedValue.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #selecting }
 ElementsPaletteFrameMorph >> selectClassVar [
 
 	| menu |
@@ -357,7 +354,7 @@ ElementsPaletteFrameMorph >> selectClassVar [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #selecting }
 ElementsPaletteFrameMorph >> selectGlobalVar [
 
 	| menu |
@@ -368,7 +365,7 @@ ElementsPaletteFrameMorph >> selectGlobalVar [
 	^ menu selectedValue.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #selecting }
 ElementsPaletteFrameMorph >> selectInstVar [
 
 	| menu |
@@ -380,7 +377,7 @@ ElementsPaletteFrameMorph >> selectInstVar [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #selecting }
 ElementsPaletteFrameMorph >> selectSelector [
 
 	| menu |

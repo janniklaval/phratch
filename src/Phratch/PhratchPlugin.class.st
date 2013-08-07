@@ -27,9 +27,6 @@ Handshake lines (options 20-25 for Set/GetOption primitives):
 Class {
 	#name : #PhratchPlugin,
 	#superclass : #InterpreterPlugin,
-	#classVars : [
-		'TestFileName'
-	],
 	#category : #'Phratch-Primitives-Plugins'
 }
 
@@ -471,20 +468,18 @@ PhratchPlugin >> hueFromR: r G: g B: b min: min max: max [
 
 	| span result |
 	self inline: true.
-
 	span := max - min.
-	span = 0 ifTrue: [^ 0].
-
-	r = max
-		ifTrue: [result := ((60 * (g - b)) // span)]
-		ifFalse: [
+	span = 0
+		ifTrue: [ ^ 0 ].
+	result := r = max
+		ifTrue: [ 60 * (g - b) // span ]
+		ifFalse: [ 
 			g = max
-				ifTrue: [result := 120 + ((60 * (b - r)) // span)]
-				ifFalse: [result := 240 + ((60 * (r - g)) // span)]].
-
-	result < 0 ifTrue: [^ result + 360].
+				ifTrue: [ 120 + (60 * (b - r) // span) ]
+				ifFalse: [ 240 + (60 * (r - g) // span) ] ].
+	result < 0
+		ifTrue: [ ^ result + 360 ].
 	^ result
-
 ]
 
 { #category : #private }
@@ -750,126 +745,90 @@ PhratchPlugin >> primWrite [
 
 { #category : #'other filters' }
 PhratchPlugin >> primitiveBlur [
-
 	| inOop outOop width in out sz height n rTotal gTotal bTotal pix outPix |
 	self export: true.
 	self var: 'in' declareC: 'unsigned int *in'.
 	self var: 'out' declareC: 'unsigned int *out'.
-
 	inOop := interpreterProxy stackValue: 2.
 	outOop := interpreterProxy stackValue: 1.
 	width := interpreterProxy stackIntegerValue: 0.
 	in := self checkedUnsignedIntPtrOf: inOop.
 	out := self checkedUnsignedIntPtrOf: outOop.
 	sz := interpreterProxy stSizeOf: inOop.
-	interpreterProxy success: ((interpreterProxy stSizeOf: outOop) = sz).
-	interpreterProxy failed ifTrue: [^ nil].
-
+	interpreterProxy success: (interpreterProxy stSizeOf: outOop) = sz.
+	interpreterProxy failed
+		ifTrue: [ ^ nil ].
 	height := sz // width.
-	1 to: height - 2 do: [:y |
-		1 to: width - 2 do: [:x |
+	1 to: height - 2 do: [ :y | 
+		1 to: width - 2 do: [ :x | 
 			n := rTotal := gTotal := bTotal := 0.
-			-1 to: 1 do: [:dY |
-				-1 to: 1 do: [:dX |
-					pix := (in at: ((y + dY) * width) + (x + dX) "add 1 when testing in Squeak") bitAnd: 16rFFFFFF.
-					pix = 0 ifFalse: [  "skip transparent pixels"
-						rTotal := rTotal + ((pix bitShift: -16) bitAnd: 16rFF).
-						gTotal := gTotal + ((pix bitShift: -8) bitAnd: 16rFF).
-						bTotal := bTotal + (pix bitAnd: 16rFF).
-						n := n + 1]]].
-			n = 0
-				ifTrue: [outPix :=  0]
-				ifFalse: [outPix := ((rTotal // n) bitShift: 16) + ((gTotal // n) bitShift: 8) +  (bTotal // n)].
-			out at: ((y * width) + x "add 1 when testing in Squeak") put: outPix]].
-
-	interpreterProxy pop: 3.  "pop args, leave rcvr on stack"
+			-1 to: 1 do: [ :dY | 
+				-1 to: 1 do: [ :dX | 
+					pix := (in at: (y + dY) * width + (x + dX)) bitAnd: 16rFFFFFF.	"add 1 when testing in Squeak"
+					pix = 0
+						ifFalse: [ 
+							"skip transparent pixels"
+							rTotal := rTotal + ((pix bitShift: -16) bitAnd: 16rFF).
+							gTotal := gTotal + ((pix bitShift: -8) bitAnd: 16rFF).
+							bTotal := bTotal + (pix bitAnd: 16rFF).
+							n := n + 1 ] ] ].
+			outPix := n = 0
+				ifTrue: [ 0 ]
+				ifFalse: [ (rTotal // n bitShift: 16) + (gTotal // n bitShift: 8) + (bTotal // n) ].
+			out at: y * width + x put: outPix	"add 1 when testing in Squeak" ] ].
+	interpreterProxy pop: 3.	"pop args, leave rcvr on stack"
 	^ 0
-
 ]
 
 { #category : #'hsv filters' }
 PhratchPlugin >> primitiveBrightnessShift [
-
 	| inOop outOop shift in sz out pix r g b max min hue saturation brightness |
 	self export: true.
 	self var: 'in' declareC: 'unsigned int *in'.
 	self var: 'out' declareC: 'unsigned int *out'.
-
 	inOop := interpreterProxy stackValue: 2.
 	outOop := interpreterProxy stackValue: 1.
 	shift := interpreterProxy stackIntegerValue: 0.
 	in := self checkedUnsignedIntPtrOf: inOop.
 	sz := interpreterProxy stSizeOf: inOop.
 	out := self checkedUnsignedIntPtrOf: outOop.
-	interpreterProxy success: ((interpreterProxy stSizeOf: outOop) = sz).
-	interpreterProxy failed ifTrue: [^ nil].
-
-	0 to: sz - 1 do: [:i |
+	interpreterProxy success: (interpreterProxy stSizeOf: outOop) = sz.
+	interpreterProxy failed
+		ifTrue: [ ^ nil ].
+	0 to: sz - 1 do: [ :i | 
 		pix := (in at: i) bitAnd: 16rFFFFFF.
-		pix = 0 ifFalse: [  "skip pixel values of 0 (transparent)"
-			r := (pix bitShift: -16) bitAnd: 16rFF.
-			g := (pix bitShift: -8) bitAnd: 16rFF.
-			b := pix bitAnd: 16rFF.
-
-			"find min and max color components"
-			max := min := r.
-			g > max ifTrue: [max := g].
-			b > max ifTrue: [max := b].
-			g < min ifTrue: [min := g].
-			b < min ifTrue: [min := b].
-
-			"find current hue with range 0 to 360"
-			hue := self hueFromR: r G: g B: b min: min max: max.
-
-			"find current saturation and brightness with range 0 to 1000"
-			max = 0 ifTrue: [saturation := 0] ifFalse: [saturation := ((max - min) * 1000) // max].
-			brightness := (max * 1000) // 255.
-
-			"compute new brigthness"
-			brightness := brightness + (shift * 10).
-			brightness > 1000 ifTrue: [brightness := 1000].
-			brightness < 0 ifTrue: [brightness := 0].
-
-			self bitmap: out at: i putH: hue s: saturation v: brightness]].
-
-	interpreterProxy pop: 3.  "pop args, leave rcvr on stack"
+		pix = 0
+			ifFalse: [ 
+				"skip pixel values of 0 (transparent)"
+				r := (pix bitShift: -16) bitAnd: 16rFF.
+				g := (pix bitShift: -8) bitAnd: 16rFF.
+				b := pix bitAnd: 16rFF.	"find min and max color components"
+				max := min := r.
+				max := max max: g.
+				max := max max: b.
+				min := min min: g.
+				min := min min: b.	"find current hue with range 0 to 360"
+				hue := self
+					hueFromR: r
+					G: g
+					B: b
+					min: min
+					max: max.	"find current saturation and brightness with range 0 to 1000"
+				saturation := max = 0
+					ifTrue: [ 0 ]
+					ifFalse: [ (max - min) * 1000 // max ].
+				brightness := max * 1000 // 255.	"compute new brigthness"
+				brightness := brightness + (shift * 10).
+				brightness := brightness min: 1000.
+				brightness := brightness max: 0.
+				self
+					bitmap: out
+					at: i
+					putH: hue
+					s: saturation
+					v: brightness ] ].
+	interpreterProxy pop: 3.	"pop args, leave rcvr on stack"
 	^ 0
-
-]
-
-{ #category : #sound }
-PhratchPlugin >> primitiveCondenseSound [
-
-	| srcOop dstOop factor sz src dst count max v |
-	self export: true.
-	self var: 'src' declareC: 'short *src'.
-	self var: 'dst' declareC: 'short *dst'.
-
-	srcOop := interpreterProxy stackValue: 2.
-	dstOop := interpreterProxy stackValue: 1.
-	factor := interpreterProxy stackIntegerValue: 0.
-	interpreterProxy success: (interpreterProxy isWords: srcOop).
-	interpreterProxy success: (interpreterProxy isWords: dstOop).
-
-	count := (2 * (interpreterProxy stSizeOf: srcOop)) // factor.
-	sz := 2 * (interpreterProxy stSizeOf: dstOop).
-	interpreterProxy success: (sz >= count).
-	interpreterProxy failed ifTrue: [^ nil].
-
-	src := self cCoerce: (interpreterProxy firstIndexableField: srcOop) to: 'short *'.
-	dst := self cCoerce: (interpreterProxy firstIndexableField: dstOop) to: 'short *'.
-
-	1 to: count do: [:i |
-		max := 0.
-		1 to: factor do: [:j |
-			v := self cCode: '*src++'.
-			v < 0 ifTrue: [v := 0 - v].
-			v > max ifTrue: [max := v]].
-		self cCode: '*dst++ = max'].
-
-	interpreterProxy pop: 3.  "pop args, leave rcvr on stack"
-	^ 0
-
 ]
 
 { #category : #scaling }
@@ -906,35 +865,6 @@ PhratchPlugin >> primitiveDoubleSize [
 			out at: i + outW + 1 put: pix]].
 
 	interpreterProxy pop: 8.  "pop args, leave rcvr on stack"
-	^ 0
-
-]
-
-{ #category : #sound }
-PhratchPlugin >> primitiveExtractChannel [
-
-	| srcOop dstOop rightFlag sz src dst |
-	self export: true.
-	self var: 'src' declareC: 'short *src'.
-	self var: 'dst' declareC: 'short *dst'.
-
-	srcOop := interpreterProxy stackValue: 2.
-	dstOop := interpreterProxy stackValue: 1.
-	rightFlag := interpreterProxy booleanValueOf: (interpreterProxy stackValue: 0).
-	interpreterProxy success: (interpreterProxy isWords: srcOop).
-	interpreterProxy success: (interpreterProxy isWords: dstOop).
-
-	sz := interpreterProxy stSizeOf: srcOop.
-	interpreterProxy success: ((interpreterProxy stSizeOf: dstOop) >= (sz // 2)).
-	interpreterProxy failed ifTrue: [^ nil].
-
-	src := self cCoerce: (interpreterProxy firstIndexableField: srcOop) to: 'short *'.
-	dst := self cCoerce: (interpreterProxy firstIndexableField: dstOop) to: 'short *'.
-
-	rightFlag ifTrue: [self cCode: 'src++']. 
-	1 to: sz do: [:i | self cCode: '*dst++ = *src; src += 2'].
-
-	interpreterProxy pop: 3.  "pop args, leave rcvr on stack"
 	^ 0
 
 ]
@@ -1148,52 +1078,60 @@ PhratchPlugin >> primitiveHalfSizeDiagonal [
 
 { #category : #'hsv filters' }
 PhratchPlugin >> primitiveHueShift [
-
 	| inOop outOop shift in sz out pix r g b max min brightness saturation hue |
 	self export: true.
 	self var: 'in' declareC: 'unsigned int *in'.
 	self var: 'out' declareC: 'unsigned int *out'.
-
 	inOop := interpreterProxy stackValue: 2.
 	outOop := interpreterProxy stackValue: 1.
 	shift := interpreterProxy stackIntegerValue: 0.
 	in := self checkedUnsignedIntPtrOf: inOop.
 	sz := interpreterProxy stSizeOf: inOop.
 	out := self checkedUnsignedIntPtrOf: outOop.
-	interpreterProxy success: ((interpreterProxy stSizeOf: outOop) = sz).
-	interpreterProxy failed ifTrue: [^ nil].
-
-	0 to: sz - 1 do: [:i |
+	interpreterProxy success: (interpreterProxy stSizeOf: outOop) = sz.
+	interpreterProxy failed
+		ifTrue: [ ^ nil ].
+	0 to: sz - 1 do: [ :i | 
 		pix := (in at: i) bitAnd: 16rFFFFFF.
-		pix = 0 ifFalse: [  "skip pixel values of 0 (transparent)"
-			r := (pix bitShift: -16) bitAnd: 16rFF.
-			g := (pix bitShift: -8) bitAnd: 16rFF.
-			b := pix bitAnd: 16rFF.
-
-			"find min and max color components"
-			max := min := r.
-			g > max ifTrue: [max := g].
-			b > max ifTrue: [max := b].
-			g < min ifTrue: [min := g].
-			b < min ifTrue: [min := b].
-
-			"find current brightness (v) and  saturation with range 0 to 1000"
-			brightness := (max * 1000) // 255.
-			max = 0 ifTrue: [saturation := 0] ifFalse: [saturation := ((max - min) * 1000) // max].
-
-			brightness < 110 ifTrue: [					"force black to a very dark, saturated gray"
-				brightness := 110. saturation := 1000].	
-			saturation < 90 ifTrue: [saturation := 90].		"force a small color change on grays"
-			((brightness = 110) | (saturation = 90))		"tint all blacks and grays the same"
-				ifTrue: [hue := 0]
-				ifFalse: [hue := self hueFromR: r G: g B: b min: min max: max].
-
-			hue := (hue + shift + 360000000) \\ 360.  "compute new hue"
-			self bitmap: out at: i putH: hue s: saturation v: brightness]].
-
-	interpreterProxy pop: 3.  "pop args, leave rcvr on stack"
+		pix = 0
+			ifFalse: [ 
+				"skip pixel values of 0 (transparent)"
+				r := (pix bitShift: -16) bitAnd: 16rFF.
+				g := (pix bitShift: -8) bitAnd: 16rFF.
+				b := pix bitAnd: 16rFF.	"find min and max color components"
+				max := min := r.
+				max := max max: g.
+				max := max max: b.
+				min := min min: g.
+				min := min min: b.	"find current brightness (v) and  saturation with range 0 to 1000"
+				brightness := max * 1000 // 255.
+				saturation := max = 0
+					ifTrue: [ 0 ]
+					ifFalse: [ (max - min) * 1000 // max ].
+				brightness < 110
+					ifTrue: [ 
+						"force black to a very dark, saturated gray"
+						brightness := 110.
+						saturation := 1000 ].
+				saturation := saturation max: 90.	"force a small color change on grays"
+				hue := brightness = 110 | (saturation = 90)
+					ifTrue: [ 0 ]
+					ifFalse: [ 
+						self
+							hueFromR: r
+							G: g
+							B: b
+							min: min
+							max: max ].	"tint all blacks and grays the same"
+				hue := (hue + shift + 360000000) \\ 360.	"compute new hue"
+				self
+					bitmap: out
+					at: i
+					putH: hue
+					s: saturation
+					v: brightness ] ].
+	interpreterProxy pop: 3.	"pop args, leave rcvr on stack"
 	^ 0
-
 ]
 
 { #category : #'bilinear interpolation' }
@@ -1284,51 +1222,56 @@ PhratchPlugin >> primitiveOpenURL [
 
 { #category : #'hsv filters' }
 PhratchPlugin >> primitiveSaturationShift [
-
 	| inOop outOop shift in sz out pix r g b max min brightness saturation hue |
 	self export: true.
 	self var: 'in' declareC: 'unsigned int *in'.
 	self var: 'out' declareC: 'unsigned int *out'.
-
 	inOop := interpreterProxy stackValue: 2.
 	outOop := interpreterProxy stackValue: 1.
 	shift := interpreterProxy stackIntegerValue: 0.
 	in := self checkedUnsignedIntPtrOf: inOop.
 	sz := interpreterProxy stSizeOf: inOop.
 	out := self checkedUnsignedIntPtrOf: outOop.
-	interpreterProxy success: ((interpreterProxy stSizeOf: outOop) = sz).
-	interpreterProxy failed ifTrue: [^ nil].
-
-	0 to: sz - 1 do: [:i |
+	interpreterProxy success: (interpreterProxy stSizeOf: outOop) = sz.
+	interpreterProxy failed
+		ifTrue: [ ^ nil ].
+	0 to: sz - 1 do: [ :i | 
 		pix := (in at: i) bitAnd: 16rFFFFFF.
-		pix < 2 ifFalse: [  "skip pixel values of 0 (transparent) and 1 (black)"
-			r := (pix bitShift: -16) bitAnd: 16rFF.
-			g := (pix bitShift: -8) bitAnd: 16rFF.
-			b := pix bitAnd: 16rFF.
-
-			"find min and max color components"
-			max := min := r.
-			g > max ifTrue: [max := g].
-			b > max ifTrue: [max := b].
-			g < min ifTrue: [min := g].
-			b < min ifTrue: [min := b].
-
-			"find current brightness (v) and  saturation with range 0 to 1000"
-			brightness := (max * 1000) // 255.
-			max = 0 ifTrue: [saturation := 0] ifFalse: [saturation := ((max - min) * 1000) // max].
-
-			saturation > 0 ifTrue: [  "do nothing if pixel is unsaturated (gray)"
-				hue := self hueFromR: r G: g B: b min: min max: max.
-
-				"compute new saturation"
-				saturation := saturation + (shift * 10).
-				saturation > 1000 ifTrue: [saturation := 1000].
-				saturation < 0 ifTrue: [saturation := 0].
-				self bitmap: out at: i putH: hue s: saturation v: brightness]]].
-
-	interpreterProxy pop: 3.  "pop args, leave rcvr on stack"
+		pix < 2
+			ifFalse: [ 
+				"skip pixel values of 0 (transparent) and 1 (black)"
+				r := (pix bitShift: -16) bitAnd: 16rFF.
+				g := (pix bitShift: -8) bitAnd: 16rFF.
+				b := pix bitAnd: 16rFF.	"find min and max color components"
+				max := min := r.
+				max := max max: g.
+				max := max max: b.
+				min := min min: g.
+				min := min min: b.	"find current brightness (v) and  saturation with range 0 to 1000"
+				brightness := max * 1000 // 255.
+				saturation := max = 0
+					ifTrue: [ 0 ]
+					ifFalse: [ (max - min) * 1000 // max ].
+				saturation > 0
+					ifTrue: [ 
+						"do nothing if pixel is unsaturated (gray)"
+						hue := self
+							hueFromR: r
+							G: g
+							B: b
+							min: min
+							max: max.	"compute new saturation"
+						saturation := saturation + (shift * 10).
+						saturation := saturation min: 1000.
+						saturation := saturation max: 0.
+						self
+							bitmap: out
+							at: i
+							putH: hue
+							s: saturation
+							v: brightness ] ] ].
+	interpreterProxy pop: 3.	"pop args, leave rcvr on stack"
 	^ 0
-
 ]
 
 { #category : #scaling }
@@ -1339,67 +1282,84 @@ PhratchPlugin >> primitiveScale [
 	self export: true.
 	self var: 'in' declareC: 'int *in'.
 	self var: 'out' declareC: 'int *out'.
-
 	inOop := interpreterProxy stackValue: 5.
 	inW := interpreterProxy stackIntegerValue: 4.
 	inH := interpreterProxy stackIntegerValue: 3.
 	outOop := interpreterProxy stackValue: 2.
 	outW := interpreterProxy stackIntegerValue: 1.
 	outH := interpreterProxy stackIntegerValue: 0.
-
 	interpreterProxy success: (interpreterProxy stSizeOf: inOop) = (inW * inH).
 	interpreterProxy success: (interpreterProxy stSizeOf: outOop) = (outW * outH).
 	in := self checkedUnsignedIntPtrOf: inOop.
 	out := self checkedUnsignedIntPtrOf: outOop.
-	interpreterProxy failed ifTrue: [^ nil].
-
-	inX := inY := 0.					"source x and y, scaled by 1024"
-	xIncr := (inW * 1024) // outW.	"source x increment, scaled by 1024"
-	yIncr := (inH * 1024) // outH.		"source y increment, scaled by 1024"
-
-	0 to: (outH - 1) do: [:outY |
+	interpreterProxy failed
+		ifTrue: [ ^ nil ].
+	inX := inY := 0.	"source x and y, scaled by 1024"
+	xIncr := inW * 1024 // outW.	"source x increment, scaled by 1024"
+	yIncr := inH * 1024 // outH.	"source y increment, scaled by 1024"
+	0 to: outH - 1 do: [ :outY | 
 		inX := 0.
-		0 to: (outW - 1) do: [:outX |
+		0 to: outW - 1 do: [ :outX | 
 			"compute weights, scaled by 2^20"
-			w1 := (1024 - (inX bitAnd: 1023))	* (1024 - (inY bitAnd: 1023)).
-			w2 := (inX bitAnd: 1023)			* (1024 - (inY bitAnd: 1023)).
-			w3 := (1024 - (inX bitAnd: 1023))	* (inY bitAnd: 1023).
-			w4 := (inX bitAnd: 1023)			* (inY bitAnd: 1023).
-
-			"get source pixels"
-			t := ((inY >> 10) * inW) + (inX >> 10).
+			w1 := (1024 - (inX bitAnd: 1023)) * (1024 - (inY bitAnd: 1023)).
+			w2 := (inX bitAnd: 1023) * (1024 - (inY bitAnd: 1023)).
+			w3 := (1024 - (inX bitAnd: 1023)) * (inY bitAnd: 1023).
+			w4 := (inX bitAnd: 1023) * (inY bitAnd: 1023).	"get source pixels"
+			t := (inY >> 10) * inW + (inX >> 10).
 			p1 := in at: t.
-			((inX >> 10) < (inW - 1)) ifTrue: [p2 := in at: t + 1] ifFalse: [p2 := p1].
-			(inY >> 10) < (inH - 1) ifTrue: [t := t + inW].  "next row"
+			p2 := inX >> 10 < (inW - 1)
+				ifTrue: [ in at: t + 1 ]
+				ifFalse: [ p1 ].
+			inY >> 10 < (inH - 1)
+				ifTrue: [ t := t + inW ].	"next row"
 			p3 := in at: t.
-			((inX >> 10) < (inW - 1)) ifTrue: [p4 := in at: t + 1] ifFalse: [p4 := p3].
-
-			"deal with transparent pixels"
+			p4 := inX >> 10 < (inW - 1)
+				ifTrue: [ in at: t + 1 ]
+				ifFalse: [ p3 ].	"deal with transparent pixels"
 			tWeight := 0.
-			p1 = 0 ifTrue: [p1 := p2. tWeight := tWeight + w1].
-			p2 = 0 ifTrue: [p2 := p1. tWeight := tWeight + w2].
-			p3 = 0 ifTrue: [p3 := p4. tWeight := tWeight + w3].
-			p4 = 0 ifTrue: [p4 := p3. tWeight := tWeight + w4].
-			p1 = 0 ifTrue: [p1 := p3. p2 := p4].  "both top pixels were transparent; use bottom row"
-			p3 = 0 ifTrue: [p3 := p1. p4 := p2].  "both bottom pixels were transparent; use top row"
-
+			p1 = 0
+				ifTrue: [ 
+					p1 := p2.
+					tWeight := tWeight + w1 ].
+			p2 = 0
+				ifTrue: [ 
+					p2 := p1.
+					tWeight := tWeight + w2 ].
+			p3 = 0
+				ifTrue: [ 
+					p3 := p4.
+					tWeight := tWeight + w3 ].
+			p4 = 0
+				ifTrue: [ 
+					p4 := p3.
+					tWeight := tWeight + w4 ].
+			p1 = 0
+				ifTrue: [ 
+					p1 := p3.
+					p2 := p4 ].	"both top pixels were transparent; use bottom row"
+			p3 = 0
+				ifTrue: [ 
+					p3 := p1.
+					p4 := p2 ].	"both bottom pixels were transparent; use top row"
 			outPix := 0.
-			tWeight < 500000 ifTrue: [  "compute an (opaque) output pixel if less than 50% transparent"
-				t := (w1 * ((p1 >> 16) bitAnd: 255)) + (w2 * ((p2 >> 16) bitAnd: 255)) + (w3 * ((p3 >> 16) bitAnd: 255)) + (w4 * ((p4 >> 16) bitAnd: 255)).
-				outPix := ((t >> 20) bitAnd: 255) << 16.
-				t := (w1 * ((p1 >> 8) bitAnd: 255)) + (w2 * ((p2 >> 8) bitAnd: 255)) + (w3 * ((p3 >> 8) bitAnd: 255)) + (w4 * ((p4 >> 8) bitAnd: 255)).
-				outPix := outPix bitOr: (((t >> 20) bitAnd: 255) << 8).
-				t := (w1 * (p1 bitAnd: 255)) + (w2 * (p2 bitAnd: 255)) + (w3 * (p3 bitAnd: 255)) + (w4 * (p4 bitAnd: 255)).
-				outPix := outPix bitOr: ((t >> 20) bitAnd: 255).
-				outPix = 0 ifTrue: [outPix := 1]].
-
-			out at: (outY * outW) + outX put: outPix.
-			inX := inX + xIncr].
-		inY := inY + yIncr].
-
-	interpreterProxy pop: 6.  "pop args, leave rcvr on stack"
+			tWeight < 500000
+				ifTrue: [ 
+					"compute an (opaque) output pixel if less than 50% transparent"
+					t := w1 * (p1 >> 16 bitAnd: 255) + (w2 * (p2 >> 16 bitAnd: 255)) + (w3 * (p3 >> 16 bitAnd: 255))
+						+ (w4 * (p4 >> 16 bitAnd: 255)).
+					outPix := (t >> 20 bitAnd: 255) << 16.
+					t := w1 * (p1 >> 8 bitAnd: 255) + (w2 * (p2 >> 8 bitAnd: 255)) + (w3 * (p3 >> 8 bitAnd: 255))
+						+ (w4 * (p4 >> 8 bitAnd: 255)).
+					outPix := outPix bitOr: (t >> 20 bitAnd: 255) << 8.
+					t := w1 * (p1 bitAnd: 255) + (w2 * (p2 bitAnd: 255)) + (w3 * (p3 bitAnd: 255)) + (w4 * (p4 bitAnd: 255)).
+					outPix := outPix bitOr: (t >> 20 bitAnd: 255).
+					outPix = 0
+						ifTrue: [ outPix := 1 ] ].
+			out at: outY * outW + outX put: outPix.
+			inX := inX + xIncr ].
+		inY := inY + yIncr ].
+	interpreterProxy pop: 6.	"pop args, leave rcvr on stack"
 	^ 0
-
 ]
 
 { #category : #'os functions' }
@@ -1497,7 +1457,6 @@ PhratchPlugin >> primitiveShortToLongPath [
 
 { #category : #'other filters' }
 PhratchPlugin >> primitiveWaterRipples1 [
- 
 	| in out aArray bArray ripply temp pix dx dy dist inOop outOop width allPix aArOop bArOop height t1 blops x y power val val2 dx2 dy2 newLoc |
 	self export: true.
 	self var: 'in' declareC: 'unsigned int *in'.
@@ -1510,7 +1469,6 @@ PhratchPlugin >> primitiveWaterRipples1 [
 	self var: 'dist' declareC: 'double dist'.
 	self var: 'dx2' declareC: 'double dx2'.
 	self var: 'dy2' declareC: 'double dy2'.
-
 	inOop := interpreterProxy stackValue: 5.
 	outOop := interpreterProxy stackValue: 4.
 	width := interpreterProxy stackIntegerValue: 3.
@@ -1522,82 +1480,68 @@ PhratchPlugin >> primitiveWaterRipples1 [
 	bArOop := interpreterProxy stackValue: 0.
 	aArray := self checkedFloatPtrOf: aArOop.
 	bArray := self checkedFloatPtrOf: bArOop.
-	interpreterProxy success: ((interpreterProxy stSizeOf: outOop) = allPix).
-	interpreterProxy failed ifTrue: [^ nil].
-
+	interpreterProxy success: (interpreterProxy stSizeOf: outOop) = allPix.
+	interpreterProxy failed
+		ifTrue: [ ^ nil ].
 	height := allPix // width.
-
 	t1 := self cCode: 'rand()'.
-	blops := t1 \\ ripply -1.
-	0 to: blops /2-1 do: [:t |
+	blops := t1 \\ ripply - 1.
+	0 to: blops / 2 - 1 do: [ :t | 
 		t1 := self cCode: 'rand()'.
 		x := t1 \\ width.
 		t1 := self cCode: 'rand()'.
 		y := t1 \\ height.
 		t1 := self cCode: 'rand()'.
 		power := t1 \\ 8.
-		-4 to: 4 do: [:g |
-			-4 to: 4 do: [:h |
-				dist := ((g*g) + (h*h)) asFloat.
-				((dist < 25) and: [dist > 0]) ifTrue: [
+		-4 to: 4 do: [ :g | 
+			-4 to: 4 do: [ :h | 
+				dist := (g * g + (h * h)) asFloat.
+				(dist < 25 and: [ dist > 0 ])
+					ifTrue: [ 
 						dx := (x + g) asInteger.
 						dy := (y + h) asInteger.
-						((dx >0) and: [(dy>0) and: [(dy < height) and: [dx < width]]]) ifTrue: [
-							aArray at: ((dy)*width + dx) put: (power *(1.0 asFloat -(dist/(25.0 asFloat))) asFloat).
-						].
-					].
-				].
-			].
-		].
-	
-		1 to: width -2 do: [:f |
-			1 to: height -2 do: [:d |
-			val := (d)*width + f.
-			aArray at: val put: (((
-				(bArray at: (val+1)) + (bArray at: (val-1)) + (bArray at: (val + width)) + (bArray at: (val - width)) +
-				((bArray at: (val -1 -width))/2) + ((bArray at: (val-1+width))/2) + ((bArray at: (val+1-width))/2) + ((bArray at: (val+1+width))/2)) /4) - (aArray at: (val))).
-			aArray at: (val) put: ((aArray at: (val))*(0.9 asFloat)).
-			].
-		].
-	
-		"temp := bArray.
+						(dx > 0 and: [ dy > 0 and: [ dy < height and: [ dx < width ] ] ])
+							ifTrue: [ aArray at: dy * width + dx put: power * (1.0 asFloat - (dist / 25.0 asFloat)) asFloat ] ] ] ] ].
+	1 to: width - 2 do: [ :f | 
+		1 to: height - 2 do: [ :d | 
+			val := d * width + f.
+			aArray
+				at: val
+				put:
+					((bArray at: val + 1) + (bArray at: val - 1) + (bArray at: val + width) + (bArray at: val - width)
+						+ ((bArray at: val - 1 - width) / 2) + ((bArray at: val - 1 + width) / 2) + ((bArray at: val + 1 - width) / 2)
+						+ ((bArray at: val + 1 + width) / 2)) / 4 - (aArray at: val).
+			aArray at: val put: (aArray at: val) * 0.9 asFloat ] ].	"temp := bArray.
 		bArray := aArray.
 		aArray := temp."
-		0 to: width*height do: [:q |
-			temp := bArray at: q.
-			bArray at: q put: (aArray at: q).
-			aArray at: q put: temp.
-		].
-
-		0 to: height-1 do: [:j |
-			0 to: width-1 do: [:i |
-				((i > 1) and: [(i<(width-1)) and: [(j>1) and: [(j<(height-1))]]]) ifTrue: [
-					val2 := (j)*width + i.
-					dx2 := ((((aArray at: (val2)) - (aArray at: (val2-1))) + ((aArray at: (val2+1)) - (aArray at: (val2)))) *64) asFloat.
-					dy2 := ((((aArray at: (val2)) - (aArray at: (val2-width))) + ((aArray at: (val2+width)) - (aArray at: (val2)))) /64) asFloat.
-					(dx2< -2) ifTrue: [dx2 := -2].
-					(dx2>2) ifTrue: [dx2 := 2].
-					(dy2< -2) ifTrue: [dy2 := -2].
-					(dy2>2) ifTrue: [dy2 := 2].
-					newLoc := ((j+dy2)*width + (i+dx2)) asInteger.
-					((newLoc < (width*height)) and: [newLoc >=0]) ifTrue: [
-						pix := in at: newLoc]
-					ifFalse: [
-						pix := in at: (i +(j*width)) ].
-				]
-				ifFalse: [
-					pix := in at: (i +(j*width)) ].
-			out at: (i + (j*width)) put: pix.
-		]].
-
-	interpreterProxy pop: 6.  "pop args, leave rcvr on stack"
+	0 to: width * height do: [ :q | 
+		temp := bArray at: q.
+		bArray at: q put: (aArray at: q).
+		aArray at: q put: temp ].
+	0 to: height - 1 do: [ :j | 
+		0 to: width - 1 do: [ :i | 
+			(i > 1 and: [ i < (width - 1) and: [ j > 1 and: [ j < (height - 1) ] ] ])
+				ifTrue: [ 
+					val2 := j * width + i.
+					dx2 := (((aArray at: val2) - (aArray at: val2 - 1) + ((aArray at: val2 + 1) - (aArray at: val2))) * 64) asFloat.
+					dy2 := (((aArray at: val2) - (aArray at: val2 - width) + ((aArray at: val2 + width) - (aArray at: val2))) / 64)
+						asFloat.
+					dx2 := dx2 max: -2.
+					dx2 := dx2 min: 2.
+					dy2 := dy2 max: -2.
+					dy2 := dy2 min: 2.
+					newLoc := ((j + dy2) * width + (i + dx2)) asInteger.
+					pix := (newLoc < (width * height) and: [ newLoc >= 0 ])
+						ifTrue: [ in at: newLoc ]
+						ifFalse: [ in at: i + (j * width) ] ]
+				ifFalse: [ pix := in at: i + (j * width) ].
+			out at: i + (j * width) put: pix ] ].
+	interpreterProxy pop: 6.	"pop args, leave rcvr on stack"
 	^ 0
-
 ]
 
 { #category : #'other filters' }
 PhratchPlugin >> primitiveWhirl [
-
 	| inOop outOop width degrees in out sz height centerX centerY radius scaleX scaleY whirlRadians radiusSquared dx dy d factor ang sina cosa pix |
 	self export: true.
 	self var: 'in' declareC: 'unsigned int *in'.
@@ -1613,7 +1557,6 @@ PhratchPlugin >> primitiveWhirl [
 	self var: 'ang' declareC: 'double ang'.
 	self var: 'sina' declareC: 'double sina'.
 	self var: 'cosa' declareC: 'double cosa'.
-
 	inOop := interpreterProxy stackValue: 3.
 	outOop := interpreterProxy stackValue: 2.
 	width := interpreterProxy stackIntegerValue: 1.
@@ -1621,45 +1564,44 @@ PhratchPlugin >> primitiveWhirl [
 	in := self checkedUnsignedIntPtrOf: inOop.
 	out := self checkedUnsignedIntPtrOf: outOop.
 	sz := interpreterProxy stSizeOf: inOop.
-	interpreterProxy success: ((interpreterProxy stSizeOf: outOop) = sz).
-	interpreterProxy failed ifTrue: [^ nil].
-
-	"calculate height, center, scales, radius, whirlRadians, and radiusSquared"
+	interpreterProxy success: (interpreterProxy stSizeOf: outOop) = sz.
+	interpreterProxy failed
+		ifTrue: [ ^ nil ].	"calculate height, center, scales, radius, whirlRadians, and radiusSquared"
 	height := sz // width.
 	centerX := width // 2.
 	centerY := height // 2.
 	centerX < centerY
-		ifTrue: [
+		ifTrue: [ 
 			radius := centerX.
-			scaleX := centerY asFloat / centerX. 
-			scaleY := 1.0]
-		ifFalse: [
+			scaleX := centerY asFloat / centerX.
+			scaleY := 1.0 ]
+		ifFalse: [ 
 			radius := centerY.
 			scaleX := 1.0.
-			centerY < centerX
-				ifTrue: [scaleY := centerX asFloat / centerY]
-				ifFalse: [scaleY := 1.0]].
-	whirlRadians := (-3.141592653589793 * degrees) / 180.0.
+			scaleY := centerY < centerX
+				ifTrue: [ centerX asFloat / centerY ]
+				ifFalse: [ 1.0 ] ].
+	whirlRadians := -3.141592653589793 * degrees / 180.0.
 	radiusSquared := (radius * radius) asFloat.
-
-	0 to: width - 1 do: [:x |
-		0 to: height - 1 do: [:y |
+	0 to: width - 1 do: [ :x | 
+		0 to: height - 1 do: [ :y | 
 			dx := scaleX * (x - centerX) asFloat.
 			dy := scaleY * (y - centerY) asFloat.
-			d := (dx * dx) + (dy * dy).
-			d < radiusSquared ifTrue: [  "inside the whirl circle"
-				factor := 1.0 - (d sqrt / radius).
-				ang := whirlRadians * (factor * factor).
-				sina := ang sin.
-				cosa := ang cos.
-				pix := self interpolatedFrom: in
-					x: (1024.0 * ((((cosa * dx) - (sina * dy)) / scaleX) + centerX)) asInteger
-					y: (1024.0 * ((((sina * dx) + (cosa * dy)) / scaleY) + centerY)) asInteger
-					width: width
-					height: height.
-				out at: ((width * y) + x "for Squeak: + 1") put: pix]]].
-
-	interpreterProxy pop: 4.  "pop args, leave rcvr on stack"
+			d := dx * dx + (dy * dy).
+			d < radiusSquared
+				ifTrue: [ 
+					"inside the whirl circle"
+					factor := 1.0 - (d sqrt / radius).
+					ang := whirlRadians * (factor * factor).
+					sina := ang sin.
+					cosa := ang cos.
+					pix := self
+						interpolatedFrom: in
+						x: (1024.0 * ((cosa * dx - (sina * dy)) / scaleX + centerX)) asInteger
+						y: (1024.0 * ((sina * dx + (cosa * dy)) / scaleY + centerY)) asInteger
+						width: width
+						height: height.
+					out at: width * y + x put: pix	"for Squeak: + 1" ] ] ].
+	interpreterProxy pop: 4.	"pop args, leave rcvr on stack"
 	^ 0
-
 ]

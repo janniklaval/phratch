@@ -74,16 +74,6 @@ EventHatMorph >> forStartEvent [
 
 ]
 
-{ #category : #initialization }
-EventHatMorph >> forceLayout [
-	"My UpdatingStringMorph calls this when its contents change"
-
-	self fixBlockLayout.
-	(self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph) ifNotNil:[
-		(self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph) fixLayout].
-
-]
-
 { #category : #other }
 EventHatMorph >> helpScreenName [
 	"Answer the name of the help screen for this hat block, or nil if no help is available."
@@ -100,25 +90,21 @@ EventHatMorph >> helpScreenName [
 
 { #category : #initialization }
 EventHatMorph >> initialize [
-
 	| parts label |
 	super initialize.
 	self removeAllMorphs.
-
 	parts := PhratchTranslator labelPartsFor: 'when I receive $Event$'.
-
-	parts first size > 0 ifTrue: [
-		label := StringMorph contents: parts first font: (PhratchFrameMorph getFont: #Label).
-		label color: Color white.
-		self addMorphBack: label].
-
+	parts first size > 0
+		ifTrue: [ 
+			label := StringMorph contents: parts first font: (PhratchFrameMorph getFont: #Label).
+			label color: Color white.
+			self addMorphBack: label ].
 	scriptNameMorph := EventTitleMorph new.
 	self addMorphBack: scriptNameMorph.
-
-	parts second size > 0 ifTrue: [
-		label := (StringMorph contents: parts second font: (PhratchFrameMorph getFont: #Label)) color: Color white.
-		self addMorphBack: label].
-
+	parts second size > 0
+		ifFalse: [ ^ self ].
+	label := (StringMorph contents: parts second font: (PhratchFrameMorph getFont: #Label)) color: Color white.
+	self addMorphBack: label
 ]
 
 { #category : #'pats in' }
@@ -133,11 +119,13 @@ EventHatMorph >> printHatNameOn: aStream [
 	| evtName |
 	evtName := self eventName.
 	evtName = 'Phratch-StartClicked'
-		ifTrue: [aStream nextPutAll: 'when green flag clicked']
-		ifFalse: [aStream nextPutAll: 'when I receive "', evtName, '"'].
-	aStream cr.
-
-
+		ifTrue: [ aStream nextPutAll: 'when green flag clicked' ]
+		ifFalse: [ 
+			aStream
+				nextPutAll: 'when I receive "';
+				nextPutAll: evtName;
+				nextPutAll: '"' ].
+	aStream cr
 ]
 
 { #category : #other }

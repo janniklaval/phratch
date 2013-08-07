@@ -18,10 +18,6 @@ Class {
 		'rolloverForm',
 		'rotationToggleMorph'
 	],
-	#classVars : [
-		'InfoFont',
-		'NameFont'
-	],
 	#category : #'Phratch-UI-Support'
 }
 
@@ -29,18 +25,18 @@ Class {
 LibraryItemMorph >> acceptDroppingMorph: aMorph event: evt [
 	"Copy the dropped scripts of another object into its target."
 
-	(aMorph isKindOf: MediaItemMorph) ifTrue: [
-		target addMediaItem: aMorph media copy.
-		evt hand rejectDropMorph: aMorph event: evt].
-
-	(aMorph isKindOf: BlockMorph) ifTrue: [
-		evt hand rejectDropMorph: aMorph event: evt.
-		target addStack: aMorph fullCopy].
-
-	(aMorph isKindOf: PhratchCommentMorph) ifTrue: [
-		evt hand rejectDropMorph: aMorph event: evt.
-		target addComment: aMorph fullCopy].
-
+	(aMorph isKindOf: MediaItemMorph)
+		ifTrue: [ 
+			target addMediaItem: aMorph media copy.
+			evt hand rejectDropMorph: aMorph event: evt ].
+	(aMorph isKindOf: BlockMorph)
+		ifTrue: [ 
+			evt hand rejectDropMorph: aMorph event: evt.
+			target addStack: aMorph fullCopy ].
+	(aMorph isKindOf: PhratchCommentMorph)
+		ifFalse: [ ^ self ].
+	evt hand rejectDropMorph: aMorph event: evt.
+	target addComment: aMorph fullCopy
 ]
 
 { #category : #drawing }
@@ -220,16 +216,16 @@ LibraryItemMorph >> justDroppedInto: aMorph event: evt [
 			ifFalse: [self target unhinge]].
 
 	self delete.
-true ifTrue: [^ self].
+	^ self.
 
 	"delete me when dropped on the blocks palette or the script editor"
-	(((aMorph ownerOrYourselfThatIsA: PhratchViewerMorph) notNil) 
+	"(((aMorph ownerOrYourselfThatIsA: PhratchViewerMorph) notNil) 
 		or: [(aMorph ownerOrYourselfThatIsA: PhratchScriptEditorMorph) notNil]) ifTrue: [
-		^ self target undoableDeleteSprite].
+		^ self target undoableDeleteSprite]."
 
 	"blocks cannot be dropped onto the stage"
-	(owner isKindOf: PhratchStageMorph) ifTrue: [
-		^ evt hand rejectDropMorph: self event: evt].
+	"(owner isKindOf: PhratchStageMorph) ifTrue: [
+		^ evt hand rejectDropMorph: self event: evt]."
 
 ]
 
@@ -304,13 +300,6 @@ LibraryItemMorph >> mouseEnterDragging: evt [
 ]
 
 { #category : #'event handling' }
-LibraryItemMorph >> mouseHold: evt [
-
-	(target isKindOf: PhratchStageMorph) ifFalse: [self rightButtonMenu].
-
-]
-
-{ #category : #'event handling' }
 LibraryItemMorph >> mouseLeaveDragging: evt [
 
 	"(evt hand submorphs at: 1) removeCopyTooltip."
@@ -354,33 +343,31 @@ LibraryItemMorph >> rightButtonMenu [
 
 	| menu stage |
 	menu := MenuMorphNG new defaultTarget: self target.
-	menu add: 'show' action: #makeVisible.
-	menu add: 'export this sprite' action: #exportObject.
-
+	menu add: 'show' translated action: #makeVisible.
+	menu add: 'export this sprite' translated action: #exportObject.
 	stage := self target ownerOrYourselfThatIsA: PhratchStageMorph.
-	stage ifNotNil: [
-		(stage phratchServer notNil and: 
-		[stage phratchServer sessionInProgress])
-			ifTrue: [
-				menu add: 'share this sprite' action: #shareObject ]].
-
+	stage
+		ifNotNil: [ 
+			(stage phratchServer notNil and: [ stage phratchServer sessionInProgress ])
+				ifTrue: [ menu add: 'share this sprite' translated action: #shareObject ] ].
 	menu addLine.
-	menu add: 'duplicate' action: #duplicateNoAttach.
-	menu add: 'delete' action: #undoableDeleteSprite.
-	(self target isKindOf: PhratchSpriteMorph) ifTrue: [
-		menu addLine.
-		menu add: 'clone' action: #spawn.
-		menu add: 'parent...' action: #choosePrototype.
-		self target instances size > 0 ifTrue: [
-			menu add: 'children...' action: [self childrenMenu]].
-		self target isNested ifTrue: [
-			menu addLine ].
-		self target hasSubsprites ifTrue: [
-			menu add: 'detach all subsprites' action: #unhingeAll ].
-		self target ownerSprite ifNotNil: [
-			menu add: 'detach from ', self target ownerSprite objName action: #unhinge  ]].
-	menu localize; invokeModal.
-
+	menu add: 'duplicate' translated action: #duplicateNoAttach.
+	menu add: 'delete' translated action: #undoableDeleteSprite.
+	(self target isKindOf: PhratchSpriteMorph)
+		ifTrue: [ 
+			menu addLine.
+			menu add: 'clone' translated action: #spawn.
+			menu add: 'parent...' translated action: #choosePrototype.
+			self target instances size > 0
+				ifTrue: [ menu add: 'children...' action: [ self childrenMenu ] ].
+			self target isNested
+				ifTrue: [ menu addLine ].
+			self target hasSubsprites
+				ifTrue: [ menu add: 'detach all subsprites' translated action: #unhingeAll ].
+			self target ownerSprite ifNotNil: [ menu add: 'detach from ' , self target ownerSprite objName action: #unhinge ] ].
+	menu
+		localize;
+		invokeModal
 ]
 
 { #category : #'event handling' }
@@ -491,7 +478,7 @@ LibraryItemMorph >> truncatedLabel [
 { #category : #initialization }
 LibraryItemMorph >> updateNameAndInfo [
 
-	| w y txt |
+	| txt |
 
 	txt := ((target objName, ' (', 'Scripts' localized, PhratchTranslator colonSuffix, ' ', target scripts size printString,')')).
 
@@ -534,60 +521,50 @@ LibraryItemMorph >> updateRotationToggleMorph [
 
 { #category : #stepping }
 LibraryItemMorph >> updateThumbnail [
-
 	| f e r form smallSize anchor subs |
-
 	self updateRotationToggleMorph.
-
 	form := thumbnailMorph form.
 	form fillColor: Color transparent.
-	target ifNil: [
-		thumbnailMorph changed.
-		^ self].
-
+	target
+		ifNil: [ 
+			thumbnailMorph changed.
+			^ self ].
 	self updateRotationToggleMorph.
-
 	smallSize := (form height // 3) @ (form height // 3).
-
-	((target isKindOf: PhratchSpriteMorph) and: [target hasSubsprites]) ifTrue: [
-		1 to: (target subsprites size min: 3) do: [:idx|
-			subs := ((target subsprites at: idx) imageForm asFormOfDepth: 16) toThumbnail: smallSize borderWidth: 0 borderColor: Color transparent.
-			subs displayOn: form at: (form width - (subs width*idx)) @ (form height - subs height) ]].
-
-
-	anchor := ((target isKindOf: PhratchSpriteMorph) and: [target ownerSprite notNil]).
-
+	((target isKindOf: PhratchSpriteMorph) and: [ target hasSubsprites ])
+		ifTrue: [ 
+			1 to: (target subsprites size min: 3) do: [ :idx | 
+				subs := ((target subsprites at: idx) imageForm asFormOfDepth: 16)
+					toThumbnail: smallSize
+					borderWidth: 0
+					borderColor: Color transparent.
+				subs displayOn: form at: (form width - (subs width * idx)) @ (form height - subs height) ] ].
+	anchor := (target isKindOf: PhratchSpriteMorph) and: [ target ownerSprite notNil ].
 	f := target imageForm asFormOfDepth: 16.
-	((f width <= form width) & (f height <= form height)) ifTrue: [
-		"target's image fits without shrinking"
-		f displayOn: form at: ((form extent - f extent) // 2).
-		thumbnailMorph changed.
-		^ self].
-
-
-	f width > f height 
-		ifTrue: [e := form width @ ((f height * form width) // f width)]
-		ifFalse: [e := ((f width * form height) // f height) @ form height].
-	e := e max: (8@8).
-	r := Rectangle center: (form extent // 2) extent: e.
-
+	f width <= form width & (f height <= form height)
+		ifTrue: [ 
+			"target's image fits without shrinking"
+			f displayOn: form at: (form extent - f extent) // 2.
+			thumbnailMorph changed.
+			^ self ].
+	e := f width > f height
+		ifTrue: [ form width @ (f height * form width // f width) ]
+		ifFalse: [ (f width * form height // f height) @ form height ].
+	e := e max: 8 @ 8.
+	r := Rectangle center: form extent // 2 extent: e.
 	(WarpBlt toForm: form)
 		sourceForm: f;
-		cellSize: 2;  "do smoothing; this also installs a colormap"
+		cellSize: 2;
 		combinationRule: Form paint;
-		copyQuad: f boundingBox innerCorners toRect: (r insetBy: 2).
-
-	anchor ifTrue: [
-		(WarpBlt toForm: form)
-			sourceForm: (target ownerSprite imageForm asFormOfDepth: 16);
-			cellSize: 2;  "do smoothing; this also installs a colormap"
-			combinationRule: Form paint;
-			copyQuad: f boundingBox innerCorners toRect: (0@0 extent: smallSize).
-
-		"anchor displayOn: form at: 0@0"].
-
-	thumbnailMorph changed.
-
+		copyQuad: f boundingBox innerCorners toRect: (r insetBy: 2).	"do smoothing; this also installs a colormap"
+	anchor
+		ifTrue: [ 
+			(WarpBlt toForm: form)
+				sourceForm: (target ownerSprite imageForm asFormOfDepth: 16);
+				cellSize: 2;
+				combinationRule: Form paint;
+				copyQuad: f boundingBox innerCorners toRect: (0 @ 0 extent: smallSize)	"do smoothing; this also installs a colormap"	"anchor displayOn: form at: 0@0" ].
+	thumbnailMorph changed
 ]
 
 { #category : #'dropping/grabbing' }

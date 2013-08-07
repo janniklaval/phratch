@@ -24,11 +24,6 @@ Class {
 	#category : #'Phratch-Blocks'
 }
 
-{ #category : #'as yet unclassified' }
-CustomCommandBlockMorph class >> codeOwner [
-	^ 'jens owns the byob code :-)'
-]
-
 { #category : #accessing }
 CustomCommandBlockMorph class >> owner [
 	^ 'jens'
@@ -122,98 +117,116 @@ CustomCommandBlockMorph >> addLabelToNonTemplate [
 	"Add a label for my command and arguments. This is the method that really creates the whole block."
 
 	| tokens args nextArgIndex m next argValues eachArg eachValue pn pt def |
-	commandSpec ifNil: [^ self].
-
-	"remember the values of the arguments"
+	commandSpec ifNil: [ ^ self ].	"remember the values of the arguments"
 	argValues := OrderedCollection new.
-	argMorphs do: [:a |
-		(a isKindOf: BlockMorph)
-			ifTrue: [argValues add: a]
-			ifFalse: [(a isKindOf: MultiArgMorph)
-				ifTrue: [argValues add: a listValue]
-				ifFalse: [(a isKindOf: ExpressionArgMorph)
-					ifTrue: [ a isNumberExpression
-						ifTrue: [a getExpression = ' '
-							ifTrue: [argValues add: a getExpression]
-							ifFalse: [argValues add: a getExpression asNumberNoError]]
-						ifFalse: [argValues add: a getExpression]]
-					ifFalse: [a isEmptySlot
-						ifFalse: [argValues add: a evaluate]]]]].
-
-	"we make sure not to remove the next block."
+	argMorphs
+		do: [ :a | 
+			(a isKindOf: BlockMorph)
+				ifTrue: [ argValues add: a ]
+				ifFalse: [ 
+					(a isKindOf: MultiArgMorph)
+						ifTrue: [ argValues add: a listValue ]
+						ifFalse: [ 
+							(a isKindOf: ExpressionArgMorph)
+								ifTrue: [ 
+									a isNumberExpression
+										ifTrue: [ 
+											a getExpression = ' '
+												ifTrue: [ argValues add: a getExpression ]
+												ifFalse: [ argValues add: a getExpression asNumberNoError ] ]
+										ifFalse: [ argValues add: a getExpression ] ]
+								ifFalse: [ 
+									a isEmptySlot
+										ifFalse: [ argValues add: a evaluate ] ] ] ] ].	"we make sure not to remove the next block."
 	next := self nextBlock.
-	self removeAllMorphsIn: (self submorphs reject: [:t | t = next]).
-
+	self removeAllMorphsIn: (self submorphs reject: [ :t | t = next ]).
 	tokens := CommandBlockMorph parseCommandSpec: commandSpec.
-	args := tokens select: [:s | CommandBlockMorph isArgSpec: s].
-
-	"remove all arg morphs from the list."
-	[argMorphs size > 0 ] whileTrue: [
-		m := argMorphs last.
-		argMorphs remove: m].
-
-	"create new arg morphs."
-	[argMorphs size < args size] whileTrue: [
-		def := self definition.
-		def isNil
-			ifTrue: [pt := #any]
-			ifFalse: [ pt := def typeOfParameterIndex: argMorphs size + 1].
-		#template = pt 
-			ifTrue: [
-				pn := def parameterNames at: argMorphs size + 1.
-				argMorphs addLast: 	(VariableBlockMorph new 
-					isSpecialForm: true; 
-					selector: #getVar:;
-					commandSpec: pn;
-		yourself)]
-			ifFalse: [argMorphs addLast: (self argMorphFor: (args at: argMorphs size + 1))]].
-
+	args := tokens select: [ :s | CommandBlockMorph isArgSpec: s ].	"remove all arg morphs from the list."
+	[ argMorphs size > 0 ]
+		whileTrue: [ 
+			m := argMorphs last.
+			argMorphs remove: m ].	"create new arg morphs."
+	[ argMorphs size < args size ]
+		whileTrue: [ 
+			def := self definition.
+			pt := def isNil
+				ifTrue: [ #any ]
+				ifFalse: [ def typeOfParameterIndex: argMorphs size + 1 ].
+			#template = pt
+				ifTrue: [ 
+					pn := def parameterNames at: argMorphs size + 1.
+					argMorphs
+						addLast:
+							(VariableBlockMorph new
+								isSpecialForm: true;
+								selector: #getVar:;
+								commandSpec: pn;
+								yourself) ]
+				ifFalse: [ argMorphs addLast: (self argMorphFor: (args at: argMorphs size + 1)) ] ].
 	nextArgIndex := 1.
-
-	tokens do: [:s |
-		(CommandBlockMorph isArgSpec: s)
-			ifTrue:	[
-				m := argMorphs at: nextArgIndex.
-				nextArgIndex := nextArgIndex + 1]
-			ifFalse:	[
-				m := self labelMorphFor: (String withAll: s)].
-		self addMorphBack: m].
-
-	(self isReporter and: [submorphs isEmpty not]) ifTrue: [
-		m := submorphs first.
-		((m isKindOf: ChoiceArgMorph) | (m isKindOf: SpriteArgMorph)) ifTrue: [  "add spacer"
-			self addMorphFront: (Morph new color: Color transparent; extent: 2@5;
-		yourself)].
-
-		m := submorphs last.
-		((m isKindOf: ChoiceArgMorph) | (m isKindOf: SpriteArgMorph)) ifTrue: [  "add spacer"
-			self addMorphBack: (Morph new color: Color transparent; extent: 2@5;
-		yourself)]].
-
-	"now try restoring the former arguments (jens)"
-	1 to: argMorphs size do: [:i |
+	tokens
+		do: [ :s | 
+			(CommandBlockMorph isArgSpec: s)
+				ifTrue: [ 
+					m := argMorphs at: nextArgIndex.
+					nextArgIndex := nextArgIndex + 1 ]
+				ifFalse: [ m := self labelMorphFor: (String withAll: s) ].
+			self addMorphBack: m ].
+	(self isReporter and: [ submorphs isEmpty not ])
+		ifTrue: [ 
+			m := submorphs first.
+			(m isKindOf: ChoiceArgMorph) | (m isKindOf: SpriteArgMorph)
+				ifTrue: [ 
+					"add spacer"
+					self
+						addMorphFront:
+							(Morph new
+								color: Color transparent;
+								extent: 2 @ 5;
+								yourself) ].
+			m := submorphs last.
+			(m isKindOf: ChoiceArgMorph) | (m isKindOf: SpriteArgMorph)
+				ifTrue: [ 
+					"add spacer"
+					self
+						addMorphBack:
+							(Morph new
+								color: Color transparent;
+								extent: 2 @ 5;
+								yourself) ] ].	"now try restoring the former arguments (jens)"
+	1 to: argMorphs size do: [ :i | 
 		eachArg := argMorphs at: i.
-		eachValue := argValues at: i ifAbsent: [nil].
-		eachValue ifNotNil: [(eachValue isKindOf: BlockMorph)
-			ifTrue: [(eachArg acceptsTypeOf: eachValue)
-				ifTrue: [ (({CSlotMorph. OSlotMorph. CArgSlotMorph. CReporterSlotMorph} includes: eachArg class) and: [eachArg class = eachValue class])
-					ifTrue: [self replaceArgMorph: eachArg by: eachValue]
-					ifFalse: [({CSlotMorph. OSlotMorph. CArgSlotMorph. CReporterSlotMorph} includes: eachValue class)
-						ifTrue: [((eachArg respondsTo: #attachBlock:) and: [(eachValue respondsTo: #nestedBlock) and: [eachValue nestedBlock notNil]])
-							ifTrue: [eachArg attachBlock: eachValue nestedBlock]]
-						ifFalse: [self replaceArgMorph: eachArg by: eachValue]]]
-				ifFalse: [((eachArg isKindOf: VariableBlockMorph) and: [
-							eachValue isKindOf: VariableBlockMorph])
-								ifTrue: [eachArg commandSpec: eachValue commandSpec]]]
-			ifFalse: [ 
-				((eachArg isKindOf: ExpressionArgMorph) and: [eachArg isNumberExpression])
-					ifTrue: [eachArg defaultValue: eachValue "asNumberNoError"]
-					ifFalse: [ (eachValue isKindOf: PhratchListMorph)
-						ifTrue: [eachArg defaultValue: eachValue]
-						ifFalse: [eachArg defaultValue: eachValue asString]]]]]
-
-
-
+		eachValue := argValues at: i ifAbsent: [ nil ].
+		eachValue
+			ifNotNil: [ 
+				(eachValue isKindOf: BlockMorph)
+					ifTrue: [ 
+						(eachArg acceptsTypeOf: eachValue)
+							ifTrue: [ 
+								(({CSlotMorph.
+								OSlotMorph.
+								CArgSlotMorph.
+								CReporterSlotMorph} includes: eachArg class) and: [ eachArg class = eachValue class ])
+									ifTrue: [ self replaceArgMorph: eachArg by: eachValue ]
+									ifFalse: [ 
+										({CSlotMorph.
+										OSlotMorph.
+										CArgSlotMorph.
+										CReporterSlotMorph} includes: eachValue class)
+											ifTrue: [ 
+												((eachArg respondsTo: #attachBlock:) and: [ (eachValue respondsTo: #nestedBlock) and: [ eachValue nestedBlock notNil ] ])
+													ifTrue: [ eachArg attachBlock: eachValue nestedBlock ] ]
+											ifFalse: [ self replaceArgMorph: eachArg by: eachValue ] ] ]
+							ifFalse: [ 
+								((eachArg isKindOf: VariableBlockMorph) and: [ eachValue isKindOf: VariableBlockMorph ])
+									ifTrue: [ eachArg commandSpec: eachValue commandSpec ] ] ]
+					ifFalse: [ 
+						((eachArg isKindOf: ExpressionArgMorph) and: [ eachArg isNumberExpression ])
+							ifTrue: [ eachArg defaultValue: eachValue	"asNumberNoError" ]
+							ifFalse: [ 
+								(eachValue isKindOf: PhratchListMorph)
+									ifTrue: [ eachArg defaultValue: eachValue ]
+									ifFalse: [ eachArg defaultValue: eachValue asString ] ] ] ] ]
 ]
 
 { #category : #template }
@@ -254,28 +267,30 @@ CustomCommandBlockMorph >> asBlockTuple [
 		at: 2 put: self rcvr;
 		at: 3 put: selector;
 		at: 4 put: userSpec.
-
 	argList := argMorphs.
-	1 to: argList size do: [:i |
+	1 to: argList size do: [ :i | 
 		arg := argList at: i.
 		(arg isKindOf: ArgMorph) | (arg isKindOf: EventTitleMorph)
-			ifTrue: [(arg isKindOf: MultiArgMorph)
-				ifTrue: [ blockTuple at: i + 4 put: arg listValue convertStacksToTuples] "a list"
-				ifFalse: [ ((arg isKindOf: CSlotMorph) or: [arg isKindOf: OSlotMorph])
-					ifTrue: [blockTuple at: i + 4 put: arg asBlockTuple]
-					ifFalse: [(arg isKindOf: ExpressionArgMorph)
-						ifTrue: [
-							val := arg getExpression.
-							arg isNumberExpression
-								ifTrue: [val = ' '
-									ifTrue: [eval := val]
-									ifFalse: [eval := val asNumberNoError]]
-								ifFalse: [eval := arg getExpression]]
-						ifFalse: [eval := arg evaluate].
-						blockTuple at: i + 4 put: eval]]]
-			ifFalse: [blockTuple at: i + 4 put: arg asBlockTuple]].
+			ifTrue: [ 
+				(arg isKindOf: MultiArgMorph)
+					ifTrue: [ blockTuple at: i + 4 put: arg listValue convertStacksToTuples ]
+					ifFalse: [ 
+						((arg isKindOf: CSlotMorph) or: [ arg isKindOf: OSlotMorph ])
+							ifTrue: [ blockTuple at: i + 4 put: arg asBlockTuple ]
+							ifFalse: [ 
+								(arg isKindOf: ExpressionArgMorph)
+									ifTrue: [ 
+										val := arg getExpression.
+										eval := arg isNumberExpression
+											ifTrue: [ 
+												val = ' '
+													ifTrue: [ val ]
+													ifFalse: [ val asNumberNoError ] ]
+											ifFalse: [ arg getExpression ] ]
+									ifFalse: [ eval := arg evaluate ].
+								blockTuple at: i + 4 put: eval ] ]	"a list" ]
+			ifFalse: [ blockTuple at: i + 4 put: arg asBlockTuple ] ].
 	^ blockTuple
-
 ]
 
 { #category : #private }
@@ -517,18 +532,18 @@ CustomCommandBlockMorph >> rename [
 
 { #category : #private }
 CustomCommandBlockMorph >> replaceArgMorph: argMorph by: newMorph [
-
 	| def typ pname i val |
 	super replaceArgMorph: argMorph by: newMorph.
-	(newMorph isKindOf: ExpressionArgMorph) ifTrue: [
-		def := self definition.
-		i := argMorphs indexOf: newMorph.
-		pname := def parameterNames at: i.
-		typ := def typeOf: pname.
-		val := def defaultOf: pname.
-		#number = typ
-			ifTrue: [newMorph numExpression: val] 
-			ifFalse: [newMorph defaultValue: val]]
+	(newMorph isKindOf: ExpressionArgMorph)
+		ifFalse: [ ^ self ].
+	def := self definition.
+	i := argMorphs indexOf: newMorph.
+	pname := def parameterNames at: i.
+	typ := def typeOf: pname.
+	val := def defaultOf: pname.
+	#number = typ
+		ifTrue: [ newMorph numExpression: val ]
+		ifFalse: [ newMorph defaultValue: val ]
 ]
 
 { #category : #byob }
@@ -608,14 +623,6 @@ CustomCommandBlockMorph >> setDefaultArgs [
 					#number = typ
 						ifTrue: [a numExpression: (def defaultOf: (parms at: i ifAbsent: [nil]))]
 						ifFalse: [a defaultValue: (def defaultOf: (parms at: i ifAbsent: [nil]))]]]]
-]
-
-{ #category : #template }
-CustomCommandBlockMorph >> showArgumentPlaceHolders [
-
-	submorphs do: [:m |
-		(m isKindOf: ArgumentPlaceHolderMorph)
-			ifTrue: [m appear]]
 ]
 
 { #category : #template }

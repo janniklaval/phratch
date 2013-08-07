@@ -7,7 +7,7 @@ Class {
 	#category : #'Phratch-Tests'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 PhratchPluginTests >> blurTest: count [
 	"PhratchPlugin blurTest: 10"
 
@@ -22,7 +22,7 @@ PhratchPluginTests >> blurTest: count [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 PhratchPluginTests >> brightnessShiftTest [
 	"self brightnessShiftTest"
 
@@ -36,7 +36,7 @@ PhratchPluginTests >> brightnessShiftTest [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 PhratchPluginTests >> doubleTest [
 	"self doubleTest"
 
@@ -49,7 +49,7 @@ PhratchPluginTests >> doubleTest [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 PhratchPluginTests >> filterBenchmark: count [
 	"self filterBenchmark: 100"
 
@@ -57,37 +57,65 @@ PhratchPluginTests >> filterBenchmark: count [
 	s := (WriteStream on: String new) cr.
 	f := (Form fromFileNamed: TestFileName) asFormOfDepth: 32.
 	fOut := f deepCopy.
-
-	msecs := [count timesRepeat: [PhratchPlugin primShiftHue: f bits into: fOut bits byDegrees: 100]] msecs.
-	s nextPutAll: 'hue shift: ', ((msecs asFloat / count) roundTo: 0.01) printString, ' msecs'; cr.
+	msecs := [ count timesRepeat: [ PhratchPlugin primShiftHue: f bits into: fOut bits byDegrees: 100 ] ] msecs.
+	s
+		nextPutAll: 'hue shift: ';
+		nextPutAll: (msecs asFloat / count roundTo: 0.01) printString;
+		nextPutAll: ' msecs';
+		cr.
 	fOut display.
-	
-	msecs := [count timesRepeat: [PhratchPlugin primShiftBrightness: f bits into: fOut bits by: 50]] msecs.
-	s nextPutAll: 'brightness shift: ', ((msecs asFloat / count) roundTo: 0.01) printString, ' msecs'; cr.
+	msecs := [ count timesRepeat: [ PhratchPlugin primShiftBrightness: f bits into: fOut bits by: 50 ] ] msecs.
+	s
+		nextPutAll: 'brightness shift: ';
+		nextPutAll: (msecs asFloat / count roundTo: 0.01) printString;
+		nextPutAll: ' msecs';
+		cr.
 	fOut display.
-
-	msecs := [count timesRepeat: [PhratchPlugin primShiftSaturation: f bits into: fOut bits by: 50]] msecs.
-	s nextPutAll: 'saturation shift: ', ((msecs asFloat / count) roundTo: 0.01) printString, ' msecs'; cr.
+	msecs := [ count timesRepeat: [ PhratchPlugin primShiftSaturation: f bits into: fOut bits by: 50 ] ] msecs.
+	s
+		nextPutAll: 'saturation shift: ';
+		nextPutAll: (msecs asFloat / count roundTo: 0.01) printString;
+		nextPutAll: ' msecs';
+		cr.
 	fOut display.
-
-	msecs := [count timesRepeat: [PhratchPlugin primFisheye: f bits into: fOut bits width: f width power: 300]] msecs.
-	s nextPutAll: 'fisheye: ', ((msecs asFloat / count) roundTo: 0.01) printString, ' msecs'; cr.
+	msecs := [ 
+	count
+		timesRepeat: [ 
+			PhratchPlugin
+				primFisheye: f bits
+				into: fOut bits
+				width: f width
+				power: 300 ] ] msecs.
+	s
+		nextPutAll: 'fisheye: ';
+		nextPutAll: (msecs asFloat / count roundTo: 0.01) printString;
+		nextPutAll: ' msecs';
+		cr.
 	fOut display.
-
-	msecs := [count timesRepeat: [PhratchPlugin primWhirl: f bits into: fOut bits width: f width angle: 1000]] msecs.
-	s nextPutAll: 'whirl: ', ((msecs asFloat / count) roundTo: 0.01) printString, ' msecs'; cr.
+	msecs := [ 
+	count
+		timesRepeat: [ 
+			PhratchPlugin
+				primWhirl: f bits
+				into: fOut bits
+				width: f width
+				angle: 1000 ] ] msecs.
+	s
+		nextPutAll: 'whirl: ';
+		nextPutAll: (msecs asFloat / count roundTo: 0.01) printString;
+		nextPutAll: ' msecs';
+		cr.
 	fOut display.
-
-	msecs := [count timesRepeat: [fOut display]] msecs.
-	s nextPutAll: 'display: ', ((msecs asFloat / count) roundTo: 0.01) printString, ' msecs'; cr.
-
-
+	msecs := [ count timesRepeat: [ fOut display ] ] msecs.
+	s
+		nextPutAll: 'display: ';
+		nextPutAll: (msecs asFloat / count roundTo: 0.01) printString;
+		nextPutAll: ' msecs';
+		cr.
 	^ s contents
-
-
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 PhratchPluginTests >> fisheyeTest [
 	"self fisheyeTest"
 
@@ -101,7 +129,7 @@ PhratchPluginTests >> fisheyeTest [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 PhratchPluginTests >> fisheyeTest2: power [
 	"self fisheyeTest2: 100"
 
@@ -114,7 +142,7 @@ PhratchPluginTests >> fisheyeTest2: power [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 PhratchPluginTests >> halfSizeAverageTest [
 	"self halfSizeAverageTest"
 
@@ -132,7 +160,7 @@ PhratchPluginTests >> halfSizeAverageTest [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 PhratchPluginTests >> halfSizeDiagonalTest [
 	"self halfSizeDiagonalTest"
 
@@ -150,7 +178,7 @@ PhratchPluginTests >> halfSizeDiagonalTest [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 PhratchPluginTests >> hueShiftTest [
 	"self hueShiftTest"
 
@@ -164,7 +192,7 @@ PhratchPluginTests >> hueShiftTest [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 PhratchPluginTests >> interpolationTest: scale [
 	"Answer a copy of the given form scaled by the given factor using linear interpolation."
 	"(self interpolationTest: 1.5) display"
@@ -192,7 +220,7 @@ PhratchPluginTests >> interpolationTest: scale [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 PhratchPluginTests >> saturationShiftTest [
 	"self saturationShiftTest"
 
@@ -206,7 +234,7 @@ PhratchPluginTests >> saturationShiftTest [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 PhratchPluginTests >> scaleTest: scale [
 	"self scaleTest: 1.5"
 
@@ -219,7 +247,7 @@ PhratchPluginTests >> scaleTest: scale [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 PhratchPluginTests >> testFileName: aString [
 	"Set the name of an image file for testing."
 	"self testFileName: 'hammy.jpg'"
@@ -229,33 +257,59 @@ PhratchPluginTests >> testFileName: aString [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
+PhratchPluginTests >> videoTest [
+	"A quick test of video input. Displays video on the screen until the mouse is pressed."
+	"CameraPlugin videoTest"
+
+	| f n startTime frameCount msecs fps |
+	(CameraPlugin openCamera: 1 width: 320 height: 240) ifNil: [^ CameraPlugin inform: 'no camera'].
+	CameraPlugin waitForCameraStart.
+	(CameraPlugin frameExtent: 1) x = 0 ifTrue: [^ CameraPlugin inform: 'no camera'].
+	f := Form extent: (CameraPlugin frameExtent: 1) depth: 32.
+	frameCount := 0.
+	startTime := nil.
+	[Sensor anyButtonPressed] whileFalse: [
+		n := CameraPlugin getFrameForCamera: 1 into: f bits.
+		n > 0 ifTrue: [
+			startTime ifNil: [startTime := Time millisecondClockValue].
+			frameCount := frameCount + 1.
+			f display]].
+	Sensor waitNoButton.
+	msecs := Time millisecondClockValue - startTime.
+	CameraPlugin closeCamera: 1.
+	fps := (frameCount * 1000) // msecs.
+	^ frameCount printString, ' frames at ', fps printString, ' frames/sec'
+]
+
+{ #category : #tests }
 PhratchPluginTests >> waterRipples1ModuleTest [
 	"Smalltalk unloadPlugin: self name"
+
 	"self waterRipples1ModuleTest"
 
 	| f fOut ripply aArray bArray |
 	f := (Form fromFileNamed: TestFileName) asFormOfDepth: 32.
 	fOut := f deepCopy.
-	aArray := ByteArray new: (f width) * (f height) * 8 withAll: 0.
-	bArray := ByteArray new: (f width) * (f height) * 8 withAll: 0.
-
-	[Sensor anyButtonPressed] whileFalse: [
-		ripply := Sensor cursorPoint x max: 1.
-		ripply := (((ripply / fOut width) sqrt) * 16.0) asInteger.
-		ripply < 1 ifTrue: [ripply := 1].
-ripply printString display.
-		PhratchPlugin primWaterRipples1: f bits
-			into: fOut bits
-			width: f width
-			dropNum: ripply
-			array1: aArray
-			array2: bArray.
-		fOut displayAt: 10@30].
-
+	aArray := ByteArray new: f width * f height * 8 withAll: 0.
+	bArray := ByteArray new: f width * f height * 8 withAll: 0.
+	[ Sensor anyButtonPressed ]
+		whileFalse: [ 
+			ripply := Sensor cursorPoint x max: 1.
+			ripply := ((ripply / fOut width) sqrt * 16.0) asInteger.
+			ripply := ripply max: 1.
+			ripply printString display.
+			PhratchPlugin
+				primWaterRipples1: f bits
+				into: fOut bits
+				width: f width
+				dropNum: ripply
+				array1: aArray
+				array2: bArray.
+			fOut displayAt: 10 @ 30 ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 PhratchPluginTests >> waterRipples1ModuleTest: n [
 	"Smalltalk unloadPlugin: self name"
 	"self waterRipples1ModuleTest: 100"
@@ -283,7 +337,7 @@ PhratchPluginTests >> waterRipples1ModuleTest: n [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 PhratchPluginTests >> waterRipplesTime: n [
 	"Smalltalk unloadPlugin: self name"
 	"self waterRipplesTime: 100"
@@ -311,7 +365,7 @@ PhratchPluginTests >> waterRipplesTime: n [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 PhratchPluginTests >> whirlTest [
 	"self whirlTest"
 

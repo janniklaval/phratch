@@ -277,12 +277,6 @@ BlockDialog >> disableAllButCategoryAndShape [
 		addMorphBack: bottomSpacer.
 ]
 
-{ #category : #interaction }
-BlockDialog >> disableTypeDeclaration [
-
-	radioButtons isHidden: true
-]
-
 { #category : #private }
 BlockDialog >> formTypeCommandOff [
 

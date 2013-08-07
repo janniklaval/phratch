@@ -58,10 +58,3 @@ CheckBoxArgMorph >> mouseDown: evt [
 	evt hand waitForClicksOrDrag: self event: evt.
 
 ]
-
-{ #category : #'event handling' }
-CheckBoxArgMorph >> preemptsMouseDown: evt [
-
-	^ true
-
-]

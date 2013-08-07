@@ -32,13 +32,6 @@ TiledImageMorph >> initialize [
 ]
 
 { #category : #accessing }
-TiledImageMorph >> tileForm [
-
-	^ tileForm
-
-]
-
-{ #category : #accessing }
 TiledImageMorph >> tileForm: aForm [
 
 	tileForm := aForm.

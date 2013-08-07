@@ -4,7 +4,7 @@ Class {
 	#category : #'Phratch-Blocks'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #adding }
 ReporterScriptBlockMorph >> addItem [
 	| varBlock pos pname |
 	super addItem.
@@ -27,59 +27,37 @@ ReporterScriptBlockMorph >> addItem [
 ]
 
 { #category : #'as yet unclassified' }
-ReporterScriptBlockMorph >> addRemove [
-	| varBlock pos |
-	super removeItem.
-
-	pos := (argMorphs reject: [:m | m == self nextBlock]) size.
-	(self isKindOf: CommandScriptBlockMorph)
-		ifFalse: [pos := pos - 1 ].
-	varBlock := VariableBlockMorph new.
-	varBlock 
-		isSpecialForm: true;
-		receiver: nil;	
-		selector: #getBlockVar:;
-		commandSpec: '#', pos printString.
-	(self isKindOf: CommandScriptBlockMorph)
-		ifTrue: [ self replaceArgMorph: (self argumentAt: pos) by: varBlock ]
-		ifFalse: [ self replaceArgMorph: (self argumentAt: pos + 1) by: varBlock]
-]
-
-{ #category : #'as yet unclassified' }
 ReporterScriptBlockMorph >> adjustInternals [
 	"private"
 
 	| newSelector sdict newSpec |
-	(#(function functionWithArgs) includes: selector) ifFalse: [^ self ].
-
-	argMorphs size > 1 
-		ifTrue: [
-			sdict := Dictionary new
+	(#(#function #functionWithArgs) includes: selector)
+		ifFalse: [ ^ self ].
+	sdict := argMorphs size > 1
+		ifTrue: [ 
+			Dictionary new
 				at: #function put: #functionWithArgs;
-				yourself]
-		ifFalse: [
-			sdict := Dictionary new
+				yourself ]
+		ifFalse: [ 
+			Dictionary new
 				at: #functionWithArgs put: #function;
-				yourself].
-
-	receiver ifNil: [^ self ].
-	newSelector := sdict at: selector ifAbsent: [selector].
-	newSelector = selector ifTrue: [^ self].
+				yourself ].
+	receiver ifNil: [ ^ self ].
+	newSelector := sdict at: selector ifAbsent: [ selector ].
+	newSelector = selector
+		ifTrue: [ ^ self ].
 	selector := newSelector.
-
 	newSpec := self receiver blockSpecForSelector: selector.
 	newSpec := newSpec localized.
-
-	self commandSpec: newSpec.
-
+	self commandSpec: newSpec
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ReporterScriptBlockMorph >> args [
 	^argMorphs
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'stack/tuple conversion' }
 ReporterScriptBlockMorph >> asBlockTuple [
 	"Answer a tuple (Array) describing this block and its arguments."
 
@@ -107,7 +85,7 @@ ReporterScriptBlockMorph >> asBlockTuple [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ReporterScriptBlockMorph >> body [
 	(argMorphs first isKindOf: BlockMorph)
 		ifTrue: [^ argMorphs first fullCopy].
@@ -142,14 +120,14 @@ ReporterScriptBlockMorph >> drawSlotBorderOn: aCanvas [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ReporterScriptBlockMorph >> helpScreenName [
 	"Answer the name of the help screen for this hat block, or nil if no help is available."
 
 	^'reporterLambda'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 ReporterScriptBlockMorph >> initialize [
 
 	super initialize.
@@ -157,54 +135,47 @@ ReporterScriptBlockMorph >> initialize [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 ReporterScriptBlockMorph >> isBooleanFunction [
 	^ isBoolean
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 ReporterScriptBlockMorph >> isFunction [
 	^ true
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'argument slot behavior' }
 ReporterScriptBlockMorph >> nestedBlock [
 	^self args first
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ReporterScriptBlockMorph >> optimized [
 	| newBlock reportBlock sel body a rcv |
-
 	rcv := self receiver.
-	rcv ifNil: [rcv := ScriptablePhratchMorph new].
-	(#(function #autoBlock) includes: selector)
-		ifTrue: [sel := #procedure]
-		ifFalse: [sel := #procedureWithArgs].
-	newBlock := rcv blockFromSpec: (rcv wholeBlockSpecForSelector: sel) 
-							color: (ScriptablePhratchMorph blockColorFor: 'operators').
-
-	newBlock isAtomic: (isAtomic or: [self isKindOf: OSlotMorph]).
-
-	reportBlock := rcv blockFromSpec: (rcv wholeBlockSpecForSelector: #doAnswer) 
-							color: (ScriptablePhratchMorph blockColorFor: 'control').
-
+	rcv ifNil: [ rcv := ScriptablePhratchMorph new ].
+	sel := (#(#function #autoBlock) includes: selector)
+		ifTrue: [ #procedure ]
+		ifFalse: [ #procedureWithArgs ].
+	newBlock := rcv
+		blockFromSpec: (rcv wholeBlockSpecForSelector: sel)
+		color: (ScriptablePhratchMorph blockColorFor: 'operators').
+	newBlock isAtomic: (isAtomic or: [ self isKindOf: OSlotMorph ]).
+	reportBlock := rcv
+		blockFromSpec: (rcv wholeBlockSpecForSelector: #doAnswer)
+		color: (ScriptablePhratchMorph blockColorFor: 'control').
 	body := self body.
-	body ifNotNil:[
-		reportBlock replaceArgMorph: (reportBlock argMorphs first) by: body].
-
-	2 to: argMorphs size - 1 do: [:i |
-		newBlock addItem ].
-
-	2 to: argMorphs size do: [:i |
+	body ifNotNil: [ reportBlock replaceArgMorph: reportBlock argMorphs first by: body ].
+	2 to: argMorphs size - 1 do: [ :i | newBlock addItem ].
+	2 to: argMorphs size do: [ :i | 
 		a := (argMorphs at: i) fullCopy.
 		newBlock replaceArgMorph: (newBlock argMorphs at: i - 1) by: a ].
-
 	newBlock attachBlock: reportBlock.
 	newBlock parameters: parameters.
 	newBlock variables: variables.
 	newBlock fixInitialFrame.
-	^newBlock
+	^ newBlock
 ]
 
 { #category : #'as yet unclassified' }
@@ -217,7 +188,8 @@ ReporterScriptBlockMorph >> privateBody [
 
 { #category : #'as yet unclassified' }
 ReporterScriptBlockMorph >> removeItem [
-	argMorphs size > self minArgs ifTrue: [
-		self removeLastArg.
-		self commandSpec: (commandSpec copyFrom: 1 to: commandSpec size - 3) ]
+	argMorphs size > self minArgs
+		ifFalse: [ ^ self ].
+	self removeLastArg.
+	self commandSpec: (commandSpec copyFrom: 1 to: commandSpec size - 3)
 ]

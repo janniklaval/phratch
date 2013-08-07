@@ -105,15 +105,10 @@ OSlotMorph >> fixArgLayout [
 	"Fix my layout. This default implementation does nothing."
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 OSlotMorph >> handlesMouseDown: evt [
 
 	^false
-]
-
-{ #category : #'argument slot behavior' }
-OSlotMorph >> implicitValue [
-	^ implicitValue
 ]
 
 { #category : #'argument slot behavior' }
@@ -121,7 +116,7 @@ OSlotMorph >> implicitValue: anObject [
 	implicitValue := anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialisation }
 OSlotMorph >> initialize [
 	super initialize.
 	isSpecialForm := true.
@@ -150,7 +145,7 @@ OSlotMorph >> isLambdaForm [
 	^ false
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 OSlotMorph >> receiver [
 
 	^receiver ifNil: [
@@ -159,7 +154,7 @@ OSlotMorph >> receiver [
 			ifFalse: [^nil]]	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 OSlotMorph >> type: aSymbol [
 
 	type := aSymbol.
@@ -179,7 +174,7 @@ OSlotMorph >> type: aSymbol [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 OSlotMorph >> veryDeepFixupWith: deepCopier [
 	"If fields were weakly copied, fix them here.  If they were in the tree being copied, fix them up, otherwise point to the originals."
 

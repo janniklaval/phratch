@@ -20,7 +20,7 @@ CommandScriptBlockMorph >> acceptsTypeOf: aBlockMorph [
 	^super acceptsTypeOf: aBlockMorph
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #adding }
 CommandScriptBlockMorph >> addItem [
 	| quoted |
 	quoted := nestedBlock.
@@ -29,39 +29,35 @@ CommandScriptBlockMorph >> addItem [
 		self attachBlock: quoted ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 CommandScriptBlockMorph >> adjustInternals [
 	"private"
 
 	| newSelector sdict quoted newSpec |
-	(#(procedure procedureWithArgs) includes: selector) ifFalse: [^ self ].
-
-	argMorphs size > 0 
-		ifTrue: [
-			sdict := Dictionary new
+	(#(#procedure #procedureWithArgs) includes: selector)
+		ifFalse: [ ^ self ].
+	sdict := argMorphs size > 0
+		ifTrue: [ 
+			Dictionary new
 				at: #procedure put: #procedureWithArgs;
-				yourself]
-		ifFalse: [
-			sdict := Dictionary new
+				yourself ]
+		ifFalse: [ 
+			Dictionary new
 				at: #procedureWithArgs put: #procedure;
-				yourself].
-
-	receiver ifNil: [^ self ].
-	newSelector := sdict at: selector ifAbsent: [selector].
-	newSelector = selector ifTrue: [^ self].
+				yourself ].
+	receiver ifNil: [ ^ self ].
+	newSelector := sdict at: selector ifAbsent: [ selector ].
+	newSelector = selector
+		ifTrue: [ ^ self ].
 	selector := newSelector.
-
 	quoted := nestedBlock.
 	newSpec := self receiver blockSpecForSelector: selector.
 	newSpec := newSpec localized.
-
 	self commandSpec: newSpec.
-
-	quoted ifNotNil: [
-		self attachBlock: quoted ]
+	quoted ifNotNil: [ self attachBlock: quoted ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'stack/tuple conversion' }
 CommandScriptBlockMorph >> asBlockTuple [
 	"Answer a tuple (Array) describing this block and its arguments."
 
@@ -76,31 +72,28 @@ CommandScriptBlockMorph >> asBlockTuple [
 		at: 6 put: type;
 		at: 7 put: declarations;
 		at: 8 put: isAtomic.
-
-
 	argList := argMorphs.
 	argList := self organizeArgs: argList.
-	1 to: argList size do: [:i |
+	1 to: argList size do: [ :i | 
 		arg := argList at: i.
 		(arg isKindOf: ArgMorph)
-			ifTrue: [(arg isKindOf: ExpressionArgMorph)
-				ifTrue: [
-					val := arg getExpression.
-					arg isNumberExpression
-						ifTrue: [val = ' '
-							ifTrue: [eval := val]
-							ifFalse: [eval := val asNumberNoError]]
-						ifFalse: [eval := arg evaluate]]
-				ifFalse: [eval := arg evaluate].
-				blockTuple at: i + 8 put: eval]
-			ifFalse: [blockTuple at: i + 8 put: arg asBlockTuple]].
-
+			ifTrue: [ 
+				(arg isKindOf: ExpressionArgMorph)
+					ifTrue: [ 
+						val := arg getExpression.
+						eval := arg isNumberExpression
+							ifTrue: [ 
+								val = ' '
+									ifTrue: [ val ]
+									ifFalse: [ val asNumberNoError ] ]
+							ifFalse: [ arg evaluate ] ]
+					ifFalse: [ eval := arg evaluate ].
+				blockTuple at: i + 8 put: eval ]
+			ifFalse: [ blockTuple at: i + 8 put: arg asBlockTuple ] ].
 	nestedBlock
-		ifNil: [blockTuple at: blockTuple size put: nil]
-		ifNotNil: [blockTuple at: blockTuple size put: nestedBlock tupleSequence]. 
+		ifNil: [ blockTuple at: blockTuple size put: nil ]
+		ifNotNil: [ blockTuple at: blockTuple size put: nestedBlock tupleSequence ].
 	^ blockTuple
-
-
 ]
 
 { #category : #private }
@@ -128,17 +121,14 @@ CommandScriptBlockMorph >> blockAttachPoints: aSet [
 	"Answer a collection of possible attachment points for me. Each entry is an Association mapping a point to the morph to which a dropping command block could be attached."
 
 	| result |
-
 	result := #().
-
 	nestedBlock
-		ifNil: [PhratchTranslator isRTL
-			ifTrue: [result := result copyWith: ((self topRight + (-12@(self topBarHeight + 7))) -> self)]
-			ifFalse: [result := result copyWith: ((self topLeft + (12@(self topBarHeight + 7))) -> self)]]
-		ifNotNil: [nestedBlock blockAttachPoints: aSet].
-
-	aSet addAll: result.
-
+		ifNil: [ 
+			result := PhratchTranslator isRTL
+				ifTrue: [ result copyWith: self topRight + (-12 @ (self topBarHeight + 7)) -> self ]
+				ifFalse: [ result copyWith: self topLeft + (12 @ (self topBarHeight + 7)) -> self ] ]
+		ifNotNil: [ nestedBlock blockAttachPoints: aSet ].
+	aSet addAll: result
 ]
 
 { #category : #byob }
@@ -150,7 +140,7 @@ CommandScriptBlockMorph >> blockWidth [
 	^self width max: self bracketThickness + maxWidth
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 CommandScriptBlockMorph >> body [
 	nestedBlock ifNil: [^nil].
 	^nestedBlock fullCopy
@@ -188,7 +178,7 @@ CommandScriptBlockMorph >> containsPoint: aPoint [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #deleting }
 CommandScriptBlockMorph >> deleteVariableTemplate: aVarBlockMorph [
 
 	| quoted |
@@ -266,16 +256,13 @@ CommandScriptBlockMorph >> drawInnerTopY: y on: aCanvas [
 ]
 
 { #category : #drawing }
-CommandScriptBlockMorph >> drawOn: aCanvas [ 
-
+CommandScriptBlockMorph >> drawOn: aCanvas [
 	| c |
-
 	topBarBottom := self top + self topBarHeight.
-	self isForever
-		ifTrue: [blockBottom := self bottom - 3]
-		ifFalse: [blockBottom := self bottom - 7].
+	blockBottom := self isForever
+		ifTrue: [ self bottom - 3 ]
+		ifFalse: [ self bottom - 7 ].
 	self contrastColor.
-
 	self computeHighlightColors.
 	c := FormCanvas extent: self extent depth: 32.
 	c := c copyOffset: self topLeft negated.
@@ -283,11 +270,8 @@ CommandScriptBlockMorph >> drawOn: aCanvas [
 	self drawTopBarOn: c.
 	self drawVerticalBarOn: c.
 	self drawBottomBarOn: c.
-
 	self drawFinalOn: aCanvas fromCanvas: c.
-
 	self drawInlinePaletteOn: aCanvas
-
 ]
 
 { #category : #drawing }
@@ -442,14 +426,14 @@ CommandScriptBlockMorph >> fixBlockLayoutNoWrap [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 CommandScriptBlockMorph >> helpScreenName [
 	"Answer the name of the help screen for this hat block, or nil if no help is available."
 
 	^'commandLambda'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 CommandScriptBlockMorph >> initialize [
 
 	super initialize.
@@ -458,7 +442,7 @@ CommandScriptBlockMorph >> initialize [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 CommandScriptBlockMorph >> isBooleanFunction [
 
 	| reporter |
@@ -470,7 +454,7 @@ CommandScriptBlockMorph >> isBooleanFunction [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 CommandScriptBlockMorph >> isFunction [
 	self allMorphsDo: [:m|
 		((m isKindOf: CommandBlockMorph) and: [
@@ -511,19 +495,19 @@ CommandScriptBlockMorph >> nonControlFlowSubmorphs [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 CommandScriptBlockMorph >> optimized [
 	^self fullCopy
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 CommandScriptBlockMorph >> privateBody [
 	"no copy"
 	nestedBlock ifNil: [^nil].
 	^nestedBlock
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #deleting }
 CommandScriptBlockMorph >> removeItem [
 	| quoted |
 	quoted := nestedBlock.

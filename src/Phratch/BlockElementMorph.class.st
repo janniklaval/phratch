@@ -9,13 +9,6 @@ Class {
 }
 
 { #category : #adding }
-BlockElementMorph >> addStep: aStepElement [
-	steps contents isNil 
-		ifTrue: [steps contents: aStepElement]
-		ifFalse: [steps contents addToLast: aStepElement]
-]
-
-{ #category : #adding }
 BlockElementMorph >> addVarNames: aCollection [
 	palette addVarNames: aCollection
 
@@ -122,7 +115,7 @@ BlockElementMorph >> refreshVarColors [
 				m color: self varColor ]]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'*Phratch-Extensions' }
 BlockElementMorph >> rootForGrabOf: aMorph [
 	"Allow myself to be extracted."
 
@@ -130,11 +123,6 @@ BlockElementMorph >> rootForGrabOf: aMorph [
 		(self ownerThatIsA: MessageElementMorph)
 			ifNotNil: [^owner rootForGrabOf: owner ]].
 	^super rootForGrabOf: aMorph
-]
-
-{ #category : #accessing }
-BlockElementMorph >> steps [
-	^steps contents
 ]
 
 { #category : #'as yet unclassified' }

@@ -120,16 +120,15 @@ UpdatingColorMorph >> target: anObject [
 	target := anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'target access' }
 UpdatingColorMorph >> valueFromTargetOrNil [
 	"Answer the value read from my target. Answer nil if my target or selector is nil.."
 
 	| result |
-	((target == nil) or: [selector == nil]) ifTrue: [^ nil].
+	(target isNil or: [ selector isNil ])
+		ifTrue: [ ^ nil ].
 	result := nil.
-	[result := parameter
-		ifNil: [target perform: selector]
-		ifNotNil: [target perform: selector with: parameter]
-	] ifError: [].
+	[ result := parameter ifNil: [ target perform: selector ] ifNotNil: [ target perform: selector with: parameter ] ]
+		ifError: [  ].
 	^ result
 ]

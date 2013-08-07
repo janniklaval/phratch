@@ -4,17 +4,17 @@ Class {
 	#category : #'Phratch-Categories'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PhratchCategoryOperators class >> color [
 	^(Color h: 93 s: 0.9 v: 0.76)
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PhratchCategoryOperators class >> label [
 	^'operators'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PhratchCategoryOperators class >> order [
 	^6
 ]

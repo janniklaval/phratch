@@ -326,22 +326,25 @@ SpriteArgMorph >> updateLabel [
 	| s |
 	self checkForDeletedMorph.
 	s := ' '.
-	(morph isKindOf: ScriptablePhratchMorph) ifTrue: [s := morph objName].
-	(morph isKindOf: String) ifTrue: [
-		s := morph localized.
-		morph = #mouse ifTrue: [s := 'mouse-pointer' localized].
-		morph = #null ifTrue: [s := '']].
-
-	labelMorph contents = s ifFalse: [
-		labelMorph contents: s.
-		labelMorph position: self position + borderWidth + (3 @ -1).
-		self extent: (labelMorph extent + (16@2) + borderWidth).
-		menuIconMorph position: (self right - borderWidth - 10)@(self top + borderWidth + 4).
-		(self owner isKindOf: BlockMorph) ifTrue: [
-			self owner addLabel].
-		(self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph) ifNotNil: [
-			(self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph) fixLayout]].
-
+	(morph isKindOf: ScriptablePhratchMorph)
+		ifTrue: [ s := morph objName ].
+	(morph isKindOf: String)
+		ifTrue: [ 
+			s := morph localized.
+			morph = #mouse
+				ifTrue: [ s := 'mouse-pointer' localized ].
+			morph = #null
+				ifTrue: [ s := '' ] ].
+	labelMorph contents = s
+		ifTrue: [ ^ self ].
+	labelMorph contents: s.
+	labelMorph position: self position + borderWidth + (3 @ -1).
+	self extent: labelMorph extent + (16 @ 2) + borderWidth.
+	menuIconMorph position: (self right - borderWidth - 10) @ (self top + borderWidth + 4).
+	(self owner isKindOf: BlockMorph)
+		ifTrue: [ self owner addLabel ].
+	(self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph)
+		ifNotNil: [ (self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph) fixLayout ]
 ]
 
 { #category : #copy }

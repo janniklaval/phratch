@@ -4,7 +4,7 @@ Class {
 	#category : #'Phratch-UI-Elements'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #converting }
 ObjectElementMorph >> asSmalltalk [ 
 
 	^name ifNil: ['undefined']
@@ -12,19 +12,17 @@ ObjectElementMorph >> asSmalltalk [
 
 { #category : #'as yet unclassified' }
 ObjectElementMorph >> contextMenu [
-	|m|
-	m := MenuMorph new.
-"	m add: 'duplicate' action: #duplicate. "
-	m add: 'delete' action: #throwAway.
-	(owner class == PaletteElementMorph)
-		ifTrue: [m add: 'remove' action: #removeFromPalette ]
-		ifFalse: [
-		 	self isRenameable ifTrue: [
-				m add: 'rename...' action: #editLabel ]].
+	| m |
+	m := MenuMorph new.	"	m add: 'duplicate' action: #duplicate. "
+	m add: 'delete' translated action: #throwAway.
+	owner class == PaletteElementMorph
+		ifTrue: [ m add: 'remove' translated action: #removeFromPalette ]
+		ifFalse: [ 
+			self isRenameable
+				ifTrue: [ m add: 'rename...' translated action: #editLabel ] ].
 	m addLine.
-	m add: 'show code...' action: #showGeneratedSmalltalk.
-
-	^m
+	m add: 'show code...' translated action: #showGeneratedSmalltalk.
+	^ m
 ]
 
 { #category : #'as yet unclassified' }
@@ -35,14 +33,14 @@ ObjectElementMorph >> editLabel [
 	(ans size > 0) ifTrue: [self label: ans]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialize }
 ObjectElementMorph >> initialize [
 	super initialize.
 	color := Color blue darker.
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 ObjectElementMorph >> isRenameable [
 	| editor method |
 	editor := (self ownerThatIsA: ElementsMethodEditorMorph).
@@ -54,12 +52,12 @@ ObjectElementMorph >> isRenameable [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ObjectElementMorph >> label [
 	^label contents
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ObjectElementMorph >> label: aString [
 
 	super label: aString.
@@ -84,7 +82,7 @@ ObjectElementMorph >> label: aString [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 ObjectElementMorph >> labelFont [
 	^StrikeFont fontName: 'Verdana' size: 10
 ]

@@ -39,7 +39,11 @@ CreationEventHatMorph >> initialize [
 CreationEventHatMorph >> printHatNameOn: aStream [
 	"Append a human-readable string for this hat block's name to the given stream."
 
-	aStream nextPutAll: 'when ', self receiverName, ' created'; cr.
+	aStream
+		nextPutAll: 'when ';
+		nextPutAll: self receiverName;
+		nextPutAll: ' created';
+		cr
 ]
 
 { #category : #other }

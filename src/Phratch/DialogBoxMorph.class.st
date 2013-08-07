@@ -46,8 +46,11 @@ DialogBoxMorph class >> ask: questionString [
 
 	| dialogBox |
 	dialogBox := self new
-		title: '?';
-		withButtonsForYes: true no: true okay: false cancel: false;
+		title: '?' translated;
+		withButtonsForYes: true
+			no: true
+			okay: false
+			cancel: false;
 		message: questionString;
 		yourself.
 	^ dialogBox getUserResponse
@@ -61,8 +64,11 @@ DialogBoxMorph class >> askWithCancel: questionString [
 
 	| dialogBox |
 	dialogBox := self new
-		title: '?';
-		withButtonsForYes: true no: true okay: false cancel: true;
+		title: '?' translated;
+		withButtonsForYes: true
+			no: true
+			okay: false
+			cancel: true;
 		message: questionString;
 		yourself.
 	^ dialogBox getUserResponse
@@ -121,45 +127,20 @@ PhratchFrameMorph allInstancesDo: [ :d | d updatePanes ].
 ]
 
 { #category : #'instance creation' }
-DialogBoxMorph class >> informWithCancel: informationString [
-	"Put up an instance of me to give the user an informational message and wait until they click the 'ok' button before proceeding."
-	"DialogBoxMorph informWithCancel: 'This operation may take a while...'"
-
-	| dialogBox |
-	dialogBox := self new
-		withButtonsForYes: false no: false okay: false cancel: true;
-		message: informationString;
-		yourself.
-	^ dialogBox getUserResponse
-
-]
-
-{ #category : #'instance creation' }
 DialogBoxMorph class >> warn: informationString [
 	"Put up an instance of me to give the user a warning message and wait until they click the 'ok' button before proceeding."
 	"DialogBoxMorph warn: 'File not found'"
 
 	| dialogBox |
 	dialogBox := self new
-		title: '!';
-		withButtonsForYes: false no: false okay: true cancel: false;
+		title: '!' translated;
+		withButtonsForYes: false
+			no: false
+			okay: true
+			cancel: false;
 		message: informationString;
 		yourself.
 	^ dialogBox getUserResponse
-
-]
-
-{ #category : #accessing }
-DialogBoxMorph >> addMessageLine: aMorph [
-	"Add the given morph (some kind of StringMorph, probably) centered below the other message lines."
-
-	| ypos |
-	messageLineMorphs ifNil: [messageLineMorphs := OrderedCollection new].
-	ypos := self top + 50.
-	messageLineMorphs submorphsDo: [:m | ypos := ypos max: (m bottom + 5)].
-	aMorph position: (self left + ((self width - aMorph width) // 2))@ypos.
-	messageLineMorphs addMorphBack: aMorph.
-	self height: (aMorph bottom - self top) + 75.
 
 ]
 

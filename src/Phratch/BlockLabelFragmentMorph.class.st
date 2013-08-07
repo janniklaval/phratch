@@ -41,11 +41,6 @@ BlockLabelFragmentMorph >> labelFragment [
 	^labelFragment
 ]
 
-{ #category : #accessing }
-BlockLabelFragmentMorph >> labelFragment: fragment [
-	labelFragment := fragment
-]
-
 { #category : #widgets }
 BlockLabelFragmentMorph >> mouseDown: evt [
 	"Handle a mouse down event"

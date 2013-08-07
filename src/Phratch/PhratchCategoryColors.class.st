@@ -4,22 +4,22 @@ Class {
 	#category : #'Phratch-Categories'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PhratchCategoryColors class >> color [
 	^(Color h: 0 s: 0 v: 0.25)
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PhratchCategoryColors class >> label [
 	^'colors'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PhratchCategoryColors class >> order [
 	^10
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #drawing }
 PhratchCategoryColors class >> viewerPageFor: aScriptablePhratchMorph [ 
 
 		| page addButton deleteButton showButton hideButton hasColors stage x y maxX |

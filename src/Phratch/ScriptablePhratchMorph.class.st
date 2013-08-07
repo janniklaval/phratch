@@ -28,15 +28,13 @@ Class {
 		'sceneStates',
 		'customBlocks',
 		'deletedAttributes',
-		'colors',
-		'createdBlocks'
+		'colors'
 	],
 	#classVars : [
 		'BlockColorDict',
 		'BlockSpecDict',
 		'CameraOpenings',
 		'DefaultBackgroundForm',
-		'DefaultSpriteForm',
 		'DoubleSize',
 		'Experimental',
 		'FileIOPreference',
@@ -45,7 +43,6 @@ Class {
 		'MeowSound',
 		'NoviceMode',
 		'ObjEncoding',
-		'OldMeowPrefixReversed',
 		'PhratchOrigin',
 		'PopSound',
 		'RandomGen',
@@ -55,7 +52,7 @@ Class {
 	#category : #'Phratch-Objects'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #run }
 ScriptablePhratchMorph class >> DoIt [
 	| menu |
 	menu := MenuMorphNG new defaultTarget: self.
@@ -148,30 +145,6 @@ ScriptablePhratchMorph class >> blockSpecs [
 			('leave mesh'									-	leaveMesh)
 			-
 			('mesh IP address'								r	getMeshIPAddress)"
-]
-
-{ #category : #'translation support' }
-ScriptablePhratchMorph class >> blockSpecsForTranslation [
-	"Answer a collection blocks for translation. Obsolete blocks are removed."
-
-	| allSpecs |
-	allSpecs := Set new.
-	(ScriptablePhratchMorph blockSpecs,
-	 PhratchSpriteMorph blockSpecs,
-	 PhratchStageMorph blockSpecs) do: [:el |
-		(el isKindOf: Array)
-			ifTrue: [allSpecs add: el first]
-			ifFalse: [((el beginsWith: 'obsolete') or:[#('-' '~') includes: el])
-				ifFalse:[allSpecs add: el]]].
-	"ScriptablePhratchMorph obsoleteBlockSpecs do: [:el |
-		(el isKindOf: Array) ifTrue: [allSpecs remove: el first ifAbsent: []]]."
-	allSpecs
-		add: 'else';
-		add: 'variables';
-		add: 'set $Variable$ to $Number$';
-		add: 'change $Variable$ by $Number$'.
-	^ allSpecs asArray sort
-
 ]
 
 { #category : #'block specs' }
@@ -340,13 +313,6 @@ ScriptablePhratchMorph class >> noviceMode: anObject [
 	NoviceMode := anObject
 ]
 
-{ #category : #'forms/sounds/icons' }
-ScriptablePhratchMorph class >> oldMeowPrefixReversed [
-
-	^ OldMeowPrefixReversed
-
-]
-
 { #category : #other }
 ScriptablePhratchMorph class >> phratchOrigin: aPoint [
 	"Set the origin for the Phratch coordinate system."
@@ -492,14 +458,12 @@ ScriptablePhratchMorph >> addComment: aPhratchCommentMorph [
 
 	| y bottom |
 	y := 10.
-	blocksBin submorphsDo: [:m |
-		bottom :=  (m fullBounds bottom) - (blocksBin position y).
-		(bottom > y) ifTrue: 
-			[y := bottom]].
-	aPhratchCommentMorph position: blocksBin position + (20@(y+10)).
-
-	blocksBin addMorph: aPhratchCommentMorph.
-
+	blocksBin
+		submorphsDo: [ :m | 
+			bottom := m fullBounds bottom - blocksBin position y.
+			y := y max: bottom ].
+	aPhratchCommentMorph position: blocksBin position + (20 @ (y + 10)).
+	blocksBin addMorph: aPhratchCommentMorph
 ]
 
 { #category : #'panther actions' }
@@ -575,33 +539,27 @@ ScriptablePhratchMorph >> addCustomBlock [
 
 { #category : #byob }
 ScriptablePhratchMorph >> addCustomBlocksTo: page y: startY [
-
-	| addButton  x y b cdefs inherited all |
-	addButton := PhratchFrameMorph
-		buttonLabel: 'Make a block' localized
-		selector: #addCustomBlock.
-
+	| addButton x y b cdefs inherited all |
+	addButton := PhratchFrameMorph buttonLabel: 'Make a block' localized selector: #addCustomBlock.
 	x := 13.
 	y := startY + 10.
-	page addMorph: (addButton target: self; position: x@y).
-	y := addButton bottom + 5.
-
-	"add custom blocks (jens)"
-	inherited := self inheritedBlocks select: [:def |
-		def category = #none].
-
-	customBlocks 
-		ifNil: [cdefs := Set new]
-		ifNotNil: [ cdefs := customBlocks select: [:def | 
-			def category = #none]].
-
-	all := inherited, cdefs.
-	all isEmpty ifFalse: [
-		all := all asSortedCollection: [:first :second | first id <= second id].
-		all do: [:eachDef|
+	page
+		addMorph:
+			(addButton
+				target: self;
+				position: x @ y).
+	y := addButton bottom + 5.	"add custom blocks (jens)"
+	inherited := self inheritedBlocks select: [ :def | def category = #none ].
+	customBlocks ifNil: [ cdefs := Set new ] ifNotNil: [ cdefs := customBlocks select: [ :def | def category = #none ] ].
+	all := inherited , cdefs.
+	all isEmpty
+		ifTrue: [ ^ self ].
+	all := all asSortedCollection: [ :first :second | first id <= second id ].
+	all
+		do: [ :eachDef | 
 			b := self newCustomBlockFor: eachDef.
-			page addMorph: (b position: (x@y)).
-			y := y + b height + 3 ]].
+			page addMorph: (b position: x @ y).
+			y := y + b height + 3 ]
 ]
 
 { #category : #blocks }
@@ -692,65 +650,61 @@ ScriptablePhratchMorph >> addGenericVariableBlocksTo: page x: x y: startY [
 	"Add the generic variable blocks to the given page starting at the given y offset. Answer the new y."
 
 	| y vName stage block varBlocks |
-	y := startY.
-
-	"pick a default variable name"
+	y := startY.	"pick a default variable name"
 	vName := nil.
 	stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
-	(stage notNil and: [stage varNames size > 0])
-		ifTrue: [
-			vName := stage varNames first]
-		ifFalse: [
+	vName := (stage notNil and: [ stage varNames size > 0 ])
+		ifTrue: [ stage varNames first ]
+		ifFalse: [ 
 			self varNames size = 0
-				ifTrue: [vName := ''  "^ y"]
-				ifFalse: [vName := self varNames first]].
-
-	vName ifNil: [vName := ''].
-
+				ifTrue: [ ''	"^ y" ]
+				ifFalse: [ self varNames first ] ].
+	vName ifNil: [ vName := '' ].
 	varBlocks := OrderedCollection new.
-
 	block := SetterBlockMorph new
 		initSetterForVar: vName;
 		receiver: self blockReceiver.
 	block expressionArg stringExpression: '0'.
 	varBlocks add: block.
-
 	block := SetterBlockMorph new
 		initChangerForVar: vName;
 		receiver: self blockReceiver.
 	block expressionArg numExpression: '1'.
 	varBlocks add: block.
-
-	(self blocksFor: 'variables') do: [:b |
-		(b isKindOf: BlockMorph) ifTrue: [
-			b defaultArgs: (Array with: vName)].
-			varBlocks add: b].
-
+	(self blocksFor: 'variables')
+		do: [ :b | 
+			(b isKindOf: BlockMorph)
+				ifTrue: [ b defaultArgs: (Array with: vName) ].
+			varBlocks add: b ].
 	block := VariableDeclarationBlockMorph new
-		minArgs: 1; 
-		commandSpec: 'script variables' localized; 
+		minArgs: 1;
+		commandSpec: 'script variables' localized;
 		receiver: self blockReceiver;
 		addItem;
 		isSpecialForm: true;
 		selector: #doDeclareVariables.
 	varBlocks add: block afterIndex: 5.
-
-	varBlocks do: [:blockOrSym |
-		(blockOrSym = #-) | (blockOrSym = #~) | (blockOrSym = #=)
-			ifTrue: [
-				(blockOrSym = #-) ifTrue: [y := y + 15].  "insert a full space"
-				(blockOrSym = #~) ifTrue: [y := y + 5].  "insert a half space"
-				(blockOrSym = #=) ifTrue: [
-					y := y + 7.
-					page addMorph: ((ImageMorph new form: (PhratchFrameMorph skinAt: #connector)) position: x@y).
-					y := y + 20]]  "insert a line"
-			ifFalse: [
-				blockOrSym color: ((blockOrSym isKindOf: VariableDeclarationBlockMorph)
-									ifTrue: [Color gray]
-									ifFalse: [ self variableBlockColor]).
-				page addMorph: (blockOrSym position: x@y).
-				y := blockOrSym bottom + 3]].
-"
+	varBlocks
+		do: [ :blockOrSym | 
+			blockOrSym = #- | (blockOrSym = #~) | (blockOrSym = #=)
+				ifTrue: [ 
+					blockOrSym = #-
+						ifTrue: [ y := y + 15 ].	"insert a full space"
+					blockOrSym = #~
+						ifTrue: [ y := y + 5 ].	"insert a half space"
+					blockOrSym = #=
+						ifTrue: [ 
+							y := y + 7.
+							page addMorph: ((ImageMorph new form: (PhratchFrameMorph skinAt: #connector)) position: x @ y).
+							y := y + 20 ] ]
+				ifFalse: [ 
+					blockOrSym
+						color:
+							((blockOrSym isKindOf: VariableDeclarationBlockMorph)
+								ifTrue: [ Color gray ]
+								ifFalse: [ self variableBlockColor ]).
+					page addMorph: (blockOrSym position: x @ y).
+					y := blockOrSym bottom + 3 ]	"insert a line" ].	"
 
 
 [:b |
@@ -759,8 +713,6 @@ ScriptablePhratchMorph >> addGenericVariableBlocksTo: page x: x y: startY [
 		y := b bottom + 3].
 "
 	^ y
-
-
 ]
 
 { #category : #'panther actions' }
@@ -899,15 +851,13 @@ ScriptablePhratchMorph >> addStack: aBlockStack [
 
 	| y bottom |
 	y := 10.
-	blocksBin submorphsDo: [:m |
-		bottom :=  (m fullBounds bottom) - (blocksBin position y).
-		(bottom > y) ifTrue: 
-			[y := bottom]].
-	aBlockStack position: blocksBin position + (20@(y+10)).
-
+	blocksBin
+		submorphsDo: [ :m | 
+			bottom := m fullBounds bottom - blocksBin position y.
+			y := y max: bottom ].
+	aBlockStack position: blocksBin position + (20 @ (y + 10)).
 	aBlockStack newScriptOwner: self.
-	blocksBin addMorph: aBlockStack.
-
+	blocksBin addMorph: aBlockStack
 ]
 
 { #category : #byob }
@@ -1028,15 +978,13 @@ ScriptablePhratchMorph >> addWatcherForNewVariable: varName withScope: spriteOrS
 
 { #category : #byob }
 ScriptablePhratchMorph >> allInstancesOf: aCustomBlockId [
-
 	| objects stage all |
-	(self isKindOf: PhratchStageMorph)
-		ifTrue: [stage := self]
-		ifFalse: [stage := self owner].
-	objects := {stage}, stage sprites.
+	stage := (self isKindOf: PhratchStageMorph)
+		ifTrue: [ self ]
+		ifFalse: [ self owner ].
+	objects := {stage} , stage sprites.
 	all := OrderedCollection new.
-	objects do: [:obj|
-		all addAll: (obj instancesOf: aCustomBlockId)].
+	objects do: [ :obj | all addAll: (obj instancesOf: aCustomBlockId) ].
 	^ all
 ]
 
@@ -1100,13 +1048,10 @@ ScriptablePhratchMorph >> answer [
 ScriptablePhratchMorph >> append: anObject toList: listName [
 	<phratchItem: 'add $String$ to $List$' kind: #- category: 'list' defaultValues: #('thing') subCategory: #a4>
 	| list |
-
-	(listName isKindOf: PhratchListMorph)
-		ifTrue: [list := listName]
-		ifFalse: [list := self listNamed: listName ifNone: [^ 0]].
-	list insertLine: (self asListElement: anObject) at: (list lineCount + 1)
-
-
+	list := (listName isKindOf: PhratchListMorph)
+		ifTrue: [ listName ]
+		ifFalse: [ self listNamed: listName ifNone: [ ^ 0 ] ].
+	list insertLine: (self asListElement: anObject) at: list lineCount + 1
 ]
 
 { #category : #'list ops' }
@@ -1130,6 +1075,12 @@ ScriptablePhratchMorph >> asListElement: anObject [
 	^ anObject printString
 
 
+]
+
+{ #category : #'as yet unclassified' }
+ScriptablePhratchMorph >> asReferenceTuple [
+
+	self subclassResponsibility 
 ]
 
 { #category : #byob }
@@ -1187,6 +1138,12 @@ ScriptablePhratchMorph >> askForFileIO [
 	^ dialog getUserResponse.
 ]
 
+{ #category : #'as yet unclassified' }
+ScriptablePhratchMorph >> attribute: attr [
+
+	self subclassResponsibility 
+]
+
 { #category : #'BYOB OOP message passing' }
 ScriptablePhratchMorph >> attribute: attr of: anObject [
 	"Answer the variable or built-in attribute value for the given sprite. Answer zero if the given sprite does not have a built-in attribute or variable of the given name."
@@ -1213,12 +1170,6 @@ ScriptablePhratchMorph >> blockCategories [
 	^ (self class blockSpecs select: [:el |
 		(el isKindOf: String) and: [el ~= '-' and: [el ~= '~']]]) asArray
 
-]
-
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> blockColor: blockName [
-
-	^ (createdBlocks at: blockName) at: 5 ifAbsent: [self class blockColorFor: 'obsolete'].
 ]
 
 { #category : #byob }
@@ -1252,186 +1203,205 @@ ScriptablePhratchMorph >> blockFromOldFormTuple: tuple receiver: scriptOwner [
 
 	| k spec blockColor block argCount arg argBlock userSpec csp |
 	k := tuple first.
-	(#(readVariable changeVariable) includes: k) ifTrue: [
-		^ self variableBlockFromTuple: tuple receiver: scriptOwner].
-
-	(#(readBlockVariable changeBlockVariable) includes: k) ifTrue: [
-		^ self blockVariableBlockFromTuple: tuple receiver: scriptOwner].
-
-	#listNamed: = k ifTrue: [
-		^ ListContentsBlockMorph new
-			color: ScriptablePhratchMorph listBlockColor;
-			receiver: scriptOwner;
-			commandSpec: tuple second;
-			selector: #listNamed:].
-
-	#lambda: = k ifTrue: [
-		block := ReporterBlockMorph new.
-		block
-			color: Color lightGray;
-			receiver: scriptOwner;
-			selector: k;
-			commandSpec: 'the $BlockId$ block'.
-		(block argumentAt: 1) defaultValue: (tuple at: 2).
-		^block ].
-
-	#doCustomBlock = k ifTrue: [
-		userSpec := tuple at: 2.
-		(scriptOwner definitionFor: (CustomBlockDefinition idFromSpec: userSpec)) isReporter
-			ifTrue: [ 
-				block := CustomReporterBlockMorph new.
-				block isBoolean: (scriptOwner definitionFor: (CustomBlockDefinition idFromSpec: userSpec)) isBoolean]
-			ifFalse: [ block := CustomCommandBlockMorph new].
-		block 
-			receiver: scriptOwner;
-			userSpec: userSpec.
-		block isSpecialForm: true.
-		block selector: #doCustomBlock.
-		argCount := block argumentCount min: tuple size - 2.
-		1 to: argCount do: [:i |
-			arg := tuple at: i + 2.
-			(arg isKindOf: Array)
-				ifTrue: [ "argument is a block"
-					((arg size = 1) and: [arg first isKindOf: Array]) ifTrue: [arg := arg first].
-					argBlock := self blockFromTuple: arg receiver: scriptOwner.
-					block replaceArgMorph: (block argumentAt: i) by: argBlock]
-				ifFalse: [ "argument is a value"
-					(block argumentAt: i) stringExpression: arg asString]].
-		^block].
-
-	#doMakeNewList = k ifTrue: [
-		block := MultiArgReporterBlockMorph new
-			color: ScriptablePhratchMorph listBlockColor;
-			receiver: scriptOwner;
-			isSpecialForm: true;
-			selector: #doMakeNewList.
-		spec := 'list'.
-		argCount := tuple size - 1.
-		argCount timesRepeat: [ spec := spec, ' $String$' ].
-		block commandSpec: spec.
-		1 to: argCount do: [:i |
-			arg := tuple at: i + 1.
-			(arg isKindOf: Array)
-				ifTrue: [ "argument is a block"
-					((arg size = 1) and: [arg first isKindOf: Array]) ifTrue: [arg := arg first].
-					argBlock := self blockFromTuple: arg receiver: scriptOwner.
-					block replaceArgMorph: (block argumentAt: i) by: argBlock]
-				ifFalse: [ "argument is a value"
-					(block argumentAt: i) stringExpression: arg asString]].
-		^block].
-
-
-	(#(doCallBlockWithArgs doReport) includes: k) ifTrue: [
-		block := MultiArgReporterBlockMorph new
-			color: (ScriptablePhratchMorph blockColorFor: 'control');
-			receiver: scriptOwner;
-			isSpecialForm: true;
-			minArgs: 1;
-			selector: k.
-		spec := scriptOwner blockSpecForSelector: k.
-		argCount := tuple size - 1.
-		(argCount - 2) timesRepeat: [ spec := spec, ' $String$' ].
-		block commandSpec: spec.
-		1 to: argCount do: [:i |
-			arg := tuple at: i + 1.
-			(arg isKindOf: Array)
-				ifTrue: [ "argument is a block"
-					((arg size = 1) and: [arg first isKindOf: Array]) ifTrue: [arg := arg first].
-					argBlock := self blockFromTuple: arg receiver: scriptOwner.
-					block replaceArgMorph: (block argumentAt: i) by: argBlock]
-				ifFalse: [ "argument is a value"
-					(block argumentAt: i) stringExpression: arg asString]].
-		^block].
-
-	(#(function functionWithArgs) includes: k) ifTrue: [
-		block := ReporterScriptBlockMorph new
-			color: (ScriptablePhratchMorph blockColorFor: 'operators');
-			receiver: scriptOwner;
-			isSpecialForm: false;
-			minArgs: 1;
-			selector: k.
-		spec := scriptOwner blockSpecForSelector: k.
-		argCount := tuple size - 1.
-		(argCount - 2) timesRepeat: [ spec := spec, ' $String$' ].
-		block commandSpec: spec.
-		1 to: argCount do: [:i |
-			arg := tuple at: i + 1.
-			(arg isKindOf: Array)
-				ifTrue: [ "argument is a block"
-					((arg size = 1) and: [arg first isKindOf: Array]) ifTrue: [arg := arg first].
-					argBlock := self blockFromTuple: arg receiver: scriptOwner.
-					block replaceArgMorph: (block argumentAt: i) by: argBlock]
-				ifFalse: [ "argument is a value"
-					(block argumentAt: i) stringExpression: arg asString]].
-		^block].
-
-	(#(EventHatMorph KeyEventHatMorph MouseClickEventHatMorph WhenHatBlockMorph) includes: k) ifTrue: [
-		block := self hatBlockFromTuple: tuple receiver: scriptOwner.
-		(block isKindOf: WhenHatBlockMorph) ifTrue: [block color: Color red].
-		^ block].
-
-	#phratchComment = k ifTrue: [
-		block := PhratchCommentMorph new.
-		tuple size > 1 ifTrue: [block commentMorph contents: (tuple at: 2)].
-		tuple size > 2 ifTrue: [(tuple at: 3) ifFalse: [block toggleShowing]].
-		tuple size > 3 ifTrue: [block width: (tuple at: 4)].
-		tuple size > 4 ifTrue: [block anchor: (self blockWithID: (tuple at: 5))].
-		^ block].
-
-	#comment: = k ifTrue: [
-		block := CommentBlockMorph new.
-		tuple size > 1 ifTrue: [block comment: (tuple at: 2)].
-		tuple size > 2 ifTrue: [(tuple at: 3) ifFalse: [block toggleShowing]].
-		block color: (Color r: 0.8 g: 0 b: 0).  "obsolete"
-		^ block].
-
-	spec := self class blockSpecDict at: k ifAbsent: [nil].
-	spec ifNil: [
-		^ scriptOwner
-			blockFromSpec: #('obsolete!' - yourself)
-			color: Color red].
-
-	blockColor := BlockColorDict at: k ifAbsent: [Color red].
+	(#(#readVariable #changeVariable) includes: k)
+		ifTrue: [ ^ self variableBlockFromTuple: tuple receiver: scriptOwner ].
+	(#(#readBlockVariable #changeBlockVariable) includes: k)
+		ifTrue: [ ^ self blockVariableBlockFromTuple: tuple receiver: scriptOwner ].
+	#listNamed: = k
+		ifTrue: [ 
+			^ ListContentsBlockMorph new
+				color: ScriptablePhratchMorph listBlockColor;
+				receiver: scriptOwner;
+				commandSpec: tuple second;
+				selector: #listNamed: ].
+	#lambda: = k
+		ifTrue: [ 
+			block := ReporterBlockMorph new.
+			block
+				color: Color lightGray;
+				receiver: scriptOwner;
+				selector: k;
+				commandSpec: 'the $BlockId$ block'.
+			(block argumentAt: 1) defaultValue: (tuple at: 2).
+			^ block ].
+	#doCustomBlock = k
+		ifTrue: [ 
+			userSpec := tuple at: 2.
+			(scriptOwner definitionFor: (CustomBlockDefinition idFromSpec: userSpec)) isReporter
+				ifTrue: [ 
+					block := CustomReporterBlockMorph new.
+					block isBoolean: (scriptOwner definitionFor: (CustomBlockDefinition idFromSpec: userSpec)) isBoolean ]
+				ifFalse: [ block := CustomCommandBlockMorph new ].
+			block
+				receiver: scriptOwner;
+				userSpec: userSpec.
+			block isSpecialForm: true.
+			block selector: #doCustomBlock.
+			argCount := block argumentCount min: tuple size - 2.
+			1 to: argCount do: [ :i | 
+				arg := tuple at: i + 2.
+				(arg isKindOf: Array)
+					ifTrue: [ 
+						"argument is a block"
+						(arg size = 1 and: [ arg first isKindOf: Array ])
+							ifTrue: [ arg := arg first ].
+						argBlock := self blockFromTuple: arg receiver: scriptOwner.
+						block replaceArgMorph: (block argumentAt: i) by: argBlock ]
+					ifFalse: [ 
+						"argument is a value"
+						(block argumentAt: i) stringExpression: arg asString ] ].
+			^ block ].
+	#doMakeNewList = k
+		ifTrue: [ 
+			block := MultiArgReporterBlockMorph new
+				color: ScriptablePhratchMorph listBlockColor;
+				receiver: scriptOwner;
+				isSpecialForm: true;
+				selector: #doMakeNewList.
+			spec := 'list'.
+			argCount := tuple size - 1.
+			argCount timesRepeat: [ spec := spec , ' $String$' ].
+			block commandSpec: spec.
+			1 to: argCount do: [ :i | 
+				arg := tuple at: i + 1.
+				(arg isKindOf: Array)
+					ifTrue: [ 
+						"argument is a block"
+						(arg size = 1 and: [ arg first isKindOf: Array ])
+							ifTrue: [ arg := arg first ].
+						argBlock := self blockFromTuple: arg receiver: scriptOwner.
+						block replaceArgMorph: (block argumentAt: i) by: argBlock ]
+					ifFalse: [ 
+						"argument is a value"
+						(block argumentAt: i) stringExpression: arg asString ] ].
+			^ block ].
+	(#(#doCallBlockWithArgs #doReport) includes: k)
+		ifTrue: [ 
+			block := MultiArgReporterBlockMorph new
+				color: (ScriptablePhratchMorph blockColorFor: 'control');
+				receiver: scriptOwner;
+				isSpecialForm: true;
+				minArgs: 1;
+				selector: k.
+			spec := scriptOwner blockSpecForSelector: k.
+			argCount := tuple size - 1.
+			argCount - 2 timesRepeat: [ spec := spec , ' $String$' ].
+			block commandSpec: spec.
+			1 to: argCount do: [ :i | 
+				arg := tuple at: i + 1.
+				(arg isKindOf: Array)
+					ifTrue: [ 
+						"argument is a block"
+						(arg size = 1 and: [ arg first isKindOf: Array ])
+							ifTrue: [ arg := arg first ].
+						argBlock := self blockFromTuple: arg receiver: scriptOwner.
+						block replaceArgMorph: (block argumentAt: i) by: argBlock ]
+					ifFalse: [ 
+						"argument is a value"
+						(block argumentAt: i) stringExpression: arg asString ] ].
+			^ block ].
+	(#(#function #functionWithArgs) includes: k)
+		ifTrue: [ 
+			block := ReporterScriptBlockMorph new
+				color: (ScriptablePhratchMorph blockColorFor: 'operators');
+				receiver: scriptOwner;
+				isSpecialForm: false;
+				minArgs: 1;
+				selector: k.
+			spec := scriptOwner blockSpecForSelector: k.
+			argCount := tuple size - 1.
+			argCount - 2 timesRepeat: [ spec := spec , ' $String$' ].
+			block commandSpec: spec.
+			1 to: argCount do: [ :i | 
+				arg := tuple at: i + 1.
+				(arg isKindOf: Array)
+					ifTrue: [ 
+						"argument is a block"
+						(arg size = 1 and: [ arg first isKindOf: Array ])
+							ifTrue: [ arg := arg first ].
+						argBlock := self blockFromTuple: arg receiver: scriptOwner.
+						block replaceArgMorph: (block argumentAt: i) by: argBlock ]
+					ifFalse: [ 
+						"argument is a value"
+						(block argumentAt: i) stringExpression: arg asString ] ].
+			^ block ].
+	(#(#EventHatMorph #KeyEventHatMorph #MouseClickEventHatMorph #WhenHatBlockMorph) includes: k)
+		ifTrue: [ 
+			block := self hatBlockFromTuple: tuple receiver: scriptOwner.
+			(block isKindOf: WhenHatBlockMorph)
+				ifTrue: [ block color: Color red ].
+			^ block ].
+	#phratchComment = k
+		ifTrue: [ 
+			block := PhratchCommentMorph new.
+			tuple size > 1
+				ifTrue: [ block commentMorph contents: (tuple at: 2) ].
+			tuple size > 2
+				ifTrue: [ 
+					(tuple at: 3)
+						ifFalse: [ block toggleShowing ] ].
+			tuple size > 3
+				ifTrue: [ block width: (tuple at: 4) ].
+			tuple size > 4
+				ifTrue: [ block anchor: (self blockWithID: (tuple at: 5)) ].
+			^ block ].
+	#comment: = k
+		ifTrue: [ 
+			block := CommentBlockMorph new.
+			tuple size > 1
+				ifTrue: [ block comment: (tuple at: 2) ].
+			tuple size > 2
+				ifTrue: [ 
+					(tuple at: 3)
+						ifFalse: [ block toggleShowing ] ].
+			block color: (Color r: 0.8 g: 0 b: 0).	"obsolete"
+			^ block ].
+	spec := self class blockSpecDict at: k ifAbsent: [ nil ].
+	spec ifNil: [ ^ scriptOwner blockFromSpec: #('obsolete!' #- #yourself) color: Color red ].
+	blockColor := BlockColorDict at: k ifAbsent: [ Color red ].
 	block := scriptOwner blockFromSpec: spec color: blockColor.
-
-	#procedureWithArgs = block selector ifTrue: [
-		argCount := tuple size - 2.
-		argCount > 1 ifTrue: [
-			csp := block commandSpec.
-			argCount - 1 timesRepeat: [ csp := csp, ' $String$' ].
-			block commandSpec: csp ]].
-
-	(block isKindOf: CommandBlockMorph) ifTrue: [
-		argCount := block argumentCount min: tuple size - 1.
-		1 to: argCount do: [:i |
-			((#(+ - / * =) includes: block selector) and: [PhratchTranslator isRTLMath]) "RTLMath operators are RTL"
-				ifTrue: [arg := tuple at: ((argCount + 1) - (i - 1))]
-				ifFalse: [arg := tuple at: i + 1].
-			(arg isKindOf: Array)
-				ifTrue: [  "argument is a block"
-					((arg size = 1) and: [arg first isKindOf: Array]) ifTrue: [arg := arg first].
-					argBlock := self blockFromTuple: arg receiver: scriptOwner.
-					block replaceArgMorph: (block argumentAt: i) by: argBlock]
-				ifFalse: [  "argument is a value"
-					(block argumentAt: i) defaultValue: arg]].
-
-		(block isKindOf: CBlockMorph) | (block isKindOf: CommandScriptBlockMorph) ifTrue: [
-			(tuple last isKindOf: Array) ifTrue: [
-				block firstBlockList: (self stackFromTupleList: tuple last receiver: scriptOwner)]].
-
-		(block isKindOf: IfElseBlockMorph) ifTrue: [
-			arg := tuple at: tuple size - 1.
-			(arg isKindOf: Array) ifTrue: [
-				block trueBlock: (self stackFromTupleList: arg receiver: scriptOwner)].
-			arg := tuple at: tuple size.
-			(arg isKindOf: Array) ifTrue: [
-				block falseBlock: (self stackFromTupleList: arg receiver: scriptOwner)]].
-
-		(block isKindOf: ReporterBlockMorph) ifTrue: [
-			((spec at: 2) includes: $b) ifTrue: [block isBoolean: true]]].
-
+	#procedureWithArgs = block selector
+		ifTrue: [ 
+			argCount := tuple size - 2.
+			argCount > 1
+				ifTrue: [ 
+					csp := block commandSpec.
+					argCount - 1 timesRepeat: [ csp := csp , ' $String$' ].
+					block commandSpec: csp ] ].
+	(block isKindOf: CommandBlockMorph)
+		ifTrue: [ 
+			argCount := block argumentCount min: tuple size - 1.
+			1 to: argCount do: [ :i | 
+				arg := ((#(#+ #- #/ #* #=) includes: block selector) and: [ PhratchTranslator isRTLMath ])
+					ifTrue: [ tuple at: argCount + 1 - (i - 1) ]
+					ifFalse: [ tuple at: i + 1 ].	"RTLMath operators are RTL"
+				(arg isKindOf: Array)
+					ifTrue: [ 
+						"argument is a block"
+						(arg size = 1 and: [ arg first isKindOf: Array ])
+							ifTrue: [ arg := arg first ].
+						argBlock := self blockFromTuple: arg receiver: scriptOwner.
+						block replaceArgMorph: (block argumentAt: i) by: argBlock ]
+					ifFalse: [ 
+						"argument is a value"
+						(block argumentAt: i) defaultValue: arg ] ].
+			(block isKindOf: CBlockMorph) | (block isKindOf: CommandScriptBlockMorph)
+				ifTrue: [ 
+					(tuple last isKindOf: Array)
+						ifTrue: [ block firstBlockList: (self stackFromTupleList: tuple last receiver: scriptOwner) ] ].
+			(block isKindOf: IfElseBlockMorph)
+				ifTrue: [ 
+					arg := tuple at: tuple size - 1.
+					(arg isKindOf: Array)
+						ifTrue: [ block trueBlock: (self stackFromTupleList: arg receiver: scriptOwner) ].
+					arg := tuple at: tuple size.
+					(arg isKindOf: Array)
+						ifTrue: [ block falseBlock: (self stackFromTupleList: arg receiver: scriptOwner) ] ].
+			(block isKindOf: ReporterBlockMorph)
+				ifTrue: [ 
+					((spec at: 2) includes: $b)
+						ifTrue: [ block isBoolean: true ] ] ].
 	^ block
-
 ]
 
 { #category : #'list ops' }
@@ -1444,51 +1414,47 @@ ScriptablePhratchMorph >> blockFromSpec: spec color: blockColor [
 	blockType := spec at: 2.
 	selector := (spec at: 3) asSymbol.
 	defaultArgs := self defaultArgsFor: spec.
-
-	(#(E K M S W C) includes: blockType) ifTrue: [
-		^ (self hatBlockType: blockType) color: blockColor].
-
-	"basic block type: normal or C-shaped"
+	(#(#E #K #M #S #W #C) includes: blockType)
+		ifTrue: [ ^ (self hatBlockType: blockType) color: blockColor ].	"basic block type: normal or C-shaped"
 	(blockType includes: $c)
-		ifTrue:	[
-			selector = #doIfElse
-				ifTrue: [block := IfElseBlockMorph new isSpecialForm: true]
-				ifFalse: [block := CBlockMorph new isSpecialForm: true]]
-		ifFalse:	[
+		ifTrue: [ 
+			block := selector = #doIfElse
+				ifTrue: [ IfElseBlockMorph new isSpecialForm: true ]
+				ifFalse: [ CBlockMorph new isSpecialForm: true ] ]
+		ifFalse: [ 
 			(blockType includes: $q) | (blockType includes: $Q)
-				ifTrue: [ (blockType includes: $Q)
-					ifTrue: [ block := ReporterScriptBlockMorph new minArgs: 1 ]
-					ifFalse: [ block := CommandScriptBlockMorph new ].
-					block isSpecialForm: false]
-				ifFalse: [
+				ifTrue: [ 
+					block := (blockType includes: $Q)
+						ifTrue: [ ReporterScriptBlockMorph new minArgs: 1 ]
+						ifFalse: [ CommandScriptBlockMorph new ].
+					block isSpecialForm: false ]
+				ifFalse: [ 
 					(blockType includes: $r) | (blockType includes: $b) | (blockType includes: $R)
-						ifTrue: [block := ReporterBlockMorph new]
-						ifFalse: [
+						ifTrue: [ block := ReporterBlockMorph new ]
+						ifFalse: [ 
 							(blockType includes: $d)
-								ifTrue: [
+								ifTrue: [ 
 									block := MultiArgReporterBlockMorph new.
-									(#(doCallBlockWithArgs doReport) includes: selector) ifTrue: [
-										block minArgs: 1]]
-								ifFalse: [ (blockType includes: $u)
-									ifTrue: [
-										block := MultiArgCommandBlockMorph new.
-										block minArgs: 1]
-									ifFalse: [(blockType includes: $g)
-										ifTrue: [block := ColorBlockMorph new]
-										ifFalse: [block := CommandBlockMorph new]]]]]].
-
-	(blockType includes: $b) ifTrue: [block isBoolean: true].
-	(blockType includes: $s) 
-		| (blockType includes: $R) 
-		| (blockType includes: $d) 
-		| (blockType includes: $u) 
-			ifTrue: [block isSpecialForm: true].
-	(blockType includes: $t) ifTrue: [block isTimed: true].
-
-	(ScriptablePhratchMorph isSpriteSpecificTarget: self selector: selector)
-		ifTrue: [rcvr := self]
-		ifFalse: [rcvr := self ownerOrYourselfThatIsA: PhratchStageMorph].
-
+									(#(#doCallBlockWithArgs #doReport) includes: selector)
+										ifTrue: [ block minArgs: 1 ] ]
+								ifFalse: [ 
+									(blockType includes: $u)
+										ifTrue: [ 
+											block := MultiArgCommandBlockMorph new.
+											block minArgs: 1 ]
+										ifFalse: [ 
+											block := (blockType includes: $g)
+												ifTrue: [ ColorBlockMorph new ]
+												ifFalse: [ CommandBlockMorph new ] ] ] ] ] ].
+	(blockType includes: $b)
+		ifTrue: [ block isBoolean: true ].
+	(blockType includes: $s) | (blockType includes: $R) | (blockType includes: $d) | (blockType includes: $u)
+		ifTrue: [ block isSpecialForm: true ].
+	(blockType includes: $t)
+		ifTrue: [ block isTimed: true ].
+	rcvr := (ScriptablePhratchMorph isSpriteSpecificTarget: self selector: selector)
+		ifTrue: [ self ]
+		ifFalse: [ self ownerOrYourselfThatIsA: PhratchStageMorph ].
 	^ block
 		argPermutation: argPermutation;
 		color: blockColor;
@@ -1496,7 +1462,6 @@ ScriptablePhratchMorph >> blockFromSpec: spec color: blockColor [
 		commandSpec: blockLabelSpec;
 		defaultArgs: defaultArgs;
 		receiver: rcvr
-
 ]
 
 { #category : #blocks }
@@ -1504,359 +1469,371 @@ ScriptablePhratchMorph >> blockFromTuple: tuple receiver: scriptOwner [
 	"Answer a new block for the given tuple."
 
 	| k rcvr spec blockColor block argCount arg argBlock userSpec csp def |
-
-	#byob = tuple first ifFalse: [
-		^self blockFromOldFormTuple: tuple receiver: scriptOwner ].
-
-	'Stage' = tuple second 
+	#byob = tuple first
+		ifFalse: [ ^ self blockFromOldFormTuple: tuple receiver: scriptOwner ].
+	'Stage' = tuple second
 		ifTrue: [ rcvr := self ownerOrYourselfThatIsA: PhratchStageMorph ]
-		ifFalse: [(tuple second isKindOf: VariableFrame) 
-			ifFalse: [ rcvr := self coerceSpriteArg: tuple second ]].
-	rcvr ifNil: [ rcvr := scriptOwner].
-
+		ifFalse: [ 
+			(tuple second isKindOf: VariableFrame)
+				ifFalse: [ rcvr := self coerceSpriteArg: tuple second ] ].
+	rcvr ifNil: [ rcvr := scriptOwner ].
 	k := tuple third.
-
-	(#(readVariable changeVariable) includes: k) ifTrue: [
-		^ self variableBlockFromTuple: tuple receiver: rcvr].
-
-	(#(readBlockVariable changeBlockVariable) includes: k) ifTrue: [
-		^ self blockVariableBlockFromTuple: tuple receiver: rcvr].
-
-	#listNamed: = k ifTrue: [
-		^ ListContentsBlockMorph new
-			color: ScriptablePhratchMorph listBlockColor;
-			receiver: rcvr;
-			commandSpec: tuple fourth;
-			selector: #listNamed:].
-
-	#lambda: = k ifTrue: [
-		block := ReporterBlockMorph new.
-		block
-			color: Color lightGray;
-			receiver: rcvr;
-			selector: k;
-			commandSpec: 'the $BlockId$ block'.
-		(block argumentAt: 1) defaultValue: (tuple at: 4).
-		^block ].
-
-	#autoLambda = k ifTrue: [
-		block := CSlotMorph new.
-		(tuple at: 9) ifNotNil: [
-			block attachBlockNested: (self stackFromTupleList: (tuple at: 9) receiver: scriptOwner)].
-		^block ].
-
-	#loopLambda = k ifTrue: [
-		block := CArgSlotMorph new.
-		(tuple at: 9) ifNotNil: [
-			block attachBlockNested: (self stackFromTupleList: (tuple at: 9) receiver: scriptOwner)].
-		^block ].
-
-	#autoBlock = k ifTrue: [
-		block := OSlotMorph new type: #reporterslot.
-		(tuple at: 4) ifNotNil: [
-			block replaceArgMorph: block argMorphs first by: (self stackFromTupleList: (tuple at: 4) receiver: scriptOwner)].
-		^block ].
-
-	#cLambda = k ifTrue: [
-		block := CReporterSlotMorph new.
-		(tuple at: 4) ifNotNil: [
-			block replaceArgMorph: block argMorphs first by: (self stackFromTupleList: (tuple at: 4) receiver: scriptOwner)].
-		^block ].
-
-	#typeInLambda = k ifTrue: [
-		block := TypeInReporterSlotMorph new.
-		((tuple at: 4) isKindOf: String)
-			ifTrue: [block argMorphs first defaultValue: (tuple at: 4)]
-			ifFalse: [
-				block replaceArgMorph: block argMorphs first by: (self stackFromTupleList: (tuple at: 4) receiver: scriptOwner)].
-		^block ].
-
-	#autoPredicate = k ifTrue: [
-		block := OSlotMorph new type: #booleanslot.
-		(tuple at: 4) ifNotNil: [
-			block replaceArgMorph: block argMorphs first by: (self stackFromTupleList: (tuple at: 4) receiver: scriptOwner)].
-		^block ].
-
-	#doCustomBlock = k ifTrue: [
-		userSpec := tuple at: 4.
-		def := (rcvr definitionFor: (CustomBlockDefinition idFromSpec: userSpec)).
-		(def isNil or: [#none = def type])
-			ifTrue: [block := CustomCommandBlockMorph new]
-			ifFalse: [
-				block := CustomReporterBlockMorph new.
-				block isBoolean: def type = #boolean].
-		block 
-			receiver: rcvr;
-			userSpec: userSpec.
-		block isSpecialForm: true.
-		block selector: #doCustomBlock.
-		argCount := block argumentCount min: tuple size - 4.
-		1 to: argCount do: [:i |
-			arg := tuple at: i + 4.
-			(arg isKindOf: Array)
-				ifTrue: [ "argument is a block"
-					((arg size = 1) and: [arg first isKindOf: Array]) ifTrue: [arg := arg first].
-					argBlock := self blockFromTuple: arg receiver: scriptOwner.
-					block replaceArgMorph: (block argumentAt: i) by: argBlock]
-				ifFalse: [ "argument is a value"
-					(arg isKindOf: PhratchListMorph)
-						ifTrue: [arg convertBlockTuplesToStacksFor: self].
-					(block argumentAt: i) defaultValue: arg]].
-		^block].
-
-	#doMakeNewList = k ifTrue: [
-		block := MultiArgReporterBlockMorph new
-			color: ScriptablePhratchMorph listBlockColor;
-			receiver: rcvr;
-			isSpecialForm: true;
-			selector: #doMakeNewList.
-		spec := 'list'.
-		argCount := tuple size - 3.
-		argCount timesRepeat: [ spec := spec, ' $String$' ].
-		block commandSpec: spec.
-		1 to: argCount do: [:i |
-			arg := tuple at: i + 3. 
-			(arg isKindOf: Array)
-				ifTrue: [ "argument is a block"
-					((arg size = 1) and: [arg first isKindOf: Array]) ifTrue: [arg := arg first].
-					argBlock := self blockFromTuple: arg receiver: rcvr.
-					block replaceArgMorph: (block argumentAt: i) by: argBlock]
-				ifFalse: [ "argument is a value"
-					(block argumentAt: i) stringExpression: arg asString]].
-		^block].
-
-
-	(#(doCallBlockWithArgs doReport doCallBlockWithArgList) includes: k) ifTrue: [
-		block := MultiArgReporterBlockMorph new
-			color: (ScriptablePhratchMorph blockColorFor: 'control');
-			receiver: rcvr;
-			isSpecialForm: true;
-			minArgs: 1;
-			selector: k.
-		spec := rcvr blockSpecForSelector: k.
-		argCount := tuple size - 3. 
-		(argCount - 3) timesRepeat: [ spec := spec, ' $String$' ].
-		block commandSpec: spec.
-		1 to: argCount do: [:i |
-			arg := tuple at: i + 3.
-			(arg isKindOf: Array)
-				ifTrue: [ "argument is a block"
-					((arg size = 1) and: [arg first isKindOf: Array]) ifTrue: [arg := arg first].
-					argBlock := self blockFromTuple: arg receiver: rcvr.
-					block replaceArgMorph: (block argumentAt: i) by: argBlock]
-				ifFalse: [ "argument is a value"
-					((block argumentAt: i) isKindOf: ChoiceArgMorph)
-						ifTrue: [(block argumentAt: i) privateSetChoice: arg asString]
-						ifFalse: [arg isNil
-							ifFalse: [(block argumentAt: i) stringExpression: arg asString]]]].
-		^block].
-
-	(#(function functionWithArgs) includes: k) ifTrue: [
-		block := ReporterScriptBlockMorph new
-			color: (ScriptablePhratchMorph blockColorFor: 'operators');
-			receiver: rcvr;
-			isSpecialForm: false;
-			minArgs: 1;
-			selector: k;
-			parameters: (tuple at: 4) asOrderedCollection;
-			variables: (tuple at: 5) asOrderedCollection;
-			type: (tuple at: 6);
-			declarations: (tuple at: 7);
-			isAtomic: (tuple at: 8).
-		spec := scriptOwner blockSpecForSelector: k. 
-		argCount := tuple size - 9.
-		(argCount - 2) timesRepeat: [ spec := spec, ' $String$' ].
-		block commandSpec: spec.
-		1 to: argCount do: [:i |
-			arg := tuple at: i + 8.
-			(arg isKindOf: Array)
-				ifTrue: [ "argument is a block"
-					((arg size = 1) and: [arg first isKindOf: Array]) ifTrue: [arg := arg first].
-					argBlock := self blockFromTuple: arg receiver: rcvr.
-					block replaceArgMorph: (block argumentAt: i) by: argBlock]
-				ifFalse: [ "argument is a value"
-					(block argumentAt: i) stringExpression: arg asString]].
-		block fixInitialFrame.
-		^block].
-
-	#doDeclareVariables = k ifTrue: [
-		block := VariableDeclarationBlockMorph new
-			receiver: rcvr;
-			color: Color gray;
-			isSpecialForm: true;
-			minArgs: 1;
-			selector: k.
-		argCount := tuple size - 3.
-		spec := 'script variables' localized.
-		argCount timesRepeat: [ spec := spec, ' $String$' ].
-		block commandSpec: spec.
-		1 to: argCount do: [:i |
-			arg := tuple at: i + 3.
-			(arg isKindOf: Array)
-				ifTrue: [ "argument is a block"
-					((arg size = 1) and: [arg first isKindOf: Array]) ifTrue: [arg := arg first].
-					argBlock := self blockFromTuple: arg receiver: rcvr.
-					block replaceArgMorph: (block argumentAt: i) by: argBlock]
-				ifFalse: [ "argument is a value"
-					(block argumentAt: i) stringExpression: arg asString]].
-		^block].
-
-
-
-	(#(EventHatMorph KeyEventHatMorph MouseClickEventHatMorph WhenHatBlockMorph CreationEventHatMorph) includes: k) ifTrue: [
-		block := self hatBlockFromTuple: tuple receiver: rcvr.
-		(block isKindOf: WhenHatBlockMorph) ifTrue: [block color: Color red].
-		^ block].
-
-	#phratchComment = k ifTrue: [
-		block := PhratchCommentMorph new.
-		tuple size > 3 ifTrue: [block commentMorph contents: (tuple at: 4)].
-		tuple size > 4 ifTrue: [(tuple at: 5) ifFalse: [block toggleShowing]].
-		tuple size > 5 ifTrue: [block width: (tuple at: 6)].
-		tuple size > 6 ifTrue: [block anchor: (self blockWithID: (tuple at: 7))].
-		block toggleShowing; toggleShowing.
-		^ block].
-
-	#comment: = k ifTrue: [
-		block := CommentBlockMorph new.
-		tuple size > 1 ifTrue: [block comment: (tuple at: 2)].
-		tuple size > 2 ifTrue: [(tuple at: 3) ifFalse: [block toggleShowing]].
-		block color: (Color r: 0.8 g: 0 b: 0).  "obsolete"
-		^ block].
-
-	spec := self class blockSpecDict at: k ifAbsent: [nil].
-	spec ifNil: [
-		^ rcvr
-			blockFromSpec: #('obsolete!' - yourself)
-			color: Color red].
-
-	blockColor := BlockColorDict at: k ifAbsent: [Color red].
-	block := rcvr blockFromSpec: spec color: blockColor.
-
-
-	#procedure = block selector ifTrue: [
-		block
-			parameters: (tuple at: 4) asOrderedCollection;
-			variables: (tuple at: 5) asOrderedCollection;
-			type: (tuple at: 6);
-			declarations: (tuple at: 7);
-			isAtomic: (tuple at: 8).
-		argCount := tuple size - 9. 
-		argCount > 1 ifTrue: [
-			csp := block commandSpec.
-			argCount - 1 timesRepeat: [ csp := csp, ' $String$' ].
-			block commandSpec: csp ].
-		1 to: argCount do: [:i |
-			arg := tuple at: i + 8.
-			(arg isKindOf: Array)
-				ifTrue: [ "argument is a block"
-					((arg size = 1) and: [arg first isKindOf: Array]) ifTrue: [arg := arg first].
-					argBlock := self blockFromTuple: arg receiver: rcvr.
-					block replaceArgMorph: (block argumentAt: i) by: argBlock]
-				ifFalse: [ "argument is a value"
-					(block argumentAt: i) stringExpression: arg asString]].
-
-			(tuple last isKindOf: Array) ifTrue: [
-				block firstBlockList: (self stackFromTupleList: tuple last receiver: rcvr)].
-		block fixInitialFrame.
-		^block].
-
-	#procedureWithArgs = block selector ifTrue: [
-		block
-			parameters: (tuple at: 4) asOrderedCollection;
-			variables: (tuple at: 5) asOrderedCollection;
-			type: (tuple at: 6);
-			declarations: (tuple at: 7);
-			isAtomic: (tuple at: 8).
-		argCount := tuple size - 9. 
-		argCount > 1 ifTrue: [
-			csp := block commandSpec.
-			argCount - 1 timesRepeat: [ csp := csp, ' $String$' ].
-			block commandSpec: csp ].
-		1 to: argCount do: [:i |
-			arg := tuple at: i + 8.
-			(arg isKindOf: Array)
-				ifTrue: [ "argument is a block"
-					((arg size = 1) and: [arg first isKindOf: Array]) ifTrue: [arg := arg first].
-					argBlock := self blockFromTuple: arg receiver: rcvr.
-					block replaceArgMorph: (block argumentAt: i) by: argBlock]
-				ifFalse: [ "argument is a value"
-					(block argumentAt: i) stringExpression: arg asString]].
-
-			(tuple last isKindOf: Array) ifTrue: [
-				block firstBlockList: (self stackFromTupleList: tuple last receiver: rcvr)].
-		block fixInitialFrame.
-		^block].
-
-
-	(block isKindOf: CommandBlockMorph) ifTrue: [
-		argCount := block argumentCount min: tuple size - 3.
-
-		(block isKindOf: MultiArgCommandBlockMorph) ifTrue: [
+	(#(#readVariable #changeVariable) includes: k)
+		ifTrue: [ ^ self variableBlockFromTuple: tuple receiver: rcvr ].
+	(#(#readBlockVariable #changeBlockVariable) includes: k)
+		ifTrue: [ ^ self blockVariableBlockFromTuple: tuple receiver: rcvr ].
+	#listNamed: = k
+		ifTrue: [ 
+			^ ListContentsBlockMorph new
+				color: ScriptablePhratchMorph listBlockColor;
+				receiver: rcvr;
+				commandSpec: tuple fourth;
+				selector: #listNamed: ].
+	#lambda: = k
+		ifTrue: [ 
+			block := ReporterBlockMorph new.
+			block
+				color: Color lightGray;
+				receiver: rcvr;
+				selector: k;
+				commandSpec: 'the $BlockId$ block'.
+			(block argumentAt: 1) defaultValue: (tuple at: 4).
+			^ block ].
+	#autoLambda = k
+		ifTrue: [ 
+			block := CSlotMorph new.
+			(tuple at: 9) ifNotNil: [ block attachBlockNested: (self stackFromTupleList: (tuple at: 9) receiver: scriptOwner) ].
+			^ block ].
+	#loopLambda = k
+		ifTrue: [ 
+			block := CArgSlotMorph new.
+			(tuple at: 9) ifNotNil: [ block attachBlockNested: (self stackFromTupleList: (tuple at: 9) receiver: scriptOwner) ].
+			^ block ].
+	#autoBlock = k
+		ifTrue: [ 
+			block := OSlotMorph new type: #reporterslot.
+			(tuple at: 4)
+				ifNotNil: [ block replaceArgMorph: block argMorphs first by: (self stackFromTupleList: (tuple at: 4) receiver: scriptOwner) ].
+			^ block ].
+	#cLambda = k
+		ifTrue: [ 
+			block := CReporterSlotMorph new.
+			(tuple at: 4)
+				ifNotNil: [ block replaceArgMorph: block argMorphs first by: (self stackFromTupleList: (tuple at: 4) receiver: scriptOwner) ].
+			^ block ].
+	#typeInLambda = k
+		ifTrue: [ 
+			block := TypeInReporterSlotMorph new.
+			((tuple at: 4) isKindOf: String)
+				ifTrue: [ block argMorphs first defaultValue: (tuple at: 4) ]
+				ifFalse: [ block replaceArgMorph: block argMorphs first by: (self stackFromTupleList: (tuple at: 4) receiver: scriptOwner) ].
+			^ block ].
+	#autoPredicate = k
+		ifTrue: [ 
+			block := OSlotMorph new type: #booleanslot.
+			(tuple at: 4)
+				ifNotNil: [ block replaceArgMorph: block argMorphs first by: (self stackFromTupleList: (tuple at: 4) receiver: scriptOwner) ].
+			^ block ].
+	#doCustomBlock = k
+		ifTrue: [ 
+			userSpec := tuple at: 4.
+			def := rcvr definitionFor: (CustomBlockDefinition idFromSpec: userSpec).
+			(def isNil or: [ #none = def type ])
+				ifTrue: [ block := CustomCommandBlockMorph new ]
+				ifFalse: [ 
+					block := CustomReporterBlockMorph new.
+					block isBoolean: def type = #boolean ].
+			block
+				receiver: rcvr;
+				userSpec: userSpec.
+			block isSpecialForm: true.
+			block selector: #doCustomBlock.
+			argCount := block argumentCount min: tuple size - 4.
+			1 to: argCount do: [ :i | 
+				arg := tuple at: i + 4.
+				(arg isKindOf: Array)
+					ifTrue: [ 
+						"argument is a block"
+						(arg size = 1 and: [ arg first isKindOf: Array ])
+							ifTrue: [ arg := arg first ].
+						argBlock := self blockFromTuple: arg receiver: scriptOwner.
+						block replaceArgMorph: (block argumentAt: i) by: argBlock ]
+					ifFalse: [ 
+						"argument is a value"
+						(arg isKindOf: PhratchListMorph)
+							ifTrue: [ arg convertBlockTuplesToStacksFor: self ].
+						(block argumentAt: i) defaultValue: arg ] ].
+			^ block ].
+	#doMakeNewList = k
+		ifTrue: [ 
+			block := MultiArgReporterBlockMorph new
+				color: ScriptablePhratchMorph listBlockColor;
+				receiver: rcvr;
+				isSpecialForm: true;
+				selector: #doMakeNewList.
+			spec := 'list'.
 			argCount := tuple size - 3.
-			csp := block commandSpec.
-			(argCount - 3) timesRepeat: [ csp := csp, ' $String$' ].
-			block commandSpec: csp.
-			1 to: argCount do: [:i |
+			argCount timesRepeat: [ spec := spec , ' $String$' ].
+			block commandSpec: spec.
+			1 to: argCount do: [ :i | 
 				arg := tuple at: i + 3.
 				(arg isKindOf: Array)
-					ifTrue: [ "argument is a block"
-						((arg size = 1) and: [arg first isKindOf: Array]) ifTrue: [arg := arg first].
+					ifTrue: [ 
+						"argument is a block"
+						(arg size = 1 and: [ arg first isKindOf: Array ])
+							ifTrue: [ arg := arg first ].
 						argBlock := self blockFromTuple: arg receiver: rcvr.
-						block replaceArgMorph: (block argumentAt: i) by: argBlock]
-					ifFalse: [ "argument is a value"
+						block replaceArgMorph: (block argumentAt: i) by: argBlock ]
+					ifFalse: [ 
+						"argument is a value"
+						(block argumentAt: i) stringExpression: arg asString ] ].
+			^ block ].
+	(#(#doCallBlockWithArgs #doReport #doCallBlockWithArgList) includes: k)
+		ifTrue: [ 
+			block := MultiArgReporterBlockMorph new
+				color: (ScriptablePhratchMorph blockColorFor: 'control');
+				receiver: rcvr;
+				isSpecialForm: true;
+				minArgs: 1;
+				selector: k.
+			spec := rcvr blockSpecForSelector: k.
+			argCount := tuple size - 3.
+			argCount - 3 timesRepeat: [ spec := spec , ' $String$' ].
+			block commandSpec: spec.
+			1 to: argCount do: [ :i | 
+				arg := tuple at: i + 3.
+				(arg isKindOf: Array)
+					ifTrue: [ 
+						"argument is a block"
+						(arg size = 1 and: [ arg first isKindOf: Array ])
+							ifTrue: [ arg := arg first ].
+						argBlock := self blockFromTuple: arg receiver: rcvr.
+						block replaceArgMorph: (block argumentAt: i) by: argBlock ]
+					ifFalse: [ 
+						"argument is a value"
 						((block argumentAt: i) isKindOf: ChoiceArgMorph)
-							ifTrue: [(block argumentAt: i) privateSetChoice: arg asString]
-							ifFalse: [(block argumentAt: i) stringExpression: arg asString]]].
-			^block].
-
-		1 to: argCount do: [:i |
-			((#(+ - / * =) includes: block selector) and: [PhratchTranslator isRTLMath]) "RTLMath operators are RTL"
-				ifTrue: [arg := tuple at: ((argCount + 3) - (i - 1))]
-				ifFalse: [arg := tuple at: i + 3].
-			(arg isKindOf: Array)
-				ifTrue: [  "argument is a block"
-					((arg size = 1) and: [arg first isKindOf: Array]) ifTrue: [arg := arg first].
-					argBlock := self blockFromTuple: arg receiver: scriptOwner.
-					block replaceArgMorph: (block argumentAt: i) by: argBlock]
-				ifFalse: [  "argument is a value"
-					(arg isKindOf: PhratchListMorph)
-						ifTrue: [arg convertBlockTuplesToStacksFor: self].
-					(block argumentAt: i) defaultValue: arg]].
-
-		(block isKindOf: CBlockMorph) ifTrue: [
-			(tuple last isKindOf: Array) ifTrue: [
-				block firstBlockList: (self stackFromTupleList: tuple last receiver: rcvr)]].
-
-		(block isKindOf: IfElseBlockMorph) ifTrue: [
-			arg := tuple at: tuple size - 1.
-			(arg isKindOf: Array) ifTrue: [
-				block trueBlock: (self stackFromTupleList: arg receiver: rcvr)].
-			arg := tuple at: tuple size.
-			(arg isKindOf: Array) ifTrue: [
-				block falseBlock: (self stackFromTupleList: arg receiver: rcvr)]].
-
-		(block isKindOf: ReporterBlockMorph) ifTrue: [
-			((spec at: 2) includes: $b) ifTrue: [block isBoolean: true]]].
-
+							ifTrue: [ (block argumentAt: i) privateSetChoice: arg asString ]
+							ifFalse: [ 
+								arg isNil
+									ifFalse: [ (block argumentAt: i) stringExpression: arg asString ] ] ] ].
+			^ block ].
+	(#(#function #functionWithArgs) includes: k)
+		ifTrue: [ 
+			block := ReporterScriptBlockMorph new
+				color: (ScriptablePhratchMorph blockColorFor: 'operators');
+				receiver: rcvr;
+				isSpecialForm: false;
+				minArgs: 1;
+				selector: k;
+				parameters: (tuple at: 4) asOrderedCollection;
+				variables: (tuple at: 5) asOrderedCollection;
+				type: (tuple at: 6);
+				declarations: (tuple at: 7);
+				isAtomic: (tuple at: 8).
+			spec := scriptOwner blockSpecForSelector: k.
+			argCount := tuple size - 9.
+			argCount - 2 timesRepeat: [ spec := spec , ' $String$' ].
+			block commandSpec: spec.
+			1 to: argCount do: [ :i | 
+				arg := tuple at: i + 8.
+				(arg isKindOf: Array)
+					ifTrue: [ 
+						"argument is a block"
+						(arg size = 1 and: [ arg first isKindOf: Array ])
+							ifTrue: [ arg := arg first ].
+						argBlock := self blockFromTuple: arg receiver: rcvr.
+						block replaceArgMorph: (block argumentAt: i) by: argBlock ]
+					ifFalse: [ 
+						"argument is a value"
+						(block argumentAt: i) stringExpression: arg asString ] ].
+			block fixInitialFrame.
+			^ block ].
+	#doDeclareVariables = k
+		ifTrue: [ 
+			block := VariableDeclarationBlockMorph new
+				receiver: rcvr;
+				color: Color gray;
+				isSpecialForm: true;
+				minArgs: 1;
+				selector: k.
+			argCount := tuple size - 3.
+			spec := 'script variables' localized.
+			argCount timesRepeat: [ spec := spec , ' $String$' ].
+			block commandSpec: spec.
+			1 to: argCount do: [ :i | 
+				arg := tuple at: i + 3.
+				(arg isKindOf: Array)
+					ifTrue: [ 
+						"argument is a block"
+						(arg size = 1 and: [ arg first isKindOf: Array ])
+							ifTrue: [ arg := arg first ].
+						argBlock := self blockFromTuple: arg receiver: rcvr.
+						block replaceArgMorph: (block argumentAt: i) by: argBlock ]
+					ifFalse: [ 
+						"argument is a value"
+						(block argumentAt: i) stringExpression: arg asString ] ].
+			^ block ].
+	(#(#EventHatMorph #KeyEventHatMorph #MouseClickEventHatMorph #WhenHatBlockMorph #CreationEventHatMorph) includes: k)
+		ifTrue: [ 
+			block := self hatBlockFromTuple: tuple receiver: rcvr.
+			(block isKindOf: WhenHatBlockMorph)
+				ifTrue: [ block color: Color red ].
+			^ block ].
+	#phratchComment = k
+		ifTrue: [ 
+			block := PhratchCommentMorph new.
+			tuple size > 3
+				ifTrue: [ block commentMorph contents: (tuple at: 4) ].
+			tuple size > 4
+				ifTrue: [ 
+					(tuple at: 5)
+						ifFalse: [ block toggleShowing ] ].
+			tuple size > 5
+				ifTrue: [ block width: (tuple at: 6) ].
+			tuple size > 6
+				ifTrue: [ block anchor: (self blockWithID: (tuple at: 7)) ].
+			block
+				toggleShowing;
+				toggleShowing.
+			^ block ].
+	#comment: = k
+		ifTrue: [ 
+			block := CommentBlockMorph new.
+			tuple size > 1
+				ifTrue: [ block comment: (tuple at: 2) ].
+			tuple size > 2
+				ifTrue: [ 
+					(tuple at: 3)
+						ifFalse: [ block toggleShowing ] ].
+			block color: (Color r: 0.8 g: 0 b: 0).	"obsolete"
+			^ block ].
+	spec := self class blockSpecDict at: k ifAbsent: [ nil ].
+	spec ifNil: [ ^ rcvr blockFromSpec: #('obsolete!' #- #yourself) color: Color red ].
+	blockColor := BlockColorDict at: k ifAbsent: [ Color red ].
+	block := rcvr blockFromSpec: spec color: blockColor.
+	#procedure = block selector
+		ifTrue: [ 
+			block
+				parameters: (tuple at: 4) asOrderedCollection;
+				variables: (tuple at: 5) asOrderedCollection;
+				type: (tuple at: 6);
+				declarations: (tuple at: 7);
+				isAtomic: (tuple at: 8).
+			argCount := tuple size - 9.
+			argCount > 1
+				ifTrue: [ 
+					csp := block commandSpec.
+					argCount - 1 timesRepeat: [ csp := csp , ' $String$' ].
+					block commandSpec: csp ].
+			1 to: argCount do: [ :i | 
+				arg := tuple at: i + 8.
+				(arg isKindOf: Array)
+					ifTrue: [ 
+						"argument is a block"
+						(arg size = 1 and: [ arg first isKindOf: Array ])
+							ifTrue: [ arg := arg first ].
+						argBlock := self blockFromTuple: arg receiver: rcvr.
+						block replaceArgMorph: (block argumentAt: i) by: argBlock ]
+					ifFalse: [ 
+						"argument is a value"
+						(block argumentAt: i) stringExpression: arg asString ] ].
+			(tuple last isKindOf: Array)
+				ifTrue: [ block firstBlockList: (self stackFromTupleList: tuple last receiver: rcvr) ].
+			block fixInitialFrame.
+			^ block ].
+	#procedureWithArgs = block selector
+		ifTrue: [ 
+			block
+				parameters: (tuple at: 4) asOrderedCollection;
+				variables: (tuple at: 5) asOrderedCollection;
+				type: (tuple at: 6);
+				declarations: (tuple at: 7);
+				isAtomic: (tuple at: 8).
+			argCount := tuple size - 9.
+			argCount > 1
+				ifTrue: [ 
+					csp := block commandSpec.
+					argCount - 1 timesRepeat: [ csp := csp , ' $String$' ].
+					block commandSpec: csp ].
+			1 to: argCount do: [ :i | 
+				arg := tuple at: i + 8.
+				(arg isKindOf: Array)
+					ifTrue: [ 
+						"argument is a block"
+						(arg size = 1 and: [ arg first isKindOf: Array ])
+							ifTrue: [ arg := arg first ].
+						argBlock := self blockFromTuple: arg receiver: rcvr.
+						block replaceArgMorph: (block argumentAt: i) by: argBlock ]
+					ifFalse: [ 
+						"argument is a value"
+						(block argumentAt: i) stringExpression: arg asString ] ].
+			(tuple last isKindOf: Array)
+				ifTrue: [ block firstBlockList: (self stackFromTupleList: tuple last receiver: rcvr) ].
+			block fixInitialFrame.
+			^ block ].
+	(block isKindOf: CommandBlockMorph)
+		ifTrue: [ 
+			argCount := block argumentCount min: tuple size - 3.
+			(block isKindOf: MultiArgCommandBlockMorph)
+				ifTrue: [ 
+					argCount := tuple size - 3.
+					csp := block commandSpec.
+					argCount - 3 timesRepeat: [ csp := csp , ' $String$' ].
+					block commandSpec: csp.
+					1 to: argCount do: [ :i | 
+						arg := tuple at: i + 3.
+						(arg isKindOf: Array)
+							ifTrue: [ 
+								"argument is a block"
+								(arg size = 1 and: [ arg first isKindOf: Array ])
+									ifTrue: [ arg := arg first ].
+								argBlock := self blockFromTuple: arg receiver: rcvr.
+								block replaceArgMorph: (block argumentAt: i) by: argBlock ]
+							ifFalse: [ 
+								"argument is a value"
+								((block argumentAt: i) isKindOf: ChoiceArgMorph)
+									ifTrue: [ (block argumentAt: i) privateSetChoice: arg asString ]
+									ifFalse: [ (block argumentAt: i) stringExpression: arg asString ] ] ].
+					^ block ].
+			1 to: argCount do: [ :i | 
+				arg := ((#(#+ #- #/ #* #=) includes: block selector) and: [ PhratchTranslator isRTLMath ])
+					ifTrue: [ tuple at: argCount + 3 - (i - 1) ]
+					ifFalse: [ tuple at: i + 3 ].	"RTLMath operators are RTL"
+				(arg isKindOf: Array)
+					ifTrue: [ 
+						"argument is a block"
+						(arg size = 1 and: [ arg first isKindOf: Array ])
+							ifTrue: [ arg := arg first ].
+						argBlock := self blockFromTuple: arg receiver: scriptOwner.
+						block replaceArgMorph: (block argumentAt: i) by: argBlock ]
+					ifFalse: [ 
+						"argument is a value"
+						(arg isKindOf: PhratchListMorph)
+							ifTrue: [ arg convertBlockTuplesToStacksFor: self ].
+						(block argumentAt: i) defaultValue: arg ] ].
+			(block isKindOf: CBlockMorph)
+				ifTrue: [ 
+					(tuple last isKindOf: Array)
+						ifTrue: [ block firstBlockList: (self stackFromTupleList: tuple last receiver: rcvr) ] ].
+			(block isKindOf: IfElseBlockMorph)
+				ifTrue: [ 
+					arg := tuple at: tuple size - 1.
+					(arg isKindOf: Array)
+						ifTrue: [ block trueBlock: (self stackFromTupleList: arg receiver: rcvr) ].
+					arg := tuple at: tuple size.
+					(arg isKindOf: Array)
+						ifTrue: [ block falseBlock: (self stackFromTupleList: arg receiver: rcvr) ] ].
+			(block isKindOf: ReporterBlockMorph)
+				ifTrue: [ 
+					((spec at: 2) includes: $b)
+						ifTrue: [ block isBoolean: true ] ] ].
 	^ block
-
 ]
 
 { #category : #byob }
 ScriptablePhratchMorph >> blockIds [
-	customBlocks ifNil: [customBlocks := OrderedCollection new].
-	^ (customBlocks select: [:eachDef | eachDef isGlobal not ])
-		collect: [:eachDef | eachDef id]
-]
-
-{ #category : #'BYOB OOP message passing' }
-ScriptablePhratchMorph >> blockLike: aBlockMorph [
-
-	aBlockMorph selector = #doCustomBlock
-		ifTrue: [^ self lambda: aBlockMorph id].
-	^ (self blockForSelector: aBlockMorph selector) asLambda
-
+	customBlocks ifNil: [ customBlocks := OrderedCollection new ].
+	^ (customBlocks reject: [ :eachDef | eachDef isGlobal ]) collect: [ :eachDef | eachDef id ]
 ]
 
 { #category : #blocks }
@@ -1884,53 +1861,46 @@ ScriptablePhratchMorph >> blockVariableBlockFromTuple: tuple receiver: scriptOwn
 	"Answer a new block for the given variable reference tuple."
 
 	| varName rcvr selector block arg argBlock |
-	#byob = tuple first ifFalse: [
-		^ self blockVariableBlockFromTupleOldForm: tuple receiver: scriptOwner ].
-
+	#byob = tuple first
+		ifFalse: [ ^ self blockVariableBlockFromTupleOldForm: tuple receiver: scriptOwner ].
 	varName := tuple at: 4.
 	rcvr := scriptOwner.
-
-	tuple third = #readBlockVariable ifTrue: [
-		((tuple at: 5) isKindOf: VariableFrame) 
-			ifTrue: [ rcvr := (tuple at: 5) convertTuplesToStacks ]
-			ifFalse: [ rcvr := VariableFrame new "definitionFor: (CustomBlockDefinition idFromSpec: (tuple at: 5))" ]. 
-		^VariableBlockMorph new
-			receiver: rcvr;
-			selector: #getVar:;
-			commandSpec: varName;
-			isSpecialForm: true ].
-
-	tuple third = #changeBlockVariable ifTrue: [
-		selector := tuple at: 5.
-		((tuple at: 6) isKindOf: VariableFrame) 
-			ifTrue: [ rcvr := (tuple at: 6) convertTuplesToStacks ]
-			ifFalse: [ rcvr := rcvr definitionFor: (CustomBlockDefinition idFromSpec: (tuple at: 6))]. 
-
-		block := SetterBlockMorph new
-			color: (ScriptablePhratchMorph blockColorFor: 'variables').
-
-		(#(setVar:to: setBlockVar:to:) includes: selector)
-			ifTrue: [block initSetterForVar: varName]
-			ifFalse: [block initChangerForVar: varName].
-
-		block 
-			receiver: rcvr;
-			isSpecialForm: true.
-
-		arg := tuple at: 7.
-		(arg isKindOf: Array)
-			ifTrue: [  "argument is a block"
-				((arg size = 1) and: [arg first isKindOf: Array]) ifTrue: [arg := arg first].
-				argBlock := self blockFromTuple: arg receiver: scriptOwner.
-				block replaceArgMorph: block expressionArg by: argBlock]
-			ifFalse: [ "argument is a value"
-				block expressionArg defaultValue: arg].
-
-		^ block].
-
+	tuple third = #readBlockVariable
+		ifTrue: [ 
+			rcvr := ((tuple at: 5) isKindOf: VariableFrame)
+				ifTrue: [ (tuple at: 5) convertTuplesToStacks ]
+				ifFalse: [ VariableFrame new	"definitionFor: (CustomBlockDefinition idFromSpec: (tuple at: 5))" ].
+			^ VariableBlockMorph new
+				receiver: rcvr;
+				selector: #getVar:;
+				commandSpec: varName;
+				isSpecialForm: true ].
+	tuple third = #changeBlockVariable
+		ifTrue: [ 
+			selector := tuple at: 5.
+			rcvr := ((tuple at: 6) isKindOf: VariableFrame)
+				ifTrue: [ (tuple at: 6) convertTuplesToStacks ]
+				ifFalse: [ rcvr definitionFor: (CustomBlockDefinition idFromSpec: (tuple at: 6)) ].
+			block := SetterBlockMorph new color: (ScriptablePhratchMorph blockColorFor: 'variables').
+			(#(#setVar:to: #setBlockVar:to:) includes: selector)
+				ifTrue: [ block initSetterForVar: varName ]
+				ifFalse: [ block initChangerForVar: varName ].
+			block
+				receiver: rcvr;
+				isSpecialForm: true.
+			arg := tuple at: 7.
+			(arg isKindOf: Array)
+				ifTrue: [ 
+					"argument is a block"
+					(arg size = 1 and: [ arg first isKindOf: Array ])
+						ifTrue: [ arg := arg first ].
+					argBlock := self blockFromTuple: arg receiver: scriptOwner.
+					block replaceArgMorph: block expressionArg by: argBlock ]
+				ifFalse: [ 
+					"argument is a value"
+					block expressionArg defaultValue: arg ].
+			^ block ].
 	self error: 'unknown block variable spec'
-
-
 ]
 
 { #category : #blocks }
@@ -1940,47 +1910,42 @@ ScriptablePhratchMorph >> blockVariableBlockFromTupleOldForm: tuple receiver: sc
 	| varName rcvr selector block arg argBlock |
 	varName := tuple at: 2.
 	rcvr := scriptOwner.
-
-	tuple first = #readBlockVariable ifTrue: [
-		(tuple third isKindOf: VariableFrame) 
-			ifTrue: [ rcvr := tuple third convertTuplesToStacks ]
-			ifFalse: [ rcvr := rcvr definitionFor: (CustomBlockDefinition idFromSpec: tuple third) ]. 
-		^ VariableBlockMorph new
-			receiver: rcvr;
-			selector: #getVar:;
-			commandSpec: varName;
-			isSpecialForm: true ].
-
-	tuple first = #changeBlockVariable ifTrue: [
-		selector := tuple at: 3.
-		(tuple fourth isKindOf: VariableFrame) 
-			ifTrue: [ rcvr := tuple fourth convertTuplesToStacks ]
-			ifFalse: [ rcvr := rcvr definitionFor: (CustomBlockDefinition idFromSpec: tuple fourth) ]. 
-
-		block := SetterBlockMorph new
-			receiver: rcvr;
-			color: (ScriptablePhratchMorph blockColorFor: 'variables').
-
-		(#(setVar:to: setBlockVar:to:) includes: selector)
-			ifTrue: [block initSetterForVar: varName]
-			ifFalse: [block initChangerForVar: varName].
-
-		block isSpecialForm: true.
-
-		arg := tuple at: 5.
-		(arg isKindOf: Array)
-			ifTrue: [  "argument is a block"
-				((arg size = 1) and: [arg first isKindOf: Array]) ifTrue: [arg := arg first].
-				argBlock := self blockFromTuple: arg receiver: scriptOwner.
-				block replaceArgMorph: block expressionArg by: argBlock]
-			ifFalse: [ "argument is a value"
-				block expressionArg defaultValue: arg].
-
-		^ block].
-
+	tuple first = #readBlockVariable
+		ifTrue: [ 
+			rcvr := (tuple third isKindOf: VariableFrame)
+				ifTrue: [ tuple third convertTuplesToStacks ]
+				ifFalse: [ rcvr definitionFor: (CustomBlockDefinition idFromSpec: tuple third) ].
+			^ VariableBlockMorph new
+				receiver: rcvr;
+				selector: #getVar:;
+				commandSpec: varName;
+				isSpecialForm: true ].
+	tuple first = #changeBlockVariable
+		ifTrue: [ 
+			selector := tuple at: 3.
+			rcvr := (tuple fourth isKindOf: VariableFrame)
+				ifTrue: [ tuple fourth convertTuplesToStacks ]
+				ifFalse: [ rcvr definitionFor: (CustomBlockDefinition idFromSpec: tuple fourth) ].
+			block := SetterBlockMorph new
+				receiver: rcvr;
+				color: (ScriptablePhratchMorph blockColorFor: 'variables').
+			(#(#setVar:to: #setBlockVar:to:) includes: selector)
+				ifTrue: [ block initSetterForVar: varName ]
+				ifFalse: [ block initChangerForVar: varName ].
+			block isSpecialForm: true.
+			arg := tuple at: 5.
+			(arg isKindOf: Array)
+				ifTrue: [ 
+					"argument is a block"
+					(arg size = 1 and: [ arg first isKindOf: Array ])
+						ifTrue: [ arg := arg first ].
+					argBlock := self blockFromTuple: arg receiver: scriptOwner.
+					block replaceArgMorph: block expressionArg by: argBlock ]
+				ifFalse: [ 
+					"argument is a value"
+					block expressionArg defaultValue: arg ].
+			^ block ].
 	self error: 'unknown block variable spec'
-
-
 ]
 
 { #category : #blocks }
@@ -2099,51 +2064,10 @@ ScriptablePhratchMorph >> broadcast: name withArgument: arg [
 
 ]
 
-{ #category : #'byob easter egg fun' }
-ScriptablePhratchMorph >> callMe [
-
-	^ (ReporterBlockMorph new
-		color: Color random;
-		receiver: self;
-		commandSpec: 'Wow, you''re a smart one. Now call ME $String$ !';
-		selector: #callMeWith:) asLambda
-		
-]
-
-{ #category : #'byob easter egg fun' }
-ScriptablePhratchMorph >> callMeWith: anArg [
-
-	((anArg isKindOf: String) and: [anArg isEmpty not])
-		ifFalse: [^ 'call me with ''please'', please!'].
-
-	anArg asLowercase = 'please' ifTrue: [
-		(self isKindOf: PhratchStageMorph) ifTrue: [
-			^'first drag me from the stage into a sprite, then call me again!'].
-
-		^ (CommandBlockMorph new
-			color: Color random;
-			receiver: self;
-			commandSpec: 'Cool! Now RUN me $String$ !';
-			selector: #runMeWith:;
-			yourself) asLambda ].
-
-	^ 'come on, call me with ''please''!'
-
-
-]
-
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> cameraIsOpen [
 	<phratchItem: 'camera is open?' kind: #b category: 'looks' defaultValues: #() subCategory: #a9>
 	^ CameraPlugin cameraIsOpen: 1.
-]
-
-{ #category : #'looks ops' }
-ScriptablePhratchMorph >> changeCostumeIndexBy: aNumber [
-	"Change my costume index by the given amount."
-
-	self costumeIndex: self costumeIndex + aNumber.
-
 ]
 
 { #category : #'looks ops' }
@@ -2229,12 +2153,6 @@ ScriptablePhratchMorph >> changeVar: varName by: increment [
 
 ]
 
-{ #category : #'looks ops' }
-ScriptablePhratchMorph >> changeVisibilityBy: delta [
-	"Obsolete. Do nothing."
-
-]
-
 { #category : #'sound ops' }
 ScriptablePhratchMorph >> changeVolumeBy: aNumber [
 	<phratchItem: 'change volume by $Number$' kind: #- category: 'sound' defaultValues: #(-10) subCategory: #a4>
@@ -2242,7 +2160,7 @@ ScriptablePhratchMorph >> changeVolumeBy: aNumber [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #widgets }
 ScriptablePhratchMorph >> changed [
 	"Report that the area occupied by this morph should be redrawn."
 	self invalidRect: self fullBounds.
@@ -2317,9 +2235,10 @@ ScriptablePhratchMorph >> closeCamera [
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> closeDefinitivelyCamera [
 	<phratchItem: 'close camera' kind: #- category: 'looks' defaultValues: #() subCategory: #a9>
-	self cameraIsOpen ifTrue: [
-		CameraOpenings := 0.
-		CameraPlugin closeCamera: 1].
+	self cameraIsOpen
+		ifFalse: [ ^ self ].
+	CameraOpenings := 0.
+	CameraPlugin closeCamera: 1
 ]
 
 { #category : #'sensing ops' }
@@ -2351,27 +2270,30 @@ ScriptablePhratchMorph >> colorAsString: aColor [
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> colorAtX: x y: y [
-	<phratchItem: 'color of pixel x: $Number$ y: $Number$' kind: #g category: 'colors' defaultValues: #(0 0) subCategory: #a3>
+	<phratchItem: 'color of pixel x: $Number$ y: $Number$' kind: #g category: 'colors' defaultValues: #(0 0) subCategory:
+		#a3>
 	| frame w newX newY p |
 	frame := self ownerThatIsA: PhratchFrameMorph.
-	frame ifNil: [
-		(w := self ownerThatIsA: OffscreenWorldMorph) ifNil: [^ self].
-		frame := w frame].
-
+	frame
+		ifNil: [ 
+			(w := self ownerThatIsA: OffscreenWorldMorph) ifNil: [ ^ self ].
+			frame := w frame ].
 	newX := x.
-	newX isNaN ifTrue: [newX := 0].
-	newX > 240 ifTrue: [newX := 240].
-	newX < -240 ifTrue: [newX := -240].
+	newX isNaN
+		ifTrue: [ newX := 0 ].
+	newX := newX min: 240.
+	newX := newX max: -240.
 	newY := y.
-	newY isNaN ifTrue: [newY := 0].
-	newY < -180 ifTrue: [newY := -180].
-	newY > 180 ifTrue: [newY := 180].
-
-	DoubleSize ifTrue: [
-		newX := newX * 2.
-		newY := newY * 2].
+	newY isNaN
+		ifTrue: [ newY := 0 ].
+	newY := newY max: -180.
+	newY := newY min: 180.
+	DoubleSize
+		ifTrue: [ 
+			newX := newX * 2.
+			newY := newY * 2 ].
 	p := newX @ newY negated.
-	^ Display colorAt: (PhratchOrigin + p).
+	^ Display colorAt: PhratchOrigin + p
 ]
 
 { #category : #'panther actions' }
@@ -2528,7 +2450,6 @@ ScriptablePhratchMorph >> contentsOfList: listName [
 
 { #category : #byob }
 ScriptablePhratchMorph >> convertListVarReferencesToTuples [
-
 	"format conventions:
 
 		sprite:
@@ -2559,29 +2480,31 @@ ScriptablePhratchMorph >> convertListVarReferencesToTuples [
 					converted to tuples in place"
 
 	| obj ref rcvr |
-
-	self varNames do: [:varName |
-		obj := self getVar: varName.
-
-		(obj isKindOf: BlockMorph) ifTrue: [
-			(obj receiver isKindOf: ScriptablePhratchMorph)
-				ifTrue: [(obj receiver isKindOf: PhratchStageMorph)
-					ifTrue: [rcvr := 'Stage']
-					ifFalse: [rcvr := obj receiver objName]]
-				ifFalse: [ rcvr := '' ].
-			vars at: varName put: (Array with: #block with: rcvr with: obj tupleSequence) ].
-
-		(obj isKindOf: PhratchListMorph) ifTrue: [
-			ref := obj asReferenceTuple. 
-			(ref first = #variableList) & ({objName. 'Stage'} includes: ref second ) & (ref third = varName)
-				ifTrue: [obj convertStacksToTuples]
-				ifFalse: [ vars at: varName put: ref]].
-
-		(obj isKindOf: ScriptablePhratchMorph) ifTrue: [
-			ref := obj asReferenceTuple. 
-			vars at: varName put: ref]].
-
-
+	self varNames
+		do: [ :varName | 
+			obj := self getVar: varName.
+			(obj isKindOf: BlockMorph)
+				ifTrue: [ 
+					rcvr := (obj receiver isKindOf: ScriptablePhratchMorph)
+						ifTrue: [ 
+							(obj receiver isKindOf: PhratchStageMorph)
+								ifTrue: [ 'Stage' ]
+								ifFalse: [ obj receiver objName ] ]
+						ifFalse: [ '' ].
+					vars at: varName put: (Array with: #block with: rcvr with: obj tupleSequence) ].
+			(obj isKindOf: PhratchListMorph)
+				ifTrue: [ 
+					ref := obj asReferenceTuple.
+					ref first = #variableList
+						&
+							({objName.
+							'Stage'} includes: ref second) & (ref third = varName)
+						ifTrue: [ obj convertStacksToTuples ]
+						ifFalse: [ vars at: varName put: ref ] ].
+			(obj isKindOf: ScriptablePhratchMorph)
+				ifTrue: [ 
+					ref := obj asReferenceTuple.
+					vars at: varName put: ref ] ]
 ]
 
 { #category : #blocks }
@@ -2665,7 +2588,6 @@ ScriptablePhratchMorph >> convertTuplesToStacks [
 
 { #category : #byob }
 ScriptablePhratchMorph >> convertVarTuplesToListReferences [
-
 	"format conventions:
 
 		sprite:
@@ -2696,37 +2618,29 @@ ScriptablePhratchMorph >> convertVarTuplesToListReferences [
 					converted to tuples in place"
 
 	| obj rcvr stage block |
-
-	self varNames do: [:varName |
-		obj := self getVar: varName.
-	
-		(obj isKindOf: PhratchListMorph) ifTrue: [
-			obj convertTuplesToStacks ].
-
-		(obj isKindOf: Array) ifTrue: [
-			stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
-			obj second = 'Stage'
-				ifTrue: [rcvr := stage ]
-				ifFalse: [rcvr := stage coerceSpriteArg: obj second ].
-
-
-
-			#block = obj first ifTrue: [
-				block := stage stackFromTupleList: obj third receiver: rcvr.
-				varName ifNotNil: [	vars at: varName put: block ]].
-				
-			#namedList = obj first ifTrue: [
-				vars at: varName put: (stage listNamed: obj third targetName: obj second)].
-
-			#variableList = obj first ifTrue: [
-				vars at: varName put: (stage listInVarNamed: obj third targetName: obj second)].
-
-			#stage = obj first ifTrue: [
-				vars at: varName put: stage].	
-
-			#sprite = obj first ifTrue: [
-				vars at: varName put: (stage coerceSpriteArg: obj second)]]].
-
+	self varNames
+		do: [ :varName | 
+			obj := self getVar: varName.
+			(obj isKindOf: PhratchListMorph)
+				ifTrue: [ obj convertTuplesToStacks ].
+			(obj isKindOf: Array)
+				ifTrue: [ 
+					stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
+					rcvr := obj second = 'Stage'
+						ifTrue: [ stage ]
+						ifFalse: [ stage coerceSpriteArg: obj second ].
+					#block = obj first
+						ifTrue: [ 
+							block := stage stackFromTupleList: obj third receiver: rcvr.
+							varName ifNotNil: [ vars at: varName put: block ] ].
+					#namedList = obj first
+						ifTrue: [ vars at: varName put: (stage listNamed: obj third targetName: obj second) ].
+					#variableList = obj first
+						ifTrue: [ vars at: varName put: (stage listInVarNamed: obj third targetName: obj second) ].
+					#stage = obj first
+						ifTrue: [ vars at: varName put: stage ].
+					#sprite = obj first
+						ifTrue: [ vars at: varName put: (stage coerceSpriteArg: obj second) ] ] ]
 ]
 
 { #category : #byob }
@@ -2876,19 +2790,6 @@ ScriptablePhratchMorph >> costumeIndex [
 ]
 
 { #category : #'looks ops' }
-ScriptablePhratchMorph >> costumeIndex: aNumber [
-	"Set my costume to the costume at the given index modulo my total number of costumes. Costumes are numbered starting at 1."
-
-	| cList i newC |
-	cList := media reject: [:m | m isSound].
-	cList size = 0 ifTrue: [^ self].  "should never happen..."
-	i := ((aNumber rounded - 1) \\ cList size) + 1.
-	newC := cList at: i.
-	costume == newC ifFalse: [self lookLike: newC mediaName].
-
-]
-
-{ #category : #'looks ops' }
 ScriptablePhratchMorph >> costumeNameFromNumber: aNumber [
 	"Return a costume name for the given number--rounded and modulo the number of costumes."
 
@@ -2934,63 +2835,54 @@ ScriptablePhratchMorph >> costumesPage: xOffset [
 	| bin label m y images n recBut impBut photoBut maxHeight xMargin yMargin separator |
 	xMargin := 15.
 	yMargin := 15.
-
 	bin := PhratchBlockPaletteMorph new color: PhratchFrameMorph scriptsPaneColor.
-
-	(self isKindOf: PhratchStageMorph)
-		ifTrue: [label := 'New background:' localized]
-		ifFalse: [label := 'New costume:' localized].
-	m := StringMorph
-		contents: label
-		font: (PhratchFrameMorph getFont: #CostumesPage).
+	label := (self isKindOf: PhratchStageMorph)
+		ifTrue: [ 'New background:' localized ]
+		ifFalse: [ 'New costume:' localized ].
+	m := StringMorph contents: label font: (PhratchFrameMorph getFont: #CostumesPage).
 	m color: Color white.
 	bin addMorph: m.
-
 	recBut := PhratchFrameMorph buttonLabel: 'Paint' localized selector: #drawNewCostume.
 	recBut target: self.
 	bin addMorph: recBut.
-
 	impBut := PhratchFrameMorph buttonLabel: 'Import' localized selector: #importImage.
 	impBut target: self.
 	bin addMorph: impBut.
-
 	photoBut := PhratchFrameMorph buttonLabel: 'Camera' localized selector: #takePhoto.
 	photoBut target: self.
 	bin addMorph: photoBut.
-
-	maxHeight := (m height max: (impBut height max: (recBut height max: photoBut height))).
+	maxHeight := m height max: (impBut height max: (recBut height max: photoBut height)).
 	PhratchTranslator isRTL
-		ifTrue: [
-			photoBut position: xMargin@(yMargin + ((maxHeight - photoBut height) / 2)).
-			impBut position: (photoBut right + 4)@(yMargin + ((maxHeight - impBut height) / 2)).
-			recBut position: (impBut right + 4)@(yMargin + ((maxHeight - recBut height) / 2)).
-			m position: (recBut right + 4)@(yMargin + ((maxHeight - m height) / 2))]
-		ifFalse: [
-			m position: xMargin@(yMargin + ((maxHeight - m height) / 2)).
-			recBut position: (m right + 4)@(yMargin + ((maxHeight - recBut height) / 2)).
-			impBut position: (recBut right + 4)@(yMargin + ((maxHeight - impBut height) / 2)).
-			photoBut position: (impBut right + 4)@(yMargin + ((maxHeight - impBut height) / 2))].
-
+		ifTrue: [ 
+			photoBut position: xMargin @ (yMargin + ((maxHeight - photoBut height) / 2)).
+			impBut position: (photoBut right + 4) @ (yMargin + ((maxHeight - impBut height) / 2)).
+			recBut position: (impBut right + 4) @ (yMargin + ((maxHeight - recBut height) / 2)).
+			m position: (recBut right + 4) @ (yMargin + ((maxHeight - m height) / 2)) ]
+		ifFalse: [ 
+			m position: xMargin @ (yMargin + ((maxHeight - m height) / 2)).
+			recBut position: (m right + 4) @ (yMargin + ((maxHeight - recBut height) / 2)).
+			impBut position: (recBut right + 4) @ (yMargin + ((maxHeight - impBut height) / 2)).
+			photoBut position: (impBut right + 4) @ (yMargin + ((maxHeight - impBut height) / 2)) ].
 	separator := TiledImageMorph new tileForm: (PhratchFrameMorph skinAt: #costumeSeparatorTile).
-	bin addMorph: (separator position: (xOffset + 17)@(yMargin + maxHeight + 5)).
-
+	bin addMorph: (separator position: (xOffset + 17) @ (yMargin + maxHeight + 5)).
 	y := yMargin + maxHeight + 9.
 	n := 0.
-	images := media select: [:item | item isImage].
-	images do: [:item |
-		m := MediaItemMorph new.
-		m phratchObj: self media: item; position: xOffset@y.
-		m setNumber: (n := n + 1).
-		item = costume ifTrue: [m highlight: true].
-		bin addMorph: m.
-		y := y + m height - 1.].
-
+	images := media select: [ :item | item isImage ].
+	images
+		do: [ :item | 
+			m := MediaItemMorph new.
+			m
+				phratchObj: self media: item;
+				position: xOffset @ y.
+			m setNumber: (n := n + 1).
+			item = costume
+				ifTrue: [ m highlight: true ].
+			bin addMorph: m.
+			y := y + m height - 1 ].
 	bin submorphs size > 0
-		ifTrue: [separator width: bin firstSubmorph width - 14]
-		ifFalse: [separator width: 240].
-
+		ifTrue: [ separator width: bin firstSubmorph width - 14 ]
+		ifFalse: [ separator width: 240 ].
 	^ bin
-
 ]
 
 { #category : #blocks }
@@ -3104,112 +2996,85 @@ ScriptablePhratchMorph >> defaultArgsFor: blockSpec [
 	"Answer the default argument for the given block specification."
 
 	| defaultArgs stage sel currentSize list |
-	defaultArgs := blockSpec copyFrom: 4 to: blockSpec size.  "may be empty"
+	defaultArgs := blockSpec copyFrom: 4 to: blockSpec size.	"may be empty"
 	stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
-
 	sel := (blockSpec at: 3) asSymbol.
-	#gotoX:y: = sel ifTrue: [
-		defaultArgs := Array
-			with: self referencePosition x rounded
-			with: self referencePosition y rounded].
-
-	#glideSecs:toX:y:elapsed:from: = sel ifTrue: [
-		defaultArgs := Array
-			with: 1
-			with: self referencePosition x rounded
-			with: self referencePosition y rounded].
-
-	#motor:direction: = self ifTrue: [
-		defaultArgs := Array with: 'reverse' localized with: 'this way' localized with: 'that way'].
-
-	#setSizeTo: = sel ifTrue: [
-		(self isKindOf: PhratchStageMorph) ifTrue: [ 	"no size ops for stage -jens"
-			^Array with: 100].
-		currentSize := (100.0 * (self scalePoint x max: self scalePoint y)) rounded.
-		defaultArgs := Array with: currentSize].
-
-	#getAttribute:of: = sel ifTrue: [
-		(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNotNil: [
-			list := stage submorphs select: [:m | m isKindOf: PhratchSpriteMorph].
-			list sort: [:s1 :s2 | s1 objName asLowercase < s2 objName asLowercase].
-			list size > 0
-				ifTrue: [defaultArgs := Array with: 'x position' with: list first]
-				ifFalse: [defaultArgs := Array with: 'background #' with: stage]]
-		ifNil:[defaultArgs := Array with: 'x position' with: self]].
-
-	#concatenate:with: = sel ifTrue: [
-		defaultArgs := Array with: 'hello ' localized with: 'world' localized].
-
-	#doAsk = sel ifTrue: [
-		defaultArgs := Array with: 'What''s your name?' localized].
-
-	#letter:of: = sel ifTrue: [
-		defaultArgs := Array with: 1 with: 'world' localized].
-
-	#stringLength: = sel ifTrue: [
-		defaultArgs := Array with: 'world' localized].
-
-	#say:duration:elapsed:from: = sel ifTrue: [
-		defaultArgs := Array with: 'Hello!' localized with: 2].
-
-	#say: = sel ifTrue: [
-		defaultArgs := Array with: 'Hello!' localized].
-
-	#think:duration:elapsed:from: = sel ifTrue: [
-		defaultArgs := Array with: 'Hmm...' localized with: 2].
-
-	#think: = sel ifTrue: [
-		defaultArgs := Array with: 'Hmm...' localized].
-
-	(#(lookLike: showBackground:) includes: sel) ifTrue: [
-		defaultArgs := Array with: self costumeNames last].
-
-	(#(playSound: doPlaySoundAndWait) includes: sel) ifTrue: [
-		list := self soundNames.
-		defaultArgs := list size <= 2
-			ifTrue: [Array with: '']
-			ifFalse: [Array with: (list at: (list size - 2))]].
-
-	(#(broadcast: doBroadcastAndWait) includes: sel) ifTrue: [
-		stage ifNotNil: [defaultArgs := Array with: stage defaultEventName]].
-
-	(#(append:toList: deleteLine:ofList: insert:at:ofList:) includes: sel) ifTrue: [
-		defaultArgs size >= 1 ifTrue: [
-			defaultArgs at: 1 put: (defaultArgs at: 1) localized]].
-
-	(#(append:toList: deleteLine:ofList: getLine:ofList: insert:at:ofList: lineCountOfList: contentsOfList:)
-		includes: sel) ifTrue: [
-			defaultArgs := defaultArgs copyWith: self defaultListName].
-
-	#setLine:ofList:to: = sel ifTrue: [
-		defaultArgs size >= 3 ifTrue: [
-			defaultArgs at: 2 put: self defaultListName.
-			defaultArgs at: 3 put: (defaultArgs at: 3) localized]].
-
-	#appendLettersOf:toList: = sel ifTrue: [
-		defaultArgs size >= 2 ifTrue: [
-			defaultArgs at: 1 put: (defaultArgs at: 1) localized.
-			defaultArgs at: 2 put: self defaultListName]].
-
-	#list:contains: = sel ifTrue: [
-		defaultArgs size >= 2 ifTrue: [
-			defaultArgs at: 1 put: self defaultListName.
-			defaultArgs at: 2 put: (defaultArgs at: 2) localized]].
-
+	#gotoX:y: = sel
+		ifTrue: [ defaultArgs := Array with: self referencePosition x rounded with: self referencePosition y rounded ].
+	#glideSecs:toX:y:elapsed:from: = sel
+		ifTrue: [ defaultArgs := Array with: 1 with: self referencePosition x rounded with: self referencePosition y rounded ].
+	#motor:direction: = self
+		ifTrue: [ defaultArgs := Array with: 'reverse' localized with: 'this way' localized with: 'that way' ].
+	#setSizeTo: = sel
+		ifTrue: [ 
+			(self isKindOf: PhratchStageMorph)
+				ifTrue: [ 
+					"no size ops for stage -jens"
+					^ Array with: 100 ].
+			currentSize := (100.0 * (self scalePoint x max: self scalePoint y)) rounded.
+			defaultArgs := Array with: currentSize ].
+	#getAttribute:of: = sel
+		ifTrue: [ 
+			(stage := self ownerOrYourselfThatIsA: PhratchStageMorph)
+				ifNotNil: [ 
+					list := stage submorphs select: [ :m | m isKindOf: PhratchSpriteMorph ].
+					list sort: [ :s1 :s2 | s1 objName asLowercase < s2 objName asLowercase ].
+					defaultArgs := list size > 0
+						ifTrue: [ Array with: 'x position' with: list first ]
+						ifFalse: [ Array with: 'background #' with: stage ] ]
+				ifNil: [ defaultArgs := Array with: 'x position' with: self ] ].
+	#concatenate:with: = sel
+		ifTrue: [ defaultArgs := Array with: 'hello ' localized with: 'world' localized ].
+	#doAsk = sel
+		ifTrue: [ defaultArgs := Array with: 'What''s your name?' localized ].
+	#letter:of: = sel
+		ifTrue: [ defaultArgs := Array with: 1 with: 'world' localized ].
+	#stringLength: = sel
+		ifTrue: [ defaultArgs := Array with: 'world' localized ].
+	#say:duration:elapsed:from: = sel
+		ifTrue: [ defaultArgs := Array with: 'Hello!' localized with: 2 ].
+	#say: = sel
+		ifTrue: [ defaultArgs := Array with: 'Hello!' localized ].
+	#think:duration:elapsed:from: = sel
+		ifTrue: [ defaultArgs := Array with: 'Hmm...' localized with: 2 ].
+	#think: = sel
+		ifTrue: [ defaultArgs := Array with: 'Hmm...' localized ].
+	(#(#lookLike: #showBackground:) includes: sel)
+		ifTrue: [ defaultArgs := Array with: self costumeNames last ].
+	(#(#playSound: #doPlaySoundAndWait) includes: sel)
+		ifTrue: [ 
+			list := self soundNames.
+			defaultArgs := list size <= 2
+				ifTrue: [ Array with: '' ]
+				ifFalse: [ Array with: (list at: list size - 2) ] ].
+	(#(#broadcast: #doBroadcastAndWait) includes: sel)
+		ifTrue: [ stage ifNotNil: [ defaultArgs := Array with: stage defaultEventName ] ].
+	(#(#append:toList: #deleteLine:ofList: #insert:at:ofList:) includes: sel)
+		ifTrue: [ 
+			defaultArgs size >= 1
+				ifTrue: [ defaultArgs at: 1 put: (defaultArgs at: 1) localized ] ].
+	(#(#append:toList: #deleteLine:ofList: #getLine:ofList: #insert:at:ofList: #lineCountOfList: #contentsOfList:)
+		includes: sel)
+		ifTrue: [ defaultArgs := defaultArgs copyWith: self defaultListName ].
+	#setLine:ofList:to: = sel
+		ifTrue: [ 
+			defaultArgs size >= 3
+				ifTrue: [ 
+					defaultArgs at: 2 put: self defaultListName.
+					defaultArgs at: 3 put: (defaultArgs at: 3) localized ] ].
+	#appendLettersOf:toList: = sel
+		ifTrue: [ 
+			defaultArgs size >= 2
+				ifTrue: [ 
+					defaultArgs at: 1 put: (defaultArgs at: 1) localized.
+					defaultArgs at: 2 put: self defaultListName ] ].
+	#list:contains: = sel
+		ifTrue: [ 
+			defaultArgs size >= 2
+				ifTrue: [ 
+					defaultArgs at: 1 put: self defaultListName.
+					defaultArgs at: 2 put: (defaultArgs at: 2) localized ] ].
 	^ defaultArgs
-
-]
-
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> defaultColorName [
-
-	| stage |
-	colors size > 0 ifTrue: [^ colors keys asArray sort first].
-
-	(stage := self ownerThatIsA: PhratchStageMorph) ifNotNil: [
-		stage colorNames size > 0 ifTrue: [^ stage colorNames asArray sort first]].
-
-	^ 'a color'
 ]
 
 { #category : #media }
@@ -3411,12 +3276,8 @@ ScriptablePhratchMorph >> deleteList [
 	self = stage ifFalse: [
 		stage listVarNames isEmpty ifFalse: [menu addLine].
 		self listVarNames do: [:v | menu add: v target: self selector: #deleteList: argument: v]].
-	choice := menu invokeModal.
-	"choice ifNil: [^ self].
-
-	choice second = #global
-		ifTrue: [stage deleteList: choice first]
-		ifFalse: [self deleteList: choice first]."
+	menu invokeModal.
+	
 
 	sFrame viewerPane categoryChanged: 'variables'.
 
@@ -3496,29 +3357,27 @@ ScriptablePhratchMorph >> deleteObject: anObject [
 	<phratchItem: 'delete $OSReporter$' kind: #- category: 'variables' defaultValues: #() subCategory: #a2>
 	| oi obj att block sel rcv |
 	(anObject isKindOf: PhratchSpriteMorph)
-		ifTrue: [^ self deleteSprite: anObject].
-
-	(anObject isKindOf: CommandScriptBlockMorph) ifTrue: [
-		oi := self objectInterface.
-		obj := anObject receiver.
-		(obj isKindOf: PhratchSpriteMorph) ifFalse: [
-			^ self error: 'cannot delete attributes of non-Sprites'].
-		block := anObject body argMorphs first.
-
-		(block isKindOf: VariableBlockMorph) ifTrue: [
-			rcv := block receiver.
-			rcv ifNil: [^ self].
-			^ rcv deleteVariable: block variable].
-			
-		block selector = #get: 
-			ifTrue: [sel := (oi at: (block argMorphs first choice)) second]
-			ifFalse: [sel := block selector].
-		att := oi keys detect: [:key |
-			(oi at: key) second  = sel] ifNone: [
-				^ self error: 'no attribute found for selector: ', anObject selector].
-		^ obj deleteAttribute: att ].
-
-	self error: 'cannot delete this'.
+		ifTrue: [ ^ self deleteSprite: anObject ].
+	(anObject isKindOf: CommandScriptBlockMorph)
+		ifTrue: [ 
+			oi := self objectInterface.
+			obj := anObject receiver.
+			(obj isKindOf: PhratchSpriteMorph)
+				ifFalse: [ ^ self error: 'cannot delete attributes of non-Sprites' ].
+			block := anObject body argMorphs first.
+			(block isKindOf: VariableBlockMorph)
+				ifTrue: [ 
+					rcv := block receiver.
+					rcv ifNil: [ ^ self ].
+					^ rcv deleteVariable: block variable ].
+			sel := block selector = #get:
+				ifTrue: [ (oi at: block argMorphs first choice) second ]
+				ifFalse: [ block selector ].
+			att := oi keys
+				detect: [ :key | (oi at: key) second = sel ]
+				ifNone: [ ^ self error: 'no attribute found for selector: ' , anObject selector ].
+			^ obj deleteAttribute: att ].
+	self error: 'cannot delete this'
 ]
 
 { #category : #private }
@@ -3622,13 +3481,8 @@ ScriptablePhratchMorph >> deleteVariable [
 	self = stage ifFalse: [
 		stage varNames isEmpty ifFalse: [menu addLine].
 		self varNames do: [:v | menu add: v target: self selector: #deleteVariable: argument: v]].
-	choice := menu invokeModal.
-	"choice ifNil: [^ self].
+	menu invokeModal.
 
-	choice second = #global
-		ifTrue: [stage deleteVariable: choice first]
-		ifFalse: [self deleteVariable: choice first]."
-		
 	sFrame viewerPane categoryChanged: 'variables'.
 
 ]
@@ -4002,77 +3856,77 @@ ScriptablePhratchMorph >> editSpecId: id [
 
 	| stage ans def sf bd oldCat inst newType |
 	sf := self ownerOrYourselfThatIsA: PhratchFrameMorph.
-	sf ifNil: [^self].
+	sf ifNil: [ ^ self ].
 	stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
 	def := self definitionFor: id.
 	newType := def type.
-
-	BlockDialog isOpen ifTrue: [^ self].
-
+	BlockDialog isOpen
+		ifTrue: [ ^ self ].
 	bd := BlockDialog new.
 	bd
-		title: '?';
-		withButtonsForYes: false no: false okay: true cancel: true;
+		title: '?' translated;
+		withButtonsForYes: false
+			no: false
+			okay: true
+			cancel: true;
 		message: 'Custom block category';
 		setUserSpec: def userSpec;
 		setCategory: def category;
 		setType: def type;
 		updateTypeSelection.
-
-	inst := self instancesOf: id. 
-	def isGlobal ifTrue: [
-		inst := OrderedCollection new.
-		stage isNil ifFalse: [
-			stage sprites, {stage} do: [:obj |
-				inst addAll: (obj instancesOf: id) ]]].
-		
+	inst := self instancesOf: id.
+	def isGlobal
+		ifTrue: [ 
+			inst := OrderedCollection new.
+			stage isNil
+				ifFalse: [ stage sprites , {stage} do: [ :obj | inst addAll: (obj instancesOf: id) ] ] ].
 	inst isEmpty
-		ifTrue: [bd disableAllButCategoryAndShape]
-		ifFalse: [bd disableAllButCategory].
-
+		ifTrue: [ bd disableAllButCategoryAndShape ]
+		ifFalse: [ bd disableAllButCategory ].
 	bd updateInitialSettings.
-	ans := bd getUserResponse. 
-
-	(ans = #cancelled) ifTrue: [^self ].
-	ans first isEmpty ifTrue: [^self].
-
-	((self existsBlockId: (CustomBlockDefinition idFromSpec: ans first)) and: [def userSpec ~= ans first])
-			ifTrue: [ ^DialogBoxMorph warn: 'a custom block with this label already exists' localized].
+	ans := bd getUserResponse.
+	ans = #cancelled
+		ifTrue: [ ^ self ].
+	ans first isEmpty
+		ifTrue: [ ^ self ].
+	((self existsBlockId: (CustomBlockDefinition idFromSpec: ans first)) and: [ def userSpec ~= ans first ])
+		ifTrue: [ ^ DialogBoxMorph warn: 'a custom block with this label already exists' localized ].
 	(def varNames includesAnyOf: (def parameterNamesInSpec: ans first))
-		ifTrue: [^DialogBoxMorph warn: 'a block variable with the same name as a parameter already exists'].
-
-	ans = def userSpec ifTrue: [^self].
-	ans isEmpty ifTrue: [^self].
-	(self existsBlockId: (CustomBlockDefinition idFromSpec: ans)) ifTrue: [
-		^DialogBoxMorph warn: 'a custom block with this label already exists'].
+		ifTrue: [ ^ DialogBoxMorph warn: 'a block variable with the same name as a parameter already exists' ].
+	ans = def userSpec
+		ifTrue: [ ^ self ].
+	ans isEmpty
+		ifTrue: [ ^ self ].
+	(self existsBlockId: (CustomBlockDefinition idFromSpec: ans))
+		ifTrue: [ ^ DialogBoxMorph warn: 'a custom block with this label already exists' ].
 	(def varNames includesAnyOf: (def parameterNamesInSpec: ans first))
-		ifTrue: [^DialogBoxMorph warn: 'a block variable with the same name as a parameter already exists'].
-
-	inst isEmpty ifTrue: [
-		(ans at: 2)	
-			ifTrue: [ (ans at: 3) 
-				ifTrue: [newType := #boolean]
-				ifFalse: [newType := #any]]
-			ifFalse: [newType := #none]].
-
-	def type = newType ifFalse: [
-		def type: newType ].
-
+		ifTrue: [ ^ DialogBoxMorph warn: 'a block variable with the same name as a parameter already exists' ].
+	inst isEmpty
+		ifTrue: [ 
+			newType := (ans at: 2)
+				ifTrue: [ 
+					(ans at: 3)
+						ifTrue: [ #boolean ]
+						ifFalse: [ #any ] ]
+				ifFalse: [ #none ] ].
+	def type = newType
+		ifFalse: [ def type: newType ].
 	oldCat := def category.
-	def category: (ans fourth = #other ifTrue: [#none] ifFalse: [ans fourth]).
-	#none = oldCat ifFalse: [
-		sf viewerPane categoryChanged: oldCat asString ].
-
-	def isGlobal ifFalse: [
-		^ self updateLocalId: id withSpec: ans first].
-
-	stage ifNil: [^ self updateId: id withSpec: ans first ].
-
-	stage sprites, {stage} do: [:obj |
-		obj
-			updateCustomBlockDefinitionId: id with: def;
-			updateLocalId: id withSpec: ans first ]
-
+	def
+		category:
+			(ans fourth = #other
+				ifTrue: [ #none ]
+				ifFalse: [ ans fourth ]).
+	#none = oldCat
+		ifFalse: [ sf viewerPane categoryChanged: oldCat asString ].
+	def isGlobal
+		ifFalse: [ ^ self updateLocalId: id withSpec: ans first ].
+	stage ifNil: [ ^ self updateId: id withSpec: ans first ].
+	stage sprites , {stage}
+		do: [ :obj | 
+			obj
+				updateCustomBlockDefinitionId: id with: def;
+				updateLocalId: id withSpec: ans first ]
 ]
 
 { #category : #media }
@@ -4195,30 +4049,18 @@ ScriptablePhratchMorph >> eventReceived: event [
 	| targetScripts newProcs |
 	targetScripts := #().
 	event name = 'Phratch-KeyPressedEvent'
-		ifTrue: [
-			targetScripts := self scripts select: [:s |
-				(s class == KeyEventHatMorph) and:
-				 [s respondsToKeyEvent: event argument]]]
-		ifFalse: [
+		ifTrue: [ targetScripts := self scripts select: [ :s | s class == KeyEventHatMorph and: [ s respondsToKeyEvent: event argument ] ] ]
+		ifFalse: [ 
 			event name = 'Phratch-MouseClickEvent'
-				ifTrue: [
-					self isHidden not ifTrue: [
-						targetScripts := self scripts select: [:s |
-							s class == MouseClickEventHatMorph]]]
-				ifFalse: [
-					event name = 'Phratch-CreationEvent'
-					ifTrue: [
-						targetScripts := self scripts select: [:s |
-							s class == CreationEventHatMorph]]
-					ifFalse: [
-						targetScripts := self scripts select: [:s |
-							(s class == EventHatMorph) and:
-							 [s eventName caseInsensitiveEqual: event name]]]]].
-	
-	newProcs := targetScripts asArray collect: [:script | script startForEvent: event].
-	^ newProcs select: [:p | p notNil]
-
-
+				ifTrue: [ 
+					self isHidden
+						ifFalse: [ targetScripts := self scripts select: [ :s | s class == MouseClickEventHatMorph ] ] ]
+				ifFalse: [ 
+					targetScripts := event name = 'Phratch-CreationEvent'
+						ifTrue: [ self scripts select: [ :s | s class == CreationEventHatMorph ] ]
+						ifFalse: [ self scripts select: [ :s | s class == EventHatMorph and: [ s eventName caseInsensitiveEqual: event name ] ] ] ] ].
+	newProcs := targetScripts asArray collect: [ :script | script startForEvent: event ].
+	^ newProcs select: [ :p | p notNil ]
 ]
 
 { #category : #'panther actions' }
@@ -4252,22 +4094,12 @@ ScriptablePhratchMorph >> existsBlockId: id [
 
 { #category : #byob }
 ScriptablePhratchMorph >> existsBlockId: id global: bool [
-
 	| stage |
-
-	bool ifTrue: [
-		^self existsBlockId: id].
-
+	bool
+		ifTrue: [ ^ self existsBlockId: id ].
 	stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
-	stage ifNil: [^ self existsBlockId: id].
-
-	stage sprites, {stage} do: [:obj |
-		(obj existsBlockId: id) ifTrue: [
-			^ true]].
-
-	^ false
-
-
+	stage ifNil: [ ^ self existsBlockId: id ].
+	^ stage sprites , {stage} anySatisfy: [ :obj | obj existsBlockId: id ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -4360,7 +4192,7 @@ ScriptablePhratchMorph >> filteredForm [
 	filterPack filtersActive ifTrue: [  "filter parameters have changed; apply filters"
 		PhratchFrameMorph useErrorCatcher
 			ifTrue: [[filterPack applyFiltersTo: self rotatedForm]
-						ifError: [Transcript show: 'There is a problem with FilterPack'. filterPack := nil. ^ self rotatedForm]]
+						ifError: [UIManager inform:  'There is a problem with FilterPack'. filterPack := nil. ^ self rotatedForm]]
 			ifFalse: [filterPack applyFiltersTo: self rotatedForm]].
 
 	^ filterPack resultForm as8BitColorForm
@@ -4437,15 +4269,6 @@ ScriptablePhratchMorph >> get: anObject [
 ]
 
 { #category : #'sensing ops' }
-ScriptablePhratchMorph >> getAttribute: attr [
-	"Answer the value of my variable or built-in attribute with the given name. Answer zero if I have no attribute or variable with the given name."
-
-	(vars includesKey: attr) ifTrue: [^ vars at: attr].
-	^ 0
-
-]
-
-{ #category : #'sensing ops' }
 ScriptablePhratchMorph >> getAttribute: attr of: anObject [
 	"Answer the variable or built-in attribute value for the given sprite. Answer zero if the given sprite does not have a built-in attribute or variable of the given name."
 	<phratchItem: '$Attributes$ of $Sprite$' kind: #r category: 'sensing' defaultValues: #() subCategory: #a3>
@@ -4474,23 +4297,10 @@ ScriptablePhratchMorph >> getFalse [
 ScriptablePhratchMorph >> getLine: lineNum ofList: listName [
 	<phratchItem: 'item $ListIndex$ of $List$' kind: #r category: 'list' defaultValues: #(1) subCategory: #a5>
 	| list |
-
-	(listName isKindOf: PhratchListMorph)
-		ifTrue: [list := listName ]
-		ifFalse: [ list := self listNamed: listName ifNone: [^ '']].
+	list := (listName isKindOf: PhratchListMorph)
+		ifTrue: [ listName ]
+		ifFalse: [ self listNamed: listName ifNone: [ ^ '' ] ].
 	^ list lineAt: (self lineNum: lineNum forList: list)
-
-]
-
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> getMeshIPAddress [
-
-	| localAddr |
-	Socket initializeNetwork.
-	localAddr := NetNameResolver localHostAddress.
-	
-	^ NetNameResolver stringFromAddress: localAddr.
-	
 ]
 
 { #category : #'panther actions' }
@@ -4551,24 +4361,24 @@ ScriptablePhratchMorph >> getVar: varName block: aVariableBlockMorph [
 ScriptablePhratchMorph >> getVarOrListNamed: varName [
 	<phratchItem: 'variable named $String$' kind: #r category: 'variables' defaultValues: #() subCategory: #a3>
 	| value |
-
 	"first let's try to find a variable"
-	(vars includesKey: varName)
-		ifFalse: [ value := (self ownerOrYourselfThatIsA: PhratchStageMorph) vars at: varName asString ifAbsent: [
-			(self prototype notNil and: [self prototype varNames includes: varName])
-				ifTrue:[self prototype getVar: varName]
-				ifFalse: [nil]]]
-		ifTrue:[
-			value := vars at: varName asString ifAbsent: [nil]].
-
-	"if none is found check for a named list"
-
-	value ifNil: [
-		value := self listNamed: varName ifNone: [
-			self error: 'no such variable or list'. nil]].
-
+	value := (vars includesKey: varName)
+		ifFalse: [ 
+			(self ownerOrYourselfThatIsA: PhratchStageMorph) vars
+				at: varName asString
+				ifAbsent: [ 
+					(self prototype notNil and: [ self prototype varNames includes: varName ])
+						ifTrue: [ self prototype getVar: varName ]
+						ifFalse: [ nil ] ] ]
+		ifTrue: [ vars at: varName asString ifAbsent: [ nil ] ].	"if none is found check for a named list"
+	value
+		ifNil: [ 
+			value := self
+				listNamed: varName
+				ifNone: [ 
+					self error: 'no such variable or list'.
+					nil ] ].
 	^ value
-			
 ]
 
 { #category : #'panther actions' }
@@ -4806,28 +4616,6 @@ ScriptablePhratchMorph >> hookupSensorNames [
 
 	^ sensorNames
 
-]
-
-{ #category : #'sensing ops' }
-ScriptablePhratchMorph >> hookupSensorNumber [
-	"Backwards compatibility for old blocks."
-
-	^ (1 to: 8) collect: [:n | n printString]
-
-]
-
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> hostMesh [
-	"Start running the Phratch server, allowing Phratch and other applications to interact with this Phratch remotely."
-
-	| sFrame server |
-	(sFrame := self ownerThatIsA: PhratchFrameMorph) ifNil: [sFrame := (self ownerThatIsA: OffscreenWorldMorph) frame].
-	sFrame workPane phratchServer ifNil: [
-		server := PhratchServer new.
-		server stage: (sFrame workPane).
-		sFrame workPane phratchServer: server].
-
-	sFrame workPane phratchServer startHosting.
 ]
 
 { #category : #'panther actions' }
@@ -5233,26 +5021,30 @@ ScriptablePhratchMorph >> interpretStringAsNumberIfPossible: anObject [
 	"If the argument is a string that can be interpreted as a number, such as '123', then return it's value as a number. Otherwise, return the original object."
 
 	| s digits hasDigit |
-	(anObject isKindOf: String) ifFalse: [^ anObject].
-	anObject size = 0 ifTrue: [^ anObject].
-
-	(anObject first isKindOf: Character)
-		ifTrue: [s := ReadStream on: anObject asByteArray]
-		ifFalse: [s := ReadStream on: anObject].
-
-	"see if the string can be parsed as a Phratch number:"
+	(anObject isKindOf: String)
+		ifFalse: [ ^ anObject ].
+	anObject size = 0
+		ifTrue: [ ^ anObject ].
+	s := (anObject first isKindOf: Character)
+		ifTrue: [ ReadStream on: anObject asByteArray ]
+		ifFalse: [ ReadStream on: anObject ].	"see if the string can be parsed as a Phratch number:"
 	digits := '0123456789' asByteArray.
 	hasDigit := false.
-	(s atEnd not and: [s peek = $- asciiValue]) ifTrue: [s next].
-	[s atEnd not and: [digits includes: s peek]] whileTrue: [hasDigit := true. s next].
-	(s atEnd not and: [s peek = $. asciiValue]) ifTrue: [s next].
-	[s atEnd not and: [digits includes: s peek]] whileTrue: [hasDigit := true. s next].
-
-	(s atEnd and: [hasDigit])
-		ifTrue: [^ anObject asNumberNoError]
-		ifFalse: [^ anObject].
-
-
+	(s atEnd not and: [ s peek = $- asciiValue ])
+		ifTrue: [ s next ].
+	[ s atEnd not and: [ digits includes: s peek ] ]
+		whileTrue: [ 
+			hasDigit := true.
+			s next ].
+	(s atEnd not and: [ s peek = $. asciiValue ])
+		ifTrue: [ s next ].
+	[ s atEnd not and: [ digits includes: s peek ] ]
+		whileTrue: [ 
+			hasDigit := true.
+			s next ].
+	(s atEnd and: [ hasDigit ])
+		ifTrue: [ ^ anObject asNumberNoError ]
+		ifFalse: [ ^ anObject ]
 ]
 
 { #category : #byob }
@@ -5290,14 +5082,7 @@ ScriptablePhratchMorph >> isClone: aBoolean [
 	"Ignored here. Overridden by my subclasses."
 ]
 
-{ #category : #accessing }
-ScriptablePhratchMorph >> isColorable [
-
-	^ false
-
-]
-
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 ScriptablePhratchMorph >> isFibonacci: t1 [ 
 	<phratchItem: '$Number$ is a Fibonacci number?' kind: #b category: 'operators' defaultValues: #() subCategory: #a9>
     | fib1 fib2 oldfib2 fib3 oldfib3 |
@@ -5336,18 +5121,7 @@ ScriptablePhratchMorph >> isHidden [
 
 ]
 
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> isHostingMesh [
-	"Answer true if hosting a mesh."
-
-	| sFrame server |
-	(sFrame := self ownerThatIsA: PhratchFrameMorph) ifNil: [sFrame := (self ownerThatIsA: OffscreenWorldMorph) frame].
-
-	(server := sFrame workPane phratchServer) ifNil: [^ false].
-	^ server isHosting.
-]
-
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 ScriptablePhratchMorph >> isInteger: t1 [
 	<phratchItem: '$Number$ is an integer?' kind: #b category: 'operators' defaultValues: #() subCategory: #a9>
     ^ t1 = t1 rounded
@@ -5409,7 +5183,7 @@ ScriptablePhratchMorph >> isObject: object type: type [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 ScriptablePhratchMorph >> isPrime: t1 [ 
 	<phratchItem: '$Number$ is prime?' kind: #b category: 'operators' defaultValues: #() subCategory: #a9>
     | divisor factor |
@@ -5447,21 +5221,6 @@ ScriptablePhratchMorph >> isVisible [
 
 	^ self isHidden not and: [visibility > 0]
 
-]
-
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> joinMesh: addrString [
-	"Join another Phratch user or a Phratch-compatible remote application."
-
-	| server sFrame |
-	(sFrame := self ownerThatIsA: PhratchFrameMorph) ifNil: [sFrame := (self ownerThatIsA: OffscreenWorldMorph) frame].
-	server := PhratchServer new.
-	server stage: (sFrame workPane).
-	sFrame workPane phratchServer: server.
-
-	addrString size = 0 ifTrue: [^ ''].
-
-	sFrame workPane phratchServer joinSessionAt: addrString.
 ]
 
 { #category : #'dropping/grabbing' }
@@ -5582,14 +5341,6 @@ ScriptablePhratchMorph >> layoutStyles [
 		'large'
 		'slider'
 		).
-]
-
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> leaveMesh [
-	
-	| sFrame |
-	(sFrame := self ownerThatIsA: PhratchFrameMorph) ifNil: [sFrame := (self ownerThatIsA: OffscreenWorldMorph) frame].
-	sFrame exitPhratchSession.
 ]
 
 { #category : #'string ops' }
@@ -5761,10 +5512,7 @@ ScriptablePhratchMorph >> lists [
 
 { #category : #byob }
 ScriptablePhratchMorph >> localBlocks [
-
-	^ self inheritedBlocks, (customBlocks ifNil: [#()]) select: [:eachDef | 
-		eachDef isGlobal not].
-
+	^ self inheritedBlocks , (customBlocks ifNil: [ #() ]) reject: [ :eachDef | eachDef isGlobal ]
 ]
 
 { #category : #'looks ops' }
@@ -6083,16 +5831,16 @@ ScriptablePhratchMorph >> midiNoteMenu [
 	| menu midiKey noteName |
 	menu := MenuMorphNG new defaultTarget: self.
 	midiKey := 48.
-	#(low middle) do: [:oct |
-		#(C 'C#' D 'Eb' E F 'F#' G 'Ab' A 'Bb' B) do: [:n |
-			n = #C
-				ifTrue: [noteName := oct, ' ', n]
-				ifFalse: [noteName := n].
-			menu
-				add: '(', midiKey printString, ') ', noteName
-				value: midiKey.
-			midiKey := midiKey + 1]].
-		menu add: '(72) high C' value: 72.
+	#(#low #middle)
+		do: [ :oct | 
+			#(#C 'C#' #D 'Eb' #E #F 'F#' #G 'Ab' #A 'Bb' #B)
+				do: [ :n | 
+					noteName := n = #C
+						ifTrue: [ oct , ' ' , n ]
+						ifFalse: [ n ].
+					menu add: '(' , midiKey printString , ') ' , noteName value: midiKey.
+					midiKey := midiKey + 1 ] ].
+	menu add: '(72) high C' value: 72.
 	menu invokeModal.
 	^ menu
 ]
@@ -6134,28 +5882,34 @@ ScriptablePhratchMorph >> motor: motorName direction: directionName [
 
 	| dir |
 	dir := 0.
-	(directionName includesSubstring: 'reverse') ifTrue: [dir := 0].
-	(directionName includesSubstring: 'this way') ifTrue: [dir := 1].
-	(directionName includesSubstring: 'that way') ifTrue: [dir := -1].
-
-	'A' = motorName ifTrue: [WeDoPlugin motorADirection: dir].
-	'B' = motorName ifTrue: [WeDoPlugin motorBDirection: dir].
-	' ' = motorName ifTrue: [
-		WeDoPlugin motorADirection: dir.
-		WeDoPlugin motorBDirection: dir].
-
+	(directionName includesSubstring: 'reverse')
+		ifTrue: [ dir := 0 ].
+	(directionName includesSubstring: 'this way')
+		ifTrue: [ dir := 1 ].
+	(directionName includesSubstring: 'that way')
+		ifTrue: [ dir := -1 ].
+	'A' = motorName
+		ifTrue: [ WeDoPlugin motorADirection: dir ].
+	'B' = motorName
+		ifTrue: [ WeDoPlugin motorBDirection: dir ].
+	' ' = motorName
+		ifFalse: [ ^ self ].
+	WeDoPlugin motorADirection: dir.
+	WeDoPlugin motorBDirection: dir
 ]
 
 { #category : #'motor ops' }
 ScriptablePhratchMorph >> motor: motorName power: power [
 	"Set the power level of the given motor (0-100)."
 
-	'A' = motorName ifTrue: [WeDoPlugin motorAPower: power].
-	'B' = motorName ifTrue: [WeDoPlugin motorBPower: power].
-	' ' = motorName ifTrue: [
-		WeDoPlugin motorAPower: power.
-		WeDoPlugin motorBPower: power].
-
+	'A' = motorName
+		ifTrue: [ WeDoPlugin motorAPower: power ].
+	'B' = motorName
+		ifTrue: [ WeDoPlugin motorBPower: power ].
+	' ' = motorName
+		ifFalse: [ ^ self ].
+	WeDoPlugin motorAPower: power.
+	WeDoPlugin motorBPower: power
 ]
 
 { #category : #'motor ops' }
@@ -6180,36 +5934,28 @@ ScriptablePhratchMorph >> motorNames [
 ScriptablePhratchMorph >> motorOff: motorName [
 	"Turn the given motor off."
 
-	'A' = motorName ifTrue: [WeDoPlugin motorAOn: false].
-	'B' = motorName ifTrue: [WeDoPlugin motorBOn: false].
-	' ' = motorName ifTrue: [
-		WeDoPlugin motorAOn: false.
-		WeDoPlugin motorBOn: false].
-
+	'A' = motorName
+		ifTrue: [ WeDoPlugin motorAOn: false ].
+	'B' = motorName
+		ifTrue: [ WeDoPlugin motorBOn: false ].
+	' ' = motorName
+		ifFalse: [ ^ self ].
+	WeDoPlugin motorAOn: false.
+	WeDoPlugin motorBOn: false
 ]
 
 { #category : #'motor ops' }
 ScriptablePhratchMorph >> motorOn: motorName [
 	"Turn the given motor on."
 
-	'A' = motorName ifTrue: [WeDoPlugin motorAOn: true].
-	'B' = motorName ifTrue: [WeDoPlugin motorBOn: true].
-	' ' = motorName ifTrue: [
-		WeDoPlugin motorAOn: true.
-		WeDoPlugin motorBOn: true].
-
-]
-
-{ #category : #'motor ops' }
-ScriptablePhratchMorph >> motorOn: motorName duration: secs elapsed: elapsedMSecs from: motorID [
-	"Turn the given motor on for the given number of seconds."
-
-	motorID ifNil: [  "first call, start motor"
-		self motorOn: motorName.
-		^ motorName].
-
-	elapsedMSecs >= (1000 * secs) ifTrue: [self motorOff: motorID].
-
+	'A' = motorName
+		ifTrue: [ WeDoPlugin motorAOn: true ].
+	'B' = motorName
+		ifTrue: [ WeDoPlugin motorBOn: true ].
+	' ' = motorName
+		ifFalse: [ ^ self ].
+	WeDoPlugin motorAOn: true.
+	WeDoPlugin motorBOn: true
 ]
 
 { #category : #'motor ops' }
@@ -6239,13 +5985,6 @@ ScriptablePhratchMorph >> mouseDown: evt [
 	evt rightButtonPressed
 		ifTrue: [Sensor waitNoButton. ^ self rightButtonMenu]
 		ifFalse:	[evt hand waitForClicksOrDrag: self event: evt].
-]
-
-{ #category : #'event handling' }
-ScriptablePhratchMorph >> mouseHold: evt [
-
-	self rightButtonMenu.
-
 ]
 
 { #category : #'sensing ops' }
@@ -6605,6 +6344,12 @@ ScriptablePhratchMorph >> passiveFisheyeEffect: aNumber [
 	self propagate: #fisheye
 ]
 
+{ #category : #'as yet unclassified' }
+ScriptablePhratchMorph >> passiveLookLike: costumeName [
+
+	self subclassResponsibility 
+]
+
 { #category : #'BYOB attributes' }
 ScriptablePhratchMorph >> passiveMosaicEffect: aNumber [
 
@@ -6669,7 +6414,7 @@ ScriptablePhratchMorph >> passiveWhirlEffect: aNumber [
 	self propagate: #whirl
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #menu }
 ScriptablePhratchMorph >> pause [
 	<phratchItem: 'pause' kind: #- category: 'control' defaultValues: #() subCategory: #startstop>
     DialogBoxMorph warn: 'Paused: Click OK to continue'.
@@ -6717,20 +6462,6 @@ ScriptablePhratchMorph >> pixelateEffect: aNumber [
 ]
 
 { #category : #'sound ops' }
-ScriptablePhratchMorph >> playMidi: fileName [
-	"Play the midi file with the given name."
-
-	| fname score player |
-	fname := fileName, '.mid'.
-	(fname) exists ifFalse: [^ self].
-	score := (MIDIFileReader scoreFromFileNamed: fname).
-	player := ScorePlayer onScore: score.
-	player openMIDIPort: 0.
-	player play.
-
-]
-
-{ #category : #'sound ops' }
 ScriptablePhratchMorph >> playSound: soundName [
 	<phratchItem: 'play sound $SoundNames$' kind: #- category: 'sound' defaultValues: #() subCategory: #a1>
 	| snd |
@@ -6740,39 +6471,36 @@ ScriptablePhratchMorph >> playSound: soundName [
 ]
 
 { #category : #'BYOB attributes' }
-ScriptablePhratchMorph >> pointillizeEffect [
-	^ [filterPack pointillizeSize] ifError: [0]
-]
-
-{ #category : #'BYOB attributes' }
 ScriptablePhratchMorph >> pointillizeEffect: aNumber [
 	self setGraphicEffect: 'pointillize' to: aNumber
 ]
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> positionVar: varName atX: x y: y [
-	
 	| frame w b newX newY p |
-	(self varNames includes: varName) ifFalse: [^ self].
+	(self varNames includes: varName)
+		ifFalse: [ ^ self ].
 	frame := self ownerThatIsA: PhratchFrameMorph.
-	frame ifNil: [
-		(w := self ownerThatIsA: OffscreenWorldMorph) ifNil: [^ self].
-		frame := w frame].
-
-	b := VariableBlockMorph new commandSpec: varName; receiver: self blockReceiver.
-	(w := frame watcherForBlock: b)
-		ifNil: [^ self].
+	frame
+		ifNil: [ 
+			(w := self ownerThatIsA: OffscreenWorldMorph) ifNil: [ ^ self ].
+			frame := w frame ].
+	b := VariableBlockMorph new
+		commandSpec: varName;
+		receiver: self blockReceiver.
+	(w := frame watcherForBlock: b) ifNil: [ ^ self ].
 	newX := x.
-	newX isNaN ifTrue: [newX := 0].
-	newX > 240 ifTrue: [newX := 240].
-	newX < (-240 - w extent x) ifTrue: [newX := (-240 - w extent x)].
+	newX isNaN
+		ifTrue: [ newX := 0 ].
+	newX := newX min: 240.
+	newX := newX max: -240 - w extent x.
 	newY := y.
-	newY isNaN ifTrue: [newY := 0].
-	newY < -180 ifTrue: [newY := -180].
-	newY > (180 + w extent y) ifTrue: [newY := (180 + w extent y)].
-
+	newY isNaN
+		ifTrue: [ newY := 0 ].
+	newY := newY max: -180.
+	newY := newY min: 180 + w extent y.
 	p := newX @ newY negated.
-	w position: PhratchOrigin + p.
+	w position: PhratchOrigin + p
 ]
 
 { #category : #scripts }
@@ -6808,35 +6536,62 @@ ScriptablePhratchMorph >> pressGreenFlag [
 
 { #category : #private }
 ScriptablePhratchMorph >> printSummaryOn: aStream [
-
 	| costumes snds stacks hats otherStacks |
-	aStream nextPutAll: 'Sprite: ', self objName; crlf.
-
-	costumes := media select: [:item | item isImage].
-	aStream nextPutAll: '  Costumes (', costumes size printString, '):'; crlf.
-	costumes do: [:item |
-		aStream nextPutAll: '    ', item mediaName, ' (', item infoString, ')'; crlf].
-
-	snds := media select: [:item | item isSound].
-	aStream nextPutAll: '  Sounds (', snds size printString, '):'; crlf.
-	snds do: [:item |
-		aStream nextPutAll: '    ', item mediaName, ' (', item infoString, ')'; crlf].
-
-	stacks := blocksBin submorphs select: [:m | m isKindOf: BlockMorph].
-	stacks size = 0 ifTrue: [
-		aStream nextPutAll: '  No stacks.'; crlf; crlf.
-		^ self].
-	aStream nextPutAll: '  Stacks (', stacks size printString, '):'; crlf.
-
-	hats := stacks select: [:m | m isKindOf: HatBlockMorph].
-	otherStacks := stacks select: [:m | (m isKindOf: HatBlockMorph) not].
-
-	hats, otherStacks do: [:item |
-		item printCodeOn: aStream indent: 1.
-		(item isKindOf: ReporterBlockMorph) ifTrue: [aStream crlf].
-		aStream crlf].
-
-
+	aStream
+		nextPutAll: 'Sprite: ';
+		nextPutAll: self objName;
+		crlf.
+	costumes := media select: [ :item | item isImage ].
+	aStream
+		nextPutAll: '  Costumes (';
+		nextPutAll: costumes size printString;
+		nextPutAll: '):';
+		crlf.
+	costumes
+		do: [ :item | 
+			aStream
+				nextPutAll: '    ';
+				nextPutAll: item mediaName;
+				nextPutAll: ' (';
+				nextPutAll: item infoString;
+				nextPutAll: ')';
+				crlf ].
+	snds := media select: [ :item | item isSound ].
+	aStream
+		nextPutAll: '  Sounds (';
+		nextPutAll: snds size printString;
+		nextPutAll: '):';
+		crlf.
+	snds
+		do: [ :item | 
+			aStream
+				nextPutAll: '    ';
+				nextPutAll: item mediaName;
+				nextPutAll: ' (';
+				nextPutAll: item infoString;
+				nextPutAll: ')';
+				crlf ].
+	stacks := blocksBin submorphs select: [ :m | m isKindOf: BlockMorph ].
+	stacks size = 0
+		ifTrue: [ 
+			aStream
+				nextPutAll: '  No stacks.';
+				crlf;
+				crlf.
+			^ self ].
+	aStream
+		nextPutAll: '  Stacks (';
+		nextPutAll: stacks size printString;
+		nextPutAll: '):';
+		crlf.
+	hats := stacks select: [ :m | m isKindOf: HatBlockMorph ].
+	otherStacks := stacks reject: [ :m | m isKindOf: HatBlockMorph ].
+	hats , otherStacks
+		do: [ :item | 
+			item printCodeOn: aStream indent: 1.
+			(item isKindOf: ReporterBlockMorph)
+				ifTrue: [ aStream crlf ].
+			aStream crlf ]
 ]
 
 { #category : #'BYOB attributes' }
@@ -6911,23 +6666,6 @@ ScriptablePhratchMorph >> promptInProgress [
 ]
 
 { #category : #'byob OOP' }
-ScriptablePhratchMorph >> propagate [
-	"private - apply the method calling me to all subsprites"
-
-	| sel args instances |
-	instances := self instances.
-	instances isEmpty ifTrue: [^self].
-	sel := thisContext sender method selector.
-	args := OrderedCollection new.
-	1 to: thisContext sender method numArgs do: [:idx |
-		args add: (thisContext sender tempAt: idx) ].
-	instances do: [:eachPart |
-		args isEmpty
-			ifTrue: [ eachPart perform: sel]
-			ifFalse: [ eachPart perform: sel withArguments: args asArray]]
-]
-
-{ #category : #'byob OOP' }
 ScriptablePhratchMorph >> propagate: attributeName [
 	"private - apply the method calling me to all subsprites"
 
@@ -6998,16 +6736,16 @@ ScriptablePhratchMorph >> quietCreateListNamed: listName [
 { #category : #'other ops' }
 ScriptablePhratchMorph >> randomFrom: start to: stop [
 	"Answer a random number within the given range. If both min and max are integers, the result is rounded to the nearest integer."
+
 	<phratchItem: 'pick random $Number$ to $Number$' kind: #r category: 'operators' defaultValues: #(1 10) subCategory: #a2>
 	| min max result |
 	min := start min: stop.
 	max := start max: stop.
-	result := (RandomGen next * (max - min)) + min.
-	min isInteger & max isInteger
-		ifTrue: [result := (RandomGen next * ((max + 1) - min)) truncated + min]
-		ifFalse: [result := (RandomGen next * (max - min)) + min].
+	result := RandomGen next * (max - min) + min.
+	result := min isInteger & max isInteger
+		ifTrue: [ (RandomGen next * (max + 1 - min)) truncated + min ]
+		ifFalse: [ RandomGen next * (max - min) + min ].
 	^ result
-
 ]
 
 { #category : #'panther actions' }
@@ -7203,16 +6941,6 @@ ScriptablePhratchMorph >> revertToCostume: oldCostumeName [
 
 ]
 
-{ #category : #'sound ops' }
-ScriptablePhratchMorph >> rewindSound: soundName [
-	"Rewind the given sound."
-
-	| snd |
-	snd := self soundNamed: soundName ifAbsent: [^ self].
-	snd rewindSound.
-
-]
-
 { #category : #'right button menu' }
 ScriptablePhratchMorph >> rightButtonMenu [
 	"This default implementation does nothing."
@@ -7241,19 +6969,6 @@ ScriptablePhratchMorph >> rotationCenter: aPoint [
 ScriptablePhratchMorph >> rounded [
 	<phratchItem: 'round $Number$' kind: #r category: 'operators' defaultValues: #(-) subCategory: #a8>
 
-]
-
-{ #category : #'byob easter egg fun' }
-ScriptablePhratchMorph >> runMeWith: arg [
-
-	(self isKindOf: PhratchSpriteMorph) ifTrue: [
-		((arg isKindOf: String) and: [arg isEmpty not]) ifFalse: [^ self say: 'Run me with your name!'].
-		^self say: 'Hi, ', arg, '! Nice talking to you :-) Congratulations for figuring out this little riddle. You are now a certified lambdaist!']
-]
-
-{ #category : #'BYOB attributes' }
-ScriptablePhratchMorph >> saturationEffect [
-	^ [filterPack saturationShift] ifError: [0]
 ]
 
 { #category : #'BYOB attributes' }
@@ -7321,14 +7036,6 @@ ScriptablePhratchMorph >> scripts [
 
 ]
 
-{ #category : #blocks }
-ScriptablePhratchMorph >> scriptsAsTuples: tuples [
-
-	blocksBin := tuples asArray.
-	self convertTuplesToStacks.
-
-]
-
 { #category : #'sensing ops' }
 ScriptablePhratchMorph >> sensor: sensorName [
 	"Answer the value of the given sensor, or zero if the sensorboard is not available."
@@ -7379,38 +7086,35 @@ ScriptablePhratchMorph >> serialized [
 ScriptablePhratchMorph >> set: anObject to: aValue [
 	<phratchItem: 'set $Attributes$ to $String$' kind: #- category: 'operators' defaultValues: #() subCategory: #b3>
 	| oi sel obj att block arg |
-
 	oi := self objectInterface.
-
-	(anObject isKindOf: Symbol) ifTrue: [
-		sel := oi at: anObject ifAbsent: [^ self error: 'unknown attribute: ', anObject asString ].
-		sel third = #- ifTrue: [
-			^ self error: 'cannot set r/o attribute'].
-		^ self perform: sel third with: aValue ].
-		
-	(anObject isKindOf: String) ifTrue: [
-		^ self setVar: anObject to: aValue].
-
-	(anObject isKindOf: CommandScriptBlockMorph) ifTrue: [
-		obj := anObject receiver.
-		(obj isKindOf: ScriptablePhratchMorph) ifFalse: [
-			^ self error: 'cannot get attributes of non-Sprites/Stage'].
-		block := anObject body argMorphs first.
-		(block isKindOf: VariableBlockMorph) ifTrue: [
-			^ obj setVar: block variable to: aValue].
-		#get: = block selector 
-			ifTrue: [ 
-				arg := block argumentAt: 1.
-				(arg isKindOf: ChoiceArgMorph)
-					ifTrue: [ att := (block argumentAt: 1) choice ]
-					ifFalse: [ att := (block argumentAt: 1) evaluate ]]
-			ifFalse: [
-				att := oi keys detect: [:key |
-					(oi at: key) second  = block selector] ifNone: [
-						^ self error: 'no attribute found for selector: ', anObject selector]].
-		^ obj set: att to: aValue ].
-
-	self error: ['cannot set this value']
+	(anObject isKindOf: Symbol)
+		ifTrue: [ 
+			sel := oi at: anObject ifAbsent: [ ^ self error: 'unknown attribute: ' , anObject asString ].
+			sel third = #-
+				ifTrue: [ ^ self error: 'cannot set r/o attribute' ].
+			^ self perform: sel third with: aValue ].
+	(anObject isKindOf: String)
+		ifTrue: [ ^ self setVar: anObject to: aValue ].
+	(anObject isKindOf: CommandScriptBlockMorph)
+		ifTrue: [ 
+			obj := anObject receiver.
+			(obj isKindOf: ScriptablePhratchMorph)
+				ifFalse: [ ^ self error: 'cannot get attributes of non-Sprites/Stage' ].
+			block := anObject body argMorphs first.
+			(block isKindOf: VariableBlockMorph)
+				ifTrue: [ ^ obj setVar: block variable to: aValue ].
+			#get: = block selector
+				ifTrue: [ 
+					arg := block argumentAt: 1.
+					att := (arg isKindOf: ChoiceArgMorph)
+						ifTrue: [ (block argumentAt: 1) choice ]
+						ifFalse: [ (block argumentAt: 1) evaluate ] ]
+				ifFalse: [ 
+					att := oi keys
+						detect: [ :key | (oi at: key) second = block selector ]
+						ifNone: [ ^ self error: 'no attribute found for selector: ' , anObject selector ] ].
+			^ obj set: att to: aValue ].
+	self error: [ 'cannot set this value' ]
 ]
 
 { #category : #'panther actions' }
@@ -7451,41 +7155,6 @@ ScriptablePhratchMorph >> setHideFlagTo: aBool [
 
 	self undeleteAttribute: #isHidden.
 	self passiveSetHideFlagTo: aBool
-]
-
-{ #category : #'sound ops' }
-ScriptablePhratchMorph >> setInstrument: aNumber [
-	"New 'set instrument to :=' block. Set the instrument used for note sounds. Testing in beta but reverted."
-
-	| stage map n player |
-	(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNil: [^ self].
-	map := #(1 30 25 35).
-	n := aNumber asNumberNoError asInteger.
-	(n between: 1 and: map size)
-		ifTrue: [n := map at: n]
-		ifFalse: [n := 1].
-	(player := stage notePlayerFor: self) ifNotNil: [
-		player instrument: n].
-
-]
-
-{ #category : #'sound ops' }
-ScriptablePhratchMorph >> setInstrumentMenu [
-	"Provides a drop-down menu for setting the instrument number."
-
-	"| menu |
-	self haltOnce.
-	menu := MenuMorph new defaultTarget: self.
-	#(	('Piano' 1)
-		('Electric Guitar' 2)
-		('Acoustic Guiar' 3)
-		('Bass' 4)
-	) do: [:pair |
-		menu
-			add: (self numberInParens: pair second), (pair first localizedMIDI)
-			action: pair second].
-	^ menu"
-
 ]
 
 { #category : #'BYOB attributes' }
@@ -7578,12 +7247,6 @@ ScriptablePhratchMorph >> setVar: varName to: newValue [
 		^ self ].
 
 	vars at: vName put: newValue.
-
-]
-
-{ #category : #'looks ops' }
-ScriptablePhratchMorph >> setVisibilityTo: percent [
-	"Obsolete. Do nothing."
 
 ]
 
@@ -7753,9 +7416,8 @@ ScriptablePhratchMorph >> showVariable: varName [
 ScriptablePhratchMorph >> soleCostume: imageMedia [
 	"Make the given image my only costume."
 
-	media := media select: [:item | item isImage not].
-	self addMediaItem: imageMedia.
-
+	media := media reject: [ :item | item isImage ].
+	self addMediaItem: imageMedia
 ]
 
 { #category : #'sound ops' }
@@ -7993,13 +7655,11 @@ ScriptablePhratchMorph >> stopPlaying [
 	| firstCostume |
 	costume stopPlaying.
 	self filterReset.
-	self setVolumeTo: 100.  "reset volume"
-
-	"exit camera mode"
-	(costume isKindOf: CameraMedia) ifTrue: [
-		firstCostume := media detect: [:el | el isImage] ifNone: [^ self].
-		self lookLike: firstCostume mediaName].
-
+	self setVolumeTo: 100.	"reset volume"	"exit camera mode"
+	(costume isKindOf: CameraMedia)
+		ifFalse: [ ^ self ].
+	firstCostume := media detect: [ :el | el isImage ] ifNone: [ ^ self ].
+	self lookLike: firstCostume mediaName
 ]
 
 { #category : #byob }
@@ -8114,10 +7774,9 @@ ScriptablePhratchMorph >> timer [
 	<phratchItem: 'timer' kind: #r category: 'sensing' defaultValues: #() subCategory: #timer>
 	| now |
 	now := Time millisecondClockValue.
-	TimerStartMSecs ifNil: [TimerStartMSecs := now].
-	TimerStartMSecs > now ifTrue: [TimerStartMSecs := now].
+	TimerStartMSecs ifNil: [ TimerStartMSecs := now ].
+	TimerStartMSecs := TimerStartMSecs min: now.
 	^ (now - TimerStartMSecs) asFloat / 1000.0
-
 ]
 
 { #category : #'sensing ops' }
@@ -8259,37 +7918,37 @@ ScriptablePhratchMorph >> unusedMediaNameFromBaseName: baseName forMedia: aMedia
 	| nm i existingNames greatestNum |
 	nm := baseName.
 	i := nm indexOf: $..
-	i > 1 ifTrue: [nm := nm copyFrom: 1 to: i - 1].
-
-	nm size = 0 ifTrue: [
-		aMedia
-			ifNil: [nm := 'new' localized, '1']
-			ifNotNil: [
-				aMedia isImage
-					ifTrue: [nm := self defaultImageMedia mediaName]
-					ifFalse: [nm := 'sound' localized, '1']]].
-
+	i > 1
+		ifTrue: [ nm := nm copyFrom: 1 to: i - 1 ].
+	nm size = 0
+		ifTrue: [ 
+			aMedia
+				ifNil: [ nm := 'new' localized , '1' ]
+				ifNotNil: [ 
+					nm := aMedia isImage
+						ifTrue: [ self defaultImageMedia mediaName ]
+						ifFalse: [ 'sound' localized , '1' ] ] ].
 	existingNames := Set new.
-	media do: [:m | m = aMedia ifFalse: [existingNames add: (String withAll: m mediaName)]].
-
-	(nm size > 0 and: [nm last isDigit]) ifFalse: [
-		(existingNames includes: (String withAll: nm)) ifFalse: [^ nm]].
-
-	"remove trailing digits, if any"
+	media
+		do: [ :m | 
+			m = aMedia
+				ifFalse: [ existingNames add: (String withAll: m mediaName) ] ].
+	(nm size > 0 and: [ nm last isDigit ])
+		ifFalse: [ 
+			(existingNames includes: (String withAll: nm))
+				ifFalse: [ ^ nm ] ].	"remove trailing digits, if any"
 	i := nm size.
-	[i > 1 and: [(nm at: i) isDigit]] whileTrue: [i := i - 1].
-	[i > 1 and: [(nm at: i) = Character space]] whileTrue: [i := i - 1].
+	[ i > 1 and: [ (nm at: i) isDigit ] ] whileTrue: [ i := i - 1 ].
+	[ i > 1 and: [ (nm at: i) = Character space ] ] whileTrue: [ i := i - 1 ].
 	nm := nm copyFrom: 1 to: i.
-
 	greatestNum := 0.
-	existingNames do: [:n |
-		i := n size.
-		[i > 1 and: [(n at: i) isDigit]] whileTrue: [i := i - 1].
-		(n copyFrom: 1 to: i) = nm ifTrue: [
-			greatestNum := ((n copyFrom: i+1 to: n size) asNumber) max: greatestNum]].
-
-	^ nm, (greatestNum+1) printString
-
+	existingNames
+		do: [ :n | 
+			i := n size.
+			[ i > 1 and: [ (n at: i) isDigit ] ] whileTrue: [ i := i - 1 ].
+			(n copyFrom: 1 to: i) = nm
+				ifTrue: [ greatestNum := (n copyFrom: i + 1 to: n size) asNumber max: greatestNum ] ].
+	^ nm , (greatestNum + 1) printString
 ]
 
 { #category : #'as yet unclassified' }
@@ -8545,64 +8204,9 @@ ScriptablePhratchMorph >> variableNameInUse: varName [
 
 ]
 
-{ #category : #blocks }
-ScriptablePhratchMorph >> variablesPage [
-	"Answer a morph containing my variables."
-
-	| page addButton deleteButton hasVars stage x y maxX |
-	page := PhratchBlockPaletteMorph new
-		color: (Color r: 0.8 g: 0.8 b: 1.0);
-		borderWidth: 0.
-
-	addButton := PhratchFrameMorph
-		buttonLabel: 'Make a variable' localized
-		selector: #addGlobalVariable.
-	(self isKindOf: PhratchSpriteMorph) ifTrue: [addButton actionSelector: #addVariable].
-
-	deleteButton := PhratchFrameMorph
-		buttonLabel: 'Delete a variable' localized
-		selector: #deleteVariable.
-
-	x := 13.
-	page addMorph: (addButton target: self; position: x@7).
-	y := addButton bottom + 3.
-
-	hasVars := self varNames size > 0.
-	(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNotNil: [
-		stage varNames size > 0 ifTrue: [hasVars := true]].
-
-	hasVars ifTrue: [
-		page addMorph: (deleteButton target: self; position: x@y).
-		y := deleteButton bottom + 10.
-
-		y := self addVariableReportersTo: page x: x y: y.
-		y := y + 12  ].
-
-	y := self addGenericVariableBlocksTo: page x: x y: y.
-
-	y := self addGenericListBlocksTo: page y: y.
-	page updateWatcherButtonsForFrame: (self ownerOrYourselfThatIsA: PhratchFrameMorph).
-
-	self addCustomBlocksTo: page y: y.
-
-	maxX := page submorphs inject: 0 into: [:t :m | t max: m right].
-	page extent: (maxX + 10) @ y.
-	^ page
-
-]
-
 { #category : #byob }
 ScriptablePhratchMorph >> vars [
 	^vars
-]
-
-{ #category : #private }
-ScriptablePhratchMorph >> vars: varsDict blocksBin: aBlocksBin [
-	"Private! Set my variables and blocks bin. Used by copyRecordingIn:."
-
-	vars := varsDict.
-	blocksBin := aBlocksBin.
-
 ]
 
 { #category : #private }
@@ -8657,134 +8261,6 @@ ScriptablePhratchMorph >> viewerPageForCategory: aCategoryName [
 	^(PhratchCategory allSubclasses detect:[:e | e label = aCategoryName]) viewerPageFor: self.
 ]
 
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> viewerPageForColors [
-
-	| page addButton deleteButton showButton hideButton hasColors stage x y maxX |
-	page := PhratchBlockPaletteMorph new
-		color: (Color r: 0.8 g: 0.8 b: 1.0);
-		borderWidth: 0.
-
-	addButton := PhratchFrameMorph
-		buttonLabel: 'Make a color' localized
-		selector: #addGlobalColor.
-	(self isKindOf: PhratchSpriteMorph) ifTrue: [addButton actionSelector: #addColor].
-
-	deleteButton := PhratchFrameMorph
-		buttonLabel: 'Delete a color' localized
-		selector: #deleteColor.
-	showButton := PhratchFrameMorph
-		buttonLabel: 'Show a color' localized
-		selector: #showColor.
-	hideButton := PhratchFrameMorph
-		buttonLabel: 'Hide a color' localized
-		selector: #hideColor.
-
-	x := 13.
-	page addMorph: (addButton target: self; position: x@7).
-	y := addButton bottom + 3.
-
-	hasColors := self colorNames size > 0.
-	(stage := self ownerThatIsA: PhratchStageMorph) ifNotNil: [
-		stage colorNames size > 0 ifTrue: [hasColors := true]].
-
-	hasColors ifTrue: [
-		page addMorph: (deleteButton target: self; position: x@y).
-		y := deleteButton bottom + 3.
-		page addMorph: (showButton target: self; position: x@y).
-		y := showButton bottom + 3.
-		page addMorph: (hideButton target: self; position: x@y).
-		y := hideButton bottom + 10].
-
-	self addGenericColorBlocksTo: page x: x y: y.
-	maxX := page submorphs inject: 0 into: [:t :m | t max: m right].
-	page extent: (maxX + 10) @ y.
-	^ page
-]
-
-{ #category : #blocks }
-ScriptablePhratchMorph >> viewerPageForMotion [
-	"Answer a morph containing mtion blocks for the given category for use in the given PhratchViewer."
-
-	| bin isStage addMotorBlocks s font x y m |
-	bin := PhratchBlockPaletteMorph new.
-
-	(self isKindOf: PhratchStageMorph)
-		ifTrue: [
-			isStage := true.
-			addMotorBlocks := self showMotorBlocks]
-		ifFalse: [
-			isStage := false.
-			s := self ownerOrYourselfThatIsA: PhratchStageMorph.
-			addMotorBlocks := s notNil and: [s showMotorBlocks]].
-
-	(isStage & addMotorBlocks not) ifTrue: [
-		font := (PhratchFrameMorph getFont: #ViewerPage).
-		x := 20.
-		y := 12.
-		m := StringMorph contents: 'Stage selected:' localized font: font.
-		bin addMorph: (m color: Color white; position: x@y).
-		m := StringMorph contents: 'No motion blocks' localized font: font.
-		bin addMorph: (m color: Color white; position: x@(y + 17)).
-		^ bin].
-
-	x := 12.
-	y := 10.
-	(self blocksFor: 'motion') do: [:blockOrSym |
-		(blockOrSym = #-) | (blockOrSym = #~) |  (blockOrSym = #=)
-			ifTrue: [
-				(blockOrSym = #-) ifTrue: [y := y + 15].  "insert a full space"
-				(blockOrSym = #~) ifTrue: [y := y + 5].  "insert a half space"
-				(blockOrSym = #=) ifTrue: [
-					y := y + 7.
-					bin addMorph: ((ImageMorph new form: (PhratchFrameMorph skinAt: #connector)) position: x@y).
-					y := y + 20]]  "insert a line"
-			ifFalse: [
-				y := self createBlock: blockOrSym atPosition: x@y onPage: bin]].
-
-	addMotorBlocks ifFalse: [^ bin].
-
-	isStage ifFalse: [
-		y := y + 7.
-		bin addMorph: ((ImageMorph new form: (PhratchFrameMorph skinAt: #connector)) position: x@y).
-		y := y + 20].
-
-	(self blocksFor: 'motor') do: [:blockOrSym |
-		(blockOrSym = #-) | (blockOrSym = #~)
-			ifTrue: [
-				(blockOrSym = #-) ifTrue: [y := y + 15].  "insert a full space"
-				(blockOrSym = #~) ifTrue: [y := y + 5]]  "insert a half space"
-			ifFalse: [
-				y := self createBlock: blockOrSym atPosition: x@y onPage: bin]].
-
-	^ bin
-
-]
-
-{ #category : #blocks }
-ScriptablePhratchMorph >> viewerPageForSensing [
-	"Answer a morph containing mtion blocks for the given category for use in the given PhratchViewer."
-
-	| bin x y |
-	bin := PhratchBlockPaletteMorph new.
-	x := 12.
-	y := 10.
-	(self blocksFor: 'sensing') do: [:blockOrSym |
-		(blockOrSym = #-) | (blockOrSym = #~) |  (blockOrSym = #=)
-			ifTrue: [
-				(blockOrSym = #-) ifTrue: [y := y + 15].  "insert a full space"
-				(blockOrSym = #~) ifTrue: [y := y + 5].  "insert a half space"
-				(blockOrSym = #=) ifTrue: [
-					y := y + 7.
-					bin addMorph: ((ImageMorph new form: (PhratchFrameMorph skinAt: #connector)) position: x@y).
-					y := y + 20]]  "insert a line"
-			ifFalse: [
-				y := self createBlock: blockOrSym atPosition: x@y onPage: bin]].
-
-	^ bin
-
-]
-
 { #category : #'looks ops' }
 ScriptablePhratchMorph >> visibility [
 	"Answer my visibility. 0 is invisible. 100 is fully opaque."
@@ -8821,11 +8297,6 @@ ScriptablePhratchMorph >> wait: duration elapsed: elapsed from: ignored [
 	<phratchItem: 'wait $Number$ secs' kind: #t category: 'control' defaultValues: #(1) subCategory: #time>
 	^ nil
 
-]
-
-{ #category : #'BYOB attributes' }
-ScriptablePhratchMorph >> waterRippleEffect [
-	^ [filterPack waterRippleRate] ifError: [0]
 ]
 
 { #category : #'BYOB attributes' }

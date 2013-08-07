@@ -4,22 +4,22 @@ Class {
 	#category : #'Phratch-Categories'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PhratchCategoryVariables class >> color [
 	^(Color h: 25 s: 0.88 v: 0.95)
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PhratchCategoryVariables class >> label [
 	^'variables'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PhratchCategoryVariables class >> order [
 	^8
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #drawing }
 PhratchCategoryVariables class >> viewerPageFor: aScriptablePhratchMorph [ 
 
 	"Answer a morph containing my variables."

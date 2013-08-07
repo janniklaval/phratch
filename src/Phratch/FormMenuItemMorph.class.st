@@ -52,8 +52,10 @@ FormMenuItemMorph >> minHeight [
 
 { #category : #layout }
 FormMenuItemMorph >> minWidth [
-
-	form ifNotNil: [^form width + 2].
-	^ (self stringWidth: contents) + (subMenu == nil ifTrue: [0] ifFalse: [10])
-
+	form ifNotNil: [ ^ form width + 2 ].
+	^ (self stringWidth: contents)
+		+
+			(subMenu isNil
+				ifTrue: [ 0 ]
+				ifFalse: [ 10 ])
 ]

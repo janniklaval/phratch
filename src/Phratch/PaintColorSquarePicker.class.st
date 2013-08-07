@@ -32,17 +32,20 @@ PaintColorSquarePicker >> createColorSwatches [
 		color: Color transparent;
 		inset: 0;
 		hResizing: #shrinkWrap;
-		vResizing: #shrinkWrap.
+		vResizing: #shrinkWrap; 
+		yourself.
 
 	spacer := Morph new
 		width: 2;
 		height: 12;
-		color: Color transparent.
+		color: Color transparent; 
+		yourself.
 
 	spacerRow := Morph new
 		width: self width;
 		height: 2;
-		color: Color transparent.
+		color: Color transparent; 
+		yourself.
 
 	swatch := SimpleButtonMorph new
 		borderWidth: 1;
@@ -50,7 +53,8 @@ PaintColorSquarePicker >> createColorSwatches [
 		actWhen: #buttonDown;
 		borderColor: (Color r: 0.505 g: 0.505 b: 0.505);
 		target: self;
-		actionSelector: #setColor:.
+		actionSelector: #setColor:; 
+		yourself.
 
 	swatch firstSubmorph delete. "remove label, which can cause layout issue with scaled up fonts"
 	swatch extent: 12@12.
@@ -62,13 +66,16 @@ PaintColorSquarePicker >> createColorSwatches [
 		target: self;
 		actionSelector: #setColor:;
 		extent: 12@12;
-		arguments: (Array with: Color transparent).
+		arguments: (Array with: Color transparent); 
+		yourself.
 
-	swatchCol := AlignmentMorph newColumn color: Color transparent; inset: 0; hResizing: #rigid; vResizing: #rigid.
+	swatchCol := AlignmentMorph newColumn color: Color transparent; inset: 0; hResizing: #rigid; vResizing: #rigid; 
+		yourself.
 	row := emptyRow fullCopy.
 	1 to: (baseColors size - 1) do: [:i |
 		thisColor := baseColors at: i.
-		b := swatch fullCopy color: thisColor; arguments: (Array with: thisColor).
+		b := swatch fullCopy color: thisColor; arguments: (Array with: thisColor); 
+		yourself.
 		row ifNil: [row := emptyRow fullCopy].
 		row addMorphBack: b.
 		row addMorphBack: spacer fullCopy.
@@ -88,12 +95,11 @@ PaintColorSquarePicker >> createColorSwatches [
 
 { #category : #geometry }
 PaintColorSquarePicker >> extent: aPoint [
-
-	bounds extent = aPoint ifFalse: [
-		bounds := bounds topLeft extent: aPoint.
-		self layoutChanged.
-		self changed].
-
+	bounds extent = aPoint
+		ifTrue: [ ^ self ].
+	bounds := bounds topLeft extent: aPoint.
+	self layoutChanged.
+	self changed
 ]
 
 { #category : #'event handling' }

@@ -33,26 +33,6 @@ SyntaxElementMorph class >> fromString: aString [
 	
 ]
 
-{ #category : #testing }
-SyntaxElementMorph class >> isDecompilable: selector class: class [
-
-	|  original compiled text node|
-	original := class methodDict at: selector.
-	text := ((class decompilerClass new)
-		decompile: selector in: class method: original) printString.
-	node := Compiler new 
-		compile: text 
-		in: class 
-		notifying: nil 
-		ifFail: [self inform: 'compilation failed'].
-	compiled := node generate: #(0 0 0 0).
-	original = compiled
-		ifFalse: [Transcript nextPut: $-].
-	^original = compiled
-		
-		
-]
-
 { #category : #'as yet unclassified' }
 SyntaxElementMorph class >> objectNameFrom: aUserString [
 	"answer a camel-cased String beginning with a lowercase character"
@@ -82,32 +62,6 @@ SyntaxElementMorph class >> selectorFrom: aUserString [
 { #category : #tests }
 SyntaxElementMorph class >> test [
 	1 even ifTrue:[] ifFalse:[^'yes']
-]
-
-{ #category : #tests }
-SyntaxElementMorph class >> testAllOriginalMethods [
-
-	| eachClass methods original compiled text node|
-	Smalltalk classNames do: [: className |
-		eachClass := Smalltalk classNamed: className.
-		methods := eachClass methodDict.
-		methods keysDo: [ :eachSelector|
-			original := methods at: eachSelector.
-			text := ((eachClass decompilerClass new)
-				decompile: eachSelector in: eachClass method: original) printString.
-			node := Compiler new 
-				compile: text 
-				in: eachClass 
-				notifying: nil 
-				ifFail: [self inform: 'compilation failed'].
-			compiled := node generate: #(0 0 0 0).
-			original = compiled
-				ifTrue: [Transcript show:'.']
-				ifFalse: [Transcript cr; 
-					show: className asString, ' -> ', 
-						eachSelector printString; cr]]]
-		
-		
 ]
 
 { #category : #'as yet unclassified' }
@@ -183,7 +137,7 @@ SyntaxElementMorph >> borderWidth [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #menu }
 SyntaxElementMorph >> contextMenu [
 
 	^nil
@@ -257,7 +211,7 @@ SyntaxElementMorph >> initialize [
 	color := Color red
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #menu }
 SyntaxElementMorph >> invokeContextMenu [
 	|m choice|
 	m := self contextMenu.
@@ -323,7 +277,7 @@ SyntaxElementMorph >> representsNil [
 	^false
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'*Phratch-Extensions' }
 SyntaxElementMorph >> rootForGrabOf: aMorph [
 	"Allow myself to be extracted."
 

@@ -38,13 +38,6 @@ Class {
 	#category : #'Phratch-UI-Support'
 }
 
-{ #category : #'instance creation' }
-ScrollingStringMorph class >> includeInNewMorphMenu [
-
-	^ true
-
-]
-
 { #category : #'class initialization' }
 ScrollingStringMorph class >> initialize [
 	"self initialize"
@@ -55,11 +48,9 @@ ScrollingStringMorph class >> initialize [
 
 { #category : #menu }
 ScrollingStringMorph >> addCustomMenuItems: aCustomMenu hand: aHandMorph [
-
 	super addCustomMenuItems: aCustomMenu hand: aHandMorph.
 	aCustomMenu addLine.
-	aCustomMenu add: 'set font' action: #fontMenu.
-
+	aCustomMenu add: 'set font' translated action: #fontMenu
 ]
 
 { #category : #'event handling' }
@@ -89,13 +80,13 @@ ScrollingStringMorph >> backForm: f [
 ScrollingStringMorph >> backspaceChar [
 	"If there is a selection, delete it. Otherwise delete the character just before the insertion point (i.e. backspace)."
 
-	selectionStart = selectionEnd ifFalse: [^ self deleteSelection].
-
-	selectionStart > 1 ifTrue: [
-		selectionEnd := selectionStart.
-		selectionStart := selectionStart - 1.
-		self deleteSelection].
-
+	selectionStart = selectionEnd
+		ifFalse: [ ^ self deleteSelection ].
+	selectionStart > 1
+		ifFalse: [ ^ self ].
+	selectionEnd := selectionStart.
+	selectionStart := selectionStart - 1.
+	self deleteSelection
 ]
 
 { #category : #private }
@@ -194,20 +185,6 @@ ScrollingStringMorph >> copySelection [
 
 	PhratchTranslator unicodeClipboardPut: self currentSelection.
 
-]
-
-{ #category : #editing }
-ScrollingStringMorph >> currentLine [
-	"Answer the logical line containing the insertion point (i.e. all the character between two line breaks, independent of word wrap.)"
-
-	| start end result |
-	start := end := (self lineAndIndexFor: selectionStart) first.
-	[(start > 1) and: [(lines at: start - 1) last ~= CR]] whileTrue: [start := start - 1].
-	[(end < lines size) and: [(lines at: end)  last ~= CR]] whileTrue: [end := end + 1].
-
-	result := ''.
-	start to: end do: [:i | result := result, (lines at: i)].
-	^ result
 ]
 
 { #category : #editing }
@@ -348,32 +325,28 @@ ScrollingStringMorph >> doubleClick: evt [
 	"Select a word."
 
 	| lineAndIndex lineNum s index wordStart wordEnd lineStart |
-	lines size = 0 ifTrue: [^ self].
-
+	lines size = 0
+		ifTrue: [ ^ self ].
 	lineAndIndex := self lineAndIndexFor: (self indexForPoint: evt cursorPoint).
 	lineNum := lineAndIndex first.
 	s := lines at: lineNum.
-	s size = 0 ifTrue: [^ self].  "empty line"
-
+	s size = 0
+		ifTrue: [ ^ self ].	"empty line"
 	index := lineAndIndex second.
-	index > s size ifTrue: [index := s size].  "at end of line; try one char back"
-	(s at: index) isSeparator ifTrue: [^ self].  "on separator; do nothing"
-
+	index := index min: s size.	"at end of line; try one char back"
+	(s at: index) isSeparator
+		ifTrue: [ ^ self ].	"on separator; do nothing"
 	wordStart := index.
-	[(wordStart >= 1) and: [(s at: wordStart) isSeparator not]]
-		whileTrue: [wordStart := wordStart - 1].
+	[ wordStart >= 1 and: [ (s at: wordStart) isSeparator not ] ] whileTrue: [ wordStart := wordStart - 1 ].
 	wordEnd := index.
-	[(wordEnd < s size) and: [(s at: wordEnd) isSeparator not]]
-		whileTrue: [wordEnd := wordEnd + 1].
-	(s at: wordEnd) isSeparator ifTrue: [wordEnd := wordEnd - 1].
-
+	[ wordEnd < s size and: [ (s at: wordEnd) isSeparator not ] ] whileTrue: [ wordEnd := wordEnd + 1 ].
+	(s at: wordEnd) isSeparator
+		ifTrue: [ wordEnd := wordEnd - 1 ].
 	lineStart := self startOfLine: lineNum.
 	selectionStart := lineStart + (wordStart + 1).
 	selectionEnd := lineStart + (wordEnd + 1).
 	startLoc := selectionStart.
-	self changed.
-
-
+	self changed
 ]
 
 { #category : #drawing }
@@ -382,17 +355,20 @@ ScrollingStringMorph >> drawCursor: charIndex line: lineIndex on: aCanvas [
 
 	| line pair x p |
 	line := lines at: lineIndex.
-	line size = 0
-		ifTrue: [pair := #(0 0)]
-		ifFalse: [pair := (renderer xRangesFor: line) at: (charIndex within: 1 and: line size)].
-
-	PhratchTranslator isRTL
-		ifTrue: [x := charIndex > line size ifTrue: [pair min] ifFalse: [pair max]]
-		ifFalse: [x := charIndex > line size ifTrue: [pair max] ifFalse: [pair min]].
-
+	pair := line size = 0
+		ifTrue: [ #(0 0) ]
+		ifFalse: [ (renderer xRangesFor: line) at: (charIndex within: 1 and: line size) ].
+	x := PhratchTranslator isRTL
+		ifTrue: [ 
+			charIndex > line size
+				ifTrue: [ pair min ]
+				ifFalse: [ pair max ] ]
+		ifFalse: [ 
+			charIndex > line size
+				ifTrue: [ pair max ]
+				ifFalse: [ pair min ] ].
 	p := self offsetForLine: lineIndex.
-	aCanvas fillRectangle: (p + (x@0) extent: 2@lineHeight) color: selectionColor.
-
+	aCanvas fillRectangle: (p + (x @ 0) extent: 2 @ lineHeight) color: selectionColor
 ]
 
 { #category : #drawing }
@@ -512,23 +488,18 @@ ScrollingStringMorph >> emptyLine [
 
 { #category : #private }
 ScrollingStringMorph >> ensureCursorIsOnScreen [
-
 	| visibleLines i |
 	visibleLines := self visibleLineCount.
-	visibleLines >= lines size ifTrue: [^ self updateScrollbar].
-
+	visibleLines >= lines size
+		ifTrue: [ ^ self updateScrollbar ].
 	i := (self lineAndIndexFor: selectionStart) first.
-	(i between: firstVisibleLine and: firstVisibleLine + visibleLines - 2) ifTrue: [
-		^ self updateScrollbar].
-
-	i < firstVisibleLine
-		ifTrue: [firstVisibleLine := (i - 2) max: 1]
-		ifFalse: [firstVisibleLine := (i + 1 - visibleLines) max: 1].
-
+	(i between: firstVisibleLine and: firstVisibleLine + visibleLines - 2)
+		ifTrue: [ ^ self updateScrollbar ].
+	firstVisibleLine := i < firstVisibleLine
+		ifTrue: [ i - 2 max: 1 ]
+		ifFalse: [ i + 1 - visibleLines max: 1 ].
 	self updateScrollbar.
-	self changed.
-
-
+	self changed
 ]
 
 { #category : #private }
@@ -537,13 +508,13 @@ ScrollingStringMorph >> ensureSelectionStartPrecedesEnd [
 
 	| lastIndex tmp |
 	lastIndex := self charCount + 1.
-	selectionStart := selectionStart  within: 1 and: lastIndex.
-	selectionEnd := selectionEnd  within: 1 and: lastIndex.
-	selectionEnd < selectionStart ifTrue: [
-		tmp := selectionEnd.
-		selectionEnd := selectionStart.
-		selectionStart := tmp].
-
+	selectionStart := selectionStart within: 1 and: lastIndex.
+	selectionEnd := selectionEnd within: 1 and: lastIndex.
+	selectionEnd < selectionStart
+		ifFalse: [ ^ self ].
+	tmp := selectionEnd.
+	selectionEnd := selectionStart.
+	selectionStart := tmp
 ]
 
 { #category : #menu }
@@ -927,15 +898,6 @@ ScrollingStringMorph >> mouseMove: evt [
 ]
 
 { #category : #editing }
-ScrollingStringMorph >> moveCursorContentsEnd [
-	"Position the cursor at the end of my contents (i.e. at very end, not the end of the current line)."
-
-	selectionStart := selectionEnd := self charCount + 1.
-	self changed.
-
-]
-
-{ #category : #editing }
 ScrollingStringMorph >> moveCursorEndAndSelect: selectFlag [
 
 	| lineNum line |
@@ -981,22 +943,6 @@ ScrollingStringMorph >> moveCursorPageUpAndSelect: selectFlag [
 	selectFlag ifFalse: [selectionEnd := selectionStart].
 	startLoc := selectionEnd.
 	self changed.
-
-]
-
-{ #category : #editing }
-ScrollingStringMorph >> moveCursorToStartOfNextLine [
-	"Position the cursor at start of the next line. Insert a CR if this is the last line and it doesn't end in one."
-
-	| i |
-	self moveCursorEndAndSelect: false.
-	selectionStart := selectionEnd := selectionStart + 1.
-	i := (self lineAndIndexFor: selectionStart) first.
-	i = lines size ifTrue: [
-		(((lines at: i) size = 0) or:
-		 [(lines at: i) last ~= CR]) ifTrue: [
-			selectionStart := selectionEnd := self charCount + 1.
-			self insertString: (String with: CR)]].
 
 ]
 
@@ -1193,22 +1139,18 @@ ScrollingStringMorph >> updateScrollbar [
 
 	| visibleLines maxScroll |
 	visibleLines := self visibleLineCount.
-	scrollbar percentVisible: (visibleLines asFloat / lines size).
-	visibleLines >= lines size ifTrue: [
-		firstVisibleLine := 1.
-		self changed].
-
-	maxScroll := (lines size - (self visibleLineCount // 3)) max: 1.
+	scrollbar percentVisible: visibleLines asFloat / lines size.
+	visibleLines >= lines size
+		ifTrue: [ 
+			firstVisibleLine := 1.
+			self changed ].
+	maxScroll := lines size - (self visibleLineCount // 3) max: 1.
 	maxScroll > 0
-		ifTrue: [
-			scrollbar
-				scrollDelta: 1.0 / visibleLines
-				pageDelta: (0.6 * visibleLines) / maxScroll.
-			firstVisibleLine > maxScroll ifTrue: [firstVisibleLine := maxScroll].
-			scrollbar value: (firstVisibleLine - 1) / maxScroll]
-		ifFalse: [
-			scrollbar value: 0].
-
+		ifTrue: [ 
+			scrollbar scrollDelta: 1.0 / visibleLines pageDelta: 0.6 * visibleLines / maxScroll.
+			firstVisibleLine := firstVisibleLine min: maxScroll.
+			scrollbar value: (firstVisibleLine - 1) / maxScroll ]
+		ifFalse: [ scrollbar value: 0 ]
 ]
 
 { #category : #private }

@@ -36,42 +36,28 @@ SoundMedia >> balance [
 
 ]
 
-{ #category : #accessing }
-SoundMedia >> balance: aNumber [
-	"Set my left-right balance, a number between 0 and 100, where 50 is centered."
-
-	balance := (aNumber rounded max: 0) min: 100.
-	playingSound ifNotNil: [
-		playingSound setPan: (balance / 100.0) volume: (volume / 100.0) for: 1].
-
-]
-
 { #category : #compressing }
 SoundMedia >> compressBitsPerSample: bits saveOriginal: saveFlag [
 	"Compress my sound if possible. Return true if compression is done."
 
 	| samples |
-	self isBuiltInSound ifTrue: [^ false].  "don't compress built-in sounds"
-	compressedData ifNotNil: [^ false].  "don't recompress"
-	((originalSound isKindOf: SampledSound) not or:
-	 [originalSound isStereo]) ifTrue: [^ false].
-
-	saveFlag
-		ifTrue: [savedSound := originalSound]
-		ifFalse: [savedSound := nil].
-
+	self isBuiltInSound
+		ifTrue: [ ^ false ].	"don't compress built-in sounds"
+	compressedData ifNotNil: [ ^ false ].	"don't recompress"
+	((originalSound isKindOf: SampledSound) not or: [ originalSound isStereo ])
+		ifTrue: [ ^ false ].
+	savedSound := saveFlag
+		ifTrue: [ originalSound ]
+		ifFalse: [ nil ].
 	samples := originalSound samples.
 	compressedSampleRate := originalSound originalSamplingRate.
-	[compressedSampleRate >= 32000] whileTrue: [
-		samples := samples downSampledLowPassFiltering: false.
-		compressedSampleRate := compressedSampleRate // 2].
-
+	[ compressedSampleRate >= 32000 ]
+		whileTrue: [ 
+			samples := samples downSampledLowPassFiltering: false.
+			compressedSampleRate := compressedSampleRate // 2 ].
 	compressedBitsPerSample := bits.
 	compressedData := (ADPCMCodec newBitsPerSample: bits) encodeSoundBuffer: samples.
-
 	^ true
-
-
 ]
 
 { #category : #compressing }
@@ -92,15 +78,6 @@ SoundMedia >> compressedData [
 SoundMedia >> compressedSampleRate [
 
 	^ compressedSampleRate
-
-]
-
-{ #category : #accessing }
-SoundMedia >> currentSeconds [
-
-	playingSound
-		ifNil: [^ 0]
-		ifNotNil: [^ playingSound sounds first currentPosition].
 
 ]
 
@@ -305,14 +282,6 @@ SoundMedia >> pausePlaying [
 ]
 
 { #category : #'scratch ops' }
-SoundMedia >> playFrom: secs [
-	"Play from the given point through the end of the sound."
-
-	self playFrom: secs to: self totalSeconds.
-
-]
-
-{ #category : #'scratch ops' }
 SoundMedia >> playFrom: startSecs to: endSecs [
 	"Play the given portion of the sound. The start and end offsets are in seconds at the original sound's sampling rate regardless of the current playback rate."
 
@@ -341,46 +310,6 @@ SoundMedia >> playFromStart [
 	"Play my sound from beginning to end."
 
 	self playFrom: 0 to: self totalSeconds.
-
-]
-
-{ #category : #compressing }
-SoundMedia >> reduceSamplingRate [
-	"Reduce my sampling rate to under 22 ksamples/sec (typically to 11.025 ksamples/sec). Answer true if the sampling rate was reduced."
-
-	originalSound originalSamplingRate < 22000 ifTrue: [^ false].  "already reduced"
-	self isBuiltInSound ifTrue: [^ false].  "built-in sound"
-
-	self pausePlaying.
-	playingSound := nil.
-
-	[originalSound originalSamplingRate < 22000] whileFalse: [
-		originalSound := SampledSound
-			samples: (originalSound samples downSampledLowPassFiltering: true)
-			samplingRate: originalSound originalSamplingRate // 2].
-
-	^ true
-
-]
-
-{ #category : #compressing }
-SoundMedia >> revertToUncompressed [
-	"Revert to my original, uncompressed sound after compression with the 'saveOriginal' flag."
-
-	savedSound ifNotNil: [
-		originalSound := savedSound.
-		compressedSampleRate := nil.
-		compressedBitsPerSample := nil.
-		compressedData := nil.
-		savedSound := nil].
-
-]
-
-{ #category : #'scratch ops' }
-SoundMedia >> rewindSound [
-	"Rewind the playing sound, if any."
-
-	playingSound ifNotNil: [playingSound sounds first reset].
 
 ]
 

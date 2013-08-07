@@ -9,7 +9,7 @@ Class {
 	#category : #'Phratch-UI-Elements'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #converting }
 MessageHeaderElementMorph >> asSmalltalk [
 	| kw ws |
 	kw := selector keywords.
@@ -21,22 +21,22 @@ MessageHeaderElementMorph >> asSmalltalk [
 	^ws contents
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'instance creation' }
 MessageHeaderElementMorph >> beBinary [
 	self selector: selector arguments: #(arg)
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #menu }
 MessageHeaderElementMorph >> contextMenu [
-	|m|
+	| m |
 	m := MenuMorph new.
-	m add: 'rename...' action: #editSelector.
-	arguments isEmpty ifTrue: [
-		m add: 'add argument' action: #beBinary ].
-	^m
+	m add: 'rename...' translated action: #editSelector.
+	arguments isEmpty
+		ifTrue: [ m add: 'add argument' translated action: #beBinary ].
+	^ m
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'instance creation' }
 MessageHeaderElementMorph >> editSelector [
 	|ans parms tokens|
 
@@ -54,7 +54,7 @@ MessageHeaderElementMorph >> editSelector [
 	self selector: ans arguments: parms.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 MessageHeaderElementMorph >> fit [
 	| cw bw bw2 x arg lb maxHeight |
 
@@ -87,7 +87,7 @@ MessageHeaderElementMorph >> fit [
 		ifTrue: [^owner fit]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialize }
 MessageHeaderElementMorph >> initialize [
 	super initialize.
 	labels := OrderedCollection new.
@@ -95,22 +95,22 @@ MessageHeaderElementMorph >> initialize [
 	self fit
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 MessageHeaderElementMorph >> labelColor [
 	^Color black
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 MessageHeaderElementMorph >> labelFont [
 	^StrikeFont fontName: 'VerdanaBold' size: 10
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 MessageHeaderElementMorph >> selector [
 	^selector
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'instance creation' }
 MessageHeaderElementMorph >> selector: aString arguments: anArray [
 
 	"for decompilation purposes only. Caution: this method assumes that the number of arguments matches the

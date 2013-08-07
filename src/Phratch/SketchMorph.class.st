@@ -28,13 +28,6 @@ Class {
 }
 
 { #category : #'instance creation' }
-SketchMorph class >> includeInNewMorphMenu [
-
-	^ true
-
-]
-
-{ #category : #'instance creation' }
 SketchMorph class >> withForm: aForm [
 	"Note: 'SketchMorph withForm: f' is faster than 'SketchMorph new form: f'."
 
@@ -44,32 +37,21 @@ SketchMorph class >> withForm: aForm [
 
 { #category : #menu }
 SketchMorph >> addCustomMenuItems: aCustomMenu hand: aHandMorph [
-
 	super addCustomMenuItems: aCustomMenu hand: aHandMorph.
 	aCustomMenu addLine.
-	aCustomMenu add: 'grab from screen' action: #grabFromScreen.
-	aCustomMenu add: 'read from file' action: #readFromFile.
+	aCustomMenu add: 'grab from screen' translated action: #grabFromScreen.
+	aCustomMenu add: 'read from file' translated action: #readFromFile.
 	aCustomMenu addLine.
-	aCustomMenu add: 'save as BMP' action: #saveAsBMP.
-	aCustomMenu add: 'save as GIF' action: #saveAsGIF.
-	aCustomMenu add: 'save as JPEG' action: #saveAsJPEG.
+	aCustomMenu add: 'save as BMP' translated action: #saveAsBMP.
+	aCustomMenu add: 'save as GIF' translated action: #saveAsGIF.
+	aCustomMenu add: 'save as JPEG' translated action: #saveAsJPEG.
 	aCustomMenu addLine.
-	aCustomMenu add: 'set rotation center' action: #setRotationCenter.
-	aCustomMenu add: 'set rotation style' action: #setRotationStyle.
-	aCustomMenu add: 'erase pixels of color' action: #erasePixelsOfColor:.
-	aCustomMenu add: 'recolor of pixels of color' action: #recolorPixelsOfColor:.
+	aCustomMenu add: 'set rotation center' translated action: #setRotationCenter.
+	aCustomMenu add: 'set rotation style' translated action: #setRotationStyle.
+	aCustomMenu add: 'erase pixels of color' translated action: #erasePixelsOfColor:.
+	aCustomMenu add: 'recolor of pixels of color' translated action: #recolorPixelsOfColor:.
 	aCustomMenu addLine.
-	aCustomMenu add: 'repaint' action: #editDrawing.
-
-]
-
-{ #category : #'pen support' }
-SketchMorph >> clearExtent: aPoint fillColor: aColor [
-	"Make this sketch have the given pixel dimensions and fill it with given color. Its previous contents are replaced."
-
-	self form:
-		((Form extent: aPoint depth: Display depth) fillColor: aColor).
-
+	aCustomMenu add: 'repaint' translated action: #editDrawing
 ]
 
 { #category : #geometry }
@@ -176,19 +158,22 @@ SketchMorph >> form: aForm [
 SketchMorph >> generateRotatedForm [
 	"Compute my rotatedForm and offsetWhenRotated."
 
-	| adjustedAngle smoothPix pair |
-	(rotationStyle = #normal)
-		ifTrue: [adjustedAngle := rotationDegrees]  "smooth rotation"
-		ifFalse: [adjustedAngle := 0.0].  "leftRight, upDown, none"
+	"headed down; use flipped"
 
-	((adjustedAngle closeTo: 0.0) and: [1.0@1.0 = scalePoint])
-		ifTrue: [  "no rotation or scaling; use original"
+	| adjustedAngle smoothPix pair |
+	adjustedAngle := rotationStyle = #normal
+		ifTrue: [ rotationDegrees ]
+		ifFalse: [ 0.0 ].	"smooth rotation"	"leftRight, upDown, none"
+	((adjustedAngle closeTo: 0.0) and: [ 1.0 @ 1.0 = scalePoint ])
+		ifTrue: [ 
+			"no rotation or scaling; use original"
 			rotatedForm := originalForm.
-			offsetWhenRotated := 0@0]
-		ifFalse: [  "generated rotated and/or scaled form"
-			((scalePoint x < 1.0) or: [scalePoint y < 1.0])
-				ifTrue: [smoothPix := 2]
-				ifFalse: [smoothPix := 1].
+			offsetWhenRotated := 0 @ 0 ]
+		ifFalse: [ 
+			"generated rotated and/or scaled form"
+			smoothPix := (scalePoint x < 1.0 or: [ scalePoint y < 1.0 ])
+				ifTrue: [ 2 ]
+				ifFalse: [ 1 ].
 			pair := WarpBlt
 				rotatePhratch: originalForm
 				degrees: adjustedAngle negated
@@ -196,22 +181,18 @@ SketchMorph >> generateRotatedForm [
 				scaleBy: self scalePoint
 				smoothing: smoothPix.
 			rotatedForm := pair first.
-			offsetWhenRotated := pair last negated].
-
-	((rotationStyle = #leftRight) and: [rotationDegrees < 0.0]) ifTrue: [
-		"headed left; use flipped"
-		rotatedForm := rotatedForm flipBy: #horizontal centerAt: 0@0.
-		offsetWhenRotated := offsetWhenRotated + 
-			(((2 * (rotationCenter x - (originalForm width // 2)))@0) * scalePoint).
-		^ self].
-
-	((rotationStyle = #upDown) and: [(rotationDegrees > 90.0) or: 
-		[rotationDegrees < -90.0]]) ifTrue: [
-			"headed down; use flipped"
-			rotatedForm := rotatedForm flipBy: #vertical centerAt: 0@0.
-			offsetWhenRotated := offsetWhenRotated + 
-				((0@(2 * (rotationCenter y - (originalForm height // 2)))) * scalePoint).
-			^ self].
+			offsetWhenRotated := pair last negated ].
+	(rotationStyle = #leftRight and: [ rotationDegrees < 0.0 ])
+		ifTrue: [ 
+			"headed left; use flipped"
+			rotatedForm := rotatedForm flipBy: #horizontal centerAt: 0 @ 0.
+			offsetWhenRotated := offsetWhenRotated + ((2 * (rotationCenter x - (originalForm width // 2))) @ 0 * scalePoint).
+			^ self ].
+	(rotationStyle = #upDown and: [ rotationDegrees > 90.0 or: [ rotationDegrees < -90.0 ] ])
+		ifFalse: [ ^ self ].
+	rotatedForm := rotatedForm flipBy: #vertical centerAt: 0 @ 0.
+	offsetWhenRotated := offsetWhenRotated + (0 @ (2 * (rotationCenter y - (originalForm height // 2))) * scalePoint).
+	^ self
 ]
 
 { #category : #menu }
@@ -258,29 +239,6 @@ SketchMorph >> initializeWith: aForm [
 
 ]
 
-{ #category : #other }
-SketchMorph >> isColorable [
-
-	^ false
-
-]
-
-{ #category : #other }
-SketchMorph >> isPaintable [
-	"Answer true if my image can be repainted."
-
-	^ true
-
-]
-
-{ #category : #other }
-SketchMorph >> isRotatable [
-	"Answer true if my image can be repainted."
-
-	^ true
-
-]
-
 { #category : #'change reporting' }
 SketchMorph >> layoutChanged [
 	"Update rotatedForm and offsetWhenRotated and compute new bounds."
@@ -301,19 +259,14 @@ SketchMorph >> layoutChanged [
 
 ]
 
-{ #category : #'pen support' }
-SketchMorph >> penOnMyForm [
-	"Support for experiments with drawing under program control. To get started, make a new SketchMorph in a morphic world. In an inspector, give it the desired pixel dimensions with clearExtent:fillColor:. Then use this method to get a pen to which you can send normal pen commands. Reveal the resulting drawing with revealPenStrokes."
-
-	^ PhratchPen newOnForm: originalForm
-
-]
-
 { #category : #menu }
 SketchMorph >> readFromFile [
 
 	|  fileName |
-	fileName := result directory pathName / result name.
+	fileName := UIManager default
+		request: 'Please enter the image file name' translated
+		initialAnswer: 'fileName'.
+	fileName isEmptyOrNil ifTrue: [^ self].
 	self form: (Form fromFileNamed: fileName).
 
 ]
@@ -359,15 +312,6 @@ SketchMorph >> releaseCachedState [
 
 ]
 
-{ #category : #'pen support' }
-SketchMorph >> revealPenStrokes [
-	"This message must be sent after a sequence of pen strokes to make the resulting changes visible."
-
-	rotatedForm := nil.
-	self changed.
-
-]
-
 { #category : #accessing }
 SketchMorph >> rotatedForm [
  
@@ -400,22 +344,19 @@ SketchMorph >> rotationDegrees [
 
 { #category : #accessing }
 SketchMorph >> rotationDegrees: angleInDegrees [
-
-	rotationDegrees ~= angleInDegrees ifTrue: [
-		rotationDegrees := angleInDegrees \\ 360.0.
-		self layoutChanged].
-
+	rotationDegrees ~= angleInDegrees
+		ifFalse: [ ^ self ].
+	rotationDegrees := angleInDegrees \\ 360.0.
+	self layoutChanged
 ]
 
 { #category : #accessing }
 SketchMorph >> rotationDegrees: newRotationDegrees scalePoint: newScalePoint [
-
-	((newRotationDegrees ~= rotationDegrees) or:
-	 [scalePoint ~= newScalePoint]) ifTrue: [
-		rotationDegrees := newRotationDegrees \\ 360.0.
-		scalePoint := newScalePoint.
-		self layoutChanged].
-
+	(newRotationDegrees ~= rotationDegrees or: [ scalePoint ~= newScalePoint ])
+		ifFalse: [ ^ self ].
+	rotationDegrees := newRotationDegrees \\ 360.0.
+	scalePoint := newScalePoint.
+	self layoutChanged
 ]
 
 { #category : #accessing }

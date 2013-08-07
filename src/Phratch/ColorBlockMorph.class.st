@@ -65,12 +65,6 @@ ColorBlockMorph >> drawOn: aCanvas [
 		
 ]
 
-{ #category : #initialization }
-ColorBlockMorph >> initialize [
-
-	super initialize.
-]
-
 { #category : #other }
 ColorBlockMorph >> showValue [
 

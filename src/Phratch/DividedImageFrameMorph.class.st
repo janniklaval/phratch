@@ -52,7 +52,7 @@ DividedImageFrameMorph >> drawFrameOn: aCanvas [
 DividedImageFrameMorph >> initFrontFromForm: aForm topSectionHeight: aNumber [
 
 	| w h |
-	super initFrontFromForm: aForm.
+	self initFrontFromForm: aForm.
 
 	topSectionHeight := aNumber.
 	leftMargin := 0.

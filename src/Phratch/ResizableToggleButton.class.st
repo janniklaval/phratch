@@ -30,16 +30,6 @@ ResizableToggleButton >> action [
 
 ]
 
-{ #category : #layout }
-ResizableToggleButton >> centerLabelOffset: anInteger [
-	"Center the label horizontally with the given offset."
-
-	justification := #center.
-	hOffset := anInteger.
-	self updateLayout.
-
-]
-
 { #category : #accessing }
 ResizableToggleButton >> color [
 
@@ -143,27 +133,28 @@ ResizableToggleButton >> isOn [
 
 { #category : #'event handling' }
 ResizableToggleButton >> keyStroke: evt [
-
-	| ch m |
-"	ch := evt unicodeChar.
+	"	ch := evt unicodeChar.
 	ch = 0 ifTrue: [ch := evt keyValue]."
 
+	"cr, lf, or enter key"
+
+	| ch m |
 	ch := evt keyValue.
-
-	ch = 9 ifTrue: [  "tab"
-		(m := self ownerOrYourselfThatIsA: DialogBoxMorph) ifNotNil: [m tabToNextField: evt].
-		^ self].
-
-	ch = 27 ifTrue: [  "escape key"
-		(m := self ownerOrYourselfThatIsA: DialogBoxMorph) ifNotNil: [m escapeKeyPressed: evt].
-		^ self].
-
-	(ch = 10) | (ch = 13) ifTrue: [  "cr, lf, or enter key"
-		(m := self ownerOrYourselfThatIsA: DialogBoxMorph) ifNotNil: [^ m enterKeyPressed: evt].
-		evt hand newKeyboardFocus: nil.
-		^ self].
-
-
+	ch = 9
+		ifTrue: [ 
+			"tab"
+			(m := self ownerOrYourselfThatIsA: DialogBoxMorph) ifNotNil: [ m tabToNextField: evt ].
+			^ self ].
+	ch = 27
+		ifTrue: [ 
+			"escape key"
+			(m := self ownerOrYourselfThatIsA: DialogBoxMorph) ifNotNil: [ m escapeKeyPressed: evt ].
+			^ self ].
+	ch = 10 | (ch = 13)
+		ifFalse: [ ^ self ].
+	(m := self ownerOrYourselfThatIsA: DialogBoxMorph) ifNotNil: [ ^ m enterKeyPressed: evt ].
+	evt hand newKeyboardFocus: nil.
+	^ self
 ]
 
 { #category : #'event handling' }
@@ -217,34 +208,31 @@ ResizableToggleButton >> leftJustifyInset: anInteger [
 
 { #category : #'event handling' }
 ResizableToggleButton >> mouseDown: evt [
-
 	evt hand toolType: nil.
 	wasOn := isOn.
-
 	evt hand newKeyboardFocus: nil.
-
-	evt rightButtonPressed ifTrue: [
-		Sensor waitNoButton.
-		^ self rightButtonMenu].
-
+	evt rightButtonPressed
+		ifTrue: [ 
+			Sensor waitNoButton.
+			^ self rightButtonMenu ].
 	toggleButtonMode
-		ifTrue: [
+		ifTrue: [ 
 			toggleMode
-				ifTrue: [
+				ifTrue: [ 
 					isOn
-						ifTrue: [isOn := false. self over]
-						ifFalse: [self on]]
-
-				ifFalse: [
+						ifTrue: [ 
+							isOn := false.
+							self over ]
+						ifFalse: [ self on ] ]
+				ifFalse: [ 
 					isOn
-						ifTrue: [^ self]
-						ifFalse: [self on]]]
-		ifFalse: [self on].
-
-	actWhen = #buttonDown ifTrue: [
-		self doButtonAction.
-		self off].
-
+						ifTrue: [ ^ self ]
+						ifFalse: [ self on ] ] ]
+		ifFalse: [ self on ].
+	actWhen = #buttonDown
+		ifFalse: [ ^ self ].
+	self doButtonAction.
+	self off
 ]
 
 { #category : #'event handling' }
@@ -411,14 +399,14 @@ ResizableToggleButton >> pressed: aMorph [
 
 { #category : #'event handling' }
 ResizableToggleButton >> rightButtonMenu [
-
 	| menu |
-	(self owner isKindOf: PhratchBlockPaletteMorph) ifTrue: [
-		menu := MenuMorph new defaultTarget: self.
-		menu add: 'help' action: #presentHelpScreen.
-		menu localize; invokeModal].
-
-
+	(self owner isKindOf: PhratchBlockPaletteMorph)
+		ifFalse: [ ^ self ].
+	menu := MenuMorph new defaultTarget: self.
+	menu add: 'help' translated action: #presentHelpScreen.
+	menu
+		localize;
+		invokeModal
 ]
 
 { #category : #layout }

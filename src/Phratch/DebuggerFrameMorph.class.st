@@ -47,7 +47,7 @@ DebuggerFrameMorph >> centerOnScreen [
 	self updateResizeMorph
 ]
 
-{ #category : #intialization }
+{ #category : #initialization }
 DebuggerFrameMorph >> createButtons [
 	"Replace my current buttons with the ones specified."
 	"Note: The button row morph was created by initialize; I just replace its contents with a new collection of buttons."
@@ -148,23 +148,22 @@ DebuggerFrameMorph >> handlesMouseDown: evt [
 	^true
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 DebuggerFrameMorph >> hasVars [
-
 	| vars env |
-
-	returnValue ifNotNil: [^ true].
-	
-	(thread currentBlock receiver isKindOf: VariableFrame)
-		ifTrue: [vars := thread currentBlock receiver ]
-		ifFalse: [vars := thread temporaryVariables ].
-
-	vars vars keys size > 0 ifTrue: [^true].
-
+	returnValue ifNotNil: [ ^ true ].
+	vars := (thread currentBlock receiver isKindOf: VariableFrame)
+		ifTrue: [ thread currentBlock receiver ]
+		ifFalse: [ thread temporaryVariables ].
+	vars vars keys size > 0
+		ifTrue: [ ^ true ].
 	env := thread currentEnvironment.
-	env ifNotNil: [ env = vars ifFalse: [
-		env vars keys size > 0 ifTrue: [^ true]]].
-
+	env
+		ifNotNil: [ 
+			env = vars
+				ifFalse: [ 
+					env vars keys size > 0
+						ifTrue: [ ^ true ] ] ].
 	^ false
 ]
 
@@ -273,7 +272,7 @@ DebuggerFrameMorph >> on: aPhratchProcess [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #handling }
 DebuggerFrameMorph >> on: aPhratchProcess returnValue: obj [
 
 	thread := aPhratchProcess.
@@ -287,7 +286,7 @@ DebuggerFrameMorph >> on: aPhratchProcess returnValue: obj [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #build }
 DebuggerFrameMorph >> rememberUserDimensions [
 	self class setUserPos: self position size: self extent
 ]
@@ -298,7 +297,7 @@ DebuggerFrameMorph >> resume [
 	self yes
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #interaction }
 DebuggerFrameMorph >> snapToUserDimensions [
 
 	self extent: UserSize.
@@ -315,13 +314,13 @@ DebuggerFrameMorph >> step [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #stepping }
 DebuggerFrameMorph >> stepNext [
 	thread nextStep.
 	self yes
 ]
 
-{ #category : #'initailize-release' }
+{ #category : #initialization }
 DebuggerFrameMorph >> updateContents [
 
 	| block rcvr lbl |
@@ -346,42 +345,35 @@ DebuggerFrameMorph >> updateContents [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #stepping }
 DebuggerFrameMorph >> updateResizeMorph [
 	resizeMorph ifNotNil: [
 		resizeMorph position: self bottomRight - "resizeMorph extent - " bottomRightForm width ]
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #interaction }
 DebuggerFrameMorph >> varMenu [
-
 	| menu vars env mh mw |
 	menu := MenuMorph new defaultTarget: self.
-
-	returnValue ifNotNil: [
-		menu add: 'report value' localized toolTip: returnValue action: nil.
-		menu addLine].
-	
-	(thread currentBlock receiver isKindOf: VariableFrame)
-		ifTrue: [vars := thread currentBlock receiver ]
-		ifFalse: [vars := thread temporaryVariables ].
-
-	vars vars keys asSortedCollection do: [:vname |
-		menu add: vname toolTip: (vars vars at: vname) action: nil].
-
-	menu addLine. 
-
+	returnValue
+		ifNotNil: [ 
+			menu add: 'report value' localized toolTip: returnValue action: nil.
+			menu addLine ].
+	vars := (thread currentBlock receiver isKindOf: VariableFrame)
+		ifTrue: [ thread currentBlock receiver ]
+		ifFalse: [ thread temporaryVariables ].
+	vars vars keys asSortedCollection do: [ :vname | menu add: vname toolTip: (vars vars at: vname) action: nil ].
+	menu addLine.
 	env := thread currentEnvironment.
-	env ifNotNil: [ env = vars ifFalse: [
-		env vars keys asSortedCollection do: [:vname |
-			menu add: vname toolTip: (env vars at: vname) action: nil]]].
-
+	env
+		ifNotNil: [ 
+			env = vars
+				ifFalse: [ env vars keys asSortedCollection do: [ :vname | menu add: vname toolTip: (env vars at: vname) action: nil ] ] ].
 	menu build.
 	mh := menu menuForm height.
 	mw := menu menuForm width.
-
-	menu popUpAt: ((varButton left + (varButton width - mw // 2)) @ (varButton top - mh)) inWorld: World
+	menu popUpAt: (varButton left + ((varButton width - mw) // 2)) @ (varButton top - mh) inWorld: World
 ]
 
 { #category : #interaction }

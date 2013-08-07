@@ -117,7 +117,7 @@ ExpressionArgMorph >> fixArgLayout [
 			xInset := 4 + (extraW // 2)]
 		ifFalse: [
 			self extent: labelMorph extent + (2 @ 0).
-			xInset := 3
+			xInset := 3.
 			isText
 				ifTrue: [self width: (self width max: 25)]].
 
@@ -179,20 +179,6 @@ ExpressionArgMorph >> isEmptySlot [
 ExpressionArgMorph >> isNumberExpression [
 
 	^ isNumber
-
-]
-
-{ #category : #BYOB }
-ExpressionArgMorph >> isNumberExpression: bool [
-
-	isNumber := bool
-
-]
-
-{ #category : #drawing }
-ExpressionArgMorph >> isRectangular [
-
-	^ isNumber not
 
 ]
 

@@ -103,8 +103,12 @@ PhratchStackFrame >> pc: anInteger [
 
 { #category : #accessing }
 PhratchStackFrame >> printOn: aStream [
-
-	aStream nextPutAll: '[', expression printString, ' ', shouldUnlight printString, ']'.
+	aStream
+		nextPutAll: '[';
+		nextPutAll: expression printString;
+		nextPutAll: ' ';
+		nextPutAll: shouldUnlight printString;
+		nextPutAll: ']'
 ]
 
 { #category : #accessing }
@@ -190,14 +194,11 @@ PhratchStackFrame >> stopMotors [
 
 { #category : #accessing }
 PhratchStackFrame >> stopTalkThinkAsk [
-
 	| s |
-	(expression isKindOf: CommandBlockMorph) ifTrue: [
-		((#say:duration:elapsed:from: = expression selector) |
-		 (#think:duration:elapsed:from: = expression selector)) ifTrue: [
-			expression receiver sayNothing].
-
-		#doAsk = expression selector ifTrue: [
-			(s := expression receiver ownerOrYourselfThatIsA: PhratchStageMorph) ifNotNil: [s stopAsks]]].
-
+	(expression isKindOf: CommandBlockMorph)
+		ifFalse: [ ^ self ].
+	#say:duration:elapsed:from: = expression selector | (#think:duration:elapsed:from: = expression selector)
+		ifTrue: [ expression receiver sayNothing ].
+	#doAsk = expression selector
+		ifTrue: [ (s := expression receiver ownerOrYourselfThatIsA: PhratchStageMorph) ifNotNil: [ s stopAsks ] ]
 ]

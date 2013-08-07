@@ -46,13 +46,13 @@ WatcherMorph >> buildReadout [
 
 { #category : #'event handling' }
 WatcherMorph >> click: evt [
-
-	evt hand toolType = 'CutTool' ifTrue: [
-		evt shiftPressed ifFalse: [evt hand toolType: nil].
-		PhratchFrameMorph putInClipboard: self.
-		self aboutToBeGrabbedBy: evt hand.
-		self delete].
-
+	evt hand toolType = 'CutTool'
+		ifFalse: [ ^ self ].
+	evt shiftPressed
+		ifFalse: [ evt hand toolType: nil ].
+	PhratchFrameMorph putInClipboard: self.
+	self aboutToBeGrabbedBy: evt hand.
+	self delete
 ]
 
 { #category : #'falta adaptar' }
@@ -254,7 +254,7 @@ WatcherMorph >> initialize [
 		buildReadout;
 		useRoundedCorners;
 		addMorphBack: watcher;
-		addMorphBack: (Morph new color: Color transparent; extent: 5@1).
+		addMorphBack: (Morph new color: Color transparent; extent: 5@1; yourself).
 
 ]
 
@@ -666,24 +666,21 @@ WatcherMorph >> translatedName [
 	"Answer the name for this watcher based on my selector and argument. The names of reporters are translated into the current language. The names of variables are left untouched."
 
 	| sel spec result param |
-	readout target ifNil: [^ 'xxx'].
+	readout target ifNil: [ ^ 'xxx' ].
 	sel := readout getSelector.
-	(#(getVar: reportColor: ) includes: sel) ifTrue: [^ readout parameter].
-
+	(#(#getVar: #reportColor:) includes: sel)
+		ifTrue: [ ^ readout parameter ].
 	spec := readout target blockSpecForSelector: sel.
-	spec ifNil: [^ sel].
-
+	spec ifNil: [ ^ sel ].
 	result := PhratchTranslator translationFor: spec.
 	param := readout parameter.
-	param ifNil: [param := ''].
-
-	(param isKindOf: String) ifTrue: [result := self replaceArgIn: result with: param] ifFalse: [result := self replaceArgIn: result with: '[]'].
-	
-	"#sensor: = sel ifTrue: [
+	param ifNil: [ param := '' ].
+	result := (param isKindOf: String)
+		ifTrue: [ self replaceArgIn: result with: param ]
+		ifFalse: [ self replaceArgIn: result with: '[]' ].	"#sensor: = sel ifTrue: [
 		result := self replace: '$SensorNames$' with: (PhratchTranslator translationFor: param) in: result].
 	#sensorPressed: = sel ifTrue: [
 		result := self replace: '$SensorBooleans$' with: (PhratchTranslator translationFor: param) in: result]."
-
 	^ result
 ]
 

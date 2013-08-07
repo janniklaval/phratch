@@ -68,19 +68,18 @@ PaintColorPicker >> createColorWheels [
 
 { #category : #geometry }
 PaintColorPicker >> extent: newExtent [
-
-	newExtent = self extent ifFalse: [
-		super extent: newExtent.
-		(colorPickerContainer notNil and:
-		 [shadePickerContainer notNil]) ifTrue: [
-			colorPickerContainer
-				extent: (newExtent x - 8)@(newExtent y - 22);
-				position: (self left + 4)@(self top + 4).
-			shadePickerContainer
-				extent: (newExtent x - 8)@(9);
-				position: (self left + 4)@(self bottom - 15).
-			self createColorWheels]].
-
+	newExtent = self extent
+		ifTrue: [ ^ self ].
+	super extent: newExtent.
+	(colorPickerContainer notNil and: [ shadePickerContainer notNil ])
+		ifFalse: [ ^ self ].
+	colorPickerContainer
+		extent: (newExtent x - 8) @ (newExtent y - 22);
+		position: (self left + 4) @ (self top + 4).
+	shadePickerContainer
+		extent: (newExtent x - 8) @ 9;
+		position: (self left + 4) @ (self bottom - 15).
+	self createColorWheels
 ]
 
 { #category : #'event handling' }
@@ -165,27 +164,17 @@ PaintColorPicker >> selector [
 ]
 
 { #category : #accessing }
-PaintColorPicker >> selector2 [
-
-	^ selector2
-
-]
-
-{ #category : #accessing }
 PaintColorPicker >> selector2: sel [
-
-	(sel isNil or: [sel = 'nil' or: [sel isEmpty]])
-		ifTrue: [selector2 := nil]
-		ifFalse: [selector2 := sel asSymbol].
+	selector2 := (sel isNil or: [ sel = 'nil' or: [ sel isEmpty ] ])
+		ifTrue: [ nil ]
+		ifFalse: [ sel asSymbol ]
 ]
 
 { #category : #accessing }
 PaintColorPicker >> selector: sel [
-
-	(sel isNil or: [sel = 'nil' or: [sel isEmpty]])
-		ifTrue: [selector := nil]
-		ifFalse: [selector := sel asSymbol].
-
+	selector := (sel isNil or: [ sel = 'nil' or: [ sel isEmpty ] ])
+		ifTrue: [ nil ]
+		ifFalse: [ sel asSymbol ]
 ]
 
 { #category : #accessing }

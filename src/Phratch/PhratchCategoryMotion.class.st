@@ -4,22 +4,22 @@ Class {
 	#category : #'Phratch-Categories'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PhratchCategoryMotion class >> color [
 	^(Color h: 225 s: 0.65 v: 0.83)
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PhratchCategoryMotion class >> label [
 	^'motion'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PhratchCategoryMotion class >> order [
 	^1
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #drawing }
 PhratchCategoryMotion class >> viewerPageFor: aScriptablePhratchMorph [ 
 
 		| bin isStage addMotorBlocks s font x y m |

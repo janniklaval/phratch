@@ -29,14 +29,21 @@ FileIOAskerDialog >> forPhratchFrame: aPhratchFrameMorph [
 
 { #category : #initialization }
 FileIOAskerDialog >> initialize [
-	
 	| spacer |
 	super initialize.
-	spacer := Morph new extent: 10@5; color: Color transparent;
+	spacer := Morph new
+		extent: 10 @ 5;
+		color: Color transparent;
 		yourself.
-	self withButtonsForYes: true no: true okay: false cancel: false.
-	self title: 'Allow File I/O'.
-	self message: 'This Panther project is trying to use file I/O. While file I/O
+	self
+		withButtonsForYes: true
+		no: true
+		okay: false
+		cancel: false.
+	self title: 'Allow File I/O' translated.
+	self
+		message:
+			'This Panther project is trying to use file I/O. While file I/O
 can be a very useful feature, it also poses a potential risk
 to your computer. Before allowing this project to use file
 I/O, make sure that this project and its author can be
@@ -47,9 +54,10 @@ harmful or useful.'.
 	buttonRow addMorphBack: spacer fullCopy.
 	buttonRow addMorphBack: (self buttonLabel: 'Never' localized action: #never).
 	buttonRow addMorphBack: spacer fullCopy.
-	buttonRow submorphs do: [:b |
-		(b isKindOf: ResizableToggleButton) ifTrue: [tabFields add: b]].
-
+	buttonRow submorphs
+		do: [ :b | 
+			(b isKindOf: ResizableToggleButton)
+				ifTrue: [ tabFields add: b ] ]
 ]
 
 { #category : #'as yet unclassified' }

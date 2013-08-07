@@ -16,7 +16,7 @@ Class {
 	#category : #'Phratch-UI-Support'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ShadowedStringMorph class >> contents: aString color: aColor font: aFont [
 
 	^ self new

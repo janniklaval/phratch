@@ -4,30 +4,30 @@ Class {
 	#category : #'Phratch-UI-Elements'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #adding }
 PrimitiveElementMorph >> addExpression [
 	expression := TextBoxElementMorph new label: 'primitive '.
 	self addMorphFront: expression.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #converting }
 PrimitiveElementMorph >> asSmalltalk [
 	^'<',expression contents, '>'
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PrimitiveElementMorph >> contents: aString [
 	expression label: aString
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialize }
 PrimitiveElementMorph >> initialize [
 	super initialize.
 	color := Color yellow darker
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'dropping/grabbing' }
 PrimitiveElementMorph >> wantsDroppedMorph: aMorph event: evt [
 
 	^next isNil & (aMorph isKindOf: StepElementMorph)

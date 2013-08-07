@@ -34,17 +34,20 @@ PaintPalette >> addToolbarButtons [
 		inset: 0;
 	 	wrapCentering: #topLeft;
 		vResizing: #shrinkWrap;
-		hResizing: #shrinkWrap.
+		hResizing: #shrinkWrap; 
+		yourself.
 	firstRow := AlignmentMorph newRow
 		inset: 0;
 		wrapCentering: #topLeft;
 		vResizing: #shrinkWrap;
-		hResizing: #shrinkWrap.
+		hResizing: #shrinkWrap; 
+		yourself.
 	secondRow := AlignmentMorph newRow
 		inset: 0;
 		wrapCentering: #topLeft;
 		vResizing: #shrinkWrap;
-		hResizing: #shrinkWrap.
+		hResizing: #shrinkWrap; 
+		yourself.
 
 	buttonSpecs := #(
 		"name			tip"
@@ -68,7 +71,8 @@ PaintPalette >> addToolbarButtons [
 			actionSelector: #mode:;
 			arguments: (Array with: bName);
 			setProperty: #balloonText toValue: bTip localized;
-			actWhen: #buttonDown.
+			actWhen: #buttonDown; 
+		yourself.
 		firstRow addMorphBack: b].
 
 	buttonSpecs := #(
@@ -93,7 +97,8 @@ PaintPalette >> addToolbarButtons [
 			actionSelector: #mode:;
 			arguments: (Array with: bName);
 			setProperty: #balloonText toValue: bTip localized;
-			actWhen: #buttonDown.
+			actWhen: #buttonDown; 
+		yourself.
 		secondRow addMorphBack: b.
 		].
 
@@ -125,52 +130,59 @@ PaintPalette >> brushSize: aNumber [
 
 { #category : #'event handling' }
 PaintPalette >> brushSizeMenu [
-
 	| b icon row n2 colorToUse |
-
-	brushSizeMenu ifNotNil: [brushSizeMenu isInWorld ifTrue: [^ self]].
+	brushSizeMenu
+		ifNotNil: [ 
+			brushSizeMenu isInWorld
+				ifTrue: [ ^ self ] ].
 	brushSizeMenu := AlignmentMorph newColumn
 		color: Color transparent;
 		inset: 0;
 		borderWidth: 1;
 		useRoundedCorners;
-		borderColor: (Color r: (173/255) g: (174/255) b: (181/255)).
+		borderColor: (Color r: 173 / 255 g: 174 / 255 b: 181 / 255); 
+		yourself.
 	row := AlignmentMorph newRow
 		borderWidth: 0;
-		inset: 0.
-	#(1 2 3 4 5 7 9 13 19 29 47 75) do: [:n | 
-		n2 := n asNumber.
-		(n2 <= 6) ifTrue: [n2 := n2 + 1].
-		(n2 == 29) ifTrue: [n2 := 23].
-		(n2 == 47) ifTrue: [n2 := 25].
-		(n2 == 75) ifTrue: [n2 := 27].
-		self mode = #erase
-			ifTrue: [colorToUse := Color transparent]
-			ifFalse: [colorToUse := self color1].
-		icon := (PaintCanvas brushCursorSize: n2 color: colorToUse scale: 1).
-		b := IconicButton new
-			color: (Color r: (211/255) g: (212/255) b: (220/255));
-			borderColor: (Color r: (173/255) g: (174/255) b: (181/255));
-			labelGraphic: icon;
-			width: 30; 
-			height: 30;
-			actionSelector: #brushSize:;
-			target: self;
-			arguments: (Array with: n).
-		(self brushSize = n asNumber) ifTrue: [b color: Color white "(Color r: (188/255) g: (193/255) b: (200/255))"].
-		row addMorphBack: b.
-		(row submorphs size == 4) ifTrue: [
-			brushSizeMenu addMorphBack: row.
-			row := AlignmentMorph newRow borderWidth: 0; inset: 0]].
-	brushSizeMenu position: (optionsPane left + 55)@(optionsPane bottom - 5).
-	self owner addMorph: brushSizeMenu.
-]
-
-{ #category : #accessing }
-PaintPalette >> canvasMorph [
-
-	^ canvasMorph
-
+		inset: 0; 
+		yourself.
+	#(1 2 3 4 5 7 9 13 19 29 47 75)
+		do: [ :n | 
+			n2 := n asNumber.
+			n2 <= 6
+				ifTrue: [ n2 := n2 + 1 ].
+			n2 == 29
+				ifTrue: [ n2 := 23 ].
+			n2 == 47
+				ifTrue: [ n2 := 25 ].
+			n2 == 75
+				ifTrue: [ n2 := 27 ].
+			colorToUse := self mode = #erase
+				ifTrue: [ Color transparent ]
+				ifFalse: [ self color1 ].
+			icon := PaintCanvas brushCursorSize: n2 color: colorToUse scale: 1.
+			b := IconicButton new
+				color: (Color r: 211 / 255 g: 212 / 255 b: 220 / 255);
+				borderColor: (Color r: 173 / 255 g: 174 / 255 b: 181 / 255);
+				labelGraphic: icon;
+				width: 30;
+				height: 30;
+				actionSelector: #brushSize:;
+				target: self;
+				arguments: (Array with: n); 
+		yourself.
+			self brushSize = n asNumber
+				ifTrue: [ b color: Color white	"(Color r: (188/255) g: (193/255) b: (200/255))" ].
+			row addMorphBack: b.
+			row submorphs size == 4
+				ifTrue: [ 
+					brushSizeMenu addMorphBack: row.
+					row := AlignmentMorph newRow
+						borderWidth: 0;
+						inset: 0; 
+		yourself ] ].
+	brushSizeMenu position: (optionsPane left + 55) @ (optionsPane bottom - 5).
+	self owner addMorph: brushSizeMenu
 ]
 
 { #category : #accessing }
@@ -239,7 +251,7 @@ PaintPalette >> createOptionsPane [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #drawing }
 PaintPalette >> drawOn: aCanvas [
 
 	color isTransparent ifTrue: [^ self].
@@ -467,23 +479,22 @@ PaintPalette >> textFontMenu [
 
 { #category : #'event handling' }
 PaintPalette >> textSizeMenu [
-
 	| menu font sizeList |
-
 	menu := MenuMorph new.
 	font := canvasMorph canvasTextBox font.
-	font isOSFont
-		ifTrue: [sizeList := #(8 9 10 12 14 18 24 36 48 60 72 96 120 144 216 288)]
-		ifFalse: [sizeList := StrikeFont sizesForFontName: font name].
-
-	sizeList size = 0 ifTrue: [^ Beeper beep].  "should not happen"
-	sizeList do: [:n | 
-		menu add: n
-			target: self 
-			selector: #updateSizeMenu:
-			argument: n
-	].
-	menu  invokeModal.
+	sizeList := font isOSFont
+		ifTrue: [ #(8 9 10 12 14 18 24 36 48 60 72 96 120 144 216 288) ]
+		ifFalse: [ StrikeFont sizesForFontName: font name ].
+	sizeList size = 0
+		ifTrue: [ ^ Beeper beep ].	"should not happen"
+	sizeList
+		do: [ :n | 
+			menu
+				add: n
+				target: self
+				selector: #updateSizeMenu:
+				argument: n ].
+	menu invokeModal
 ]
 
 { #category : #'event handling' }
@@ -495,172 +506,224 @@ PaintPalette >> toggleRotationPoint [
 
 { #category : #'as yet unclassified' }
 PaintPalette >> updateFontMenu: choice withOsFont: useOSFont [
-	|fontSize font |
+	| fontSize font |
 	fontSize := textSizeMorph contents asNumber.
-	useOSFont
-		ifTrue: [font := StrikeFont osFontName: choice size: fontSize]
-		ifFalse: [font := StrikeFont fontName: choice size: fontSize].
-
+	font := useOSFont
+		ifTrue: [ StrikeFont osFontName: choice size: fontSize ]
+		ifFalse: [ StrikeFont fontName: choice size: fontSize ].
 	canvasMorph canvasTextBox font: font.
 	self updateOptionsPane.
-	canvasMorph changed.
-
-
+	canvasMorph changed
 ]
 
 { #category : #accessing }
 PaintPalette >> updateOptionsPane [
-
 	| options font s spacer form b formMorph colorToUse brushThumbnail n2 aColor2 fName |
-
 	optionsPane removeAllMorphs.
 	options := AlignmentMorph newRow
-		width: (optionsPane width - 16);
-		height: (optionsPane height - 30);
+		width: optionsPane width - 16;
+		height: optionsPane height - 30;
 		color: Color transparent;
 		hResizing: #shrinkWrap;
 		vResizing: #shrinkWrap;
-		inset: 0.
-
-	(#(paint erase line) includes: self mode) ifTrue: [
-		brushSizeMorph := AlignmentMorph newRow
-			cellPositioning: #leftCenter;
-			centering: #center;
-			color: Color transparent.
-		font := (StrikeFont fontName: 'VerdanaBold' size: 11).
-		s := (StringMorph contents: 'Brush size: ' localized).
-		self mode = #erase ifTrue: [s contents: ('Eraser size' localized ,': ')].
-		s font: font; color: Color gray darker.
-		brushSizeMorph addMorphBack: s.
-		self mode = #erase
-			ifTrue: [colorToUse := Color transparent]
-			ifFalse: [colorToUse := self color1].
-		brushSizeMorph addMorphBack: (Morph new extent: 2@5; color: Color transparent).
-		brushSizeMorph addMorphBack: (ImageMorph new form: (PhratchFrameMorph skinAt: #downArrow)).
-		brushSizeMorph addMorphBack: (Morph new extent: 4@5; color: Color transparent).
-		brushThumbnail := Morph new
-			extent: 30@30;
-			color: Color transparent.
-		n2 := self brushSize.
-		(n2 <= 6) ifTrue: [n2 := n2 + 1].
-		(n2 == 29) ifTrue: [n2 := 23].
-		(n2 == 47) ifTrue: [n2 := 25].
-		(n2 == 75) ifTrue: [n2 := 27].
-		brushIcon := ImageMorph new form: (PaintCanvas brushCursorSize: n2 color: colorToUse scale: 1).
-		brushIcon position: (15@15 - ((n2//2)@(n2//2))).
-		brushThumbnail addMorphBack: brushIcon.
-		brushSizeMorph addMorphBack: brushThumbnail.
-		options
-			addMorphBack: brushSizeMorph].
-
-	(#(oval rect) includes: self mode) ifTrue: [
-		b := ToggleButton onForm: (PhratchFrameMorph skinAt: #paintOptionsButtonPressed)
-					 offForm: (PhratchFrameMorph skinAt: #paintOptionsButton).
-		b
-			target: self;
-			actionSelector: #shapeFilling:;
-			arguments: (Array with: true);
-			toggleMode: false.
-		self shapeFilling ifTrue: [b on].
-		(self mode = #oval)
-			ifTrue: [form := Form extent: 16@17 depth: 16.
-					(FormCanvas on: form) fillOval: form boundingBox color: self color1]
-			ifFalse: [form := Form extent: 16@17 depth: 8. form fillColor: self color1].
-		formMorph := ImageMorph new form: form; position: 7@5.
-		b addMorph: formMorph.
-		options addMorphBack: b.
-		options addMorphBack: (Morph new extent: 5@2; color: Color transparent).
-		b := ToggleButton onForm: (PhratchFrameMorph skinAt: #paintOptionsButtonPressed)
-					 offForm: (PhratchFrameMorph skinAt: #paintOptionsButton).
-		b
-			target: self;
-			actionSelector: #shapeFilling:;
-			arguments: (Array with: false);
-			toggleMode: false.
-		self shapeFilling ifFalse: [b on].
-		(self mode = #oval)
-			ifTrue: [form := Form extent: 16@17 depth: 16.
-					(FormCanvas on: form) frameOval: form boundingBox width: 2 color: self color1]
-			ifFalse: [form := Form extent: 16@17 depth: 8. form border: (0@0 extent: 16@17) width: 2 fillColor: self color1].
-		formMorph := ImageMorph new form: form; position: 7@5.
-		b addMorph: formMorph.
-		options addMorphBack: b].
-
-	#fill = self mode ifTrue: [
-		fillStylePane := AlignmentMorph newRow
-		inset: 0;
-		borderWidth: 0;
-		color: Color transparent;
-		vResizing: #shrinkWrap;
-		hResizing: #shrinkWrap.
-		spacer := Morph new extent: 5@5; color: Color transparent.
-		#(color hGradient vGradient rGradient) do: [:style |
-			b := ToggleButton onForm: (PhratchFrameMorph skinAt: #paintOptionsButtonPressed)
-					 offForm: (PhratchFrameMorph skinAt: #paintOptionsButton).
+		inset: 0; 
+		yourself.
+	(#(#paint #erase #line) includes: self mode)
+		ifTrue: [ 
+			brushSizeMorph := AlignmentMorph newRow
+				cellPositioning: #leftCenter;
+				centering: #center;
+				color: Color transparent; 
+		yourself.
+			font := StrikeFont fontName: 'VerdanaBold' size: 11.
+			s := StringMorph contents: 'Brush size: ' localized.
+			self mode = #erase
+				ifTrue: [ s contents: 'Eraser size' localized , ': ' ].
+			s
+				font: font;
+				color: Color gray darker.
+			brushSizeMorph addMorphBack: s.
+			colorToUse := self mode = #erase
+				ifTrue: [ Color transparent ]
+				ifFalse: [ self color1 ].
+			brushSizeMorph
+				addMorphBack:
+					(Morph new
+						extent: 2 @ 5;
+						color: Color transparent; 
+		yourself).
+			brushSizeMorph addMorphBack: (ImageMorph new form: (PhratchFrameMorph skinAt: #downArrow)).
+			brushSizeMorph
+				addMorphBack:
+					(Morph new
+						extent: 4 @ 5;
+						color: Color transparent; 
+		yourself).
+			brushThumbnail := Morph new
+				extent: 30 @ 30;
+				color: Color transparent; 
+		yourself.
+			n2 := self brushSize.
+			n2 <= 6
+				ifTrue: [ n2 := n2 + 1 ].
+			n2 == 29
+				ifTrue: [ n2 := 23 ].
+			n2 == 47
+				ifTrue: [ n2 := 25 ].
+			n2 == 75
+				ifTrue: [ n2 := 27 ].
+			brushIcon := ImageMorph new form: (PaintCanvas brushCursorSize: n2 color: colorToUse scale: 1).
+			brushIcon position: 15 @ 15 - ((n2 // 2) @ (n2 // 2)).
+			brushThumbnail addMorphBack: brushIcon.
+			brushSizeMorph addMorphBack: brushThumbnail.
+			options addMorphBack: brushSizeMorph ].
+	(#(#oval #rect) includes: self mode)
+		ifTrue: [ 
+			b := ToggleButton
+				onForm: (PhratchFrameMorph skinAt: #paintOptionsButtonPressed)
+				offForm: (PhratchFrameMorph skinAt: #paintOptionsButton).
 			b
 				target: self;
-				actionSelector: #paintBucketFillStyle:;
-				arguments: (Array with: style);
+				actionSelector: #shapeFilling:;
+				arguments: (Array with: true);
 				toggleMode: false.
-			form := Form extent: 16@17 depth: 32.
-			(style == #color) ifTrue: [form fillColor: self color1].
-			(style == #hGradient) ifTrue: [form fillFromXColorBlock: [:m | self color2 mixed: m with: self color1]].
-			(style == #vGradient) ifTrue: [form fillFromYColorBlock: [:m | self color2 mixed: m with: self color1]].
-			(style == #rGradient) ifTrue: [form fillRadialFromXColorBlock: [:m | self color2 mixed: m with: self color1] center: 8@8].
-			formMorph := ImageMorph new form: form; position: 7@5.
-			formMorph lock.
+			self shapeFilling
+				ifTrue: [ b on ].
+			self mode = #oval
+				ifTrue: [ 
+					form := Form extent: 16 @ 17 depth: 16.
+					(FormCanvas on: form) fillOval: form boundingBox color: self color1 ]
+				ifFalse: [ 
+					form := Form extent: 16 @ 17 depth: 8.
+					form fillColor: self color1 ].
+			formMorph := ImageMorph new
+				form: form;
+				position: 7 @ 5; 
+		yourself.
 			b addMorph: formMorph.
-			b off.
-			(style == self paintBucketFillStyle) ifTrue: [b on].
+			options addMorphBack: b.
+			options
+				addMorphBack:
+					(Morph new
+						extent: 5 @ 2;
+						color: Color transparent; 
+		yourself).
+			b := ToggleButton
+				onForm: (PhratchFrameMorph skinAt: #paintOptionsButtonPressed)
+				offForm: (PhratchFrameMorph skinAt: #paintOptionsButton).
+			b
+				target: self;
+				actionSelector: #shapeFilling:;
+				arguments: (Array with: false);
+				toggleMode: false.
+			self shapeFilling
+				ifFalse: [ b on ].
+			self mode = #oval
+				ifTrue: [ 
+					form := Form extent: 16 @ 17 depth: 16.
+					(FormCanvas on: form) frameOval: form boundingBox width: 2 color: self color1 ]
+				ifFalse: [ 
+					form := Form extent: 16 @ 17 depth: 8.
+					form border: (0 @ 0 extent: 16 @ 17) width: 2 fillColor: self color1 ].
+			formMorph := ImageMorph new
+				form: form;
+				position: 7 @ 5; 
+		yourself.
+			b addMorph: formMorph.
+			options addMorphBack: b ].
+	#fill = self mode
+		ifTrue: [ 
+			fillStylePane := AlignmentMorph newRow
+				inset: 0;
+				borderWidth: 0;
+				color: Color transparent;
+				vResizing: #shrinkWrap;
+				hResizing: #shrinkWrap; 
+		yourself.
+			spacer := Morph new
+				extent: 5 @ 5;
+				color: Color transparent; 
+		yourself.
+			#(#color #hGradient #vGradient #rGradient)
+				do: [ :style | 
+					b := ToggleButton
+						onForm: (PhratchFrameMorph skinAt: #paintOptionsButtonPressed)
+						offForm: (PhratchFrameMorph skinAt: #paintOptionsButton).
+					b
+						target: self;
+						actionSelector: #paintBucketFillStyle:;
+						arguments: (Array with: style);
+						toggleMode: false.
+					form := Form extent: 16 @ 17 depth: 32.
+					style == #color
+						ifTrue: [ form fillColor: self color1 ].
+					style == #hGradient
+						ifTrue: [ form fillFromXColorBlock: [ :m | self color2 mixed: m with: self color1 ] ].
+					style == #vGradient
+						ifTrue: [ form fillFromYColorBlock: [ :m | self color2 mixed: m with: self color1 ] ].
+					style == #rGradient
+						ifTrue: [ form fillRadialFromXColorBlock: [ :m | self color2 mixed: m with: self color1 ] center: 8 @ 8 ].
+					formMorph := ImageMorph new
+						form: form;
+						position: 7 @ 5; 
+		yourself.
+					formMorph lock.
+					b addMorph: formMorph.
+					b off.
+					style == self paintBucketFillStyle
+						ifTrue: [ b on ].
+					fillStylePane addMorphBack: spacer fullCopy.
+					fillStylePane addMorphBack: b.
+					b position: b left @ b top + 2 ].
 			fillStylePane addMorphBack: spacer fullCopy.
-			fillStylePane addMorphBack: b.
-			b position: b left@ b top + 2].
-		fillStylePane addMorphBack: spacer fullCopy.
-		options
-			addMorphBack: fillStylePane].
-
-	#text = self mode ifTrue: [
-		font := (StrikeFont fontName: 'VerdanaBold' size: 11).
-		fName := canvasMorph canvasTextBox font name.
-		textFontMenu := ImageMorph new form: (PhratchFrameMorph skinAt: #textFontMenu).
-		textFontMorph := StringMorph new font: font.
-		textFontMorph contents: (textFontMorph stringWithEllipses: fName limitedToWidth: 109).
-		textFontMenu addMorph: textFontMorph.
-		textFontMorph position: 8@3.
-		textSizeMenu := ImageMorph new form: (PhratchFrameMorph skinAt: #textSizeMenu).
-		textSizeMorph := StringMorph contents: canvasMorph canvasTextBox font pointSize asString font: font.
-		textSizeMenu addMorph: textSizeMorph.
-		textSizeMorph position: 9@3.
-		aColor2 := self color1.
-		(aColor2 == Color transparent) ifTrue: [aColor2 := Color white].
+			options addMorphBack: fillStylePane ].
+	#text = self mode
+		ifTrue: [ 
+			font := StrikeFont fontName: 'VerdanaBold' size: 11.
+			fName := canvasMorph canvasTextBox font name.
+			textFontMenu := ImageMorph new form: (PhratchFrameMorph skinAt: #textFontMenu).
+			textFontMorph := StringMorph new font: font.
+			textFontMorph contents: (textFontMorph stringWithEllipses: fName limitedToWidth: 109).
+			textFontMenu addMorph: textFontMorph.
+			textFontMorph position: 8 @ 3.
+			textSizeMenu := ImageMorph new form: (PhratchFrameMorph skinAt: #textSizeMenu).
+			textSizeMorph := StringMorph contents: canvasMorph canvasTextBox font pointSize asString font: font.
+			textSizeMenu addMorph: textSizeMorph.
+			textSizeMorph position: 9 @ 3.
+			aColor2 := self color1.
+			aColor2 == Color transparent
+				ifTrue: [ aColor2 := Color white ].
 			canvasMorph textColor: aColor2.
 			canvasMorph changed.
-		options
-			addMorphBack: textFontMenu;
-			addMorphBack: (Morph new width: 8; height: 5; color: Color transparent);
-			addMorphBack: textSizeMenu].
-
+			options
+				addMorphBack: textFontMenu;
+				addMorphBack:
+						(Morph new
+								width: 8;
+								height: 5;
+								color: Color transparent; 
+		yourself);
+				addMorphBack: textSizeMenu ].
 	optionsPane addMorph: options.
-	options position: (optionsPane left + (optionsPane width // 2) - (options width // 2))@(optionsPane top + (optionsPane height //2) - (options height // 2)).
-
+	options
+		position:
+			(optionsPane left + (optionsPane width // 2) - (options width // 2))
+				@ (optionsPane top + (optionsPane height // 2) - (options height // 2))
 ]
 
 { #category : #'as yet unclassified' }
 PaintPalette >> updateSizeMenu: aSize [
-
 	| choice oldFont newFont font |
 	font := canvasMorph canvasTextBox font.
 	choice := aSize contents asNumber.
-	choice ifNil: [^ self].
-
+	choice ifNil: [ ^ self ].
 	textSizeMorph contents: choice asString.
 	oldFont := canvasMorph canvasTextBox font.
-	oldFont isOSFont
-		ifTrue: [newFont := StrikeFont osFontName: font name size: choice]
-		ifFalse: [newFont := StrikeFont fontName: font name size: choice].
-
+	newFont := oldFont isOSFont
+		ifTrue: [ StrikeFont osFontName: font name size: choice ]
+		ifFalse: [ StrikeFont fontName: font name size: choice ].
 	canvasMorph canvasTextBox font: newFont.
-	canvasMorph changed.
+	canvasMorph changed
 ]
 
 { #category : #'event handling' }

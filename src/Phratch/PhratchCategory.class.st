@@ -2,27 +2,27 @@ Class {
 	#name : #PhratchCategory,
 	#superclass : #Object,
 	#classInstVars : [
-		'Visible'
+		'visible'
 	],
 	#category : #'Phratch-Categories'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PhratchCategory class >> color [
 	^(Color h: 0 s: 0.81 v: 0.83)
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PhratchCategory class >> label [
 	^'Generic Category'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PhratchCategory class >> order [
 	^0
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #drawing }
 PhratchCategory class >> viewerPageFor: aScriptablePhratchMorph [
 	| bin x y |
 	bin := PhratchBlockPaletteMorph new.
@@ -43,13 +43,13 @@ PhratchCategory class >> viewerPageFor: aScriptablePhratchMorph [
 	^ bin
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #drawing }
 PhratchCategory class >> visible [
-	Visible ifNil: [ Visible := true ].
-	^Visible.
+	visible ifNil: [ visible := true ].
+	^visible.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #drawing }
 PhratchCategory class >> visible: aBoolean [
-	Visible := aBoolean
+	visible := aBoolean
 ]

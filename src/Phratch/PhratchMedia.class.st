@@ -102,19 +102,16 @@ PhratchMedia >> mediaType [
 
 { #category : #printing }
 PhratchMedia >> printOn: aStream [
-
-	aStream nextPutAll: mediaName, ' [', self mediaType, ']'.
-
+	aStream
+		nextPutAll: mediaName;
+		nextPutAll: ' [';
+		nextPutAll: self mediaType;
+		nextPutAll: ']'
 ]
 
 { #category : #playing }
 PhratchMedia >> resumePlaying [
 	"This method is called when switching costumes to resume playing a costume that was playing when it was switched out. This default implementaton does nothing."
-]
-
-{ #category : #accessing }
-PhratchMedia >> revertToUncompressed [
-	"Revert to my uncompressed version after temporary compression (e.g. when uploading a project). This default implementation does nothing."
 ]
 
 { #category : #playing }

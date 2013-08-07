@@ -27,7 +27,8 @@ PhratchCameraDialog >> cameraButton [
 		icon: (PhratchFrameMorph skinAt: #camera);
 		target: self;
 		actionSelector: #savePhoto;
-		setLabelColor: (Color gray: 0.15)
+		setLabelColor: (Color gray: 0.15); 
+		yourself
 
 ]
 
@@ -42,7 +43,7 @@ PhratchCameraDialog >> client: anObject [
 PhratchCameraDialog >> close [
 
 	CameraPlugin closeCamera: 1.
-	super cancelled.
+	self cancelled.
 
 ]
 
@@ -52,7 +53,8 @@ PhratchCameraDialog >> createButtons [
 	"Note: The button row morph was created by initialize; I just replace its contents with a new collection of buttons."
 
 	| spacer |
-	spacer := Morph new extent: 10@5; color: Color transparent.
+	spacer := Morph new extent: 10@5; color: Color transparent; 
+		yourself.
 	buttonRow removeAllMorphs.
 
 	buttonRow addMorphBack: (AlignmentMorph newSpacer: Color transparent).
@@ -71,36 +73,41 @@ PhratchCameraDialog >> createButtons [
 
 { #category : #intialization }
 PhratchCameraDialog >> initialize [
-
 	super initialize.
-	self title: 'Camera'.
+	self title: 'Camera' translated.
 	self createButtons.
-	viewFinderMorph := ImageMorph new form: (Form extent: 320@240 depth: 2) fillBlack.
-
-	mainColumn addMorph: (Morph new extent: 10@12; color: Color transparent).
+	viewFinderMorph := ImageMorph new form: (Form extent: 320 @ 240 depth: 2) fillBlack.
+	mainColumn
+		addMorph:
+			(Morph new
+				extent: 10 @ 12;
+				color: Color transparent).
 	mainColumn addMorph: viewFinderMorph.
-	mainColumn addMorph: (Morph new extent: 10@18; color: Color transparent).
-
+	mainColumn
+		addMorph:
+			(Morph new
+				extent: 10 @ 18;
+				color: Color transparent)
 ]
 
 { #category : #'event handling' }
 PhratchCameraDialog >> keyStroke: evt [
-
-	| ch |
-"	ch := evt unicodeChar.
+	"	ch := evt unicodeChar.
 	ch = 0 ifTrue: [ch := evt keyValue]."
 
+	"escape key"
+
+	| ch |
 	ch := evt keyValue.
-
-	ch = 32 ifTrue: [  "space key"
-		self savePhoto.
-		^ self].
-
-	ch = 27 ifTrue: [  "escape key"
-		self escapeKeyPressed: evt.
-		^ self].
-
-
+	ch = 32
+		ifTrue: [ 
+			"space key"
+			self savePhoto.
+			^ self ].
+	ch = 27
+		ifFalse: [ ^ self ].
+	self escapeKeyPressed: evt.
+	^ self
 ]
 
 { #category : #accessing }
@@ -133,22 +140,19 @@ PhratchCameraDialog >> savePhoto [
 
 { #category : #stepping }
 PhratchCameraDialog >> step [
-
 	| w n outF |
-	(w := self world) ifNotNil: [w activeHand newKeyboardFocus: self].
-	frameForm ifNil: [^ self].
-
+	(w := self world) ifNotNil: [ w activeHand newKeyboardFocus: self ].
+	frameForm ifNil: [ ^ self ].
 	n := CameraPlugin getFrameForCamera: 1 into: frameForm bits.
-	n > 0 ifTrue: [
-		outF := viewFinderMorph form.
-		(WarpBlt toForm: outF)
-			sourceForm: frameForm;
-			cellSize: 1;  "installs a new colormap if cellSize > 1"
-			combinationRule: Form over;
-			copyQuad: frameForm boundingBox innerCorners toRect: outF boundingBox.
-		viewFinderMorph changed].
-
-
+	n > 0
+		ifFalse: [ ^ self ].
+	outF := viewFinderMorph form.
+	(WarpBlt toForm: outF)
+		sourceForm: frameForm;
+		cellSize: 1;
+		combinationRule: Form over;
+		copyQuad: frameForm boundingBox innerCorners toRect: outF boundingBox.	"installs a new colormap if cellSize > 1"
+	viewFinderMorph changed
 ]
 
 { #category : #stepping }

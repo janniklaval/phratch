@@ -156,28 +156,28 @@ ThumbnailCache >> updateThumbnails [
 	| didRemove fList n thumb buf fSize |
 	didRemove := self removeObsoleteEntries.
 	fList := self filesToUpdate.
-
-	fList size > 0 ifTrue: [
-		n := 0.
-		('Updating thumbnails' localized, PhratchTranslator ellipsesSuffix)
-			displayProgressAt: Display center
-			from: 0 to: fList size
-			during: [:bar |
-				fList do: [:fn |
-					bar value: n.
-					thumb := nil.
-					[
-						buf := (FileStream readOnlyFileNamed: (directory / fn) fullName) binary contentsOfEntireFile.
-						((fn asLowercase endsWith: '.sprite') | (fn asLowercase endsWith: '.ysp'))
-							ifTrue: [thumb := self thumbnailFromSpriteData: buf]
-							ifFalse: [thumb := self thumbnailFromImageData: buf].
-					] ifError: [].
-					fSize := fileSizes at: fn ifAbsent: [0].
-					thumb ifNotNil: [dict at: fn put: (Array with: fSize with: thumb colorReduced)].
-					n := n + 1]]].
-
-	(didRemove | (fList size > 0) | (dict size = 0)) ifTrue: [self writeThumbnailFile].
-
+	fList size > 0
+		ifTrue: [ 
+			n := 0.
+			'Updating thumbnails' localized , PhratchTranslator ellipsesSuffix
+				displayProgressAt: Display center
+				from: 0
+				to: fList size
+				during: [ :bar | 
+					fList
+						do: [ :fn | 
+							bar value: n.
+							thumb := nil.
+							[ 
+							buf := (FileStream readOnlyFileNamed: (directory / fn) fullName) binary contentsOfEntireFile.
+							thumb := (fn asLowercase endsWith: '.sprite') | (fn asLowercase endsWith: '.ysp')
+								ifTrue: [ self thumbnailFromSpriteData: buf ]
+								ifFalse: [ self thumbnailFromImageData: buf ] ] ifError: [  ].
+							fSize := fileSizes at: fn ifAbsent: [ 0 ].
+							thumb ifNotNil: [ dict at: fn put: (Array with: fSize with: thumb colorReduced) ].
+							n := n + 1 ] ] ].
+	didRemove | (fList size > 0) | (dict size = 0)
+		ifTrue: [ self writeThumbnailFile ]
 ]
 
 { #category : #other }

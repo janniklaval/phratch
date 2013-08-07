@@ -923,22 +923,8 @@ BlockLabelFragmentDialog >> typeReporter [
 ]
 
 { #category : #interaction }
-BlockLabelFragmentDialog >> typeReporterSlot [
-	fragment type: #reporterSlot.
-	self updateSlotShape
-
-]
-
-{ #category : #interaction }
 BlockLabelFragmentDialog >> typeText [
 	fragment type: #text.
-	self updateSlotShape
-
-]
-
-{ #category : #interaction }
-BlockLabelFragmentDialog >> typeTypeInReporter [
-	fragment type: #typeInReporter.
 	self updateSlotShape
 
 ]

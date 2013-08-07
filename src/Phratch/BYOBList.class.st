@@ -9,16 +9,6 @@ Class {
 }
 
 { #category : #demo }
-BYOBList class >> purgeAll [
-	"for dev purposes only"
-
-	PhratchListMorph allInstancesDo: [:l | l delete].
-	BYOBList allInstancesDo: [:l | l = nil].
-	Smalltalk garbageCollect
-
-]
-
-{ #category : #demo }
 BYOBList class >> test [
 	"BYOBList test"
 

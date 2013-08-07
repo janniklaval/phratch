@@ -27,15 +27,18 @@ PhratchThumbnailMorph >> doubleClick: evt [
 
 { #category : #drawing }
 PhratchThumbnailMorph >> drawOn: aCanvas [
-
 	| offset |
 	super drawOn: aCanvas.
-	(target respondsTo: #rotationDegrees:) ifFalse: [^ self].  "nil or background"
-	showDirection ifTrue: [
-		offset := Point r: (self width / 2) - 1 degrees: target rotationDegrees.
-		aCanvas line: self center to: self center + offset width: 1 color: Color blue].
-
-
+	(target respondsTo: #rotationDegrees:)
+		ifFalse: [ ^ self ].	"nil or background"
+	showDirection
+		ifFalse: [ ^ self ].
+	offset := Point r: self width / 2 - 1 degrees: target rotationDegrees.
+	aCanvas
+		line: self center
+		to: self center + offset
+		width: 1
+		color: Color blue
 ]
 
 { #category : #accessing }
@@ -148,31 +151,25 @@ PhratchThumbnailMorph >> target: aMorph [
 
 { #category : #stepping }
 PhratchThumbnailMorph >> updateThumbnail [
-
 	| f e r |
 	self form fillColor: Color transparent.
-	target ifNil: [^ self].
-
+	target ifNil: [ ^ self ].
 	f := target imageForm.
-
-	((f width <= self form width) & (f height <= self form height)) ifTrue: [
-		"target's image fits without shrinking"
-		f displayOn: self form at: ((self form extent - f extent) // 2).
-		^ self changed].
-
-	f width > f height 
-		ifTrue: [e := self form width @ ((f height *self  form width) // f width)]
-		ifFalse: [e := ((f width * self form height) // f height) @ self form height].
-	e := e max: (8@8).
-	r := Rectangle center: (self form extent // 2) extent: e.
-
+	f width <= self form width & (f height <= self form height)
+		ifTrue: [ 
+			"target's image fits without shrinking"
+			f displayOn: self form at: (self form extent - f extent) // 2.
+			^ self changed ].
+	e := f width > f height
+		ifTrue: [ self form width @ (f height * self form width // f width) ]
+		ifFalse: [ (f width * self form height // f height) @ self form height ].
+	e := e max: 8 @ 8.
+	r := Rectangle center: self form extent // 2 extent: e.
 	(WarpBlt toForm: self form)
 		sourceForm: f;
-		cellSize: 2;  "do smoothing; this also installs a colormap"
+		cellSize: 2;
 		combinationRule: Form paint;
-		copyQuad: f boundingBox innerCorners toRect: (r insetBy: 2).
-
+		copyQuad: f boundingBox innerCorners toRect: (r insetBy: 2).	"do smoothing; this also installs a colormap"
 	lastUpdateMSecs := target costumeChangeMSecs.
-	self changed.
-
+	self changed
 ]

@@ -338,17 +338,18 @@ MediaItemMorph >> getEditButton [
 
 { #category : #'event handling' }
 MediaItemMorph >> handleTool: toolName hand: hand [
-
-	toolName = 'CopyTool' ifTrue: [
-		Sensor shiftPressed ifFalse: [hand toolType: nil].
-		^ self duplicateMedia].
-
-	toolName = 'CutTool' ifTrue: [
-		Sensor shiftPressed ifFalse: [hand toolType: nil].
-		self delete.
-		PhratchFrameMorph putInClipboard: self configureForDragging.
-		^ self deleteMedia].
-
+	toolName = 'CopyTool'
+		ifTrue: [ 
+			Sensor shiftPressed
+				ifFalse: [ hand toolType: nil ].
+			^ self duplicateMedia ].
+	toolName = 'CutTool'
+		ifFalse: [ ^ self ].
+	Sensor shiftPressed
+		ifFalse: [ hand toolType: nil ].
+	self delete.
+	PhratchFrameMorph putInClipboard: self configureForDragging.
+	^ self deleteMedia
 ]
 
 { #category : #'event handling' }
@@ -388,20 +389,19 @@ MediaItemMorph >> initialize [
 
 { #category : #'dropping/grabbing' }
 MediaItemMorph >> justDroppedInto: aMorph event: evt [
-
 	self delete.
-	(aMorph ownerOrYourselfThatIsA: PhratchViewerMorph) ifNotNil: [
-		"delete myself when dropped on the blocks palette"
-		^ self deleteMedia].
-
-	(aMorph ownerOrYourselfThatIsA: PhratchBlockPaletteMorph) ifNotNil: [
-		"I have been accepted into a media list; exit this method to prevent myself from being put into the Clipboard again"
-		^ self].
-
-	(phratchObj media includes: media) not ifTrue: [
-		"I have been dropped outside of the media list; allow myself to be resurrected again".
-		^ self deleteMedia]
-
+	(aMorph ownerOrYourselfThatIsA: PhratchViewerMorph)
+		ifNotNil: [ 
+			"delete myself when dropped on the blocks palette"
+			^ self deleteMedia ].
+	(aMorph ownerOrYourselfThatIsA: PhratchBlockPaletteMorph)
+		ifNotNil: [ 
+			"I have been accepted into a media list; exit this method to prevent myself from being put into the Clipboard again"
+			^ self ].
+	(phratchObj media includes: media)
+		ifFalse: [ 
+			"I have been dropped outside of the media list; allow myself to be resurrected again"
+			^ self deleteMedia ]
 ]
 
 { #category : #accessing }
@@ -446,13 +446,6 @@ MediaItemMorph >> mouseDown: evt [
 
 ]
 
-{ #category : #'event handling' }
-MediaItemMorph >> mouseHold: evt [
-
-	self rightButtonMenu.
-
-]
-
 { #category : #accessing }
 MediaItemMorph >> phratchObj [
 
@@ -471,9 +464,11 @@ MediaItemMorph >> phratchObj: anObject media: aPhratchMedia [
 
 { #category : #printing }
 MediaItemMorph >> printOn: aStream [
-
-	aStream nextPutAll: self class name, '[', media mediaName, ']'.
-
+	aStream
+		nextPutAll: self class name;
+		nextPutAll: '[';
+		nextPutAll: media mediaName;
+		nextPutAll: ']'
 ]
 
 { #category : #'menu/button ops' }
@@ -482,13 +477,15 @@ MediaItemMorph >> rightButtonMenu [
 
 	| menu |
 	menu := MenuMorph new defaultTarget: self.
-	media isImage ifTrue: [
-		menu add: 'turn into new sprite' action: #turnIntoNewSprite.
-		menu add: 'export this costume' action: #exportMedia].
-	media isSound ifTrue: [
-		menu add: 'export this sound' action: #exportMedia].
-	menu localize; invokeModal.
-
+	media isImage
+		ifTrue: [ 
+			menu add: 'turn into new sprite' translated action: #turnIntoNewSprite.
+			menu add: 'export this costume' translated action: #exportMedia ].
+	media isSound
+		ifTrue: [ menu add: 'export this sound' translated action: #exportMedia ].
+	menu
+		localize;
+		invokeModal
 ]
 
 { #category : #accessing }
@@ -516,24 +513,22 @@ MediaItemMorph >> startPreviewSound [
 
 { #category : #'event handling' }
 MediaItemMorph >> step [
-	
-	Sensor anyButtonPressed ifTrue: [^ self].
-
-	media isSound ifTrue: [
-		(media sound notNil and: [media sound isPlaying])
-			ifTrue: [
-				thumbnailMorph form: SoundIconOn.
-				infoMorph contents: media sound currentPosition hhmmss.
-				infoMorph color: Color white.
-				playButton on]
-			ifFalse: [
-				thumbnailMorph form: SoundIcon.
-				infoMorph contents: media infoString.
-				infoMorph color: Color black.
-				playButton off].
-		stopButton off	
-		].
-
+	Sensor anyButtonPressed
+		ifTrue: [ ^ self ].
+	media isSound
+		ifFalse: [ ^ self ].
+	(media sound notNil and: [ media sound isPlaying ])
+		ifTrue: [ 
+			thumbnailMorph form: SoundIconOn.
+			infoMorph contents: media sound currentPosition hhmmss.
+			infoMorph color: Color white.
+			playButton on ]
+		ifFalse: [ 
+			thumbnailMorph form: SoundIcon.
+			infoMorph contents: media infoString.
+			infoMorph color: Color black.
+			playButton off ].
+	stopButton off
 ]
 
 { #category : #'event handling' }

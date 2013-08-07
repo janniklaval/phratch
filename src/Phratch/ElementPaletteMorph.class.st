@@ -129,22 +129,6 @@ ElementPaletteMorph class >> messagesFor: aClass [
 ]
 
 { #category : #'as yet unclassified' }
-ElementPaletteMorph class >> messagesForSelf: aClass [
-	
-	| pal me|
-	pal := self new.
-	aClass allSelectors asSortedCollection do: [:selector|
-		me := MessageElementMorph new selector: selector.
-		((selector asString includes: ($:)) not and: [
-			(aClass lookupSelector: selector) numArgs > 0])
-				ifTrue: [me beBinary].
-		me receiver: (ObjectElementMorph new label: 'self').
-		pal addElement: me ].
-	^pal
-
-]
-
-{ #category : #'as yet unclassified' }
 ElementPaletteMorph class >> packageClassesDict [
 	| packages pkg ans |
 	packages := Dictionary new.

@@ -52,12 +52,6 @@ Morph >> flags [
 ]
 
 { #category : #'*Phratch-Extensions' }
-Morph >> flags: aValue [
-
-	self setProperty: #flags toValue: aValue.
-]
-
-{ #category : #'*Phratch-Extensions' }
 Morph >> fullCopy [
 	^ self veryDeepCopy
 ]
@@ -164,11 +158,12 @@ Morph >> ownerOrYourselfThatIsA: aClass [
 
 	| current |
 	current := self.
-	[current == nil] whileFalse: [
-		(current isKindOf: aClass) ifTrue: [^ current].
-		current := current owner].
+	[ current isNil ]
+		whileFalse: [ 
+			(current isKindOf: aClass)
+				ifTrue: [ ^ current ].
+			current := current owner ].
 	^ current
-
 ]
 
 { #category : #'*Phratch-Extensions' }
@@ -213,27 +208,18 @@ Morph >> rootForGrabOf: aMorph [
 
 { #category : #'*Phratch-Extensions' }
 Morph >> storeFieldsOn: anObjStream [
-
 	| flags |
-
-	self storeFieldsNamed: #(
-		bounds
-		owner
-		submorphs
-		color
-	"	flags"
-	) on: anObjStream.
-	
+	self storeFieldsNamed: #(#bounds #owner #submorphs #color) on: anObjStream.
 	flags := 0.
-	{self isHidden . self isSticky . self isLocked ". self isPartsDonor"} doWithIndex: [:bool :i |
-		| maskInteger |
-		maskInteger := 2 raisedTo: i - 1.
-		bool
-			ifTrue: [flags := flags bitOr: maskInteger]
-			ifFalse: [flags := flags bitAnd: maskInteger bitInvert]].
-	
+	{(self isHidden).
+	(self isSticky).
+	(self isLocked)	". self isPartsDonor"}
+		doWithIndex: [ :bool :i | 
+			| maskInteger |
+			maskInteger := 2 raisedTo: i - 1.
+			flags := bool
+				ifTrue: [ flags bitOr: maskInteger ]
+				ifFalse: [ flags bitAnd: maskInteger bitInvert ] ].
 	anObjStream putField: flags.
-	
-	anObjStream putField: nil.  "placeholder for properties"
-
+	anObjStream putField: nil	"placeholder for properties"
 ]

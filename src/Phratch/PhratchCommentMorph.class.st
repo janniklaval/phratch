@@ -337,15 +337,13 @@ PhratchCommentMorph >> mouseDown: evt [
 
 { #category : #'event handling' }
 PhratchCommentMorph >> mouseMove: evt [
-
 	| p |
 	evt hand newKeyboardFocus: nil.
 	p := evt cursorPoint.
-
-	isResizing ifTrue: [
-		self width: (self defaultWidth max: ((p - self topLeft) + resizeOffset) x).
-		commentMorph width: self width - (resizeMorph width)].
-
+	isResizing
+		ifFalse: [ ^ self ].
+	self width: (self defaultWidth max: (p - self topLeft + resizeOffset) x).
+	commentMorph width: self width - resizeMorph width
 ]
 
 { #category : #private }
@@ -393,16 +391,14 @@ PhratchCommentMorph >> resetAnchorOffset [
 
 { #category : #'event handling' }
 PhratchCommentMorph >> rightButtonMenu [
-
 	| menu |
 	menu := MenuMorph new defaultTarget: self.
-
 	menu addLine.
-	menu add: 'delete' action: #delete.
-	menu add: 'duplicate' action: #duplicate.
-
-	menu localize; invokeModal"localize; invokeOn: self".
-
+	menu add: 'delete' translated action: #delete.
+	menu add: 'duplicate' translated action: #duplicate.
+	menu
+		localize;
+		invokeModal	"localize; invokeOn: self"
 ]
 
 { #category : #'dropping/grabbing' }
@@ -451,20 +447,18 @@ PhratchCommentMorph >> step [
 	"Follow the anchor block"
 
 	| t |
-	anchor ifNil: [^ self].
-
-	anchor isInWorld ifFalse: [^ self detach].  "anchor block was deleted"
-
-	"check for layout change and fix offset if needed"
-	(t := anchor topBlock lastLayoutTime) = lastLayoutTime ifFalse: [
-		self updateAnchorOffset.
-		oldAnchorPos := nil.  "force position update"
-		lastLayoutTime := t].
-
-	anchor position ~= oldAnchorPos ifTrue: [
-		self updatePosition.
-		oldAnchorPos := anchor position].
-
+	anchor ifNil: [ ^ self ].
+	anchor isInWorld
+		ifFalse: [ ^ self detach ].	"anchor block was deleted"	"check for layout change and fix offset if needed"
+	(t := anchor topBlock lastLayoutTime) = lastLayoutTime
+		ifFalse: [ 
+			self updateAnchorOffset.
+			oldAnchorPos := nil.	"force position update"
+			lastLayoutTime := t ].
+	anchor position ~= oldAnchorPos
+		ifFalse: [ ^ self ].
+	self updatePosition.
+	oldAnchorPos := anchor position
 ]
 
 { #category : #stepping }
@@ -542,39 +536,34 @@ PhratchCommentMorph >> updateAnchorOffset [
 	"Update the horizontal offset from my anchor block."
 
 	| extraSpace blocksInStack rects allObstacles touching before after collapsed |
-
-	anchor ifNil: [^ self].
-
+	anchor ifNil: [ ^ self ].
 	self resetAnchorOffset.
-	isShowing ifFalse: [^ self].
-
+	isShowing
+		ifFalse: [ ^ self ].
 	extraSpace := 5.
-	blocksInStack := anchor topBlock allMorphs reversed select:
-		[:m | (m isKindOf: BlockMorph) and: [m isReporter not]].
+	blocksInStack := anchor topBlock allMorphs reversed select: [ :m | (m isKindOf: BlockMorph) and: [ m isReporter not ] ].
 	before := self commentsBeforeMe: blocksInStack.
 	after := self commentsAfterMe: blocksInStack.
-	collapsed := after select: [:c | c isShowing not].
-
-	before, collapsed do: [: c | c resetAnchorOffset].
-	before do: [:c | c updateAnchorOffset].
-
-	allObstacles := blocksInStack, before, collapsed.
-	rects := allObstacles collect: [:m | (m isKindOf: BlockMorph)
-		ifTrue: [m bounds origin extent: (m bounds extent - (0@4))]
-		ifFalse: [m bounds]].
-
-	[touching := rects detect: [:r | (r intersects: self bounds)] ifNone: [nil].
-	 touching isNil] whileFalse: [
-		PhratchTranslator isRTL
-			ifTrue: [self right: (self right min: (touching left - extraSpace))]
-			ifFalse: [self left: (self left max: (touching right + extraSpace))]].
-
-	PhratchTranslator isRTL
-		ifTrue: [anchorOffset := anchor left - self right]
-		ifFalse: [anchorOffset := self left - anchor right].
-
-	self updatePosition.
-
+	collapsed := after reject: [ :c | c isShowing ].
+	before , collapsed do: [ :c | c resetAnchorOffset ].
+	before do: [ :c | c updateAnchorOffset ].
+	allObstacles := blocksInStack , before , collapsed.
+	rects := allObstacles
+		collect: [ :m | 
+			(m isKindOf: BlockMorph)
+				ifTrue: [ m bounds origin extent: m bounds extent - (0 @ 4) ]
+				ifFalse: [ m bounds ] ].
+	[ 
+	touching := rects detect: [ :r | r intersects: self bounds ] ifNone: [ nil ].
+	touching isNil ]
+		whileFalse: [ 
+			PhratchTranslator isRTL
+				ifTrue: [ self right: (self right min: touching left - extraSpace) ]
+				ifFalse: [ self left: (self left max: touching right + extraSpace) ] ].
+	anchorOffset := PhratchTranslator isRTL
+		ifTrue: [ anchor left - self right ]
+		ifFalse: [ self left - anchor right ].
+	self updatePosition
 ]
 
 { #category : #private }

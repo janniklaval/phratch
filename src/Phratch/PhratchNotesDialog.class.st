@@ -30,26 +30,21 @@ PhratchNotesDialog >> createNotesDialogFor: aPhratchFrameMorph [
 	"Create a Phratch project notes dialog box."
 
 	| commentFont |
-	commentFont := (PhratchFrameMorph getFont: #ProjectNotes).
-
+	commentFont := PhratchFrameMorph getFont: #ProjectNotes.
 	commentMorph := ScrollingStringMorph new
 		borderWidth: 0;
 		contents: '';
 		font: commentFont;
 		backForm: (PhratchFrameMorph skinAt: #stringFieldFrame);
 		width: 300.
-
-	self title: 'Project Notes'.
+	self title: 'Project Notes' translated.
 	mainColumn addMorphBack: commentMorph.
 	mainColumn addMorphBack: buttonRow.
-
 	phratchFrame := aPhratchFrameMorph.
 	commentMorph contents: phratchFrame projectCommentOrTemplate.
 	bottomSpacer delete.
 	bottomSpacer := nil.
-
-	tabFields add: commentMorph.
-
+	tabFields add: commentMorph
 ]
 
 { #category : #other }

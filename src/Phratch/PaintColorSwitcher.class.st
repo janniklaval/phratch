@@ -19,15 +19,14 @@ PaintColorSwitcher >> background [
 
 { #category : #accessing }
 PaintColorSwitcher >> background: aColor [
-
 	| t |
 	background color: aColor.
 	background removeAllMorphs.
-	aColor = Color transparent ifTrue: [
-		t := transparentMorph fullCopy.
-		background addMorph:t.
-		t position: (background position + (1@1))].
-
+	aColor = Color transparent
+		ifFalse: [ ^ self ].
+	t := transparentMorph fullCopy.
+	background addMorph: t.
+	t position: background position + (1 @ 1)
 ]
 
 { #category : #initialization }
@@ -37,7 +36,8 @@ PaintColorSwitcher >> createForegroundBackground [
 		width: 24;
 		height: 24;
 		borderColor: Color white;
-		borderWidth: 1.
+		borderWidth: 1; 
+		yourself.
 	background := foreground fullCopy.
 
 	self addMorphBack: foreground.
@@ -118,18 +118,6 @@ PaintColorSwitcher >> mouseLeave: evt [
 
 	PhratchToolTipMorph clearToolTips.
 
-]
-
-{ #category : #'event handling' }
-PaintColorSwitcher >> showBalloon: msg [
-
-	| w worldBounds tooltip |
-
-	w := self world.
-	tooltip := (PhratchToolTipMorph string: msg for: self).
-	w addMorphFront: (tooltip position: self bottomLeft + (0@8)).
-	((worldBounds := w bounds) containsRect: tooltip bounds) ifFalse:
-		[tooltip bounds: (tooltip bounds translatedToBeWithin: worldBounds)].
 ]
 
 { #category : #accessing }

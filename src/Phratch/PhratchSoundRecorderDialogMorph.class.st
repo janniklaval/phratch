@@ -23,10 +23,13 @@ PhratchSoundRecorderDialogMorph class >> forClient: aScriptablePhratchMorph [
 	"SoundRecorderDialogMorph forClient: "
 
 	| dialog |
-	dialog := super new
-		withButtonsForYes: false no: false okay: true cancel: true;
+	dialog := self new
+		withButtonsForYes: false
+			no: false
+			okay: true
+			cancel: true;
 		client: aScriptablePhratchMorph;
-		title: 'Sound Recorder'.
+		title: 'Sound Recorder' translated.
 	^ dialog getUserResponse
 ]
 
@@ -191,17 +194,16 @@ PhratchSoundRecorderDialogMorph >> play [
 
 { #category : #'button commands' }
 PhratchSoundRecorderDialogMorph >> record [
-
-	recorder isActive ifFalse:[
-		recorder clearRecordedSound.
-		recorder resumeRecording.
-		savedMeterLevels := OrderedCollection new.
-		duration := 0.
-		self
-			setMode: #record;
-			setMode: #play isDisabled: false.
-		self changed].
-
+	recorder isActive
+		ifTrue: [ ^ self ].
+	recorder clearRecordedSound.
+	recorder resumeRecording.
+	savedMeterLevels := OrderedCollection new.
+	duration := 0.
+	self
+		setMode: #record;
+		setMode: #play isDisabled: false.
+	self changed
 ]
 
 { #category : #'button commands' }
@@ -234,11 +236,13 @@ PhratchSoundRecorderDialogMorph >> setMode: aSymbol isDisabled: aBoolean [
 PhratchSoundRecorderDialogMorph >> startStepping [
 	"Make the level meter active when dropped into the world. Do nothing if already recording. Note that this will cause other recorders to stop recording..."
 
-	super startStepping.
-	recorder isPaused ifTrue: [
-		SoundRecorder allSubInstancesDo: [:r | r stopRecording].  "stop all other sound recorders"
-		recorder pause].  "meter is updated while paused"
+	"meter is updated while paused"
 
+	super startStepping.
+	recorder isPaused
+		ifFalse: [ ^ self ].
+	SoundRecorder allSubInstancesDo: [ :r | r stopRecording ].	"stop all other sound recorders"
+	recorder pause
 ]
 
 { #category : #stepping }

@@ -67,8 +67,11 @@ KeyEventHatMorph >> initialize [
 KeyEventHatMorph >> printHatNameOn: aStream [
 	"Append a human-readable string for this hat block's name to the given stream."
 
-	aStream nextPutAll: 'when ', scriptNameMorph choice, ' key pressed'; cr.
-
+	aStream
+		nextPutAll: 'when ';
+		nextPutAll: scriptNameMorph choice;
+		nextPutAll: ' key pressed';
+		cr
 ]
 
 { #category : #other }

@@ -151,12 +151,12 @@ ColorArgMorph >> mouseUp: evt [
 ColorArgMorph >> printArgOn: aStream [
 	"Print this argument morph on the given stream."
 
-	aStream nextPutAll: 'c[',
-		(self hexFor: color red),
-		(self hexFor: color green),
-		(self hexFor: color blue),
-		']'.
-
+	aStream
+		nextPutAll: 'c[';
+		nextPutAll: (self hexFor: color red);
+		nextPutAll: (self hexFor: color green);
+		nextPutAll: (self hexFor: color blue);
+		nextPutAll: ']'
 ]
 
 { #category : #other }

@@ -103,66 +103,58 @@ PhratchViewerMorph >> pageViewer [
 
 { #category : #initialization }
 PhratchViewerMorph >> rebuildCategorySelectors [
-
 	| catList maxExtent buttons label offForm onForm overForm b pad leftColumnX rightColumnX x y |
-	catList := (((PhratchCategory allSubclasses select:[:e | e visible]) sort: [:e :f | e order < f order]) collect: [:c | c label] ) asArray.
-
-	"First, delete the old category buttons"
-	submorphs do: [:m | (m isKindOf: ResizableToggleButton) ifTrue: [m delete]].
-
-	"Create new buttons, keeping track of the maximum extent."
-	maxExtent := 75@0.
-	buttons := catList collect: [:cat |
-		label := (PhratchTranslator translationFor: cat asString) capitalized.
-		offForm := (PhratchFrameMorph skinAt: cat).
-		onForm := (PhratchFrameMorph skinAt: (cat, 'Pressed')).
-		overForm := (PhratchFrameMorph skinAt: (cat, 'Over')).
-		PhratchTranslator isRTL
-			ifTrue:[
-				b := ResizableToggleButton new
-					offForm:	(offForm flipBy: #horizontal centerAt: offForm center)
-					onForm:		(onForm flipBy: #horizontal centerAt: onForm center)
-					overForm:	(overForm flipBy: #horizontal centerAt: overForm center)]
-			ifFalse:[
-				b := ResizableToggleButton new
-					offForm:	offForm
-					onForm:		onForm
-					overForm:	overForm].
-		b
-			label: label font: (PhratchFrameMorph getFont: #Category);
-			setLabelColor: Color white;
-			target: self;
-			actionSelector: #currentCategory:;
-			arguments: (Array with: cat);
-			toggleButtonMode: true;
-			toggleMode: false.
-		PhratchTranslator isRTL
-			ifTrue:[b rightJustifyInset: 10]
-			ifFalse:[b leftJustifyInset: 10].
-		maxExtent := maxExtent max: (b extent + (3 @ -6)).
-		b].
-
-	"calculate catButtonsExtent"
-	pad := 15. "padding on left, right, and betwen the button columns"
-	catButtonsExtent := ((2 * maxExtent x) + (3 * pad)) @ (((catList size+1 // 2) * (maxExtent y + 6)) + 25).
-
-	"place the buttons"
+	catList := (((PhratchCategory allSubclasses select: [ :e | e visible ]) sort: [ :e :f | e order < f order ])
+		collect: [ :c | c label ]) asArray.	"First, delete the old category buttons"
+	submorphs
+		do: [ :m | 
+			(m isKindOf: ResizableToggleButton)
+				ifTrue: [ m delete ] ].	"Create new buttons, keeping track of the maximum extent."
+	maxExtent := 75 @ 0.
+	buttons := catList
+		collect: [ :cat | 
+			label := (PhratchTranslator translationFor: cat asString) capitalized.
+			offForm := PhratchFrameMorph skinAt: cat.
+			onForm := PhratchFrameMorph skinAt: cat , 'Pressed'.
+			overForm := PhratchFrameMorph skinAt: cat , 'Over'.
+			b := PhratchTranslator isRTL
+				ifTrue: [ 
+					ResizableToggleButton new
+						offForm: (offForm flipBy: #horizontal centerAt: offForm center)
+						onForm: (onForm flipBy: #horizontal centerAt: onForm center)
+						overForm: (overForm flipBy: #horizontal centerAt: overForm center) ]
+				ifFalse: [ ResizableToggleButton new offForm: offForm onForm: onForm overForm: overForm ].
+			b
+				label: label font: (PhratchFrameMorph getFont: #Category);
+				setLabelColor: Color white;
+				target: self;
+				actionSelector: #currentCategory:;
+				arguments: (Array with: cat);
+				toggleButtonMode: true;
+				toggleMode: false.
+			PhratchTranslator isRTL
+				ifTrue: [ b rightJustifyInset: 10 ]
+				ifFalse: [ b leftJustifyInset: 10 ].
+			maxExtent := maxExtent max: b extent + (3 @ -6).
+			b ].	"calculate catButtonsExtent"
+	pad := 15.	"padding on left, right, and betwen the button columns"
+	catButtonsExtent := (2 * maxExtent x + (3 * pad)) @ ((catList size + 1) // 2 * (maxExtent y + 6) + 25).	"place the buttons"
 	leftColumnX := self left + 12 + pad.
 	rightColumnX := leftColumnX + maxExtent x + pad.
 	x := leftColumnX.
 	y := self top + 17.
-	1 to: buttons size do: [:i |
+	1 to: buttons size do: [ :i | 
 		b := buttons at: i.
 		b extent: maxExtent.
-		self addMorph: (b position: x@y).
+		self addMorph: (b position: x @ y).
 		i even
-			ifTrue: [x := leftColumnX. y := y + b height + 6]
-			ifFalse: [x := rightColumnX]].
-
+			ifTrue: [ 
+				x := leftColumnX.
+				y := y + b height + 6 ]
+			ifFalse: [ x := rightColumnX ] ].
 	self width: catButtonsExtent x.
-	pageViewer position: self position + (0@catButtonsExtent y).
-	topSectionHeight := catButtonsExtent y - 4.
-
+	pageViewer position: self position + (0 @ catButtonsExtent y).
+	topSectionHeight := catButtonsExtent y - 4
 ]
 
 { #category : #accessing }

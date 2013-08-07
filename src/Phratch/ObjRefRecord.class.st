@@ -27,8 +27,9 @@ ObjRefRecord >> objectID: anInteger [
 
 { #category : #printing }
 ObjRefRecord >> printOn: aStream [
-
 	super printOn: aStream.
-	aStream nextPutAll: '(', objectID printString, ')'.
-
+	aStream
+		nextPutAll: '(';
+		nextPutAll: objectID printString;
+		nextPutAll: ')'
 ]

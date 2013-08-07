@@ -128,200 +128,10 @@ PhratchTranslator class >> detectRenderPlugin [
 ]
 
 { #category : #'language translation' }
-PhratchTranslator class >> doNotTranslate [
-
-	^ #(
-	'!'
-	'0'
-	'1'
-	'2'
-	'3'
-	'4'
-	'5'
-	'6'
-	'7'
-	'8'
-	'9'
-	'10'
-	'a'
-	'b'
-	'c'
-	'd'
-	'e'
-	'f'
-	'g'
-	'h'
-	'i'
-	'j'
-	'k'
-	'l'
-	'm'
-	'n'
-	'o'
-	'p'
-	'q'
-	'r'
-	's'
-	't'
-	'u'
-	'v'
-	'w'
-	'x'
-	'y'
-	'z'
-	'A'
-	'B'
-	'$Number$ * $Number$'
-	'$Number$ + $Number$'
-	'$Number$ - $Number$'
-	'$Number$ / $Number$'
-	'$Number$ < $Number$'
-	'$Number$ = $Number$'
-	'$Number$ > $Number$'
-	'$String$ > $String$'
-	'$String$ = $String$'
-	'$String$ < $String$'
-	'*'
-	'+'
-	'-'
-	'/'
-	'<'
-	'='
-	'>'
-	'sin'
-	'cos'
-	'tan'
-	'asin'
-	'acos'
-	'atan'
-	'ln'
-	'log'
-	'e ^'
-	'10 ^'
-	'enter'
-	'motor'
-	'Scratch'
-	'Sprite1'
-	'['
-	']'
-	'set translation formatting...'
-	'enable remote access...'
-	'Host Mesh'
-	'Join Mesh'
-	're-record')
-
-]
-
-{ #category : #'language translation' }
 PhratchTranslator class >> ellipsesSuffix [
 	"Answer an ellipses suffix (three periods). If the current language is RTL, then include the Unicode RTL mark after the colon."
 
 	^ self isRTL ifTrue: [EllipsesSuffix] ifFalse: ['...']
-
-]
-
-{ #category : #'import/export' }
-PhratchTranslator class >> export: keyString value: aStringOrUTF8 to: aStream [
-	"Write the given string to the given stream as a quoted gettext format. If the string is multiple lines. store it as a sequence of strings in double quotes, each ending with '\n'."
-
-	| lines |
-	aStream nextPutAll: keyString; space.
-	lines := (String withAll: aStringOrUTF8) lines.
-	lines size = 1
-		ifTrue: [aStream nextPut: $"; nextPutAll: lines first; nextPut: $"; crlf]
-		ifFalse: [
-			aStream nextPutAll: '""'; crlf.
-			lines do: [:s | aStream nextPut: $"; nextPutAll: s; nextPutAll: '\n"'; crlf]].
-
-]
-
-{ #category : #'import/export' }
-PhratchTranslator class >> exportStringsToTranslateFrom: aDictionary toFile: fName [
-	"Export the strings to be translated either to Scratch.pot or an existing translation (.po) file."
-	"self resetUITranslationSet. self resetMIDITranslationSet. self exportStringsToTranslateFrom: nil toFile: nil"
-	"self resetMIDITranslationSet. self exportStringsToTranslateFrom: (self importTranslation: 'es.po') toFile: 'exportTest.po'"
-
-	| dir fn header f sections templateDict title keys comments |
-
-	self setLanguage: 'en'.
-	header := HeaderString.
-	dir := self translationDir.
-	fn := fName.
-	fn ifNil: [fn := self templateFilename].
-	(dir exists: fn) ifTrue: [  "extract the existing header, then delete the old .po file"
-		aDictionary ifNotNil: [
-			header := aDictionary at: '' ifAbsent: [''].
-			(dir / fn) delete]].
-	f := FileStream newFileNamed: (dir / fn) fullName.
-	"f nextPutAll: #(239 187 191) asByteArray asString."  "UTF8 byte-order mark - removed for now (Pootle)"
-
-	"header comments are stored as '-comments' because the header key is the empty string"
-	aDictionary ifNotNil: [
-		comments := aDictionary at: '-comments' ifAbsent: [#()].
-		comments do: [:s | f nextPutAll: s; crlf]].
-
-	"header is stored as a multi-line translation entry for the empty string"
-	self export: 'msgid' value: '' to: f.
-	self export: 'msgstr' value: header to: f.
-	f crlf.
-
-	sections := {
-		{'FORMATTING'.			self formattingHeaderFields}.
-		{'BLOCKS'.				ScriptablePhratchMorph blockSpecsForTranslation}.
-		{'USER INTERFACE'.		self uiTranslationSetAsSortedArray}.
- 		{'MIDI INSTRUMENTS'.	self midiTranslationSet asArray sort}
-	}.
-
-	aDictionary ifNotNil: [templateDict := self importTranslation: self templateFilename].
-
-	sections do: [:pair |
-		title := pair first.
-		keys := pair second asOrderedCollection.
-		f nextPutAll: '############################################'; crlf.
-		f nextPutAll: '# ', title; crlf.
-		f nextPutAll: '############################################'; crlf.
-		f crlf.
-
-		((title = 'FORMATTING') and: [aDictionary isNil]) ifTrue: [
-			f nextPutAll: self formattingSectionForPOT.
-			keys := OrderedCollection new].
-
-		keys removeAllSansError: self doNotTranslate.
-		keys do: [:k |
-			(aDictionary isNil or: [templateDict includesKey: k]) ifTrue: [
-				"COMMENTS"
-				comments := #().
-				(templateDict notNil and: [templateDict includesKey: k,'-comments'])
-					ifTrue: [ "use the comment from template .pot file if there is one"
-						comments := (templateDict at: k, '-comments')]
-					ifFalse: [ "else use the comment from the translation file"
-						aDictionary ifNotNil: [
-							comments := aDictionary at: k, '-comments' ifAbsent: [#()]]].
-				comments do: [:s | f nextPutAll: s; crlf].
-
-				"FUZZY TAG"
-				(aDictionary notNil and: [aDictionary includesKey: k, '-fuzzy'])
-					ifTrue: [f nextPutAll: '#, fuzzy'; crlf].
-
-				"KEY"
-				self export: 'msgid' value: k to: f.
-
-				"TRANSLATION"
-				(aDictionary notNil and: [aDictionary includesKey: k])
-					ifTrue: [
-						self export: 'msgstr' value: (aDictionary at: k) to: f]
-					ifFalse: [
-						(aDictionary notNil and: [aDictionary includesKey: k asLowercase])
-							ifTrue: [  "TEMPORARY CAPITALIZATION HACK"
-								self export: 'msgstr' value: (aDictionary at: k asLowercase) to: f]
-							ifFalse: [
-								(aDictionary notNil and: [(k endsWith: '?') and: [aDictionary includesKey: (k copyFrom: 1 to: k size - 1)]])
-									ifTrue: [  "TEMPORARY QUESTION HACK"
-										self export: 'msgstr' value: (aDictionary at: (k copyFrom: 1 to: k size - 1)) to: f]
-									ifFalse: [  "BLANK TRANSLATION"
-										self export: 'msgstr' value: '' to: f]]].
-				f crlf]]].
-	f close.
 
 ]
 
@@ -409,66 +219,6 @@ PhratchTranslator class >> fontScaleMenu [
 			selector: #renderFontScale:
 			argument: n].
 	menu popUpInWorld.
-]
-
-{ #category : #'language translation' }
-PhratchTranslator class >> formattingHeaderFields [
-
-	^ #(
-		'Language-Name'
-		'Language-Direction'
-		'Font-Scale'
-		'Suppress-Bold'
-		'Win-Font'
-		'Mac-Font'
-		'Linux-Font')
-
-]
-
-{ #category : #'language translation' }
-PhratchTranslator class >> formattingSectionForPOT [
-
-	| s |
-	s :=
-'# Language name as you''d like it to appear in the Languages menu
-# (Required)
-msgid "Language-Name"
-msgstr ""
-
-# Directionality of language
-# LTR = Left to Right
-# RTL = Right to Left
-msgid "Language-Direction"
-msgstr ""
-
-# Scale to apply to font size (2 for twice as large)
-# Use this if the font is too small for legibility on the Phratch interface
-msgid "Font-Scale"
-msgstr ""
-
-# Set to ''true'' or ''false''
-# Use this if you do not want any of the text to be bolded, for legibility
-msgid "Suppress-Bold"
-msgstr ""
-
-# Font to use on a Windows system
-msgid "Win-Font"
-msgstr ""
-
-# Font to use on a Mac system
-msgid "Mac-Font"
-msgstr ""
-
-# Font to use on a Linux system
-msgid "Linux-Font"
-msgstr ""
-
-'.
-
-	s := s copyReplaceTokens: String cr with: String crlf.
-
-	^ s.
-
 ]
 
 { #category : #locale }
@@ -589,13 +339,6 @@ PhratchTranslator class >> isoCodeForName: aString [
 ]
 
 { #category : #'language translation' }
-PhratchTranslator class >> isoDict [
-
-	^ ISODict
-
-]
-
-{ #category : #'language translation' }
 PhratchTranslator class >> labelPartsFor: aString [
 	"Answer a collection label strings for the translation of given block label. Currently handles one or two-part labels. In a two-part label, the label is split at the field name begginning with a percent sign. For example, 'when $String$ clicked' would yield the two label parts 'when' and 'clicked'."
 	| s i p1 p2 j |
@@ -628,13 +371,6 @@ PhratchTranslator class >> lineOf: aString containingIndex: anIndex [
 	[(i > 1) and: [((ch := aString at: i - 1) ~= cr) & (ch ~= lf)]] whileTrue: [i := i - 1].
 	[(j < aString size) and: [((ch := aString at: j + 1) ~= cr) & (ch ~= lf)]] whileTrue: [j := j + 1].
 	^ aString copyFrom: i to: j
-
-]
-
-{ #category : #'language translation' }
-PhratchTranslator class >> midiTranslationSet [
-
-	^ MIDITranslationSet
 
 ]
 
@@ -771,15 +507,17 @@ PhratchTranslator class >> renderingMenu [
 	| menu |
 	World activeHand toolType: nil.
 	Cursor normal show.
-	RenderWithSqueak ifTrue: [^ Beeper beep].
+	RenderWithSqueak
+		ifTrue: [ ^ Beeper beep ].
 
 	menu := MenuMorph new defaultTarget: self.
-	menu add: 'set font scale...' action: #fontScaleMenu.
+	menu add: 'set font scale...' translated action: #fontScaleMenu.
 	RenderSuppressBold
-		ifTrue: [menu add: 'allow bold' action: #toggleSuppressBold]
-		ifFalse: [menu add: 'suppress bold' action: #toggleSuppressBold].
-
-	menu localize; popUpInWorld
+		ifTrue: [ menu add: 'allow bold' translated action: #toggleSuppressBold ]
+		ifFalse: [ menu add: 'suppress bold' translated action: #toggleSuppressBold ].
+	menu
+		localize;
+		popUpInWorld
 ]
 
 { #category : #'Unicode rendering' }
@@ -862,40 +600,42 @@ PhratchTranslator class >> setRenderingHints [
 	RenderVerticalTrimCache := IdentityDictionary new.
 	RenderWithSqueak := true.
 
-	TranslationDict isEmpty ifTrue: [^ self].
-
-	(TranslationDict includesKey: 'Language-Direction') ifTrue: [
-		IsRTLMath := (TranslationDict at: 'Language-Direction') "asString asUppercase" = 'RTL-MATH'.
-		IsRTLMath
-			ifTrue: [IsRTL := true]
-			ifFalse: [IsRTL := (TranslationDict at: 'Language-Direction') "asString asUppercase" = 'RTL']].
-
-	OSPlatform isWin32 ifTrue: [
-		((TranslationDict includesKey: 'Win-Font') and: [(TranslationDict at: 'Win-Font') size > 0])
-			ifTrue: [RenderFont := TranslationDict at: 'Win-Font']].
-
-	OSPlatform isMacOSX ifTrue: [
-		((TranslationDict includesKey: 'Mac-Font') and: [(TranslationDict at: 'Mac-Font') size > 0])
-			ifTrue: [RenderFont := TranslationDict at: 'Mac-Font']].
-
-	(OSPlatform isWin32 | OSPlatform isMacOSX) ifFalse: [
-		((TranslationDict includesKey: 'Linux-Font') and: [(TranslationDict at: 'Linux-Font') size > 0])
-			ifTrue: [RenderFont := TranslationDict at: 'Linux-Font']].
-
-	s := TranslationDict at: 'Font-Scale' ifAbsent: [''].
-	s size > 0 ifTrue: [
-		RenderScale := s asString  asNumber.
-		RenderScale = 0 ifTrue: [RenderScale := 1].  "non-number string"
-		RenderScale := RenderScale asNumber within: 0.5 and: 2.5].
-
-	s := TranslationDict at: 'Suppress-Bold' ifAbsent: [''].
-	s size > 0 ifTrue: [s  asLowercase = 'true' ifTrue: [RenderSuppressBold := true]].
-
-	"even though we are not actively using the hint string, keep this code in case we need it in the future:"
-	s := TranslationDict at: 'Layout-Hint' ifAbsent: [''].
-	s size > 0 ifTrue: [RenderHintString := s].
-
-	RenderWithSqueak := self useSqueakRendering.
+	TranslationDict isEmpty
+		ifTrue: [ ^ self ].
+	(TranslationDict includesKey: 'Language-Direction')
+		ifTrue: [ 
+			IsRTLMath := (TranslationDict at: 'Language-Direction') = 'RTL-MATH'.	"asString asUppercase"
+			IsRTL := IsRTLMath
+				ifTrue: [ true ]
+				ifFalse: [ (TranslationDict at: 'Language-Direction') = 'RTL'	"asString asUppercase" ] ].
+	OSPlatform isWin32
+		ifTrue: [ 
+			((TranslationDict includesKey: 'Win-Font') and: [ (TranslationDict at: 'Win-Font') size > 0 ])
+				ifTrue: [ RenderFont := TranslationDict at: 'Win-Font' ] ].
+	OSPlatform isMacOSX
+		ifTrue: [ 
+			((TranslationDict includesKey: 'Mac-Font') and: [ (TranslationDict at: 'Mac-Font') size > 0 ])
+				ifTrue: [ RenderFont := TranslationDict at: 'Mac-Font' ] ].
+	OSPlatform isWin32 | OSPlatform isMacOSX
+		ifFalse: [ 
+			((TranslationDict includesKey: 'Linux-Font') and: [ (TranslationDict at: 'Linux-Font') size > 0 ])
+				ifTrue: [ RenderFont := TranslationDict at: 'Linux-Font' ] ].
+	s := TranslationDict at: 'Font-Scale' ifAbsent: [ '' ].
+	s size > 0
+		ifTrue: [ 
+			RenderScale := s asString asNumber.
+			RenderScale = 0
+				ifTrue: [ RenderScale := 1 ].	"non-number string"
+			RenderScale := RenderScale asNumber within: 0.5 and: 2.5 ].
+	s := TranslationDict at: 'Suppress-Bold' ifAbsent: [ '' ].
+	s size > 0
+		ifTrue: [ 
+			s asLowercase = 'true'
+				ifTrue: [ RenderSuppressBold := true ] ].	"even though we are not actively using the hint string, keep this code in case we need it in the future:"
+	s := TranslationDict at: 'Layout-Hint' ifAbsent: [ '' ].
+	s size > 0
+		ifTrue: [ RenderHintString := s ].
+	RenderWithSqueak := self useSqueakRendering
 
 ]
 
@@ -932,14 +672,6 @@ PhratchTranslator class >> stringExtent: aString font: aStrikeFont [
 
 ]
 
-{ #category : #'import/export' }
-PhratchTranslator class >> templateFilename [
-	"Returns the filename for the translation template file to send to users."
-
-	^ 'BYOB.pot'
-
-]
-
 { #category : #'rendering menu' }
 PhratchTranslator class >> toggleSuppressBold [
 
@@ -972,24 +704,6 @@ PhratchTranslator class >> translationFor: englishString [
 	s size = 0 ifTrue: [s := englishString].
 	^ s
 
-
-]
-
-{ #category : #'language translation' }
-PhratchTranslator class >> uiTranslationSet [
-
-	#('' '?'), ScriptablePhratchMorph blockSpecsForTranslation do: [:e |
-		UITranslationSet remove: e ifAbsent: []].
-
-	^ UITranslationSet
-
-]
-
-{ #category : #'language translation' }
-PhratchTranslator class >> uiTranslationSetAsSortedArray [
-
-	^ self uiTranslationSet asArray
-		sort: [:a :b | a asLowercase <= b asLowercase]
 
 ]
 

@@ -24,7 +24,7 @@ ArgumentPlaceHolderMorph >> acceptDroppingMorph: aBlockMorph event: evt [
 	self template updateSpecWithDnDSpec
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #drawing }
 ArgumentPlaceHolderMorph >> appear [
 
 	self
@@ -32,7 +32,7 @@ ArgumentPlaceHolderMorph >> appear [
 		appearInactive
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #drawing }
 ArgumentPlaceHolderMorph >> appearActiveFor: aMorph [
 	self
 		extent: aMorph extent + (4@4);
@@ -41,7 +41,7 @@ ArgumentPlaceHolderMorph >> appearActiveFor: aMorph [
 		color: Color white darker
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #drawing }
 ArgumentPlaceHolderMorph >> appearInactive [
 	self
 		extent: self class dimensions;
@@ -50,7 +50,7 @@ ArgumentPlaceHolderMorph >> appearInactive [
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #drawing }
 ArgumentPlaceHolderMorph >> drawEmbeddedOn: aCanvas [
 	
 	| form |
@@ -71,7 +71,7 @@ ArgumentPlaceHolderMorph >> drawOn: aCanvas [
 		ifFalse: [self drawEmbeddedOn: aCanvas]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #drawing }
 ArgumentPlaceHolderMorph >> drawRaisedOn: aCanvas [
 	
 	| form |
@@ -131,11 +131,6 @@ ArgumentPlaceHolderMorph >> initialize [
 { #category : #accessing }
 ArgumentPlaceHolderMorph >> labelFragment [
 	^labelFragment
-]
-
-{ #category : #accessing }
-ArgumentPlaceHolderMorph >> labelFragment: aBlockLabelFragmen [
-	labelFragment := aBlockLabelFragmen
 ]
 
 { #category : #'event handling' }
@@ -204,7 +199,7 @@ ArgumentPlaceHolderMorph >> mouseLeaveDragging: evt [
 	self appearInactive
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ArgumentPlaceHolderMorph >> template [
 
 	| template |

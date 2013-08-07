@@ -138,17 +138,11 @@ ElementsEditorFrameMorph >> handlesMouseDown: evt [
 { #category : #initialization }
 ElementsEditorFrameMorph >> initialize [
 	super initialize.
-	self title: 'Elements Editor'.
+	self title: 'Elements Editor' translated.
 	resizeMorph := PhratchResizeMorph ofType: #corner.
-	
 	editor := PluggableTextMorph new.
-
 	mainColumn addMorph: editor.
-
-	self addMorph: resizeMorph.
-
-
-
+	self addMorph: resizeMorph
 ]
 
 { #category : #'dropping/grabbing' }
@@ -216,7 +210,7 @@ ElementsEditorFrameMorph >> mouseUp: evt [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ElementsEditorFrameMorph >> onMethod: sel ofClass: cls [
 
 	initialClass := cls.
@@ -227,12 +221,12 @@ ElementsEditorFrameMorph >> onMethod: sel ofClass: cls [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #build }
 ElementsEditorFrameMorph >> rememberUserDimensions [
 	self class setUserPos: self position size: self extent
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #interaction }
 ElementsEditorFrameMorph >> snapToUserDimensions [
 
 	self extent: UserSize.
@@ -249,7 +243,7 @@ ElementsEditorFrameMorph >> step [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #stepping }
 ElementsEditorFrameMorph >> updateResizeMorph [
 	resizeMorph ifNotNil: [
 		resizeMorph position: self bottomRight - "resizeMorph extent - " bottomRightForm width ]

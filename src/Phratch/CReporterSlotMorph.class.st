@@ -83,27 +83,46 @@ CReporterSlotMorph >> drawOn: aCanvas [
 ]
 
 { #category : #drawing }
-CReporterSlotMorph >> drawTopBarOn: aCanvas [ 
-
+CReporterSlotMorph >> drawTopBarOn: aCanvas [
 	| left right y |
-
 	left := CBlockBracketThickness - 1.
 	right := self width - 1.
 	y := topBarBottom - self top.
-
-	self drawHLineFrom: left to: right y: y color: color on: aCanvas.
-	self drawHLineFrom: left to: right y: y + 1 color: color on: aCanvas.
-
-	self drawHLineFrom: left to: (left + 2) y: y + 2 color: color on: aCanvas.
-	self drawHLineFrom: left to: (left + 1) y: y + 3 color: color on: aCanvas.
-	self drawPoint: (left + 1)@(y + 3) color: shadowColor on: aCanvas.
-
-	self drawHLineFrom: (left + 2) to: right - 1 "gapStart" y: y + 2 color: shadowColor on: aCanvas.
-
-	(owner isKindOf: CustomReporterBlockMorph) ifFalse: [
-		self drawPoint: (right "- 1")@y color: shadowColor on: aCanvas.
-		self drawPoint: (right - 1 "2")@(y + 1) color: shadowColor on: aCanvas]
-
+	self
+		drawHLineFrom: left
+		to: right
+		y: y
+		color: color
+		on: aCanvas.
+	self
+		drawHLineFrom: left
+		to: right
+		y: y + 1
+		color: color
+		on: aCanvas.
+	self
+		drawHLineFrom: left
+		to: left + 2
+		y: y + 2
+		color: color
+		on: aCanvas.
+	self
+		drawHLineFrom: left
+		to: left + 1
+		y: y + 3
+		color: color
+		on: aCanvas.
+	self drawPoint: (left + 1) @ (y + 3) color: shadowColor on: aCanvas.
+	self
+		drawHLineFrom: left + 2
+		to: right - 1
+		y: y + 2
+		color: shadowColor
+		on: aCanvas.	"gapStart"
+	(owner isKindOf: CustomReporterBlockMorph)
+		ifTrue: [ ^ self ].
+	self drawPoint: right @ y color: shadowColor on: aCanvas.	"- 1"
+	self drawPoint: (right - 1) @ (y + 1) color: shadowColor on: aCanvas	"2"
 ]
 
 { #category : #drawing }

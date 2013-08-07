@@ -7,7 +7,7 @@ Class {
 	#category : #'Phratch-Installation'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #installation }
 PhratchInstaller class >> beginInstall [
 	"self
 		inform:
@@ -39,7 +39,7 @@ PhratchInstaller class >> beginInstall [
 		label: 'Welcome to Phratch!'.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #installation }
 PhratchInstaller class >> downloadFileFromUrl: anUrl andUnzipIntoDirectory: aPath [
 
 	UIManager default informUserDuring: 
@@ -52,7 +52,7 @@ PhratchInstaller class >> downloadFileFromUrl: anUrl andUnzipIntoDirectory: aPat
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #installation }
 PhratchInstaller class >> externalVerification [
 
 	PhratchInstaller gotPhratchLicence ifFalse: [PhratchInstaller getPhratchLicence].
@@ -65,112 +65,105 @@ PhratchInstaller class >> externalVerification [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #installation }
 PhratchInstaller class >> getBYOBManual [
-	Transcript cr; 
-		show: 'Downloading BYOB Manual'.
+	UIManager inform:  'Downloading BYOB Manual'.
 	self
 		downloadFileFromUrl: 'https://phratch.googlecode.com/files/Manual.zip' 
 		andUnzipIntoDirectory: FileSystem workingDirectory
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #installation }
 PhratchInstaller class >> getPhratchHelp [
-	Transcript cr; 
-		show: 'Downloading Help'.
+	UIManager inform: 'Downloading Help'.
 	self
 		downloadFileFromUrl: 'https://phratch.googlecode.com/files/Help.zip' 
 		andUnzipIntoDirectory: FileSystem workingDirectory
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #installation }
 PhratchInstaller class >> getPhratchLicence [
-	Transcript cr; 
-		show: 'Downloading licence.txt'.
+	UIManager inform:  'Downloading licence.txt'.
 	(FileStream newFileNamed: 'license.txt') nextPutAll: ((ZnHTTPSocketFacade httpGet: 'https://phratch.googlecode.com/files/license.txt'))
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #installation }
 PhratchInstaller class >> getPhratchLocales [
-	Transcript cr; 
-		show: 'Downloading Local'.
+	UIManager inform:  'Downloading Local'.
 	self
 		downloadFileFromUrl: 'https://phratch.googlecode.com/files/locale.zip'
 		andUnzipIntoDirectory: FileSystem workingDirectory
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #installation }
 PhratchInstaller class >> getPhratchMedia [
-	Transcript cr; 
-		show: 'Downloading Media'.
+	UIManager inform: 'Downloading Media'.
 	self
 		downloadFileFromUrl: 'https://phratch.googlecode.com/files/Media.zip'
 		andUnzipIntoDirectory: FileSystem workingDirectory 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #installation }
 PhratchInstaller class >> getPhratchPlugins [
-	Transcript cr; 
-		show: 'Downloading Plugins'.
+	UIManager inform:  'Downloading Plugins'.
 	UIManager inform: 'This will install plugins in VM directory'.
 	self
 		downloadFileFromUrl: self pluginsURL
 		andUnzipIntoDirectory: (self pluginsPath)
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #installation }
 PhratchInstaller class >> getPhratchSkins [
-	Transcript cr; 
-		show: 'Downloading ScratchSkin'.
+	UIManager inform: 'Downloading ScratchSkin'.
 	self
 		downloadFileFromUrl: 'https://phratch.googlecode.com/files/ScratchSkin.zip'
 		andUnzipIntoDirectory: (FileSystem workingDirectory)
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #installation }
 PhratchInstaller class >> gotBYOBManual [
 	^ (FileSystem workingDirectory / 'Manual') exists
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #installation }
 PhratchInstaller class >> gotPhratchHelp [
 	^ (FileSystem workingDirectory / 'Help') exists
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #installation }
 PhratchInstaller class >> gotPhratchLicence [
 	^ (FileSystem workingDirectory / 'license.txt') exists
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #installation }
 PhratchInstaller class >> gotPhratchLocales [
 	^ (FileSystem workingDirectory / 'locale') exists
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #installation }
 PhratchInstaller class >> gotPhratchMedia [
 	^ (FileSystem workingDirectory / 'Media') exists
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #installation }
 PhratchInstaller class >> gotPhratchPlugins [
 	^ (self pluginsPath /  'CameraPlugin') exists
 		& (self pluginsPath /  'mpeg3Plugin') exists
 		& (self pluginsPath / 'ScratchPlugin') exists
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #installation }
 PhratchInstaller class >> gotPhratchSkins [
 	^ (FileSystem workingDirectory / 'ScratchSkin') exists
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'class initialization' }
 PhratchInstaller class >> initialize [
 "	InputEventSensor startUp."
 	SoundPlayer initialize; shutDown; startUp.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #installation }
 PhratchInstaller class >> phratchSettingsOn: aBuilder [  
 	<systemsettings>  
 	(aBuilder group: #phratch)
@@ -231,7 +224,7 @@ PhratchInstaller class >> phratchSettingsOn: aBuilder [
 		].
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #installation }
 PhratchInstaller class >> pluginsPath [
 
 "	^(Smalltalk vmBinary resolve parent / 'Plugins')."
@@ -245,7 +238,7 @@ PhratchInstaller class >> pluginsPath [
 		]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #installation }
 PhratchInstaller class >> pluginsURL [
 	^ OSPlatform isMacOS
 		ifTrue: [ ^ 'https://phratch.googlecode.com/files/pluginsMacOSX.zip' ]

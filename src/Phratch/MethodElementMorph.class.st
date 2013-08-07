@@ -7,16 +7,7 @@ Class {
 	#category : #'Phratch-UI-Elements'
 }
 
-{ #category : #'as yet unclassified' }
-MethodElementMorph >> asCompiledMethodForClass: aClass [
-	| mn1 cm st |
-	st := self asSmalltalk.
-	mn1 := Compiler new compile: st in: aClass notifying: nil ifFail: [self inform: 'compiling failed'].
-	cm := mn1 generate: #(0 0 0 0).
-	^cm 
-]
-
-{ #category : #'as yet unclassified' }
+{ #category : #converting }
 MethodElementMorph >> asSmalltalk [
 	| ws vn|
 	ws := WriteStream on: String new.
@@ -34,12 +25,13 @@ MethodElementMorph >> asSmalltalk [
 
 { #category : #'as yet unclassified' }
 MethodElementMorph >> contextMenu [
-	|m|
+	| m |
 	m := super contextMenu.
-	self isRenameable ifTrue: [
-		m addLine.
-		m add: 'rename...' action: #editSelector ].
-	^m
+	self isRenameable
+		ifTrue: [ 
+			m addLine.
+			m add: 'rename...' translated action: #editSelector ].
+	^ m
 ]
 
 { #category : #'as yet unclassified' }
@@ -47,43 +39,33 @@ MethodElementMorph >> editSelector [
 	header editSelector
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 MethodElementMorph >> fit [
-	| bw bw2 cw handle x y editor|
-
-	header ifNil: [^self ].
+	| bw bw2 cw handle x y editor |
+	header ifNil: [ ^ self ].
 	bw := self borderWidth.
 	bw2 := bw * 2.
 	cw := self labelFont widthOf: $ .
 	handle := cw.
-
-	header position: (self left + bw + handle) @ (self top).
-
-	palette position: (self left + handle) @ (header bottom).
-	(palette height = 0)
-		ifTrue: [y := header bottom + (bw * 3)]
-		ifFalse: [y := palette bottom].
-	
-
+	header position: (self left + bw + handle) @ self top.
+	palette position: (self left + handle) @ header bottom.
+	y := palette height = 0
+		ifTrue: [ header bottom + (bw * 3) ]
+		ifFalse: [ palette bottom ].
 	steps position: (self left + bw2 + handle) @ y.
-
-	x := ((steps right + bw2) max: palette right) max: header right.
-
+	x := (steps right + bw2 max: palette right) max: header right.
 	self width: x - self left.
-	(palette height = 0)
+	palette height = 0
 		ifTrue: [ self height: steps height + header height + (bw * 6) ]
-		ifFalse: [self height: steps height + palette height + header height + (bw2) ].
-
+		ifFalse: [ self height: steps height + palette height + header height + bw2 ].
 	self refreshVarColors.
-
 	(owner respondsTo: #fit)
-		ifTrue: [^owner fit].
-
-	editor := (self ownerThatIsA: ElementsMethodEditorMorph).
-	editor ifNotNil: [editor methodModified ]
+		ifTrue: [ ^ owner fit ].
+	editor := self ownerThatIsA: ElementsMethodEditorMorph.
+	editor ifNotNil: [ editor methodModified ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 MethodElementMorph >> fitMethod [
 	|editor|
 	(self findA: StepHolderElementMorph) fitMethod.
@@ -91,7 +73,7 @@ MethodElementMorph >> fitMethod [
 	editor ifNotNil: [editor methodModified ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialize }
 MethodElementMorph >> initialize [
 	super initialize.
 	color := Color paleTan.
@@ -101,7 +83,7 @@ MethodElementMorph >> initialize [
 	self fit.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 MethodElementMorph >> isRenameable [
 	^true
 ]
@@ -111,7 +93,7 @@ MethodElementMorph >> localVariableNames [
 	^super variableNames
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'*Phratch-Extensions' }
 MethodElementMorph >> rootForGrabOf: aMorph [
 	"Allow myself to be extracted."
 
@@ -120,12 +102,12 @@ MethodElementMorph >> rootForGrabOf: aMorph [
 	^super rootForGrabOf: aMorph
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 MethodElementMorph >> selector [
 	^header selector asSymbol
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'instance creation' }
 MethodElementMorph >> selector: aSymbol arguments: aCollection [
 	header selector: aSymbol arguments: aCollection
 ]

@@ -2,8 +2,7 @@ Class {
 	#name : #WhenHatBlockMorph,
 	#superclass : #HatBlockMorph,
 	#instVars : [
-		'argMorph',
-		'lastState'
+		'argMorph'
 	],
 	#category : #'Phratch-Blocks'
 }
@@ -131,18 +130,6 @@ WhenHatBlockMorph >> replaceArgMorph: oldMorph by: newMorph [
 	argMorph := newMorph.
 	self replaceSubmorph: oldMorph by: newMorph.
 	self layoutChanged.
-
-]
-
-{ #category : #other }
-WhenHatBlockMorph >> triggered [
-	"Answer true if my condition has just become true."
-
-	| condition |
-	condition := self evaluateCondition.
-	condition & lastState not ifTrue: [lastState := true. ^ true].  "trigger on false->true transition"
-	lastState := condition.
-	^ false
 
 ]
 

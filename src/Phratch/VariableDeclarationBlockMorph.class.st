@@ -8,21 +8,21 @@ Class {
 	#category : #'Phratch-Blocks'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #adding }
 VariableDeclarationBlockMorph >> addItem [
 	| varBlock pos vname names |
-	names := #(a b c d e f g h i j k l m n o p q r s t u v w x y z foo bar baz).
+	names := #(#a #b #c #d #e #f #g #h #i #j #k #l #m #n #o #p #q #r #s #t #u #v #w #x #y #z #foo #bar #baz).
 	super addItem.
 	pos := argMorphs size.
-	pos > names size
-		ifTrue: [vname := ('z', (pos - names size + 1) printString)]
-		ifFalse: [vname := (names at: pos) asString].
+	vname := pos > names size
+		ifTrue: [ 'z' , (pos - names size + 1) printString ]
+		ifFalse: [ (names at: pos) asString ].
 	varBlock := VariableBlockMorph new.
-	varBlock 
+	varBlock
 		isSpecialForm: true;
 		selector: #getVar:;
 		commandSpec: vname.
-	self replaceArgMorph: (self argumentAt: pos) by: varBlock.
+	self replaceArgMorph: (self argumentAt: pos) by: varBlock
 ]
 
 { #category : #accessing }
@@ -35,7 +35,7 @@ VariableDeclarationBlockMorph >> defaultArgs: anArray [
  	"override my superclass, do nothing"
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #deleting }
 VariableDeclarationBlockMorph >> deleteVariableTemplate: aVarBlockMorph [
 
 	aVarBlockMorph delete.
@@ -54,14 +54,15 @@ VariableDeclarationBlockMorph >> mouseDownPriority [
 	^ 0
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #deleting }
 VariableDeclarationBlockMorph >> removeItem [
-	argMorphs size > self minArgs ifTrue: [
-		self removeLastArg.
-		self commandSpec: (commandSpec copyFrom: 1 to: commandSpec size - 3) ]
+	argMorphs size > self minArgs
+		ifFalse: [ ^ self ].
+	self removeLastArg.
+	self commandSpec: (commandSpec copyFrom: 1 to: commandSpec size - 3)
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #deleting }
 VariableDeclarationBlockMorph >> removeLastArg [
 
 	| idx |
@@ -71,7 +72,7 @@ VariableDeclarationBlockMorph >> removeLastArg [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'events-processing' }
 VariableDeclarationBlockMorph >> renameParm: old to: new [
 
 	(self variables includes: new) ifTrue: [

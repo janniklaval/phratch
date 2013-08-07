@@ -40,13 +40,6 @@ Class {
 	#category : #'Phratch-UI-Support'
 }
 
-{ #category : #'instance creation' }
-MultilineStringMorph class >> includeInNewMorphMenu [
-
-	^ true
-
-]
-
 { #category : #'class initialization' }
 MultilineStringMorph class >> initialize [
 	"self initialize"
@@ -57,24 +50,22 @@ MultilineStringMorph class >> initialize [
 
 { #category : #menu }
 MultilineStringMorph >> addCustomMenuItems: aCustomMenu hand: aHandMorph [
-
 	super addCustomMenuItems: aCustomMenu hand: aHandMorph.
 	aCustomMenu addLine.
-	aCustomMenu add: 'set font' action: #fontMenu.
-
+	aCustomMenu add: 'set font' translated action: #fontMenu
 ]
 
 { #category : #editing }
 MultilineStringMorph >> backspaceChar [
 	"If there is a selection, delete it. Otherwise delete the character just before the insertion point (i.e. backspace)."
 
-	selectionStart = selectionEnd ifFalse: [^ self deleteSelection].
-
-	selectionStart > 1 ifTrue: [
-		selectionEnd := selectionStart.
-		selectionStart := selectionStart - 1.
-		self deleteSelection].
-
+	selectionStart = selectionEnd
+		ifFalse: [ ^ self deleteSelection ].
+	selectionStart > 1
+		ifFalse: [ ^ self ].
+	selectionEnd := selectionStart.
+	selectionStart := selectionStart - 1.
+	self deleteSelection
 ]
 
 { #category : #private }
@@ -326,32 +317,28 @@ MultilineStringMorph >> doubleClick: evt [
 	"Select a word."
 
 	| lineAndIndex lineNum s index wordStart wordEnd lineStart |
-	lines size = 0 ifTrue: [^ self].
-
+	lines size = 0
+		ifTrue: [ ^ self ].
 	lineAndIndex := self lineAndIndexFor: (self indexForPoint: evt cursorPoint).
 	lineNum := lineAndIndex first.
 	s := lines at: lineNum.
-	s size = 0 ifTrue: [^ self].  "empty line"
-
+	s size = 0
+		ifTrue: [ ^ self ].	"empty line"
 	index := lineAndIndex second.
-	index > s size ifTrue: [index := s size].  "at end of line; try one char back"
-	(s at: index) isSeparator ifTrue: [^ self].  "on separator; do nothing"
-
+	index := index min: s size.	"at end of line; try one char back"
+	(s at: index) isSeparator
+		ifTrue: [ ^ self ].	"on separator; do nothing"
 	wordStart := index.
-	[(wordStart >= 1) and: [(s at: wordStart) isSeparator not]]
-		whileTrue: [wordStart := wordStart - 1].
+	[ wordStart >= 1 and: [ (s at: wordStart) isSeparator not ] ] whileTrue: [ wordStart := wordStart - 1 ].
 	wordEnd := index.
-	[(wordEnd < s size) and: [(s at: wordEnd) isSeparator not]]
-		whileTrue: [wordEnd := wordEnd + 1].
-	(s at: wordEnd) isSeparator ifTrue: [wordEnd := wordEnd - 1].
-
+	[ wordEnd < s size and: [ (s at: wordEnd) isSeparator not ] ] whileTrue: [ wordEnd := wordEnd + 1 ].
+	(s at: wordEnd) isSeparator
+		ifTrue: [ wordEnd := wordEnd - 1 ].
 	lineStart := self startOfLine: lineNum.
 	selectionStart := lineStart + (wordStart + 1).
 	selectionEnd := lineStart + (wordEnd + 1).
 	startLoc := selectionStart.
-	self changed.
-
-
+	self changed
 ]
 
 { #category : #drawing }
@@ -360,17 +347,20 @@ MultilineStringMorph >> drawCursor: charIndex line: lineIndex on: aCanvas [
 
 	| line pair x p |
 	line := lines at: lineIndex.
-	line size = 0
-		ifTrue: [pair := #(0 0)]
-		ifFalse: [pair := (renderer xRangesFor: line) at: (charIndex within: 1 and: line size)].
-
-	PhratchTranslator isRTL
-		ifTrue: [x := charIndex > line size ifTrue: [pair min] ifFalse: [pair max]]
-		ifFalse: [x := charIndex > line size ifTrue: [pair max] ifFalse: [pair min]].
-
+	pair := line size = 0
+		ifTrue: [ #(0 0) ]
+		ifFalse: [ (renderer xRangesFor: line) at: (charIndex within: 1 and: line size) ].
+	x := PhratchTranslator isRTL
+		ifTrue: [ 
+			charIndex > line size
+				ifTrue: [ pair min ]
+				ifFalse: [ pair max ] ]
+		ifFalse: [ 
+			charIndex > line size
+				ifTrue: [ pair max ]
+				ifFalse: [ pair min ] ].
 	p := self offsetForLine: lineIndex.
-	aCanvas fillRectangle: (p + (x@0) extent: 2@lineHeight) color: selectionColor.
-
+	aCanvas fillRectangle: (p + (x @ 0) extent: 2 @ lineHeight) color: selectionColor
 ]
 
 { #category : #drawing }
@@ -463,20 +453,19 @@ MultilineStringMorph >> drawString: aString at: aPoint on: aCanvas [
 
 { #category : #drawing }
 MultilineStringMorph >> drawTextOn: aCanvas [
-
 	| hInset x y |
 	hInset := self insetX.
 	y := self insetY.
-	centerText ifNil: [centerText := false].
-	lines do: [:s |
-		PhratchTranslator isRTL
-			ifTrue: [x := self width - hInset - (renderer stringWidth: s)]
-			ifFalse: [x := hInset].
-		centerText ifTrue: [
-			x := (self width - hInset - (renderer stringWidth: s)) // 2].
-		self drawString: s at: x@y on: aCanvas.
-		y := y + lineHeight].
-
+	centerText ifNil: [ centerText := false ].
+	lines
+		do: [ :s | 
+			x := PhratchTranslator isRTL
+				ifTrue: [ self width - hInset - (renderer stringWidth: s) ]
+				ifFalse: [ hInset ].
+			centerText
+				ifTrue: [ x := (self width - hInset - (renderer stringWidth: s)) // 2 ].
+			self drawString: s at: x @ y on: aCanvas.
+			y := y + lineHeight ]
 ]
 
 { #category : #private }
@@ -502,11 +491,11 @@ MultilineStringMorph >> ensureSelectionStartPrecedesEnd [
 	lastIndex := self charCount + 1.
 	selectionStart := selectionStart within: 1 and: lastIndex.
 	selectionEnd := selectionEnd within: 1 and: lastIndex.
-	selectionEnd < selectionStart ifTrue: [
-		tmp := selectionEnd.
-		selectionEnd := selectionStart.
-		selectionStart := tmp].
-
+	selectionEnd < selectionStart
+		ifFalse: [ ^ self ].
+	tmp := selectionEnd.
+	selectionEnd := selectionStart.
+	selectionStart := tmp
 ]
 
 { #category : #geometry }
@@ -880,15 +869,6 @@ MultilineStringMorph >> mouseMove: evt [
 	newLoc < startLoc
 		ifTrue: [selectionStart := newLoc. selectionEnd := startLoc]
 		ifFalse: [selectionStart := startLoc. selectionEnd := newLoc].
-	self changed.
-
-]
-
-{ #category : #editing }
-MultilineStringMorph >> moveCursorContentsEnd [
-	"Position the cursor at the end of my contents (i.e. at very end, not the end of the current line)."
-
-	selectionStart := selectionEnd := self charCount + 1.
 	self changed.
 
 ]

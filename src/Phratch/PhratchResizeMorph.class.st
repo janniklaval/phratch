@@ -68,10 +68,9 @@ PhratchResizeMorph >> mouseLeave: evt [
 
 { #category : #'event handling' }
 PhratchResizeMorph >> type: aSymbol [
-
 	type := aSymbol.
-	(type = #edge) ifTrue: [
-		self addMorphBack: (AlignmentMorph newSpacer: Color transparent).
-		self addMorphFront: (AlignmentMorph newSpacer: Color transparent)].
-
+	type = #edge
+		ifFalse: [ ^ self ].
+	self addMorphBack: (AlignmentMorph newSpacer: Color transparent).
+	self addMorphFront: (AlignmentMorph newSpacer: Color transparent)
 ]

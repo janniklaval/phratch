@@ -53,7 +53,6 @@ Class {
 		'cursor',
 		'origSamplingRate',
 		'samplingRate',
-		'rateSlider',
 		'slider',
 		'volume',
 		'snd',
@@ -271,68 +270,6 @@ PhratchSoundEditor >> addSlider [
 ]
 
 { #category : #initialization }
-PhratchSoundEditor >> addValueSelectors [
-
-	| r m b |
-	b := SimpleButtonMorph new target: self; borderColor: Color black; useSquareCorners.
-	b borderColor: #raised; borderWidth: 3.
-	r := AlignmentMorph newRow.
-	r color: Color transparent; borderWidth: 0; inset: 0.
-	r hResizing: #spaceFill; vResizing: #shrinkWrap; extent: 5@5.
-	r centering: #center; cellPositioning: #leftCenter.
-
-	r addMorphBack: (Morph new color: r color; extent: 5@5).
-
-	"r addMorphBack: (b fullCopy label: '<<';					actionSelector: #slower)."
-	r addMorphBack: (b fullCopy label: 'Reset Play Rate';	actionSelector: #resetSamplingRate).
-	"r addMorphBack: (b fullCopy label: '>>';					actionSelector: #faster)."
-
-	r addMorphBack: (Morph new color: r color; extent: 25@5).
-	m := StringMorph new contents: 'Sampling Rate'.
-	r addMorphBack: m.
-	m := Morph new color: r color; extent: 5@5. "spacer"
-	r addMorphBack: m.
-
-	rateSlider := SimpleSliderMorph new
-	color: Color veryVeryLightGray;
-	extent: 60@2;
-	target: self;
-	minVal: 0.2;
-	maxVal: 2.5;
-	actionSelector: #samplingRate:.
-	r addMorphBack: rateSlider.
-	r addMorphBack: (Morph new color: r color; extent: 30@5).
-
-	m := StringMorph new contents: 'Index: '.
-	r addMorphBack: m.
-	m := UpdatingStringMorph new
-		target: graph; getSelector: #cursor; putSelector: #cursor:;
-		growable: false; width: 30; step.
-	r addMorphBack: m.
-	
-	m:= Morph new color: r color; extent: 20@5. "spacer"
-	r addMorphBack: m.
-
-	m := StringMorph new contents: 'Value: '.
-	r addMorphBack: m.
-	m := UpdatingStringMorph new
-		target: graph; getSelector: #valueAtCursor; putSelector: #valueAtCursor:;
-		growable: false; width: 40; step.
-	r addMorphBack: m.
-
-	m := Morph new color: r color; extent: 20@5. "spacer"
-	r addMorphBack: m.
-
-	"r addMorphBack: ( b fullCopy label: 'zoom to selection';		actionSelector: #zoomToSelection).
-	m := Morph new color: r color; extent: 5@5.
-	r addMorphBack: m."
-
-	self addMorphBack: r.
-
-
-]
-
-{ #category : #initialization }
 PhratchSoundEditor >> addViewer [
 
 	| r |
@@ -489,30 +426,11 @@ PhratchSoundEditor >> endPlaying [
 	^endPlaying.
 ]
 
-{ #category : #menu }
-PhratchSoundEditor >> faster [
-
-	| rate |
-	rate := rateSlider getScaledValue*1.1.
-	rateSlider setScaledValue: rate.
-	self samplingRate: rate.
-
-	
-]
-
 { #category : #'graph ops' }
 PhratchSoundEditor >> fixSliderRange [
  
 	slider maxVal: (1 -(slider sliderThickness/slider extent x)).
 	^slider
-]
-
-{ #category : #'graph ops' }
-PhratchSoundEditor >> fwd [
-	
-	"moves the cursor forward in the music."
-	scrollDelta := 5.
-	self cursor: cursor + 5.
 ]
 
 { #category : #accessing }
@@ -621,17 +539,23 @@ PhratchSoundEditor >> makeSliderButton: buttonExtent [
 
 { #category : #'event handling' }
 PhratchSoundEditor >> mouseDown: evt [
+	"do stuff"
 
 	| p |
-	"do stuff"
 	p := evt cursorPoint.
-	
-
-	(slider containsPoint: p) ifTrue: [ 
-		slider descending ifTrue: [scrollDelta := deltaVal negated.]
-						  ifFalse: [scrollDelta := deltaVal.].].
-	(backButton containsPoint: p) ifTrue: [ backButton borderInset. scrollDelta := deltaVal negated ].
-	(fwdButton containsPoint: p) ifTrue: [ fwdButton borderInset. scrollDelta := deltaVal].
+	(slider containsPoint: p)
+		ifTrue: [ 
+			scrollDelta := slider descending
+				ifTrue: [ deltaVal negated ]
+				ifFalse: [ deltaVal ] ].
+	(backButton containsPoint: p)
+		ifTrue: [ 
+			backButton borderInset.
+			scrollDelta := deltaVal negated ].
+	(fwdButton containsPoint: p)
+		ifFalse: [ ^ self ].
+	fwdButton borderInset.
+	scrollDelta := deltaVal
 ]
 
 { #category : #'event handling' }
@@ -647,24 +571,6 @@ PhratchSoundEditor >> mouseUp: evt [
 	scrollDelta := 0.
 	fwdButton borderRaised.
 	backButton borderRaised.
-
-]
-
-{ #category : #other }
-PhratchSoundEditor >> normalize: sampleArray [
-	"Return a copy of the given sample array scaled to use the maximum 16-bit sample range. Remove any D.C. offset."
-
-	| max abs scale out |
-	max := 0.
-	sampleArray do: [:s |
-		s > 0 ifTrue: [abs := s] ifFalse: [abs := 0 - s].
-		abs > max ifTrue: [max := abs]].
-	scale := ((1 << 15) - 1) asFloat / max.
-
-	out := sampleArray species new: sampleArray size.
-	1 to: sampleArray size do: [:i |
-		out at: i put: (scale * (sampleArray at: i)) truncated].
-	^ out
 
 ]
 
@@ -791,18 +697,6 @@ PhratchSoundEditor >> playCursor [
 	^playCursor.
 ]
 
-{ #category : #accessing }
-PhratchSoundEditor >> playCursor: aNumber [
- 
-	graph data ifNil: [^self].
-
-	"allows the graph to set where the playing cursor is"
-
-	cursor ~= aNumber ifTrue:  [
-	cursor := ((aNumber truncated max: 1) min: graph data size) truncated.
-	].
-]
-
 { #category : #menu }
 PhratchSoundEditor >> playFrom: start to: end [
 
@@ -838,34 +732,20 @@ PhratchSoundEditor >> readFromFile [
 PhratchSoundEditor >> readFromFile: fName [
 	"Read my samples from the file with the given name."
 
-	( fName) exists
-		ifFalse: [^ self inform: 'File not found' withDetails: fName].
+	fName exists
+		ifFalse: [ ^ self inform: 'File not found' withDetails: fName ].
 	snd := SampledSound fromFileNamed: fName.
-
 	completeSnd := snd copy.
 	graph cursor: 200.
 	samplingRate := snd originalSamplingRate.
 	origSamplingRate := snd originalSamplingRate.
 	graph data: snd samples.
 	graph scale: 2.0.
-
 	self setVolume: 0.5.
 	volume setScaledValue: 0.5.
-	
-	graph data size > 5000
-		ifTrue: [deltaVal := 50]
-		ifFalse: [deltaVal := graph data size // 10].
-
-
-]
-
-{ #category : #menu }
-PhratchSoundEditor >> resetSamplingRate [
-
-	snd ifNil: [^self].
-
-	snd setSamples: snd samples samplingRate: origSamplingRate.
-	rateSlider setScaledValue: 1.0.
+	deltaVal := graph data size > 5000
+		ifTrue: [ 50 ]
+		ifFalse: [ graph data size // 10 ]
 ]
 
 { #category : #accessing }
@@ -906,15 +786,16 @@ PhratchSoundEditor >> saveToFile [
 
 	| fileName samples f |
 	fileName := StringDialog ask: 'File name?'.
-	fileName size = 0 ifTrue: [^ self].
-	(fileName asLowercase endsWith: '.wav') ifFalse: [fileName := fileName, '.wav'].
-	(graph data isKindOf: SoundBuffer)
-		ifTrue: [samples := graph data]
-		ifFalse: [samples := SoundBuffer fromArray: graph data].
+	fileName size = 0
+		ifTrue: [ ^ self ].
+	(fileName asLowercase endsWith: '.wav')
+		ifFalse: [ fileName := fileName , '.wav' ].
+	samples := (graph data isKindOf: SoundBuffer)
+		ifTrue: [ graph data ]
+		ifFalse: [ SoundBuffer fromArray: graph data ].
 	f := (FileStream newFileNamed: fileName) binary.
 	(SampledSound samples: samples samplingRate: samplingRate) storeWAVSamplesOn: f.
-	f close.
-
+	f close
 ]
 
 { #category : #accessing }
@@ -977,17 +858,6 @@ PhratchSoundEditor >> slider [
 	^slider.
 ]
 
-{ #category : #menu }
-PhratchSoundEditor >> slower [
-
-	| rate |
-	rate := rateSlider getScaledValue/1.1.
-	rateSlider setScaledValue: rate.
-	self samplingRate: rate.
-
-	
-]
-
 { #category : #accessing }
 PhratchSoundEditor >> sound [
 
@@ -996,7 +866,6 @@ PhratchSoundEditor >> sound [
 
 { #category : #'graph ops' }
 PhratchSoundEditor >> sound: aSampledSound [
-
 	"completeSnd is a version of the sound that is unaffected by the play mechanism.  This method is called when a SoundMorph brings up a SoundEditor. soundMorphSound is a copy of the initial sampledSound, used for saving and cancelling edits purposes.  It serves as a reference to the original sound so that we can actually change the sound in the soundMorph"
 
 	snd := aSampledSound copy.
@@ -1004,25 +873,19 @@ PhratchSoundEditor >> sound: aSampledSound [
 	graph cursor: 200.
 	samplingRate := snd originalSamplingRate.
 	origSamplingRate := snd originalSamplingRate.
-
-	PhratchGraphMorph minScale: (graph extent x/completeSnd samples size).
-
-	graph data: completeSnd samples.  "SHOULD IT BE COPY?/"
+	PhratchGraphMorph minScale: graph extent x / completeSnd samples size.
+	graph data: completeSnd samples.	"SHOULD IT BE COPY?/"
 	graph scale: 2.
-	graph calculateDataArray.
-	"self fixSliderRange.
+	graph calculateDataArray.	"self fixSliderRange.
 	graph computeSlider."
-	
 	viewer data: completeSnd samples.
 	viewer scale: 1.
 	viewer calculateDataArray.
 	self setVolume: snd loudness.
 	volume setScaledValue: snd loudness.
-	
-	(graph data size > 5000)
-		ifTrue: [deltaVal := 200]
-		ifFalse: [deltaVal := (graph data size) // 10].
-
+	deltaVal := graph data size > 5000
+		ifTrue: [ 200 ]
+		ifFalse: [ graph data size // 10 ].
 	self updateSlider
 ]
 
@@ -1049,7 +912,6 @@ PhratchSoundEditor >> startSelection: aNumber [
 
 { #category : #'graph ops' }
 PhratchSoundEditor >> startTime [
-	
 	| ss |
 	"secs := cursor / samplingRate.
 	hrs := secs // 3600.
@@ -1057,13 +919,11 @@ PhratchSoundEditor >> startTime [
 	secs := secs \\ 60 asFloat.
 	ms := ((secs \\ 1) * 100) asFloat truncated.
 	secs := secs // 1."
-
 	" hrs asString,':',mins asString, ':', secs asString, '.', ms asString."
-	
-	origSamplingRate isNil
-		ifTrue: [ss := 20000]
-		ifFalse: [ss := origSamplingRate].
-	^ ((cursor asFloat/ss) roundTo: 0.01) asString.
+	ss := origSamplingRate isNil
+		ifTrue: [ 20000 ]
+		ifFalse: [ origSamplingRate ].
+	^ (cursor asFloat / ss roundTo: 0.01) asString
 ]
 
 { #category : #'graph ops' }
@@ -1113,25 +973,6 @@ PhratchSoundEditor >> stop [
 	snd pause.
 	playCursor := nil.
 	
-]
-
-{ #category : #other }
-PhratchSoundEditor >> stretch: sampleArray by: stretchFactor [
-	"Return an array consisting of the given samples \stretched in time by the given factor."
-
-	| out end incr i frac index |
-	out := OrderedCollection new: (stretchFactor * sampleArray size) asInteger + 1.
-	end := (sampleArray size - 1) asFloat.
-	incr := 1.0 / stretchFactor.
-	i := 1.0.
-	[i < end] whileTrue: [
-		frac := i fractionPart.
-		index := i truncated.
-		i := i + incr.
-		out addLast:
-			(((1.0 - frac) * (sampleArray at: index)) + (frac * (sampleArray at: index + 1))) rounded].
-	^ out asArray
-
 ]
 
 { #category : #'graph ops' }

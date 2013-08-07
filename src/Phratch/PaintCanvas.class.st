@@ -130,19 +130,23 @@ PaintCanvas >> applyTransform [
 	| f degrees |
 	f := transformSrcForm.
 	degrees := transformDegrees.
-	transformHFlip ifTrue: [degrees := degrees negated].
-	transformVFlip ifTrue: [degrees := degrees negated].
-	(degrees closeTo: 0.0) not ifTrue: [f := f rotateBy: degrees].
-	(transformScale closeTo: 1.0) not ifTrue: [
-		f := f magnify: f boundingBox by: transformScale smoothing: 1].
-	transformHFlip ifTrue: [	f := f flipBy: #horizontal centerAt: f boundingBox center].
-	transformVFlip ifTrue: [	f := f flipBy: #vertical centerAt: f boundingBox center].
+	transformHFlip
+		ifTrue: [ degrees := degrees negated ].
+	transformVFlip
+		ifTrue: [ degrees := degrees negated ].
+	(degrees closeTo: 0.0)
+		ifFalse: [ f := f rotateBy: degrees ].
+	(transformScale closeTo: 1.0)
+		ifFalse: [ f := f magnify: f boundingBox by: transformScale smoothing: 1 ].
+	transformHFlip
+		ifTrue: [ f := f flipBy: #horizontal centerAt: f boundingBox center ].
+	transformVFlip
+		ifTrue: [ f := f flipBy: #vertical centerAt: f boundingBox center ].
 	f := f copy: (f rectangleEnclosingPixelsNotOfColor: Color transparent).
 	f offset: nil.
 	moveOrStampForm := f.
-	selectionRect := (selectionRect center - (f extent // 2)) extent: f extent.
-	self changed.
-
+	selectionRect := selectionRect center - (f extent // 2) extent: f extent.
+	self changed
 ]
 
 { #category : #'event handling' }
@@ -336,44 +340,48 @@ PaintCanvas >> dragShapeTo: aPoint [
 
 	| mode w shapeCanvas endPoint r dx dy side |
 	mode := palette mode.
-
 	w := palette brushSize.
-	feedbackForm bits atAllPut: 0.  "fast clear"
+	feedbackForm bits atAllPut: 0.	"fast clear"
 	shapeCanvas := FormCanvas on: feedbackForm.
-
-	#line = mode ifTrue:[
-		endPoint := aPoint.
-		Sensor shiftPressed ifTrue: [
-			(endPoint y - startPoint y) abs > (endPoint x - startPoint x) abs
-				ifTrue: [endPoint := startPoint x@endPoint y]
-				ifFalse: [endPoint := endPoint x@startPoint y]].
-		shapeCanvas line: startPoint to: endPoint width: w color: Color black].
-
-	#oval = mode ifTrue: [
-		r := startPoint rect: aPoint.
-		Sensor shiftPressed ifTrue: [
-			dx := aPoint x - startPoint x.
-			dy := aPoint y - startPoint y.
-			side := dx abs max: dy abs.
-			r := startPoint rect: startPoint + (side * (dx sign@dy sign))].
-		palette shapeFilling
-			ifTrue: [shapeCanvas fillOval: r color: Color black]
-			ifFalse: [shapeCanvas frameOval: r width: w color: Color black]].
-
-	#rect = mode ifTrue:[
-		r := startPoint rect: aPoint.
-		Sensor shiftPressed ifTrue: [
-			dx := aPoint x - startPoint x.
-			dy := aPoint y - startPoint y.
-			side := dx abs max: dy abs.
-			r := startPoint rect: startPoint + (side * (dx sign@dy sign))].
-		palette shapeFilling
-			ifTrue: [shapeCanvas fillRectangle: r color: Color black]
-			ifFalse: [shapeCanvas frameRectangle: r width: w color: Color black]].
-
+	#line = mode
+		ifTrue: [ 
+			endPoint := aPoint.
+			Sensor shiftPressed
+				ifTrue: [ 
+					endPoint := (endPoint y - startPoint y) abs > (endPoint x - startPoint x) abs
+						ifTrue: [ startPoint x @ endPoint y ]
+						ifFalse: [ endPoint x @ startPoint y ] ].
+			shapeCanvas
+				line: startPoint
+				to: endPoint
+				width: w
+				color: Color black ].
+	#oval = mode
+		ifTrue: [ 
+			r := startPoint rect: aPoint.
+			Sensor shiftPressed
+				ifTrue: [ 
+					dx := aPoint x - startPoint x.
+					dy := aPoint y - startPoint y.
+					side := dx abs max: dy abs.
+					r := startPoint rect: startPoint + (side * (dx sign @ dy sign)) ].
+			palette shapeFilling
+				ifTrue: [ shapeCanvas fillOval: r color: Color black ]
+				ifFalse: [ shapeCanvas frameOval: r width: w color: Color black ] ].
+	#rect = mode
+		ifTrue: [ 
+			r := startPoint rect: aPoint.
+			Sensor shiftPressed
+				ifTrue: [ 
+					dx := aPoint x - startPoint x.
+					dy := aPoint y - startPoint y.
+					side := dx abs max: dy abs.
+					r := startPoint rect: startPoint + (side * (dx sign @ dy sign)) ].
+			palette shapeFilling
+				ifTrue: [ shapeCanvas fillRectangle: r color: Color black ]
+				ifFalse: [ shapeCanvas frameRectangle: r width: w color: Color black ] ].
 	lastPoint := aPoint.
-	self changed.
-
+	self changed
 ]
 
 { #category : #'event handling' }
@@ -382,22 +390,22 @@ PaintCanvas >> dragTo: aPoint [
 
 	| mode c |
 	mode := palette mode.
-	((#paint = mode) | (#erase = mode)) ifTrue: [^ self dragBrushTo: aPoint].
-	(#(line oval rect) includes: mode) ifTrue: [^ self dragShapeTo: aPoint].
-
-	#eyedropper = mode ifTrue: [
-		(bounds containsPoint: Sensor cursorPoint)
-			ifTrue: [c := canvasForm colorAt: aPoint]  "if over me, get color from canvasForm"
-			ifFalse: [c := Display colorAt: Sensor cursorPoint].
-		palette color1: c.
-		^ self].
-
-	"holding shift with the stamp tool does multiple stamps while dragging"
-	((#stamp = palette mode) & (Sensor shiftPressed)) ifTrue: [
-		self stampAt: aPoint.
-		(Delay forMilliseconds:  50) wait.
-		^ self].
-
+	#paint = mode | (#erase = mode)
+		ifTrue: [ ^ self dragBrushTo: aPoint ].
+	(#(#line #oval #rect) includes: mode)
+		ifTrue: [ ^ self dragShapeTo: aPoint ].
+	#eyedropper = mode
+		ifTrue: [ 
+			c := (bounds containsPoint: Sensor cursorPoint)
+				ifTrue: [ canvasForm colorAt: aPoint ]
+				ifFalse: [ Display colorAt: Sensor cursorPoint ].	"if over me, get color from canvasForm"
+			palette color1: c.
+			^ self ].	"holding shift with the stamp tool does multiple stamps while dragging"
+	#stamp = palette mode & Sensor shiftPressed
+		ifFalse: [ ^ self ].
+	self stampAt: aPoint.
+	(Delay forMilliseconds: 50) wait.
+	^ self
 ]
 
 { #category : #drawing }
@@ -532,31 +540,34 @@ PaintCanvas >> drawRegistrationPointOnBufferSrcRect: srcRect dstRect: dstRect [
 	"Draw the registation point."
 
 	| r offset bitBlt x y |
-	registrationPoint ifNil: [  "compute an initial registration point"
-		r := canvasForm rectangleEnclosingPixelsNotOfColor: Color transparent.
-		r area = 0
-			ifTrue: [registrationPoint := canvasForm center]
-			ifFalse: [registrationPoint := r center]].
-	registrationPoint := (registrationPoint max: 0@0) min: canvasForm extent.
-
-	offset := scale > 1 ifTrue: [scale // 2] ifFalse: [0].
-
+	registrationPoint
+		ifNil: [ 
+			"compute an initial registration point"
+			r := canvasForm rectangleEnclosingPixelsNotOfColor: Color transparent.
+			registrationPoint := r area = 0
+				ifTrue: [ canvasForm center ]
+				ifFalse: [ r center ] ].
+	registrationPoint := (registrationPoint max: 0 @ 0) min: canvasForm extent.
+	offset := scale > 1
+		ifTrue: [ scale // 2 ]
+		ifFalse: [ 0 ].
 	bitBlt := (BitBlt toForm: bufferForm)
 		clipRect: dstRect;
 		fillColor: (Color quickHighLight: bufferForm depth);
-		combinationRule: Form reverse.
-
-	(registrationPoint x between: srcRect left and: srcRect right) ifTrue: [
-		x := dstRect left + (scale * (registrationPoint x - srcRect left)) rounded + offset.
-		bitBlt
-			destRect: (x@0 extent: 1@bufferForm height);
-			copyBits].
-	(registrationPoint y between: srcRect top and: srcRect bottom) ifTrue: [
-		y := dstRect top + (scale * (registrationPoint y - srcRect top)) rounded + offset..
-		bitBlt
-			destRect: (0@y extent: bufferForm width@1);
-			copyBits].
-
+		combinationRule: Form reverse; 
+		yourself.
+	(registrationPoint x between: srcRect left and: srcRect right)
+		ifTrue: [ 
+			x := dstRect left + (scale * (registrationPoint x - srcRect left)) rounded + offset.
+			bitBlt
+				destRect: (x @ 0 extent: 1 @ bufferForm height);
+				copyBits ].
+	(registrationPoint y between: srcRect top and: srcRect bottom)
+		ifFalse: [ ^ self ].
+	y := dstRect top + (scale * (registrationPoint y - srcRect top)) rounded + offset.
+	bitBlt
+		destRect: (0 @ y extent: bufferForm width @ 1);
+		copyBits
 ]
 
 { #category : #drawing }
@@ -569,7 +580,8 @@ PaintCanvas >> drawSelectionOnBufferSrcRect: srcRect dstRect: dstRect [
 	bitBlt := (BitBlt toForm: bufferForm)
 		clipRect: dstRect;
 		fillColor: (Color quickHighLight: bufferForm depth);
-		combinationRule: Form reverse.
+		combinationRule: Form reverse; 
+		yourself.
 
 	r := ((selectionRect translateBy: srcRect topLeft negated) scaleBy: scale) rounded translateBy: dstRect topLeft.
 	bitBlt destRect: (r topLeft extent: r width@1); copyBits.
@@ -758,7 +770,7 @@ PaintCanvas >> flipV [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 PaintCanvas >> handlesKeyboard: evt [
 ^true  
 ]
@@ -783,32 +795,24 @@ PaintCanvas >> import [
 
 	| fName f spriteOrStage type |
 	palette showRotationCenter: false.
-
 	spriteOrStage := self owner originalObject.
-	(spriteOrStage isKindOf: PhratchStageMorph)
-		ifTrue: [type := #background]
-		ifFalse: [type := #costume].
-	fName := PhratchFileChooserDialog
-		chooseImageFileType: type
-		title: 'Import Image'.
-	(fName isNil or: [fName = #cancelled]) ifTrue: [^ self].
-
-	((fName asLowercase endsWith: '.sprite') | (fName asLowercase endsWith: '.ysp'))
-		ifTrue: [
-			f := self importCostumeFromSprite: fName]
-		ifFalse: [
-			[f := Form fromFileNamed: fName] ifError: [nil]].
-	f ifNil: [^ self].
-
+	type := (spriteOrStage isKindOf: PhratchStageMorph)
+		ifTrue: [ #background ]
+		ifFalse: [ #costume ].
+	fName := PhratchFileChooserDialog chooseImageFileType: type title: 'Import Image'.
+	(fName isNil or: [ fName = #cancelled ])
+		ifTrue: [ ^ self ].
+	(fName asLowercase endsWith: '.sprite') | (fName asLowercase endsWith: '.ysp')
+		ifTrue: [ f := self importCostumeFromSprite: fName ]
+		ifFalse: [ [ f := Form fromFileNamed: fName ] ifError: [ nil ] ].
+	f ifNil: [ ^ self ].
 	f := PhratchFrameMorph scaledFormForPaintEditor: f.
-
-	(owner isKindOf: PaintFrame) ifTrue: [owner scaleCanvas: 1].
-
-	self commitMove.  "commit previous move, if any"
+	(owner isKindOf: PaintFrame)
+		ifTrue: [ owner scaleCanvas: 1 ].
+	self commitMove.	"commit previous move, if any"
 	palette mode: #move.
 	moveOrStampForm := f.
-	selectionRect := ((canvasForm extent - f extent) // 2) extent: f extent.
-
+	selectionRect := (canvasForm extent - f extent) // 2 extent: f extent
 ]
 
 { #category : #private }
@@ -845,7 +849,8 @@ PaintCanvas >> initialize [
 		suppressAntiAliasing: true;
 		textColor: Color black;		"pixel value 1 at depth 2"
 		borderColor: Color white;		"pixel value 2 at depth 2"
-		borderWidth: 0.
+		borderWidth: 0; 
+		yourself.
 	textDragMode := #none.
 	self extent: 250@250.
 
@@ -857,33 +862,31 @@ PaintCanvas >> installCursorInHand: h [
 
 	| mode cursor |
 	h showTemporaryCursor: nil.
-	palette showRotationCenter ifTrue: [^ self].
-
+	palette showRotationCenter
+		ifTrue: [ ^ self ].
 	mode := palette mode.
-	#eyedropper = mode ifTrue: [h showTemporaryCursor: Cursor eyeDropper].
-	#fill = mode ifTrue: [h showTemporaryCursor: Cursor paintBucket].
-	(#(line oval rect) includes: mode) ifTrue: [h showTemporaryCursor: Cursor crossHair].
-
-	(#(stamp move) includes: mode) ifTrue: [
-		moveOrStampForm
-			ifNil: [h showTemporaryCursor: Cursor crossHair]
-			ifNotNil: [
-				#stamp = mode
-					ifTrue: [h showTemporaryCursor: Cursor blank]
-					ifFalse: [h showTemporaryCursor: Cursor handOpen]]].
-
-	#erase = mode ifTrue: [
-		cursor := self brushCursorSize: palette brushSize color: Color transparent.
-		h
-			showTemporaryCursor: cursor
-			hotSpotOffset: (cursor center truncateTo: scale)].
-
-	#paint = mode ifTrue: [
-		cursor := self brushCursorSize: palette brushSize color: palette color1.
-		h
-			showTemporaryCursor: cursor
-			hotSpotOffset: (cursor center truncateTo: scale)].
-
+	#eyedropper = mode
+		ifTrue: [ h showTemporaryCursor: Cursor eyeDropper ].
+	#fill = mode
+		ifTrue: [ h showTemporaryCursor: Cursor paintBucket ].
+	(#(#line #oval #rect) includes: mode)
+		ifTrue: [ h showTemporaryCursor: Cursor crossHair ].
+	(#(#stamp #move) includes: mode)
+		ifTrue: [ 
+			moveOrStampForm
+				ifNil: [ h showTemporaryCursor: Cursor crossHair ]
+				ifNotNil: [ 
+					#stamp = mode
+						ifTrue: [ h showTemporaryCursor: Cursor blank ]
+						ifFalse: [ h showTemporaryCursor: Cursor handOpen ] ] ].
+	#erase = mode
+		ifTrue: [ 
+			cursor := self brushCursorSize: palette brushSize color: Color transparent.
+			h showTemporaryCursor: cursor hotSpotOffset: (cursor center truncateTo: scale) ].
+	#paint = mode
+		ifFalse: [ ^ self ].
+	cursor := self brushCursorSize: palette brushSize color: palette color1.
+	h showTemporaryCursor: cursor hotSpotOffset: (cursor center truncateTo: scale)
 ]
 
 { #category : #'event handling' }
@@ -946,7 +949,8 @@ PaintCanvas >> makeCheckerboard [
 	blt := (BitBlt toForm: f)
 		fillColor: Color black;
 		combinationRule: Form over;
-		destRect: (0@0 extent: squareSize).
+		destRect: (0@0 extent: squareSize); 
+		yourself.
 
 	0 to: f height by: (2 * squareSize) do: [:y |
 		blt destY: y.
@@ -977,7 +981,8 @@ PaintCanvas >> mouseDown: evt [
 	brush := (PhratchPen newOnForm: canvasForm)
 		roundNib: palette brushSize;
 		color: palette color1;
-		place: startPoint.
+		place: startPoint; 
+		yourself.
 
 	(#erase = palette mode) | (palette color1 isTransparent) ifTrue: [
 		brush color: Color black.
@@ -1083,35 +1088,6 @@ PaintCanvas >> moveToolMouseDown: aPoint [
 
 ]
 
-{ #category : #private }
-PaintCanvas >> newContents: aForm center: centerPoint [
-	"Replace the contents of my canvas with the new form after some transformation."
-
-	| r f p |
-	r := aForm rectangleEnclosingPixelsNotOfColor: Color transparent.
-	r = aForm boundingBox
-		ifTrue: [f := aForm]
-		ifFalse: [f := aForm copy: r].
-
-	"adjust canvasForm extent if necessary"
-	((f width > canvasForm width) |
-	 (f height > canvasForm height) |
-	 ((f width < canvasForm width) & (canvasForm width > self width)) |
-	 ((f height < canvasForm height) & (canvasForm height > self height))) ifTrue: [
-		canvasForm := Form extent: (self extent max: f extent) depth: canvasForm depth].
-
-	p := centerPoint - (f extent // 2).				"try to center"
-	p := p min: canvasForm extent - f extent.		"but don't go off bottom or right"
-	p := p max: 0@0.								"and don't go off the top or left"
-
-	canvasForm fillColor: Color transparent.
-	f displayOn: canvasForm at: p.
-
-	self centerAt: (p + (f extent // 2)).
-
-
-]
-
 { #category : #'private-tranforms' }
 PaintCanvas >> nonNumberWarning [
 
@@ -1212,14 +1188,6 @@ PaintCanvas >> redoTransform [
 PaintCanvas >> registrationPoint [
 
 	^ registrationPoint
-
-]
-
-{ #category : #'registration point' }
-PaintCanvas >> registrationPoint: aPointOrNil [
-	"Set the registration point for the current drawing. If the registration point is nil, a new one will be computed on demand." 
-
-	registrationPoint := aPointOrNil.
 
 ]
 

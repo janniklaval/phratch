@@ -11,18 +11,18 @@ Class {
 	#category : #'Phratch-UI-Elements'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 MessageElementMorph class >> labelFont [
 	^StrikeFont fontName: 'Verdana' size: 10
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #layout }
 MessageElementMorph >> acceptDroppingMorph: aMorph event: evt [
 
 	self addToCascade: aMorph
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #adding }
 MessageElementMorph >> addLabel [
 	label := StringMorph contents: '' font: self labelFont.
 	label color: self labelColor.
@@ -30,25 +30,25 @@ MessageElementMorph >> addLabel [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #adding }
 MessageElementMorph >> addReceiver [
 	receiver := ArgumentElementMorph new.
 	self addMorphFront: receiver.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #adding }
 MessageElementMorph >> addToCascade: aMessageElement [
 	cascade add: aMessageElement.
 	self addMorph: aMessageElement.
 	aMessageElement embedAsCascade
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #evaluation }
 MessageElementMorph >> argumentCount [
 	^arguments size
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 MessageElementMorph >> arguments: anArray [
 
 	1 to: anArray size do: [:i|
@@ -56,21 +56,22 @@ MessageElementMorph >> arguments: anArray [
 			(arguments at: i) contents: (anArray at: i ) ]]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #converting }
 MessageElementMorph >> asSmalltalk [
 	| ws |
-	receiver isHidden ifTrue: [^self keywordsAndArgs ].
-	cascade isEmpty not ifTrue: [ ^self cascadeCode ].
-
+	receiver isHidden
+		ifTrue: [ ^ self keywordsAndArgs ].
+	cascade isEmpty
+		ifFalse: [ ^ self cascadeCode ].
 	ws := WriteStream on: String new.
-	^ws
-		nextPutString: receiver asSmalltalk, ' ';
+	^ ws
+		nextPutString: receiver asSmalltalk , ' ';
 		nextPutString: self keywordsAndArgs;
 		contents;
 		yourself
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #converting }
 MessageElementMorph >> assign [
 	self selector: #_ arguments: { ObjectElementMorph new }.
 	(arguments at: 1) contents delete. 
@@ -144,22 +145,22 @@ MessageElementMorph >> cascadeCode [
 		yourself
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #menu }
 MessageElementMorph >> contextMenu [
-	|m|
-	m := MenuMorph new.
-"	m add: 'duplicate' action: #duplicate. "
-	m add: 'delete' action: #throwAway.
+	| m |
+	m := MenuMorph new.	"	m add: 'duplicate' action: #duplicate. "
+	m add: 'delete' translated action: #throwAway.
 	self isRenameable
-		ifTrue: [
-			m add: 'rename...' action: #editSelector.
-			arguments isEmpty ifTrue: [
-				m add: 'add argument' action: #beBinary ]]
+		ifTrue:
+			[ 
+			m add: 'rename...' translated action: #editSelector.
+			arguments isEmpty
+				ifTrue: [ m add: 'add argument' translated action: #beBinary ] ].
 	m addLine.
-	m add: 'show code...' action: #showGeneratedSmalltalk.
-	m add: 'show result...' action: #showResult.
-	m add: 'evaluate' action: #evaluate.
-	^m
+	m add: 'show code...' translated action: #showGeneratedSmalltalk.
+	m add: 'show result...' translated action: #showResult.
+	m add: 'evaluate' translated action: #evaluate.
+	^ m
 ]
 
 { #category : #'as yet unclassified' }
@@ -182,14 +183,15 @@ MessageElementMorph >> extractFromCascade [
 	self fit
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 MessageElementMorph >> fit [
-
-	receiver isHidden ifTrue: [^self fitForCascade ].
-	cascade isEmpty not ifTrue: [ ^self fitCascaded ].
+	receiver isHidden
+		ifTrue: [ ^ self fitForCascade ].
+	cascade isEmpty
+		ifFalse: [ ^ self fitCascaded ].
 	self isStacked
-	ifTrue: [self fitStacked]
-	ifFalse: [self fitInLine]
+		ifTrue: [ self fitStacked ]
+		ifFalse: [ self fitInLine ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -370,7 +372,7 @@ MessageElementMorph >> fitStacked [
 		ifTrue: [owner fit]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'*Phratch-Extensions' }
 MessageElementMorph >> fullCopy [
 	|copy|
 	copy := self class new selector: selector.
@@ -389,7 +391,7 @@ MessageElementMorph >> hasCascade [
 	^cascade isEmpty not
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialize }
 MessageElementMorph >> initialize [
 	super initialize.
 	labels := OrderedCollection new.
@@ -401,19 +403,19 @@ MessageElementMorph >> initialize [
 	self fit.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 MessageElementMorph >> isBinary [
 
 	^(arguments size = 1) and: [
 		selector asString last ~= ($:)]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 MessageElementMorph >> isKeywords [
 	^arguments size > 0 & self isBinary not
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 MessageElementMorph >> isLabelFirst [
 	|firstWord disabled|
 	disabled := true. "change this to experiment with swapped unaries"
@@ -427,7 +429,7 @@ MessageElementMorph >> isLabelFirst [
 	^arguments isEmpty & cascade isEmpty & receiver isHidden not
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 MessageElementMorph >> isStacked [
 	^(#(
 		'isNil:'
@@ -457,7 +459,7 @@ MessageElementMorph >> isStacked [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 MessageElementMorph >> isUnary [
 
 	^arguments isEmpty
@@ -476,17 +478,17 @@ MessageElementMorph >> keywordsAndArgs [
 	^ws contents
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 MessageElementMorph >> labelFont [
 	^self class labelFont
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 MessageElementMorph >> receiver [
 	^receiver contents
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 MessageElementMorph >> receiver: anElement [
 	receiver contents: anElement
 ]
@@ -500,7 +502,7 @@ MessageElementMorph >> removeCascadedElement: element [
 	^self
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'*Phratch-Extensions' }
 MessageElementMorph >> rootForGrabOf: aMorph [
 	"Answer the root of the morph structure to be picked up when the given morph is grabbed."
 
@@ -510,7 +512,7 @@ MessageElementMorph >> rootForGrabOf: aMorph [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 MessageElementMorph >> selector: aString [
 
 	selector := aString.
@@ -518,7 +520,7 @@ MessageElementMorph >> selector: aString [
 	self fit
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'instance creation' }
 MessageElementMorph >> selector: aString arguments: anArray [
 
 	"for decompilation purposes only. Caution: this method assumes that the number of arguments matches the
@@ -553,7 +555,7 @@ MessageElementMorph >> selector: aString arguments: anArray [
 	self fit
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'dropping/grabbing' }
 MessageElementMorph >> wantsDroppedMorph: aMorph event: evt [
 
 	(owner isKindOf: self class) ifTrue: [owner hasCascade ifTrue: [^false]].

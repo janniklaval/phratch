@@ -31,8 +31,7 @@ Class {
 		'doneWithDebugging'
 	],
 	#classVars : [
-		'BlockHighlightMSecs',
-		'Times'
+		'BlockHighlightMSecs'
 	],
 	#category : #'Phratch-Execution Engine'
 }
@@ -218,43 +217,29 @@ PhratchProcess >> doAnswer [
 	"Evaluates its argument, and returns the value to the frame from which the current method was called."
 
 	| value args zap |
-
-	args := stackFrame arguments.
-
-	"Evaluate the argument, if necessary."
-
+	args := stackFrame arguments.	"Evaluate the argument, if necessary."
 	args size < stackFrame expression argumentCount
-		ifTrue: [^self evaluateNextArgument].
-
-
-	"Remember the return value."
-	args size > 0
-		ifTrue:	[value := args first]
-		ifFalse:	[value := nil].
-	answer := value. 
-
-	zap := [
-		[ stackFrame isNil
-		or: [stackFrame expression = #closeCustomBlock ]] whileFalse: [ 
-			self popStackFrame]. self closeCustomBlock].
-
-	zap value.
-
-	"get out of a custom C-shape command slot"
-	[stackFrame notNil 
-	and: [(stackFrame expression isKindOf: Array)
-		and: [stackFrame expression first isKindOf: MultiArgCommandBlockMorph]]] whileTrue: [ 
-		zap value. zap value]. 
-
-	[stackFrame notNil 
-	and: [stackFrame parentFrame notNil 
-	and: [stackFrame parentFrame expression = #shouldYield]]] whileTrue: [
-		zap value. zap value ].
-
+		ifTrue: [ ^ self evaluateNextArgument ].	"Remember the return value."
+	value := args size > 0
+		ifTrue: [ args first ]
+		ifFalse: [ nil ].
+	answer := value.
+	zap := [ 
+	[ stackFrame isNil or: [ stackFrame expression = #closeCustomBlock ] ] whileFalse: [ self popStackFrame ].
+	self closeCustomBlock ].
+	zap value.	"get out of a custom C-shape command slot"
+	[ 
+	stackFrame notNil
+		and: [ (stackFrame expression isKindOf: Array) and: [ stackFrame expression first isKindOf: MultiArgCommandBlockMorph ] ] ]
+		whileTrue: [ 
+			zap value.
+			zap value ].
+	[ stackFrame notNil and: [ stackFrame parentFrame notNil and: [ stackFrame parentFrame expression = #shouldYield ] ] ]
+		whileTrue: [ 
+			zap value.
+			zap value ].
 	self returnValueToParentFrame: value.
-
-	stackFrame ifNotNil: [ self popStackFrame ].
-
+	stackFrame ifNotNil: [ self popStackFrame ]
 ]
 
 { #category : #'private-special forms' }
@@ -555,18 +540,15 @@ PhratchProcess >> doCustomBlock [
 
 { #category : #'private-special forms' }
 PhratchProcess >> doDeclareVariables [
-
-	| block env  |
-
+	| block env |
 	block := stackFrame expression.
-	(blockVarList notNil and: [blockVarList size > 0])
-		ifTrue: [ env := blockVarList last ]
-		ifFalse: [ env := tempVars ].
-	block variables do: [:var | env add: var ]. 
-	(scriptList notNil and: [scriptList size > 0])
-		ifTrue: [self bindVarsIn: scriptList last to: env]
-		ifFalse: [self bindVarsIn: block blockSequence to: env].
-
+	env := (blockVarList notNil and: [ blockVarList size > 0 ])
+		ifTrue: [ blockVarList last ]
+		ifFalse: [ tempVars ].
+	block variables do: [ :var | env add: var ].
+	(scriptList notNil and: [ scriptList size > 0 ])
+		ifTrue: [ self bindVarsIn: scriptList last to: env ]
+		ifFalse: [ self bindVarsIn: block blockSequence to: env ].
 	self popStackFrame
 ]
 
@@ -709,28 +691,17 @@ PhratchProcess >> doPauseThread [
 
 { #category : #'BYOB-pause/resume' }
 PhratchProcess >> doPauseThreadReporter [
-
-
 	| value args |
-
 	self nextStep.
-
-	args := stackFrame arguments.
-	"Evaluate the argument, if necessary."
+	args := stackFrame arguments.	"Evaluate the argument, if necessary."
 	args size < stackFrame expression argumentCount
-		ifTrue: [ ^self evaluateNextArgument].
-
-	"Remember the return value."
-	args size > 0
-		ifTrue:	[value := args first]
-		ifFalse:	[value := nil].
-	answer := value. 
-
+		ifTrue: [ ^ self evaluateNextArgument ].	"Remember the return value."
+	value := args size > 0
+		ifTrue: [ args first ]
+		ifFalse: [ nil ].
+	answer := value.
 	self returnValueToParentFrame: value.
-
-	stackFrame ifNotNil: [
-		self popStackFrame]
-
+	stackFrame ifNotNil: [ self popStackFrame ]
 ]
 
 { #category : #'private-special forms' }
@@ -821,27 +792,17 @@ PhratchProcess >> doReturn [
 	"Evaluates its argument, and returns the value to the frame from which the current method was called."
 
 	| value args |
-
-	args := stackFrame arguments.
-
-	"Evaluate the argument, if necessary."
+	args := stackFrame arguments.	"Evaluate the argument, if necessary."
 	args size < stackFrame expression argumentCount
-		ifTrue: [^self evaluateNextArgument].
-
-	"Remember the return value."
-	args size > 0
-		ifTrue:	[value := args first]
-		ifFalse:	[value := nil].
-
-	"Pop until we're out of frames to pop, or we hit a return marker."
-
-	[stackFrame isNil] whileFalse:
-		[self popStackFrame].
-
-	stackFrame ifNotNil:	[
-		self returnValueToParentFrame: value.
-		self popStackFrame].
-
+		ifTrue: [ ^ self evaluateNextArgument ].	"Remember the return value."
+	value := args size > 0
+		ifTrue: [ args first ]
+		ifFalse: [ nil ].	"Pop until we're out of frames to pop, or we hit a return marker."
+	[ stackFrame isNil ] whileFalse: [ self popStackFrame ].
+	stackFrame
+		ifNotNil: [ 
+			self returnValueToParentFrame: value.
+			self popStackFrame ]
 ]
 
 { #category : #'private-special forms' }
@@ -951,7 +912,7 @@ PhratchProcess >> doWaitUntil [
 { #category : #'private-special forms' }
 PhratchProcess >> doWhile [
 	"Evaluates the current while-loop expression."
-
+	
 	^self doUntil: false.
 ]
 
@@ -1214,12 +1175,7 @@ PhratchProcess >> includesDeletedReceiver [
 PhratchProcess >> includesReceiver: anObject [
 	"Answer true if I have the given object as a block receiver."
 
-	self stackAsArray do: [:frm |
-		((frm respondsTo: #receiver) and: [frm receiver == anObject])
-			ifTrue: [^ true]].
-	^ false
-
-
+	^ self stackAsArray anySatisfy: [ :frm | (frm respondsTo: #receiver) and: [ frm receiver == anObject ] ]
 ]
 
 { #category : #initialization }
@@ -1327,19 +1283,19 @@ PhratchProcess >> popStackFrame [
 	"this effectively disables Scratch's so called single stepping mechanism
 	for BYOB, a sacrifice that let's us catch up with Scratch speed again,
 	-jens"
-	true ifTrue: [^self].
+	^self.
 
 	"and this is the old code"
 
-	self isAtomic ifTrue: [^self ].
+	"self isAtomic ifTrue: [^self ].
 
 	BlockHighlightMSecs > 0 ifTrue: [
 		(frame shouldUnlight not and: [command isKindOf: BlockMorph]) ifTrue: [
-			"We push a new frame for unlighting this command."
+			""We push a new frame for unlighting this command.""
 			unlightFrame := PhratchStackFrame new
 				expression: command;
 				shouldUnlight: true.
-			self pushStackFrame: unlightFrame]].
+			self pushStackFrame: unlightFrame]]."
 
 ]
 
@@ -1501,96 +1457,10 @@ PhratchProcess >> topBlock: aBlock [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #copying }
 PhratchProcess >> veryDeepCopyWith: ignored [
 
 	^ nil
-]
-
-{ #category : #'private-special forms' }
-PhratchProcess >> xdoAnswer [
-	"Evaluates its argument, and returns the value to the frame from which the current method was called."
-
-	| value args zap |
-
-	args := stackFrame arguments.
-
-	"Evaluate the argument, if necessary."
-
-	args size < stackFrame expression argumentCount
-		ifTrue: [^self evaluateNextArgument].
-
-
-	"Remember the return value."
-	args size > 0
-		ifTrue:	[value := args first]
-		ifFalse:	[value := nil].
-	answer := value. 
-
-	zap := [
-		[ stackFrame isNil
-		or: [stackFrame expression = #closeCustomBlock ]] whileFalse: [ 
-			self popStackFrame]. self closeCustomBlock].
-
-	zap value.
-
-	"get out of a custom C-shape command slot"
-	[stackFrame notNil 
-	and: [(stackFrame expression isKindOf: Array)
-		and: [stackFrame expression first isKindOf: MultiArgCommandBlockMorph]]] whileTrue: [ 
-		zap value. zap value]. 
-
-	[stackFrame notNil 
-	and: [stackFrame parentFrame notNil 
-	and: [stackFrame parentFrame expression = #shouldYield]]] whileTrue: [
-		zap value. zap value ].
-
-	self returnValueToParentFrame: value.
-
-	stackFrame ifNotNil: [ self popStackFrame ].
-
-]
-
-{ #category : #'private-special forms' }
-PhratchProcess >> xnewdoAnswer [
-	"Evaluates its argument, and returns the value to the frame from which the current method was called."
-
-	| value args stopFrame zap |
-
-	stopFrame := stackFrame expression stopFrame.
-	args := stackFrame arguments.
-
-	"Evaluate the argument, if necessary."
-
-	args size < stackFrame expression argumentCount
-		ifTrue: [^self evaluateNextArgument].
-
-	"Remember the return value."
-	args size > 0
-		ifTrue:	[value := args first]
-		ifFalse:	[value := nil].
-	answer := value. 
-
-	zap := [
-		[ stackFrame isNil
-		or: [stackFrame expression = #closeCustomBlock ]] whileFalse: [ 
-			self popStackFrame]. self closeCustomBlock].
-
-	[stackFrame isNil
-	or: [stackFrame parentFrame isNil
-	or: [stackFrame parentFrame parentFrame isNil
-	or: [stackFrame == stopFrame]]]] whileFalse: [
-			zap value].
-
-	stackFrame ifNotNil: [
-		self popStackFrame].
-
-	self returnValueToParentFrame: value.
-
-	stackFrame ifNotNil: [
-		self popStackFrame].
-
-
 ]
 
 { #category : #'private-evaluation' }

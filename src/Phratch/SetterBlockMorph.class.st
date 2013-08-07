@@ -24,85 +24,77 @@ this symbol is *not* the selector!. Instead the selector goes into slot 5. The i
 "
 
 	| arg rcvr blockTuple val eval var |
-	isSpecialForm 
-		ifTrue: [
-			(receiver isKindOf: VariableFrame)
-				ifTrue: [ rcvr := receiver convertStacksToTuples ]
-				ifFalse: [ rcvr := nil ].
-
+	isSpecialForm
+		ifTrue: [ 
+			rcvr := (receiver isKindOf: VariableFrame)
+				ifTrue: [ receiver convertStacksToTuples ]
+				ifFalse: [ nil ].
 			blockTuple := Array new: 7.
 			blockTuple
 				at: 1 put: #byob;
-				at: 2 put: self rcvr;			"not really needed for this block. late-bound. JM"
+				at: 2 put: self rcvr;
 				at: 3 put: #changeBlockVariable;
 				at: 4 put: self variable;
 				at: 5 put: selector;
 				at: 6 put: rcvr;
-				at: 7 put: nil.
-
+				at: 7 put: nil.	"not really needed for this block. late-bound. JM"
 			arg := (argMorphs first isKindOf: ChoiceArgMorph)
-				ifTrue: [argMorphs last]
-				ifFalse: [argMorphs first].
-
+				ifTrue: [ argMorphs last ]
+				ifFalse: [ argMorphs first ].
 			(arg isKindOf: ArgMorph)
-				ifTrue: [(arg isKindOf: ExpressionArgMorph)
-					ifTrue: [
-						val := arg getExpression.
-						arg isNumberExpression
-							ifTrue: [val = ' '
-								ifTrue: [eval := val]
-								ifFalse: [eval := val asNumberNoError]]
-							ifFalse: [eval := arg evaluate]]
-					ifFalse: [eval := arg evaluate].
-					blockTuple at: 7 put: eval]
-				ifFalse: [blockTuple at: 7 put: arg asBlockTuple]]
-
-		ifFalse: [
+				ifTrue: [ 
+					(arg isKindOf: ExpressionArgMorph)
+						ifTrue: [ 
+							val := arg getExpression.
+							eval := arg isNumberExpression
+								ifTrue: [ 
+									val = ' '
+										ifTrue: [ val ]
+										ifFalse: [ val asNumberNoError ] ]
+								ifFalse: [ arg evaluate ] ]
+						ifFalse: [ eval := arg evaluate ].
+					blockTuple at: 7 put: eval ]
+				ifFalse: [ blockTuple at: 7 put: arg asBlockTuple ] ]
+		ifFalse: [ 
 			var := self variable.
-			(var isKindOf: CommandBlockMorph) ifTrue: [
-				var := var asBlockTuple].
+			(var isKindOf: CommandBlockMorph)
+				ifTrue: [ var := var asBlockTuple ].
 			blockTuple := Array new: 6.
 			blockTuple
 				at: 1 put: #byob;
-				at: 2 put: self rcvr;			"not really needed for this block. late-bound. JM"
+				at: 2 put: self rcvr;
 				at: 3 put: #changeVariable;
 				at: 4 put: var;
 				at: 5 put: selector;
-				at: 6 put: nil.
-
-			"determine if the block is a getter or a setter:"
-
-			arg := ((argMorphs first isKindOf: ChoiceArgMorph) 
-					or: [argMorphs first isKindOf: ReporterBlockMorph])
-				ifTrue: [argMorphs last]
-				ifFalse: [argMorphs first].
-
+				at: 6 put: nil.	"not really needed for this block. late-bound. JM"	"determine if the block is a getter or a setter:"
+			arg := ((argMorphs first isKindOf: ChoiceArgMorph) or: [ argMorphs first isKindOf: ReporterBlockMorph ])
+				ifTrue: [ argMorphs last ]
+				ifFalse: [ argMorphs first ].
 			(arg isKindOf: ArgMorph)
-				ifTrue: [(arg isKindOf: ExpressionArgMorph)
-					ifTrue: [
-						val := arg getExpression.
-						arg isNumberExpression
-							ifTrue: [val = ' '
-								ifTrue: [eval := val]
-								ifFalse: [eval := val asNumberNoError]]
-							ifFalse: [eval := arg evaluate]]
-					ifFalse: [eval := arg evaluate].
-					blockTuple at: 6 put: eval]
-				ifFalse: [blockTuple at: 6 put: arg asBlockTuple]].
-
-		^ blockTuple
+				ifTrue: [ 
+					(arg isKindOf: ExpressionArgMorph)
+						ifTrue: [ 
+							val := arg getExpression.
+							eval := arg isNumberExpression
+								ifTrue: [ 
+									val = ' '
+										ifTrue: [ val ]
+										ifFalse: [ val asNumberNoError ] ]
+								ifFalse: [ arg evaluate ] ]
+						ifFalse: [ eval := arg evaluate ].
+					blockTuple at: 6 put: eval ]
+				ifFalse: [ blockTuple at: 6 put: arg asBlockTuple ] ].
+	^ blockTuple
 ]
 
 { #category : #byob }
 SetterBlockMorph >> contrastColor [
-
 	| newColor |
-	isSpecialForm
-		ifTrue: [newColor := VariableFrame variableBlockColor]
-		ifFalse: [newColor := (ScriptablePhratchMorph blockColorFor: 'variables')].
-	color = newColor ifFalse: [
-		self color: newColor ].
-
+	newColor := isSpecialForm
+		ifTrue: [ VariableFrame variableBlockColor ]
+		ifFalse: [ ScriptablePhratchMorph blockColorFor: 'variables' ].
+	color = newColor
+		ifFalse: [ self color: newColor ].
 	super contrastColor
 ]
 

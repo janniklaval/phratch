@@ -41,14 +41,6 @@ ReporterBlockMorph >> bodyLeft [
 ]
 
 { #category : #'byob lambdas' }
-ReporterBlockMorph >> bodyLeft: x [
-	"move me"
-
-	self left: self left + (x - self bodyLeft)
-
-]
-
-{ #category : #'byob lambdas' }
 ReporterBlockMorph >> bodyRight [
 
 	^ self right - (self height // 2)
@@ -309,153 +301,137 @@ ReporterBlockMorph >> fixBlockLayoutWrap [
 	"Update the positions of my submorphs."
 
 	| parts lines line h x y minXForArgs w space left maxX maxHeight extraSpace mh |
-
-	(#(function functionWithArgs doReport doCallWithArgs doCallBlockWithArgs) includes: selector) ifTrue: [
-		self updateIsBoolean; layoutChanged].
-
-	(self isCustomBlock and: [self isTemplate]) ifTrue: [^ self fixBlockLayoutNoWrap].
-	blockLayoutNeeded ifFalse: [^ self].
-
+	(#(#function #functionWithArgs #doReport #doCallWithArgs #doCallBlockWithArgs) includes: selector)
+		ifTrue: [ 
+			self
+				updateIsBoolean;
+				layoutChanged ].
+	(self isCustomBlock and: [ self isTemplate ])
+		ifTrue: [ ^ self fixBlockLayoutNoWrap ].
+	blockLayoutNeeded
+		ifFalse: [ ^ self ].
 	cachedForm := nil.
 	cachedFeedbackForm := nil.
-
 	parts := self nonControlFlowSubmorphs.
-	parts isEmpty ifTrue: [^self].
-	lines := OrderedCollection new.
-
-
-	"distribute parts horizontally and cut up into lines"
-
+	parts isEmpty
+		ifTrue: [ ^ self ].
+	lines := OrderedCollection new.	"distribute parts horizontally and cut up into lines"
 	line := OrderedCollection new.
 	x := self left + 5.
 	left := x.
 	maxX := x.
 	minXForArgs := self left.
 	space := 4.
-
-	parts do: [:m |
-	((m isKindOf: CArgSlotMorph) or: [(m isKindOf: CReporterSlotMorph) or: [(m isKindOf: MultiArgMorph) and: [m isWrapping]]])
-		ifTrue: [ 
-			line isEmpty ifFalse: [
-				lines add: line].
-			m left: self left - 5.
-			lines add: (OrderedCollection with: m).
-			(m isKindOf: MultiArgMorph)
-				ifTrue: [m fixArgLayout]
-				ifFalse: [m fixBlockLayout].
-			((m isKindOf: CArgSlotMorph) or: [m isKindOf: CReporterSlotMorph])
-				ifTrue: [m width: 40].
-			line := OrderedCollection new.
-			maxX := maxX max: (left + m width).
-			x := left ]
-		ifFalse: [
-			x - left > 300 ifTrue: [
-				lines add: line.
-				line := OrderedCollection new.
-				x := left].
-			(m isKindOf: BlockMorph) ifTrue: [m fixBlockLayout].
-			(m isKindOf: ArgMorph) ifTrue: [m fixArgLayout].
-			(m isKindOf: StringMorph)
-				ifTrue: [m color: self labelColor]
-				ifFalse: [x := x max: minXForArgs].
-
-			m left: x.
-			(m right - left > 300 and: [line isEmpty not])
-				ifTrue: [
-					lines add: line.
+	parts
+		do: [ :m | 
+			((m isKindOf: CArgSlotMorph)
+				or: [ (m isKindOf: CReporterSlotMorph) or: [ (m isKindOf: MultiArgMorph) and: [ m isWrapping ] ] ])
+				ifTrue: [ 
+					line isEmpty
+						ifFalse: [ lines add: line ].
+					m left: self left - 5.
+					lines add: (OrderedCollection with: m).
+					(m isKindOf: MultiArgMorph)
+						ifTrue: [ m fixArgLayout ]
+						ifFalse: [ m fixBlockLayout ].
+					((m isKindOf: CArgSlotMorph) or: [ m isKindOf: CReporterSlotMorph ])
+						ifTrue: [ m width: 40 ].
 					line := OrderedCollection new.
-					m left: left.
-					line add: m.
-					x := left]
-				ifFalse: [ line add: m].
-				x := x + m fullBounds width + space.
-				maxX := maxX max: x]].
-	x = left ifFalse: [
-		lines add: line].
-	w := maxX - self left max: 4.
-
-	"distribute lines vertically"
-
+					maxX := maxX max: left + m width.
+					x := left ]
+				ifFalse: [ 
+					x - left > 300
+						ifTrue: [ 
+							lines add: line.
+							line := OrderedCollection new.
+							x := left ].
+					(m isKindOf: BlockMorph)
+						ifTrue: [ m fixBlockLayout ].
+					(m isKindOf: ArgMorph)
+						ifTrue: [ m fixArgLayout ].
+					(m isKindOf: StringMorph)
+						ifTrue: [ m color: self labelColor ]
+						ifFalse: [ x := x max: minXForArgs ].
+					m left: x.
+					(m right - left > 300 and: [ line isEmpty not ])
+						ifTrue: [ 
+							lines add: line.
+							line := OrderedCollection new.
+							m left: left.
+							line add: m.
+							x := left ]
+						ifFalse: [ line add: m ].
+					x := x + m fullBounds width + space.
+					maxX := maxX max: x ] ].
+	x = left
+		ifFalse: [ lines add: line ].
+	w := maxX - self left max: 4.	"distribute lines vertically"
 	space := 1.
-	y := self top "+ 2" "+ space".
-	lines do: [:eachLine |
-		maxHeight := 14.
-		eachLine do: [:m |
-			((m isKindOf: ReporterBlockMorph)
-			and: [m isBlockTemplate or: [ 
-			((m isKindOf: CArgSlotMorph) 
-			or: [m isKindOf: OSlotMorph]) and: [(m isKindOf: CReporterSlotMorph) not and: [m isEmptySlot not]]] ])
-				ifTrue: [mh := m height + 10]
-
-				ifFalse: [ ((m isKindOf: CArgSlotMorph) or: [(m isKindOf: OSlotMorph) and: [(m isKindOf: CReporterSlotMorph) not]])
-					ifTrue: [mh := m height + 4]
-					ifFalse: [mh := m height + 2]].
-
-
-			maxHeight := mh max: maxHeight].
-		eachLine do: [:m |
-			m top: y + (maxHeight - m height // 2) + 1].
-		y := y + maxHeight + space].
-	h := y - self top + space.
-
-
-	"adjust lines to round / hex shape"
-
+	y := self top.	"+ 2"	"+ space"
+	lines
+		do: [ :eachLine | 
+			maxHeight := 14.
+			eachLine
+				do: [ :m | 
+					mh := ((m isKindOf: ReporterBlockMorph)
+						and: [ 
+							m isBlockTemplate
+								or: [ 
+									((m isKindOf: CArgSlotMorph) or: [ m isKindOf: OSlotMorph ])
+										and: [ (m isKindOf: CReporterSlotMorph) not and: [ m isEmptySlot not ] ] ] ])
+						ifTrue: [ m height + 10 ]
+						ifFalse: [ 
+							((m isKindOf: CArgSlotMorph) or: [ (m isKindOf: OSlotMorph) and: [ (m isKindOf: CReporterSlotMorph) not ] ])
+								ifTrue: [ m height + 4 ]
+								ifFalse: [ m height + 2 ] ].
+					maxHeight := mh max: maxHeight ].
+			eachLine do: [ :m | m top: y + ((maxHeight - m height) // 2) + 1 ].
+			y := y + maxHeight + space ].
+	h := y - self top + space.	"adjust lines to round / hex shape"
 	extraSpace := 0.
-	lines size > 1 
-		ifTrue: [extraSpace := h // 2]
-		ifFalse: [ isBoolean
-			ifTrue: [extraSpace := h // 3]].
-
-	parts do: [:m|
-		m left: m left + extraSpace].
-
-	w := w + (extraSpace * 2).
-
-	"adjust CArgSlots"
-
-	parts do: [:m |
-		((m isKindOf: CArgSlotMorph) or: [m isKindOf: CReporterSlotMorph])
-			ifTrue: [m width: w - (extraSpace * 2) + 6]].
-
-	((parts last isKindOf: CArgSlotMorph) or: [parts last isKindOf: CReporterSlotMorph]) ifTrue: [
-		h := h + space + 5].
-
-
-	"stack nested Reporters more efficiently:"
-
-	lines size > 1 ifTrue: [
-		self height: h.
-		lines do: [:l |
-			| offset |
-			((l first respondsTo: #bodyLeft) and: [(isBoolean and: [l first isBooleanReporter not]) not])
-				ifTrue: [ offset := l first bodyLeft - self bodyLeft]
-				ifFalse: [ offset := l first left - self bodyLeft].
-				l do: [:m |
-					self isBooleanReporter
-						ifTrue: [m left: m left - offset + 2]
-						ifFalse: [m left: m left - offset]]].
-
-		maxX := self left + 5.
-		lines do: [:l |
-			((l last respondsTo: #bodyRight)  and: [(isBoolean and: [l last isBooleanReporter not]) not])
-				ifTrue: [maxX := maxX max: l last bodyRight]
-				ifFalse: [maxX := maxX max: l last right]].
-		self isBooleanReporter
-			ifTrue: [self bodyRight: maxX + 2]
-			ifFalse: [self bodyRight: maxX].
-
-		"adjust Multi-CArgSlots"
-
-		parts do: [:m | (m isKindOf: MultiArgMorph)
-			ifTrue: [m loopsWidth: self bodyRight - self bodyLeft]]]
-
-	ifFalse: [ self extent: w @ h].
-
-	(self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph) ifNotNil: [
-		(self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph) fixLayout].
-
-
+	lines size > 1
+		ifTrue: [ extraSpace := h // 2 ]
+		ifFalse: [ 
+			isBoolean
+				ifTrue: [ extraSpace := h // 3 ] ].
+	parts do: [ :m | m left: m left + extraSpace ].
+	w := w + (extraSpace * 2).	"adjust CArgSlots"
+	parts
+		do: [ :m | 
+			((m isKindOf: CArgSlotMorph) or: [ m isKindOf: CReporterSlotMorph ])
+				ifTrue: [ m width: w - (extraSpace * 2) + 6 ] ].
+	((parts last isKindOf: CArgSlotMorph) or: [ parts last isKindOf: CReporterSlotMorph ])
+		ifTrue: [ h := h + space + 5 ].	"stack nested Reporters more efficiently:"
+	lines size > 1
+		ifTrue: [ 
+			self height: h.
+			lines
+				do: [ :l | 
+					| offset |
+					offset := ((l first respondsTo: #bodyLeft) and: [ (isBoolean and: [ l first isBooleanReporter not ]) not ])
+						ifTrue: [ l first bodyLeft - self bodyLeft ]
+						ifFalse: [ l first left - self bodyLeft ].
+					l
+						do: [ :m | 
+							self isBooleanReporter
+								ifTrue: [ m left: m left - offset + 2 ]
+								ifFalse: [ m left: m left - offset ] ] ].
+			maxX := self left + 5.
+			lines
+				do: [ :l | 
+					maxX := ((l last respondsTo: #bodyRight) and: [ (isBoolean and: [ l last isBooleanReporter not ]) not ])
+						ifTrue: [ maxX max: l last bodyRight ]
+						ifFalse: [ maxX max: l last right ] ].
+			self isBooleanReporter
+				ifTrue: [ self bodyRight: maxX + 2 ]
+				ifFalse: [ self bodyRight: maxX ].	"adjust Multi-CArgSlots"
+			parts
+				do: [ :m | 
+					(m isKindOf: MultiArgMorph)
+						ifTrue: [ m loopsWidth: self bodyRight - self bodyLeft ] ] ]
+		ifFalse: [ self extent: w @ h ].
+	(self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph)
+		ifNotNil: [ (self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph) fixLayout ]
 ]
 
 { #category : #watcher }
@@ -520,17 +496,15 @@ ReporterBlockMorph >> isReporter [
 
 { #category : #'byob lambdas' }
 ReporterBlockMorph >> lambdaMenu [
-
 	| menu choice |
 	menu := MenuMorph new defaultTarget: self.
-
-	(owner isKindOf: PhratchBlockPaletteMorph) ifTrue: [^ self].
-
+	(owner isKindOf: PhratchBlockPaletteMorph)
+		ifTrue: [ ^ self ].
 	(owner isKindOf: ReporterScriptBlockMorph)
-		ifFalse: [ menu add: 'quote' action: #lambdafied ].
-
-	(choice := menu localize; popUpInWorld) ifNotNil: [
-		self perform: choice ].
+		ifFalse: [ menu add: 'quote' translated action: #lambdafied ].
+	(choice := menu
+		localize;
+		popUpInWorld) ifNotNil: [ self perform: choice ].
 	World activeHand showTemporaryCursor: nil
 ]
 
@@ -575,80 +549,76 @@ ReporterBlockMorph >> mouseDown: evt [
 
 { #category : #'byob lambdas' }
 ReporterBlockMorph >> showLambdaValue [
-
 	| gotError msg tooltip w worldBounds zombie |
 	gotError := false.
-
-	[self start.
+	[ 
+	self start.
 	zombie := phratchProc.
 	phratchProc stepUntilDoneFor: (receiver ownerOrYourselfThatIsA: PhratchStageMorph).
-	msg := zombie answer ] ifError: [
-		gotError := true.
-		msg := 'Error!'].
-
-	(msg isKindOf: Morph)
-		ifTrue: [(msg respondsTo: #displayForm)
-			ifTrue: [msg := msg displayForm ]
-			ifFalse: [msg := msg imageForm ]]
-		ifFalse: [msg := msg asString ].
-
-	(self isBooleanReporter or: [msg = 'Error!']) ifTrue: [
-		msg := msg localized].
+	msg := zombie answer ]
+		ifError: [ 
+			gotError := true.
+			msg := 'Error!' ].
+	msg := (msg isKindOf: Morph)
+		ifTrue: [ 
+			(msg respondsTo: #displayForm)
+				ifTrue: [ msg displayForm ]
+				ifFalse: [ msg imageForm ] ]
+		ifFalse: [ msg asString ].
+	(self isBooleanReporter or: [ msg = 'Error!' ])
+		ifTrue: [ msg := msg localized ].
 	tooltip := (PhratchReporterToolTipMorph string: msg for: self)
 		left: self right;
 		bottom: self top.
-	PhratchTranslator isRTL ifTrue: [tooltip right: self left].
-	gotError ifTrue: [tooltip messageColor: Color red darker].
-
+	PhratchTranslator isRTL
+		ifTrue: [ tooltip right: self left ].
+	gotError
+		ifTrue: [ tooltip messageColor: Color red darker ].
 	w := self world.
 	w addMorphFront: tooltip.
-	((worldBounds := w bounds) containsRect: tooltip bounds) ifFalse:
-		[tooltip bounds: (tooltip bounds translatedToBeWithin: worldBounds)].
-
+	((worldBounds := w bounds) containsRect: tooltip bounds)
+		ifFalse: [ tooltip bounds: (tooltip bounds translatedToBeWithin: worldBounds) ].
 	self setProperty: #toolTip toValue: tooltip.
 	tooltip initialCursorPoint: Sensor cursorPoint.
-	tooltip startStepping.
+	tooltip startStepping
 ]
 
 { #category : #other }
 ReporterBlockMorph >> showValue [
-
 	| gotError msg tooltip w worldBounds |
-
-	(#(doReport doMakeNewList doCallWithArgs doPauseThreadReporter) includes: selector) ifTrue: [^self showLambdaValue ].
-"
+	(#(#doReport #doMakeNewList #doCallWithArgs #doPauseThreadReporter) includes: selector)
+		ifTrue: [ ^ self showLambdaValue ].	"
 	(self allMorphs detect: [:m | (m isKindOf: ReporterBlockMorph) and: [m isSpecialForm]] ifNone: [nil])
 		isNil ifFalse: [ receiver ifNotNil: [^ self showLambdaValue]].
 "
 	gotError := false.
-	[msg := self evaluate ] ifError: [
-		gotError := true.
-		msg := 'Error!'].
-
-	(msg isKindOf: Morph)
-		ifTrue: [(msg respondsTo: #thumbnailImageForm)
-			ifTrue: [msg := msg thumbnailImageForm]
-			ifFalse: [msg := msg imageForm ]]
-		ifFalse: [msg := msg asString ].
-
-	(self isBooleanReporter or: [msg = 'Error!']) ifTrue: [
-		msg := msg localized].
+	[ msg := self evaluate ]
+		ifError: [ 
+			gotError := true.
+			msg := 'Error!' ].
+	msg := (msg isKindOf: Morph)
+		ifTrue: [ 
+			(msg respondsTo: #thumbnailImageForm)
+				ifTrue: [ msg thumbnailImageForm ]
+				ifFalse: [ msg imageForm ] ]
+		ifFalse: [ msg asString ].
+	(self isBooleanReporter or: [ msg = 'Error!' ])
+		ifTrue: [ msg := msg localized ].
 	tooltip := (PhratchReporterToolTipMorph string: msg for: self)
 		left: self right;
 		bottom: self top.
-	PhratchTranslator isRTL ifTrue: [tooltip right: self left].
-	gotError ifTrue: [tooltip messageColor: Color red darker].
-
+	PhratchTranslator isRTL
+		ifTrue: [ tooltip right: self left ].
+	gotError
+		ifTrue: [ tooltip messageColor: Color red darker ].
 	w := self world.
-	w ifNil: [^ self].
+	w ifNil: [ ^ self ].
 	w addMorphFront: tooltip.
-	((worldBounds := w bounds) containsRect: tooltip bounds) ifFalse:
-		[tooltip bounds: (tooltip bounds translatedToBeWithin: worldBounds)].
-
+	((worldBounds := w bounds) containsRect: tooltip bounds)
+		ifFalse: [ tooltip bounds: (tooltip bounds translatedToBeWithin: worldBounds) ].
 	self setProperty: #toolTip toValue: tooltip.
 	tooltip initialCursorPoint: Sensor cursorPoint.
-	tooltip startStepping.
-
+	tooltip startStepping
 ]
 
 { #category : #'object i/o' }

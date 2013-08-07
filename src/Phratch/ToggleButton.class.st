@@ -26,24 +26,6 @@ Class {
 }
 
 { #category : #'instance creation' }
-ToggleButton class >> buttonHue: hue [
-	"Answer a new ToggleButton that looks like an LED indicator light of the given hue."
-
-	| d onF offF w bezelF |
-	w := 2.
-	bezelF := TranslucentImageMorph bezelDiameter: 14 width: 2 baseColor: Color gray inset: true.
-	d := bezelF width - (2 * w).
-	onF := bezelF deepCopy.
-	(TranslucentImageMorph glowDiameter: d color: (Color h: hue s: 0.4 v: 1) on: true)
-		displayOn: onF at: w@w rule: Form paint.
-	offF := bezelF deepCopy.
-	(TranslucentImageMorph glowDiameter: d color: (Color h: hue s: 0.4 v: 1) on: false)
-		displayOn: offF at: w@w rule: Form paint.
-	^ ToggleButton onForm: onF offForm: offF
-
-]
-
-{ #category : #'instance creation' }
 ToggleButton class >> onForm: f1 offForm: f2 [
 	"Set the forms used for my on and off states."
 
@@ -61,11 +43,9 @@ ToggleButton class >> onForm: f1 offForm: f2 overForm: f3 [
 
 { #category : #menu }
 ToggleButton >> addCustomMenuItems: aCustomMenu hand: aHandMorph [
-
 	super addCustomMenuItems: aCustomMenu hand: aHandMorph.
-	aCustomMenu add: 'change action selector' action: #setActionSelector.
-	aCustomMenu add: 'change arguments' action: #setArguments.
-
+	aCustomMenu add: 'change action selector' translated action: #setActionSelector.
+	aCustomMenu add: 'change arguments' translated action: #setArguments
 ]
 
 { #category : #accessing }
@@ -78,20 +58,6 @@ ToggleButton >> areasRemainingToFill: aRectangle [
 	"Don't optimize redraw; I may have transparent areas!"
 
 	^ Array with: aRectangle
-
-]
-
-{ #category : #accessing }
-ToggleButton >> clearIsOver [
-
-	| f |
-	isOver ifFalse: [^ self].  "already cleared"
-	isOver := false.
-
-	"update my extent"
-	f := isOn ifTrue: [onForm] ifFalse: [offForm].
-	isDisabled ifTrue: [f := disabledForm].
-	f ifNotNil: [self extent: f extent].
 
 ]
 
@@ -250,14 +216,15 @@ ToggleButton >> mouseDown: evt [
 	"If I am currently turned on, turn myself off and vice versa. If toggleMode is false, then do nothing if I am already on. If isMomentary, then turn myself off immediately. If I am to act when I'm pressed, then send my target my action selector."
 
 	evt hand toolType: nil.
-	isDisabled ifTrue: [^ self].
-
+	isDisabled
+		ifTrue: [ ^ self ].
 	wasOn := isOn.
-	actWhen == #buttonDown ifTrue: [
-		self doButtonAction.
-		self on.
-		isMomentary ifTrue: [self off]].
-
+	actWhen == #buttonDown
+		ifFalse: [ ^ self ].
+	self doButtonAction.
+	self on.
+	isMomentary
+		ifTrue: [ self off ]
 ]
 
 { #category : #'event handling' }
@@ -401,19 +368,6 @@ ToggleButton >> setLabelColor: aColor [
 	| s |
 	s := self findA: StringMorph.
 	s color: aColor.
-
-]
-
-{ #category : #accessing }
-ToggleButton >> shortcutLabel: aString font: aFont [
-	"Add the given label in the given font centered in my current extent."
-
-	| oldLabel m |
-	(oldLabel := self findA: StringMorph) ifNotNil: [oldLabel delete].
-	m := StringMorph contents: aString font: (aFont ifNil: [PhratchFrameMorph standardButtonFont]).
-	m position: self center - (m extent // 2) + (0@6).
-	self addMorph: m.
-	m lock.
 
 ]
 

@@ -6,7 +6,6 @@ Class {
 	#name : #PhratchStageMorph,
 	#superclass : #ScriptablePhratchMorph,
 	#instVars : [
-		'zoom',
 		'hPan',
 		'vPan',
 		'penTrailsForm',
@@ -49,7 +48,7 @@ PhratchStageMorph >> addBackgroundTyped: aString [
 	self addCostumeTyped: aString.
 ]
 
-{ #category : #'-- all --' }
+{ #category : #'as yet unclassified' }
 PhratchStageMorph >> adjustedCursorPoint [
 	"Answer the current mouse cursorPoint adjusted for the scaling presentation and q-mode."
 
@@ -161,14 +160,6 @@ PhratchStageMorph >> broadcastEventNamed: name with: value [
 ]
 
 { #category : #'looks ops' }
-PhratchStageMorph >> changeBackgroundIndexBy: aNumber [
-	"Change my background index by the given amount."
-
-	self changeCostumeIndexBy: aNumber.
-
-]
-
-{ #category : #'looks ops' }
 PhratchStageMorph >> changeHPanBy: amount [
 	"Change my horizontal pan by the given amount."
 	<phratchItem: 'change horizontal pan by $Number$' kind: #- category: 'looks' defaultValues: #() subCategory: #a4>
@@ -186,15 +177,6 @@ PhratchStageMorph >> changeVPanBy: amount [
 
 ]
 
-{ #category : #'looks ops' }
-PhratchStageMorph >> changeZoomBy: percent [
-	"Change my zoom by the given percent."
-
-	zoom := zoom + percent.
-	self changed.
-
-]
-
 { #category : #byob }
 PhratchStageMorph >> clearAllVariables [
 
@@ -204,7 +186,7 @@ PhratchStageMorph >> clearAllVariables [
 
 ]
 
-{ #category : #'pen support' }
+{ #category : #'as yet unclassified' }
 PhratchStageMorph >> clearPenTrails [
 	"Remove my pen trails Form. It will be recreated later if it is needed."
 	<phratchItem: 'clear pen trails' kind: #- category: 'pen' defaultValues: #() subCategory: #a5>
@@ -253,20 +235,22 @@ PhratchStageMorph >> costumeChanged [
 PhratchStageMorph >> createOrResizeTrailsForm [
 	"If necessary, create a new penTrailsForm or resize the existing one to fill my bounds. On return, penTrailsForm will be a Form of the correct size."
 
+	"resize trails Form to my current exent"
+
 	| newForm |
-	penTrailsForm ifNil: [
-		penTrailsForm := Form extent: self extent depth: 32.
-		^ self].
-
-	penTrailsForm extent = self extent ifFalse: [  "resize trails Form to my current exent"
-		newForm := Form extent: self extent depth: 32.
-		newForm
-			copy: penTrailsForm boundingBox
-			from: penTrailsForm
-			to: 0@0
-			rule: Form paint.
-		penTrailsForm := newForm].
-
+	penTrailsForm
+		ifNil: [ 
+			penTrailsForm := Form extent: self extent depth: 32.
+			^ self ].
+	penTrailsForm extent = self extent
+		ifTrue: [ ^ self ].
+	newForm := Form extent: self extent depth: 32.
+	newForm
+		copy: penTrailsForm boundingBox
+		from: penTrailsForm
+		to: 0 @ 0
+		rule: Form paint.
+	penTrailsForm := newForm
 ]
 
 { #category : #'scratch processes/events' }
@@ -308,21 +292,7 @@ PhratchStageMorph >> deleteSprite [
 	^ self
 ]
 
-{ #category : #clones }
-PhratchStageMorph >> deleteTerminatedClones [
-	"Delete all clones that have no running scripts."
-
-	| isRunning |
-	self allClones do: [:clone |
-		isRunning := false.
-		clone blocksBin allMorphsDo: [:b |
-			((b isKindOf: BlockMorph) and: [b hasRunningProcess])
-				ifTrue: [isRunning := true]].
-		isRunning ifFalse: [clone delete]].
-
-]
-
-{ #category : #'as yet unclassified' }
+{ #category : #media }
 PhratchStageMorph >> drawNewCostume [
 
 	| oldCostumeName newName newImage |
@@ -447,21 +417,19 @@ PhratchStageMorph >> drawSubmorphsOn: aCanvas [
 
 { #category : #drawing }
 PhratchStageMorph >> exportFileName: fileName [
-
 	| form fName |
 	form := self stageShotForm.
-	form depth <= 8 ifTrue: [
-		(fileName asLowercase endsWith: '.gif')
-			ifTrue: [fName := fileName]
-			ifFalse: [fName := fileName, '.gif'].
-		GIFReadWriter putForm: form colorReduced8Bit onFileNamed: fName.
-		^ self].
-
-	(fileName asLowercase endsWith: '.bmp')
-		ifTrue: [fName := fileName]
-		ifFalse: [fName := fileName, '.bmp'].
-	(form asFormOfDepth: 32) writeBMPFileNamed: fName.
-
+	form depth <= 8
+		ifTrue: [ 
+			fName := (fileName asLowercase endsWith: '.gif')
+				ifTrue: [ fileName ]
+				ifFalse: [ fileName , '.gif' ].
+			GIFReadWriter putForm: form colorReduced8Bit onFileNamed: fName.
+			^ self ].
+	fName := (fileName asLowercase endsWith: '.bmp')
+		ifTrue: [ fileName ]
+		ifFalse: [ fileName , '.bmp' ].
+	(form asFormOfDepth: 32) writeBMPFileNamed: fName
 ]
 
 { #category : #'object i/o' }
@@ -555,22 +523,6 @@ PhratchStageMorph >> fullDrawOn: aCanvas [
 
 ]
 
-{ #category : #'sensing ops' }
-PhratchStageMorph >> getAttribute: attr [
-	"Answer the value of my variable or built-in attribute with the given name. Answer zero if I have no attribute or variable with the given name."
-
-	| a |
-	(vars includesKey: attr) ifTrue: [^ vars at: attr].
-	(self allLocalBlockIds includes: attr) ifTrue: [ ^self lambda: attr ].
-
-	a := attr localized.
-	'background #' localized = a ifTrue: [^ self backgroundIndex].
-	'costume #' localized = a ifTrue: [^ self backgroundIndex].
-	'volume' localized = a ifTrue: [^ self volume].
-	^ 0
-
-]
-
 { #category : #'event handling' }
 PhratchStageMorph >> grabSpriteFromScreen [
 	"Create a new sprite, grabbing it's costume from an area of the screen."
@@ -582,32 +534,6 @@ PhratchStageMorph >> grabSpriteFromScreen [
 	m onlyCostume: f.
 	frame addAndView: m.
 
-
-]
-
-{ #category : #drawing }
-PhratchStageMorph >> incrRedraw: damageList [
-	"Redraw the damaged areas of this stage directly onto the display. Assumes that no other morph is in front of me."
-
-	| f c p screenR |
-	damageList do: [:r |
-		f := Form extent: r extent depth: 32.
-		c := (FormCanvas on: f) copyOffset: r origin negated.
-		self fullDrawOn: c.
-		DoubleSize
-			ifTrue: [
-				p := (self center - self extent) + (2 * (r origin - self topLeft)).
-				screenR := p extent: 2 * f extent.
-				(Display boundingBox containsRect: screenR) ifTrue: [
-					[
-						PhratchPlugin
-							primDouble: f bits w: f width h: f height
-							into: Display bits w: Display width h: Display height
-							x: screenR left y: screenR top.
-					] ifError: [].
-					Display forceToScreen: screenR]]
-			ifFalse: [
-				f displayOn: Display at: r topLeft rule: Form over]].
 
 ]
 
@@ -867,18 +793,24 @@ PhratchStageMorph >> openMIDI [
 
 	| possiblePorts dir menu |
 	self closeMIDI.
-	possiblePorts := (0 to: SimpleMIDIPort primPortCount - 1) select: [:i |
-		dir := SimpleMIDIPort primPortDirectionalityOf: i.
-		(dir = 2) | (dir = 3)].  "out or in/out port"
-	possiblePorts size = 0 ifTrue: [^ self inform: 'No MIDI ports currently available.'].
-	menu := MenuMorph new defaultTarget: self; title: 'MIDI port:'.
-	possiblePorts do: [:i | menu add: (SimpleMIDIPort portDescription: i) 
-							target: self 
-							selector: #midiPortNum:
-							argument: i].	
+	possiblePorts := (0 to: SimpleMIDIPort primPortCount - 1)
+		select: [ :i | 
+			dir := SimpleMIDIPort primPortDirectionalityOf: i.
+			dir = 2 | (dir = 3) ].	"out or in/out port"
+	possiblePorts size = 0
+		ifTrue: [ ^ self inform: 'No MIDI ports currently available.' ].
+	menu := MenuMorph new
+		defaultTarget: self;
+		title: 'MIDI port:' translated.
+	possiblePorts
+		do: [ :i | 
+			menu
+				add: (SimpleMIDIPort portDescription: i)
+				target: self
+				selector: #midiPortNum:
+				argument: i ].
 	menu popUpInWorld.
-	self tryToOpenMidiPort.
-
+	self tryToOpenMidiPort
 ]
 
 { #category : #'byob OOP' }
@@ -988,17 +920,6 @@ PhratchStageMorph >> phratchServer [
 PhratchStageMorph >> phratchServer: anObject [
 
 	phratchServer := anObject.
-
-]
-
-{ #category : #drawing }
-PhratchStageMorph >> previewForm [
-	"Answer a full-size preview of me and my submorphs. Use super fullDrawOn: to avoid drawing the shadows along the top and left edges of the workspace."
-
-	| canvas |
-	canvas := FormCanvas extent: bounds extent depth: 32.
-	canvas translateBy: bounds topLeft negated during: [:c | super fullDrawOn: c].
-	^ canvas form
 
 ]
 
@@ -1112,11 +1033,12 @@ PhratchStageMorph >> rightButtonMenu [
 
 	| menu |
 	menu := MenuMorph new defaultTarget: self.
-	menu add: 'grab screen region for new sprite' action: #grabSpriteFromScreen.
+	menu add: 'grab screen region for new sprite' translated action: #grabSpriteFromScreen.
 	menu addLine.
-	menu add: 'save picture of stage...' action: #stageShot.
-	menu localize; invokeModal.
-
+	menu add: 'save picture of stage...' translated action: #stageShot.
+	menu
+		localize;
+		invokeModal
 ]
 
 { #category : #'dropping/grabbing' }
@@ -1216,15 +1138,6 @@ PhratchStageMorph >> setVPanTo: aNumber [
 ]
 
 { #category : #'looks ops' }
-PhratchStageMorph >> setZoomTo: percent [
-	"Set my zoom to the given percent."
-
-	zoom := percent truncated.
-	self changed.
-
-]
-
-{ #category : #'looks ops' }
 PhratchStageMorph >> showBackground: costumeNameOrIndex [
 	"This is lookLike: for the stage..."
 	<phratchItem: 'switch to background $Costumes$' kind: #- category: 'looks' defaultValues: #('background1') subCategory: #a1>
@@ -1243,18 +1156,6 @@ PhratchStageMorph >> showMotorBlocks [
 PhratchStageMorph >> showMotorBlocks: aBoolean [
 
 	showMotorBlocks := aBoolean.
-
-]
-
-{ #category : #'looks ops' }
-PhratchStageMorph >> showScene: sceneName [
-
-	(sceneStates includesKey: sceneName) ifTrue: [
-		self showBackground: (sceneStates at: sceneName)].
-
-	submorphs do: [:m |
-		(m isKindOf: PhratchSpriteMorph) ifTrue: [
-			m setScene: sceneName]].
 
 ]
 
@@ -1581,22 +1482,24 @@ PhratchStageMorph >> tryToOpenMidiPort [
 	"Attempt to open the MIDI port. First try the port selected by the user, if any. If that port number is not a MIDI output port, try to find another port number. If all measures fail, leave midiPort set to nil."
 
 	| possiblePorts dir portNum |
-	OSPlatform isUnix ifTrue: [midiPort := nil. ^ self].
-
-	possiblePorts := (0 to: SimpleMIDIPort primPortCount - 1) select: [:i |
-		dir := SimpleMIDIPort primPortDirectionalityOf: i.
-		(dir = 2) | (dir = 3)].  "out or in/out port"
-
-	possiblePorts size = 0 ifTrue: [midiPort := nil. ^ self].  "no midi ports"
-
-
-	(possiblePorts includes: midiPortNum)
-		ifTrue: [portNum := midiPortNum]  "use the port requested by the user"
-		ifFalse: [portNum := possiblePorts first].  "use the first available port"
-			
-	[midiPort := SimpleMIDIPort openOnPortNumber: portNum. midiPort ensureOpen] 
-		ifError: [midiPort := nil].
-
+	OSPlatform isUnix
+		ifTrue: [ 
+			midiPort := nil.
+			^ self ].
+	possiblePorts := (0 to: SimpleMIDIPort primPortCount - 1)
+		select: [ :i | 
+			dir := SimpleMIDIPort primPortDirectionalityOf: i.
+			dir = 2 | (dir = 3) ].	"out or in/out port"
+	possiblePorts size = 0
+		ifTrue: [ 
+			midiPort := nil.
+			^ self ].	"no midi ports"
+	portNum := (possiblePorts includes: midiPortNum)
+		ifTrue: [ midiPortNum ]
+		ifFalse: [ possiblePorts first ].	"use the port requested by the user"	"use the first available port"
+	[ 
+	midiPort := SimpleMIDIPort openOnPortNumber: portNum.
+	midiPort ensureOpen ] ifError: [ midiPort := nil ]
 ]
 
 { #category : #byob }
@@ -1654,20 +1557,6 @@ PhratchStageMorph >> updateSpritesList [
 
 ]
 
-{ #category : #drawing }
-PhratchStageMorph >> updateStageDisplay [
-	"Redraw the damaged areas of this stage directly onto the display. Assumes that no other morph is in front of me."
-
-	| root damageList |
-	root := owner.
-	[root owner notNil] whileTrue: [root := root owner].
-	(root respondsTo: #damageRecorder) ifFalse: [^ self].
-
-	damageList := root damageRecorder filteredDamageWithin: self bounds.
-	damageList size > 0 ifTrue: [self incrRedraw: damageList].
-
-]
-
 { #category : #'pen support' }
 PhratchStageMorph >> updateTrailsForm [
 	"Update the pen trails form using the current positions of all sprites with their pens down."
@@ -1695,18 +1584,20 @@ PhratchStageMorph >> updateTrailsForm [
 
 { #category : #byob }
 PhratchStageMorph >> userSelectSpriteDefault: defaultSprite butNotAnyOf: excludeArray [
-
 	| menu current |
 	menu := MenuMorphNG new defaultTarget: self.
-	(defaultSprite isKindOf: PhratchSpriteMorph)
-		ifTrue: [current := defaultSprite objName]
-		ifFalse: [current := 'none'].
-	menu title: 'current parent: ', current.
-	sprites do: [:each |
-		(excludeArray includes: each) ifFalse: [
-			menu add: each objName value: each]].
+	current := (defaultSprite isKindOf: PhratchSpriteMorph)
+		ifTrue: [ defaultSprite objName ]
+		ifFalse: [ 'none' ].
+	menu title: 'current parent: ' , current.
+	sprites
+		do: [ :each | 
+			(excludeArray includes: each)
+				ifFalse: [ menu add: each objName value: each ] ].
 	menu addLine.
 	menu add: 'none' value: #null.
-	^ (menu defaultTarget: #null; popUpInWorld; selectedValue) 
-
+	^ menu
+		defaultTarget: #null;
+		popUpInWorld;
+		selectedValue
 ]

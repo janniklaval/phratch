@@ -80,13 +80,6 @@ BooleanArgMorph >> initialize [
 
 ]
 
-{ #category : #drawing }
-BooleanArgMorph >> isRectangular [
-
-	^ false
-
-]
-
 { #category : #other }
 BooleanArgMorph >> printArgOn: aStream [
 	"Print this argument morph on the given stream."

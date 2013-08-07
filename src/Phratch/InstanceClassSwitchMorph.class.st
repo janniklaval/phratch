@@ -10,7 +10,7 @@ Class {
 	#category : #'Phratch-UI-Support'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 InstanceClassSwitchMorph >> arrangePanes [
 
 	| toggleWidth |
@@ -29,7 +29,7 @@ InstanceClassSwitchMorph >> arrangePanes [
 	self height: class bottom + 2 - self top
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 InstanceClassSwitchMorph >> buildPanes [
 
 	instance := ElementsToggleButtonMorph new
@@ -52,12 +52,12 @@ InstanceClassSwitchMorph >> buildPanes [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 InstanceClassSwitchMorph >> choice [
 	^choice
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 InstanceClassSwitchMorph >> class [
 	(choice = #class) ifTrue: [^self].
 	choice := #class.
@@ -66,12 +66,12 @@ InstanceClassSwitchMorph >> class [
 		self refresh ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 InstanceClassSwitchMorph >> frame: aMorph [
 	frame := aMorph
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialize }
 InstanceClassSwitchMorph >> initialize [
 	super initialize.
 	choice := #instance.
@@ -82,7 +82,7 @@ InstanceClassSwitchMorph >> initialize [
 	self refresh
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 InstanceClassSwitchMorph >> instance [
 	(choice = #instance) ifTrue: [^self].
 	choice := #instance.
@@ -91,7 +91,7 @@ InstanceClassSwitchMorph >> instance [
 		self refresh ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 InstanceClassSwitchMorph >> refresh [
 
 	instance off.

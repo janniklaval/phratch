@@ -22,7 +22,6 @@ Class {
 		'outgoingMessages',
 		'outBuf',
 		'outIndex',
-		'lastActivityTime',
 		'isHttp'
 	],
 	#category : #'Phratch-Networking'
@@ -59,18 +58,6 @@ MessageSocket >> connectTo: serverAddress port: serverPortNumber [
 ]
 
 { #category : #connection }
-MessageSocket >> connectTo: serverAddress port: serverPortNumber waitSecs: waitSecs [
-	"Attempt to open a connection to the given port of the given host and wait for up to waitSecs for the connection to be established. Answer true if the connection is established. Destroys previous socket, if any."
-
-	self connectTo: serverAddress port: serverPortNumber.
-	socket waitForConnectionFor: (waitSecs).
-	socket isConnected ifFalse: [  "connection attempt failed or timed out"
-		socket destroy.
-		socket := nil].
-	^ socket notNil
-]
-
-{ #category : #'as yet unclassified' }
 MessageSocket >> deadlineSecs: secs [
 	"Return a deadline time the given number of seconds from now."
 
@@ -126,16 +113,6 @@ MessageSocket >> isConnected [
 
 	^ socket notNil and: [socket isConnected]
 
-]
-
-{ #category : #S4A }
-MessageSocket >> isHttp [
-	^isHttp
-]
-
-{ #category : #accessing }
-MessageSocket >> isHttp: anObject [
-	isHttp := anObject
 ]
 
 { #category : #S4A }
@@ -243,15 +220,6 @@ MessageSocket >> processHttpMsg: msg [
 		ifFalse: [^ self processGetMsg: msg]
 ]
 
-{ #category : #receiving }
-MessageSocket >> receiveProgress [
-	"Answer a Float between 0.0 and 1.0 indicating the amount of progress towards receiving the current message."
-
-	inBuf ifNil: [^ 0.0].  "haven't even received the message size yet"
-	^ inIndex asFloat / inBuf size
-
-]
-
 { #category : #requests }
 MessageSocket >> request: aByteArrayOrString [
 	"Send the given message to the server and answer its reply message. Answer nil if the connection is broken before the transaction is complete. Wait indefinitely for the reply as long as the connection is unbroken."
@@ -267,49 +235,6 @@ MessageSocket >> request: aByteArrayOrString [
 	"connection was broken"
 	self destroy.  "close my end"
 	^ nil
-
-]
-
-{ #category : #requests }
-MessageSocket >> request: aByteArrayOrString timeoutSecs: timeoutSecs [
-	"Send the given message to the server and answer its reply message. Answer nil if the connection is broken or timeoutSecs pass with no activity."
-
-	| sending reply |
-	self sendMessage: aByteArrayOrString.
-	[self isConnected and:
-	 [self secondsSinceLastActivity < timeoutSecs]] whileTrue: [
-		sending := self sendData.
-		reply := self nextMessage.
-		reply ifNotNil: [^ reply].
-		sending ifFalse: [socket waitForDataUntil: (self deadlineSecs: 1)]].
-	^ nil  "timeout or broken connection"
-
-]
-
-{ #category : #requests }
-MessageSocket >> request: aByteArrayOrString withStream: aPositionableStream [
-	"Send the given message to the server followed by the bytes from the given stream and answer its reply message. Answer nil if the connection is broken before the transaction is complete. Wait indefinitely for the reply as long as the connection is unbroken."
-
-	| reply sending |
-	self sendMessage: aByteArrayOrString.
-	self sendMessage: aPositionableStream.
-	[self isConnected] whileTrue: [
-		sending := self sendData.
-		reply := self nextMessage.
-		reply ifNotNil: [^ reply].
-		sending ifFalse: [socket waitForDataUntil: (self deadlineSecs: 1)]].
-
-	"connection was broken"
-	self destroy.  "close my end"
-	^ nil
-
-]
-
-{ #category : #connection }
-MessageSocket >> secondsSinceLastActivity [
-	"Answer the time, in seconds, since data was last sent or received on this socket."
-
-	^ Time totalSeconds - lastActivityTime
 
 ]
 

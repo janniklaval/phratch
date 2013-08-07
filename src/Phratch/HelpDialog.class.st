@@ -16,11 +16,14 @@ HelpDialog class >> showForm: aForm [
 	"HelpDialogMorph showForm: (Form fromFileNamed: 'move.gif')"
 
 	| dialog |
-	dialog := super new
-		withButtonsForYes: false no: false okay: true cancel: false;
-		title: 'help';
+	dialog := self new
+		withButtonsForYes: false
+			no: false
+			okay: true
+			cancel: false;
+		title: 'help' translated;
 		helpForm: aForm;
-		extent: (aForm extent + (80@145));
+		extent: aForm extent + (80 @ 145);
 		yourself.
 	^ dialog getUserResponse
 

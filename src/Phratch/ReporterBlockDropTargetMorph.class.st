@@ -17,7 +17,7 @@ ReporterBlockDropTargetMorph class >> booleanLabelled: aString argument: aMorphO
 	^m
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'instance creation' }
 ReporterBlockDropTargetMorph class >> labelled: aString [
 	^self new label: aString
 ]
@@ -27,7 +27,7 @@ ReporterBlockDropTargetMorph class >> labelled: aString argument: aMorphOrNumber
 	^self new label: aString; argument: aMorphOrNumber
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ReporterBlockDropTargetMorph >> argument [
 	| am |
 	am := argMorphs first.
@@ -36,33 +36,33 @@ ReporterBlockDropTargetMorph >> argument [
 	^am labelMorph contents
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ReporterBlockDropTargetMorph >> argument: aMorphOrNumber [
 	(aMorphOrNumber isKindOf: ReporterBlockMorph)
 		ifTrue: [^self replaceArgMorph: argMorphs first by: aMorphOrNumber ].
 	argMorphs first stringExpression: aMorphOrNumber
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #drawing }
 ReporterBlockDropTargetMorph >> drawOn: aCanvas [
 
 	aCanvas fillRectangle: self bounds color: color.
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 ReporterBlockDropTargetMorph >> initialize [
 	super initialize.
 	isBoolean := false.
 	self color: Color transparent
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ReporterBlockDropTargetMorph >> isBoolean: aBoolean [
 	isBoolean := aBoolean
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ReporterBlockDropTargetMorph >> label: aString [
 	|dropSpec|
 	dropSpec := ' $String$'.
@@ -70,13 +70,13 @@ ReporterBlockDropTargetMorph >> label: aString [
 	self commandSpec: aString, dropSpec
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 ReporterBlockDropTargetMorph >> labelColor [
 	^Color gray: 0.3
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 ReporterBlockDropTargetMorph >> layoutChanged [
 	| be |
 	super layoutChanged.
@@ -85,7 +85,7 @@ ReporterBlockDropTargetMorph >> layoutChanged [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'submorphs-add/remove' }
 ReporterBlockDropTargetMorph >> replaceSubmorph: oldMorph by: newMorph [
 	| index itsPosition w |
 	oldMorph stopStepping.
@@ -100,20 +100,20 @@ ReporterBlockDropTargetMorph >> replaceSubmorph: oldMorph by: newMorph [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #byob }
 ReporterBlockDropTargetMorph >> rightButtonMenu [
 
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'dropping/grabbing' }
 ReporterBlockDropTargetMorph >> rootForGrabOf: aMorph [
 	"prevent myself from being extracted."
 
 	^nil
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'stepping and presenter' }
 ReporterBlockDropTargetMorph >> step [
 	"Give feedback about possible drop targets."
 
@@ -196,7 +196,7 @@ ReporterBlockDropTargetMorph >> step [
 			h addMorphFront: (feedbackMorph position: targetP)].
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 ReporterBlockDropTargetMorph >> stepTime [
 	"Answer the desired time between steps in milliseconds. This default implementation requests that the 'step' method be called once every second."
 
@@ -204,7 +204,7 @@ ReporterBlockDropTargetMorph >> stepTime [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #stepping }
 ReporterBlockDropTargetMorph >> topArgMorphAt: aRectangle exclude: aMorph [
 	"Give feedback about possible drop targets."
 
@@ -246,25 +246,20 @@ ReporterBlockDropTargetMorph >> topArgMorphAt: aRectangle exclude: aMorph [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 ReporterBlockDropTargetMorph >> uncoveredAt: aPoint [
 	"Return true if the receiver is not covered by any submorphs at the given point."
 
-	| w morphsAbove be  |
-	(w := self world) ifNil: [^ true].
-
+	| w morphsAbove be |
+	(w := self world) ifNil: [ ^ true ].
 	morphsAbove := w morphsAt: aPoint.
-	(morphsAbove size = 0) ifTrue: [^ true ].
-
+	morphsAbove size = 0
+		ifTrue: [ ^ true ].
 	be := self ownerOrYourselfThatIsA: DialogBoxMorph.
-
-	morphsAbove do: [:m | ((m isKindOf: DialogBoxMorph) and: [m ~= be])
-		ifTrue: [^ false ]].
-
-	^ true
+	^ morphsAbove noneSatisfy: [ :m | (m isKindOf: DialogBoxMorph) and: [ m ~= be ] ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'dropping/grabbing' }
 ReporterBlockDropTargetMorph >> wantsDroppedMorph: aMorph event: evt [
 	| topArg |
 

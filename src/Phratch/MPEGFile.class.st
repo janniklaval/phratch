@@ -169,22 +169,6 @@ MPEGFile >> duration: streamIndex [
 
 ]
 
-{ #category : #audio }
-MPEGFile >> endOfAudio: aStream [
-	"Returns true if end of Audio"
-	self hasAudio ifFalse: [^true].
-	^self primEndOfAudio: self fileHandle stream: aStream
-
-]
-
-{ #category : #video }
-MPEGFile >> endOfVideo: aStream [
-	"Returns true if end of video"
-	self hasVideo ifFalse: [^true].
-	^self primEndOfVideo: self fileHandle stream: aStream
-
-]
-
 { #category : #access }
 MPEGFile >> fileHandle [
 	(Smalltalk externalObjects at: fileIndex ifAbsent: [^nil]) == fileBits 
@@ -203,27 +187,6 @@ MPEGFile >> finalize [
 
 	self closeFile.
 
-]
-
-{ #category : #access }
-MPEGFile >> getPercentage [
-	"Return current location by percentage, 0.0-1.0"
-	^self primGetPercentage: self fileHandle 
-]
-
-{ #category : #access }
-MPEGFile >> getTOC: timecode doStreams: streams [
-	| buffer |
-	
-	buffer := String new: 64*1024+1.
-	self primGenerateToc: self fileHandle useSearch: timecode doStreams: streams buffer: buffer.
-	^buffer
-]
-
-{ #category : #access }
-MPEGFile >> getTimeCode [
-	"Return time code, (float) "
-	^self primGetTime: self fileHandle
 ]
 
 { #category : #audio }
@@ -459,39 +422,6 @@ MPEGFile >> primVideoWidth: aFileHandle  stream: aStream [
 	self primitiveFailed
 ]
 
-{ #category : #access }
-MPEGFile >> seekPercentage: aFloat [
-	self primSeekPercentage: self fileHandle percentage: aFloat asFloat 
-]
-
-{ #category : #access }
-MPEGFile >> setMMX: aValue [
-	" true is set, false is off. May not be supported "
-	self primSetMMX: self fileHandle useMMX: aValue  
-]
-
-{ #category : #audio }
-MPEGFile >> totalAudioStreams [
-	"Returns total number of audio streams"
-	^self primTotalAudioStreams: self fileHandle 
-
-]
-
-{ #category : #video }
-MPEGFile >> totalVideoStreams [
-	"Returns total number of video streams"
-	^self primTotalVideoStreams: self fileHandle 
-
-]
-
-{ #category : #video }
-MPEGFile >> videoDropFrames: aNumberOfFrames stream: aStream [
-	"Returns -1 if setFrame failed"
-	self hasVideo ifFalse: [^-1].
-	^[self primDropFrame: self fileHandle frame: aNumberOfFrames stream: aStream] ifError: [-1]
-
-]
-
 { #category : #video }
 MPEGFile >> videoFrameHeight: aStream [
 	"Returns video frame height, -1 if error "
@@ -528,14 +458,6 @@ MPEGFile >> videoGetFrame: aStream [
 	"Returns frame number, or -1 if error"
 	self hasVideo ifFalse: [^-1].
 	^[(self primGetFrame: self fileHandle stream: aStream) asInteger] ifError: [-1]
-
-]
-
-{ #category : #video }
-MPEGFile >> videoPreviousFrame: aStream [
-	"Returns 0 if ok"
-	self hasVideo ifFalse: [^-1].
-	^[self primPreviousFrame: self fileHandle stream: aStream] ifError: [-1]
 
 ]
 
@@ -595,11 +517,6 @@ MPEGFile >> videoReadNextFrameInto: aFormBuffer x: x y: y width: width height: h
 #define MPEG3:=601:=RGBA8888 10
 #define MPEG3:=601:=ARGB8888 12 //JMM for Squeak
 "
-]
-
-{ #category : #video }
-MPEGFile >> videoSetCPUs: aNumber [
-	self primSetCPUs: self fileHandle number: aNumber
 ]
 
 { #category : #video }

@@ -39,7 +39,7 @@ Class {
 	#category : #'Phratch-Objects'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #adding }
 PhratchSpriteMorph >> addCostTyped: aString [
 	<phratchItem: 'add $NewCostume$ to costumes' kind: #- category: 'looks' defaultValues: #() subCategory: #a2>
 	self addCostumeTyped: aString.
@@ -77,7 +77,7 @@ PhratchSpriteMorph >> allSubsprites [
 	^ all
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PhratchSpriteMorph >> area [
 	<phratchItem: 'area' kind: #r category: 'looks' defaultValues: #() subCategory: #a4>
 ^self height * self width
@@ -230,38 +230,43 @@ PhratchSpriteMorph >> bubble: obj thinkFlag: thinkFlag promptFlag: promptFlag [
 
 	| s talkBubble objToShow |
 	self sayNothing.
-
-	(obj respondsTo: #morphToShow)
-		ifTrue: [objToShow := obj morphToShow]
-		ifFalse: [objToShow := obj].
-
+	objToShow := (obj respondsTo: #morphToShow)
+		ifTrue: [ obj morphToShow ]
+		ifFalse: [ obj ].
 	obj isNumber
-		ifTrue: [
-			obj isInteger
-				ifTrue: [s := objToShow printString]
-				ifFalse: [s := (objToShow asFloat roundTo: 0.01) printString]]
-		ifFalse: [(objToShow isKindOf: Boolean)
-			ifTrue: [s := objToShow asString localized]
-			ifFalse: [ (objToShow isKindOf: Morph) ifFalse: [
-				s := objToShow asString]]].
+		ifTrue: [ 
+			s := obj isInteger
+				ifTrue: [ objToShow printString ]
+				ifFalse: [ (objToShow asFloat roundTo: 0.01) printString ] ]
+		ifFalse: [ 
+			(objToShow isKindOf: Boolean)
+				ifTrue: [ s := objToShow asString localized ]
+				ifFalse: [ 
+					(objToShow isKindOf: Morph)
+						ifFalse: [ s := objToShow asString ] ] ].
 	(s isKindOf: String)
-		ifTrue: [
-			(s skipDelimiters: ' 	' startingAt: 1) > s size ifTrue: [^ self].
-			s size < 5 ifTrue: [s := s, ' ']]
-		ifFalse: [ (objToShow respondsTo: #thumbnailImageForm)
-			ifTrue: [s := ImageMorph new form: objToShow thumbnailImageForm]
-			ifFalse: [s := ImageMorph new form: objToShow imageForm ]].
-
+		ifTrue: [ 
+			(s skipDelimiters: ' 	' startingAt: 1) > s size
+				ifTrue: [ ^ self ].
+			s size < 5
+				ifTrue: [ s := s , ' ' ] ]
+		ifFalse: [ 
+			s := (objToShow respondsTo: #thumbnailImageForm)
+				ifTrue: [ ImageMorph new form: objToShow thumbnailImageForm ]
+				ifFalse: [ ImageMorph new form: objToShow imageForm ] ].
 	talkBubble := PhratchTalkBubbleMorph new message: s.
-	thinkFlag ifTrue: [talkBubble beThoughtBubble: true].
-	promptFlag ifTrue: [talkBubble bePrompt: true].
-	talkBubble lock; position: self position.
+	thinkFlag
+		ifTrue: [ talkBubble beThoughtBubble: true ].
+	promptFlag
+		ifTrue: [ talkBubble bePrompt: true ].
+	talkBubble
+		lock;
+		position: self position.
 	self setProperty: #talkBubble toValue: talkBubble.
 	self addMorphFront: talkBubble.
 	self positionTalkBubble.
 	World displayWorldSafely.
 	^ talkBubble
-
 ]
 
 { #category : #nesting }
@@ -363,31 +368,13 @@ PhratchSpriteMorph >> choosePrototype [
 	self prototype: choice
 ]
 
-{ #category : #'pen ops' }
+{ #category : #'as yet unclassified' }
 PhratchSpriteMorph >> clearPenTrails [
 	"Clear the pen trails layer."
 	<phratchItem: 'clear pen trails' kind: #- category: 'pen' defaultValues: #() subCategory: #a5>
 	| m |
 	(m := self ownerOrYourselfThatIsA: PhratchStageMorph)
 		ifNotNil: [m clearPenTrails].
-
-]
-
-{ #category : #'clone ops' }
-PhratchSpriteMorph >> cloneAndSend: msgName [
-	"Clone this sprite and send the clone (and only the clone) the given message."
-
-	| frame clone |
-	(frame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNil: [^ self].
-
-	clone := self fullCopy.
-	clone objName: objName, ' clone'.
-	clone isClone: true.
-	clone blocksBin allMorphsDo: [:m |
-		(m isKindOf: BlockMorph) ifTrue: [m stop]].
-
-	frame workPane addMorph: clone.
-	clone eventReceived: (PhratchEvent new name: msgName asString argument: 0).
 
 ]
 
@@ -446,7 +433,7 @@ PhratchSpriteMorph >> color: sensitiveColor sees: soughtColor [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'BYOB attributes' }
 PhratchSpriteMorph >> comeToFront [
 
 	<phratchItem: 'go to front' kind: #- category: 'looks' defaultValues: #() subCategory: #a7>
@@ -718,26 +705,27 @@ PhratchSpriteMorph >> functionWithArgs [
 PhratchSpriteMorph >> generateRotatedForm [
 	"Compute my rotatedForm and offsetWhenRotated."
 
+	"headed left; use flipped"
+
 	| adjustedAngle srcForm smoothPix pair |
-	rotationStyle = #normal
-		ifTrue: [adjustedAngle := self rotationDegrees]  "smooth rotation"
-		ifFalse: [adjustedAngle := 0.0].  "leftRight or none"
-
+	adjustedAngle := rotationStyle = #normal
+		ifTrue: [ self rotationDegrees ]
+		ifFalse: [ 0.0 ].	"smooth rotation"	"leftRight or none"
 	srcForm := self costumeForm.
-	((srcForm width = 1) & (srcForm height = 1))
-		ifTrue: [adjustedAngle := 0.0].  "don't rotate a 1x1 costume"
-
-	((adjustedAngle closeTo: 0.0) and: [1.0@1.0 = scalePoint])
-		ifTrue: [  "no rotation or scaling; use original"
+	srcForm width = 1 & (srcForm height = 1)
+		ifTrue: [ adjustedAngle := 0.0 ].	"don't rotate a 1x1 costume"
+	((adjustedAngle closeTo: 0.0) and: [ 1.0 @ 1.0 = scalePoint ])
+		ifTrue: [ 
+			"no rotation or scaling; use original"
 			rotatedForm := srcForm.
-			offsetWhenRotated := costume rotationCenter]
-		ifFalse: [  "generated rotated and/or scaled form"
-			(((adjustedAngle rounded \\ 90) = 0) and:
-			 [1.0@1.0 = scalePoint]) ifTrue: [
-				^ self rotateByFlipping].
-			((scalePoint x < 1.0) or: [scalePoint y < 1.0])
-				ifTrue: [smoothPix := 2]
-				ifFalse: [smoothPix := 1].
+			offsetWhenRotated := costume rotationCenter ]
+		ifFalse: [ 
+			"generated rotated and/or scaled form"
+			(adjustedAngle rounded \\ 90 = 0 and: [ 1.0 @ 1.0 = scalePoint ])
+				ifTrue: [ ^ self rotateByFlipping ].
+			smoothPix := (scalePoint x < 1.0 or: [ scalePoint y < 1.0 ])
+				ifTrue: [ 2 ]
+				ifFalse: [ 1 ].
 			pair := WarpBlt
 				rotatePhratch: srcForm
 				degrees: adjustedAngle negated
@@ -745,33 +733,11 @@ PhratchSpriteMorph >> generateRotatedForm [
 				scaleBy: scalePoint
 				smoothing: smoothPix.
 			rotatedForm := pair first.
-			offsetWhenRotated := (costume rotationCenter + pair last) rounded].
-
-	((rotationStyle = #leftRight) and:
-	 [(self rotationDegrees > 90.0) and: [self rotationDegrees < 270.0]]) ifTrue: [
-		"headed left; use flipped"
-		rotatedForm := rotatedForm flipBy: #horizontal centerAt: 0@0.
-		offsetWhenRotated := (rotatedForm width - offsetWhenRotated x - 1) @ offsetWhenRotated y].
-
-]
-
-{ #category : #'sensing ops' }
-PhratchSpriteMorph >> getAttribute: attr [
-	"Answer the value of my variable or built-in attribute with the given name. Answer zero if I have no attribute or variable with the given name."
-
-	| a |
-	(vars includesKey: attr) ifTrue: [^ vars at: attr].
-	(self allLocalBlockIds includes: attr) ifTrue: [ ^self lambda: attr ].
-
-	a := attr localized.
-	'x position' localized = a ifTrue: [^ self xpos].
-	'y position' localized = a ifTrue: [^ self ypos].
-	'direction' localized = a ifTrue: [^ self heading].
-	'costume #' localized = a ifTrue: [^ self costumeIndex].
-	'size' localized = a ifTrue: [^ self scale].
-	'volume' localized = a ifTrue: [^ self volume].
-	^ 0
-
+			offsetWhenRotated := (costume rotationCenter + pair last) rounded ].
+	(rotationStyle = #leftRight and: [ self rotationDegrees > 90.0 and: [ self rotationDegrees < 270.0 ] ])
+		ifFalse: [ ^ self ].
+	rotatedForm := rotatedForm flipBy: #horizontal centerAt: 0 @ 0.
+	offsetWhenRotated := (rotatedForm width - offsetWhenRotated x - 1) @ offsetWhenRotated y
 ]
 
 { #category : #'byob OOP' }
@@ -809,21 +775,21 @@ PhratchSpriteMorph >> getRotationStyle [
 { #category : #'motion ops' }
 PhratchSpriteMorph >> glideSecs: duration toX: endX y: endY elapsed: elapsed from: startPoint [
 	"Interpolate my position from my current postion to the given x and y over the given duration. If startPoint is nil, just answer my current position; this sets the starting point for the interpolation."
-	<phratchItem: 'glide $Number$ secs to x:$Number$ y:$Number$' kind: #t category: 'motion' defaultValues: #(1 50 50) subCategory: #a3>
+
+	<phratchItem: 'glide $Number$ secs to x:$Number$ y:$Number$' kind: #t category: 'motion' defaultValues: #(1 50 50)
+	subCategory: #a3>
 	| fraction endPoint rPos |
-	startPoint ifNil: [
-		^ self referencePosition].
-	endPoint := endX@endY.
-	duration < 0.001
-		ifTrue: [fraction := 1]
-		ifFalse: [fraction := elapsed asFloat / (1000.0 * duration)].
-	fraction > 1.0 ifTrue: [fraction := 1].
-	fraction < 0.0 ifTrue: [fraction := 0].
+	startPoint ifNil: [ ^ self referencePosition ].
+	endPoint := endX @ endY.
+	fraction := duration < 0.001
+		ifTrue: [ 1 ]
+		ifFalse: [ elapsed asFloat / (1000.0 * duration) ].
+	fraction > 1.0
+		ifTrue: [ fraction := 1 ].
+	fraction < 0.0
+		ifTrue: [ fraction := 0 ].
 	rPos := startPoint + (fraction * (endPoint - startPoint)) truncated.
-	self gotoX: rPos x y: rPos y 
-
-
-"
+	self gotoX: rPos x y: rPos y	"
 	| fraction endPoint |
 	startPoint ifNil: [
 		self holdSubsprites. 
@@ -878,22 +844,6 @@ PhratchSpriteMorph >> gotoSpriteOrMouse: anObject [
 PhratchSpriteMorph >> gotoX: x y: y [
 	<phratchItem: 'go to x:$Number$ y:$Number$' kind: #- category: 'motion' defaultValues: #(0 0) subCategory: #a3>
 	self xpos: x; ypos: y
-
-]
-
-{ #category : #'motion ops' }
-PhratchSpriteMorph >> gotoX: endX y: endY duration: duration elapsed: elapsed from: startPoint [
-	"Interpolate my position from startPoint to endPoint over the given duration. If startPoint is nil, just answer my current position; this sets the starting point for the interpolation."
-
-	| fraction endPoint |
-	startPoint ifNil: [^ self referencePosition].
-	endPoint := endX@endY.
-	duration < 0.001
-		ifTrue: [fraction := 1]
-		ifFalse: [fraction := elapsed asFloat / (1000.0 * duration)].
-	fraction > 1.0 ifTrue: [fraction := 1].
-	fraction < 0.0 ifTrue: [fraction := 0].
-	self referencePosition: startPoint + (fraction * (endPoint - startPoint)) truncated.
 
 ]
 
@@ -974,7 +924,7 @@ PhratchSpriteMorph >> heading: headingDegrees [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #geometry }
 PhratchSpriteMorph >> height [
 	<phratchItem: 'height' kind: #r category: 'looks' defaultValues: #() subCategory: #a4>
 ^super height
@@ -985,12 +935,6 @@ PhratchSpriteMorph >> hide [
 	"Make myself invisible."
 	<phratchItem: 'hide' kind: #- category: 'looks' defaultValues: #() subCategory: #a6>
 	self setHideFlagTo: true
-
-]
-
-{ #category : #'sensing ops' }
-PhratchSpriteMorph >> hideQuestion [
-	"Hide my question prompt."
 
 ]
 
@@ -1128,22 +1072,6 @@ PhratchSpriteMorph >> isOrContains: aSprite [
 	^ (subsprites collect: [:sub |
 		sub isOrContains: aSprite ])
 			includes: true
-]
-
-{ #category : #accessing }
-PhratchSpriteMorph >> isPaintable [
-	"Answer true if my image can be repainted."
-
-	^ true
-
-]
-
-{ #category : #accessing }
-PhratchSpriteMorph >> isRotatable [
-	"Answer true if my image can be rotated."
-
-	^ true
-
 ]
 
 { #category : #accessing }
@@ -1318,14 +1246,12 @@ PhratchSpriteMorph >> passivePenColor: aColor [
 
 	| b |
 	penColor := aColor.
-	penHue := (penColor hue * 200.0) / 360.0.
+	penHue := penColor hue * 200.0 / 360.0.
 	b := penColor brightness.
-	(b closeTo: 1.0)
-		ifTrue: [penShade := 50.0 + (50.0 * (1.0 - penColor saturation))]
-		ifFalse: [penShade := 50.0 * b].
-
+	penShade := (b closeTo: 1.0)
+		ifTrue: [ 50.0 + (50.0 * (1.0 - penColor saturation)) ]
+		ifFalse: [ 50.0 * b ].
 	self propagate: #penColor
-
 ]
 
 { #category : #'byob OOP' }
@@ -1886,39 +1812,28 @@ PhratchSpriteMorph >> rightButtonMenu [
 
 	| menu stage |
 	menu := MenuMorph new defaultTarget: self.
-	menu add: 'grab screen region for new costume' action: #grabFromScreen.
-	menu add: 'export this sprite' action: #exportObject.
+	menu add: 'grab screen region for new costume' translated action: #grabFromScreen.
+	menu add: 'export this sprite' translated action: #exportObject.
 	stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
-	stage ifNotNil: [
-		(stage phratchServer notNil and: 
-		[stage phratchServer sessionInProgress])
-			ifTrue: [
-				menu add: 'share this sprite' action: #shareObject ]].
+	stage
+		ifNotNil: [ 
+			(stage phratchServer notNil and: [ stage phratchServer sessionInProgress ])
+				ifTrue: [ menu add: 'share this sprite' translated action: #shareObject ] ].
 	menu addLine.
-	menu add: 'duplicate' action: #duplicate.
-	menu add: 'clone' action: #spawn.
-	menu add: 'delete' action: #undoableDeleteSprite.
+	menu add: 'duplicate' translated action: #duplicate.
+	menu add: 'clone' translated action: #spawn.
+	menu add: 'delete' translated action: #undoableDeleteSprite.
 	menu addLine.
-	menu add: 'resize this sprite' action: #resizeHandle.
-	menu add: 'rotate this sprite' action: #rotateHandle.
-	self isNested ifTrue: [
-		menu addLine ].
-	self hasSubsprites ifTrue: [
-		menu add: 'detach all subsprites' action: #unhingeAll ].
-	ownerSprite ifNotNil: [
-		menu add: 'detach from ', self ownerSprite objName action: #unhinge  ].
-	menu localize; invokeModal.
-
-]
-
-{ #category : #nesting }
-PhratchSpriteMorph >> rootSprite [
-
-	| current |
-	current := self.
-	[current ownerSprite isNil] whileFalse: [
-		current := current ownerSprite].
-	^ current
+	menu add: 'resize this sprite' translated action: #resizeHandle.
+	menu add: 'rotate this sprite' translated action: #rotateHandle.
+	self isNested
+		ifTrue: [ menu addLine ].
+	self hasSubsprites
+		ifTrue: [ menu add: 'detach all subsprites' translated action: #unhingeAll ].
+	ownerSprite ifNotNil: [ menu add: 'detach from ' , self ownerSprite objName action: #unhinge ].
+	menu
+		localize;
+		invokeModal
 ]
 
 { #category : #private }
@@ -1927,23 +1842,26 @@ PhratchSpriteMorph >> rotateByFlipping [
 
 	| a center srcForm |
 	a := self rotationDegrees rounded \\ 360.
-	a < 0 ifTrue: [a := a + 360].
+	a < 0
+		ifTrue: [ a := a + 360 ].
 	srcForm := self costumeForm.
 	center := costume rotationCenter.
-	0 = a ifTrue: [
-		rotatedForm := srcForm.
-		offsetWhenRotated := center].
-	90 = a ifTrue: [
-		rotatedForm := srcForm rotateBy: #right centerAt: 0@0.
-		offsetWhenRotated := (srcForm height - 1 - center y) @ center x].
-	180 = a ifTrue: [
-		rotatedForm := srcForm rotateBy: #pi centerAt: 0@0.
-		offsetWhenRotated := srcForm extent - 1 - center].
-	270 = a ifTrue: [
-		rotatedForm := srcForm rotateBy: #left centerAt: 0@0.
-		offsetWhenRotated := center y @ (srcForm width - 1 - center x)].
-
-
+	0 = a
+		ifTrue: [ 
+			rotatedForm := srcForm.
+			offsetWhenRotated := center ].
+	90 = a
+		ifTrue: [ 
+			rotatedForm := srcForm rotateBy: #right centerAt: 0 @ 0.
+			offsetWhenRotated := (srcForm height - 1 - center y) @ center x ].
+	180 = a
+		ifTrue: [ 
+			rotatedForm := srcForm rotateBy: #pi centerAt: 0 @ 0.
+			offsetWhenRotated := srcForm extent - 1 - center ].
+	270 = a
+		ifFalse: [ ^ self ].
+	rotatedForm := srcForm rotateBy: #left centerAt: 0 @ 0.
+	offsetWhenRotated := center y @ (srcForm width - 1 - center x)
 ]
 
 { #category : #'handle ops' }
@@ -1998,24 +1916,22 @@ PhratchSpriteMorph >> rotationDegrees [
 
 { #category : #accessing }
 PhratchSpriteMorph >> rotationDegrees: newRotationDegrees [
-
-	rotationDegrees ~= newRotationDegrees ifTrue: [
-		rotationDegrees := newRotationDegrees asFloat \\ 360.0.
-		(rotationStyle = #none) ifFalse: [
-			self positionTalkBubble.
-			self costumeChanged]].
-
+	rotationDegrees ~= newRotationDegrees
+		ifFalse: [ ^ self ].
+	rotationDegrees := newRotationDegrees asFloat \\ 360.0.
+	rotationStyle = #none
+		ifTrue: [ ^ self ].
+	self positionTalkBubble.
+	self costumeChanged
 ]
 
 { #category : #private }
 PhratchSpriteMorph >> rotationDegrees: newRotationDegrees scalePoint: newScalePoint [
-
-	((newRotationDegrees ~= self rotationDegrees) or:
-	 [scalePoint ~= newScalePoint]) ifTrue: [
-		rotationDegrees := newRotationDegrees asFloat \\ 360.0.
-		scalePoint := newScalePoint.
-		self costumeChanged].
-
+	(newRotationDegrees ~= self rotationDegrees or: [ scalePoint ~= newScalePoint ])
+		ifFalse: [ ^ self ].
+	rotationDegrees := newRotationDegrees asFloat \\ 360.0.
+	scalePoint := newScalePoint.
+	self costumeChanged
 ]
 
 { #category : #accessing }
@@ -2111,31 +2027,6 @@ PhratchSpriteMorph >> setMyName: aName [
 ]
 
 { #category : #'pen ops' }
-PhratchSpriteMorph >> setPenColorFromCostumedNamed: costumeNameOrIndex x: x y: y [
-	"Set my pen color from my costume of the given name at the given point. If the point is off the edge, set my color to black."
-
-	| cName m f pixel |
-	cName := costumeNameOrIndex.
-	cName isNumber ifTrue: [cName := self costumeNameFromNumber: costumeNameOrIndex].
-	m := media
-		detect: [:el | el isSound not and: [el mediaName caseInsensitiveEqual: cName]]
-		ifNone: [^ self].
-
-	f := m form.
-	f unhibernate.
-	pixel := PhratchPlugin
-		primInterpolate: f bits
-		width: f width
-		x: (x * 1024) rounded
-		y: ((f height - y) * 1024) rounded.
-
-	pixel = 0
-		ifTrue: [self penColor: Color black]
-		ifFalse: [self penColor: (Color colorFromPixelValue: pixel depth: 24)].
-
-]
-
-{ #category : #'pen ops' }
 PhratchSpriteMorph >> setPenHueTo: aNumber [
 	"Set the pen hue to given number between 0 and 200. (That makes 100 the 'maximum' distance away from the original color on the color wheel.)"
 	<phratchItem: 'set pen color to $Number$' kind: #- category: 'pen' defaultValues: #(0) subCategory: #a3>
@@ -2161,18 +2052,6 @@ PhratchSpriteMorph >> setRotationStyle: aNumber [
 
 	self undeleteAttribute: #rotationStyle.
 	self passiveRotationStyle: aNumber
-]
-
-{ #category : #'looks ops' }
-PhratchSpriteMorph >> setScene: sceneName [
-
-	| sceneState |
-	sceneState := sceneStates at: sceneName ifAbsent: [^ self hide].
-	self show.
-	self referencePosition: (sceneState at: #referencePosition).
-	self setSizeTo: (sceneState at: #size).
-	self heading: (sceneState at: #heading).
-
 ]
 
 { #category : #'looks ops' }
@@ -2513,31 +2392,6 @@ PhratchSpriteMorph >> turn: degrees [
 ]
 
 { #category : #'motion ops' }
-PhratchSpriteMorph >> turnAwayFromEdge [
-	"Turn away from the nearest edge."
-
-	| dirX dirY refP delta |
-	dirX := self rotationDegrees degreesToRadians cos.
-	dirY := self rotationDegrees degreesToRadians sin negated.
-	refP := self referencePosition.
-	delta := (PhratchFrameMorph workpaneExtent // 2) - refP abs.
-
-	(delta x < delta y) | (delta x < 0) ifTrue: [  "point dirX towards center"
-		(dirX closeTo: 0.0) ifTrue: [dirX := 0.1].
-		refP x > 0
-			ifTrue: [dirX := dirX abs negated]
-			ifFalse: [dirX := dirX abs]].
-	(delta y < delta x) | (delta y < 0) ifTrue: [  "point dirY towards center"
-		(dirY closeTo: 0.0) ifTrue: [dirY := 0.1].
-		refP y > 0
-			ifTrue: [dirY := dirY abs negated]
-			ifFalse: [dirY := dirY abs]].
-
-	self rotationDegrees: (dirY negated asFloat arcTan: dirX) radiansToDegrees.
-
-]
-
-{ #category : #'motion ops' }
 PhratchSpriteMorph >> turnLeft: degrees [
 	"Turn counter-clockwise the given number of degrees."
 	<phratchItem: 'turn $Number$ degrees' kind: #- category: 'motion' defaultValues: #(15) subCategory: #a1>
@@ -2605,7 +2459,7 @@ PhratchSpriteMorph >> vScale [
 	^ (100 * scalePoint y) rounded
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #copying }
 PhratchSpriteMorph >> veryDeepFixupWith: deepCopier [
 	"If fields were weakly copied, fix them here.  If they were in the tree being copied, fix them up, otherwise point to the originals."
 
@@ -2615,7 +2469,7 @@ PhratchSpriteMorph >> veryDeepFixupWith: deepCopier [
 "	subsprites := subsprites collect: [:m | deepCopier references at: m ifAbsent: [m]]"
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #copying }
 PhratchSpriteMorph >> veryDeepInner: deepCopier [
 	"Copy all of my instance variables.  Some need to be not copied at all, but shared.  	Warning!!  Every instance variable defined in this class must be handled.  We must also implement veryDeepFixupWith:.  See DeepCopier class comment."
 
@@ -2647,12 +2501,7 @@ PhratchSpriteMorph >> virtualScale [
 		virtualScale := self realScale]
 ]
 
-{ #category : #nesting }
-PhratchSpriteMorph >> virtualScale: aPoint [
-	virtualScale := aPoint
-]
-
-{ #category : #'as yet unclassified' }
+{ #category : #'instance creation' }
 PhratchSpriteMorph >> warn: t1 [ 
 	<phratchItem: 'warn $String$' kind: #- category: 'sensing' defaultValues: #('Invalid input') subCategory: #a1>
     DialogBoxMorph warn: t1.
@@ -2666,7 +2515,7 @@ PhratchSpriteMorph >> whenSpriteCreated [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #geometry }
 PhratchSpriteMorph >> width [
 	<phratchItem: 'width' kind: #r category: 'looks' defaultValues: #() subCategory: #a4>
 ^super width

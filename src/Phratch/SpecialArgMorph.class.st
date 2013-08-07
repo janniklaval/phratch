@@ -8,7 +8,7 @@ Class {
 	#category : #'Phratch-Blocks'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #example }
 SpecialArgMorph class >> example [
 	| script dict block |
 	"self example"
@@ -34,14 +34,14 @@ SpecialArgMorph class >> example [
 	script openInWorld
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #other }
 SpecialArgMorph >> acceptsDroppedReporters [
 
 	^ true
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #byob }
 SpecialArgMorph >> acceptsTypeOf: aBlockMorph [
 	"Answer true if I can accept a dropped reporter of the given type. Answer false by default."
 
@@ -49,7 +49,7 @@ SpecialArgMorph >> acceptsTypeOf: aBlockMorph [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #drawing }
 SpecialArgMorph >> drawOn: aCanvas [
 
 	(owner isKindOf: CReporterSlotMorph)
@@ -98,7 +98,7 @@ SpecialArgMorph >> drawOn: aCanvas [
 	aCanvas paintImage: skin at: self position
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #evaluation }
 SpecialArgMorph >> evaluate [
 
 	implicitValue notNil
@@ -107,18 +107,18 @@ SpecialArgMorph >> evaluate [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 SpecialArgMorph >> stringExpression: obj [
 
 	"default is not to do anything"
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 SpecialArgMorph >> type [
 	^type
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 SpecialArgMorph >> type: aSymbol [
 
 	"currently BYOB supports the following first class types:

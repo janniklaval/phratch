@@ -29,7 +29,7 @@ ElementsDoubleToggleMorph >> fitMorphs [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialize }
 ElementsDoubleToggleMorph >> initialize [
 	super initialize.
 	chooser := TriangleButtonMorph new

@@ -22,12 +22,11 @@ CBlockMorph >> addCommandIcons [
 
 	| f |
 	super addCommandIcons.
-
-	(#(doForever doForeverIf doRepeat doUntil) includes: selector) ifTrue: [
-		f := PhratchFrameMorph skinAt: #loopIcon ifAbsent: [^ self].
-		loopMorph := ImageMorph new form: f.
-		self addMorphBack: loopMorph].
-
+	(#(#doForever #doForeverIf #doRepeat #doUntil) includes: selector)
+		ifFalse: [ ^ self ].
+	f := PhratchFrameMorph skinAt: #loopIcon ifAbsent: [ ^ self ].
+	loopMorph := ImageMorph new form: f.
+	self addMorphBack: loopMorph
 ]
 
 { #category : #private }
@@ -49,12 +48,12 @@ CBlockMorph >> asBlockTuple [
 				(arg isKindOf: ExpressionArgMorph)
 					ifTrue: [ 
 						val := arg getExpression.
-						arg isNumberExpression
+						eval := arg isNumberExpression
 							ifTrue: [ 
-								eval := val = ' '
+								val = ' '
 									ifTrue: [ val ]
 									ifFalse: [ val asNumberNoError ] ]
-							ifFalse: [ eval := arg evaluate ] ]
+							ifFalse: [ arg evaluate ] ]
 					ifFalse: [ eval := arg evaluate ].
 				blockTuple at: i + 3 put: eval ]
 			ifFalse: [ blockTuple at: i + 3 put: arg asBlockTuple ] ].
@@ -217,16 +216,13 @@ CBlockMorph >> drawInnerTopY: y on: aCanvas [
 ]
 
 { #category : #drawing }
-CBlockMorph >> drawOn: aCanvas [ 
-
+CBlockMorph >> drawOn: aCanvas [
 	| c |
 	self contrastColor.
-	
 	topBarBottom := self top + self topBarHeight.
-	self isForever
-		ifTrue: [blockBottom := self bottom - 3]
-		ifFalse: [blockBottom := self bottom - 7].
-
+	blockBottom := self isForever
+		ifTrue: [ self bottom - 3 ]
+		ifFalse: [ self bottom - 7 ].
 	self computeHighlightColors.
 	c := FormCanvas extent: self extent depth: 32.
 	c := c copyOffset: self topLeft negated.
@@ -234,10 +230,8 @@ CBlockMorph >> drawOn: aCanvas [
 	self drawTopBarOn: c.
 	self drawVerticalBarOn: c.
 	self drawBottomBarOn: c.
-
 	self drawFinalOn: aCanvas fromCanvas: c.
 	self drawInlinePaletteOn: aCanvas
-
 ]
 
 { #category : #drawing }

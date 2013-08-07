@@ -10,8 +10,7 @@ Class {
 		'saver',
 		'fillScreenOn',
 		'currentMethod',
-		'currentClass',
-		'methodModified'
+		'currentClass'
 	],
 	#classVars : [
 		'WarnIfNoChangesFile',
@@ -56,7 +55,7 @@ and based in part on the Scratch Source Code.
 Implemented in Squeak and in itself.'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #actions }
 ElementsMethodEditorMorph >> arrangeElements [
 	| current x y spacing |
 	spacing := 5.
@@ -70,7 +69,7 @@ ElementsMethodEditorMorph >> arrangeElements [
 		
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 ElementsMethodEditorMorph >> arrangePanes [
 	classChooser position: self topLeft + 2.
 	sideChooser position: classChooser bottomLeft.
@@ -98,7 +97,8 @@ ElementsMethodEditorMorph >> buildPanes [
 	editor contents: p.
 	p addMorph: m.
 
-	palette := ElementsPaletteFrameMorph new editorFrame: self; height: self height; arrangePanes.
+	palette := ElementsPaletteFrameMorph new editorFrame: self; height: self height; arrangePanes; 
+		yourself.
 	saver := ElementsToggleButtonMorph new flat; label: 'save'; onColor: color offColor: color; target: self; selector: #saveCurrentMethod;
 		yourself.
 	self
@@ -111,24 +111,20 @@ ElementsMethodEditorMorph >> buildPanes [
 	saver isHidden: true
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #menu }
 ElementsMethodEditorMorph >> contextMenu [
-	|m|
+	| m |
 	m := MenuMorph new.
-	m add: 'clean up' action: #arrangeElements.
-
+	m add: 'clean up' translated action: #arrangeElements.
 	m addLine.
 	fillScreenOn
-		ifTrue: [
-			m add: 'switch to development mode' action: #developmentMode.
-]
-		ifFalse: [m add: 'switch to user mode' action: #userMode.
-			m add: 'save image in user mode' action: #saveImage ].
-
+		ifTrue: [ m add: 'switch to development mode' translated action: #developmentMode ]
+		ifFalse: [ 
+			m add: 'switch to user mode' translated action: #userMode.
+			m add: 'save image in user mode' translated action: #saveImage ].
 	m addLine.
-	m add: 'about...' action: #about.
-
-	^m
+	m add: 'about...' translated action: #about.
+	^ m
 ]
 
 { #category : #accessing }
@@ -136,19 +132,19 @@ ElementsMethodEditorMorph >> currentClass [
 	^currentClass
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ElementsMethodEditorMorph >> currentMethodElement [
 	^editor contents findA: MethodElementMorph
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ElementsMethodEditorMorph >> currentSide [
 	sideChooser ifNil: [^#instance ].
 	^sideChooser choice
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #actions }
 ElementsMethodEditorMorph >> developmentMode [
 	fillScreenOn := false.
 	self
@@ -175,7 +171,6 @@ ElementsMethodEditorMorph >> handlesMouseDown: evt [
 { #category : #initialize }
 ElementsMethodEditorMorph >> initialize [
 	fillScreenOn := false.
-	methodModified := false.
 	currentClass := Object.
 	currentMethod := #yourself.
 	super initialize.
@@ -186,7 +181,7 @@ ElementsMethodEditorMorph >> initialize [
 	self refresh
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #menu }
 ElementsMethodEditorMorph >> invokeContextMenu [
 	|m choice|
 	m := self contextMenu.
@@ -195,7 +190,7 @@ ElementsMethodEditorMorph >> invokeContextMenu [
 		choice ifNotNil: [self perform: choice] ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #actions }
 ElementsMethodEditorMorph >> maximize [
 	((self position = World position) and: [
 		self extent = World extent])
@@ -211,12 +206,11 @@ ElementsMethodEditorMorph >> maximize [
 
 { #category : #accessing }
 ElementsMethodEditorMorph >> methodModified [
-	methodModified := true.
 	saver isHidden: false.
 	saver position: (self position x + (palette left - methodChooser right - saver width // 2) ) @ (methodChooser bottom - saver height)
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ElementsMethodEditorMorph >> methodTemplate [
 	| m |
 	m := MethodElementMorph new selector: '' arguments: #().
@@ -228,9 +222,8 @@ ElementsMethodEditorMorph >> methodTemplate [
 	self methodUnmodified
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ElementsMethodEditorMorph >> methodUnmodified [
-	methodModified := false.
 	saver isHidden: true
 ]
 
@@ -245,9 +238,8 @@ ElementsMethodEditorMorph >> mouseDown: evt [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ElementsMethodEditorMorph >> onMethod: aSelector ofClass: aClass [
-	methodModified := false.
 	currentClass := aClass.
 	classChooser class: aClass.
 	currentMethod := #aSelector.
@@ -262,7 +254,7 @@ ElementsMethodEditorMorph >> refresh [
 	self methodTemplate
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #actions }
 ElementsMethodEditorMorph >> saveCurrentMethod [
 	| se sel|
 	se := self currentMethodElement.
@@ -342,19 +334,19 @@ ElementsMethodEditorMorph >> stepTime [
 	^0
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #actions }
 ElementsMethodEditorMorph >> switchToClassSide [
 
 	self selectClass: currentClass class
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #actions }
 ElementsMethodEditorMorph >> switchToInstanceSide [
 
 	self selectClass: currentClass allInstances first.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #actions }
 ElementsMethodEditorMorph >> userMode [
 
 	fillScreenOn := true.

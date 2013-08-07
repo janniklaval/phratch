@@ -12,31 +12,18 @@ Class {
 }
 
 { #category : #drawing }
-ElementsToggleButtonMorph >> drawOn: aCanvas [ 
-
-	|r bw |
-	bw := self borderWidth.
-
-	"border"
-	"top"
-	r := Rectangle origin: ((self left + bw) @ self top) corner: (self right @ (self top + bw)).
-	aCanvas fillRectangle: r color: self borderColorVeryLight.
-
-	"left"
-	r := Rectangle origin: (self topLeft) corner: (self left + bw) @ (self bottom - bw).
-	aCanvas fillRectangle: r color: self borderColorLight.
-
-	"right"
-	r := Rectangle origin: ((self right - bw) @ (self top + bw)) corner: self bottomRight.
-	aCanvas fillRectangle: r color: self borderColorDark.
-
-	"bottom"
-	r := Rectangle origin: (self left @ (self bottom - bw)) corner: (self right - bw) @ self bottom.
-	aCanvas fillRectangle: r color: self borderColorVeryDark.
-
-	"body"
-	aCanvas fillRectangle: (Rectangle origin: (self topLeft + bw) corner: (self bottomRight - bw)) color: color.
-"
+ElementsToggleButtonMorph >> drawOn: aCanvas [
+	| r bw |
+	bw := self borderWidth.	"border"	"top"
+	r := Rectangle origin: (self left + bw) @ self top corner: self right @ (self top + bw).
+	aCanvas fillRectangle: r color: self borderColorVeryLight.	"left"
+	r := Rectangle origin: self topLeft corner: (self left + bw) @ (self bottom - bw).
+	aCanvas fillRectangle: r color: self borderColorLight.	"right"
+	r := Rectangle origin: (self right - bw) @ (self top + bw) corner: self bottomRight.
+	aCanvas fillRectangle: r color: self borderColorDark.	"bottom"
+	r := Rectangle origin: self left @ (self bottom - bw) corner: (self right - bw) @ self bottom.
+	aCanvas fillRectangle: r color: self borderColorVeryDark.	"body"
+	aCanvas fillRectangle: (Rectangle origin: self topLeft + bw corner: self bottomRight - bw) color: color.	"
 	aCanvas fillRectangle: (Rectangle origin: (self topLeft + bw) corner: (self right - bw) @ (self center y - bw)) color: color twiceLighter.
 
 	aCanvas fillRectangle: (Rectangle origin: (self left + bw) @ (self center y - bw) corner: (self right - bw) @ (self center y)) color: color lighter.
@@ -44,20 +31,22 @@ ElementsToggleButtonMorph >> drawOn: aCanvas [
 	aCanvas fillRectangle: (Rectangle origin: (self left + bw @ (self center y)) corner: (self bottomRight - bw)) color: color.
 
 "
-
-specialEffect ifTrue: [
-
-	aCanvas fillRectangle: (Rectangle origin: (self topLeft + bw) corner: (self left + self height) @ (self center y - bw)) color: onColor twiceLighter.
-
-	aCanvas fillRectangle: (Rectangle origin: (self left + bw) @ (self center y - bw) corner: (self left + self height) @ (self center y)) color: onColor lighter.
-
-	aCanvas fillRectangle: (Rectangle origin: (self left + bw @ (self center y)) corner: (self left + self height) @ (self bottom - bw)) color: onColor
-
-
+	specialEffect
+		ifFalse: [ ^ self ].
+	aCanvas
+		fillRectangle: (Rectangle origin: self topLeft + bw corner: (self left + self height) @ (self center y - bw))
+		color: onColor twiceLighter.
+	aCanvas
+		fillRectangle:
+			(Rectangle origin: (self left + bw) @ (self center y - bw) corner: (self left + self height) @ self center y)
+		color: onColor lighter.
+	aCanvas
+		fillRectangle:
+			(Rectangle origin: (self left + bw) @ self center y corner: (self left + self height) @ (self bottom - bw))
+		color: onColor
 ]
-]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 ElementsToggleButtonMorph >> fitMorphs [
 	| bw x y |
 	bw := self borderWidth.
@@ -67,7 +56,7 @@ ElementsToggleButtonMorph >> fitMorphs [
 	label position: x@ y 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 ElementsToggleButtonMorph >> flat [
 	specialEffect := false
 ]

@@ -7,7 +7,7 @@ Class {
 	#category : #'Phratch-UI-Support'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #adding }
 MethodChooserMorph >> addCategory [
 	| ans |
 	ans := UIManager default request: 'new category:' initialAnswer: ''.
@@ -17,27 +17,26 @@ MethodChooserMorph >> addCategory [
 
 { #category : #'as yet unclassified' }
 MethodChooserMorph >> chooseMethod [
-
-	|menu list|
+	| menu list |
 	menu := MenuMorph new.
 	menu defaultTarget: self.
-	selector ifNotNil: [
-		menu add: 'put method into category...' action: #reclassify.
-		menu add: 'add category...' action: #addCategory.
-		menu add: 'remove empty categories' action: #removeEmptyCategories.
-		menu addLine ].
+	selector
+		ifNotNil: [ 
+			menu add: 'put method into category...' translated action: #reclassify.
+			menu add: 'add category...' translated action: #addCategory.
+			menu add: 'remove empty categories' translated action: #removeEmptyCategories.
+			menu addLine ].
 	list := class organization categories asSortedCollection.
-	list do: [:each|
-		menu add: each asString subMenu: (self menuForCategory: each)].
+	list do: [ :each | menu add: each asString subMenu: (self menuForCategory: each) ].
 	menu popUpAt: button center x @ (self bottom + 5) forHand: World activeHand
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 MethodChooserMorph >> class: aClass [
 	class := aClass. 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialize }
 MethodChooserMorph >> initialize [
 	super initialize.
 	class := Object.
@@ -62,7 +61,7 @@ MethodChooserMorph >> menuForCategory: categoryName [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 MethodChooserMorph >> mouseDown: evt [
 	self chooseMethod
 ]
@@ -72,18 +71,18 @@ MethodChooserMorph >> reclassify [
 	class organization letUserReclassify: selector
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 MethodChooserMorph >> removeEmptyCategories [
 
 	class organization removeEmptyCategories
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 MethodChooserMorph >> selector [
 	^selector
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 MethodChooserMorph >> selector: aSelector [
 
 	selector := aSelector.

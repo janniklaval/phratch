@@ -144,32 +144,24 @@ PhratchFilePicker >> changeSelectionIndexBy: anInteger [
 { #category : #private }
 PhratchFilePicker >> checkForPhratchInfoFetchDone [
 	"Try to retrieve info for the currently selected Phratch project and, if successful, report it to our client."
+
 	"Details: The fetcher is allowed to keep running even after the info dictionary is retrieved. Thus if the user decides to open this project, we'll have a head start on fetching it."
 
 	| data s version infoSize infoDict |
-	phratchProjectFetcher ifNil: [^ self].
-
+	phratchProjectFetcher ifNil: [ ^ self ].
 	data := phratchProjectFetcher bodyData.
-	data size >= 14 ifTrue: [
-		s := ReadStream on: data.
-		version := ObjStream phratchFileVersionFrom: (s next: 10) asString.
-		(version = 1) | (version = 2)
-			ifTrue: [
-				infoSize := s uint32.
-				infoSize <= (s size - s position) ifTrue: [
-					infoDict := [ObjStream new readObjFrom: s] ifError: [Dictionary new].
-					phratchInfoClient phratchInfo: infoDict]]
-			ifFalse: [
-				phratchInfoClient phratchInfo: Dictionary new]].
-
-
-]
-
-{ #category : #accessing }
-PhratchFilePicker >> contentsPaneMorph [
-
-	^ contentsPaneMorph
-
+	data size >= 14
+		ifFalse: [ ^ self ].
+	s := ReadStream on: data.
+	version := ObjStream phratchFileVersionFrom: (s next: 10) asString.
+	version = 1 | (version = 2)
+		ifTrue: [ 
+			infoSize := s uint32.
+			infoSize <= (s size - s position)
+				ifTrue: [ 
+					infoDict := [ ObjStream new readObjFrom: s ] ifError: [ Dictionary new ].
+					phratchInfoClient phratchInfo: infoDict ] ]
+		ifFalse: [ phratchInfoClient phratchInfo: Dictionary new ]
 ]
 
 { #category : #accessing }
@@ -185,57 +177,55 @@ PhratchFilePicker >> currentDirectory: aDirectoryOrString [
 	"Set my current directory to the given directory or path String."
 
 	| s truncated w eWidth |
-	(currentDir isKindOf: PhratchServerDirectory) ifTrue: [
-		fetchInProgress := false.
-		currentDir stopFetching].
-	
-	(aDirectoryOrString isKindOf: String)
-		ifTrue: [currentDir := ((aDirectoryOrString) asFileReference)]
-		ifFalse: [currentDir := aDirectoryOrString].
-
-	currentDir fullName isEmpty
-		ifTrue: [s := FileSystem root basename]
-		ifFalse: [s := currentDir basename].
-
-	"trim directory name to fit button, if necessary"
+	(currentDir isKindOf: PhratchServerDirectory)
+		ifTrue: [ 
+			fetchInProgress := false.
+			currentDir stopFetching ].
+	currentDir := (aDirectoryOrString isKindOf: String)
+		ifTrue: [ aDirectoryOrString asFileReference ]
+		ifFalse: [ aDirectoryOrString ].
+	s := currentDir fullName isEmpty
+		ifTrue: [ FileSystem root basename ]
+		ifFalse: [ currentDir basename ].	"trim directory name to fit button, if necessary"
 	truncated := false.
 	eWidth := (PhratchTranslator stringExtent: '...' font: directoryBarMorph label font) x.
 	w := 190 - eWidth.
-	[((PhratchTranslator stringExtent: s font: directoryBarMorph label font) x) > w] whileTrue: [
-		truncated := true.
-		s := s copyFrom: 1 to: s size - 1].
-	truncated ifTrue: [s := s, '...'].
-	s = '/' ifTrue: [s := 'Computer'].
-	directoryBarMorph label: (String  withAll: s) font: (PhratchFrameMorph getFont: #FilePickerDirectoryName).
-	directoryBarMorph
-		width: contentsPaneMorph width - 160.
+	[ (PhratchTranslator stringExtent: s font: directoryBarMorph label font) x > w ]
+		whileTrue: [ 
+			truncated := true.
+			s := s copyFrom: 1 to: s size - 1 ].
+	truncated
+		ifTrue: [ s := s , '...' ].
+	s = '/'
+		ifTrue: [ s := 'Computer' ].
+	directoryBarMorph label: (String withAll: s) font: (PhratchFrameMorph getFont: #FilePickerDirectoryName).
+	directoryBarMorph width: contentsPaneMorph width - 160.
 	directoryBarArrowMorph right: directoryBarMorph right - 9.
 	lastUpMSecs := 0.
-	self getDirectoryContents.
-
+	self getDirectoryContents
 ]
 
 { #category : #private }
 PhratchFilePicker >> deleteDirectory [
 	"Delete the directory or file that is currently highlit."
 
-	| entries selectedDir dirEntries response e1|
+	| entries selectedDir dirEntries response e1 |
 	entries := contentsPaneMorph contents submorphs.
-	selectedDir := entries detect: [:e | e1:= e. e isHighlit & e entryIsDirectory] ifNone: [^ self].
-
+	selectedDir := entries
+		detect: [ :e | 
+			e1 := e.
+			e isHighlit & e entryIsDirectory ]
+		ifNone: [ ^ self ].
 	dirEntries := (self currentDirectory / selectedDir) entries.
-	dirEntries size > 0 ifTrue: [^ self].  "do nothing if selectedDir is not empty"
-
+	dirEntries size > 0
+		ifTrue: [ ^ self ].	"do nothing if selectedDir is not empty"
 	freezeFocus := true.
-	response := DialogBoxMorph ask: 
-		'Are you sure you want to delete the empty folder ''' , selectedDir entryName , '''?'.
+	response := DialogBoxMorph ask: 'Are you sure you want to delete the empty folder ''' , selectedDir entryName , '''?'.
 	freezeFocus := false.
-
-	response ifTrue: [
-		[self currentDirectory delete: e1 entryName]
-			ifError: [^ DialogBoxMorph warn: 'Could not delete folder.'].
-		^ self currentDirectory: self currentDirectory].
-
+	response
+		ifFalse: [ ^ self ].
+	[ self currentDirectory delete: e1 entryName ] ifError: [ ^ DialogBoxMorph warn: 'Could not delete folder.' ].
+	^ self currentDirectory: self currentDirectory
 ]
 
 { #category : #private }
@@ -395,34 +385,33 @@ PhratchFilePicker >> getLocalDirectoryContents [
 
 	| allNames fileNames dirNames ext page |
 	"make an alphabetized list of all files and directory names"
-
 	fileNames := currentDir fileNames.
-	extensions ifNotNil: [  "filter out files without a matching extension"
-		fileNames := fileNames select: [:n |
-			extensions includes: ((currentDir / n) extension) asLowercase]].
-	fileNames := fileNames sort: [:n1 :n2 | n1 caseInsensitiveLessOrEqual: n2].
+	extensions
+		ifNotNil: [ 
+			"filter out files without a matching extension"
+			fileNames := fileNames select: [ :n | extensions includes: (currentDir / n) extension asLowercase ] ].
+	fileNames := fileNames sort: [ :n1 :n2 | n1 caseInsensitiveLessOrEqual: n2 ].
 	dirNames := self getLocalDirectoryNames.
-	dirNames := dirNames sort: [:n1 :n2 | n1 caseInsensitiveLessOrEqual: n2].
+	dirNames := dirNames sort: [ :n1 :n2 | n1 caseInsensitiveLessOrEqual: n2 ].
 	allNames := dirNames , fileNames.
-	allNames := allNames reject: [:n | n endsWith: ':=th.gif'].					"suppress Phratch project thumbnails"
-	allNames := allNames reject: [:n | n beginsWith: '.'].						"suppress hidden files on Mac OS X and Unix"
-	allNames := allNames reject: [:n |
-		ext := (currentDir / n) extension asLowercase.
-		#(app dll exe ini image changes) includes: ext].
-	allNames := allNames reject: [:n | PhratchPlugin isHidden: (currentDir / n) fullName].	"suppress hidden files/folders on Win32"
-
-	currentDir fullName = FileSystem workingDirectory fullName ifTrue: [
-		allNames := allNames reject: [:fn |
-			#(help icons 'license.txt' locale plugins 'scratch.app' ) includes: fn asLowercase]].
-
-	showThumbnails
-		ifTrue: [page := self thumbnailStylePageFor: allNames]
-		ifFalse: [page := self listStylePageFor: allNames].
+	allNames := allNames reject: [ :n | n endsWith: ':=th.gif' ].	"suppress Phratch project thumbnails"
+	allNames := allNames reject: [ :n | n beginsWith: '.' ].	"suppress hidden files on Mac OS X and Unix"
+	allNames := allNames
+		reject: [ :n | 
+			ext := (currentDir / n) extension asLowercase.
+			#(#app #dll #exe #ini #image #changes) includes: ext ].
+	allNames := allNames reject: [ :n | PhratchPlugin isHidden: (currentDir / n) fullName ].	"suppress hidden files/folders on Win32"
+	currentDir fullName = FileSystem workingDirectory fullName
+		ifTrue: [ 
+			allNames := allNames
+				reject: [ :fn | #(#help #icons 'license.txt' #locale #plugins 'scratch.app') includes: fn asLowercase ] ].
+	page := showThumbnails
+		ifTrue: [ self thumbnailStylePageFor: allNames ]
+		ifFalse: [ self listStylePageFor: allNames ].
 	contentsPaneMorph contents: page.
-
-	showThumbnails ifTrue: [self startThumbnailFetchProcess].
-	self changeSelectionIndexBy: 1.
-
+	showThumbnails
+		ifTrue: [ self startThumbnailFetchProcess ].
+	self changeSelectionIndexBy: 1
 ]
 
 { #category : #private }
@@ -447,22 +436,24 @@ PhratchFilePicker >> getPhratchInfoFromFile [
 
 	| result fullName f version buf |
 	result := Dictionary new.
-
-	self selectedFile ifNil: [^ result].
+	self selectedFile ifNil: [ ^ result ].
 	fullName := (currentDir / self selectedFile) fullName.
-	( fullName asFileReference) exists ifFalse: [^ result].
-	[f := (FileStream readOnlyFileNamed: fullName) binary] ifError: [^ result].
-
-	[
-		version := ObjStream phratchFileVersionFrom: (f next: 10) asString.
-		(version = 1) | (version = 2) ifTrue: [
+	fullName asFileReference exists
+		ifFalse: [ ^ result ].
+	[ f := (FileStream readOnlyFileNamed: fullName) binary ] ifError: [ ^ result ].
+	[ 
+	version := ObjStream phratchFileVersionFrom: (f next: 10) asString.
+	version = 1 | (version = 2)
+		ifTrue: [ 
 			buf := f next: f uint32.
-			result := ((ObjStream new readObjFrom: (ReadStream on: buf)) associations collect: [:each | each value] ) asDictionary ].
-	] ifError: [:e | Transcript show: e printString, ' in PhratchFilePicker>>getPhratchInfoFromFile'].
+			result := ((ObjStream new readObjFrom: (ReadStream on: buf)) associations collect: [ :each | each value ])
+				asDictionary ] ]
+		ifError: [ :e | 
+			Transcript
+				show: e printString;
+				show: ' in PhratchFilePicker>>getPhratchInfoFromFile' ].
 	f close.
-
 	^ result
-
 ]
 
 { #category : #'event handling' }
@@ -846,15 +837,14 @@ PhratchFilePicker >> startPlayingSound: fullName [
 	"Attempt to play the sound with given name."
 
 	self stopPlayingSound.
-
-	(fullName asLowercase endsWith: '.mp3')
-		ifTrue: [sound := [StreamingMP3Sound onFileNamed: fullName] ifError: [nil]]
-		ifFalse: [sound := [SampledSound fromFileNamed: fullName] ifError: [nil]].
-
-	sound ifNotNil: [
-		(sound respondsTo: #volume:) ifTrue: [sound volume: 1.0].
-		sound play].
-
+	sound := (fullName asLowercase endsWith: '.mp3')
+		ifTrue: [ [ StreamingMP3Sound onFileNamed: fullName ] ifError: [ nil ] ]
+		ifFalse: [ [ SampledSound fromFileNamed: fullName ] ifError: [ nil ] ].
+	sound
+		ifNotNil: [ 
+			(sound respondsTo: #volume:)
+				ifTrue: [ sound volume: 1.0 ].
+			sound play ]
 ]
 
 { #category : #'private-thumbnails' }
@@ -900,15 +890,6 @@ PhratchFilePicker >> stopPlayingSound [
 
 	sound ifNotNil: [sound pause].
 	sound := nil.
-
-]
-
-{ #category : #'private-thumbnails' }
-PhratchFilePicker >> stopThumbnailFetchProcess [
-
-	thumbnailFetchProcess ifNotNil: [
-		thumbnailFetchProcess terminate.
-		thumbnailFetchProcess := nil].
 
 ]
 

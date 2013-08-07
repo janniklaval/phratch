@@ -155,16 +155,6 @@ SensorBoardMorph >> closePort [
 
 ]
 
-{ #category : #'motor ops' }
-SensorBoardMorph >> coastToStopMotor: motorNum [
-	"Let the given motor coast to a stop."
-
-	self portIsOpen ifFalse: [^ self].
-	self selectMotor: motorNum.
-	port nextPutAll: #(84 254 84) asByteArray.
-
-]
-
 { #category : #'object i/o' }
 SensorBoardMorph >> fieldsVersion [
 
@@ -236,13 +226,6 @@ SensorBoardMorph >> mouseDown: evt [
 
 ]
 
-{ #category : #'event handling' }
-SensorBoardMorph >> mouseHold: evt [
-
-	self rightButtonMenu.
-
-]
-
 { #category : #'serial port' }
 SensorBoardMorph >> openPort: aString [
 	"Close the serial port if it is open, then open the port with the given name and initialize streaming of sensor data. Answer true if the operation was successful."
@@ -274,18 +257,6 @@ SensorBoardMorph >> openPort: aString [
 
 ]
 
-{ #category : #private }
-SensorBoardMorph >> ping [
-	"Answer true if a GoGoBoard is connected to my serial port."
-
-	| buf |
-	port flushInputBuffer.
-	port nextPutAll: #(84 254 0) asByteArray.
-	buf := port next: 3.
-	^ buf = #(85 255 170) asByteArray
-
-]
-
 { #category : #'serial port' }
 SensorBoardMorph >> portIsOpen [
 
@@ -306,59 +277,60 @@ SensorBoardMorph >> portNames [
 
 ]
 
-{ #category : #'event handling' }
-SensorBoardMorph >> preemptsMouseDown: evt [
-
-	^ true
-
-]
-
 { #category : #'sensor ops' }
 SensorBoardMorph >> privateSensor: sensorIndex [
 	"Read the virtual sensor with the given index permuted according to which Phratch board is plugged in and scaled if it is a known special sensor such as the light or sound sensor. If reportRaw is true then the raw sensor value (0..1023) is reported."
+
 	"This method does not call processIncomingData. It should only be used by the step method."
 
 	| i raw |
 	"map the sensor index to the corresponding channel"
 	i := (sensorIndex asInteger max: 1) min: 8.
-	useGoGoProtocol ifFalse: [
-		phratchBoardV3
-			ifTrue: [i := #(8 6 7 4 5 3 2 1) at: i] 
-			ifFalse: [i := #(5 6 7 8 1 2 3 4) at: i]].
-
+	useGoGoProtocol
+		ifFalse: [ 
+			i := phratchBoardV3
+				ifTrue: [ #(8 6 7 4 5 3 2 1) at: i ]
+				ifFalse: [ #(5 6 7 8 1 2 3 4) at: i ] ].
 	raw := sensorValues at: i.
-	reportRaw ifTrue: [^ raw].
-	phratchBoardV3 ifTrue: [
-		i = 6 ifTrue: [^ self scaleLight: raw].
-		i = 7 ifTrue: [^ self scaleSound: raw]].
-	raw > 1020 ifTrue: [raw := 1023].  "avoids jitter in the range 1021-1023"
-	^ (100.0 * raw) / 1023.0  
-
+	reportRaw
+		ifTrue: [ ^ raw ].
+	phratchBoardV3
+		ifTrue: [ 
+			i = 6
+				ifTrue: [ ^ self scaleLight: raw ].
+			i = 7
+				ifTrue: [ ^ self scaleSound: raw ] ].
+	raw > 1020
+		ifTrue: [ raw := 1023 ].	"avoids jitter in the range 1021-1023"
+	^ 100.0 * raw / 1023.0
 ]
 
 { #category : #private }
 SensorBoardMorph >> processGoGoByte: aByte [
 	"Process one byte of the incoming data stream from a GoGoBoard."
+
 	"Details: This code recognizes three-byte sensor update messages starting with 16r0C using a simple, three-state finite state machine. We assume that sensor updates are always contiguous--that is, replies to motor or other GoGo board commands will not be inserted between the bytes of any given three-byte sensor update message. The sensor number is the top three bits of the byte two. The data value is the bottom two bits of byte two plus all eight bits of byte three."
 
+	"final byte of message: report the sensor value"
+
 	| sensorNum val |
-	currentState = #idle ifTrue: [ 
-		aByte = 16r0C ifTrue: [currentState := #startByteSeen].
-		^ self].
-
-	currentState = #startByteSeen ifTrue: [
-		highByte := aByte.
-		currentState := #highByteSeen.
-		^ self].
-
-	currentState = #highByteSeen ifTrue: [
-		"final byte of message: report the sensor value"
-		sensorNum := (highByte bitShift: -5) + 1.
-		val := ((highByte bitAnd: 3) bitShift: 8) + aByte.
-		(sensorNum between: 1 and: 8) ifTrue: [
-			sensorValues at: sensorNum put: val].
-		currentState := #idle].
-
+	currentState = #idle
+		ifTrue: [ 
+			aByte = 16r0C
+				ifTrue: [ currentState := #startByteSeen ].
+			^ self ].
+	currentState = #startByteSeen
+		ifTrue: [ 
+			highByte := aByte.
+			currentState := #highByteSeen.
+			^ self ].
+	currentState = #highByteSeen
+		ifFalse: [ ^ self ].
+	sensorNum := (highByte bitShift: -5) + 1.
+	val := ((highByte bitAnd: 3) bitShift: 8) + aByte.
+	(sensorNum between: 1 and: 8)
+		ifTrue: [ sensorValues at: sensorNum put: val ].
+	currentState := #idle
 ]
 
 { #category : #private }
@@ -389,80 +361,60 @@ SensorBoardMorph >> processIncomingData [
 { #category : #private }
 SensorBoardMorph >> processPhratchByte: aByte [
 	"Process one byte of the incoming data stream from a Phratch sensor board."
+
 	"Sensor messages are two bytes with the following format:
 		Byte1: <1><sensor number (4 bits)><sensor value high bits (3 bits)>
 		Byte2: <0><sensor value low bits (7 bits)>"
 
 	| sensorNum val |
-	currentState = #idle ifTrue: [  "wait for first byte of message"
-		(aByte bitAnd: 16r80) > 0 ifTrue: [
-			currentState := #firstByteSeen.
-			highByte := aByte].
-		^ self].
-
-	currentState = #firstByteSeen ifTrue: [
-		(aByte bitAnd: 16r80) > 0 ifTrue: [  "must have lost second byte; stay in firstByteSeen state"
+	currentState = #idle
+		ifTrue: [ 
+			"wait for first byte of message"
+			(aByte bitAnd: 16r80) > 0
+				ifTrue: [ 
+					currentState := #firstByteSeen.
+					highByte := aByte ].
+			^ self ].
+	currentState = #firstByteSeen
+		ifFalse: [ ^ self ].
+	(aByte bitAnd: 16r80) > 0
+		ifTrue: [ 
+			"must have lost second byte; stay in firstByteSeen state"
 			highByte := aByte.
-			^ self].
-
-		"good second byte: report the sensor value"
-		sensorNum := ((highByte bitShift: -3) bitAnd: 16rF) + 1.
-		val := ((highByte bitAnd: 7) bitShift: 7) + (aByte bitAnd: 16r7F).
-		sensorNum <= sensorValues size ifTrue: [
+			^ self ].	"good second byte: report the sensor value"
+	sensorNum := ((highByte bitShift: -3) bitAnd: 16rF) + 1.
+	val := ((highByte bitAnd: 7) bitShift: 7) + (aByte bitAnd: 16r7F).
+	sensorNum <= sensorValues size
+		ifTrue: [ 
 			sensorValues at: sensorNum put: val.
-			sensorNum = 16 ifTrue: [
-				(val == 3) | (val == 4) ifTrue: [
-					phratchBoardV3 := true]]].  "PhratchBoard, version 3 or 4"
-
-		currentState := #idle].
-
-]
-
-{ #category : #'serial port' }
-SensorBoardMorph >> resetPort [
-	"If the port is closed, do nothing. If it is open, close and reopen it. This can be used to reset the Prolific USB serial driver if it misbehaves."
-
-	self portIsOpen ifFalse: [^ self].
-	portName ifNil: [^ self].
-	self closePort.
-	self openPort: portName.
-	scanState := #on.
-	self step.
-
-]
-
-{ #category : #'motor ops' }
-SensorBoardMorph >> reverseMotor: motorNum [
-	"Reverse the direction of the given motor."
-
-	self portIsOpen ifFalse: [^ self].
-	self selectMotor: motorNum.
-	port nextPutAll: #(84 254 72) asByteArray.
-
+			sensorNum = 16
+				ifTrue: [ 
+					val == 3 | (val == 4)
+						ifTrue: [ phratchBoardV3 := true ] ] ].	"PhratchBoard, version 3 or 4"
+	currentState := #idle
 ]
 
 { #category : #'event handling' }
 SensorBoardMorph >> rightButtonMenu [
-
 	| menu |
 	menu := MenuMorph new defaultTarget: self.
 	Sensor shiftPressed
-		ifTrue: [
+		ifTrue: [ 
 			reportRaw
-				ifTrue: [menu add: 'stop reporting raw data' action: #toggleRawMode]
-				ifFalse: [menu add: 'report raw data' action: #toggleRawMode].
+				ifTrue: [ menu add: 'stop reporting raw data' translated action: #toggleRawMode ]
+				ifFalse: [ menu add: 'report raw data' translated action: #toggleRawMode ].
 			useGoGoProtocol
-				ifTrue: [menu add: 'use Phratch board' action: #usePhratchboardProtocol]
-				ifFalse: [menu add: 'use GoGo board' action: #useGoGoProtocol]]
-		ifFalse: [
-			menu add: 'select serial/USB port' action: #selectPort.
+				ifTrue: [ menu add: 'use Phratch board' translated action: #usePhratchboardProtocol ]
+				ifFalse: [ menu add: 'use GoGo board' translated action: #useGoGoProtocol ] ]
+		ifFalse: [ 
+			menu add: 'select serial/USB port' translated action: #selectPort.
 			self portIsOpen
-				ifTrue: [menu add: 'close port' action: #stopReadingData].
+				ifTrue: [ menu add: 'close port' translated action: #stopReadingData ].
 			menu addLine.
-			menu add: 'hide' action: #delete].
-
-	menu localize; invokeModal.
-
+			menu add: 'hide' translated action: #delete ].
+	menu
+		localize;
+		invokeModal
 ]
 
 { #category : #'dropping/grabbing' }
@@ -497,40 +449,46 @@ SensorBoardMorph >> scaleSound: val [
 { #category : #'serial port' }
 SensorBoardMorph >> scanForPort [
 	"Try to find the serial port that the sensor board is attached to. This is incremental--each time it is called it does the next task."
+
 	"Details: scanState is one of: #(off, start, checkData, on). scanPorts is a list of port names to try. Attempt to open each port in turn, then wait for a while and see if Phratch Sensor data of the right form has arrived."
 
 	| msecs buf i |
-	#off = scanState ifTrue: [self scanNextPort].
-
-	#on = scanState ifTrue: [  "if port is open, close it and start a new scan"
-		scanPorts := nil.
-		self scanNextPort].
-
-	#start = scanState ifTrue: [
-		(scanPorts isNil or: [scanPorts size = 0]) ifTrue: [
-			scanPorts := self portNames asOrderedCollection].
-		scanPorts size = 0 ifTrue: [^ self scanNextPort].
-		self openPort: scanPorts removeFirst.
-		self portIsOpen ifFalse: [^ self].
-		scanState := #checkData.
-		scanStartMSecs := Time millisecondClockValue.
-		^ self].
-
-	#checkData = scanState ifTrue: [
-		msecs := Time millisecondClockValue - scanStartMSecs.
-		(self portIsOpen not or: [msecs > 4000]) ifTrue: [^ self scanNextPort].
-		port nextPut: 1.  "send poll byte"
-		((buf := port readByteArray) size < 10) ifTrue: [^ self].  "no data yet"
-
-		"check that the data is in Phratch Sensor Board format"
-		i := (buf first bitAnd: 128) > 0 ifTrue: [1] ifFalse: [2].
-		[i < (buf size - 1)] whileTrue: [
-			(((buf at: i) bitAnd: 128) > 0 and:
-			 [((buf at: i + 1) bitAnd: 128) = 0]) ifFalse: [^ self scanNextPort].
-			i := i + 2].
-
-		scanState := #on].
-
+	#off = scanState
+		ifTrue: [ self scanNextPort ].
+	#on = scanState
+		ifTrue: [ 
+			"if port is open, close it and start a new scan"
+			scanPorts := nil.
+			self scanNextPort ].
+	#start = scanState
+		ifTrue: [ 
+			(scanPorts isNil or: [ scanPorts size = 0 ])
+				ifTrue: [ scanPorts := self portNames asOrderedCollection ].
+			scanPorts size = 0
+				ifTrue: [ ^ self scanNextPort ].
+			self openPort: scanPorts removeFirst.
+			self portIsOpen
+				ifFalse: [ ^ self ].
+			scanState := #checkData.
+			scanStartMSecs := Time millisecondClockValue.
+			^ self ].
+	#checkData = scanState
+		ifFalse: [ ^ self ].
+	msecs := Time millisecondClockValue - scanStartMSecs.
+	(self portIsOpen not or: [ msecs > 4000 ])
+		ifTrue: [ ^ self scanNextPort ].
+	port nextPut: 1.	"send poll byte"
+	(buf := port readByteArray) size < 10
+		ifTrue: [ ^ self ].	"no data yet"	"check that the data is in Phratch Sensor Board format"
+	i := (buf first bitAnd: 128) > 0
+		ifTrue: [ 1 ]
+		ifFalse: [ 2 ].
+	[ i < (buf size - 1) ]
+		whileTrue: [ 
+			(((buf at: i) bitAnd: 128) > 0 and: [ ((buf at: i + 1) bitAnd: 128) = 0 ])
+				ifFalse: [ ^ self scanNextPort ].
+			i := i + 2 ].
+	scanState := #on
 ]
 
 { #category : #'serial port' }
@@ -612,22 +570,23 @@ SensorBoardMorph >> startDrag: evt [
 SensorBoardMorph >> startReadingData [
 	"Ensure that the serial port is open, turn off all motors and put them into a known state, and begin streaming sensor data."
 
-	self portIsOpen ifFalse: [^ self].  "could not open the serial port"
+	"all 8 sensors"
 
+	self portIsOpen
+		ifFalse: [ ^ self ].	"could not open the serial port"
 	currentState := #idle.
 	sensorValues atAllPut: 0.
 	phratchBoardV3 := false.
-	self startStreamingSensors: 0.  "in case board was left in streaming mode"
+	self startStreamingSensors: 0.	"in case board was left in streaming mode"
 	port flushInputBuffer.
-
-	useGoGoProtocol ifTrue: [
-		1 to: 6 do: [:motor |
-			self turnOffMotor: motor.
-			self thisWayMotor: motor.
-			self setPower: 3 motor: motor.
-			self turnOffMotor: motor].
-		self startStreamingSensors: 16rFF].  "all 8 sensors"
-
+	useGoGoProtocol
+		ifFalse: [ ^ self ].
+	1 to: 6 do: [ :motor | 
+		self turnOffMotor: motor.
+		self thisWayMotor: motor.
+		self setPower: 3 motor: motor.
+		self turnOffMotor: motor ].
+	self startStreamingSensors: 16rFF
 ]
 
 { #category : #private }
@@ -694,16 +653,6 @@ SensorBoardMorph >> storeFieldsOn: anObjStream [
 ]
 
 { #category : #'motor ops' }
-SensorBoardMorph >> thatWayMotor: motorNum [
-	"Set motor direction to that way."
-
-	self portIsOpen ifFalse: [^ self].
-	self selectMotor: motorNum.
-	port nextPutAll: #(84 254 80) asByteArray.
-
-]
-
-{ #category : #'motor ops' }
 SensorBoardMorph >> thisWayMotor: motorNum [
 	"Set motor direction to this way."
 
@@ -736,15 +685,6 @@ SensorBoardMorph >> turnOffMotor: motorNum [
 	self portIsOpen ifFalse: [^ self].
 	self selectMotor: motorNum.
 	port nextPutAll: #(84 254 68) asByteArray.
-
-]
-
-{ #category : #'motor ops' }
-SensorBoardMorph >> turnOnMotor: motorNum [
-
-	self portIsOpen ifFalse: [^ self].
-	self selectMotor: motorNum.
-	port nextPutAll: #(84 254 64) asByteArray.
 
 ]
 

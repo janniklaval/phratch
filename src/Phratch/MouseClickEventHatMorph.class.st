@@ -24,7 +24,8 @@ MouseClickEventHatMorph >> initialize [
 
 	parts := PhratchTranslator labelPartsFor: 'when $Sprite$ clicked'.
 
-	s := StringMorph new contents: parts first; font: (PhratchFrameMorph getFont: #Label); color: Color white.
+	s := StringMorph new contents: parts first; font: (PhratchFrameMorph getFont: #Label); color: Color white; 
+		yourself.
 	self addMorphBack: s.
 
 	self addMorphBack:
@@ -32,7 +33,8 @@ MouseClickEventHatMorph >> initialize [
 			font: (PhratchFrameMorph getFont: #Label);
 			color: Color white;
 			target: self;
-			getSelector: #receiverName).
+			getSelector: #receiverName; 
+		yourself).
 
 	s := s fullCopy contents: parts second.
 	self addMorphBack: s.
@@ -43,8 +45,11 @@ MouseClickEventHatMorph >> initialize [
 MouseClickEventHatMorph >> printHatNameOn: aStream [
 	"Append a human-readable string for this hat block's name to the given stream."
 
-	aStream nextPutAll: 'when ', self receiverName, ' clicked'; cr.
-
+	aStream
+		nextPutAll: 'when ';
+		nextPutAll: self receiverName;
+		nextPutAll: ' clicked';
+		cr
 ]
 
 { #category : #other }

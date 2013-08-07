@@ -7,31 +7,29 @@ Class {
 	#category : #'Phratch-UI-Elements'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #converting }
 LiteralElementMorph >> asSmalltalk [
 	^textBox contents
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 LiteralElementMorph >> contents: aLiteral [
 	(aLiteral isMemberOf: Array)
 		ifTrue: [ textBox label: '#', aLiteral printString ]
 		ifFalse: [ textBox label: aLiteral printString ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #menu }
 LiteralElementMorph >> contextMenu [
-	|m|
-	m := MenuMorph new.
-"	m add: 'duplicate' action: #duplicate. "
-	m add: 'delete' action: #throwAway.
+	| m |
+	m := MenuMorph new.	"	m add: 'duplicate' action: #duplicate. "
+	m add: 'delete' translated action: #throwAway.
 	m addLine.
-	m add: 'show code...' action: #showGeneratedSmalltalk.
-
-	^m
+	m add: 'show code...' translated action: #showGeneratedSmalltalk.
+	^ m
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 LiteralElementMorph >> fit [
 
 	| bw cw handle |
@@ -49,7 +47,7 @@ LiteralElementMorph >> fit [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialize }
 LiteralElementMorph >> initialize [
 	super initialize.
 	color := Color blue darker.

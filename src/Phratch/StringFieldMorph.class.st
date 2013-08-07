@@ -197,39 +197,6 @@ StringFieldMorph >> copySelection [
 ]
 
 { #category : #private }
-StringFieldMorph >> currsorOffsetFor: characterOffset [
-	"Answer the insertion cursor x offset for the given character offset."
-
-	| s xRanges xPairChar0 xPairCharLast startsOnLeft r xPairCharOffset |
-	stringMorph contents size = 0 ifTrue: [^ 0].
-
-	s := stringMorph stringToDisplay.
-	xRanges := stringMorph xRangesFor: s.
-	xPairChar0 := xRanges at: 1.
-	xPairCharLast := xRanges last.
-	startsOnLeft := xPairChar0 first < xPairCharLast last.
-
-	"special case for a single character; double it to see if it is RTL"
-	xRanges size = 1 ifTrue: [
-		r := stringMorph xRangesFor: (s, s).
-		startsOnLeft := r first first < r last last].
-
-	"if string starts left-to-right, then put cursor on the left side left of first char, otherwise put it on the right side"
-	characterOffset < 1 ifTrue: [
-		startsOnLeft
-			ifTrue: [^ xPairChar0 first]
-			ifFalse: [^ xPairChar0 last - 1]].
-
-	xPairCharOffset := xRanges at: (characterOffset min: xRanges size).
-
-	"if string starts left-to-right, then put cursor on right size of character"
-	startsOnLeft
-		ifTrue: [^ xPairCharOffset last]
-		ifFalse: [^ xPairCharOffset first].
-
-]
-
-{ #category : #private }
 StringFieldMorph >> cursorOffsetFor: characterOffset [
 	"Answer the insertion cursor x offset for the given character offset."
 
@@ -491,12 +458,6 @@ StringFieldMorph >> isEditable: aBoolean [
 
 ]
 
-{ #category : #stepping }
-StringFieldMorph >> isKeyboardFocus [
-
-	^ isKeyboardFocus
-]
-
 { #category : #private }
 StringFieldMorph >> isLTRAt: index in: xRange [
 	"True if the character at the given index in the given xRange is LTR."
@@ -738,13 +699,6 @@ StringFieldMorph >> paste [
 
 ]
 
-{ #category : #'event handling' }
-StringFieldMorph >> preemptsMouseDown: evt [
-
-	^ true
-
-]
-
 { #category : #'text editing' }
 StringFieldMorph >> recordUndoState [
 	"Remember the current contents and selection to allow undo."
@@ -833,12 +787,10 @@ StringFieldMorph >> startDrag: evt [
 	"Do nothing if have keyboard focus. Otherwise, allow myself to be grabbed."
 
 	| myBlock |
-	isKeyboardFocus ifFalse: [
-		myBlock := self ownerOrYourselfThatIsA: BlockMorph.
-		myBlock
-			ifNil: [super startDrag: evt]
-			ifNotNil: [myBlock startDrag: evt]].
-
+	isKeyboardFocus
+		ifTrue: [ ^ self ].
+	myBlock := self ownerOrYourselfThatIsA: BlockMorph.
+	myBlock ifNil: [ super startDrag: evt ] ifNotNil: [ myBlock startDrag: evt ]
 ]
 
 { #category : #stepping }

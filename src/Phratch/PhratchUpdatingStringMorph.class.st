@@ -4,7 +4,7 @@ Class {
 	#category : #'Phratch-UI-Panes'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #'target access' }
 PhratchUpdatingStringMorph >> formatValue: v [
 
 	format = #string ifTrue: [
@@ -31,7 +31,7 @@ PhratchUpdatingStringMorph >> formatValue: v [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'target access' }
 PhratchUpdatingStringMorph >> readFromTarget [
 	"Answer the formatted string for the value read from my target. If the target or selector are nil, or if the value is the same as the last value read, answer my current contents."
 
@@ -43,16 +43,17 @@ PhratchUpdatingStringMorph >> readFromTarget [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'target access' }
 PhratchUpdatingStringMorph >> valueFromTargetOrNil [
 	"Answer the value read from my target. Answer nil if my target or selector is nil.."
 
 	| result |
-	((target == nil) or: [getSelector == nil]) ifTrue: [^ nil].
+	(target isNil or: [ getSelector isNil ])
+		ifTrue: [ ^ nil ].
 	result := nil.
-	[result := self parameter
-		ifNil: [target perform: getSelector]
-		ifNotNil: [target perform: getSelector with: self parameter]
-	] ifError: [].
+	[ 
+	result := self parameter
+		ifNil: [ target perform: getSelector ]
+		ifNotNil: [ target perform: getSelector with: self parameter ] ] ifError: [  ].
 	^ result
 ]

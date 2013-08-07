@@ -56,9 +56,9 @@ PhratchFileChooserDialog class >> chooseFolder: aDirectory [
 	m := self new
 		createFileChooserLayout: false;
 		choosingFolder: true;
-		setDirectory: aDirectory;  "initial directory"
-		extensions: '!';  "do not show files in the directories"
-		title: 'Choose a folder'.
+		setDirectory: aDirectory;
+		extensions: '!';
+		title: 'Choose a folder' translated.	"initial directory"	"do not show files in the directories"
 
 	^ m getUserResponseForFolder
 
@@ -110,12 +110,12 @@ PhratchFileChooserDialog class >> chooseSpriteCostumeFor: aPhratchFrameMorph [
 	PhratchFileChooserDialog deleteDuplicates.
 	m := self new
 		createFileChooserLayout: false;
-		title: 'New Sprite';
+		title: 'New Sprite' translated;
 		showThumbnails: true;
 		type: #costume;
-		extensions: #(gif jpeg jpg bmp png sprite ysp);
+		extensions: #(#gif #jpeg #jpg #bmp #png #sprite #ysp);
 		phratchFrame: aPhratchFrameMorph;
-		listExtent: 550@300.
+		listExtent: 550 @ 300.
 
 	^ m getUserResponse
 
@@ -345,28 +345,31 @@ PhratchFileChooserDialog class >> waitForCompletionOrCancelOfFetch: anHTTPFetche
 
 	| dialogBox total |
 	dialogBox := DialogBoxMorph new
-		title: 'Downloading...';
-		withButtonsForYes: false no: false okay: false cancel: true;
-		extent: 200@150;
+		title: 'Downloading...' translated;
+		withButtonsForYes: false
+			no: false
+			okay: false
+			cancel: true;
+		extent: 200 @ 150;
 		percentDone: 0.
 
 	dialogBox center: World center.
 	dialogBox openInWorld.
 
 	total := nil.
-	[dialogBox isDone not & anHTTPFetcher inProgress] whileTrue: [
-		(Delay forMilliseconds: 100) wait.
-		total ifNil: [total := anHTTPFetcher contentLength].
-		total ifNotNil: [
-			dialogBox percentDone: (100 * anHTTPFetcher bytesDownloaded) // total].
-		World doOneCycle].  "wait for user to press a button"
-
-	anHTTPFetcher succeeded ifFalse: [
-		dialogBox message: 'Failed: ', anHTTPFetcher failureReason.
-		[dialogBox isDone not] whileTrue: [World doOneCycle]].
+	[ dialogBox isDone not & anHTTPFetcher inProgress ]
+		whileTrue: [ 
+			(Delay forMilliseconds: 100) wait.
+			total ifNil: [ total := anHTTPFetcher contentLength ].
+			total ifNotNil: [ dialogBox percentDone: 100 * anHTTPFetcher bytesDownloaded // total ].
+			World doOneCycle ].	"wait for user to press a button"
+	anHTTPFetcher succeeded
+		ifFalse: [ 
+			dialogBox message: 'Failed: ' , anHTTPFetcher failureReason.
+			[ dialogBox isDone ] whileFalse: [ World doOneCycle ] ].
 
 	dialogBox delete.
-	World doOneCycle.
+	World doOneCycle
 
 ]
 
@@ -425,37 +428,39 @@ PhratchFileChooserDialog >> createFileChooserLayout: allowNewFile [
 	bottomSpacer delete.
 	bottomSpacer := nil.
 	mainColumn addMorphBack: list.
-
-	self title: 'Open'.
-	allowNewFile ifTrue: [
-		self title: 'Save As'.
-		newFileTitle := StringMorph new
-			contents: 'New Filename:' localized, ' ';
-			color: (Color gray: 0.3);
-			font: (PhratchFrameMorph getFont: #FileChooserNewFileTitle).
-		newFileName := StringFieldMorph new
-			font: (PhratchFrameMorph getFont: #FileChooserNewFilename);
-			color: (Color r: (211/255) g: (214/255) b: (216/255));
-			width: 180.
-		newTitleBin
-			addMorphBack: newFileTitle;
-			addMorphBack: (Morph new extent: (5@5); color: Color transparent);
-			addMorphBack: newFileName;
-			addMorphBack: (AlignmentMorph newSpacer: Color transparent).
+	self title: 'Open' translated.
+	allowNewFile
+		ifTrue: [ 
+			self title: 'Save As' translated.
+			newFileTitle := StringMorph new
+				contents: 'New Filename:' localized , ' ';
+				color: (Color gray: 0.3);
+				font: (PhratchFrameMorph getFont: #FileChooserNewFileTitle).
+			newFileName := StringFieldMorph new
+				font: (PhratchFrameMorph getFont: #FileChooserNewFilename);
+				color: (Color r: 211 / 255 g: 214 / 255 b: 216 / 255);
+				width: 180.
+			newTitleBin
+				addMorphBack: newFileTitle;
+				addMorphBack:
+						(Morph new
+								extent: 5 @ 5;
+								color: Color transparent);
+				addMorphBack: newFileName;
+				addMorphBack: (AlignmentMorph newSpacer: Color transparent).
 			PhratchTranslator isRTL
-		ifTrue: [newTitleBin submorphs reversed do: [:m |
-			m delete.
-			newTitleBin addMorphBack: m]]].
-
+				ifTrue: [ 
+					newTitleBin submorphs reversed
+						do: [ :m | 
+							m delete.
+							newTitleBin addMorphBack: m ] ] ].
 	mainColumn
 		addMorphBack: newTitleBin;
 		addMorphBack: buttonRow.
-
 	self
 		addMorphBack: shortcutColumn;
 		addMorphBack: mainColumn;
-		addMorphBack: fileInfoColumn.
-
+		addMorphBack: fileInfoColumn
 ]
 
 { #category : #initialization }
@@ -465,82 +470,97 @@ PhratchFileChooserDialog >> createPhratchFileChooserFor: aPhratchFrameMorph savi
 	| labelFont contentsFont commentFont thumbnailHolder dumm |
 	phratchFrame := aPhratchFrameMorph.
 	readingPhratchFile := savingFlag not.
-
-	list := PhratchFilePicker new extensions: #(scratch sb ypr).
+	list := PhratchFilePicker new extensions: #(#scratch #sb #ypr).
 	self removeAllMorphs.
 	bottomSpacer delete.
 	bottomSpacer := nil.
 	mainColumn addMorphBack: list.
-
-	savingFlag ifFalse: [
-		self title: 'Open Project'.
-		list phratchInfoClient: self].
-
-	labelFont := (PhratchFrameMorph getFont: #FileChooserLabel).
-	contentsFont := (PhratchFrameMorph getFont: #FileChooserContents).
-	commentFont := (PhratchFrameMorph getFont: #FileChooserComment).
-
-	savingFlag ifTrue: [
-		self title: 'Save Project'.
-		newFileTitle := StringMorph contents: ('New Filename:' localized, ' ') font: labelFont.
-		newFileTitle color: (Color gray: 0.3).
-		newFileName := StringFieldMorph new
-			contents: phratchFrame projectName;
-			client: self;
-			font: contentsFont;
-			color: (Color r: (211/255) g: (214/255) b: (216/255));
-			width: 180.
-		tabFields add: newFileName.
-		newTitleBin
-			addMorphBack: newFileTitle;
-			addMorphBack: (Morph new extent: (5@5); color: Color transparent);
-			addMorphBack: newFileName;
-			addMorphBack: (AlignmentMorph newSpacer: Color transparent).
-		PhratchTranslator isRTL
-			ifTrue: [newTitleBin submorphs reversed do: [:m |
-				m delete.
-				newTitleBin addMorphBack: m]]].
+	savingFlag
+		ifFalse: [ 
+			self title: 'Open Project' translated.
+			list phratchInfoClient: self ].
+	labelFont := PhratchFrameMorph getFont: #FileChooserLabel.
+	contentsFont := PhratchFrameMorph getFont: #FileChooserContents.
+	commentFont := PhratchFrameMorph getFont: #FileChooserComment.
+	savingFlag
+		ifTrue: [ 
+			self title: 'Save Project' translated.
+			newFileTitle := StringMorph contents: 'New Filename:' localized , ' ' font: labelFont.
+			newFileTitle color: (Color gray: 0.3).
+			newFileName := StringFieldMorph new
+				contents: phratchFrame projectName;
+				client: self;
+				font: contentsFont;
+				color: (Color r: 211 / 255 g: 214 / 255 b: 216 / 255);
+				width: 180.
+			tabFields add: newFileName.
+			newTitleBin
+				addMorphBack: newFileTitle;
+				addMorphBack:
+						(Morph new
+								extent: 5 @ 5;
+								color: Color transparent);
+				addMorphBack: newFileName;
+				addMorphBack: (AlignmentMorph newSpacer: Color transparent).
+			PhratchTranslator isRTL
+				ifTrue: [ 
+					newTitleBin submorphs reversed
+						do: [ :m | 
+							m delete.
+							newTitleBin addMorphBack: m ] ] ].
 	mainColumn
-		addMorphBack: (Morph new extent: (5@9); color: Color transparent);
+		addMorphBack:
+				(Morph new
+						extent: 5 @ 9;
+						color: Color transparent);
 		addMorphBack: newTitleBin.
-
 	thumbnailHolder := AlignmentMorph newColumn
 		cellPositioning: #topCenter;
 		centering: #center;
 		vResizing: #shrinkWrap;
 		color: Color transparent.
-	thumbnailFrameMorph := ImageFrameMorph new
-		initFromForm: (PhratchFrameMorph skinAt: #dialogThumbnailFrame).
-	thumbnailFrameMorph extent: (170@130).
+	thumbnailFrameMorph := ImageFrameMorph new initFromForm: (PhratchFrameMorph skinAt: #dialogThumbnailFrame).
+	thumbnailFrameMorph extent: 170 @ 130.
 	thumbnailHolder addMorph: thumbnailFrameMorph.
-	dumm := Morph new extent: (210@130); color: Color transparent. "hack SPFA"
-	
+	dumm := Morph new
+		extent: 210 @ 130;
+		color: Color transparent.	"hack SPFA"
 	fileInfoColumn
-		addMorphBack: (dumm addMorph: thumbnailFrameMorph); "hack SPFA"
-		addMorphBack: (Morph new extent: (5@6); color: Color transparent). "spacer"
-	thumbnailMorph := ImageMorph new form: (Form extent: 160@120 depth: 1).
-	thumbnailFrameMorph addMorphFront: (thumbnailMorph position: ((thumbnailFrameMorph position) + (5@5))).
-
+		addMorphBack: (dumm addMorph: thumbnailFrameMorph);
+		addMorphBack:
+				(Morph new
+						extent: 5 @ 6;
+						color: Color transparent).	"hack SPFA"	"spacer"
+	thumbnailMorph := ImageMorph new form: (Form extent: 160 @ 120 depth: 1).
+	thumbnailFrameMorph addMorphFront: (thumbnailMorph position: thumbnailFrameMorph position + (5 @ 5)).
 	authorLabelMorph := StringMorph contents: 'Project author:' localized font: labelFont.
 	authorLabelMorph color: (Color gray: 0.3).
 	fileInfoColumn addMorphBack: authorLabelMorph.
 	savingFlag
-		ifTrue: [authorMorph := StringFieldMorph new
-			useStringFieldFrame;
-			contents: '';
-			font: contentsFont.
-			tabFields add: authorMorph]
-		ifFalse: [fileInfoColumn addMorphBack: (Morph new extent: (5@6); color: Color transparent). "spacer"
+		ifTrue: [ 
+			authorMorph := StringFieldMorph new
+				useStringFieldFrame;
+				contents: '';
+				font: contentsFont.
+			tabFields add: authorMorph ]
+		ifFalse: [ 
+			fileInfoColumn
+				addMorphBack:
+					(Morph new
+						extent: 5 @ 6;
+						color: Color transparent).	"spacer"
 			authorMorph := StringFieldMorph new
 				color: Color transparent;
 				borderWidth: 0;
 				contents: '';
 				isEditable: false;
-				font: contentsFont].
+				font: contentsFont ].
 	fileInfoColumn
 		addMorphBack: authorMorph;
-		addMorphBack: (Morph new extent: (5@6); color: Color transparent). "spacer"
-
+		addMorphBack:
+				(Morph new
+						extent: 5 @ 6;
+						color: Color transparent).	"spacer"
 	commentLabelMorph := StringMorph contents: 'About this project:' localized font: labelFont.
 	commentLabelMorph color: authorLabelMorph color.
 	fileInfoColumn addMorphBack: commentLabelMorph.
@@ -548,27 +568,25 @@ PhratchFileChooserDialog >> createPhratchFileChooserFor: aPhratchFrameMorph savi
 		borderWidth: 0;
 		contents: '';
 		font: commentFont;
-		extent: (210@110).
+		extent: 210 @ 110.
 	savingFlag
-		ifTrue: [commentMorph backForm: (PhratchFrameMorph skinAt: #stringFieldFrame).
-			tabFields add: commentMorph]
-		ifFalse: [commentMorph isEditable: false].
+		ifTrue: [ 
+			commentMorph backForm: (PhratchFrameMorph skinAt: #stringFieldFrame).
+			tabFields add: commentMorph ]
+		ifFalse: [ commentMorph isEditable: false ].
 	fileInfoColumn addMorphBack: commentMorph.
-
 	fileInfoColumn addMorphBack: buttonRow.
 	self
 		addMorphBack: shortcutColumn;
 		addMorphBack: mainColumn;
 		addMorphBack: fileInfoColumn.
-
-	savingFlag ifTrue: [
-		self phratchInfo: phratchFrame projectInfo.
-		thumbnailMorph form: phratchFrame workPane thumbnailForm.
-		"default author field to login name if known; else author"
-		(aPhratchFrameMorph loginName size > 0)
-			ifTrue: [authorMorph contents: aPhratchFrameMorph loginName]
-			ifFalse: [authorMorph contents: aPhratchFrameMorph author]].
-
+	savingFlag
+		ifFalse: [ ^ self ].
+	self phratchInfo: phratchFrame projectInfo.
+	thumbnailMorph form: phratchFrame workPane thumbnailForm.	"default author field to login name if known; else author"
+	aPhratchFrameMorph loginName size > 0
+		ifTrue: [ authorMorph contents: aPhratchFrameMorph loginName ]
+		ifFalse: [ authorMorph contents: aPhratchFrameMorph author ]
 ]
 
 { #category : #accessing }

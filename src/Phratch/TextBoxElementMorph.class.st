@@ -9,7 +9,7 @@ TextBoxElementMorph >> contents [
 	^label contents
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 TextBoxElementMorph >> fit [
 	label ifNil: [^self ].
 	self extent: label extent + (self borderWidth * 2).
@@ -20,7 +20,7 @@ TextBoxElementMorph >> fit [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 TextBoxElementMorph >> handlesMouseDown: evt [
 	"Return true if this morph wants to receive mouseDown events (i.e., mouseDown:, mouseMove:, mouseUp:). The default response is false; subclasses that implement mouse messages should override this to return true." 
 
@@ -28,7 +28,7 @@ TextBoxElementMorph >> handlesMouseDown: evt [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialize }
 TextBoxElementMorph >> initialize [
 	super initialize.
 	color := Color white.
@@ -46,12 +46,12 @@ TextBoxElementMorph >> label: aString [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 TextBoxElementMorph >> labelColor [
 	^Color black
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 TextBoxElementMorph >> labelFont [
 	^StrikeFont fontName: 'Verdana' size: 9
 ]
@@ -63,13 +63,13 @@ TextBoxElementMorph >> layoutChanged [
 	self resizeToLabel.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 TextBoxElementMorph >> mouseDown: evt [
 	"Handle a mouse down event. This default implementation does nothing."
 	label launchMiniEditor: evt
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 TextBoxElementMorph >> resizeToLabel [
 	| le h ne |
 	label ifNil: [^self ].
