@@ -232,7 +232,8 @@ PaintFrame >> addTransformButtons [
 		color: Color transparent;
 		inset: 0;
 		vResizing: #shrinkWrap;
-		centering: #center.
+		centering: #center;
+		yourself.
 
 	specs do: [:n |
 		n = #-

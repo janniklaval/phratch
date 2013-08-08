@@ -268,7 +268,8 @@ PhratchStageMorph >> defaultImageMedia [
 
 	^ ImageMedia new
 		form: ScriptablePhratchMorph defaultBackgroundForm;
-		mediaName: ('background' localized, '1')
+		mediaName: ('background' localized, '1');
+		yourself
 
 ]
 
@@ -772,7 +773,8 @@ PhratchStageMorph >> notePlayerFor: aPhratchObject [
 	newPlayer := PhratchNotePlayer new
 		channel: newCh;
 		midiPort: midiPort;
-		instrument: 1.
+		instrument: 1;
+		yourself.
 	notePlayerDict at: aPhratchObject put: newPlayer.
 
 	^ newPlayer
@@ -800,7 +802,8 @@ PhratchStageMorph >> openMIDI [
 		ifTrue: [ ^ self inform: 'No MIDI ports currently available.' ].
 	menu := MenuMorph new
 		defaultTarget: self;
-		title: 'MIDI port:' translated.
+		title: 'MIDI port:' translated;
+		yourself.
 	possiblePorts
 		do: [ :i | 
 			menu
@@ -1073,7 +1076,8 @@ PhratchStageMorph >> savePhoto: aForm [
 		combinationRule: Form over;
 		copyQuad: aForm boundingBox innerCorners toRect: f boundingBox.
 
-	self addMediaItem: (ImageMedia new mediaName: n; form: f).
+	self addMediaItem: (ImageMedia new mediaName: n; form: f;
+		yourself).
 
 
 ]
@@ -1238,7 +1242,8 @@ PhratchStageMorph >> startProcessFor: topBlock [
 
 	proc := PhratchProcess new
 		topBlock: topBlock;
-		expression: sequence.
+		expression: sequence;
+		yourself.
 	topBlock phratchProc: proc.
 
 	(runningBlocks includes: topBlock) ifFalse: [runningBlocks addLast: topBlock].
@@ -1262,7 +1267,8 @@ PhratchStageMorph >> startProcessForSequence: anArray [
 	proc := PhratchProcess new
 		topBlock: topBlock;
 		scriptList: anArray;
-		expression: sequence.
+		expression: sequence;
+		yourself.
 	topBlock phratchProc: proc.
 	(runningBlocks includes: topBlock) ifFalse: [runningBlocks addLast: topBlock].
 
@@ -1597,5 +1603,6 @@ PhratchStageMorph >> userSelectSpriteDefault: defaultSprite butNotAnyOf: exclude
 	^ menu
 		defaultTarget: #null;
 		popUpInWorld;
-		selectedValue
+		selectedValue;
+		yourself
 ]

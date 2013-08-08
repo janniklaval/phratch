@@ -27,7 +27,8 @@ PhratchCategoryVariables class >> viewerPageFor: aScriptablePhratchMorph [
 	| page addButton deleteButton hasVars stage x y maxX |
 	page := PhratchBlockPaletteMorph new
 		color: (Color r: 0.8 g: 0.8 b: 1.0);
-		borderWidth: 0.
+		borderWidth: 0;
+		yourself.
 
 	addButton := PhratchFrameMorph
 		buttonLabel: 'Make a variable' localized
@@ -39,7 +40,8 @@ PhratchCategoryVariables class >> viewerPageFor: aScriptablePhratchMorph [
 		selector: #deleteVariable.
 
 	x := 13.
-	page addMorph: (addButton target: aScriptablePhratchMorph; position: x@7).
+	page addMorph: (addButton target: aScriptablePhratchMorph; position: x@7;
+		yourself).
 	y := addButton bottom + 3.
 
 	hasVars := aScriptablePhratchMorph varNames size > 0.
@@ -47,7 +49,8 @@ PhratchCategoryVariables class >> viewerPageFor: aScriptablePhratchMorph [
 		stage varNames size > 0 ifTrue: [hasVars := true]].
 
 	hasVars ifTrue: [
-		page addMorph: (deleteButton target: aScriptablePhratchMorph; position: x@y).
+		page addMorph: (deleteButton target: aScriptablePhratchMorph; position: x@y;
+		yourself).
 		y := deleteButton bottom + 10.
 
 		y := aScriptablePhratchMorph addVariableReportersTo: page x: x y: y.

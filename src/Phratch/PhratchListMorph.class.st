@@ -123,7 +123,8 @@ PhratchListMorph >> addScrollPane [
 		color: Color transparent;
 		growthFraction: 0.0;
 		scrollbarStartInset: 2 endInset: -2;
-		contents: (Morph new color: Color transparent).
+		contents: (Morph new color: Color transparent);
+		yourself.
 
 	self addMorph: scrollPane.
 
@@ -132,7 +133,8 @@ PhratchListMorph >> addScrollPane [
 { #category : #initialization }
 PhratchListMorph >> addTitleAndControls [
 
-	titleMorph := StringMorph new contents: 'myList'; font: (PhratchFrameMorph getFont: #Label).
+	titleMorph := StringMorph new contents: 'myList'; font: (PhratchFrameMorph getFont: #Label);
+		yourself.
 	deleteMorph := (ImageMorph new form: (PhratchFrameMorph skinAt: #deleteItem)).
 	addItemMorph := (ImageMorph new form: (PhratchFrameMorph skinAt: #addItem)).
 	addSublistMorph := (ImageMorph new form: self sublistIcon).
@@ -140,12 +142,14 @@ PhratchListMorph >> addTitleAndControls [
 	countMorph := StringMorph new
 		contents: '0';
 		font: (PhratchFrameMorph getFont: #XYReadout);
-		color: (Color gray: 0.15).
+		color: (Color gray: 0.15);
+		yourself.
 
 	"emptyMorph is added to contents pane when list is empty"
 	emptyMorph := StringMorph new
 		contents: '(empty)' localized;
-		font: (PhratchFrameMorph getFont: #CommentBlock).
+		font: (PhratchFrameMorph getFont: #CommentBlock);
+		yourself.
 
 	self addMorph: titleMorph.
 	self addMorph: deleteMorph.
@@ -420,7 +424,8 @@ PhratchListMorph >> createCell: anObject [
 		color: Color transparent;
 		textColor: Color white;
 		growWithText: true;
-		contents: txt font: font.
+		contents: txt font: font;
+		yourself.
 	readout height: (PhratchTranslator stringExtent: 'A' font: font) y + 6.
 	numberRight := PhratchTranslator isRTL
 		ifTrue: [ self right - 5 ]
@@ -431,7 +436,8 @@ PhratchListMorph >> createCell: anObject [
 	cell := WatcherReadoutFrameMorph new
 		color: ScriptablePhratchMorph listBlockColor;
 		extent: readout extent + 3;
-		addMorphBack: readout.
+		addMorphBack: readout;
+		yourself.
 	(anObject isKindOf: String)
 		ifFalse: [ cell complexObject: anObject ].
 	cell position: scrollPane contents bottomLeft.	"avoid recursive lists"
@@ -1067,7 +1073,8 @@ PhratchListMorph >> showEmpty [
 	scrollPane hScrollRelative: 0; vScrollRelative: 0.
 	page := scrollPane contents
 		removeAllMorphs;
-		extent: scrollPane extent.
+		extent: scrollPane extent;
+		yourself.
 
 	numberMorphs size > 0 ifTrue: [numberMorphs := #()].
 
@@ -1135,7 +1142,8 @@ PhratchListMorph >> storeFieldsOn: anObjStream [
 PhratchListMorph >> sublistIcon [
 
 	| block slot form halfList big |
-	block := ReporterBlockMorph new color: (ScriptablePhratchMorph blockColorFor: 'list'); commandSpec: '$String$'.
+	block := ReporterBlockMorph new color: (ScriptablePhratchMorph blockColorFor: 'list'); commandSpec: '$String$';
+		yourself.
 	slot := block argMorphs first.
 	slot extent: 7 @ 4.
 	form := slot imageForm.
@@ -1386,7 +1394,8 @@ PhratchListMorph >> updateIndices: rightX [
 		page := scrollPane contents.
 		s := StringMorph new
 			color: self indexColor;
-			font: (PhratchFrameMorph getFont: #Label).
+			font: (PhratchFrameMorph getFont: #Label);
+		yourself.
 		newNumbers := (numberMorphs size + 1 to: cellMorphs size)
 			collect: [:i | s fullCopy contents: i printString].
 		newNumbers do: [:m | page addMorph: m].

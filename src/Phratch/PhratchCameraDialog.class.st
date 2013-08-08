@@ -81,13 +81,15 @@ PhratchCameraDialog >> initialize [
 		addMorph:
 			(Morph new
 				extent: 10 @ 12;
-				color: Color transparent).
+				color: Color transparent;
+		yourself).
 	mainColumn addMorph: viewFinderMorph.
 	mainColumn
 		addMorph:
 			(Morph new
 				extent: 10 @ 18;
-				color: Color transparent)
+				color: Color transparent;
+		yourself)
 ]
 
 { #category : #'event handling' }

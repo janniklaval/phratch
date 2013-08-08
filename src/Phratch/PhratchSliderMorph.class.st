@@ -22,11 +22,13 @@ PhratchSliderMorph >> buildNumberBox [
 		borderWidth: 1;
 		borderInset;
 		color: Color paleBlue;
-		extent: 20@17.
+		extent: 20@17;
+		yourself.
 	m := UpdatingStringMorph new
 		target: slider;
 		floatPrecision: 0.01;
-		useDefaultFormat.
+		useDefaultFormat;
+		yourself.
 	box addMorph: m.
 	^ box
 
@@ -69,14 +71,17 @@ PhratchSliderMorph >> initialize [
 	slider := SimpleSliderMorph new
 		minVal: 0; maxVal: 100;
 		setValue: 50;
-		extent: 128@10.
+		extent: 128@10;
+		yourself.
 
 	self orientation: #horizontal; cellPositioning: #leftCenter; centering: #center; hResizing: #shrinkWrap;
 		borderWidth: 1; borderColor: (Color r: 0.0 g: 0.65 b: 0.0);
 		addMorphBack: (sliderMin := self buildNumberBox);
-		addMorphBack: (AlignmentMorph new width: 5; color: Color transparent; hResizing: #rigid);
+		addMorphBack: (AlignmentMorph new width: 5; color: Color transparent; hResizing: #rigid;
+		yourself);
 		addMorphBack: slider;
-		addMorphBack: (AlignmentMorph new width: 5; color: Color transparent; hResizing: #rigid);
+		addMorphBack: (AlignmentMorph new width: 5; color: Color transparent; hResizing: #rigid;
+		yourself);
 		addMorphBack: (sliderMax := self buildNumberBox).
 
 	sliderMin firstSubmorph

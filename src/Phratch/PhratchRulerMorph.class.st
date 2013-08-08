@@ -13,7 +13,8 @@ Class {
 { #category : #'instance creation' }
 PhratchRulerMorph class >> graphMorph: aPhratchGraphMorph [
 
-	^ self new graph: aPhratchGraphMorph; extent: (aPhratchGraphMorph extent x)@20.
+	^ self new graph: aPhratchGraphMorph; extent: (aPhratchGraphMorph extent x)@20;
+		yourself.
 
 	
 ]

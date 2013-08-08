@@ -86,13 +86,17 @@ ElementsMethodEditorMorph >> arrangePanes [
 { #category : #initialization }
 ElementsMethodEditorMorph >> buildPanes [
 	| p m |
-	classChooser := ClassChooserMorph new frame: self; class: Object.
+	classChooser := ClassChooserMorph new frame: self; class: Object;
+		yourself.
 	sideChooser := InstanceClassSwitchMorph new frame: self.
-	methodChooser := MethodChooserMorph new frame: self; class: Object; selector: #yourself.
+	methodChooser := MethodChooserMorph new frame: self; class: Object; selector: #yourself;
+		yourself.
 	editor := ElementsScrollFrameMorph new
 				color: Color gray;
-				borderColor: Color gray.
-	p := PasteUpMorph new borderWidth: 0; color: Color gray darker.
+				borderColor: Color gray;
+		yourself.
+	p := PasteUpMorph new borderWidth: 0; color: Color gray darker;
+		yourself.
 	m := MethodElementMorph new selector: '' arguments: #().
 	editor contents: p.
 	p addMorph: m.

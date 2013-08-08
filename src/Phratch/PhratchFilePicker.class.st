@@ -55,18 +55,21 @@ PhratchFilePicker >> buildButtons [
 		hResizing: #spaceFill;
 		vResizing: #rigid;
 		centering: #center;
-		color: Color transparent.
+		color: Color transparent;
+		yourself.
 	directoryBarArrowMorph := ImageMorph new form: (PhratchFrameMorph skinAt: #directoryBarArrow).
 	directoryBarMorph := ResizableToggleButton new
 		offForm: (PhratchFrameMorph skinAt: #directoryBar)
 		onForm: (PhratchFrameMorph skinAt: #directoryBar);
-		padding: 3@5.
+		padding: 3@5;
+		yourself.
 	directoryBarMorph
 		target: self;
 		actionSelector: #directoryMenu;
 		actWhen: #buttonUp.
 	topBarMorph
-		addMorphBack: (Morph new extent: (5@5); color: Color transparent);
+		addMorphBack: (Morph new extent: (5@5); color: Color transparent;
+		yourself);
 		addMorphBack: directoryBarMorph.
 
 	b := ToggleButton
@@ -78,7 +81,8 @@ PhratchFilePicker >> buildButtons [
 		actWhen: #buttonUp;
 		isMomentary: true.
 	topBarMorph
-		addMorphBack: (Morph new extent: (5@5); color: Color transparent);
+		addMorphBack: (Morph new extent: (5@5); color: Color transparent;
+		yourself);
 		addMorphBack: (b position: self position + (252@16)).
 
 	f := ToggleButton
@@ -90,7 +94,8 @@ PhratchFilePicker >> buildButtons [
 		actWhen: #buttonUp;
 		isMomentary: true.
 	topBarMorph
-		addMorphBack: (Morph new extent: (5@5); color: Color transparent);
+		addMorphBack: (Morph new extent: (5@5); color: Color transparent;
+		yourself);
 		addMorphBack: (f position: self position + (274@16)).
 
 	directoryBarMorph
@@ -111,7 +116,8 @@ PhratchFilePicker >> buildContentsPane [
 		contents: (Morph new color: self color);
 		showHorizontalScrollbar: false;
 		hBarInset: 18;
-		vBarInset: 18.
+		vBarInset: 18;
+		yourself.
 
 	self addMorphBack: contentsPaneMorph.
 
@@ -277,7 +283,8 @@ PhratchFilePicker >> directoryMenu [
 		entry1 := serverEntries at: choice - pathParts size.
 		^ self currentDirectory: (PhratchServerDirectory new
 			serverName: (entry1 at: 2);
-			path: (entry1 at: 3))].
+			path: (entry1 at: 3);
+		yourself)].
 
 	s := WriteStream on: String new.
 	1 to: choice do: [:i |
@@ -368,7 +375,8 @@ PhratchFilePicker >> getFetchedServerDirectoryContents [
 		m := PhratchFilePickerEntry new
 			name: nm dir: currentDir isDirectory: isDir;
 			width: self width - 60;
-			color: self color.
+			color: self color;
+		yourself.
 		morphsToAdd add: (m position: x@y).
 		y := y + m height].
 
@@ -575,7 +583,8 @@ PhratchFilePicker >> listStylePageFor: allNames [
 	| page dirNames morphsToAdd x y m |
 	page := Morph new
 		color: self color;
-		width: self width - 20.
+		width: self width - 20;
+		yourself.
 
 	dirNames := currentDir directoryNames asSet.
 	morphsToAdd := OrderedCollection new: 1000.
@@ -587,7 +596,8 @@ PhratchFilePicker >> listStylePageFor: allNames [
 			width: self width - 60;
 			color: self color;
 			borderWidth: 0;
-			useRoundedCorners.
+			useRoundedCorners;
+		yourself.
 		morphsToAdd add: (m position: x@y).
 		y := y + m height].
 
@@ -913,7 +923,8 @@ PhratchFilePicker >> thumbnailStylePageFor: allNames [
 	| page dirNames morphsToAdd leftMargin rightMargin x y m thumbnailCache f |
 	page := Morph new
 		color: self color;
-		width: self width - 20.
+		width: self width - 20;
+		yourself.
 
 	dirNames := currentDir directoryNames asSet.
 	thumbnailCache := ThumbnailCache new directory: currentDir.

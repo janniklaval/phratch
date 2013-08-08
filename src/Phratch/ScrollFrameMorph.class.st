@@ -229,16 +229,20 @@ ScrollFrameMorph >> initialize [
 	contents := PasteUpMorph new
 		color: (Color gray: 0.9);
 		borderWidth: 0;
-		enableDragNDrop: true.
+		enableDragNDrop: true;
+		yourself.
 
 	hScrollbar := PhratchScrollBar newHorizontal
 		target: self;
-		selector: #hScrollRelative:.
+		selector: #hScrollRelative:;
+		yourself.
 	vScrollbar := PhratchScrollBar newVertical
 		target: self;
-		selector: #vScrollRelative:.
+		selector: #vScrollRelative:;
+		yourself.
 	cornerMorph := BorderedMorph new
-		borderRaised; borderWidth: 2.
+		borderRaised; borderWidth: 2;
+		yourself.
 		
 	contents position: self position + borderWidth.
 	self addMorph: contents.

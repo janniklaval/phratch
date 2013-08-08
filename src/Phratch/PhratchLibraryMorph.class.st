@@ -39,20 +39,24 @@ PhratchLibraryMorph >> buildPanes [
 	| bin |
 	stagePane := Morph new
 		color: Color transparent;
-		position: self position + (7@0).
+		position: self position + (7@0);
+		yourself.
 
 	bin := PhratchSpriteLibraryMorph new
 		color: Color transparent;
-		borderWidth: 0.
+		borderWidth: 0;
+		yourself.
 
 	scrollPane := ScrollFrameMorph new
 		color: Color transparent;
 		contents: bin;
-		showHorizontalScrollbar: false.
+		showHorizontalScrollbar: false;
+		yourself.
 
 	spritePane := Morph new
 		color: Color gray;
-		position: self position.
+		position: self position;
+		yourself.
 	spriteLabel := self buildSpriteLabel.
 	buttonPane := self makeNewSpriteButtons: (self ownerOrYourselfThatIsA: PhratchFrameMorph).
 
@@ -70,7 +74,8 @@ PhratchLibraryMorph >> buildSpriteLabel [
 	^ StringMorph new
 		font: (PhratchFrameMorph getFont: #Tab);
 		color: Color white;
-		contents: 'New sprite:' localized
+		contents: 'New sprite:' localized;
+		yourself
 
 ]
 

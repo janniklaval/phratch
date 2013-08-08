@@ -42,7 +42,8 @@ PhratchFileChooserDialog class >> chooseExistingFileType: type extensions: anArr
 		createFileChooserLayout: false;
 		type: type;
 		extensions: anArrayOrNil;
-		title: titleString.
+		title: titleString;
+		yourself.
 
 	^ m getUserResponse
 
@@ -58,7 +59,8 @@ PhratchFileChooserDialog class >> chooseFolder: aDirectory [
 		choosingFolder: true;
 		setDirectory: aDirectory;
 		extensions: '!';
-		title: 'Choose a folder' translated.	"initial directory"	"do not show files in the directories"
+		title: 'Choose a folder' translated;
+		yourself.	"initial directory"	"do not show files in the directories"
 
 	^ m getUserResponseForFolder
 
@@ -76,7 +78,8 @@ PhratchFileChooserDialog class >> chooseImageFileType: type title: aString [
 		type: type;
 		extensions: #(gif jpeg jpg bmp png);
 		title: aString;
-		listExtent: 550@300.
+		listExtent: 550@300;
+		yourself.
 
 	"allow sprites to be imported into the paint editor:"
 	aString = 'Import Image' ifTrue: [
@@ -96,7 +99,8 @@ PhratchFileChooserDialog class >> chooseNewFileDefault: defaultName title: title
 		type: type;
 		defaultName: defaultName;
 		title: titleString;
-		listExtent: 400@280.
+		listExtent: 400@280;
+		yourself.
 
 	^ m getUserResponseForNewFile
 
@@ -115,7 +119,8 @@ PhratchFileChooserDialog class >> chooseSpriteCostumeFor: aPhratchFrameMorph [
 		type: #costume;
 		extensions: #(#gif #jpeg #jpg #bmp #png #sprite #ysp);
 		phratchFrame: aPhratchFrameMorph;
-		listExtent: 550 @ 300.
+		listExtent: 550 @ 300;
+		yourself.
 
 	^ m getUserResponse
 
@@ -240,7 +245,8 @@ PhratchFileChooserDialog class >> openPhratchFileFor: aPhratchFrameMorph [
 	PhratchFileChooserDialog deleteDuplicates.
 	m := self new
 		createPhratchFileChooserFor: aPhratchFrameMorph saving: false;
-		type: #project.
+		type: #project;
+		yourself.
 
 	response := m getUserResponse.
 	response = #cancelled ifTrue: [^ nil].
@@ -284,7 +290,8 @@ PhratchFileChooserDialog class >> savePhratchFileFor: aPhratchFrameMorph [
 	m := self new
 		createPhratchFileChooserFor: aPhratchFrameMorph saving: true;
 		type: #project;
-		redirectSavesToSampleFolder.
+		redirectSavesToSampleFolder;
+		yourself.
 
 	result := m getUserResponseForNewFile.
 	result = #cancelled ifTrue: [^ result].
@@ -351,7 +358,8 @@ PhratchFileChooserDialog class >> waitForCompletionOrCancelOfFetch: anHTTPFetche
 			okay: false
 			cancel: true;
 		extent: 200 @ 150;
-		percentDone: 0.
+		percentDone: 0;
+		yourself.
 
 	dialogBox center: World center.
 	dialogBox openInWorld.
@@ -378,7 +386,8 @@ PhratchFileChooserDialog >> addShortcutButtons [
 	"Add shortcut buttons for my type to the shortcutColumn."
 
 	| spacer |
-	spacer := Morph new extent: 5@5; color: Color transparent.
+	spacer := Morph new extent: 5@5; color: Color transparent;
+		yourself.
 	shortcutColumn removeAllMorphs.
 
 	shortcutColumn addMorphBack: (self shortcutButtonLabel: 'Computer' action: #myComp icon: #folderDiscsIcon).
@@ -435,17 +444,20 @@ PhratchFileChooserDialog >> createFileChooserLayout: allowNewFile [
 			newFileTitle := StringMorph new
 				contents: 'New Filename:' localized , ' ';
 				color: (Color gray: 0.3);
-				font: (PhratchFrameMorph getFont: #FileChooserNewFileTitle).
+				font: (PhratchFrameMorph getFont: #FileChooserNewFileTitle);
+		yourself.
 			newFileName := StringFieldMorph new
 				font: (PhratchFrameMorph getFont: #FileChooserNewFilename);
 				color: (Color r: 211 / 255 g: 214 / 255 b: 216 / 255);
-				width: 180.
+				width: 180;
+		yourself.
 			newTitleBin
 				addMorphBack: newFileTitle;
 				addMorphBack:
 						(Morph new
 								extent: 5 @ 5;
-								color: Color transparent);
+								color: Color transparent;
+		yourself);
 				addMorphBack: newFileName;
 				addMorphBack: (AlignmentMorph newSpacer: Color transparent).
 			PhratchTranslator isRTL
@@ -492,14 +504,16 @@ PhratchFileChooserDialog >> createPhratchFileChooserFor: aPhratchFrameMorph savi
 				client: self;
 				font: contentsFont;
 				color: (Color r: 211 / 255 g: 214 / 255 b: 216 / 255);
-				width: 180.
+				width: 180;
+		yourself.
 			tabFields add: newFileName.
 			newTitleBin
 				addMorphBack: newFileTitle;
 				addMorphBack:
 						(Morph new
 								extent: 5 @ 5;
-								color: Color transparent);
+								color: Color transparent;
+		yourself);
 				addMorphBack: newFileName;
 				addMorphBack: (AlignmentMorph newSpacer: Color transparent).
 			PhratchTranslator isRTL
@@ -512,25 +526,29 @@ PhratchFileChooserDialog >> createPhratchFileChooserFor: aPhratchFrameMorph savi
 		addMorphBack:
 				(Morph new
 						extent: 5 @ 9;
-						color: Color transparent);
+						color: Color transparent;
+		yourself);
 		addMorphBack: newTitleBin.
 	thumbnailHolder := AlignmentMorph newColumn
 		cellPositioning: #topCenter;
 		centering: #center;
 		vResizing: #shrinkWrap;
-		color: Color transparent.
+		color: Color transparent;
+		yourself.
 	thumbnailFrameMorph := ImageFrameMorph new initFromForm: (PhratchFrameMorph skinAt: #dialogThumbnailFrame).
 	thumbnailFrameMorph extent: 170 @ 130.
 	thumbnailHolder addMorph: thumbnailFrameMorph.
 	dumm := Morph new
 		extent: 210 @ 130;
-		color: Color transparent.	"hack SPFA"
+		color: Color transparent;
+		yourself.	"hack SPFA"
 	fileInfoColumn
 		addMorphBack: (dumm addMorph: thumbnailFrameMorph);
 		addMorphBack:
 				(Morph new
 						extent: 5 @ 6;
-						color: Color transparent).	"hack SPFA"	"spacer"
+						color: Color transparent;
+		yourself).	"hack SPFA"	"spacer"
 	thumbnailMorph := ImageMorph new form: (Form extent: 160 @ 120 depth: 1).
 	thumbnailFrameMorph addMorphFront: (thumbnailMorph position: thumbnailFrameMorph position + (5 @ 5)).
 	authorLabelMorph := StringMorph contents: 'Project author:' localized font: labelFont.
@@ -541,26 +559,30 @@ PhratchFileChooserDialog >> createPhratchFileChooserFor: aPhratchFrameMorph savi
 			authorMorph := StringFieldMorph new
 				useStringFieldFrame;
 				contents: '';
-				font: contentsFont.
+				font: contentsFont;
+		yourself.
 			tabFields add: authorMorph ]
 		ifFalse: [ 
 			fileInfoColumn
 				addMorphBack:
 					(Morph new
 						extent: 5 @ 6;
-						color: Color transparent).	"spacer"
+						color: Color transparent;
+		yourself).	"spacer"
 			authorMorph := StringFieldMorph new
 				color: Color transparent;
 				borderWidth: 0;
 				contents: '';
 				isEditable: false;
-				font: contentsFont ].
+				font: contentsFont;
+		yourself ].
 	fileInfoColumn
 		addMorphBack: authorMorph;
 		addMorphBack:
 				(Morph new
 						extent: 5 @ 6;
-						color: Color transparent).	"spacer"
+						color: Color transparent;
+		yourself).	"spacer"
 	commentLabelMorph := StringMorph contents: 'About this project:' localized font: labelFont.
 	commentLabelMorph color: authorLabelMorph color.
 	fileInfoColumn addMorphBack: commentLabelMorph.
@@ -568,7 +590,8 @@ PhratchFileChooserDialog >> createPhratchFileChooserFor: aPhratchFrameMorph savi
 		borderWidth: 0;
 		contents: '';
 		font: commentFont;
-		extent: 210 @ 110.
+		extent: 210 @ 110;
+		yourself.
 	savingFlag
 		ifTrue: [ 
 			commentMorph backForm: (PhratchFrameMorph skinAt: #stringFieldFrame).
@@ -716,7 +739,8 @@ PhratchFileChooserDialog >> initialize [
 	newTitleBin := AlignmentMorph newRow
 		cellPositioning: #leftCenter;
 		centering: #center;
-		color: Color transparent.
+		color: Color transparent;
+		yourself.
 	buttonRow hResizing: #spaceFill.
 
 	self withButtonsForYes: false no: false okay: true cancel: true.

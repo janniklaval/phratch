@@ -12,6 +12,11 @@ PhratchCategory class >> color [
 	^(Color h: 0 s: 0.81 v: 0.83)
 ]
 
+{ #category : #drawing }
+PhratchCategory class >> initialize [
+	visible  := true
+]
+
 { #category : #accessing }
 PhratchCategory class >> label [
 	^'Generic Category'

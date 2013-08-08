@@ -39,7 +39,8 @@ SpriteHandleMorph class >> rotate: aSprite [
 		type: #rotate;
 		form: (PhratchFrameMorph skinAt: #spriteRotate); 
 		target: aSprite;
-		setBalloonText: 'drag to rotate' localized.
+		setBalloonText: 'drag to rotate' localized;
+		yourself.
 	^ Current
 
 ]
@@ -151,7 +152,8 @@ SpriteHandleMorph >> mouseMove: evt [
 					(dist negative not & self atMax)) ifTrue: [^self ]].
 			^self 
 				left: self left + dist;
-				resizeTarget ].
+				resizeTarget;
+		yourself ].
 
 	tc := self targetBounds center.
 	self 

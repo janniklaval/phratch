@@ -30,7 +30,8 @@ WatcherMorph >> buildReadout [
 		readout := PhratchUpdatingStringMorph new
 		contents: '';
 		floatPrecision: 0.1;
-		stepTime: 100.
+		stepTime: 100;
+		yourself.
 	readout
 		font: (PhratchFrameMorph getFont: #Watcher);
 		forceUnicodeRendering: true;
@@ -39,7 +40,8 @@ WatcherMorph >> buildReadout [
 	ifTrue: [
 		readout := UpdatingColorMorph new
 			color: (Color black);
-			stepTime: 100].
+			stepTime: 100;
+		yourself].
 	readoutFrame := WatcherReadoutFrameMorph new addMorph: readout.
 
 ]
@@ -241,7 +243,8 @@ WatcherMorph >> initialize [
 		hResizing: #shrinkWrap;
 		vResizing: #shrinkWrap;
 		cellPositioning: #leftCenter;
-		centering: #center.
+		centering: #center;
+		yourself.
 	self 
 		color: (Color r: (193/255) g: (196/255) b: (199/255));
 		borderWidth: 1;
@@ -328,17 +331,23 @@ WatcherMorph >> layoutForViewer [
 	watcher removeAllMorphs.
 	PhratchTranslator isRTL
 		ifTrue: [watcher
-			addMorphBack: (Morph new color: color; extent: 2@0);
+			addMorphBack: (Morph new color: color; extent: 2@0;
+		yourself);
 			addMorphBack: readoutFrame;
-			addMorphBack: (AlignmentMorph new color: color; width: 4; hResizing: #rigid);
+			addMorphBack: (AlignmentMorph new color: color; width: 4; hResizing: #rigid;
+		yourself);
 			addMorphBack: titleMorph;
-			addMorphBack: (Morph new color: color; extent: 3@0)]
+			addMorphBack: (Morph new color: color; extent: 3@0;
+		yourself)]
 		ifFalse: [watcher
-			addMorphBack: (Morph new color: color; extent: 3@0);
+			addMorphBack: (Morph new color: color; extent: 3@0;
+		yourself);
 			addMorphBack: titleMorph;
-			addMorphBack: (AlignmentMorph new color: color; width: 4; hResizing: #rigid);
+			addMorphBack: (AlignmentMorph new color: color; width: 4; hResizing: #rigid;
+		yourself);
 			addMorphBack: readoutFrame;
-			addMorphBack: (Morph new color: color; extent: 2@0)].
+			addMorphBack: (Morph new color: color; extent: 2@0;
+		yourself)].
 
 ]
 
@@ -527,7 +536,8 @@ WatcherMorph >> showSlider [
 		maxVal: sliderMax;
 		sliderThickness: 0;
 		height: 10;
-		width: self width - 12.
+		width: self width - 12;
+		yourself.
 
 	self addMorphBack: phratchSlider.
 	self world ifNotNil: [self world startSteppingSubmorphsOf: phratchSlider].

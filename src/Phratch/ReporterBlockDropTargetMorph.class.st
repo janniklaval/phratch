@@ -12,7 +12,8 @@ Class {
 { #category : #'as yet unclassified' }
 ReporterBlockDropTargetMorph class >> booleanLabelled: aString argument: aMorphOrNumber [
 	 | m |
-	m := self new isBoolean: true; label: aString; color: Color  lightGray twiceLighter twiceLighter.
+	m := self new isBoolean: true; label: aString; color: Color  lightGray twiceLighter twiceLighter;
+		yourself.
 	(aMorphOrNumber isKindOf: ReporterBlockMorph) ifTrue: [m argument: aMorphOrNumber ].
 	^m
 ]
@@ -24,7 +25,8 @@ ReporterBlockDropTargetMorph class >> labelled: aString [
 
 { #category : #'as yet unclassified' }
 ReporterBlockDropTargetMorph class >> labelled: aString argument: aMorphOrNumber [
-	^self new label: aString; argument: aMorphOrNumber
+	^self new label: aString; argument: aMorphOrNumber;
+		yourself
 ]
 
 { #category : #accessing }

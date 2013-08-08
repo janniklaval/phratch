@@ -22,8 +22,8 @@ PhratchServerDirectory >> allNames [
 	| allNames |
 	self fetchSucceeded
 		ifFalse: [ ^ #() ].
-	allNames := (HtmlChunker linksFrom: fetcher bodyData asString) asArray
-		collect: [ :assoc | assoc value replaceHtmlHexChars ].
+	allNames := #()"(HtmlChunker linksFrom: fetcher bodyData asString) asArray
+		collect: [ :assoc | assoc value replaceHtmlHexChars ]".
 	allNames := allNames select: [ :s | s size > 0 and: [ s first ~= $/ ] ].	"eliminate parent folder links"
 	allNames := allNames reject: [ :s | (s includes: $=) | (s includes: $;) ].	"eliminate Apache sorting links"
 	allNames := allNames

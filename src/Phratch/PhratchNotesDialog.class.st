@@ -14,7 +14,8 @@ PhratchNotesDialog class >> editNotesFor: aPhratchFrameMorph [
 
 	^ self new
 		createNotesDialogFor: aPhratchFrameMorph;
-		extent: 350@450.
+		extent: 350@450;
+		yourself.
 
 ]
 
@@ -36,7 +37,8 @@ PhratchNotesDialog >> createNotesDialogFor: aPhratchFrameMorph [
 		contents: '';
 		font: commentFont;
 		backForm: (PhratchFrameMorph skinAt: #stringFieldFrame);
-		width: 300.
+		width: 300;
+		yourself.
 	self title: 'Project Notes' translated.
 	mainColumn addMorphBack: commentMorph.
 	mainColumn addMorphBack: buttonRow.

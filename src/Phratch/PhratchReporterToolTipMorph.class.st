@@ -12,7 +12,8 @@ PhratchReporterToolTipMorph class >> string: str for: morph [
 		target: morph;
 		color: (Color r: 0.9 g: 0.9 b: 0.9);
 		useRoundedCorners;
-		borderWidth: 0.
+		borderWidth: 0;
+		yourself.
 
 ]
 

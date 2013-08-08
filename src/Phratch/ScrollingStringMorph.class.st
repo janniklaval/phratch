@@ -714,7 +714,8 @@ ScrollingStringMorph >> initialize [
 	scrollbar := PhratchScrollBar newVertical
 		width: 16;
 		target: self;
-		selector: #scrollRelative:.
+		selector: #scrollRelative:;
+		yourself.
 	firstVisibleLine := 1.
 	self addMorph: scrollbar.
 

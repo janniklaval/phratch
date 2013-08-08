@@ -77,7 +77,8 @@ PhratchFrameMorph class >> buttonLabel: aString selector: aSymbolOrNil [
 		offForm: (PhratchFrameMorph skinAt: #btn)
 			onForm: (PhratchFrameMorph skinAt: #btnPressed);
 		label: aString font: (PhratchFrameMorph getFont: #Button);
-		actionSelector: aSymbolOrNil.
+		actionSelector: aSymbolOrNil;
+		yourself.
 
 	^ button
 
@@ -106,8 +107,10 @@ PhratchFrameMorph class >> defaultSprite [
 		ifNil: [^ PhratchSpriteMorph new
 			addMediaItem: (ImageMedia new
 				mediaName: ('costume' localized, '1');
-				form: (PhratchFrameMorph skinAt: #defaultSpriteCostume));
-			lookLike: ('costume' localized, '1')].
+				form: (PhratchFrameMorph skinAt: #defaultSpriteCostume);
+		yourself);
+			lookLike: ('costume' localized, '1');
+		yourself].
 
 ]
 
@@ -283,7 +286,7 @@ xxx"
 	(FileSystem workingDirectory / 'servers.txt') exists
 		ifFalse: [ ^ self ].
 	[ s := (FileStream readOnlyFileNamed: 'servers.txt') contentsOfEntireFile ] ifError: [ ^ self ].
-	entryList := HtmlChunker parseTabbedString: s.	"collect Scratch servers for open dialog"
+	entryList := #()." HtmlChunker parseTabbedString: s."	"collect Scratch servers for open dialog"
 	servers := entryList reject: [ :entry | entry first beginsWith: '*share*' ].
 	servers
 		do: [ :entry | 
@@ -497,7 +500,8 @@ PhratchFrameMorph >> aboutPhratch [
 		withButtonsForYes: false
 			no: false
 			okay: true
-			cancel: false.
+			cancel: false;
+		yourself.
 	dialogBox
 		message:
 			'Phratch 1.0
@@ -528,7 +532,8 @@ Please report bugs to https://code.google.com/p/phratch/issues/list.
 		setBalloonText:
 			(CommandBlockMorph new
 				color: (ScriptablePhratchMorph blockColorFor: 'control');
-				commandSpec: 'B Y $OSReporter$ B') asLambda displayForm.
+				commandSpec: 'B Y $OSReporter$ B';
+		yourself) asLambda displayForm.
 	dialogBox getUserResponse
 ]
 
@@ -590,13 +595,16 @@ PhratchFrameMorph >> addShortcutButtonsTo: rowMorph [
 			b arguments: (Array with: b)].
 
 		('save' = (spec at: 1)) ifTrue: [  "bigger spacer"
-			rowMorph addMorphBack: (Morph new extent: (10@5); color: Color transparent)].
+			rowMorph addMorphBack: (Morph new extent: (10@5); color: Color transparent;
+		yourself)].
 
 		('share' = (spec at: 1)) ifTrue: [  "add spacer between buttons"
-			rowMorph addMorphBack: (Morph new extent: (8@5); color: Color transparent)].
+			rowMorph addMorphBack: (Morph new extent: (8@5); color: Color transparent;
+		yourself)].
 		rowMorph addMorphBack: b].
 
-	rowMorph addMorphBack: (Morph new extent: (15@5); color: Color transparent).
+	rowMorph addMorphBack: (Morph new extent: (15@5); color: Color transparent;
+		yourself).
 
 ]
 
@@ -884,7 +892,8 @@ PhratchFrameMorph >> compressSounds [
 	| menu bitsPerSample count |
 	menu := MenuMorph new
 		title: 'Sound quality:' translated;
-		defaultTarget: self.	"menu add: 'High (biggest)'
+		defaultTarget: self;
+		yourself.	"menu add: 'High (biggest)'
 		target: self 
 		selector: #canonicalizeSoundsBits:saveOriginal:
 		argumentList: (Array with: 5 with: false).
@@ -905,7 +914,8 @@ PhratchFrameMorph >> compressSounds [
 	count := menu localize; invokeModal."
 	menu := MenuMorphNG new
 		title: 'Sound quality:' translated;
-		defaultTarget: self.
+		defaultTarget: self;
+		yourself.
 	menu add: 'High (biggest)' value: 5.
 	menu add: 'Normal' value: 4.
 	menu add: 'Low' value: 3.
@@ -915,7 +925,8 @@ PhratchFrameMorph >> compressSounds [
 	menu localize.
 	(bitsPerSample := menu
 		invokeModal;
-		selectedValue) ifNil: [ ^ self ].
+		selectedValue;
+		yourself) ifNil: [ ^ self ].
 	count := self canonicalizeSoundsBits: bitsPerSample saveOriginal: false.
 	scriptsPane categoryChanged: 'Sounds'.
 	DialogBoxMorph inform: 'Sounds compressed' withDetails: count printString
@@ -990,7 +1001,8 @@ PhratchFrameMorph >> createMenuPanel [
 		color: Color transparent;
 		centering: #center;
 		inset: 0;
-		height: 0.	"will grow as needed"
+		height: 0;
+		yourself.	"will grow as needed"
 
 	self addShortcutButtonsTo: menuPanel.
 
@@ -1006,10 +1018,12 @@ PhratchFrameMorph >> createMenuPanel [
 	menuSpecs do: [:spec |
 		m := PhratchMenuTitleMorph new
 			contents: (spec at: 1) localized;
-			target: self selector: (spec at: 2).
+			target: self selector: (spec at: 2);
+		yourself.
 		menuPanel addMorphBack: m.
 		#helpMenu: = (spec at: 2) ifFalse: [
-			menuPanel addMorphBack: (Morph new color: Color transparent; extent: 12@5)]].
+			menuPanel addMorphBack: (Morph new color: Color transparent; extent: 12@5;
+		yourself)]].
 
 	topPane addMorph: menuPanel.
 
@@ -1040,12 +1054,14 @@ PhratchFrameMorph >> createStageButtonsPanel [
 		cellPositioning: #leftCenter;
 		color: Color transparent;
 		centering: #center;
-		height: 20.
+		height: 20;
+		yourself.
 
 	projectTitleMorph := StringMorph new
 		forceUnicodeRendering: true;
 		contents: '';
-		font: (PhratchFrameMorph getFont: #FrameMorphProjectTitle).
+		font: (PhratchFrameMorph getFont: #FrameMorphProjectTitle);
+		yourself.
 	stageButtonsPanel
 		addMorphBack: projectTitleMorph;
 		addMorphBack: (AlignmentMorph newSpacer: Color transparent).
@@ -1091,7 +1107,8 @@ PhratchFrameMorph >> createToolbar [
 	toolbarPanel := AlignmentMorph new
 		hResizing: #shrinkWrap;
 		vResizing: #shrinkWrap;
-		color: Color transparent.
+		color: Color transparent;
+		yourself.
 		
 	buttonSpecs := #(
 		"name			selector"			"tooltip"
@@ -1125,7 +1142,8 @@ PhratchFrameMorph >> createViewModeButtonsPanel [
 	viewModeButtonsPanel := AlignmentMorph newRow
 		hResizing: #shrinkWrap;
 		vResizing: #shrinkWrap;
-		color: Color transparent.
+		color: Color transparent;
+		yourself.
 
 	viewModeButtons := OrderedCollection new.
 	specs := OrderedCollection new.
@@ -1146,7 +1164,8 @@ PhratchFrameMorph >> createViewModeButtonsPanel [
 			setProperty: #balloonText toValue: (spec at: 3) localized.
 		viewModeButtonsPanel
 			addMorphBack: button;
-			addMorphBack: (Morph new extent: 1@5; color: Color transparent).
+			addMorphBack: (Morph new extent: 1@5; color: Color transparent;
+		yourself).
 		viewModeButtons add: button].
 
 	self addMorph: viewModeButtonsPanel.
@@ -1248,7 +1267,8 @@ PhratchFrameMorph >> editBlockDefinition: aCustomBlockDefinition for: aScriptabl
 	editor 	:= BlockEditorFrameMorph new
 		withButtonsForYes: false no: false okay: true cancel: true;
 		receiver: aScriptablePhratchMorph;
-		definition: def.
+		definition: def;
+		yourself.
 	blockEditors add: editor.
 	editor getUserResponse.
 	blockEditors remove: editor ifAbsent: []
@@ -2251,7 +2271,8 @@ PhratchFrameMorph >> makeXYReadout [
 		forceUnicodeRendering: true;
 		font: boldFont;
 		stepTime: 150;
-		growable: false.
+		growable: false;
+		yourself.
 	readoutX width: (readoutX stringWidth: '-1000').
 	labelY := PhratchTranslator isRTL
 		ifTrue: [ labelX fullCopy contents: ':y' ]
@@ -3203,7 +3224,9 @@ PhratchFrameMorph >> setDefaultSprite [
 				importMedia: (d / fName) fullName;
 				addMediaItem: (SoundMedia new
 					mediaName: 'pop' localized;
-					sound: PhratchSpriteMorph popSound).
+					sound: PhratchSpriteMorph popSound;
+		yourself);
+		yourself.
 			^ self]].
 
 ]

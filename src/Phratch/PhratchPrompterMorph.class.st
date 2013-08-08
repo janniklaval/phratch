@@ -122,7 +122,8 @@ PhratchPrompterMorph >> initialize [
 		new client: self;
 		borderWidth: 2;
 		color: (Color gray: 55);
-		font: (PhratchFrameMorph getFont: #StringDialogTypeIn).
+		font: (PhratchFrameMorph getFont: #StringDialogTypeIn);
+		yourself.
 
 	okButton := ToggleButton
 		onForm: (PhratchFrameMorph skinAt: #promptCheckButtonPressed)
@@ -163,7 +164,8 @@ PhratchPrompterMorph >> question: aString [
 		ifFalse: [ 
 			questionMorph := StringMorph new
 				contents: aString asString;
-				font: (PhratchFrameMorph getFont: #DialogBoxButton) ].
+				font: (PhratchFrameMorph getFont: #DialogBoxButton);
+		yourself ].
 	self addMorph: questionMorph.
 	self height: questionMorph height + typeinMorph height + 16
 ]

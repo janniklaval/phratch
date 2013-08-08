@@ -20,7 +20,8 @@ SliderRangeDialog class >> initialMin: defaultMin max: defaultMax [
 	| dialogBox |
 	dialogBox := self new
 		withButtonsForYes: false no: false okay: true cancel: true;
-		initialMin: defaultMin max: defaultMax.
+		initialMin: defaultMin max: defaultMax;
+		yourself.
 	^ dialogBox getUserResponse
 
 ]
@@ -84,13 +85,15 @@ SliderRangeDialog >> initialize [
 	minLabel := StringMorph new
 		contents: 'Min:' localized;
 		forceUnicodeRendering: true;
-		font: (PhratchFrameMorph getFont: #StringDialogTypeIn).
+		font: (PhratchFrameMorph getFont: #StringDialogTypeIn);
+		yourself.
 	maxLabel := minLabel fullCopy contents: 'Max:' localized.
 	minMorph := StringFieldMorph new
 		client: self;
 		font: (PhratchFrameMorph getFont: #StringDialogTypeIn);
 		color: Color transparent;
-		width: (40 max: (maxLabel stringWidth: '100') + 9).
+		width: (40 max: (maxLabel stringWidth: '100') + 9);
+		yourself.
 	maxMorph := minMorph fullCopy.
 	tabFields
 		add: minMorph;
@@ -100,25 +103,29 @@ SliderRangeDialog >> initialize [
 		color: self color;
 		hResizing: #shrinkWrap;
 		cellPositioning: #leftCenter;
-		centering: #center.
+		centering: #center;
+		yourself.
 	radioButtons addMorphBack: minLabel.
 	radioButtons
 		addMorphBack:
 			(Morph new
 				extent: 5 @ 5;
-				color: Color transparent).
+				color: Color transparent;
+		yourself).
 	radioButtons addMorphBack: minMorph.
 	radioButtons
 		addMorphBack:
 			(Morph new
 				extent: 5 @ 5;
-				color: Color transparent).
+				color: Color transparent;
+		yourself).
 	radioButtons addMorphBack: maxLabel.
 	radioButtons
 		addMorphBack:
 			(Morph new
 				extent: 5 @ 5;
-				color: Color transparent).
+				color: Color transparent;
+		yourself).
 	radioButtons addMorphBack: maxMorph.
 	PhratchTranslator isRTL
 		ifTrue: [ 
@@ -135,12 +142,14 @@ SliderRangeDialog >> initialize [
 		addMorphBack:
 				(Morph new
 						extent: 5 @ 6;
-						color: Color transparent);
+						color: Color transparent;
+		yourself);
 		addMorphBack: radioButtons;
 		addMorphBack:
 				(Morph new
 						extent: 5 @ 6;
-						color: Color transparent);
+						color: Color transparent;
+		yourself);
 		addMorphBack: buttonRow;
 		addMorphBack: bottomSpacer.
 	self extent: 200 @ 200

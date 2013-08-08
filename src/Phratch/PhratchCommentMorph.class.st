@@ -38,12 +38,14 @@ PhratchCommentMorph >> addTopBar [
 		borderWidth: 0;
 		inset: 0;
 		cellPositioning: #leftCenter;
-		centering: #center.
+		centering: #center;
+		yourself.
 
 	labelMorph := StringMorph new
 		color: (Color gray: 0.33);
 		contents: '';
-		font: (PhratchFrameMorph getFont: #Label).
+		font: (PhratchFrameMorph getFont: #Label);
+		yourself.
 
 	showHideMorph := ImageMorph new form: (PhratchFrameMorph skinAt: #arrowOpenComment).
 	showHideMorph form colors: (Array
@@ -51,9 +53,11 @@ PhratchCommentMorph >> addTopBar [
 		with: (self color mixed: 0.5 with: Color black)).
 
 	topBarMorph
-		addMorphBack: (Morph new extent: 5@5; color: Color transparent);
+		addMorphBack: (Morph new extent: 5@5; color: Color transparent;
+		yourself);
 		addMorphBack: showHideMorph;
-		addMorphBack: (Morph new extent: 3@5; color: Color transparent);
+		addMorphBack: (Morph new extent: 3@5; color: Color transparent;
+		yourself);
 		addMorphBack: labelMorph;
 		addMorphBack: (AlignmentMorph newSpacer: Color transparent).
 
@@ -228,7 +232,8 @@ PhratchCommentMorph >> initialize [
 	bottomBar := AlignmentMorph newRow
 		color: Color transparent;
 		cellPositioning: #leftCenter;
-		centering: #center.
+		centering: #center;
+		yourself.
 	resizeMorph := PhratchResizeMorph ofType: #edge.
 	resizeMorph vResizing: #spaceFill.
 	commentMorph := MultilineStringMorph new
@@ -237,7 +242,8 @@ PhratchCommentMorph >> initialize [
 		borderWidth: 0;
 		font: (PhratchFrameMorph getFont: #CommentBlock);
 		contents: 'add comment here' localized, PhratchTranslator ellipsesSuffix;
-		width: self defaultWidth - resizeMorph width.
+		width: self defaultWidth - resizeMorph width;
+		yourself.
 	bottomBar addMorphBack: commentMorph.
 	bottomBar addMorphBack: resizeMorph.
 

@@ -77,13 +77,17 @@ SensorBoardMorph >> addReadoutLabeled: aString [
 	"Add a readout row with the given label. Answer the stringmorph that's the readout."
 
 	| row box readout |
-	row := AlignmentMorph newRow color: column color; inset: 2.
-	row addMorphBack: (Morph new color: column color; extent: 1@3). "spacer"
+	row := AlignmentMorph newRow color: column color; inset: 2;
+		yourself.
+	row addMorphBack: (Morph new color: column color; extent: 1@3;
+		yourself). "spacer"
 	row addMorphBack: (StringMorph contents: aString capitalized font: (StrikeFont fontName: 'VerdanaBold' size: 10)).
-	row addMorphBack: (AlignmentMorph new color: column color; extent: 10@1; hResizing: #spaceFill).  "spacer"
+	row addMorphBack: (AlignmentMorph new color: column color; extent: 10@1; hResizing: #spaceFill;
+		yourself).  "spacer"
 	box := WatcherReadoutFrameMorph new
 		extent: 42@14;
-		color: (ScriptablePhratchMorph blockColorFor: 'sensing').
+		color: (ScriptablePhratchMorph blockColorFor: 'sensing');
+		yourself.
 	readout := StringMorph contents: '0' font: (StrikeFont fontName: 'VerdanaBold' size: 10).
 	readout color: Color white.
 	box addMorph: readout.
@@ -117,14 +121,16 @@ SensorBoardMorph >> addReadouts [
 		borderWidth: 2;
 		borderColor: (Color r: (148/255) g: (145/255) b: (145/255));
 		useRoundedCorners;
-		inset: 3.
+		inset: 3;
+		yourself.
 
 	titleMorph := StringMorph
 		contents: ''
 		font: (StrikeFont fontName: 'VerdanaBold' size: 10).
 	column addMorph: titleMorph.
 	self updateTitle.
-	column addMorphBack: (Morph new color: column color; extent: 5@3).  "spacer"
+	column addMorphBack: (Morph new color: column color; extent: 5@3;
+		yourself).  "spacer"
 
 	self removeAllMorphs.
 	readouts := readoutNames collect: [:i |
@@ -248,7 +254,8 @@ SensorBoardMorph >> openPort: aString [
 			port := SerialPort new
 				baudRate: baudRate;
 				inputFlowControlType: 2;
-				openPort: portNum ifFail: [^ false]].
+				openPort: portNum ifFail: [^ false];
+		yourself].
 
 	"initialize polling state"
 	lastPollMSecs := Time millisecondClockValue.

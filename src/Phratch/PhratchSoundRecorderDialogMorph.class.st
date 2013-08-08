@@ -29,7 +29,8 @@ PhratchSoundRecorderDialogMorph class >> forClient: aScriptablePhratchMorph [
 			okay: true
 			cancel: true;
 		client: aScriptablePhratchMorph;
-		title: 'Sound Recorder' translated.
+		title: 'Sound Recorder' translated;
+		yourself.
 	^ dialog getUserResponse
 ]
 
@@ -48,7 +49,8 @@ PhratchSoundRecorderDialogMorph >> buttonType: type action: actionSelector [
 		onForm: onForm offForm: offForm overForm: overForm disabledForm: disabledForm;
 		label: '' font: (PhratchFrameMorph getFont: #SoundRecorderButton);
 		target: self;
-		actionSelector: actionSelector.
+		actionSelector: actionSelector;
+		yourself.
 
 ]
 
@@ -142,7 +144,8 @@ PhratchSoundRecorderDialogMorph >> makeModeButtonsPane [
 	tempBin := AlignmentMorph newRow
 		color: Color transparent;
 		cellPositioning: #leftCenter;
-		centering: #center.
+		centering: #center;
+		yourself.
 	tempBin
 		addMorphBack: modeButtonsPane;
 		addMorphBack: buttonRow.
@@ -161,7 +164,8 @@ PhratchSoundRecorderDialogMorph >> makeRecordMeter [
 
 	recordMeter := PhratchRecordMeter new.
 	mainColumn
-		addMorphFront: (Morph new extent: 5@5; color: Color transparent);
+		addMorphFront: (Morph new extent: 5@5; color: Color transparent;
+		yourself);
 		addMorphFront: recordMeter.
 
 ]
@@ -175,7 +179,8 @@ PhratchSoundRecorderDialogMorph >> makeRecordTimer [
 		font: (PhratchFrameMorph getFont: #SoundRecorderTimer).
 	timerMorph color: Color darkGray.
 	fileInfoColumn
-		addMorphBack: (Morph new extent: (5@5); color: Color transparent);
+		addMorphBack: (Morph new extent: (5@5); color: Color transparent;
+		yourself);
 		addMorphBack: timerMorph.
 
 ]

@@ -106,32 +106,42 @@ PhratchSoundEditor class >> upArrow [
 PhratchSoundEditor >> addControls [
 
 	| b r spacer |
-	b := SimpleButtonMorph new target: self; borderColor: Color black; useSquareCorners.
+	b := SimpleButtonMorph new target: self; borderColor: Color black; useSquareCorners;
+		yourself.
 	b borderColor: #raised; borderWidth: 3.
 	r := AlignmentMorph newRow.
 	r color: Color transparent; borderWidth: 0; inset: 0.
 	r hResizing: #spaceFill; vResizing: #shrinkWrap; extent: 5@5.
 	r centering: #center; cellPositioning: #leftCenter.
 
-	spacer := Morph new color: r color; extent: 40@5.  "spacer"
+	spacer := Morph new color: r color; extent: 40@5;
+		yourself.  "spacer"
 	r addMorphBack: (spacer fullCopy width: 5).
-	r addMorphBack: (b fullCopy label: 'undo';		actionSelector: #undo).
+	r addMorphBack: (b fullCopy label: 'undo';		actionSelector: #undo;
+		yourself).
 	r addMorphBack: (spacer fullCopy width: 5).
-	r addMorphBack: (b fullCopy label: 'copy';		actionSelector: #copy).
+	r addMorphBack: (b fullCopy label: 'copy';		actionSelector: #copy;
+		yourself).
 	r addMorphBack: (spacer fullCopy width: 5).
-	r addMorphBack: (b fullCopy label: 'paste';		actionSelector: #paste).
+	r addMorphBack: (b fullCopy label: 'paste';		actionSelector: #paste;
+		yourself).
 	r addMorphBack: (spacer fullCopy width: 5).
-	r addMorphBack: (b fullCopy label: 'cut';		actionSelector: #cut).
+	r addMorphBack: (b fullCopy label: 'cut';		actionSelector: #cut;
+		yourself).
 	r addMorphBack: (spacer fullCopy width: 5).
-	r addMorphBack: (b fullCopy label: 'crop';		actionSelector: #crop).	
+	r addMorphBack: (b fullCopy label: 'crop';		actionSelector: #crop;
+		yourself).	
 	r addMorphBack: (spacer fullCopy width: 25).
 	r addMorphBack: (b copy target: graph;
-							label: 'zoom selection';	actionSelector: #viewSelection).
+							label: 'zoom selection';	actionSelector: #viewSelection;
+		yourself).
 
 	r addMorphBack: (spacer fullCopy width: 25).
-	r addMorphBack: (b fullCopy label: 'okay';			actionSelector: #save).
+	r addMorphBack: (b fullCopy label: 'okay';			actionSelector: #save;
+		yourself).
 	r addMorphBack: (spacer fullCopy width: 5).
-	r addMorphBack: (b fullCopy label: 'cancel';		actionSelector: #cancel).
+	r addMorphBack: (b fullCopy label: 'cancel';		actionSelector: #cancel;
+		yourself).
 
 	self addMorphBack: r.
 
@@ -158,7 +168,8 @@ PhratchSoundEditor >> addGraph [
 PhratchSoundEditor >> addPlayButtons [
 
 	| b r m space n scaleSelector |
-	b := SimpleButtonMorph new target: self; borderColor: Color black; useSquareCorners.
+	b := SimpleButtonMorph new target: self; borderColor: Color black; useSquareCorners;
+		yourself.
 	b borderColor: #raised; borderWidth: 3.
 	r := AlignmentMorph newColumn.
 	r color: Color transparent; borderWidth: 0; inset: 0.
@@ -170,7 +181,8 @@ PhratchSoundEditor >> addPlayButtons [
 	m hResizing: #shrinkWrap; vResizing: #shrinkWrap; extent: 5@5.
 	m centering: #center; cellPositioning: #leftCenter.
 
-	space := Morph new color: r color; extent: 3@5.
+	space := Morph new color: r color; extent: 3@5;
+		yourself.
 
 	n := StringMorph new contents: 'Zoom to: '.
 	m addMorphBack: n.
@@ -182,12 +194,17 @@ PhratchSoundEditor >> addPlayButtons [
 		borderWidth: 0;
 		target: graph;
 		actWhen: #buttonDown;
-		actionSelector: #setScale).
+		actionSelector: #setScale;
+		yourself).
 	m addMorphBack: scaleSelector.
-	m addMorphBack: (Morph new color: r color; extent: 5@5).
-	m addMorphBack: (b copy target: graph; label: '+';			actionSelector: #zoomIn).
-	m addMorphBack: (Morph new color: r color; extent: 5@5).
-	m addMorphBack: (b copy target: graph; label: '-';			actionSelector: #zoomOut).
+	m addMorphBack: (Morph new color: r color; extent: 5@5;
+		yourself).
+	m addMorphBack: (b copy target: graph; label: '+';			actionSelector: #zoomIn;
+		yourself).
+	m addMorphBack: (Morph new color: r color; extent: 5@5;
+		yourself).
+	m addMorphBack: (b copy target: graph; label: '-';			actionSelector: #zoomOut;
+		yourself).
 
 	"n := UpdatingStringMorph new
 	target: graph;
@@ -196,16 +213,21 @@ PhratchSoundEditor >> addPlayButtons [
 	m addMorphBack: n."
 
 
-	m addMorphBack: (Morph new color: r color; extent: 50@5).
+	m addMorphBack: (Morph new color: r color; extent: 50@5;
+		yourself).
 	
 	
-	m addMorphBack: (b fullCopy label: 'Play All';			actionSelector: #playAll).
+	m addMorphBack: (b fullCopy label: 'Play All';			actionSelector: #playAll;
+		yourself).
 	m addMorphBack: space copy.
-	m addMorphBack: (b fullCopy label: 'Play';				actionSelector: #playAfterCursor).
+	m addMorphBack: (b fullCopy label: 'Play';				actionSelector: #playAfterCursor;
+		yourself).
 	m addMorphBack: space copy.
-	m addMorphBack: (b fullCopy label: 'Stop';				actionSelector: #stop).
+	m addMorphBack: (b fullCopy label: 'Stop';				actionSelector: #stop;
+		yourself).
 
-	m addMorphBack: (Morph new color: r color; extent: 50@5).
+	m addMorphBack: (Morph new color: r color; extent: 50@5;
+		yourself).
 	m addMorphBack: (StringMorph new contents: 'Volume').
 	m addMorphBack: space copy.
 	
@@ -213,13 +235,16 @@ PhratchSoundEditor >> addPlayButtons [
 	color: Color veryVeryLightGray;
 	extent: 60@2;
 	target: self;
-	actionSelector: #setVolume:.
+	actionSelector: #setVolume:;
+		yourself.
 
 	m addMorphBack: volume.
 
-	m addMorphBack: (Morph new color: r color; extent: 50@5).
+	m addMorphBack: (Morph new color: r color; extent: 50@5;
+		yourself).
 
-	r addMorphBack: (Morph new color: r color; extent: 5@5).
+	r addMorphBack: (Morph new color: r color; extent: 5@5;
+		yourself).
 	r addMorphBack: m.
 	
 
@@ -237,7 +262,8 @@ PhratchSoundEditor >> addSlider [
 	r hResizing: #spaceFill; vResizing: #shrinkWrap; extent: 5@5.
 	r centering: #center; cellPositioning: #leftCenter.	
 	
-	spacer := Morph new color: r color; extent: (graph left -10)@5.
+	spacer := Morph new color: r color; extent: (graph left -10)@5;
+		yourself.
 	backButton := self makeSliderButton: 10@13.
 	backButton addMorphCentered: (ImageMorph new form: (self class upArrow rotateBy: #left centerAt: 0@0)).
 
@@ -249,19 +275,22 @@ PhratchSoundEditor >> addSlider [
 		extent: (graph width)@2;
 		target: self;
 		setMaxVal: (graph bounds width/(graph scale*graph data size));
-		actionSelector: #scrollTime:.
+		actionSelector: #scrollTime:;
+		yourself.
 	
 	r addMorph: spacer.
 	r addMorph: fwdButton.
 	r addMorph: slider.
 	r addMorph: backButton.
 	
-	m := Morph new color: r color; extent: 15@5.  "spacer"
+	m := Morph new color: r color; extent: 15@5;
+		yourself.  "spacer"
 	r addMorphBack: m.
 	time := UpdatingStringMorph new
 		target: self;
 		getSelector: #startTime; 
-		width: 40; step.
+		width: 40; step;
+		yourself.
 	time useStringFormat.
 	r addMorphBack: time.
 
@@ -489,7 +518,8 @@ PhratchSoundEditor >> initialize [
 
 	self addControls.
 	self addPlayButtons.
-	self addMorphBack: (Morph new color: self color; extent: 10@5).
+	self addMorphBack: (Morph new color: self color; extent: 10@5;
+		yourself).
 
 	self addGraph.
 	self addMorphBack: (Morph newBounds: (0@0 extent: 0@3) color: Color transparent).

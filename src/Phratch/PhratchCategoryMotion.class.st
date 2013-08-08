@@ -39,9 +39,11 @@ PhratchCategoryMotion class >> viewerPageFor: aScriptablePhratchMorph [
 		x := 20.
 		y := 12.
 		m := StringMorph contents: 'Stage selected:' localized font: font.
-		bin addMorph: (m color: Color white; position: x@y).
+		bin addMorph: (m color: Color white; position: x@y;
+		yourself).
 		m := StringMorph contents: 'No motion blocks' localized font: font.
-		bin addMorph: (m color: Color white; position: x@(y + 17)).
+		bin addMorph: (m color: Color white; position: x@(y + 17);
+		yourself).
 		^ bin].
 
 	x := 12.

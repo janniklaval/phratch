@@ -27,7 +27,8 @@ PhratchToolTipMorph class >> string: str for: morph [
 		target: morph;
 		color: Color paleYellow;
 		borderWidth: 1;
-		borderColor: Color black
+		borderColor: Color black;
+		yourself
 
 ]
 

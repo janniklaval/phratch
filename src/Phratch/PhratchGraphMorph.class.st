@@ -220,7 +220,8 @@ PhratchGraphMorph >> drawSelectionOn: aCanvas [
 			((s1 max: s2) <= v1) | ((s1 min: s2) >= v2)
 				ifTrue: [^aCanvas 				
 							fillRectangle: ((offsetX + (s1*scale))@y extent: ((s2-s1)*scale)@bottom)
-							color: darkColor.].
+							color: darkColor;
+		yourself.].
 			
 			(s1 <= v1) & (s2 >= v2)
 				ifTrue: [^aCanvas fillRectangle: ((offsetX + (s1*scale))@y extent: ((v1-s1)*scale)@bottom)
@@ -228,26 +229,30 @@ PhratchGraphMorph >> drawSelectionOn: aCanvas [
 								fillRectangle: ((offsetX + (v1*scale))@y extent: ((v2-v1)*scale)@bottom)
 								color: lightColor;
 								fillRectangle: (( offsetX + (v2*scale))@y extent: ((s2-v2)*scale)@bottom)
-								color: darkColor.].
+								color: darkColor;
+		yourself.].
 			
 			(s1 >= v1) & (s2 <= v2)
 				ifTrue: [^aCanvas
 							fillRectangle: ((offsetX + (s1*scale))@y extent: ((s2-s1)*scale)@bottom)
-							color: lightColor.].
+							color: lightColor;
+		yourself.].
 	
 			(s1 < v1) & (s2 > v1) & (s2 < v2)
 				ifTrue: [^aCanvas
 							fillRectangle: ((offsetX + (s1*scale))@y extent: ((v1-s1)*scale)@bottom)
 							color: darkColor;
 							fillRectangle: ((offsetX + (v1*scale))@y extent: ((s2- v1)*scale)@bottom)
-							color: lightColor.].
+							color: lightColor;
+		yourself.].
 		
 			(s1 >= v1) & (s2 >= v2) 
 				ifTrue: [^aCanvas
 							fillRectangle: ((offsetX + (s1*scale))@y extent: ((v2-s1)*scale)@bottom)
 							color: lightColor;
 							fillRectangle: ((offsetX + (v2*scale))@y extent: ((s2 - v2)*scale)@bottom)
-							color: darkColor.].
+							color: darkColor;
+		yourself.].
 
 			"Transcript show: 'no category :(';cr."
 

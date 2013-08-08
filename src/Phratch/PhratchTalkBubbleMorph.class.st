@@ -68,7 +68,8 @@ PhratchTalkBubbleMorph >> initialize [
 
 	contentsMorph := MultilineStringMorph new
 		centerText: true;
-		font: (PhratchFrameMorph getFont: #TalkBubble).
+		font: (PhratchFrameMorph getFont: #TalkBubble);
+		yourself.
 	contentsMorph
 		borderWidth: 0;
 		lock.

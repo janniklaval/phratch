@@ -171,7 +171,8 @@ SpriteArgMorph >> initialize [
 	labelMorph := StringMorph new
 		font: (PhratchFrameMorph getFont: #Arg);
 		forceUnicodeRendering: true;
-		color: Color white.
+		color: Color white;
+		yourself.
 	self addMorph: labelMorph.
 	((labelMorph extent y) > 15)
 		ifTrue: [ self extent: 20@((labelMorph extent y) + 3) ]

@@ -32,7 +32,8 @@ StringDialog class >> ask: questionString initialAnswer: aString [
 	dialogBox := self new
 		withButtonsForYes: false no: false okay: true cancel: false;
 		message: questionString;
-		initialAnswer: aString.
+		initialAnswer: aString;
+		yourself.
 	^ dialogBox getUserResponse
 
 ]
@@ -54,7 +55,8 @@ StringDialog class >> askWithCancel: questionString initialAnswer: aString [
 	dialogBox := self new
 		withButtonsForYes: false no: false okay: true cancel: true;
 		message: questionString;
-		initialAnswer: aString.
+		initialAnswer: aString;
+		yourself.
 	^ dialogBox getUserResponse
 
 ]
@@ -113,16 +115,19 @@ StringDialog >> initialize [
 		addMorph:
 				(Morph new
 						extent: 5 @ 6;
-						color: Color transparent);
+						color: Color transparent;
+		yourself);
 		addMorph:
 				(typeinMorph := StringFieldMorph new
 						client: self;
 						borderWidth: 2;
-						color: (Color r: 211 / 255 g: 214 / 255 b: 216 / 255));
+						color: (Color r: 211 / 255 g: 214 / 255 b: 216 / 255);
+		yourself);
 		addMorph:
 				(Morph new
 						extent: 5 @ 6;
-						color: Color transparent).
+						color: Color transparent;
+		yourself).
 	typeinMorph
 		font: (PhratchFrameMorph getFont: #StringDialogTypeIn);
 		width: 250.

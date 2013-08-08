@@ -18,7 +18,8 @@ PhratchTabPaneMorph >> createTab: tabID withLabel: aString onForm: aForm1 offFor
 		actionSelector: #currentTab:;
 		toggleMode: false;
 		toggleButtonMode: true;
-		arguments: (Array with: tabID).
+		arguments: (Array with: tabID);
+		yourself.
 	button offForm: aForm2 onForm: aForm1.
 	self tab: button label: aString.
 	button

@@ -65,7 +65,8 @@ PhratchScriptEditorMorph >> addNameBox [
 		font: (PhratchFrameMorph getFont: #UpdatingStringField);
 		rightJustify: PhratchTranslator isRTL;
 		acceptWhenFocusLost: true;
-		position: thumbnailMorph topRight + (17@(thumbnailMorph height * 0.12)).
+		position: thumbnailMorph topRight + (17@(thumbnailMorph height * 0.12));
+		yourself.
 
 	self addMorphBack: nameMorph.
 
@@ -88,7 +89,8 @@ PhratchScriptEditorMorph >> addReadouts [
 			label := StringMorph new
 				contents: s;
 				font: (PhratchFrameMorph getFont: #XYReadout);
-				position: x @ y.
+				position: x @ y;
+		yourself.
 			readout := (UpdatingStringMorph on: self target selector: spec second)
 				font: (PhratchFrameMorph getFont: #XYReadoutBold);
 				forceUnicodeRendering: true;
@@ -96,7 +98,8 @@ PhratchScriptEditorMorph >> addReadouts [
 				contents: '-000';
 				growable: false;
 				stepTime: 100;
-				position: (label right + 4) @ y.	"this sets the readout size"
+				position: (label right + 4) @ y;
+		yourself.	"this sets the readout size"
 			PhratchTranslator isRTL
 				ifTrue: [ readout rightJustify: true ].
 			self
@@ -437,7 +440,8 @@ PhratchScriptEditorMorph >> initialize [
 
 	pageViewerMorph := ScrollFrameMorph new
 		growthFraction: 0.1;
-		color: PhratchFrameMorph scriptsPaneColor.
+		color: PhratchFrameMorph scriptsPaneColor;
+		yourself.
 	self addMorph: (pageViewerMorph position: (self left @ (self top + topSectionHeight))).
 
 	rotationButtons := #().

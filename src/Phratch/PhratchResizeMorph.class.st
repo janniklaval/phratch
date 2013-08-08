@@ -12,8 +12,10 @@ PhratchResizeMorph class >> ofType: aSymbol [
 	"#edge #corner"
 	
 	(aSymbol = #edge)
-		ifTrue: [^ self new form: (PhratchFrameMorph skinAt: #resizeIconEdge); type: aSymbol]
-		ifFalse: [^ self new form: (PhratchFrameMorph skinAt: #resizeIconCorner); type: aSymbol].
+		ifTrue: [^ self new form: (PhratchFrameMorph skinAt: #resizeIconEdge); type: aSymbol;
+		yourself]
+		ifFalse: [^ self new form: (PhratchFrameMorph skinAt: #resizeIconCorner); type: aSymbol;
+		yourself].
 
 ]
 

@@ -421,7 +421,8 @@ VariableBlockMorph >> rightButtonMenu [
 	menu addLine.
 	menu add: 'delete' value: #deleteTemplate.
 	menu add: 'duplicate' value: #duplicate.
-	(choice := menu localize; invokeModal) selectedValue ifNil: [^ self].
+	(choice := menu localize; invokeModal;
+		yourself) selectedValue ifNil: [^ self].
 	self perform: choice.
 
 ]

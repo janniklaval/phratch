@@ -109,7 +109,8 @@ PhratchNoteSelector >> setUpNoteDisplay [
 	rectMorph := BorderedMorph new
 		color: Color white;
 		position: self bottomLeft - (0@2);
-		extent: (self width @ height).
+		extent: (self width @ height);
+		yourself.
 	self extent: self fullBounds extent.
 	self addMorph: rectMorph.
 

@@ -59,7 +59,8 @@ ScriptablePhratchMorph class >> DoIt [
 	#(#('Acoustic Bass Drum' 35 ) #('Bass Drum 1' 36 ) #('Side Stick' 37 ) #('Acoustic Snare' 38 ) #('Hand Clap' 39 ) #('Electric Snare' 40 ) #('Low Floor Tom' 41 ) #('Closed Hi-Hat' 42 ) #('High Floor Tom' 43 ) #('Pedal Hi-Hat' 44 ) #('Low Tom' 45 ) #('Open Hi-Hat' 46 ) #('Low-Mid Tom' 47 ) #('Hi-Mid Tom' 48 ) #('Crash Cymbal 1' 49 ) #('High Tom' 50 ) #('Ride Cymbal 1' 51 ) #('Chinese Cymbal' 52 ) #('Ride Bell' 53 ) #('Tambourine' 54 ) #('Splash Cymbal' 55 ) #('Cowbell' 56 ) #('Crash Cymbal 2' 57 ) #('Vibraslap' 58 ) #('Ride Cymbal 2' 59 ) #('Hi Bongo' 60 ) #('Low Bongo' 61 ) #('Mute Hi Conga' 62 ) #('Open Hi Conga' 63 ) #('Low Conga' 64 ) #('High Timbale' 65 ) #('Low Timbale' 66 ) #('High Agogo' 67 ) #('Low Agogo' 68 ) #('Cabasa' 69 ) #('Maracas' 70 ) #('Short Whistle' 71 ) #('Long Whistle' 72 ) #('Short Guiro' 73 ) #('Long Guiro' 74 ) #('Claves' 75 ) #('Hi Wood Block' 76 ) #('Low Wood Block' 77 ) #('Mute Cuica' 78 ) #('Open Cuica' 79 ) #('Mute Triangle' 80 ) #('Open Triangle' 81 ) )
 		do: [:pair | menu add: (self numberInParens: pair second)
 					, pair first localizedMIDI value: pair second].
-	^ (menu popUpInWorld ; selectedValue)
+	^ (menu popUpInWorld ; selectedValue;
+		yourself)
 ]
 
 { #category : #'block specs' }
@@ -517,7 +518,8 @@ ScriptablePhratchMorph >> addCustomBlock [
 
 	def := (CustomBlockDefinition new 
 		userSpec: (ans at: 1);
-		category: (ans fourth = #other ifTrue: [#none] ifFalse: [ans fourth])).
+		category: (ans fourth = #other ifTrue: [#none] ifFalse: [ans fourth]);
+		yourself).
 	(ans at: 2)	
 		ifTrue: [ (ans at: 3) 
 			ifTrue: [def type: #boolean]
@@ -547,7 +549,8 @@ ScriptablePhratchMorph >> addCustomBlocksTo: page y: startY [
 		addMorph:
 			(addButton
 				target: self;
-				position: x @ y).
+				position: x @ y;
+		yourself).
 	y := addButton bottom + 5.	"add custom blocks (jens)"
 	inherited := self inheritedBlocks select: [ :def | def category = #none ].
 	customBlocks ifNil: [ cdefs := Set new ] ifNotNil: [ cdefs := customBlocks select: [ :def | def category = #none ] ].
@@ -615,7 +618,8 @@ ScriptablePhratchMorph >> addGenericListBlocksTo: page y: startY [
 
 	x := 13.
 	y := startY + 10.
-	page addMorph: (addButton target: self; position: x@y).
+	page addMorph: (addButton target: self; position: x@y;
+		yourself).
 	y := addButton bottom + 3.
 
 	hasLists := self listVarNames size > 0.
@@ -623,7 +627,8 @@ ScriptablePhratchMorph >> addGenericListBlocksTo: page y: startY [
 		stage listVarNames size > 0 ifTrue: [hasLists := true]].
 	hasLists ifTrue: [
 
-		page addMorph: (deleteButton target: self; position: x@y).
+		page addMorph: (deleteButton target: self; position: x@y;
+		yourself).
 		y := deleteButton bottom + 10.
 
 		y := (self addListReportersTo: page x: x y: y) + 10 ].
@@ -663,12 +668,14 @@ ScriptablePhratchMorph >> addGenericVariableBlocksTo: page x: x y: startY [
 	varBlocks := OrderedCollection new.
 	block := SetterBlockMorph new
 		initSetterForVar: vName;
-		receiver: self blockReceiver.
+		receiver: self blockReceiver;
+		yourself.
 	block expressionArg stringExpression: '0'.
 	varBlocks add: block.
 	block := SetterBlockMorph new
 		initChangerForVar: vName;
-		receiver: self blockReceiver.
+		receiver: self blockReceiver;
+		yourself.
 	block expressionArg numExpression: '1'.
 	varBlocks add: block.
 	(self blocksFor: 'variables')
@@ -682,7 +689,8 @@ ScriptablePhratchMorph >> addGenericVariableBlocksTo: page x: x y: startY [
 		receiver: self blockReceiver;
 		addItem;
 		isSpecialForm: true;
-		selector: #doDeclareVariables.
+		selector: #doDeclareVariables;
+		yourself.
 	varBlocks add: block afterIndex: 5.
 	varBlocks
 		do: [ :blockOrSym | 
@@ -797,7 +805,8 @@ ScriptablePhratchMorph >> addListReportersTo: page x: x y: startY [
 				color: ScriptablePhratchMorph listBlockColor;
 				receiver: stage blockReceiver;
 				commandSpec: listVarName;
-				selector: #listNamed:.
+				selector: #listNamed:;
+		yourself.
 			watcherButton := self createToggleButtonFor: b.
 			yOffset := (b fullBounds height - watcherButton height) // 2.
 			page addMorph: (watcherButton position: x @ (y + yOffset)).
@@ -824,7 +833,8 @@ ScriptablePhratchMorph >> addListReportersTo: page x: x y: startY [
 			color: ScriptablePhratchMorph listBlockColor;
 			receiver: self blockReceiver;
 			commandSpec: listVarName;
-			selector: #listNamed:.
+			selector: #listNamed:;
+		yourself.
 		watcherButton := self createToggleButtonFor: b.
 		yOffset := (b fullBounds height - watcherButton height) // 2.
 		page addMorph: (watcherButton position: x @ (y + yOffset)).
@@ -921,7 +931,8 @@ ScriptablePhratchMorph >> addVariableReportersTo: page x: x y: startY [
 		stage varNames do: [:vName |
 			b := VariableBlockMorph new
 				commandSpec: vName;
-				receiver: stage blockReceiver.
+				receiver: stage blockReceiver;
+		yourself.
 
 			watcherButton := self createToggleButtonFor: b.
 			yOffset := (b fullBounds height - watcherButton height) // 2.
@@ -947,7 +958,8 @@ ScriptablePhratchMorph >> addVariableReportersTo: page x: x y: startY [
 	self varNames do: [:vName |
 		b := VariableBlockMorph new
 			commandSpec: vName;
-			receiver: self blockReceiver.
+			receiver: self blockReceiver;
+		yourself.
 
 		watcherButton := self createToggleButtonFor: b.
 		yOffset := (b fullBounds height - watcherButton height) // 2.
@@ -1213,7 +1225,8 @@ ScriptablePhratchMorph >> blockFromOldFormTuple: tuple receiver: scriptOwner [
 				color: ScriptablePhratchMorph listBlockColor;
 				receiver: scriptOwner;
 				commandSpec: tuple second;
-				selector: #listNamed: ].
+				selector: #listNamed:;
+		yourself ].
 	#lambda: = k
 		ifTrue: [ 
 			block := ReporterBlockMorph new.
@@ -1257,7 +1270,8 @@ ScriptablePhratchMorph >> blockFromOldFormTuple: tuple receiver: scriptOwner [
 				color: ScriptablePhratchMorph listBlockColor;
 				receiver: scriptOwner;
 				isSpecialForm: true;
-				selector: #doMakeNewList.
+				selector: #doMakeNewList;
+		yourself.
 			spec := 'list'.
 			argCount := tuple size - 1.
 			argCount timesRepeat: [ spec := spec , ' $String$' ].
@@ -1282,7 +1296,8 @@ ScriptablePhratchMorph >> blockFromOldFormTuple: tuple receiver: scriptOwner [
 				receiver: scriptOwner;
 				isSpecialForm: true;
 				minArgs: 1;
-				selector: k.
+				selector: k;
+		yourself.
 			spec := scriptOwner blockSpecForSelector: k.
 			argCount := tuple size - 1.
 			argCount - 2 timesRepeat: [ spec := spec , ' $String$' ].
@@ -1307,7 +1322,8 @@ ScriptablePhratchMorph >> blockFromOldFormTuple: tuple receiver: scriptOwner [
 				receiver: scriptOwner;
 				isSpecialForm: false;
 				minArgs: 1;
-				selector: k.
+				selector: k;
+		yourself.
 			spec := scriptOwner blockSpecForSelector: k.
 			argCount := tuple size - 1.
 			argCount - 2 timesRepeat: [ spec := spec , ' $String$' ].
@@ -1461,7 +1477,8 @@ ScriptablePhratchMorph >> blockFromSpec: spec color: blockColor [
 		selector: selector;
 		commandSpec: blockLabelSpec;
 		defaultArgs: defaultArgs;
-		receiver: rcvr
+		receiver: rcvr;
+		yourself
 ]
 
 { #category : #blocks }
@@ -1488,7 +1505,8 @@ ScriptablePhratchMorph >> blockFromTuple: tuple receiver: scriptOwner [
 				color: ScriptablePhratchMorph listBlockColor;
 				receiver: rcvr;
 				commandSpec: tuple fourth;
-				selector: #listNamed: ].
+				selector: #listNamed:;
+		yourself ].
 	#lambda: = k
 		ifTrue: [ 
 			block := ReporterBlockMorph new.
@@ -1570,7 +1588,8 @@ ScriptablePhratchMorph >> blockFromTuple: tuple receiver: scriptOwner [
 				color: ScriptablePhratchMorph listBlockColor;
 				receiver: rcvr;
 				isSpecialForm: true;
-				selector: #doMakeNewList.
+				selector: #doMakeNewList;
+		yourself.
 			spec := 'list'.
 			argCount := tuple size - 3.
 			argCount timesRepeat: [ spec := spec , ' $String$' ].
@@ -1595,7 +1614,8 @@ ScriptablePhratchMorph >> blockFromTuple: tuple receiver: scriptOwner [
 				receiver: rcvr;
 				isSpecialForm: true;
 				minArgs: 1;
-				selector: k.
+				selector: k;
+		yourself.
 			spec := rcvr blockSpecForSelector: k.
 			argCount := tuple size - 3.
 			argCount - 3 timesRepeat: [ spec := spec , ' $String$' ].
@@ -1629,7 +1649,8 @@ ScriptablePhratchMorph >> blockFromTuple: tuple receiver: scriptOwner [
 				variables: (tuple at: 5) asOrderedCollection;
 				type: (tuple at: 6);
 				declarations: (tuple at: 7);
-				isAtomic: (tuple at: 8).
+				isAtomic: (tuple at: 8);
+		yourself.
 			spec := scriptOwner blockSpecForSelector: k.
 			argCount := tuple size - 9.
 			argCount - 2 timesRepeat: [ spec := spec , ' $String$' ].
@@ -1655,7 +1676,8 @@ ScriptablePhratchMorph >> blockFromTuple: tuple receiver: scriptOwner [
 				color: Color gray;
 				isSpecialForm: true;
 				minArgs: 1;
-				selector: k.
+				selector: k;
+		yourself.
 			argCount := tuple size - 3.
 			spec := 'script variables' localized.
 			argCount timesRepeat: [ spec := spec , ' $String$' ].
@@ -1874,7 +1896,8 @@ ScriptablePhratchMorph >> blockVariableBlockFromTuple: tuple receiver: scriptOwn
 				receiver: rcvr;
 				selector: #getVar:;
 				commandSpec: varName;
-				isSpecialForm: true ].
+				isSpecialForm: true;
+		yourself ].
 	tuple third = #changeBlockVariable
 		ifTrue: [ 
 			selector := tuple at: 5.
@@ -1919,7 +1942,8 @@ ScriptablePhratchMorph >> blockVariableBlockFromTupleOldForm: tuple receiver: sc
 				receiver: rcvr;
 				selector: #getVar:;
 				commandSpec: varName;
-				isSpecialForm: true ].
+				isSpecialForm: true;
+		yourself ].
 	tuple first = #changeBlockVariable
 		ifTrue: [ 
 			selector := tuple at: 3.
@@ -1928,7 +1952,8 @@ ScriptablePhratchMorph >> blockVariableBlockFromTupleOldForm: tuple receiver: sc
 				ifFalse: [ rcvr definitionFor: (CustomBlockDefinition idFromSpec: tuple fourth) ].
 			block := SetterBlockMorph new
 				receiver: rcvr;
-				color: (ScriptablePhratchMorph blockColorFor: 'variables').
+				color: (ScriptablePhratchMorph blockColorFor: 'variables');
+		yourself.
 			(#(#setVar:to: #setBlockVar:to:) includes: selector)
 				ifTrue: [ block initSetterForVar: varName ]
 				ifFalse: [ block initChangerForVar: varName ].
@@ -2681,7 +2706,8 @@ ScriptablePhratchMorph >> copyListsFor: aSprite [
 		oldList := assoc value.
 		copiedList := PhratchListMorph new
 			listName: oldList listName target: aSprite;
-			newContents: oldList listContents.
+			newContents: oldList listContents;
+		yourself.
 		result at: assoc key put: copiedList].
 	^ result
 
@@ -3083,7 +3109,8 @@ ScriptablePhratchMorph >> defaultImageMedia [
 
 	^ ImageMedia new
 		form: (Form extent: 8@8 depth: 8) fillWhite;
-		mediaName: ('costume' localized, '1')
+		mediaName: ('costume' localized, '1');
+		yourself
 
 ]
 
@@ -3182,7 +3209,8 @@ ScriptablePhratchMorph >> deleteColor [
 	self = stage ifFalse: [
 		stage colorNames isEmpty ifFalse: [menu addLine].
 		self colorNames do: [:v | menu add: v value: (Array with: v with: #local)]].
-	choice := menu invokeModal; selectedValue.
+	choice := menu invokeModal; selectedValue;
+		yourself.
 	choice ifNil: [^ self].
 
 	choice second = #global
@@ -3936,7 +3964,8 @@ ScriptablePhratchMorph >> editedForm: aForm textBox: aMultilineTextMorph [
 	(costume isKindOf: ImageMedia) ifFalse: [
 		newImage := ImageMedia new
 			form: aForm;
-			mediaName: (self unusedMediaNameFromBaseName: costume mediaName).
+			mediaName: (self unusedMediaNameFromBaseName: costume mediaName);
+		yourself.
 		media addLast: newImage.
 		self lookLike: newImage mediaName].
 
@@ -4517,7 +4546,8 @@ ScriptablePhratchMorph >> hatBlockType: blockType [
 		evtName := ''.
 		(stage := self ownerOrYourselfThatIsA: PhratchStageMorph)
 			ifNotNil: [evtName := stage defaultEventName].
-		^ EventHatMorph new scriptOwner: self; eventName: evtName].
+		^ EventHatMorph new scriptOwner: self; eventName: evtName;
+		yourself].
 
 	'K' = blockType ifTrue: [^ KeyEventHatMorph new scriptOwner: self].
 	'M' = blockType ifTrue: [^ MouseClickEventHatMorph new scriptOwner: self].
@@ -4544,7 +4574,8 @@ ScriptablePhratchMorph >> hideColor [
 	self = stage ifFalse: [
 		stage colorNames isEmpty ifFalse: [menu addLine].
 		self colorNames do: [:v | menu add: v value:  (Array with: v with: #local)]].
-	choice := menu invokeModal; selectedValue.
+	choice := menu invokeModal; selectedValue;
+		yourself.
 	choice ifNil: [^ self].
 
 	choice second = #global
@@ -6486,7 +6517,8 @@ ScriptablePhratchMorph >> positionVar: varName atX: x y: y [
 			frame := w frame ].
 	b := VariableBlockMorph new
 		commandSpec: varName;
-		receiver: self blockReceiver.
+		receiver: self blockReceiver;
+		yourself.
 	(w := frame watcherForBlock: b) ifNil: [ ^ self ].
 	newX := x.
 	newX isNaN
@@ -6980,7 +7012,8 @@ ScriptablePhratchMorph >> savePhoto: aForm [
 
 	| n |
 	n := self unusedMediaNameFromBaseName: 'costume' localized, '1'.
-	self addMediaItem: (ImageMedia new mediaName: n; form: aForm).
+	self addMediaItem: (ImageMedia new mediaName: n; form: aForm;
+		yourself).
 
 	self undeleteAttribute: #costumes.
 	self propagateCostumes
@@ -7176,7 +7209,8 @@ ScriptablePhratchMorph >> setLayoutOfVar: varName to: aString [
 		stage := frame workPane.
 		(stage varNames includes: varName) ifTrue: [^ stage setLayoutOfVar: varName to: aString.].].
 	
-	b := VariableBlockMorph new commandSpec: varName; receiver: self blockReceiver.
+	b := VariableBlockMorph new commandSpec: varName; receiver: self blockReceiver;
+		yourself.
 	w := frame watcherForBlock: b.
 	w ifNotNil: [w layoutStyle: symbol].
 ]
@@ -7296,7 +7330,8 @@ ScriptablePhratchMorph >> showColor [
 	self = stage ifFalse: [
 		stage colorNames isEmpty ifFalse: [menu addLine].
 		self colorNames do: [:v | menu add: v value: (Array with: v with: #local)]].
-	choice := menu invokeModal; selectedValue.
+	choice := menu invokeModal; selectedValue;
+		yourself.
 	choice ifNil: [^ self].
 
 	choice second = #global
@@ -7387,7 +7422,8 @@ ScriptablePhratchMorph >> showOrHideVariable: varName show: showFlag [
 		(w := self ownerOrYourselfThatIsA: OffscreenWorldMorph) ifNil: [^ self].
 		frame := w frame].
 
-	b := VariableBlockMorph new commandSpec: varName; receiver: self blockReceiver.
+	b := VariableBlockMorph new commandSpec: varName; receiver: self blockReceiver;
+		yourself.
 	w := frame watcherForBlock: b.
 	showFlag
 		ifTrue: [w ifNil: [frame showWatcher: b createWatcher]]
@@ -8106,7 +8142,8 @@ ScriptablePhratchMorph >> variableBlockFromTuple: tuple receiver: scriptOwner [
 		^ VariableBlockMorph new
 			commandSpec: varName;
 			selector: #getVar:;
-			receiver: rcvr].
+			receiver: rcvr;
+		yourself].
 
 	tuple third = #changeVariable ifTrue: [
 		selector := tuple at: 5.
@@ -8155,7 +8192,8 @@ ScriptablePhratchMorph >> variableBlockFromTupleOldForm: tuple receiver: scriptO
 		^ VariableBlockMorph new
 			commandSpec: varName;
 			selector: #getVar:;
-			receiver: rcvr].
+			receiver: rcvr;
+		yourself].
 
 	tuple first = #changeVariable ifTrue: [
 		selector := tuple at: 3.

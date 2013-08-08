@@ -45,11 +45,13 @@ ShadowedStringMorph >> contents: aString color: aColor font: aFont [
 	mainMorph := StringMorph new
 		contents: aString;
 		color: aColor;
-		font: aFont.
+		font: aFont;
+		yourself.
 	shadowMorph := StringMorph new
 		contents: aString;
 		color: (Color black mixed: 0.2 with: self color);
-		font: aFont.
+		font: aFont;
+		yourself.
 	self
 		addMorphBack: (mainMorph position: self position);
 		addMorphBack: (shadowMorph position: (self position + (2@1))).

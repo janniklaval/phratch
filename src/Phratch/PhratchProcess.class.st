@@ -476,7 +476,8 @@ PhratchProcess >> doAsk [
 	"(Remove the current frame and replace it with one that will force the termination expression to be re-evaluated.)"
 
 	self popStackFrameNoUnhightlight.
-	self pushStackFrame: (PhratchStackFrame new expression: block; addArgument: prompter).
+	self pushStackFrame: (PhratchStackFrame new expression: block; addArgument: prompter;
+	yourself).
 
 	"1.  yield to another process"
 	self pushStackFrame: (PhratchStackFrame new shouldYield: true).
@@ -516,7 +517,8 @@ PhratchProcess >> doBroadcastAndWait [
 	"2.  evaluate this block again"
 	"(Remove the current frame and replace it with one that will force the termination expression to be re-evaluated.)"
 	self popStackFrameNoUnhightlight.
-	self pushStackFrame: (PhratchStackFrame new expression: block; addArgument: procs).
+	self pushStackFrame: (PhratchStackFrame new expression: block; addArgument: procs;
+		yourself).
 
 	"1.  yield to another process"
 	self pushStackFrame: (PhratchStackFrame new shouldYield: true).
@@ -734,7 +736,8 @@ PhratchProcess >> doPlaySoundAndWait [
 	self popStackFrameNoUnhightlight.
 	self pushStackFrame: (PhratchStackFrame new
 		expression: block;
-		addArgument: snd).
+		addArgument: snd;
+		yourself).
 
 	"1.  yield to another process"
 	self pushStackFrame: (PhratchStackFrame new shouldYield: true).
@@ -771,7 +774,8 @@ PhratchProcess >> doRepeat [
 	"3.  evaluate repeat block with decremented counter value."
 	frame := PhratchStackFrame new
 				expression:		block;
-				addArgument:	counter - 1.
+				addArgument:	counter - 1;
+		yourself.
 	self pushStackFrame: frame.
 
 	"2.  yield."
@@ -949,7 +953,8 @@ PhratchProcess >> doWithCamOpen [
 	We must do these in reverse order."
 
 	"2. close the camera"
-	self pushStackFrame: (PhratchStackFrame new expression: (CommandBlockMorph new selector: #closeCamera; receiver: (block receiver))).
+	self pushStackFrame: (PhratchStackFrame new expression: (CommandBlockMorph new selector: #closeCamera; receiver: (block receiver);
+		yourself)).
 
 
 	self pushStackFrame: (PhratchStackFrame new expression: block firstBlockList).

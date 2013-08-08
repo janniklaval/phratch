@@ -28,7 +28,8 @@ ReporterBlockMorph >> asLambda [
 		isSpecialForm: false;
 		minArgs: 1;
 		commandSpec: '$String$';
-		selector: #function.
+		selector: #function;
+		yourself.
 	lambda replaceArgMorph: (lambda argumentAt: 1) by: self fullCopy.
 	^lambda evaluate
 ]
@@ -504,7 +505,8 @@ ReporterBlockMorph >> lambdaMenu [
 		ifFalse: [ menu add: 'quote' translated action: #lambdafied ].
 	(choice := menu
 		localize;
-		popUpInWorld) ifNotNil: [ self perform: choice ].
+		popUpInWorld;
+		yourself) ifNotNil: [ self perform: choice ].
 	World activeHand showTemporaryCursor: nil
 ]
 
@@ -519,7 +521,8 @@ ReporterBlockMorph >> lambdafied [
 		minArgs: 1;
 		selector: #function;
 		isAtomic: false;
-		commandSpec: 'the $String$ block').
+		commandSpec: 'the $String$ block';
+		yourself).
 
 	(owner isKindOf: BlockMorph) ifTrue: [
 		owner replaceArgMorph: self by: lambda.
@@ -569,7 +572,8 @@ ReporterBlockMorph >> showLambdaValue [
 		ifTrue: [ msg := msg localized ].
 	tooltip := (PhratchReporterToolTipMorph string: msg for: self)
 		left: self right;
-		bottom: self top.
+		bottom: self top;
+		yourself.
 	PhratchTranslator isRTL
 		ifTrue: [ tooltip right: self left ].
 	gotError
@@ -606,7 +610,8 @@ ReporterBlockMorph >> showValue [
 		ifTrue: [ msg := msg localized ].
 	tooltip := (PhratchReporterToolTipMorph string: msg for: self)
 		left: self right;
-		bottom: self top.
+		bottom: self top;
+		yourself.
 	PhratchTranslator isRTL
 		ifTrue: [ tooltip right: self left ].
 	gotError
