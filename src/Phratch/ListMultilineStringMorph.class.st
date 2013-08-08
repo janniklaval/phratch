@@ -39,11 +39,6 @@ ListMultilineStringMorph >> fixLayout [
 ]
 
 { #category : #'event handling' }
-ListMultilineStringMorph >> handlesKeyboard: evt [
-^true  
-]
-
-{ #category : #'event handling' }
 ListMultilineStringMorph >> handlesMouseOver: evt [
 
 	^ true

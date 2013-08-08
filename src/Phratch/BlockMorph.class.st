@@ -112,6 +112,12 @@ BlockMorph >> addPoint: aPoint color: c to: coll [
 
 ]
 
+{ #category : #'as yet unclassified' }
+BlockMorph >> asBlockTuple [
+
+	self subclassResponsibility 
+]
+
 { #category : #private }
 BlockMorph >> attachBlock: aBlockMorph [
 	"Attach the given block to me. Assume the block has been positioned correctly."
@@ -1750,13 +1756,5 @@ BlockMorph >> updateCachedForm [
 	self drawSubmorphsOn: c.
 	cachedForm := c form.
 	lastLayoutTime := Time millisecondClockValue.
-
-]
-
-{ #category : #'event handling' }
-BlockMorph >> wantsKeyboardFocusFor: aSubmorph [
-	"Don't allow shift-click editing of block labels."
-
-	^ false
 
 ]

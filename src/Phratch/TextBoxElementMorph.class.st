@@ -20,14 +20,6 @@ TextBoxElementMorph >> fit [
 
 ]
 
-{ #category : #'event handling' }
-TextBoxElementMorph >> handlesMouseDown: evt [
-	"Return true if this morph wants to receive mouseDown events (i.e., mouseDown:, mouseMove:, mouseUp:). The default response is false; subclasses that implement mouse messages should override this to return true." 
-
-	^ true
-
-]
-
 { #category : #initialize }
 TextBoxElementMorph >> initialize [
 	super initialize.

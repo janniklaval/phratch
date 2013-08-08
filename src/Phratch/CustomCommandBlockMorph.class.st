@@ -439,11 +439,6 @@ CustomCommandBlockMorph >> isPartsBin [
 	^isTemplate
 ]
 
-{ #category : #accessing }
-CustomCommandBlockMorph >> isReporter [
-	^false
-]
-
 { #category : #template }
 CustomCommandBlockMorph >> isTemplate [
 	^isTemplate

@@ -275,13 +275,6 @@ VariableBlockMorph >> isPrototypeTemplate [
 	^ true
 ]
 
-{ #category : #accessing }
-VariableBlockMorph >> isReporter [
-
-	^ true
-
-]
-
 { #category : #initialization }
 VariableBlockMorph >> isSpecialForm: bool [
 

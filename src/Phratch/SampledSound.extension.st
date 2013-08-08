@@ -161,35 +161,36 @@ SampledSound classSide >> readSNDFrom: aBinaryStream [
 	| id hdrSize count encoding samplingRate channels data leftAndRight |
 	"read the header"
 	id := (aBinaryStream next: 4) asString.
-	id = '.snd' ifFalse: [^ self error: 'Not a Sun Audio (.au) file'].
+	id = '.snd'
+		ifFalse: [ ^ self error: 'Not a Sun Audio (.au) file' ].
 	hdrSize := aBinaryStream uint32.
  	count := aBinaryStream uint32.
 	encoding := aBinaryStream uint32.
 	samplingRate := aBinaryStream uint32.
 	channels := aBinaryStream uint32.
-	aBinaryStream skip: (hdrSize - 24).
-
-	"check the format"
-	((encoding >= 1) & (encoding <= 3)) ifFalse: [
-		^ self error: 'Unsupported Sun Audio (.au) format: ', encoding printString].
-
-	encoding = 1 ifTrue: [data := self uLawDecode: (aBinaryStream next: count)].
-	encoding = 2 ifTrue: [data := self convert8bitSignedTo16Bit: (aBinaryStream next: count)].
-	encoding = 3 ifTrue: [
-		data := SoundBuffer newMonoSampleCount: count // 2.
-		aBinaryStream next: (count // 4) into: data startingAt: 1.  "size is in 32-bit words"
-		Smalltalk isBigEndian ifFalse: [data reverseEndiannessStereo: (channels = 2)]].
-
-	"build sound object"
-	channels = 1 ifTrue: [^ self samples: data samplingRate: samplingRate].
-	channels = 2 ifTrue: [
-		leftAndRight := data splitStereo.
-		^ MixedSound new
-			add: (self samples: leftAndRight first samplingRate: samplingRate) pan: 0.0;
-			add: (self samples: leftAndRight last samplingRate: samplingRate) pan: 1.0;
-			yourself].
-
-	 self error: 'Unsupported number of channels: ', channels printString.
+	aBinaryStream skip: hdrSize - 24.	"check the format"
+	(encoding between: 1 and: 3)
+		ifFalse: [ ^ self error: 'Unsupported Sun Audio (.au) format: ' , encoding printString ].
+	encoding = 1
+		ifTrue: [ data := self uLawDecode: (aBinaryStream next: count) ].
+	encoding = 2
+		ifTrue: [ data := self convert8bitSignedTo16Bit: (aBinaryStream next: count) ].
+	encoding = 3
+		ifTrue: [ 
+			data := SoundBuffer newMonoSampleCount: count // 2.
+			aBinaryStream next: count // 4 into: data startingAt: 1.	"size is in 32-bit words"
+			Smalltalk isBigEndian
+				ifFalse: [ data reverseEndiannessStereo: channels = 2 ] ].	"build sound object"
+	channels = 1
+		ifTrue: [ ^ self samples: data samplingRate: samplingRate ].
+	channels = 2
+		ifTrue: [ 
+			leftAndRight := data splitStereo.
+			^ MixedSound new
+				add: (self samples: leftAndRight first samplingRate: samplingRate) pan: 0.0;
+				add: (self samples: leftAndRight last samplingRate: samplingRate) pan: 1.0;
+				yourself ].
+	self error: 'Unsupported number of channels: ' , channels printString
 ]
 
 { #category : #'*Phratch-Extensions' }

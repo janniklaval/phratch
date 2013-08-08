@@ -2218,6 +2218,12 @@ ScriptablePhratchMorph >> clearMediaAndCostume [
 
 ]
 
+{ #category : #'as yet unclassified' }
+ScriptablePhratchMorph >> clearPenTrails [
+
+	self subclassResponsibility 
+]
+
 { #category : #byob }
 ScriptablePhratchMorph >> clearVariables [
 
@@ -3241,6 +3247,12 @@ ScriptablePhratchMorph >> deleteColorFull: colorName [
 	(stage notNil and: [stage colorNames includes: colorName]) ifTrue: [stage deleteColor: colorName].
 	(frame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNil: [^ self].
 	frame viewerPane categoryChanged: 'colors'.
+]
+
+{ #category : #'as yet unclassified' }
+ScriptablePhratchMorph >> deleteCostAt: aNumber [
+
+	self subclassResponsibility 
 ]
 
 { #category : #'panther actions' }

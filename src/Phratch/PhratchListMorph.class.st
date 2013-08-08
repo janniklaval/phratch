@@ -100,12 +100,6 @@ PhratchListMorph class >> with: anObject [
 
 ]
 
-{ #category : #comparing }
-PhratchListMorph >> = another [
-
-	^ self == another
-]
-
 { #category : #'byob lambdas' }
 PhratchListMorph >> aboutToBeGrabbedBy: aHand [
 

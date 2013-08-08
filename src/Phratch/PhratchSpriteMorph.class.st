@@ -468,16 +468,6 @@ PhratchSpriteMorph >> copyForExport [
 
 ]
 
-{ #category : #accessing }
-PhratchSpriteMorph >> defaultImageMedia [
-
-	^ ImageMedia new
-		form: (Form extent: 8@8 depth: 8) fillWhite;
-		mediaName: ('costume' localized, '1');
-		yourself
-
-]
-
 { #category : #'as yet unclassified' }
 PhratchSpriteMorph >> deleteCostAt: aNumber [
 	<phratchItem: 'delete costume $Number$' kind: #- category: 'looks' defaultValues: #(1) subCategory: #a2>
@@ -1140,22 +1130,6 @@ PhratchSpriteMorph >> keepOnScreen [
 
 ]
 
-{ #category : #'looks ops' }
-PhratchSpriteMorph >> layer: aNumber [
-
-	| n submorphsMinusMe newSubmorphs |
-	owner ifNil: [^ 1].
-	n := (aNumber rounded max: 1) min: owner submorphCount.
-	submorphsMinusMe := owner submorphs copyWithout: self.
-	newSubmorphs :=
-		(submorphsMinusMe copyFrom: 1 to: (n - 1 min: submorphsMinusMe size)),
-		(Array with: self),
-		(submorphsMinusMe copyFrom: n to: submorphsMinusMe size).
-	owner privateSubmorphs: newSubmorphs.
-	self changed.
-
-]
-
 { #category : #private }
 PhratchSpriteMorph >> layoutChanged [
 	"Update rotatedForm and offsetWhenRotated and compute new bounds."
@@ -1581,31 +1555,6 @@ PhratchSpriteMorph >> pointTowards: anObject [
 	self pointToX: p x y: p y.
 
 
-]
-
-{ #category : #accessing }
-PhratchSpriteMorph >> position: aPoint [ 
-	"Change the position of this morph and and all of its
-	submorphs. "
-	| delta box |
-	delta := aPoint asNonFractionalPoint - bounds topLeft.
-	(delta x = 0
-			and: [delta y = 0])
-		ifTrue: [^ self].
-	"Null change"
-	box := self fullBounds.
-	(delta dotProduct: delta)
-			> 100
-		ifTrue: ["e.g., more than 10 pixels moved"
-			self invalidRect: box.
-			self
-				invalidRect: (box translateBy: delta)]
-		ifFalse: [self
-				invalidRect: (box
-						merge: (box translateBy: delta))].
-	self privateFullMoveBy: delta.
-	owner
-		ifNotNil: [owner layoutChanged]
 ]
 
 { #category : #private }

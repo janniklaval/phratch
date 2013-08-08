@@ -48,12 +48,6 @@ VariableDeclarationBlockMorph >> isPartsBin [
 	^true
 ]
 
-{ #category : #'events-processing' }
-VariableDeclarationBlockMorph >> mouseDownPriority [
-
-	^ 0
-]
-
 { #category : #deleting }
 VariableDeclarationBlockMorph >> removeItem [
 	argMorphs size > self minArgs

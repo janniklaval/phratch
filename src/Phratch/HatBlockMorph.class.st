@@ -14,12 +14,6 @@ Class {
 	#category : #'Phratch-Blocks'
 }
 
-{ #category : #'as yet unclassified' }
-HatBlockMorph >> asBlockTuple [
-
-	self subclassResponsibility 
-]
-
 { #category : #private }
 HatBlockMorph >> blockAttachPoints: aSet [
 	"Answer a collection of possible attachment points for me. Each entry is an Association mapping a point to the morph to which a dropping block could be attached."

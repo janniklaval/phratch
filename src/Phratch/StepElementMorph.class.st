@@ -27,12 +27,6 @@ StepElementMorph >> asSmalltalk [
 	expression ifNotNil: [^expression asSmalltalk]
 ]
 
-{ #category : #accessing }
-StepElementMorph >> borderWidth [
-	^1
-
-]
-
 { #category : #menu }
 StepElementMorph >> contextMenu [
 	| m |
@@ -181,11 +175,6 @@ StepElementMorph >> initialize [
 { #category : #testing }
 StepElementMorph >> isLast [
 	^next isNil
-]
-
-{ #category : #private }
-StepElementMorph >> labelFont [
-	^StrikeFont fontName: 'Verdana' size: 10
 ]
 
 { #category : #accessing }

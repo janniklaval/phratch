@@ -82,11 +82,6 @@ ObjectElementMorph >> label: aString [
 
 ]
 
-{ #category : #private }
-ObjectElementMorph >> labelFont [
-	^StrikeFont fontName: 'Verdana' size: 10
-]
-
 { #category : #'as yet unclassified' }
 ObjectElementMorph >> removeFromPalette [
 	owner removeVariable: self

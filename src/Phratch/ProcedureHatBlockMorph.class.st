@@ -45,16 +45,6 @@ ProcedureHatBlockMorph >> asBlockTuple [
 ]
 
 { #category : #other }
-ProcedureHatBlockMorph >> evaluateCondition [
-	"Answer true if my condition is true."
-
-	| arg |
-	arg := submorphs detect: [:m | m isKindOf: ReporterBlockMorph] ifNone: [^ false].
-	^ arg evaluate
-
-]
-
-{ #category : #other }
 ProcedureHatBlockMorph >> fixBlockLayout [
 	"Update the positions of my submorphs."
 

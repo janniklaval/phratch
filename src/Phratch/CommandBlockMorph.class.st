@@ -924,11 +924,6 @@ CommandBlockMorph >> isMaxNestedAt: int [
 
 ]
 
-{ #category : #'parts bin' }
-CommandBlockMorph >> isPartsBin [
-	^false
-]
-
 { #category : #accessing }
 CommandBlockMorph >> isStop [
 

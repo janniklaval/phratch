@@ -436,11 +436,6 @@ CustomReporterBlockMorph >> isPartsBin [
 	^isTemplate
 ]
 
-{ #category : #other }
-CustomReporterBlockMorph >> isReporter [
-	^true
-]
-
 { #category : #template }
 CustomReporterBlockMorph >> isTemplate [
 	^isTemplate

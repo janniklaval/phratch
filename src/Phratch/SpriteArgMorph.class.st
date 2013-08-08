@@ -364,11 +364,3 @@ SpriteArgMorph >> veryDeepInner: deepCopier [
 	menuIconMorph := menuIconMorph veryDeepCopyWith: deepCopier.
 
 ]
-
-{ #category : #'event handling' }
-SpriteArgMorph >> wantsKeyboardFocusFor: aSubmorph [
-	"Don't allow shift-click editing of block labels."
-
-	^ false
-
-]

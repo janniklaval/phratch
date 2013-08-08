@@ -3921,14 +3921,6 @@ PhratchFrameMorph >> wantsDroppedMorph: aMorph event: evt [
 
 ]
 
-{ #category : #'event handling' }
-PhratchFrameMorph >> wantsKeyboardFocusFor: aSubmorph [
-	"Don't allow shift-click edit and select in random label strings."
-
-	^ false
-
-]
-
 { #category : #watchers }
 PhratchFrameMorph >> watcherForBlock: aBlockMorph [
 	"Answer a watcher for the given block if there is one currently showing on the stage."

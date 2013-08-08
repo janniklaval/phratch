@@ -158,11 +158,3 @@ EventTitleMorph >> printArgOn: aStream [
 	aStream nextPut: $".
 
 ]
-
-{ #category : #'event handling' }
-EventTitleMorph >> wantsKeyboardFocusFor: aSubmorph [
-	"Don't allow shift-click editing of block labels."
-
-	^ false
-
-]

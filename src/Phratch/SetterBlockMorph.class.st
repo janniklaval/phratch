@@ -191,16 +191,6 @@ SetterBlockMorph >> initialize [
 
 ]
 
-{ #category : #private }
-SetterBlockMorph >> labelMorphFor: aString [
-
-	| s |
-	s := aString.
-	^ (StringMorph contents: s font: (PhratchFrameMorph getFont: #Label))
-		color: self labelColor
-
-]
-
 { #category : #accessing }
 SetterBlockMorph >> receiver: anObject [
 	"Set my receiver object and, if possible, my block color."

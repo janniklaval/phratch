@@ -363,11 +363,3 @@ ChoiceArgMorph >> storeFieldsOn: anObjStream [
 	) on: anObjStream.
 
 ]
-
-{ #category : #'event handling' }
-ChoiceArgMorph >> wantsKeyboardFocusFor: aSubmorph [
-	"Don't allow shift-click editing of block labels."
-
-	^ false
-
-]

@@ -88,12 +88,6 @@ PhratchScriptsMorph >> fieldsVersion [
 
 ]
 
-{ #category : #'event handling' }
-PhratchScriptsMorph >> handlesMouseDown: evt [
-	
-	^ true
-]
-
 { #category : #initialization }
 PhratchScriptsMorph >> initialize [
 
@@ -102,11 +96,6 @@ PhratchScriptsMorph >> initialize [
 	borderWidth := 0.
 	self enableDragNDrop: true.
 
-]
-
-{ #category : #'parts bin' }
-PhratchScriptsMorph >> isPartsBin [
-	^ false
 ]
 
 { #category : #screenshot }
