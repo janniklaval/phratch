@@ -120,7 +120,7 @@ ConfigurationOfPhratch >> baseline10: spec [
 			spec project: 'Sound' with: [
 				spec
 					repository: 'http://smalltalkhub.com/mc/PharoExtras/Sound/main'; 
-					versionString:'5.4';
+					versionString:'5.2';
 					className: 'ConfigurationOfPharoSound'].
 			spec project: 'OSProcess' with: [
 				spec
