@@ -585,7 +585,6 @@ PhratchStageMorph >> initialize [
 	objName := 'Stage' localized.
 	costume := self defaultImageMedia.
 	media := OrderedCollection with: costume with: SoundMedia new.
-	zoom := 1.0.
 	hPan := 0.
 	vPan := 0.
 	runningBlocks := OrderedCollection new.
@@ -817,7 +816,6 @@ PhratchStageMorph >> openMIDI [
 PhratchStageMorph >> passiveLookLike: costumeName [
 	"Change to the costume with the given name. Noop if there is no costume of the given name in my library."
 
-	zoom := 100.
 	hPan := 0.
 	vPan := 0.
 	super lookLike: costumeName.

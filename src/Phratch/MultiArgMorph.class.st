@@ -229,7 +229,6 @@ MultiArgMorph >> initialize [
 	text := ''.
 	type := #any.
 	minArgCount := 0.
-	defaultArgCount := 1.
 	self buildControls.
 
 ]

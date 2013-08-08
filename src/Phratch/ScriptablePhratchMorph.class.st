@@ -4891,7 +4891,6 @@ ScriptablePhratchMorph >> initialize [
 	vars := Dictionary new.
 	lists := Dictionary new.
 	colors:= Dictionary new.
-	createdBlocks := Dictionary new.
 	blocksBin := PhratchScriptsMorph new.
 	isClone := false.
 	costume := self defaultImageMedia.

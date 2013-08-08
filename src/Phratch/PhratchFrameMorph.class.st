@@ -1963,7 +1963,6 @@ PhratchFrameMorph >> initialize [
 	blockEditors := Set new.
 	author := ''.
 	loginName := ''.
-	loginPassword := ''.
 	viewMode := #normal.
 
 	self createBasicPanes.
@@ -3357,7 +3356,6 @@ PhratchFrameMorph >> startup [
 	shuffledCostumeNames := nil.
 	author := ''.
 	loginName := ''.
-	loginPassword := ''.
 	justSaved := true.
 	presentationMode := false.
 	quitFlag := false.

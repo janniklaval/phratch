@@ -22,7 +22,8 @@ Class {
 		'outgoingMessages',
 		'outBuf',
 		'outIndex',
-		'isHttp'
+		'isHttp',
+		'lastActivityTime'
 	],
 	#category : #'Phratch-Networking'
 }

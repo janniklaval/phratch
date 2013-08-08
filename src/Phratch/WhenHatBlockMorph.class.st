@@ -92,7 +92,6 @@ WhenHatBlockMorph >> initialize [
 	| s1 s2 |
 	super initialize.
 	argMorph := BooleanArgMorph new.
-	lastState := false.
 
 	s1 := 'when' localized.
 	s2 := 'is true' localized.

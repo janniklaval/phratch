@@ -382,7 +382,6 @@ BlockMorph >> computeHighlightColors [
 { #category : #byob }
 BlockMorph >> contrastColor [
 	| ob |
-	isContrasted := false.
 	originalColor ifNotNil: [ color := originalColor ].
 	Contrast = #off
 		ifTrue: [ 
@@ -412,7 +411,6 @@ BlockMorph >> contrastColor [
 				ifTrue: [ ^ color := color lighter ].
 			#strong = Contrast
 				ifTrue: [ 
-					isContrasted := true.
 					color := color twiceLighter	" lighter slightlyLighter " ] ].
 	submorphs
 		do: [ :m | 
@@ -1007,7 +1005,6 @@ BlockMorph >> initialize [
 	phratchProc := nil.
 	hadError := false.
 	lastLayoutTime := 0.
-	isContrasted := false.
 	self formerPosition: 0@0
 
 ]
@@ -1059,7 +1056,6 @@ BlockMorph >> isCShape [
 
 { #category : #byob }
 BlockMorph >> isContrasted: bool [
-	isContrasted := bool
 ]
 
 { #category : #byob }
