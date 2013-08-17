@@ -766,7 +766,7 @@ ScriptablePhratchMorph >> addGlobalVariable [
 	varName size = 0 ifTrue: [^ self].
 	varName := varName.
 	(sFrame workPane variableNameInUse: varName) ifTrue: [
-		self beep.
+		Beeper beep.
 		DialogBoxMorph warn: 'That variable name is already in use'.
 		^ self].
 
@@ -3853,10 +3853,10 @@ ScriptablePhratchMorph >> editDrawingOldCostumeName: oldCostumeName deleteOnCanc
 	"Edit my original form with the paint editor."
 
 	| sFrame paintEditor |
-	costume isMovie ifTrue: [^ self beep].
+	costume isMovie ifTrue: [^ Beeper beep].
 	(sFrame := self ownerThatIsA: PhratchFrameMorph) ifNil: [(sFrame := (self ownerThatIsA: OffscreenWorldMorph) frame) ifNil: [^ self]].
 
-	sFrame paintingInProgress ifTrue: [^ self beep].
+	sFrame paintingInProgress ifTrue: [^ Beeper beep].
 	"sFrame stopAll."
 	sFrame paintingInProgress: true.
 
@@ -5145,8 +5145,9 @@ ScriptablePhratchMorph >> isFibonacci: t1 [
             fib1 := oldfib2.
             oldfib3 := fib3.
             oldfib2 := fib2].
-    t1 = fib3 ifTrue: [^ true].
-    t1 = fib3 ifFalse: [^ false]
+    t1 = fib3 ifTrue: [^ true]
+		 ifFalse: [^ false]
+
 ]
 
 { #category : #'BYOB attributes' }

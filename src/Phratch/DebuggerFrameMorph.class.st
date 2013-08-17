@@ -371,8 +371,8 @@ DebuggerFrameMorph >> varMenu [
 			env = vars
 				ifFalse: [ env vars keys asSortedCollection do: [ :vname | menu add: vname toolTip: (env vars at: vname) action: nil ] ] ].
 	menu build.
-	mh := menu menuForm height.
-	mw := menu menuForm width.
+	mh := menu  height.
+	mw := menu  width.
 	menu popUpAt: (varButton left + ((varButton width - mw) // 2)) @ (varButton top - mh) inWorld: World
 ]
 

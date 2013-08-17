@@ -1278,12 +1278,12 @@ PhratchProcess >> pause [
 PhratchProcess >> popStackFrame [
 	"Pops the current stack frame off the top of the stack, so that the next one becomes the current frame."
 
-	| command frame unlightFrame |
+	|  |
 
-	frame := stackFrame.
-	stackFrame := stackFrame parentFrame.
+	"frame := stackFrame."
+	"stackFrame := stackFrame parentFrame."
 
-	command := frame expression.
+"	command := frame expression."
 
 	"this effectively disables Scratch's so called single stepping mechanism
 	for BYOB, a sacrifice that let's us catch up with Scratch speed again,

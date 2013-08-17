@@ -395,7 +395,7 @@ PhratchTranslator class >> parseCommandSpec: aCommandSpec [
 					ifTrue: [k := j + 1.
 						((spec at: k) isLetter)
 							ifTrue: [[(k+1 <= len) and: [(spec at: k+1) ~= $$]] whileTrue:[
-								k _ k + 1].
+								k := k + 1].
 								(k >= len)
 									ifTrue: [result addLast: (spec copyFrom: j to: len).
 										i := len + 1]

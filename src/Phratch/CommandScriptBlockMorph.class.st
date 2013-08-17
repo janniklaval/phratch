@@ -446,9 +446,9 @@ CommandScriptBlockMorph >> initialize [
 CommandScriptBlockMorph >> isBooleanFunction [
 
 	| reporter |
-	reporter := self allMorphs detect: [:m|
+	reporter := self allMorphs anySatisfy: [:m|
 		(m isKindOf: CommandBlockMorph) and: [
-			m selector = #doAnswer ]] ifNone: [^false].
+			m selector = #doAnswer ]].
 	^ (reporter argMorphs first isKindOf: ReporterBlockMorph) and: [
 			reporter argMorphs first isBooleanReporter]
 

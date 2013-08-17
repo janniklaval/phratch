@@ -472,7 +472,7 @@ MessageElementMorph >> keywordsAndArgs [
 	(selector = ':=') ifTrue: [kw := #('_')].
 	ws := WriteStream on: String new.
 	1 to: kw size do: [:i|
-		ws nextPutString: (kw at: i).
+		ws nextPutAll: (kw at: i).
 		(arguments size < i) ifFalse: [
 			ws nextPutString: ' ', (arguments at: i) asSmalltalk, ' ' ]].
 	^ws contents

@@ -708,7 +708,7 @@ BlockMorph >> fastCopyRecordingIn: dict [
 			(parts collect: [:m |
 				(m copyRecordingIn: dict) privateOwner: new])].
 
-	self properties ifNotNil: [new privateProperties: self properties copyAll].
+	self otherProperties ifNotNil: [new setProperties: self otherProperties copy].
 	^ new
 
 ]

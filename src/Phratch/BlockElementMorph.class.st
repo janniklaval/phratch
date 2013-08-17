@@ -48,9 +48,9 @@ BlockElementMorph >> asSmalltalk [
 	(vn := self variableNames) isEmpty ifFalse: [
 		vn do: [:n|
 			ws nextPut: $:.
-			ws nextPutString: n, ' ' ].
-		ws nextPutString: '| '].
-	ws nextPutString: steps asSmalltalk, ']'.
+			ws nextPutAll: n, ' ' ].
+		ws nextPutAll: '| '].
+	ws nextPutAll: steps asSmalltalk, ']'.
 	^ws contents
 ]
 

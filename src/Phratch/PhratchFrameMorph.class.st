@@ -3594,11 +3594,11 @@ PhratchFrameMorph >> undoTool [
 
 	| m newOwner oldName |
 	self paintingInProgress ifTrue: [^ Beeper beep].
-	Clipboard ifNil: [^ self beep].
+	Clipboard ifNil: [^ Beeper beep].
 	self activeHand toolType: nil.
 	m := Clipboard copy.
 	((m isKindOf: BlockMorph) and: [m isCustomBlock and: [m definition isNil]])
-		ifTrue: [^ self beep].
+		ifTrue: [^ Beeper beep].
 	"Reset clipboard to empty since an undo just happened"
 	
 	(m isKindOf: BlockMorph) ifTrue: [

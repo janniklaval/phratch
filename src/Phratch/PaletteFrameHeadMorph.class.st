@@ -149,7 +149,7 @@ PaletteFrameHeadMorph >> chooseClassForMethods [
 					catMenu := self menuForCategory: cat.
 					pkgMenu add: (SyntaxElementMorph wordsFrom: cat asString) subMenu: catMenu ].
 			menu add: eachPkg subMenu: pkgMenu ].
-	menu popUpNearHand
+	menu popUpInWorld 
 ]
 
 { #category : #'as yet unclassified' }
@@ -160,7 +160,7 @@ PaletteFrameHeadMorph >> classMenu [
 	menu defaultTarget: self.
 	menu add: 'in package' translated action: #currentPackageClasses.
 	menu add: 'all' translated action: #allClasses.
-	menu popUpNearHand
+	menu popUpInWorld 
 ]
 
 { #category : #'as yet unclassified' }
@@ -288,7 +288,7 @@ PaletteFrameHeadMorph >> varMenu [
 		ifFalse: [ menu add: 'instance' translated action: #instanceVars ].
 	menu add: 'class' translated action: #classVars.
 	menu add: 'globals' translated action: #globalVars.
-	menu popUpNearHand
+	menu popUpInWorld
 ]
 
 { #category : #accessing }

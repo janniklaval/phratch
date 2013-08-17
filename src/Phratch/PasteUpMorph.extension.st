@@ -1,6 +1,11 @@
 Extension { #name : #PasteUpMorph }
 
 { #category : #'*Phratch-Extensions' }
+PasteUpMorph >> abandonAllHalos [
+	self haloMorphs do: [:m | m delete]
+]
+
+{ #category : #'*Phratch-Extensions' }
 PasteUpMorph >> cycleWhileWaitingMSecs: waitMSecs doInput: doInputFlag doSteps: doStepFlag [
 	"Perform the interactive loop repeatedly for the given number of milliseconds."
 
@@ -16,6 +21,15 @@ PasteUpMorph >> cycleWhileWaitingMSecs: waitMSecs doInput: doInputFlag doSteps: 
 
 		doStepFlag ifTrue: [self runStepMethods].
 		self displayWorldSafely].
+]
+
+{ #category : #'*Phratch-Extensions' }
+PasteUpMorph >> doOneCycleNoInput [
+	"Do one cycle of the display and step loop without user input."
+
+	self runStepMethods.
+	self displayWorldSafely.
+
 ]
 
 { #category : #'*Phratch-Extensions' }

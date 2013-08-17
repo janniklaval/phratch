@@ -15,7 +15,7 @@ MessageHeaderElementMorph >> asSmalltalk [
 	kw := selector keywords.
 	ws := WriteStream on: String new.
 	1 to: kw size do: [:i|
-		ws nextPutString: (kw at: i).
+		ws nextPutAll: (kw at: i).
 		(variables size < i) ifFalse: [
 			ws nextPutString: ' ', (variables at: i) asSmalltalk, ' ' ]].
 	^ws contents

@@ -214,7 +214,7 @@ ElementsPaletteFrameMorph >> instanceVarMenu [
 ElementsPaletteFrameMorph >> invokeContextMenu [
 	|m |
 	m := self contextMenu.
-	m ifNotNil: [m popUpNearHand]
+	m ifNotNil: [m popUpInWorld]
 ]
 
 { #category : #menu }

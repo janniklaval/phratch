@@ -39,6 +39,24 @@ Morph >> centering: aSymbol [
 ]
 
 { #category : #'*Phratch-Extensions' }
+Morph >> copyRecordingIn: dict [
+	"Recursively copy this entire composite morph, recording the correspondence between old and new morphs in the given dictionary. This dictionary will be used to update intra-composite references in the copy. See updateReferencesUsing:.
+	Note: This default implementation copies ONLY morphs in the submorph hierarchy. If a subclass stores morphs in instance variables that it wants to copy, then it should override this method to do so. The same goes for subclasses that contain other data that should be copied when the morph is duplicated."
+
+	| new |
+	new := self copy.
+	dict at: self put: new.
+	submorphs size > 0 ifTrue: [
+		new privateSubmorphs:
+			(submorphs collect: [:m |
+				(m copyRecordingIn: dict) privateOwner: new])].
+
+	self otherProperties ifNotNil: [new setProperties: self otherProperties copyAll].
+	^ new
+
+]
+
+{ #category : #'*Phratch-Extensions' }
 Morph >> fieldsVersion [
 
 	^ 1
@@ -222,4 +240,31 @@ Morph >> storeFieldsOn: anObjStream [
 				ifFalse: [ flags bitAnd: maskInteger bitInvert ] ].
 	anObjStream putField: flags.
 	anObjStream putField: nil	"placeholder for properties"
+]
+
+{ #category : #'*Phratch-Extensions' }
+Morph >> updateReferencesUsing: aDictionary [
+	"Update intra-morph references within a composite morph that has
+been copied. For example, if a button refers to morph X in the orginal
+composite then the copy of that button in the new composite should refer to
+the copy of X in new composite, not the original X. This default
+implementation updates the contents of any morph-bearing slot. It may be
+overridden to avoid this behavior if so desired."
+
+	| old prop |
+	Morph instSize + 1 to: self class instSize do: [:i |
+		old := self instVarAt: i.
+		old isMorph ifTrue:
+			[self instVarAt: i put: (aDictionary at: old ifAbsent: [old])]].
+
+	"map morph values in my properties list"
+	prop := self otherProperties.
+	
+	prop notNil ifTrue: [ 
+		prop do:[:e |
+			old := e value.
+			old isMorph ifTrue: [
+				prop value: (aDictionary at: old ifAbsent: [old])].
+		]
+	].
 ]
