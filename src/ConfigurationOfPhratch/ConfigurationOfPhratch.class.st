@@ -118,22 +118,21 @@ ConfigurationOfPhratch >> baseline10: spec [
 			spec repository: 'http://smalltalkhub.com/mc/JLaval/Phratch/main'.
 			
 			spec project: 'Sound' with: [
-				spec
-					repository: 'http://smalltalkhub.com/mc/PharoExtras/Sound/main'; 
-					versionString: #stable;
-					className: 'ConfigurationOfPharoSound'].
+				spec 
+					className: 'ConfigurationOfPharoSound';
+					file: 'ConfigurationOfPharoSound' ;
+					version: #stable;
+					repository: 'http://smalltalkhub.com/mc/PharoExtras/Sound/main'.
+			].
 			spec project: 'OSProcess' with: [
 				spec
 					repository: 'http://www.squeaksource.com/MetacelloRepository'; 
 					className: 'ConfigurationOfOSProcess';
-					versionString: #stable ].
+					version: #stable ].
 			spec package: 'Phratch' with: [ 
-				spec requires: 'Sound'.
-				spec requires: 'OSProcess'
+				spec requires: #('Sound' 'OSProcess')
 			].
 	].
-
-
 ]
 
 { #category : #'as yet unclassified' }
@@ -160,7 +159,8 @@ ConfigurationOfPhratch >> version10: spec [
 	spec for: #common do: [
 			spec repository: 'http://smalltalkhub.com/mc/JLaval/Phratch/main'.
 			spec
-				package: 'Phratch';
+				package: 'Phratch'.
+			spec
 				project: 'Sound' with: #stable;
 				project: 'OSProcess' with: #stable.
 	]
