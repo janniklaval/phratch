@@ -368,7 +368,7 @@ PhratchSpriteMorph >> choosePrototype [
 	self prototype: choice
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'pen ops' }
 PhratchSpriteMorph >> clearPenTrails [
 	"Clear the pen trails layer."
 	<phratchItem: 'clear pen trails' kind: #- category: 'pen' defaultValues: #() subCategory: #a5>

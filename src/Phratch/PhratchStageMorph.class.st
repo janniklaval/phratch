@@ -48,7 +48,7 @@ PhratchStageMorph >> addBackgroundTyped: aString [
 	self addCostumeTyped: aString.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'-- all --' }
 PhratchStageMorph >> adjustedCursorPoint [
 	"Answer the current mouse cursorPoint adjusted for the scaling presentation and q-mode."
 
@@ -186,7 +186,7 @@ PhratchStageMorph >> clearAllVariables [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'pen support' }
 PhratchStageMorph >> clearPenTrails [
 	"Remove my pen trails Form. It will be recreated later if it is needed."
 	<phratchItem: 'clear pen trails' kind: #- category: 'pen' defaultValues: #() subCategory: #a5>
