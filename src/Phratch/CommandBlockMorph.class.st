@@ -1584,22 +1584,16 @@ CommandBlockMorph >> uncoloredArgMorphFor: specString [
 	"$r"'OSReporter' = code ifTrue: [ ^ OSlotMorph new receiver: receiver; type: #reporterslot; yourself "SpecialArgMorph new type: #reporter"].
 	"$R"'MAReporter' = code ifTrue: [ ^ MultiArgMorph type: #reporter].
 	"$p"'OSBoolean' = code ifTrue: [ ^ OSlotMorph new receiver: receiver; type: #booleanslot; yourself "SpecialArgMorph new type: #predicate"].
-	"$P"'MAPredicate' = code ifTrue: [ ^ MultiArgMorph type: #predicate;
-		yourself].
+	"$P"'MAPredicate' = code ifTrue: [ ^ MultiArgMorph type: #predicate].
 	"$t"'SAList' = code ifTrue: [ ^ SpecialArgMorph new type: #list;
 		yourself].
-	"$u"'MAList' = code ifTrue: [ ^ MultiArgMorph type: #list;
-		yourself].
+	"$u"'MAList' = code ifTrue: [ ^ MultiArgMorph type: #list].
 	"$T"'Text' = code ifTrue: [ ^ ExpressionArgMorph new stringExpression: ''; isText: true;
 		yourself.  "SpecialArgMorph new type: #text"].
-	"$U"'MAText' = code ifTrue: [ ^ MultiArgMorph type: #text;
-		yourself].
-	"$V"'MABoolean' = code ifTrue: [ ^ MultiArgMorph type: #boolean;
-		yourself].
-	"$w"'MANumber' = code ifTrue: [ ^ MultiArgMorph type: #number;
-		yourself].
-	"$X"'MAAny' = code ifTrue: [ ^ MultiArgMorph type: #any;
-		yourself].
+	"$U"'MAText' = code ifTrue: [ ^ MultiArgMorph type: #text].
+	"$V"'MABoolean' = code ifTrue: [ ^ MultiArgMorph type: #boolean].
+	"$w"'MANumber' = code ifTrue: [ ^ MultiArgMorph type: #number].
+	"$X"'MAAny' = code ifTrue: [ ^ MultiArgMorph type: #any].
 	"$z"'SpecialVar' = code ifTrue: [ ^ VariableBlockMorph new 
 							isSpecialForm: true; 
 							selector: #getVar:;
