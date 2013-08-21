@@ -282,7 +282,7 @@ PhratchStageMorph >> deleteAllClones [
 ]
 
 { #category : #'as yet unclassified' }
-PhratchStageMorph >> deleteCostAt: aNumber [
+PhratchStageMorph >> deleteBackgroundAt: aNumber [
 	<phratchItem: 'delete background $Number$' kind: #- category: 'looks' defaultValues: #(1) subCategory: #a2>
 	self deleteCostumeAt: aNumber.
 ]

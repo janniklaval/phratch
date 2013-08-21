@@ -3249,12 +3249,6 @@ ScriptablePhratchMorph >> deleteColorFull: colorName [
 	frame viewerPane categoryChanged: 'colors'.
 ]
 
-{ #category : #'as yet unclassified' }
-ScriptablePhratchMorph >> deleteCostAt: aNumber [
-
-	self subclassResponsibility 
-]
-
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> deleteCostumeAt: index [
 	"Delete the costume at the given index."

@@ -50,6 +50,11 @@ PhratchFileTests >> setUp [
 	window := PhratchFrameMorph open
 ]
 
+{ #category : #useful }
+PhratchFileTests >> stage [
+	^ window workPane.
+]
+
 { #category : #running }
 PhratchFileTests >> tearDown [
 	"Close any open Phratch windows"
@@ -131,6 +136,106 @@ PhratchFileTests >> testSaveAgain [
 ]
 
 { #category : #tests }
+PhratchFileTests >> testSaveAllBlocks [
+	"Create a few blocks and check they can be saved and loaded.
+	To create blocks we use sprite blockFromSpec: passing in a array of symbols from the blockSpec class method."
+
+	| fileName allPragmasStage commandBlocksStage allPragmasSprite commandBlocksSprite blocksSprite blocksStage |
+	fileName := '_testSaveAllBlocks.ypr'.
+	
+	allPragmasStage := Pragma allNamed: #phratchItem:kind:category:defaultValues:subCategory: from: self stage class to:  ScriptablePhratchMorph  sortedByArgument: 5.
+	commandBlocksStage := OrderedCollection new.
+	allPragmasStage do:[:aP |
+		|prov|
+		prov := { aP arguments at: 1 . aP arguments at: 2 . aP method selector},  (aP arguments at: 4).
+		commandBlocksStage add: (self addBlock: prov toSprite: self stage).
+	].
+	self assert: commandBlocksStage size > 0.
+
+	allPragmasSprite := Pragma allNamed: #phratchItem:kind:category:defaultValues:subCategory: from: self firstSprite class to:  ScriptablePhratchMorph  sortedByArgument: 5.
+	commandBlocksSprite := OrderedCollection new.
+	allPragmasSprite do:[:aP |
+		|prov|
+		prov := { aP arguments at: 1 . aP arguments at: 2 . aP method selector}.
+		(aP arguments at: 4) ifNotEmpty: [prov := prov,  (aP arguments at: 4)].
+		commandBlocksSprite add: (self addBlock: prov toSprite: self firstSprite).
+	].
+	self assert: commandBlocksSprite size > 0.
+	
+	self saveProject: fileName.
+	window newPhratchProject.
+	self openProject: fileName.
+	
+	"Use codeString to compare blocks, to check that they are equivalent"
+	blocksSprite := self firstSprite blocksBin submorphs.
+	self assert: commandBlocksSprite size = blocksSprite size.
+	blocksSprite paddedWith: commandBlocksSprite do: [:a :b | self assert:(a codeString = b codeString) ].
+	
+	blocksStage := self stage blocksBin submorphs.
+	self assert: commandBlocksStage size = blocksStage size.
+	blocksStage paddedWith: commandBlocksStage do: [:a :b | self assert:( a codeString = b codeString) ].
+
+]
+
+{ #category : #tests }
+PhratchFileTests >> testSaveAllBlocksSprite [
+	"Create a few blocks and check they can be saved and loaded.
+	To create blocks we use sprite blockFromSpec: passing in a array of symbols from the blockSpec class method."
+
+	| fileName allPragmasSprite commandBlocksSprite blocksSprite |
+	fileName := '_testSaveAllBlocksSprite.ypr'.
+
+
+	allPragmasSprite := Pragma allNamed: #phratchItem:kind:category:defaultValues:subCategory: from: self firstSprite class to:  ScriptablePhratchMorph  sortedByArgument: 5.
+	commandBlocksSprite := OrderedCollection new.
+	allPragmasSprite do:[:aP |
+		|prov|
+		prov := { aP arguments at: 1 . aP arguments at: 2 . aP method selector}.
+		(aP arguments at: 4) ifNotEmpty: [prov := prov,  (aP arguments at: 4)].
+		commandBlocksSprite add: (self addBlock: prov toSprite: self firstSprite).
+	].
+	self assert: commandBlocksSprite size > 0.
+	
+	self saveProject: fileName.
+	window newPhratchProject.
+	self openProject: fileName.
+	"Use codeString to compare blocks, to check that they are equivalent"
+	blocksSprite := self firstSprite blocksBin submorphs.
+	self assert: commandBlocksSprite size = blocksSprite size.
+	blocksSprite paddedWith: commandBlocksSprite do: [:a :b | self assert:(a codeString = b codeString) ].
+	
+]
+
+{ #category : #tests }
+PhratchFileTests >> testSaveAllBlocksStage [
+	"Create a few blocks and check they can be saved and loaded.
+	To create blocks we use sprite blockFromSpec: passing in a array of symbols from the blockSpec class method."
+
+	| fileName allPragmasStage commandBlocksStage blocksStage |
+	fileName := '_testSaveAllBlocks.ypr'.
+	
+	allPragmasStage := Pragma allNamed: #phratchItem:kind:category:defaultValues:subCategory: from: self stage class to:  ScriptablePhratchMorph  sortedByArgument: 5.
+	commandBlocksStage := OrderedCollection new.
+	allPragmasStage do:[:aP |
+		|prov|
+		prov := { aP arguments at: 1 . aP arguments at: 2 . aP method selector},  (aP arguments at: 4).
+		commandBlocksStage add: (self addBlock: prov toSprite: self stage).
+	].
+	self assert: commandBlocksStage size > 0.
+	
+	self saveProject: fileName.
+	window newPhratchProject.
+	self openProject: fileName.
+	
+	"Use codeString to compare blocks, to check that they are equivalent"
+	
+	blocksStage := self stage blocksBin submorphs.
+	self assert: commandBlocksStage size = blocksStage size.
+	blocksStage paddedWith: commandBlocksStage do: [:a :b | self assert:( a codeString = b codeString) ].
+
+]
+
+{ #category : #tests }
 PhratchFileTests >> testSaveBlocks [
 	"Create a few blocks and check they can be saved and loaded.
 	To create blocks we use sprite blockFromSpec: passing in a array of symbols from the blockSpec class method."
@@ -149,6 +254,51 @@ PhratchFileTests >> testSaveBlocks [
 	self assert: blocks first codeString = commandBlock1 codeString.
 	self assert: blocks second codeString = commandBlock2 codeString.
 	
+]
+
+{ #category : #tests }
+PhratchFileTests >> testSaveTenBlocks [
+	"Create a few blocks and check they can be saved and loaded.
+	To create blocks we use sprite blockFromSpec: passing in a array of symbols from the blockSpec class method."
+
+	| fileName allPragmasStage commandBlocksStage commandBlocksSprite allPragmasSprite blocksSprite blocksStage |
+	fileName := '_testSaveTenBlocks.ypr'.
+	
+	allPragmasStage := Pragma allNamed: #phratchItem:kind:category:defaultValues:subCategory: from: self stage class to:  ScriptablePhratchMorph  sortedByArgument: 5.
+	commandBlocksStage := OrderedCollection new.
+	allPragmasStage from:1 to:5 do:[:aP |
+		|prov|
+		prov := { aP arguments at: 1 . aP arguments at: 2 . aP method selector}.
+		(aP arguments at: 4) ifNotEmpty: [prov := prov,  (aP arguments at: 4)].
+		commandBlocksStage add: (self addBlock: prov toSprite: self stage).
+	].
+	self assert: commandBlocksStage size > 0.
+
+	allPragmasSprite := Pragma allNamed: #phratchItem:kind:category:defaultValues:subCategory: from: self firstSprite class to:  ScriptablePhratchMorph  sortedByArgument: 5.
+	commandBlocksSprite := OrderedCollection new.
+	allPragmasSprite from:1 to:5  do:[:aP |
+		|prov|
+		prov := { aP arguments at: 1 . aP arguments at: 2 . aP method selector}.
+		(aP arguments at: 4) ifNotEmpty: [prov := prov,  (aP arguments at: 4)].
+		commandBlocksSprite add: (self addBlock: prov toSprite: self firstSprite).
+	].
+	self assert: commandBlocksSprite size > 0.
+	
+	self saveProject: fileName.
+	window newPhratchProject.
+	self openProject: fileName.
+	
+	"Use codeString to compare blocks, to check that they are equivalent"
+	blocksSprite := self firstSprite blocksBin submorphs.
+	self assert: commandBlocksSprite size = blocksSprite size.
+	
+	blocksSprite paddedWith: commandBlocksSprite do: [:a :b | self assert:(a codeString = b codeString) ].
+	
+	blocksStage := self stage blocksBin submorphs.
+	self assert: commandBlocksStage size = blocksStage size.
+	
+	blocksStage paddedWith: commandBlocksSprite do: [:a :b | self assert:( a codeString = b codeString) ].
+
 ]
 
 { #category : #tests }

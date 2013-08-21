@@ -204,7 +204,7 @@ CSlotMorph >> evaluate [
 
 	implicitValue notNil
 		ifTrue: [^implicitValue].
-	^ super evaluate
+	^nil "super evaluate"
 ]
 
 { #category : #'argument slot behavior' }
@@ -283,6 +283,20 @@ CSlotMorph >> isKindOf: aClass [
 { #category : #'argument slot behavior' }
 CSlotMorph >> isLambdaForm [
 	^ false
+]
+
+{ #category : #'as yet unclassified' }
+CSlotMorph >> printArgOn: aStream [
+	"Print this argument morph on the given stream."
+
+	| v |
+
+	v := self evaluate.
+	(v isKindOf: String)
+		ifTrue: [aStream nextPutAll: '"', v, '"']
+		ifFalse: [aStream nextPutAll: v asString].
+
+
 ]
 
 { #category : #drawing }

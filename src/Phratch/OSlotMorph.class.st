@@ -89,7 +89,7 @@ OSlotMorph >> evaluate [
 
 	implicitValue notNil
 		ifTrue: [^implicitValue].
-	^ super evaluate
+	^ "super evaluate" nil
 ]
 
 { #category : #'argument slot behavior' }
@@ -143,6 +143,19 @@ OSlotMorph >> isKindOf: aClass [
 { #category : #'argument slot behavior' }
 OSlotMorph >> isLambdaForm [
 	^ false
+]
+
+{ #category : #'as yet unclassified' }
+OSlotMorph >> printArgOn: aStream [
+	"Print this argument morph on the given stream."
+
+	| v |
+	v := self evaluate.
+	(v isKindOf: String)
+		ifTrue: [aStream nextPutAll: '"', v, '"']
+		ifFalse: [aStream nextPutAll: v asString].
+
+
 ]
 
 { #category : #accessing }
