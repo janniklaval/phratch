@@ -303,6 +303,33 @@ PhratchFileTests >> testSaveTenBlocks [
 ]
 
 { #category : #tests }
+PhratchFileTests >> testSaveWithBroadcast [
+	"Test that saving scripts with variables works. 
+	Currently this fails as variables are loaded back with name replaced by int."
+
+	| sprite fileName commandBlock1 commandBlock2 blocks |
+	fileName := '_testSaveScriptWithBroadcast.ypr'.
+	sprite := self firstSprite.
+	self assert: sprite objName = 'Sprite1'.
+	
+	
+	commandBlock1 := self addBlock: #('broadcast $Event$' - broadcast: 'aBroadcast') toSprite: self firstSprite.
+	commandBlock1 defaultArgs: #('aBroadcast').
+	commandBlock2 := self addBlock: #('when I receive $Event$' #E whenEventReceived) toSprite: self firstSprite.
+	commandBlock2 eventName: 'aBroadcast'.
+
+	self saveProject: fileName.
+	window newPhratchProject.
+	self openProject: fileName.
+	
+	"Use codeString to compare blocks, to check that they are equivalent"
+	blocks := self firstSprite blocksBin submorphs.
+	self assert: blocks first codeString = commandBlock1 codeString.
+	self assert: blocks second codeString = commandBlock2 codeString.
+
+]
+
+{ #category : #tests }
 PhratchFileTests >> testSaveWithList [
 	"Test that saving scripts with variables works. 
 	Currently this fails as variables are loaded back with name replaced by int."
