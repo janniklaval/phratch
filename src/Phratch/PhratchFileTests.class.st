@@ -31,7 +31,8 @@ PhratchFileTests >> addBlock: blockSpec toSprite: aSprite [
 
 { #category : #useful }
 PhratchFileTests >> firstSprite [
-	^ window workPane submorphs first.
+	^ window workPane submorphs detect:[:e |
+		e  isKindOf: PhratchSpriteMorph].
 ]
 
 { #category : #useful }
@@ -302,6 +303,34 @@ PhratchFileTests >> testSaveTenBlocks [
 ]
 
 { #category : #tests }
+PhratchFileTests >> testSaveWithList [
+	"Test that saving scripts with variables works. 
+	Currently this fails as variables are loaded back with name replaced by int."
+
+	| sprite fileName |
+	fileName := '_testSaveScriptWithVariable.ypr'.
+	sprite := self firstSprite.
+	self assert: sprite objName = 'Sprite1'.
+	
+	sprite createListNamed: 'aList'.
+	self assert: (sprite lists includesKey: 'aList').
+	
+	sprite append: '42' toList: 'aList'.
+	self assert: (sprite getLine: 1 ofList:  'aList') = '42'.
+	
+	self saveProject: fileName.
+	window newPhratchProject.
+	sprite := self firstSprite.
+	self assert: (sprite lists includesKey: 'aList') not.
+	
+	self openProject: fileName.
+	sprite := self firstSprite.
+	self assert: (sprite lists includesKey: 'aList'). "fails"
+	self assert: (sprite getLine: 1 ofList:  'aList') = '42'.
+	
+]
+
+{ #category : #tests }
 PhratchFileTests >> testSaveWithVariable [
 	"Test that saving scripts with variables works. 
 	Currently this fails as variables are loaded back with name replaced by int."
@@ -323,5 +352,30 @@ PhratchFileTests >> testSaveWithVariable [
 	sprite := self firstSprite.
 	self assert: (sprite varNames includes: 'name'). "fails"
 	
+	
+]
+
+{ #category : #tests }
+PhratchFileTests >> testSaveWithVariableValued [
+	"Test that saving scripts with variables works. 
+	Currently this fails as variables are loaded back with name replaced by int."
+
+	| sprite fileName |
+	fileName := '_testSaveScriptWithVariable.ypr'.
+	sprite := self firstSprite.
+	self assert: sprite objName = 'Sprite1'.
+	
+	sprite addVariable: 'aNumber' value: 42.
+	self assert: (sprite varNames includes: 'aNumber').
+	
+	self saveProject: fileName.
+	window newPhratchProject.
+	sprite := self firstSprite.
+	self assert: (sprite varNames includes: 'aNumber') not.
+	
+	self openProject: fileName.
+	sprite := self firstSprite.
+	self assert: (sprite varNames includes: 'aNumber'). "fails"
+	self assert: (sprite getVar: 'aNumber') = 42.
 	
 ]
