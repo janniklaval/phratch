@@ -52,10 +52,7 @@ ElementsEditorFrameMorph >> definition: aCustomBlockDefinition [
 	definition := aCustomBlockDefinition.
 	template := CustomCommandBlockMorph template.
 	template userSpec: definition userSpec.
-	self buildScript.
-	self buildVariables.
-	self buildAtomicityToggle.
-	self buildAnswerField.
+
 ]
 
 { #category : #geometry }

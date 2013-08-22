@@ -98,7 +98,7 @@ ElementsPaletteFrameMorph >> createClassVar [
 	varName := UIManager default request: 'variable name:' initialAnswer: ''.
 	varName isEmpty
 		ifTrue: [ ^ self ].
-	current addClassVarName: varName.
+	current addClassVarNamed: varName.
 	self refresh
 ]
 
@@ -125,7 +125,7 @@ ElementsPaletteFrameMorph >> createInstVar [
 	varName isEmpty
 		ifTrue: [ ^ self ].
 	varName := SyntaxElementMorph objectNameFrom: varName.
-	current addInstVarName: varName.
+	current addInstVarNamed: varName.
 	self refresh
 ]
 
@@ -300,7 +300,7 @@ ElementsPaletteFrameMorph >> removeClassVar [
 	| var |
 	var := self selectClassVar.
 	var ifNotNil: [
-		self currentClass removeClassVarName: var.
+		self currentClass removeClassVarNamed: var.
 		self refresh ]
 ]
 
@@ -318,7 +318,7 @@ ElementsPaletteFrameMorph >> removeInstVar [
 	| var |
 	var := self selectInstVar.
 	var ifNotNil: [
-		self currentClass removeInstVarName: var.
+		self currentClass removeInstVarNamed: var.
 		self refresh ]
 ]
 

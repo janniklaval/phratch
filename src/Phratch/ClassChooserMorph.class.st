@@ -32,7 +32,7 @@ ClassChooserMorph >> chooseClass [
 				subMenu: pkgMenu."
 		menu add: eachPkg subMenu: pkgMenu ].
 
-	menu popUpAt: button center x @ (self bottom + 5) forHand: World activeHand
+	menu popUpAt: button center x @ (self bottom + 5) forActiveHandIn: World
 ]
 
 { #category : #accessing }

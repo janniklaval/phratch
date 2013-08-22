@@ -1286,15 +1286,12 @@ PhratchFrameMorph >> editMenu: aMenuTitleMorph [
 	menu addLine.
 
 	menu add: self isTurbo checkBoxString, 'Turbo' localized
-			toolTip: 'check to squeeze more computational steps into one display cycle' localized
 			action: #toggleTurboMode.
 
 	menu add: ScriptablePhratchMorph keepOnStage not checkBoxString, 'Allow Sprites offstage' localized
-			toolTip: 'check to allow sprites to move offscreen' localized
 			action: #toggleKeepSpritesOnStage.
 
 	menu add: EventHatMorph threadSafeMode checkBoxString, 'Thread safe scripts' localized
-			toolTip: 'check to disallow script reentrancy' localized
 			action: #toggleThreadSafeMode.
 	menu addLine.
 	menu add: 'Compress Sounds' localized action: #compressSounds.
@@ -1305,7 +1302,6 @@ PhratchFrameMorph >> editMenu: aMenuTitleMorph [
 	menu addLine.
 
 	menu add: workPane showMotorBlocks checkBoxString, 'Show Motor Blocks' localized
-			toolTip: nil
 			action: #toggleShowMotorBlocks.
 
 	Sensor shiftPressed ifTrue: [	self isDevelopmentMode ifTrue: [

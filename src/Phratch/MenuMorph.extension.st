@@ -1,12 +1,6 @@
 Extension { #name : #MenuMorph }
 
 { #category : #'*Phratch' }
-MenuMorph >> add: aString toolTip: tString action: aSelector [
-
-	^ self add: aString action: aSelector
-]
-
-{ #category : #'*Phratch' }
 MenuMorph >> labels [
 
 	^ self menuItems 
@@ -16,6 +10,13 @@ MenuMorph >> labels [
 MenuMorph >> localize [
 
 	"not yet implemented"
+]
+
+{ #category : #'*Phratch' }
+MenuMorph >> popUpAt: aPosition forActiveHandIn: aWorld [
+	"Present this menu under control of the given hand."
+	^self popUpAt: aPosition forHand: aWorld activeHand in: aWorld
+
 ]
 
 { #category : #'*Phratch' }

@@ -76,5 +76,5 @@ ManifestPhratch class >> ruleSentNotImplementedRuleV1FalsePositive [
 
 { #category : #'meta data' }
 ManifestPhratch class >> ruleSentNotImplementedRuleV1TODO [
-^ #(#(#(#RGMethodDefinition #(#CustomCommandBlockMorph #rename #false)) #'2013-08-13T21:51:41.836+02:00') #(#(#RGMethodDefinition #(#CustomReporterBlockMorph #rename #false)) #'2013-08-13T21:51:41.836000001+02:00') #(#(#RGMethodDefinition #(#ClassChooserMorph #chooseClass #false)) #'2013-08-13T21:51:41.836000002+02:00') #(#(#RGMethodDefinition #(#AttributeArgMorph #presentMenu #false)) #'2013-08-13T21:51:41.836000003+02:00') )
+^ #(#(#(#RGMethodDefinition #(#CustomCommandBlockMorph #rename #false)) #'2013-08-13T21:51:41.836+02:00') #(#(#RGMethodDefinition #(#CustomReporterBlockMorph #rename #false)) #'2013-08-13T21:51:41.836000001+02:00') #(#(#RGMethodDefinition #(#ClassChooserMorph #chooseClass #false)) #'2013-08-13T21:51:41.836000002+02:00') #(#(#RGMethodDefinition #(#AttributeArgMorph #presentMenu #false)) #'2013-08-13T21:51:41.836000003+02:00') #(#(#RGMethodDefinition #(#ElementsMethodEditorMorph #selectMethod: #false)) #'2013-08-22T17:54:02.55+02:00') )
 ]
