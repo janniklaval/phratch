@@ -4173,7 +4173,7 @@ ScriptablePhratchMorph >> exportObject [
 			eachSub owner ifNil: [objToExport addMorphBack: eachSub ]].
 		ObjStream new storeObj: objToExport on: f showProgress: true.
 		f close.
-		FilePluginPrims new setMacFileNamed: (dir / fName) fullName type: 'STyp' creator: 'BYOB'.
+		FilePluginPrims new setMacFileNamed: (dir / fName) fullName type: 'STyp' creator: 'PHRATCH'.
 
 	] ifError: [
 		f ifNotNil: [f close].

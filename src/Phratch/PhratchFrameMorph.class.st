@@ -1884,7 +1884,7 @@ current project."
 
 	response := PhratchFileChooserDialog
 		chooseExistingFileType: #project
-		extensions: #(scratch sb ypr)
+		extensions: #(scratch sb ypr phr)
 		title: 'Import Project'.
 	response ifNil: [^ self].
 
@@ -2331,6 +2331,7 @@ PhratchFrameMorph >> nameFromFileName: fileName [
 	(s asLowercase endsWith: '.scratch') ifTrue: [s := s copyFrom: 1 to: s size - 8].
 	(s asLowercase endsWith: '.sb') ifTrue: [s := s copyFrom: 1 to: s size - 3].
 	(s asLowercase endsWith: '.ypr') ifTrue: [s := s copyFrom: 1 to: s size - 4].
+	(s asLowercase endsWith: '.phr') ifTrue: [s := s copyFrom: 1 to: s size - 4].
 	s := String withAll: s.
 
 	^ s
@@ -2879,7 +2880,9 @@ PhratchFrameMorph >> randomProjectName [
 	projects := dir fileNames
 				select: [:fn | (fn asLowercase endsWith: '.sb')
 						or: [(fn asLowercase endsWith: '.scratch')
-						or: [fn asLowercase endsWith: '.ypr']]].
+						or: [(fn asLowercase endsWith: '.ypr')
+						or: [fn asLowercase endsWith: '.phr']	
+				]]].
 	projects size > 0 ifTrue: [^ dir fullNameFor: (projects asArray at: Random new next * projects size + 1)].
 	^ nil
 ]
@@ -2902,7 +2905,7 @@ PhratchFrameMorph >> readSettingsFile [
 	"PhratchFrameMorph new readSettingsFile"
 
 	| f dict s tokens k |
-	f := FileStream readOnlyFileNamedOrNil: 'BYOB.ini'.
+	f := FileStream readOnlyFileNamedOrNil: 'Phratch.ini'.
 	f ifNil: [^ Dictionary new].
 	dict := Dictionary new.
 	f contentsOfEntireFile lines do: [:line |
@@ -2939,7 +2942,7 @@ PhratchFrameMorph >> recordBlockContrast: anInteger [
 	"PhratchFrameMorph new recordLanguage: 'English'"
 
 	| fName f sz settings all |
-	fName := (FileSystem workingDirectory / 'BYOB.ini') fullName.
+	fName := (FileSystem workingDirectory / 'Phratch.ini') fullName.
 	f := FileStream concreteStream new open: fName forWrite: true.
 	f ifNil: [ ^ self ].
 	sz := f size.
@@ -2965,7 +2968,7 @@ PhratchFrameMorph >> recordKeepOnStage: anInteger [
 	"Record a setting in the settings file."
 
 	| fName f sz settings all |
-	fName := (FileSystem workingDirectory / 'BYOB.ini') fullName.
+	fName := (FileSystem workingDirectory / 'Phratch.ini') fullName.
 	f := FileStream concreteStream new open: fName forWrite: true.
 	f ifNil: [ ^ self ].
 	sz := f size.
@@ -2993,7 +2996,7 @@ PhratchFrameMorph >> recordLanguage: aString [
 	"PhratchFrameMorph new recordLanguage: 'English'"
 
 	| fName f sz settings all |
-	fName := (FileSystem workingDirectory / 'BYOB.ini') fullName.
+	fName := (FileSystem workingDirectory / 'Phratch.ini') fullName.
 	f := FileStream concreteStream new open: fName forWrite: true.
 	f ifNil: [ ^ self ].
 	sz := f size.
@@ -3019,7 +3022,7 @@ PhratchFrameMorph >> recordThreadSafeMode: anInteger [
 	"Record a setting in the settings file."
 
 	| fName f sz settings all |
-	fName := (FileSystem workingDirectory / 'BYOB.ini') fullName.
+	fName := (FileSystem workingDirectory / 'Phratch.ini') fullName.
 	f := FileStream concreteStream new open: fName forWrite: true.
 	f ifNil: [ ^ self ].
 	sz := f size.
@@ -3145,7 +3148,7 @@ PhratchFrameMorph >> savePhratchProject [
 "	fName := (self nameFromFileName: fName), '.sb'."
 
 	projectDirectory := fName asFileReference parent.
-	fName := (self nameFromFileName: fName), '.ypr'.
+	fName := (self nameFromFileName: fName), '.phr'.
 	projectName :=fName asFileReference basename.
 
 	projectInfo at: 'author' put: author.
@@ -3165,7 +3168,7 @@ PhratchFrameMorph >> savePhratchProjectNoDialog [
 
 	"Do we need to ask for a filename or directory?"
 	dir := PhratchFileChooserDialog getLastFolderForType: #project.
-	(fName size = 0 | (dir asFileReference / fName , 'ypr') exists not) ifTrue: [^ self savePhratchProject].
+	(fName size = 0 | (dir asFileReference / fName , 'phr') exists not) ifTrue: [^ self savePhratchProject].
 	PhratchFileChooserDialog lastFolderIsSampleProjectsFolder ifTrue:  [^ self savePhratchProject].
 	projectDirectory := dir.
 
@@ -3405,7 +3408,7 @@ PhratchFrameMorph >> startup [
 
 	fileName := startupFileNames
 		detect: [:fn |
-			(fn asLowercase endsWith: '.sb') or: [(fn asLowercase endsWith: '.scratch') or: [fn asLowercase endsWith: '.ypr']]]
+			(fn asLowercase endsWith: '.sb') or: [(fn asLowercase endsWith: '.scratch') or: [(fn asLowercase endsWith: '.ypr') or:[fn asLowercase endsWith: '.phr']]]]
 		ifNone: [presentationMode ifTrue: [self randomProjectName]]. "this is BYOB's screensaver feature -jens"
 	fileName ifNotNil: [
 		presentationMode ifTrue: [Display fillColor: Color black].
@@ -3831,7 +3834,7 @@ PhratchFrameMorph >> updateProjectName [
 	| s |
 	projectName ifNil: [ projectName := '' ].
 	projectName := self nameFromFileName: projectName.
-	projectName := projectName , '.ypr'.
+	projectName := projectName , '.phr'.
 	projectTitleMorph contents: projectName.
 	s := projectTitleMorph contents size > 0
 		ifTrue: [ projectTitleMorph contents , '- PHR' ]
@@ -3965,7 +3968,7 @@ PhratchFrameMorph >> writeMultipleSummaries [
 	dir = #cancelled ifTrue: [^ self].
 
 	(dir) files do: [:fn |
-		(fn basename endsWith: '.scratch') | (fn basename endsWith: '.sb')  | (fn basename endsWith: '.ypr') ifTrue: [
+		(fn basename endsWith: '.scratch') | (fn basename endsWith: '.sb')  | (fn basename endsWith: '.ypr') | (fn basename endsWith: '.phr') ifTrue: [
 			self openPhratchProjectNamed: fn.
 			"World doOneCycleNoInput."
 			self writeSummaryFile: fn]].
@@ -4056,7 +4059,7 @@ PhratchFrameMorph >> writePhratchProject [
 			(projectDirectory / projectName) delete.
 			[(projectDirectory / out localName) renameTo: projectName]
 				ifError: [^ self inform: 'Save failed' withDetails: 'Is the folder read-only?' localized].
-			FilePluginPrims new setMacFileNamed: (projectDirectory / projectName) fullName type: 'STyb' creator: 'BYOB']
+			FilePluginPrims new setMacFileNamed: (projectDirectory / projectName) fullName type: 'STpb' creator: 'PHRA']
 		ifNotNil: [
 			projectName := ''.
 			self inform: 'Save failed' withDetails: saveError].

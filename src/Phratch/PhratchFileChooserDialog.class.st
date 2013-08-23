@@ -143,7 +143,7 @@ PhratchFileChooserDialog class >> confirmFileOverwriteIfExisting: aFilename [
 	| response fName |
 	fName := aFilename.
 "	(fName endsWith: '.sb') ifFalse: [fName := fName, '.sb']."
-	(fName endsWith: '.ypr') ifFalse: [fName := fName, '.ypr'].
+	(fName endsWith: '.phr') ifFalse: [fName := fName, '.phr'].
 	( aFilename asFileReference) exists ifFalse: [^ aFilename].
 
 	response := DialogBoxMorph
@@ -297,7 +297,7 @@ PhratchFileChooserDialog class >> savePhratchFileFor: aPhratchFrameMorph [
 	result = #cancelled ifTrue: [^ result].
 
 "	(result asLowercase endsWith: '.sb') ifFalse: [result := result, '.sb']."
-	(result asLowercase endsWith: '.ypr') ifFalse: [result := result, '.ypr'].
+	(result asLowercase endsWith: '.phr') ifFalse: [result := result, '.phr'].
 	^ result
 
 ]
@@ -482,7 +482,7 @@ PhratchFileChooserDialog >> createPhratchFileChooserFor: aPhratchFrameMorph savi
 	| labelFont contentsFont commentFont thumbnailHolder dumm |
 	phratchFrame := aPhratchFrameMorph.
 	readingPhratchFile := savingFlag not.
-	list := PhratchFilePicker new extensions: #(#scratch #sb #ypr).
+	list := PhratchFilePicker new extensions: #(#scratch #sb #ypr #phr).
 	self removeAllMorphs.
 	bottomSpacer delete.
 	bottomSpacer := nil.

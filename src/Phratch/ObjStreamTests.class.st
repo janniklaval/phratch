@@ -100,7 +100,7 @@ ObjStreamTests >> tallyPhratchObjectsFrom: aDirectory [
 	classIDCounts := Array new: 256 withAll: 0.
 	aDirectory fileNames
 		do: [ :fn | 
-			(fn endsWith: '.sb') | (fn endsWith: '.ypr')
+			(fn endsWith: '.sb') | (fn endsWith: '.ypr') | (fn endsWith: '.phr')
 				ifTrue: [ 
 					objTable := self phratchObjectsFrom: (aDirectory fullNameFor: fn).
 					objTable

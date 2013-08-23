@@ -372,6 +372,9 @@ PhratchFilePicker >> getFetchedServerDirectoryContents [
 		(n asLowercase endsWith: '.ypr') ifTrue: [
 			nm := n copyFrom: 1 to: n size - '.ypr' size.
 			isDir := false].
+		(n asLowercase endsWith: '.phr') ifTrue: [
+			nm := n copyFrom: 1 to: n size - '.phr' size.
+			isDir := false].
 		m := PhratchFilePickerEntry new
 			name: nm dir: currentDir isDirectory: isDir;
 			width: self width - 60;

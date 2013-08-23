@@ -68,7 +68,7 @@ PhratchFileTests >> testNewProject [
 	"Test that newPhratchProject clears out changes"
 
 	| sprite fileName |
-	fileName := '_testNewProject.ypr'.
+	fileName := '_testNewProject.phr'.
 	sprite := self firstSprite.
 	self assert: sprite objName = 'Sprite1'.	
 	
@@ -88,7 +88,7 @@ PhratchFileTests >> testSave [
 	"Test a simple save, with a sprite name change, and that reloading the saved file works."
 
 	| sprite fileName |
-	fileName := '_testSave.ypr'.
+	fileName := '_testSave.phr'.
 	sprite := self firstSprite.
 	self assert: sprite objName = 'Sprite1'.	
 	
@@ -130,7 +130,7 @@ PhratchFileTests >> testSaveAgain [
 	
 	"Now make some changes that will get overwritten when we reload the project"
 	sprite objName: 'Another Name'.
-	self openProject: projectName, '.ypr'.
+	self openProject: projectName, '.phr'.
 	
 	sprite := self firstSprite.
 	self assert: sprite objName = 'TopCat'.
@@ -142,7 +142,7 @@ PhratchFileTests >> testSaveAllBlocks [
 	To create blocks we use sprite blockFromSpec: passing in a array of symbols from the blockSpec class method."
 
 	| fileName allPragmasStage commandBlocksStage allPragmasSprite commandBlocksSprite blocksSprite blocksStage |
-	fileName := '_testSaveAllBlocks.ypr'.
+	fileName := '_testSaveAllBlocks.phr'.
 	
 	allPragmasStage := Pragma allNamed: #phratchItem:kind:category:defaultValues:subCategory: from: self stage class to:  ScriptablePhratchMorph  sortedByArgument: 5.
 	commandBlocksStage := OrderedCollection new.
@@ -184,7 +184,7 @@ PhratchFileTests >> testSaveAllBlocksSprite [
 	To create blocks we use sprite blockFromSpec: passing in a array of symbols from the blockSpec class method."
 
 	| fileName allPragmasSprite commandBlocksSprite blocksSprite |
-	fileName := '_testSaveAllBlocksSprite.ypr'.
+	fileName := '_testSaveAllBlocksSprite.phr'.
 
 
 	allPragmasSprite := Pragma allNamed: #phratchItem:kind:category:defaultValues:subCategory: from: self firstSprite class to:  ScriptablePhratchMorph  sortedByArgument: 5.
@@ -213,7 +213,7 @@ PhratchFileTests >> testSaveAllBlocksStage [
 	To create blocks we use sprite blockFromSpec: passing in a array of symbols from the blockSpec class method."
 
 	| fileName allPragmasStage commandBlocksStage blocksStage |
-	fileName := '_testSaveAllBlocks.ypr'.
+	fileName := '_testSaveAllBlocks.phr'.
 	
 	allPragmasStage := Pragma allNamed: #phratchItem:kind:category:defaultValues:subCategory: from: self stage class to:  ScriptablePhratchMorph  sortedByArgument: 5.
 	commandBlocksStage := OrderedCollection new.
@@ -242,7 +242,7 @@ PhratchFileTests >> testSaveBlocks [
 	To create blocks we use sprite blockFromSpec: passing in a array of symbols from the blockSpec class method."
 
 	| fileName commandBlock1 commandBlock2 blocks |
-	fileName := '_testSaveBlocks.ypr'.
+	fileName := '_testSaveBlocks.phr'.
 	commandBlock1 := self addBlock: #('move $Number$ steps' - forward:) toSprite: self firstSprite.
 	commandBlock2 := self addBlock: #('turn $Number$ degrees' - turnRight: 15) toSprite: self firstSprite.
 
@@ -263,7 +263,7 @@ PhratchFileTests >> testSaveTenBlocks [
 	To create blocks we use sprite blockFromSpec: passing in a array of symbols from the blockSpec class method."
 
 	| fileName allPragmasStage commandBlocksStage commandBlocksSprite allPragmasSprite blocksSprite blocksStage |
-	fileName := '_testSaveTenBlocks.ypr'.
+	fileName := '_testSaveTenBlocks.phr'.
 	
 	allPragmasStage := Pragma allNamed: #phratchItem:kind:category:defaultValues:subCategory: from: self stage class to:  ScriptablePhratchMorph  sortedByArgument: 5.
 	commandBlocksStage := OrderedCollection new.
@@ -308,7 +308,7 @@ PhratchFileTests >> testSaveWithBroadcast [
 	Currently this fails as variables are loaded back with name replaced by int."
 
 	| sprite fileName commandBlock1 commandBlock2 blocks |
-	fileName := '_testSaveScriptWithBroadcast.ypr'.
+	fileName := '_testSaveScriptWithBroadcast.phr'.
 	sprite := self firstSprite.
 	self assert: sprite objName = 'Sprite1'.
 	
@@ -335,7 +335,7 @@ PhratchFileTests >> testSaveWithList [
 	Currently this fails as variables are loaded back with name replaced by int."
 
 	| sprite fileName |
-	fileName := '_testSaveScriptWithVariable.ypr'.
+	fileName := '_testSaveScriptWithVariable.phr'.
 	sprite := self firstSprite.
 	self assert: sprite objName = 'Sprite1'.
 	
@@ -363,7 +363,7 @@ PhratchFileTests >> testSaveWithVariable [
 	Currently this fails as variables are loaded back with name replaced by int."
 
 	| sprite fileName |
-	fileName := '_testSaveScriptWithVariable.ypr'.
+	fileName := '_testSaveScriptWithVariable.phr'.
 	sprite := self firstSprite.
 	self assert: sprite objName = 'Sprite1'.
 	
@@ -388,7 +388,7 @@ PhratchFileTests >> testSaveWithVariableValued [
 	Currently this fails as variables are loaded back with name replaced by int."
 
 	| sprite fileName |
-	fileName := '_testSaveScriptWithVariable.ypr'.
+	fileName := '_testSaveScriptWithVariable.phr'.
 	sprite := self firstSprite.
 	self assert: sprite objName = 'Sprite1'.
 	
