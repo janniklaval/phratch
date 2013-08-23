@@ -4028,7 +4028,7 @@ PhratchFrameMorph >> writePhratchProject [
 			ifNil: [saveError := 'Folder may be locked or read-only']
 			ifNotNil: [
 				out binary.
-				out nextPutAll: 'BloxExpV01' asByteArray. "changed the internal version marker for the byob-prototype -Jens"
+				out nextPutAll: 'PhratchV01' asByteArray. "changed the internal version marker for the byob-prototype -Jens"
 				self storeProjectInfoOn: out.
 				ObjStream new storeObj: workPane on: out.
 				out close].
