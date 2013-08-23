@@ -248,13 +248,94 @@ PhratchPluginTests >> scaleTest: scale [
 ]
 
 { #category : #tests }
-PhratchPluginTests >> testFileName: aString [
-	"Set the name of an image file for testing."
-	"self testFileName: 'hammy.jpg'"
-	"self testFileName: 'JohnMugShotBW.jpg'"
+PhratchPluginTests >> setUp [
+	TestFileName :=  (FileSystem workingDirectory / 'ScratchSkin' / 'defaultSpriteCostume.png') fullName
+]
 
-	TestFileName := aString.
+{ #category : #tests }
+PhratchPluginTests >> testBlur [
+	self blurTest: 100.
+	self fail.
 
+	
+]
+
+{ #category : #tests }
+PhratchPluginTests >> testBrightnessShift [
+	self brightnessShiftTest.
+	self fail.
+]
+
+{ #category : #tests }
+PhratchPluginTests >> testDouble [
+	self doubleTest.
+	self fail.
+]
+
+{ #category : #tests }
+PhratchPluginTests >> testFilterBenchmark [
+	self filterBenchmark: 100.
+	self fail.
+]
+
+{ #category : #tests }
+PhratchPluginTests >> testFisheye [
+	self fisheyeTest.
+	self fail.
+]
+
+{ #category : #tests }
+PhratchPluginTests >> testFisheye2 [
+	self fisheyeTest2: 100.
+	self fail.
+]
+
+{ #category : #tests }
+PhratchPluginTests >> testHalfSizeAverage [
+	self halfSizeAverageTest.
+	self fail.
+]
+
+{ #category : #tests }
+PhratchPluginTests >> testHalfSizeDiagonal [
+	self halfSizeDiagonalTest.
+	self fail.
+]
+
+{ #category : #tests }
+PhratchPluginTests >> testHueShift [
+	self hueShiftTest.
+	self fail.
+]
+
+{ #category : #tests }
+PhratchPluginTests >> testInterpolation [
+	(self interpolationTest: 1.5) display.
+	self fail.
+]
+
+{ #category : #tests }
+PhratchPluginTests >> testSaturationShift [
+	self saturationShiftTest.
+	self fail.
+]
+
+{ #category : #tests }
+PhratchPluginTests >> testScale [
+	self scaleTest: 1.5.
+	self fail
+]
+
+{ #category : #tests }
+PhratchPluginTests >> testVideo [
+	self videoTest.
+	self fail.
+]
+
+{ #category : #tests }
+PhratchPluginTests >> testWhirl [
+	self whirlTest.
+	self fail
 ]
 
 { #category : #tests }
@@ -280,89 +361,6 @@ PhratchPluginTests >> videoTest [
 	CameraPlugin closeCamera: 1.
 	fps := (frameCount * 1000) // msecs.
 	^ frameCount printString, ' frames at ', fps printString, ' frames/sec'
-]
-
-{ #category : #tests }
-PhratchPluginTests >> waterRipples1ModuleTest [
-	"Smalltalk unloadPlugin: self name"
-
-	"self waterRipples1ModuleTest"
-
-	| f fOut ripply aArray bArray |
-	f := (Form fromFileNamed: TestFileName) asFormOfDepth: 32.
-	fOut := f deepCopy.
-	aArray := ByteArray new: f width * f height * 8 withAll: 0.
-	bArray := ByteArray new: f width * f height * 8 withAll: 0.
-	[ Sensor anyButtonPressed ]
-		whileFalse: [ 
-			ripply := Sensor cursorPoint x max: 1.
-			ripply := ((ripply / fOut width) sqrt * 16.0) asInteger.
-			ripply := ripply max: 1.
-			ripply printString display.
-			PhratchPlugin
-				primWaterRipples1: f bits
-				into: fOut bits
-				width: f width
-				dropNum: ripply
-				array1: aArray
-				array2: bArray.
-			fOut displayAt: 10 @ 30 ]
-]
-
-{ #category : #tests }
-PhratchPluginTests >> waterRipples1ModuleTest: n [
-	"Smalltalk unloadPlugin: self name"
-	"self waterRipples1ModuleTest: 100"
-
-	| f fOut aArray bArray |
-	f := (Form fromFileNamed: TestFileName) asFormOfDepth: 32.
-	fOut := f deepCopy.
-	aArray := ByteArray new: (f width * f height) * 8 withAll: 0.
-	bArray := ByteArray new: (f width * f height) * 8 withAll: 0.
-
-	PhratchPlugin primWaterRipples1: f bits
-		into: fOut bits
-		width: f width
-		dropNum: n
-		array1: aArray
-		array2: bArray.
-	[Sensor anyButtonPressed] whileFalse: [
-		PhratchPlugin primWaterRipples1: f bits
-			into: fOut bits
-			width: f width
-			dropNum: 1
-			array1: aArray
-			array2: bArray.
-		fOut displayAt: 10@30].
-
-]
-
-{ #category : #tests }
-PhratchPluginTests >> waterRipplesTime: n [
-	"Smalltalk unloadPlugin: self name"
-	"self waterRipplesTime: 100"
-
-	| f fOut aArray bArray |
-	f := (Form fromFileNamed: TestFileName) asFormOfDepth: 32.
-	fOut := f deepCopy.
-	aArray := ByteArray new: (f width * f height) * 8 withAll: 0.
-	bArray := ByteArray new: (f width * f height) * 8 withAll: 0.
-
-	PhratchPlugin primWaterRipples1: f bits
-		into: fOut bits
-		width: f width
-		dropNum: n
-		array1: aArray
-		array2: bArray.
-
-	^ [100 timesRepeat: [
-		PhratchPlugin primWaterRipples1: f bits
-			into: fOut bits
-			width: f width
-			dropNum: 100
-			array1: aArray
-			array2: bArray]] msecs.
-
 ]
 
 { #category : #tests }

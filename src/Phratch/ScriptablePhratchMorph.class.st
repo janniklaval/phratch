@@ -2034,25 +2034,6 @@ ScriptablePhratchMorph >> blocksFor: aCategory [
 ]
 
 { #category : #'BYOB attributes' }
-ScriptablePhratchMorph >> blurEffect [
-
-	| att |
-	att := #blur.
-	self prototype ifNotNil: [
-		(self deletedAttributes includes: att) ifTrue: [
-			^ self prototype get: att]].
-
-	^ [filterPack blur] ifError: [0]
-]
-
-{ #category : #'BYOB attributes' }
-ScriptablePhratchMorph >> blurEffect: aNumber [
-
-	self undeleteAttribute: #blur.
-	self passiveBlurEffect: aNumber
-]
-
-{ #category : #'BYOB attributes' }
 ScriptablePhratchMorph >> brightnessEffect [
 
 	| att |
@@ -2099,47 +2080,22 @@ ScriptablePhratchMorph >> cameraIsOpen [
 ScriptablePhratchMorph >> changeGraphicEffect: effect by: aNumber [
 	"Change the given graphic effect by the given value."
 	<phratchItem: 'change $Effects$ effect by $Number$' kind: #- category: 'looks' defaultValues: #('color' 25) subCategory: #a3>
-
-	'blur' = effect ifTrue: [self blurEffect: self blurEffect + aNumber asNumberNoError].
+	
 	'brightness' = effect ifTrue: [self brightnessEffect: self brightnessEffect + aNumber asNumberNoError].
 	'fisheye' = effect ifTrue: [self fisheyeEffect: self fisheyeEffect + aNumber asNumberNoError].
 	'color' = effect ifTrue: [self colorEffect: self colorEffect + aNumber asNumberNoError].
 	'mosaic' = effect ifTrue: [self mosaicEffect: self mosaicEffect + aNumber asNumberNoError].
 	'pixelate' = effect ifTrue: [self pixelateEffect: self pixelateEffect + aNumber asNumberNoError].
 
-"
+
 	'pointillize' = effect ifTrue: [filterPack pointillizeSize: filterPack pointillizeSize + aNumber asNumberNoError].
 	'saturation' = effect ifTrue: [filterPack saturationShift: filterPack saturationShift + aNumber asNumberNoError].
-"
-	('transparency' = effect) | ('ghost' = effect) ifTrue: [
+
+	'ghost' = effect ifTrue: [
 		self transparencyEffect: self transparencyEffect + aNumber asNumberNoError].
 
-"
-	'water ripple' = effect ifTrue: [filterPack waterRippleRate: filterPack waterRippleRate + aNumber asNumberNoError].
-"
 	'whirl' = effect ifTrue: [self whirlEffect: self whirlEffect + aNumber asNumberNoError].
 
-
-"
-	filterPack ifNil: [filterPack := FilterPack new].
-
-	'blur' = effect ifTrue: [filterPack blur: filterPack blur + aNumber].
-	'brightness' = effect ifTrue: [filterPack brightnessShift: filterPack brightnessShift + aNumber].
-	'fisheye' = effect ifTrue: [filterPack fisheye: filterPack fisheye + aNumber].
-	'color' = effect ifTrue: [filterPack hueShift: filterPack hueShift + aNumber].
-	'mosaic' = effect ifTrue: [filterPack mosaicCount: filterPack mosaicCount + aNumber].
-	'pixelate' = effect ifTrue: [filterPack pixelateCount: filterPack pixelateCount + aNumber].
-	'pointillize' = effect ifTrue: [filterPack pointillizeSize: filterPack pointillizeSize + aNumber].
-	'saturation' = effect ifTrue: [filterPack saturationShift: filterPack saturationShift + aNumber].
-	('transparency' = effect) | ('ghost' = effect) ifTrue: [
-		self transparency: self transparency + aNumber].
-	'water ripple' = effect ifTrue: [filterPack waterRippleRate: filterPack waterRippleRate + aNumber].
-	'whirl' = effect ifTrue: [filterPack whirl: filterPack whirl + aNumber].
-
-	costumeChangeMSecs := Time millisecondClockValue.
-	self changed.
-	self spread
-"
 ]
 
 { #category : #'sound ops' }
@@ -4430,8 +4386,7 @@ ScriptablePhratchMorph >> graphicEffectNamed: effect [
 	'pixelate' = effect ifTrue: [^ filterPack pixelateCount].
 	'pointillize' = effect ifTrue: [^ filterPack pointillizeSize].
 	'saturation' = effect ifTrue: [^ filterPack saturationShift].
-	('transparency' = effect) | ('ghost' = effect) ifTrue: [^ self transparency].
-	'water ripple' = effect ifTrue: [^ filterPack waterRippleRate].
+	'ghost' = effect ifTrue: [^ self transparency].
 	'whirl' = effect ifTrue: [^ filterPack whirl].
 ]
 
@@ -6354,13 +6309,6 @@ ScriptablePhratchMorph >> openCamera [
 ]
 
 { #category : #'BYOB attributes' }
-ScriptablePhratchMorph >> passiveBlurEffect: aNumber [
-
-	self privateSetGraphicEffect: 'blur' to: aNumber asNumberNoError.
-	self propagate: #blur
-]
-
-{ #category : #'BYOB attributes' }
 ScriptablePhratchMorph >> passiveBrightnessEffect: aNumber [
 
 	self privateSetGraphicEffect: 'brightness' to: aNumber asNumberNoError.
@@ -6440,7 +6388,7 @@ ScriptablePhratchMorph >> passiveSetVolumeTo: aNumber [
 { #category : #'BYOB attributes' }
 ScriptablePhratchMorph >> passiveTransparencyEffect: aNumber [
 
-	self privateSetGraphicEffect: 'transparency' to: aNumber asNumberNoError.
+	self privateSetGraphicEffect: 'ghost' to: aNumber asNumberNoError.
 	self propagate: #ghost
 ]
 
@@ -6505,11 +6453,6 @@ ScriptablePhratchMorph >> playSound: soundName [
 	snd := self soundNamed: soundName ifAbsent: [^ self].
 	snd playFromStart.
 
-]
-
-{ #category : #'BYOB attributes' }
-ScriptablePhratchMorph >> pointillizeEffect: aNumber [
-	self setGraphicEffect: 'pointillize' to: aNumber
 ]
 
 { #category : #'panther actions' }
@@ -6646,8 +6589,7 @@ ScriptablePhratchMorph >> privateSetGraphicEffect: effect to: aNumber [
 	'pixelate' = effect ifTrue: [filterPack pixelateCount: aNumber].
 	'pointillize' = effect ifTrue: [filterPack pointillizeSize: aNumber].
 	'saturation' = effect ifTrue: [filterPack saturationShift: aNumber].
-	('transparency' = effect) | ('ghost' = effect) ifTrue: [self transparency: aNumber].
-	'water ripple' = effect ifTrue: [filterPack waterRippleRate: aNumber].
+	'ghost' = effect ifTrue: [self transparency: aNumber].
 	'whirl' = effect ifTrue: [filterPack whirl: aNumber].
 
 	costumeChangeMSecs := Time millisecondClockValue.
@@ -7009,11 +6951,6 @@ ScriptablePhratchMorph >> rounded [
 
 ]
 
-{ #category : #'BYOB attributes' }
-ScriptablePhratchMorph >> saturationEffect: aNumber [
-	self setGraphicEffect: 'saturation' to: aNumber
-]
-
 { #category : #media }
 ScriptablePhratchMorph >> savePhoto: aForm [
 
@@ -7173,18 +7110,14 @@ ScriptablePhratchMorph >> setColor: colorName to: newValue [
 { #category : #'looks ops' }
 ScriptablePhratchMorph >> setGraphicEffect: effect to: aNumber [
 	"Set the given graphic effect to the given value."
-	<phratchItem: 'broadcast $Event$ and wait' kind: #- category: 'looks' defaultValues: #('color' 0) subCategory: #a3>
+	<phratchItem: 'set $Effects$ effect to $Number$' kind: #- category: 'looks' defaultValues: #('color' 0) subCategory: #a3>
 	
-	'blur' = effect ifTrue: [self blurEffect: aNumber].
 	'brightness' = effect ifTrue: [self brightnessEffect: aNumber].
 	'fisheye' = effect ifTrue: [self fisheyeEffect: aNumber].
 	'color' = effect ifTrue: [self colorEffect: aNumber].
 	'mosaic' = effect ifTrue: [self mosaicEffect: aNumber].
 	'pixelate' = effect ifTrue: [self pixelateEffect: aNumber].
-	'pointillize' = effect ifTrue: [self pointillizeEffect: aNumber].
-	'saturation' = effect ifTrue: [self saturationEffect: aNumber].
-	('transparency' = effect) | ('ghost' = effect) ifTrue: [self transparencyEffect: aNumber].
-	'water ripple' = effect ifTrue: [self waterRippleEffect: aNumber].
+	'ghost' = effect ifTrue: [self transparencyEffect: aNumber].
 	'whirl' = effect ifTrue: [self whirlEffect: aNumber].
 
 ]
@@ -8341,11 +8274,6 @@ ScriptablePhratchMorph >> wait: duration elapsed: elapsed from: ignored [
 	<phratchItem: 'wait $Number$ secs' kind: #t category: 'control' defaultValues: #(1) subCategory: #time>
 	^ nil
 
-]
-
-{ #category : #'BYOB attributes' }
-ScriptablePhratchMorph >> waterRippleEffect: aNumber [
-	self setGraphicEffect: 'water ripple' to: aNumber
 ]
 
 { #category : #'other ops' }

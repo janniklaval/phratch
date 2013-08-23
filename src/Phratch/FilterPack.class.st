@@ -18,10 +18,7 @@ Class {
 		'pixelateCount',
 		'pointillizeSize',
 		'pointillizeForm',
-		'randSeed',
-		'waterRippleRate',
-		'waterArray1',
-		'waterArray2'
+		'randSeed'
 	],
 	#category : #'Phratch-Objects'
 }
@@ -31,10 +28,6 @@ FilterPack >> applyFiltersTo: srcForm [
 	"Apply all currently active filters to the given source form and answer the resulting filtered form. The argument Form itself is not changed."
 
 	self applyStaticFiltersTo: (srcForm asFormOfDepth: 32).
-
-	"apply the dynamic filters"
-	pointillizeSize = 0 ifFalse: [self applyPointillizeFilter].
-	waterRippleRate = 0 ifFalse: [self applyWaterRippleFilter].
 
 	reapply := false.
 	^ resultForm
@@ -106,40 +99,6 @@ FilterPack >> applyPixelateFilter [
 ]
 
 { #category : #private }
-FilterPack >> applyPointillizeFilter [
-	"Pointillize the image with rectanges as big as 'size'."
-
-	| sz dot offset colorMap count alpha bitblt x y thisColorPix |
-	pointillizeForm ifNil: [pointillizeForm := cachedForm deepCopy].
-	sz := pointillizeSize asInteger abs.
-	sz := sz min: ((pointillizeForm width min: pointillizeForm height) // 2).
-	dot := Form dotOfSize: sz.
-	offset := sz // 2.
-	colorMap := Bitmap new: 2.
-	colorMap at: 1 put: 0.  "transparent"
-	count := (pointillizeForm width * pointillizeForm height) // (50 * sz).
-	alpha := 120.  "alpha can be 0 to 255"
-
-	bitblt := (BitBlt toForm: pointillizeForm)
-		sourceForm: dot;
-		sourceRect: dot boundingBox;
-		combinationRule: 31;  "alpha paint with constant alpha"
-		colorMap: colorMap;
-		yourself.
-
-	1 to: count do: [:i |
-		x := self rand \\ pointillizeForm width.
-		y := self rand \\ pointillizeForm height.
-		thisColorPix := cachedForm bits at: ((y * pointillizeForm width) + x + 1).
-		colorMap at: 2 put: thisColorPix.
-		bitblt destOrigin: (x - offset)@(y - offset); copyBitsTranslucent: alpha].
-
-	resultForm := pointillizeForm deepCopy.
-
-
-]
-
-{ #category : #private }
 FilterPack >> applyStaticFiltersTo: srcForm [
 	"Apply all active static filters."
 
@@ -188,27 +147,6 @@ FilterPack >> applyStaticFiltersTo: srcForm [
 
 ]
 
-{ #category : #private }
-FilterPack >> applyWaterRippleFilter [
-
-	| fOut ripply |
-	fOut := cachedForm deepCopy.
-	waterArray1 ifNil: [waterArray1 := ByteArray new: (8 * fOut width * fOut height)].
-	waterArray2 ifNil: [waterArray2 := ByteArray new: (8 * fOut width * fOut height)].
-	ripply := (100.0 * (waterRippleRate abs / fOut width) sqrt) asInteger max: 1.
-
-	PhratchPlugin
-		primWaterRipples1: cachedForm bits
-		into: fOut bits
-		width: fOut width asInteger
-		dropNum: ripply
-		array1: waterArray1
-		array2: waterArray2.
-
-	resultForm := fOut.
-
-]
-
 { #category : #accessing }
 FilterPack >> blur [
 
@@ -253,8 +191,7 @@ FilterPack >> filtersActive [
 	"Answer true if any filters are active."
 
 	reapply ifTrue: [^ true].
-	^ (pointillizeSize ~= 0) | (waterRippleRate ~= 0)
-
+	^ (pointillizeSize ~= 0)
 
 ]
 
@@ -368,10 +305,6 @@ FilterPack >> resetAllFilters [
 
 	pointillizeSize := 0.
 	pointillizeForm := nil.
-
-	waterRippleRate := 0.
-	waterArray1 := waterArray2 := nil.
-
 ]
 
 { #category : #accessing }
@@ -392,21 +325,6 @@ FilterPack >> saturationShift [
 FilterPack >> saturationShift: aNumber [
 
 	saturationShift := aNumber.
-	reapply := true.
-
-]
-
-{ #category : #accessing }
-FilterPack >> waterRippleRate [
-
-	^ waterRippleRate
-
-]
-
-{ #category : #accessing }
-FilterPack >> waterRippleRate: rate [
-	
-	waterRippleRate := rate max: 0.
 	reapply := true.
 
 ]

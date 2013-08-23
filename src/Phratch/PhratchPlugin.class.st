@@ -331,15 +331,6 @@ PhratchPlugin class >> primShortToLongPath: aString [
 ]
 
 { #category : #'image filter primitives' }
-PhratchPlugin class >> primWaterRipples1: inBitmap into: outBitmap width: w dropNum: aNum array1: aArray array2: bArray [
-	"Apply the water ripple effect to inBitmap putting the result into outBitmap. The two bitmaps must have the same length and are for 32-bit deep Forms of the given width. The dropNum determines how many new water drops are started. The two arrays hold the state of the water-surface model."
-
-	<primitive: 'primitiveWaterRipples1' module: #ScratchPlugin>
-	self primitiveFailed
-
-]
-
-{ #category : #'image filter primitives' }
 PhratchPlugin class >> primWhirl: inBitmap into: outBitmap width: w angle: anAngle [
 	"Whirl all the non-transparent pixels in the given 32-bit image bitmap by the given angle, storing the result in outBitmap. The two bitmaps must be the same size."
 
