@@ -2086,14 +2086,8 @@ ScriptablePhratchMorph >> changeGraphicEffect: effect by: aNumber [
 	'color' = effect ifTrue: [self colorEffect: self colorEffect + aNumber asNumberNoError].
 	'mosaic' = effect ifTrue: [self mosaicEffect: self mosaicEffect + aNumber asNumberNoError].
 	'pixelate' = effect ifTrue: [self pixelateEffect: self pixelateEffect + aNumber asNumberNoError].
-
-
-	'pointillize' = effect ifTrue: [filterPack pointillizeSize: filterPack pointillizeSize + aNumber asNumberNoError].
-	'saturation' = effect ifTrue: [filterPack saturationShift: filterPack saturationShift + aNumber asNumberNoError].
-
 	'ghost' = effect ifTrue: [
 		self transparencyEffect: self transparencyEffect + aNumber asNumberNoError].
-
 	'whirl' = effect ifTrue: [self whirlEffect: self whirlEffect + aNumber asNumberNoError].
 
 ]
@@ -4378,14 +4372,11 @@ ScriptablePhratchMorph >> graphicEffectNamed: effect [
 	<phratchItem: '$Effects$ effect' kind: #r category: 'looks' defaultValues: #('color') subCategory: #a3>
 	filterPack ifNil: [filterPack := FilterPack new].
 
-	'blur' = effect ifTrue: [^ filterPack blur].
 	'brightness' = effect ifTrue: [^ filterPack brightnessShift].
 	'fisheye' = effect ifTrue: [^ filterPack fisheye].
 	'color' = effect ifTrue: [^ filterPack hueShift].
 	'mosaic' = effect ifTrue: [^ filterPack mosaicCount].
 	'pixelate' = effect ifTrue: [^ filterPack pixelateCount].
-	'pointillize' = effect ifTrue: [^ filterPack pointillizeSize].
-	'saturation' = effect ifTrue: [^ filterPack saturationShift].
 	'ghost' = effect ifTrue: [^ self transparency].
 	'whirl' = effect ifTrue: [^ filterPack whirl].
 ]
@@ -6581,14 +6572,11 @@ ScriptablePhratchMorph >> privateSetGraphicEffect: effect to: aNumber [
 
 	filterPack ifNil: [filterPack := FilterPack new].
 
-	'blur' = effect ifTrue: [filterPack blur: aNumber].
 	'brightness' = effect ifTrue: [filterPack brightnessShift: aNumber].
 	'fisheye' = effect ifTrue: [filterPack fisheye: aNumber].
 	'color' = effect ifTrue: [filterPack hueShift: aNumber].
 	'mosaic' = effect ifTrue: [filterPack mosaicCount: aNumber].
 	'pixelate' = effect ifTrue: [filterPack pixelateCount: aNumber].
-	'pointillize' = effect ifTrue: [filterPack pointillizeSize: aNumber].
-	'saturation' = effect ifTrue: [filterPack saturationShift: aNumber].
 	'ghost' = effect ifTrue: [self transparency: aNumber].
 	'whirl' = effect ifTrue: [filterPack whirl: aNumber].
 

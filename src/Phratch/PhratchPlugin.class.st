@@ -120,15 +120,6 @@ PhratchPlugin class >> pluginAvailable [
 ]
 
 { #category : #'serial port primitives' }
-PhratchPlugin class >> port: portNum getOption: optionNum [
-	"Answer the value of the given serial port option, or nil if the port is not open or the option is not defined. See the class comment for the list of options."
-
-	<primitive: 'primGetOption' module: #ScratchPlugin>
-	^ nil
-
-]
-
-{ #category : #'serial port primitives' }
 PhratchPlugin class >> port: portNum setOption: optionNum to: anInteger [
 	"Set the given serial port option to the given value. Do nothing if the option is not defined. See the class comment for the list of options."
 
@@ -219,23 +210,6 @@ PhratchPlugin class >> primHalfSizeAverage: srcBits w: srcW h: srcH into: dstBit
 
 ]
 
-{ #category : #'image scale primitives' }
-PhratchPlugin class >> primHalfSizeDiagonal: srcBits w: srcW h: srcH into: dstBits w: dstW h: dstH srcX: x1 srcY: y1 dstX: x2 dstY: y2 dstW: w dstH: h [
-	"Display the source form at half-size onto the destination form at the given location by averaging the colors of two pixels along the diagonal of a 2x2 cell, which is faster than averaging all four pixels but does not do as good a job on text. Does not handle alpha or transparency. Return nil if the target rectangle does not fit entirely within the destination form."
-
-	<primitive: 'primitiveHalfSizeDiagonal' module: #ScratchPlugin>
-	^ nil
-
-]
-
-{ #category : #'image filter primitives' }
-PhratchPlugin class >> primInterpolate: aBitmap width: w x: xFixed y: yFixed [
-	"Answer the interpolated pixel value from the given 32-bit bitmap with the given width. The coordinates are given as fixed-point integers with 10-bits of fraction. That is, the float values of x and y are multiplied by 1024, then truncated."
-
-	<primitive: 'primitiveInterpolate' module: #ScratchPlugin>
-	^ 0
-]
-
 { #category : #'OS utilities' }
 PhratchPlugin class >> primIsHidden: fullPath [
 	"Return true if file or folder with the given path should be hidden from the user. Return false if the primitive fails."
@@ -256,29 +230,11 @@ PhratchPlugin class >> primOpenURL: aString [
 ]
 
 { #category : #'image scale primitives' }
-PhratchPlugin class >> primScale: srcBitmap w: srcWidth h: srcHeight into: dstBitmap w: dstWidth h: dstHeight [
-	"Scale the source form to exactly fit the destination form using bilinear interpolation."
-
-	<primitive: 'primitiveScale' module: #ScratchPlugin>
-	self primitiveFailed
-
-]
-
-{ #category : #'image scale primitives' }
 PhratchPlugin class >> primScaleNoFail: srcBitmap w: srcWidth h: srcHeight into: dstBitmap w: dstWidth h: dstHeight [
 	"Scale the source form to exactly fit the destination form using bilinear interpolation. Answer nil if I fail."
 
 	<primitive: 'primitiveScale' module: #ScratchPlugin>
 	^ nil
-
-]
-
-{ #category : #'OS utilities' }
-PhratchPlugin class >> primSetUnicodePasteBuffer: aByteArray [
-	"Set the Mac OS X Unicode paste buffer. The argument is a big-endian UTF-16 Unicode string packed into a ByteArray. Needed to paste strings from Squeak into Second Life's code editor under Mac OS X. Do nothing if the primitive fails."
-	"self primSetUnicodePasteBuffer: ByteArray new"
-
-	<primitive: 'primitiveSetUnicodePasteBuffer' module: #ScratchPlugin>
 
 ]
 
@@ -308,15 +264,6 @@ PhratchPlugin class >> primShiftHue: inBitmap into: outBitmap byDegrees: shiftDe
 	self primitiveFailed.
 	^ nil
 
-
-]
-
-{ #category : #'image filter primitives' }
-PhratchPlugin class >> primShiftSaturation: inBitmap into: outBitmap by: shift [
-	"Shift the saturation of all the non-transparent, non-black pixels in the given 32-bit image bitmap, storing the result in outBitmap. The shift should be an integer between -100 and 100. The two bitmaps must be the same size."
-
-	<primitive: 'primitiveSaturationShift' module: #ScratchPlugin>
-	self primitiveFailed
 
 ]
 
@@ -1016,57 +963,6 @@ PhratchPlugin >> primitiveHalfSizeAverage [
 
 ]
 
-{ #category : #scaling }
-PhratchPlugin >> primitiveHalfSizeDiagonal [
-
-	| in inW inH out outW outH srcX srcY dstX dstY dstW dstH srcIndex dstIndex p1 p2 r g b |
-	self export: true.
-	self var: 'in' declareC: 'int *in'.
-	self var: 'out' declareC: 'int *out'.
-
-	in := self checkedUnsignedIntPtrOf: (interpreterProxy stackValue: 11).
-	inW := interpreterProxy stackIntegerValue: 10.
-	inH := interpreterProxy stackIntegerValue: 9.
-	out := self checkedUnsignedIntPtrOf: (interpreterProxy stackValue: 8).
-	outW := interpreterProxy stackIntegerValue: 7.
-	outH := interpreterProxy stackIntegerValue: 6.
-	srcX := interpreterProxy stackIntegerValue: 5.
-	srcY := interpreterProxy stackIntegerValue: 4.
-	dstX := interpreterProxy stackIntegerValue: 3.
-	dstY := interpreterProxy stackIntegerValue: 2.
-	dstW := interpreterProxy stackIntegerValue: 1.
-	dstH := interpreterProxy stackIntegerValue: 0.
-
-	interpreterProxy success: (srcX >= 0) & (srcY >= 0).
-	interpreterProxy success: (srcX + (2 * dstW)) <= inW.
-	interpreterProxy success: (srcY + (2 * dstH)) <= inH.
-	interpreterProxy success: (dstX >= 0) & (dstY >= 0).
-	interpreterProxy success: (dstX + dstW) <= outW.
-	interpreterProxy success: (dstY + dstH) <= outH.
-	interpreterProxy failed ifTrue: [^ nil].
-
-	0 to: dstH - 1 do: [:y |
-		srcIndex := (inW * (srcY + (2 * y))) + srcX.
-		dstIndex := (outW * (dstY + y)) + dstX.
-		0 to: dstW - 1 do: [:x |
-			p1 := in at: srcIndex.
-			p2 := in at: srcIndex + inW + 1.
-
-			r := (((p1 bitAnd: 16rFF0000) + (p2 bitAnd: 16rFF0000)) bitShift: -1) bitAnd: 16rFF0000.
-			g := (((p1 bitAnd: 16rFF00) + (p2 bitAnd: 16rFF00)) bitShift: -1) bitAnd: 16rFF00.
-			b := ((p1 bitAnd: 16rFF) + (p2 bitAnd: 16rFF)) bitShift: -1.
-
-			"store combined RGB into target bitmap"
-			out at: dstIndex put: (r bitOr: (g bitOr: b)).
-
-			srcIndex := srcIndex + 2.
-			dstIndex := dstIndex + 1]].
-
-	interpreterProxy pop: 12.  "pop args, leave rcvr on stack"
-	^ 0
-
-]
-
 { #category : #'hsv filters' }
 PhratchPlugin >> primitiveHueShift [
 	| inOop outOop shift in sz out pix r g b max min brightness saturation hue |
@@ -1123,29 +1019,6 @@ PhratchPlugin >> primitiveHueShift [
 					v: brightness ] ].
 	interpreterProxy pop: 3.	"pop args, leave rcvr on stack"
 	^ 0
-]
-
-{ #category : #'bilinear interpolation' }
-PhratchPlugin >> primitiveInterpolate [
-
-	| inOop xFixed yFixed width in sz result |
-	self export: true.
-	self var: 'in' declareC: 'unsigned int *in'.
-
-	inOop := interpreterProxy stackValue: 3.
-	width := interpreterProxy stackIntegerValue: 2.
-	xFixed := interpreterProxy stackIntegerValue: 1.
-	yFixed := interpreterProxy stackIntegerValue: 0.
-	in := self checkedUnsignedIntPtrOf: inOop.
-	sz := interpreterProxy stSizeOf: inOop.
-	interpreterProxy failed ifTrue: [^ nil].
-
-	result := self interpolatedFrom: in x: xFixed y: yFixed width: width height: sz // width.
-
-	interpreterProxy pop: 5.  "pop args and rcvr"
-	interpreterProxy pushInteger: result.
-	^ 0
-
 ]
 
 { #category : #'os functions' }
@@ -1209,60 +1082,6 @@ PhratchPlugin >> primitiveOpenURL [
 	^ 0
 
 
-]
-
-{ #category : #'hsv filters' }
-PhratchPlugin >> primitiveSaturationShift [
-	| inOop outOop shift in sz out pix r g b max min brightness saturation hue |
-	self export: true.
-	self var: 'in' declareC: 'unsigned int *in'.
-	self var: 'out' declareC: 'unsigned int *out'.
-	inOop := interpreterProxy stackValue: 2.
-	outOop := interpreterProxy stackValue: 1.
-	shift := interpreterProxy stackIntegerValue: 0.
-	in := self checkedUnsignedIntPtrOf: inOop.
-	sz := interpreterProxy stSizeOf: inOop.
-	out := self checkedUnsignedIntPtrOf: outOop.
-	interpreterProxy success: (interpreterProxy stSizeOf: outOop) = sz.
-	interpreterProxy failed
-		ifTrue: [ ^ nil ].
-	0 to: sz - 1 do: [ :i | 
-		pix := (in at: i) bitAnd: 16rFFFFFF.
-		pix < 2
-			ifFalse: [ 
-				"skip pixel values of 0 (transparent) and 1 (black)"
-				r := (pix bitShift: -16) bitAnd: 16rFF.
-				g := (pix bitShift: -8) bitAnd: 16rFF.
-				b := pix bitAnd: 16rFF.	"find min and max color components"
-				max := min := r.
-				max := max max: g.
-				max := max max: b.
-				min := min min: g.
-				min := min min: b.	"find current brightness (v) and  saturation with range 0 to 1000"
-				brightness := max * 1000 // 255.
-				saturation := max = 0
-					ifTrue: [ 0 ]
-					ifFalse: [ (max - min) * 1000 // max ].
-				saturation > 0
-					ifTrue: [ 
-						"do nothing if pixel is unsaturated (gray)"
-						hue := self
-							hueFromR: r
-							G: g
-							B: b
-							min: min
-							max: max.	"compute new saturation"
-						saturation := saturation + (shift * 10).
-						saturation := saturation min: 1000.
-						saturation := saturation max: 0.
-						self
-							bitmap: out
-							at: i
-							putH: hue
-							s: saturation
-							v: brightness ] ] ].
-	interpreterProxy pop: 3.	"pop args, leave rcvr on stack"
-	^ 0
 ]
 
 { #category : #scaling }
@@ -1354,33 +1173,6 @@ PhratchPlugin >> primitiveScale [
 ]
 
 { #category : #'os functions' }
-PhratchPlugin >> primitiveSetUnicodePasteBuffer [
-	"Set the Mac OS X Unicode paste buffer."
-
-	| utf16 strOop count |
-	self export: true.
-	self var: 'utf16' declareC: 'short int *utf16'.
-
-	strOop := interpreterProxy stackValue: 0.
-
-	((interpreterProxy isIntegerObject: strOop) or:
-	 [(interpreterProxy isBytes: strOop) not]) ifTrue: [
-		interpreterProxy success: false].
-
-	interpreterProxy failed ifTrue: [^ 0].
-
-	utf16 := self cCoerce: (interpreterProxy firstIndexableField: strOop) to: 'short int *'.
-	count := interpreterProxy stSizeOf: strOop.
-
-	self cCode: 'SetUnicodePasteBuffer(utf16, count)'.
-
-	interpreterProxy pop: 1.  "pop arg, leave rcvr on stack"
-	^ 0
-
-
-]
-
-{ #category : #'os functions' }
 PhratchPlugin >> primitiveSetWindowTitle [
 	"Set the title of the Phratch window."
 
@@ -1444,91 +1236,6 @@ PhratchPlugin >> primitiveShortToLongPath [
 	interpreterProxy pop: 2 thenPush: resultOop.  "pop arg and rcvr, push result"
 	^ 0
 
-]
-
-{ #category : #'other filters' }
-PhratchPlugin >> primitiveWaterRipples1 [
-	| in out aArray bArray ripply temp pix dx dy dist inOop outOop width allPix aArOop bArOop height t1 blops x y power val val2 dx2 dy2 newLoc |
-	self export: true.
-	self var: 'in' declareC: 'unsigned int *in'.
-	self var: 'out' declareC: 'unsigned int *out'.
-	self var: 'aArray' declareC: 'double *aArray'.
-	self var: 'bArray' declareC: 'double *bArray'.
-	self var: 'ripply' declareC: 'int ripply'.
-	self var: 'temp' declareC: 'double temp'.
-	self var: 'pix' declareC: 'unsigned int pix'.
-	self var: 'dist' declareC: 'double dist'.
-	self var: 'dx2' declareC: 'double dx2'.
-	self var: 'dy2' declareC: 'double dy2'.
-	inOop := interpreterProxy stackValue: 5.
-	outOop := interpreterProxy stackValue: 4.
-	width := interpreterProxy stackIntegerValue: 3.
-	in := self checkedUnsignedIntPtrOf: inOop.
-	out := self checkedUnsignedIntPtrOf: outOop.
-	allPix := interpreterProxy stSizeOf: inOop.
-	ripply := interpreterProxy stackIntegerValue: 2.
-	aArOop := interpreterProxy stackValue: 1.
-	bArOop := interpreterProxy stackValue: 0.
-	aArray := self checkedFloatPtrOf: aArOop.
-	bArray := self checkedFloatPtrOf: bArOop.
-	interpreterProxy success: (interpreterProxy stSizeOf: outOop) = allPix.
-	interpreterProxy failed
-		ifTrue: [ ^ nil ].
-	height := allPix // width.
-	t1 := self cCode: 'rand()'.
-	blops := t1 \\ ripply - 1.
-	0 to: blops / 2 - 1 do: [ :t | 
-		t1 := self cCode: 'rand()'.
-		x := t1 \\ width.
-		t1 := self cCode: 'rand()'.
-		y := t1 \\ height.
-		t1 := self cCode: 'rand()'.
-		power := t1 \\ 8.
-		-4 to: 4 do: [ :g | 
-			-4 to: 4 do: [ :h | 
-				dist := (g * g + (h * h)) asFloat.
-				(dist < 25 and: [ dist > 0 ])
-					ifTrue: [ 
-						dx := (x + g) asInteger.
-						dy := (y + h) asInteger.
-						(dx > 0 and: [ dy > 0 and: [ dy < height and: [ dx < width ] ] ])
-							ifTrue: [ aArray at: dy * width + dx put: power * (1.0 asFloat - (dist / 25.0 asFloat)) asFloat ] ] ] ] ].
-	1 to: width - 2 do: [ :f | 
-		1 to: height - 2 do: [ :d | 
-			val := d * width + f.
-			aArray
-				at: val
-				put:
-					((bArray at: val + 1) + (bArray at: val - 1) + (bArray at: val + width) + (bArray at: val - width)
-						+ ((bArray at: val - 1 - width) / 2) + ((bArray at: val - 1 + width) / 2) + ((bArray at: val + 1 - width) / 2)
-						+ ((bArray at: val + 1 + width) / 2)) / 4 - (aArray at: val).
-			aArray at: val put: (aArray at: val) * 0.9 asFloat ] ].	"temp := bArray.
-		bArray := aArray.
-		aArray := temp."
-	0 to: width * height do: [ :q | 
-		temp := bArray at: q.
-		bArray at: q put: (aArray at: q).
-		aArray at: q put: temp ].
-	0 to: height - 1 do: [ :j | 
-		0 to: width - 1 do: [ :i | 
-			(i > 1 and: [ i < (width - 1) and: [ j > 1 and: [ j < (height - 1) ] ] ])
-				ifTrue: [ 
-					val2 := j * width + i.
-					dx2 := (((aArray at: val2) - (aArray at: val2 - 1) + ((aArray at: val2 + 1) - (aArray at: val2))) * 64) asFloat.
-					dy2 := (((aArray at: val2) - (aArray at: val2 - width) + ((aArray at: val2 + width) - (aArray at: val2))) / 64)
-						asFloat.
-					dx2 := dx2 max: -2.
-					dx2 := dx2 min: 2.
-					dy2 := dy2 max: -2.
-					dy2 := dy2 min: 2.
-					newLoc := ((j + dy2) * width + (i + dx2)) asInteger.
-					pix := (newLoc < (width * height) and: [ newLoc >= 0 ])
-						ifTrue: [ in at: newLoc ]
-						ifFalse: [ in at: i + (j * width) ] ]
-				ifFalse: [ pix := in at: i + (j * width) ].
-			out at: i + (j * width) put: pix ] ].
-	interpreterProxy pop: 6.	"pop args, leave rcvr on stack"
-	^ 0
 ]
 
 { #category : #'other filters' }

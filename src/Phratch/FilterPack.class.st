@@ -102,16 +102,13 @@ FilterPack >> applyPixelateFilter [
 FilterPack >> applyStaticFiltersTo: srcForm [
 	"Apply all active static filters."
 
-	| fOut tmp |
+	| fOut |
 	resultForm := srcForm deepCopy.
 	resultForm unhibernate.
 
 	hueShift = 0 ifFalse: [
 		PhratchPlugin primShiftHue: resultForm bits
 			into: resultForm bits byDegrees: (1.8 * hueShift) asInteger].
-	saturationShift = 0 ifFalse: [
-		PhratchPlugin primShiftSaturation: resultForm bits
-			into: resultForm bits by: saturationShift asInteger].
 	brightnessShift = 0 ifFalse: [
 		PhratchPlugin primShiftBrightness: resultForm bits
 			into: resultForm bits by: brightnessShift asInteger].
@@ -132,33 +129,10 @@ FilterPack >> applyStaticFiltersTo: srcForm [
 
 	pixelateCount abs >= 5 ifTrue: [self applyPixelateFilter].
 	mosaicCount abs >= 5 ifTrue: [self applyMosaicFilter].
-
-	blur = 0 ifFalse: [
-		fOut := resultForm deepCopy.
-		(blur asInteger min: 100) timesRepeat: [
-			PhratchPlugin primBlur: resultForm bits into: fOut bits width: resultForm width.
-			tmp := resultForm.
-			resultForm := fOut.
-			fOut := tmp]].
 		
 	cachedForm := resultForm.
 	
 	
-
-]
-
-{ #category : #accessing }
-FilterPack >> blur [
-
-	^ blur
-
-]
-
-{ #category : #accessing }
-FilterPack >> blur: aNumber [
-
-	blur := aNumber within: 0 and: 100.
-	reapply := true.
 
 ]
 
@@ -264,21 +238,6 @@ FilterPack >> pixelateCount: aNumber [
 
 ]
 
-{ #category : #accessing }
-FilterPack >> pointillizeSize [
-
-	^ pointillizeSize
-
-]
-
-{ #category : #accessing }
-FilterPack >> pointillizeSize: aSize [
-
-	pointillizeSize := aSize max: 0.
-	reapply := true.
-
-]
-
 { #category : #private }
 FilterPack >> rand [
 	"This is a cheap, integer random generator from the old Apple Smalltalk. It's not statistically good, but it is very fast. Answers an integer between 0 and 65535."
@@ -295,37 +254,17 @@ FilterPack >> resetAllFilters [
 	resultForm := cachedForm := nil.
 
 	hueShift := 0.
-	saturationShift := 0.
 	brightnessShift := 0.
 	mosaicCount := 0.
 	pixelateCount := 0.
 	fisheye := 0.
 	whirl := 0.
-	blur := 0.
-
-	pointillizeSize := 0.
-	pointillizeForm := nil.
 ]
 
 { #category : #accessing }
 FilterPack >> resultForm [
 
 	^ resultForm
-
-]
-
-{ #category : #accessing }
-FilterPack >> saturationShift [
-
-	^ saturationShift
-
-]
-
-{ #category : #accessing }
-FilterPack >> saturationShift: aNumber [
-
-	saturationShift := aNumber.
-	reapply := true.
 
 ]
 

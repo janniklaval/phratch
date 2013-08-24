@@ -71,13 +71,6 @@ PhratchPluginTests >> filterBenchmark: count [
 		nextPutAll: ' msecs';
 		cr.
 	fOut display.
-	msecs := [ count timesRepeat: [ PhratchPlugin primShiftSaturation: f bits into: fOut bits by: 50 ] ] timeToRun.
-	s
-		nextPutAll: 'saturation shift: ';
-		nextPutAll: (msecs asFloat / count roundTo: 0.01) printString;
-		nextPutAll: ' msecs';
-		cr.
-	fOut display.
 	msecs := [ 
 	count
 		timesRepeat: [ 
@@ -161,24 +154,6 @@ PhratchPluginTests >> halfSizeAverageTest [
 ]
 
 { #category : #tests }
-PhratchPluginTests >> halfSizeDiagonalTest [
-	"self halfSizeDiagonalTest"
-
-	| f fOut |
-	f := (Form fromFileNamed: TestFileName) asFormOfDepth: 32.
-	fOut := Form extent: f extent // 2 depth: 32.
-	PhratchPlugin
-		primHalfSizeDiagonal: f bits w: f width h: f height
-		into: fOut bits w: fOut width h: fOut height
-		srcX: 0 srcY: 0
-		dstX: 0 dstY: 0 dstW: fOut width dstH: fOut height.
-	f display.
-	fOut display.
-
-
-]
-
-{ #category : #tests }
 PhratchPluginTests >> hueShiftTest [
 	"self hueShiftTest"
 
@@ -189,61 +164,6 @@ PhratchPluginTests >> hueShiftTest [
 		shift := ((Sensor cursorPoint x - Display center x) * 380 * 2) // Display width.
 		PhratchPlugin primShiftHue: f bits into: fOut bits byDegrees: shift.
 		fOut display"]".
-
-]
-
-{ #category : #tests }
-PhratchPluginTests >> interpolationTest: scale [
-	"Answer a copy of the given form scaled by the given factor using linear interpolation."
-	"(self interpolationTest: 1.5) display"
-
-	| scaleP srcForm outExtent fOut w h outW pix outH |
-	scaleP := scale asPoint.
-	(scaleP x <= 0 or: [scaleP y <= 0]) ifTrue: [PhratchPlugin error: 'bad scale factor'].
-	srcForm := (Form fromFileNamed: TestFileName) asFormOfDepth: 32.
-	outExtent := (srcForm extent * scaleP) truncated.
-	(outExtent x > 1000 or: [outExtent y > 1000]) ifTrue: [PhratchPlugin error: 'result width or height will be > 1000 pixels'].
-	fOut := Form extent: outExtent depth: 32.
-	w := srcForm width.
-	h := srcForm height.
-	outW := fOut width.
-	outH := fOut height.
-	0 to: fOut width - 1 do: [:x |
-		0 to: fOut height - 1 do: [:y |
-			pix := PhratchPlugin
-				primInterpolate: srcForm bits
-				width: srcForm width
-				x: (x * w * 1024) // outW
-				y:  (y * h * 1024) // outH.
-			fOut bits at: ((y * outW) + x + 1) put: pix]].
-	^ fOut
-
-]
-
-{ #category : #tests }
-PhratchPluginTests >> saturationShiftTest [
-	"self saturationShiftTest"
-
-	| f fOut shift |
-	f := (Form fromFileNamed: TestFileName) asFormOfDepth: 32.
-	fOut := f deepCopy.
-	"[Sensor anyButtonPressed] whileFalse: ["
-		shift := ((Sensor cursorPoint x - Display center x) * 220) // Display width.
-		PhratchPlugin primShiftSaturation: f bits into: fOut bits by: shift.
-		fOut display"]".
-
-]
-
-{ #category : #tests }
-PhratchPluginTests >> scaleTest: scale [
-	"self scaleTest: 1.5"
-
-	| f fOut |
-	f := (Form fromFileNamed: TestFileName) asFormOfDepth: 32.
-	fOut := Form extent: (f extent * scale) rounded depth: 32.
-	PhratchPlugin primScale: f bits w: f width h: f height into: fOut bits w: fOut width h: fOut height.
-	fOut display.
-
 
 ]
 
@@ -297,32 +217,8 @@ PhratchPluginTests >> testHalfSizeAverage [
 ]
 
 { #category : #tests }
-PhratchPluginTests >> testHalfSizeDiagonal [
-	self halfSizeDiagonalTest.
-	self assert: true.
-]
-
-{ #category : #tests }
 PhratchPluginTests >> testHueShift [
 	self hueShiftTest.
-	self assert: true.
-]
-
-{ #category : #tests }
-PhratchPluginTests >> testInterpolation [
-	(self interpolationTest: 1.5) display.
-	self assert: true.
-]
-
-{ #category : #tests }
-PhratchPluginTests >> testSaturationShift [
-	self saturationShiftTest.
-	self assert: true.
-]
-
-{ #category : #tests }
-PhratchPluginTests >> testScale [
-	self scaleTest: 1.5.
 	self assert: true.
 ]
 
