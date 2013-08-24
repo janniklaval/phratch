@@ -1296,13 +1296,6 @@ CommandBlockMorph >> rightButtonMenu [
 	ScriptablePhratchMorph noviceMode ifFalse:[
 		menu add: 'edit block for developer' value: #editElements.
 	].
-	sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
-	(sFrame notNil and: [#(sensor: sensorPressed:) includes: selector]) ifTrue: [
-		menu addLine.
-		menu add: 'show PhratchBoard watcher' value: #showSensorBoard.
-		sFrame workPane phratchServer
-			ifNil: [menu add: 'enable remote sensor connections' value: #enableRemoteSensors]
-			ifNotNil: [menu add: 'disable remote sensor connections' value: #exitPhratchSession]].
 
 	DebugMenu ifTrue: [
 		menu addLine.
@@ -1310,7 +1303,6 @@ CommandBlockMorph >> rightButtonMenu [
 	
 	(choice := (menu localize; invokeModal"popUpAt: World activeHand position  inWorld:   World"; yourself)selectedValue) ifNil: [^ self].
 	(#(presentHelpScreen duplicate fastDuplicate rename delete showElements editElements inheritAttribute disinheritAttribute) includes: choice) ifTrue: [^ self perform: choice].
-	choice = #showSensorBoard ifTrue: [sFrame showSensorBoard. ^ self].
 	choice = #enableRemoteSensors ifTrue: [sFrame enableRemoteSensors. ^ self].
 	choice = #exitPhratchSession ifTrue: [sFrame exitPhratchSession. ^ self].
 	choice = #showTuples ifTrue: [^ self showTuples].

@@ -12,7 +12,6 @@ Class {
 		'lastPenPositions',
 		'runningBlocks',
 		'inProcessStep',
-		'sensorBoard',
 		'midiPortNum',
 		'midiPort',
 		'notePlayerDict',
@@ -590,7 +589,6 @@ PhratchStageMorph >> initialize [
 	vPan := 0.
 	runningBlocks := OrderedCollection new.
 	inProcessStep := false.
-	sensorBoard := SensorBoardMorph new.
 	midiPortNum := -1.
 	notePlayerDict := Dictionary new.
 	sprites := OrderedCollection new.
@@ -848,7 +846,7 @@ PhratchStageMorph >> patchAt: patchRect withoutWatchersAnd: stopMorph andNothing
 			ifTrue: [morphsToDraw := morphsToDraw copyFrom: 1 to: i - 1]  "stop at stopMorph"
 			ifFalse: [morphsToDraw removeIndex: i]].  "skip stopMorph"
 	morphsToDraw do: [:m |
-		((m isKindOf: WatcherMorph) or: [(m isKindOf: SensorBoardMorph)])
+		(m isKindOf: WatcherMorph)
 			ifFalse: [m fullDrawOn: c]].
 	^ c form
 
@@ -1098,20 +1096,6 @@ PhratchStageMorph >> sceneNames [
 
 ]
 
-{ #category : #accessing }
-PhratchStageMorph >> sensorBoard [
-
-	^ sensorBoard
-
-]
-
-{ #category : #accessing }
-PhratchStageMorph >> sensorBoard: aSensorBoardMorph [
-
-	sensorBoard := aSensorBoardMorph.
-
-]
-
 { #category : #'looks ops' }
 PhratchStageMorph >> setHPanTo: aNumber [
 	"Set my horizontal pan to the given offset."
@@ -1304,7 +1288,6 @@ PhratchStageMorph >> stepProcesses [
 	"Details: Iterate over a copy of processes to allow processes to stop themselves. During development, the error catcher makes it difficult to track down errors, so it can be disabled."
 
 	| proc |
-"	sensorBoard processIncomingData."
 
 	PhratchProcess blockHighlightMSecs = 0 ifTrue: [^ self stepProcessesTurbo].
 

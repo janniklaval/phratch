@@ -2016,7 +2016,7 @@ PhratchFrameMorph >> initializeWatcherPositions [
 PhratchFrameMorph >> installNewProject: newWorkpane [
 	"Called after creating or reading a new project to clear the process scheduler, pick an object to view, clear the library thumbnails, and perform other housekeeping."
 
-	| viewTarget sb |
+	| viewTarget |
 	self stopAll.
 
 	newWorkpane class = PhratchStageMorph
@@ -2031,15 +2031,6 @@ PhratchFrameMorph >> installNewProject: newWorkpane [
 	newWorkpane bounds: workPane bounds.
 	newWorkpane midiPortNum: workPane midiPortNum.
 	workPane closeMIDI.
-
-	"use the same sensorboard for the new project"
-	sb := workPane sensorBoard.
-	newWorkpane submorphs do: [:m |
-		(m isKindOf: SensorBoardMorph) ifTrue: [
-			sb position: m position.
-			newWorkpane replaceSubmorph: m by: sb.
-			sb tryToOpenPort]].
-	newWorkpane sensorBoard: sb.
 
 	workPane owner replaceSubmorph: workPane by: newWorkpane.
 	workPane := newWorkpane.
@@ -3306,18 +3297,6 @@ PhratchFrameMorph >> showPlay [
 
 ]
 
-{ #category : #'menu/button actions' }
-PhratchFrameMorph >> showSensorBoard [
-
-	| sb |
-	sb := workPane sensorBoard.
-	sb position: self workPane position + 20.
-	self workPane addMorph: sb.
-	sb tryToOpenPort.
-	World startSteppingSubmorphsOf: sb.
-
-]
-
 { #category : #watchers }
 PhratchFrameMorph >> showWatcher: watcher [
 	"Show the given watcher. Reuse it's old position if it was showing before. Otherwise, find a new position for it."
@@ -3775,7 +3754,6 @@ PhratchFrameMorph >> updateMediaCategoryFor: anObject [
 { #category : #private }
 PhratchFrameMorph >> updatePanes [
 
-	| p |
 	menuPanel delete.
 	self createMenuPanel.
 
@@ -3794,15 +3772,6 @@ PhratchFrameMorph >> updatePanes [
 
 	readoutPane delete.
 	self createReadoutPane.
-
-	workPane sensorBoard owner
-		ifNil: [p := nil]
-		ifNotNil: [p := workPane sensorBoard position].
-
-	workPane sensorBoard addReadouts.
-	p ifNotNil:[
-		self showSensorBoard.
-		workPane sensorBoard position: p].
 
 	libraryPane clearLibrary.
 

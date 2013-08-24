@@ -7000,37 +7000,6 @@ ScriptablePhratchMorph >> scripts [
 
 ]
 
-{ #category : #'sensing ops' }
-ScriptablePhratchMorph >> sensor: sensorName [
-	"Answer the value of the given sensor, or zero if the sensorboard is not available."
-	<phratchItem: '$SensorNames$ sensor value' kind: #r category: 'sensing' defaultValues: #('slider') subCategory: #sensor>
-	| stage v sb |
-	(stage := self ownerThatIsA: PhratchStageMorph) ifNil: [^ 0].
-	stage phratchServer ifNotNil: [
-		v := stage phratchServer sensorValueFor: sensorName.
-		v ifNotNil: [^ v]].
-
-	'tilt' = sensorName ifTrue: [^ WeDoPlugin tilt].
-	'distance' = sensorName ifTrue: [^ WeDoPlugin distance].
-
-	sb := stage sensorBoard.
-	sb tryToOpenPort ifFalse: [^ 0].  "could not open"
-	^ sb sensor: (self indexForSensorName: sensorName)
-
-]
-
-{ #category : #'sensing ops' }
-ScriptablePhratchMorph >> sensorPressed: sensorName [
-	"Answer true if a button connected to the given input of the sensor board is pressed. That is, if the sensor value is less than 10. Answer false if the sensor board cannot be opened."
-	<phratchItem: 'sensor $SensorBooleans$?' kind: #b category: 'sensing' defaultValues: #('button pressed') subCategory: #sensor>
-	| stage sb |
-	(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNil: [^ false].
-	sb := stage sensorBoard.
-	sb tryToOpenPort ifFalse: [^ false].  "could not open"
-	^ (sb sensor: (self indexForSensorName: sensorName)) < 10
-
-]
-
 { #category : #networking }
 ScriptablePhratchMorph >> serialized [
 	"Answer a ByteArray containing this Phratch object in serialized form."

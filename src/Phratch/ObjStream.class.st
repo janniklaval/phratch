@@ -224,7 +224,7 @@ ObjStream class >> userClasses [
 		"(120	SpriteMorph)"
 		"(121		SoundMorph)"
 		"(122	ImageBoxMorph)"
-		(123		SensorBoardMorph)
+		"(123		SensorBoardMorph)"
 		(124		#PhratchSpriteMorph)
 		(125		#PhratchStageMorph)
 
