@@ -1179,11 +1179,11 @@ PhratchSpriteMorph >> multiplySizeBy: factor [
 ]
 
 { #category : #'as yet unclassified' }
-PhratchSpriteMorph >> nextCost [
+PhratchSpriteMorph >> nextCostume [
 	"Show the next costume in my costumes list."
 	<phratchItem: 'next costume' kind: #- category: 'looks' defaultValues: #() subCategory: #a1>
 	
-	self nextCostume.
+	super nextCostume.
 
 ]
 
