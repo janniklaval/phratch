@@ -1012,22 +1012,6 @@ ScriptablePhratchMorph >> allLocalBlockIds [
 	^ (ownIds, inheritedIds) asSortedCollection
 ]
 
-{ #category : #'motor ops' }
-ScriptablePhratchMorph >> allMotorsOff [
-	"Turn all motors off."
-	<phratchItem: 'motor off' kind: #- category: 'motor' defaultValues: #() subCategory: #a>
-	self motorOff: ' '.
-
-]
-
-{ #category : #'motor ops' }
-ScriptablePhratchMorph >> allMotorsOn [
-	"Turn all motors off."
-	<phratchItem: 'motor on' kind: #- category: 'motor' defaultValues: #() subCategory: #a>
-	self motorOn: ' '.
-
-]
-
 { #category : #'BYOB object interface' }
 ScriptablePhratchMorph >> allSprites [
 
@@ -2985,8 +2969,6 @@ ScriptablePhratchMorph >> defaultArgsFor: blockSpec [
 		ifTrue: [ defaultArgs := Array with: self referencePosition x rounded with: self referencePosition y rounded ].
 	#glideSecs:toX:y:elapsed:from: = sel
 		ifTrue: [ defaultArgs := Array with: 1 with: self referencePosition x rounded with: self referencePosition y rounded ].
-	#motor:direction: = self
-		ifTrue: [ defaultArgs := Array with: 'reverse' localized with: 'this way' localized with: 'that way' ].
 	#setSizeTo: = sel
 		ifTrue: [ 
 			(self isKindOf: PhratchStageMorph)
@@ -5860,42 +5842,6 @@ ScriptablePhratchMorph >> mosaicEffect: aNumber [
 ]
 
 { #category : #'motor ops' }
-ScriptablePhratchMorph >> motor: motorName direction: directionName [
-	"Set the direction of the given motor."
-
-	| dir |
-	dir := 0.
-	(directionName includesSubstring: 'reverse')
-		ifTrue: [ dir := 0 ].
-	(directionName includesSubstring: 'this way')
-		ifTrue: [ dir := 1 ].
-	(directionName includesSubstring: 'that way')
-		ifTrue: [ dir := -1 ].
-	'A' = motorName
-		ifTrue: [ WeDoPlugin motorADirection: dir ].
-	'B' = motorName
-		ifTrue: [ WeDoPlugin motorBDirection: dir ].
-	' ' = motorName
-		ifFalse: [ ^ self ].
-	WeDoPlugin motorADirection: dir.
-	WeDoPlugin motorBDirection: dir
-]
-
-{ #category : #'motor ops' }
-ScriptablePhratchMorph >> motor: motorName power: power [
-	"Set the power level of the given motor (0-100)."
-
-	'A' = motorName
-		ifTrue: [ WeDoPlugin motorAPower: power ].
-	'B' = motorName
-		ifTrue: [ WeDoPlugin motorBPower: power ].
-	' ' = motorName
-		ifFalse: [ ^ self ].
-	WeDoPlugin motorAPower: power.
-	WeDoPlugin motorBPower: power
-]
-
-{ #category : #'motor ops' }
 ScriptablePhratchMorph >> motorDirection [
 
 	^ {
@@ -5910,46 +5856,6 @@ ScriptablePhratchMorph >> motorDirection [
 ScriptablePhratchMorph >> motorNames [
 
 	^ #(' ' A B)
-
-]
-
-{ #category : #'motor ops' }
-ScriptablePhratchMorph >> motorOff: motorName [
-	"Turn the given motor off."
-
-	'A' = motorName
-		ifTrue: [ WeDoPlugin motorAOn: false ].
-	'B' = motorName
-		ifTrue: [ WeDoPlugin motorBOn: false ].
-	' ' = motorName
-		ifFalse: [ ^ self ].
-	WeDoPlugin motorAOn: false.
-	WeDoPlugin motorBOn: false
-]
-
-{ #category : #'motor ops' }
-ScriptablePhratchMorph >> motorOn: motorName [
-	"Turn the given motor on."
-
-	'A' = motorName
-		ifTrue: [ WeDoPlugin motorAOn: true ].
-	'B' = motorName
-		ifTrue: [ WeDoPlugin motorBOn: true ].
-	' ' = motorName
-		ifFalse: [ ^ self ].
-	WeDoPlugin motorAOn: true.
-	WeDoPlugin motorBOn: true
-]
-
-{ #category : #'motor ops' }
-ScriptablePhratchMorph >> motorOnFor: secs elapsed: elapsedMSecs from: motorID [
-	"Turn all motors on for the given number of seconds."
-	<phratchItem: 'motor on for $Number$ secs' kind: #t category: 'motor' defaultValues: #(1) subCategory: #a>
-	motorID ifNil: [  "first call, start motor"
-		self motorOn: ' '.
-		^ #' '].
-
-	elapsedMSecs >= (1000 * secs) ifTrue: [self motorOff: motorID].
 
 ]
 
@@ -7129,14 +7035,6 @@ ScriptablePhratchMorph >> setMedia: mediaCollection [
 
 ]
 
-{ #category : #'motor ops' }
-ScriptablePhratchMorph >> setMotorDirection: directionName [
-	<phratchItem: 'motor direction $MotorDirection$' kind: #- category: 'motor' defaultValues: #('this way') subCategory: #a>
-	self motor: ' ' direction: directionName.
-
-
-]
-
 { #category : #'sound ops' }
 ScriptablePhratchMorph >> setTempoTo: aNumber [
 	<phratchItem: 'set tempo to $Number$ bpm' kind: #- category: 'sound' defaultValues: #(60) subCategory: #a5>
@@ -7526,14 +7424,6 @@ ScriptablePhratchMorph >> startDrag: evt [
 	rootForGrab ifNil: [^ self].
 	rootForGrab position: evt hand position + (self topLeft - evt cursorPoint).
 	evt hand grabMorph: rootForGrab.
-
-]
-
-{ #category : #'motor ops' }
-ScriptablePhratchMorph >> startMotorPower: power [
-	<phratchItem: 'motor power $Number$' kind: #- category: 'motor' defaultValues: #(100) subCategory: #a>
-	self motor: ' ' power: power.
-	self motorOn: ' '.
 
 ]
 

@@ -175,17 +175,6 @@ PhratchStackFrame >> stopMIDI [
 ]
 
 { #category : #accessing }
-PhratchStackFrame >> stopMotors [
-
-	| motorName |
-	(expression isKindOf: CommandBlockMorph) ifTrue: [
-		#motorOnFor:elapsed:from: = expression selector ifTrue: [
-			motorName := startValue.
-			expression receiver motorOff: motorName]].
-
-]
-
-{ #category : #accessing }
 PhratchStackFrame >> stopTalkThinkAsk [
 	| s |
 	(expression isKindOf: CommandBlockMorph)
