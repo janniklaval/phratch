@@ -154,6 +154,14 @@ ConfigurationOfPhratch >> project [
 ]
 
 { #category : #'as yet unclassified' }
+ConfigurationOfPhratch >> stable: spec [ 
+	<symbolicVersion: #stable>
+	
+	spec for: #'pharo2.0.x' version: '1.0'. 
+	spec for: #'pharo3.0.x' version: '1.0'. 
+]
+
+{ #category : #'as yet unclassified' }
 ConfigurationOfPhratch >> version10: spec [
 	<version:'1.0' imports: #('1.0-baseline' )>
 	spec for: #common do: [
