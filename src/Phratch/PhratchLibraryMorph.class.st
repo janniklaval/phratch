@@ -8,7 +8,6 @@ Class {
 	#instVars : [
 		'scrollPane',
 		'stagePane',
-		'thumbWidth',
 		'itemExtent',
 		'spritePane',
 		'buttonPane',

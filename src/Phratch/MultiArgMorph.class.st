@@ -4,7 +4,6 @@ Class {
 	#instVars : [
 		'text',
 		'type',
-		'minArgCount',
 		'isWrapping'
 	],
 	#category : #'Phratch-Blocks'

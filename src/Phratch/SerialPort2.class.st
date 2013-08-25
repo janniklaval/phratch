@@ -7,15 +7,6 @@ Class {
 	#category : #'Phratch-Primitives-Plugins'
 }
 
-{ #category : #enumeration }
-SerialPort2 class >> portNames [
-	"Answer a collection of serial port names."
-
-	^ (1 to: PhratchPlugin portCount)
-		collect: [:i | PhratchPlugin portName: i]
-
-]
-
 { #category : #'open/close' }
 SerialPort2 >> assertOpen [
 	"Raise an error if the port is not open."
@@ -126,13 +117,5 @@ SerialPort2 >> readString [
 	count := PhratchPlugin readPort: portNum into: buf.
 	count <= 0 ifTrue: [^ String new].
 	^ buf copyFrom: 1 to: count
-
-]
-
-{ #category : #options }
-SerialPort2 >> setOption: optionNum to: anInteger [
-	"Set the given option to the given value."
-
-	PhratchPlugin port: portNum setOption: optionNum to: anInteger.
 
 ]

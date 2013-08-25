@@ -8,7 +8,6 @@ Class {
 	#instVars : [
 		'originalSound',
 		'volume',
-		'balance',
 		'playingSound',
 		'compressedSampleRate',
 		'compressedBitsPerSample',
@@ -26,13 +25,6 @@ SoundMedia class >> initialize [
 	"self initialize"
 
 	PlaceholderSound := SampledSound samples: SoundBuffer new samplingRate: 22050.
-
-]
-
-{ #category : #accessing }
-SoundMedia >> balance [
-
-	^ (100.0 * balance) rounded
 
 ]
 
@@ -143,7 +135,6 @@ SoundMedia >> initFieldsFrom: anObjStream version: classVersion [
 	self initFieldsNamed: #(
 		originalSound
 		volume
-		balance
 	) from: anObjStream.
 
 	classVersion = 1 ifTrue: [^ self].
@@ -377,7 +368,6 @@ SoundMedia >> storeFieldsOn: anObjStream [
 	self storeFieldsNamed: #(
 		originalSound
 		volume
-		balance
 		compressedSampleRate
 		compressedBitsPerSample
 		compressedData

@@ -4,7 +4,6 @@ Class {
 	#instVars : [
 		'foreground',
 		'background',
-		'switcher',
 		'transparentMorph'
 	],
 	#category : #'Phratch-Paint'
@@ -54,7 +53,8 @@ PaintColorSwitcher >> createForegroundBackground [
 { #category : #initialization }
 PaintColorSwitcher >> createSwitcher [
 
-	switcher := IconicButton new.
+	| switcher |
+	switcher := IconicButton new. 
 	switcher
 		labelGraphic: (PhratchFrameMorph skinAt: #paintColorSwitcher) borderWidth: 0;
 		actionSelector: #switchColors;

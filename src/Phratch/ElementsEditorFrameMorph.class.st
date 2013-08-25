@@ -6,9 +6,7 @@ Class {
 		'initialClass',
 		'initialMethod',
 		'resizeMorph',
-		'resizeOffset',
-		'definition',
-		'template'
+		'resizeOffset'
 	],
 	#classVars : [
 		'UserPos',
@@ -49,9 +47,10 @@ ElementsEditorFrameMorph >> centerOnScreen [
 { #category : #accessing }
 ElementsEditorFrameMorph >> definition: aCustomBlockDefinition [
 
+	| definition template | 
 	definition := aCustomBlockDefinition.
 	template := CustomCommandBlockMorph template.
-	template userSpec: definition userSpec.
+	template userSpec: definition userSpec. 
 
 ]
 

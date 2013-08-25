@@ -4,7 +4,6 @@ Class {
 	#instVars : [
 		'max',
 		'min',
-		'marks',
 		'graph'
 	],
 	#category : #'Phratch-Sound'

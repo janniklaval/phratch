@@ -239,19 +239,19 @@ PhratchPluginTests >> videoTest [
 	"A quick test of video input. Displays video on the screen until the mouse is pressed."
 	"CameraPlugin videoTest"
 
-	| f n startTime frameCount msecs fps |
+	| f startTime frameCount msecs fps |
 	(CameraPlugin openCamera: 1 width: 320 height: 240) ifNil: [^ CameraPlugin inform: 'no camera'].
 	CameraPlugin waitForCameraStart.
 	(CameraPlugin frameExtent: 1) x = 0 ifTrue: [^ CameraPlugin inform: 'no camera'].
 	f := Form extent: (CameraPlugin frameExtent: 1) depth: 32.
 	frameCount := 0.
 	startTime := 0.
-	"[Sensor anyButtonPressed] whileFalse: ["
-		n := CameraPlugin getFrameForCamera: 1 into: f bits.
-		"n > 0 ifTrue: ["
+	
+		CameraPlugin getFrameForCamera: 1 into: f bits.
+		
 			startTime ifNil: [startTime := Time millisecondClockValue].
 			frameCount := frameCount + 1.
-			f display"]""]".
+			f display.
 	Sensor waitNoButton.
 	msecs := Time millisecondClockValue - startTime.
 	CameraPlugin closeCamera: 1.

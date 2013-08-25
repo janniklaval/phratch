@@ -23,8 +23,7 @@ Class {
 		'arguments',
 		'pc',
 		'startTime',
-		'startValue',
-		'shouldUnlight'
+		'startValue'
 	],
 	#category : #'Phratch-Execution Engine'
 }

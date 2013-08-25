@@ -14,7 +14,6 @@ Class {
 	#instVars : [
 		'selection',
 		'scale',
-		'ruler',
 		'viewer',
 		'negVals',
 		'posVals',
@@ -50,7 +49,8 @@ PhratchGraphMorph class >> openOn: dataCollection [
 
 { #category : #initialization }
 PhratchGraphMorph >> addRuler [
-
+ 
+	| ruler |
 	ruler := PhratchRulerMorph graphMorph: self.
 	self addMorphBack: ruler.
 	ruler position: self bottomLeft.

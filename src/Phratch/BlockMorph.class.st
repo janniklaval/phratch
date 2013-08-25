@@ -1492,12 +1492,6 @@ BlockMorph >> printCodeSubmorph: aMorph on: aStream [
 ]
 
 { #category : #byob }
-BlockMorph >> privateProperties: collectionOfProperties [
-
-	self setProperty: #properties toValue: collectionOfProperties
-]
-
-{ #category : #byob }
 BlockMorph >> properties [
 	self valueOfProperty: #properties
 ]

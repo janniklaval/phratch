@@ -2,7 +2,6 @@ Class {
 	#name : #PhratchNoteSelector,
 	#superclass : #BorderedMorph,
 	#instVars : [
-		'done',
 		'selectedVal',
 		'labelMorph',
 		'notePlayer'
@@ -134,7 +133,7 @@ PhratchNoteSelector >> shutDown [
 PhratchNoteSelector >> startUp [
 	"Waits for the user to click a value or to click outside, then returns the selected note or nil."
 
-	| w result |
+	| w result done |
 	self openInWorld.
 	w := self world.
 "	Sensor waitNoButton. " "start with mouse up"

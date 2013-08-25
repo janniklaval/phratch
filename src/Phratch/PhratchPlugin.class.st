@@ -324,16 +324,6 @@ PhratchPlugin class >> scale: aForm by: scale [
 ]
 
 { #category : #'serial port primitives' }
-PhratchPlugin class >> serialPortOpsAvailable [
-	"Answer true if this plugin is available."
-	"self serialPortOpsAvailable"
-	"Smalltalk unloadPlugin: self name"
-
-	^ self portCountOrNil notNil
-
-]
-
-{ #category : #'serial port primitives' }
 PhratchPlugin class >> writePort: portNum data: buffer [
 	"Write data from the given ByteArray or String to the given port and answer the number of bytes written."
 	"self writePort: 1 into: (ByteArray new: 10)"

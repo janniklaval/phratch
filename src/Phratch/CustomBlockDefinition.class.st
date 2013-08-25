@@ -5,7 +5,6 @@ Class {
 		'userSpec',
 		'blockVars',
 		'body',
-		'isReporter',
 		'isAtomic',
 		'isBoolean',
 		'answer',
@@ -245,7 +244,6 @@ CustomBlockDefinition >> initFieldsFrom: anObjStream version: classVersion [
 		userSpec
 		blockVars
 		isAtomic
-		isReporter
 		isBoolean
 		body
 		answer
@@ -443,7 +441,6 @@ CustomBlockDefinition >> storeFieldsOn: anObjStream [
 		userSpec
 		blockVars
 		isAtomic
-		isReporter
 		isBoolean
 		body
 		answer

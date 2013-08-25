@@ -8,7 +8,6 @@ Class {
 	#instVars : [
 		'serverName',
 		'address',
-		'portNumber',
 		'path',
 		'downloadedData',
 		'status',

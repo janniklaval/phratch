@@ -152,10 +152,12 @@ OSlotMorph >> printArgOn: aStream [
 	| v |
 	v := self evaluate.
 	(v isKindOf: String)
-		ifTrue: [aStream nextPutAll: '"', v, '"']
-		ifFalse: [aStream nextPutAll: v asString].
-
-
+		ifTrue: [ 
+			aStream
+				nextPutAll: '"';
+				nextPutAll: v;
+				nextPutAll: '"' ]
+		ifFalse: [ aStream nextPutAll: v asString ]
 ]
 
 { #category : #accessing }

@@ -1262,7 +1262,7 @@ CommandBlockMorph >> replaceArgMorph: oldMorph by: newMorph [
 { #category : #byob }
 CommandBlockMorph >> rightButtonMenu [
 
-	| menu sFrame choice spec |
+	| menu choice spec |
 	menu := MenuMorphNG new defaultTarget: self.
 	menu add: 'help' value: #presentHelpScreen.
 
@@ -1303,8 +1303,8 @@ CommandBlockMorph >> rightButtonMenu [
 	
 	(choice := (menu localize; invokeModal"popUpAt: World activeHand position  inWorld:   World"; yourself)selectedValue) ifNil: [^ self].
 	(#(presentHelpScreen duplicate fastDuplicate rename delete showElements editElements inheritAttribute disinheritAttribute) includes: choice) ifTrue: [^ self perform: choice].
-	choice = #enableRemoteSensors ifTrue: [sFrame enableRemoteSensors. ^ self].
-	choice = #exitPhratchSession ifTrue: [sFrame exitPhratchSession. ^ self].
+	choice = #enableRemoteSensors ifTrue: [ ^ self].
+	choice = #exitPhratchSession ifTrue: [ ^ self].
 	choice = #showTuples ifTrue: [^ self showTuples].
 
 	"change operator"

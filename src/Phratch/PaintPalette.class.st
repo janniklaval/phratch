@@ -6,7 +6,6 @@ Class {
 		'brushSizeMorph',
 		'brushSize',
 		'eraserSize',
-		'brushIcon',
 		'colorSwitcher',
 		'fillStylePane',
 		'optionsPane',
@@ -20,8 +19,7 @@ Class {
 		'brushSizeMenu',
 		'textSizeMenu',
 		'textSizeMorph',
-		'textFontMenu',
-		'textFontMorph'
+		'textFontMenu'
 	],
 	#category : #'Phratch-Paint'
 }
@@ -518,13 +516,13 @@ PaintPalette >> updateFontMenu: choice withOsFont: useOSFont [
 
 { #category : #accessing }
 PaintPalette >> updateOptionsPane [
-	| options font s spacer form b formMorph colorToUse brushThumbnail n2 aColor2 fName |
+	| options font s spacer form b formMorph colorToUse brushThumbnail n2 aColor2 fName textFontMorph brushIcon |
 	optionsPane removeAllMorphs.
 	options := AlignmentMorph newRow
 		width: optionsPane width - 16;
-		height: optionsPane height - 30;
+		height: optionsPane height - 30; 
 		color: Color transparent;
-		hResizing: #shrinkWrap;
+		hResizing: #shrinkWrap; 
 		vResizing: #shrinkWrap;
 		inset: 0; 
 		yourself.

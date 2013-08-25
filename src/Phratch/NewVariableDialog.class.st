@@ -4,8 +4,7 @@ Class {
 	#instVars : [
 		'allSpritesRadioButton',
 		'thisSpriteRadioButton',
-		'spriteSpecificFlag',
-		'radioButtons'
+		'spriteSpecificFlag'
 	],
 	#category : #'Phratch-UI-Dialogs'
 }
@@ -36,9 +35,9 @@ NewVariableDialog >> getUserResponse [
 
 { #category : #initialization }
 NewVariableDialog >> initialize [
-	| label1 label2 |
+	| label1 label2 radioButtons |
 	super initialize.
-	spriteSpecificFlag := false.
+	spriteSpecificFlag := false. 
 	radioButtons := AlignmentMorph newRow
 		color: Color transparent;
 		hResizing: #shrinkWrap;

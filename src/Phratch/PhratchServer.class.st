@@ -522,15 +522,6 @@ PhratchServer >> sensorNames [
 
 ]
 
-{ #category : #accessing }
-PhratchServer >> sensorValueFor: sensorName [
-	"Answer the value for the given virtual sensor or nil if the given sensor name is not found."
-
-	^ sensors at: sensorName ifAbsent: [nil]
-
-
-]
-
 { #category : #'server control' }
 PhratchServer >> sessionInProgress [
 	"Answer true if this Phratch server has any external connections."

@@ -24,7 +24,6 @@ Class {
 		'radioUnevaluatedBoolean',
 		'defaultLabel',
 		'defaultField',
-		'divBar',
 		'singleRadioButton',
 		'multipleRadioButton',
 		'externalizedRadioButton'
@@ -114,11 +113,11 @@ BlockLabelFragmentDialog >> aritySingle [
 BlockLabelFragmentDialog >> buildSlotTypeChoices [
 	 | lineObject lineAny lineNumber lineText lineBoolean lineList lineCommand lineReporter linePredicate lineLoop lineUnevaluated lineUnevaluatedBoolean
 	picture label typeChooser picSize lineWidth typeLabel typeFont bg titleClr labelClr labelSingle
-	labelMultiple labelExternalized temp onForm offForm|
+	labelMultiple labelExternalized temp onForm offForm divBar |
  
 	onForm :=  PhratchFrameMorph skinAt: #radioButtonOn.
 	offForm := PhratchFrameMorph skinAt: #radioButton.
-
+ 
 	picSize := 45@25.
 	lineWidth := 160 "125".
 	titleClr := Color gray muchLighter.

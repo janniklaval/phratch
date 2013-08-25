@@ -11,17 +11,13 @@ Class {
 		'numberMorph',
 		'nameMorph',
 		'infoMorph',
-		'soundSizeMorph',
 		'playButton',
 		'stopButton',
-		'deleteButton',
 		'highlightMorph',
 		'topRightInset',
-		'separator',
 		'rightMorph',
 		'highlightPadding',
 		'numberMorphTopRight',
-		'minThumbHeight',
 		'phratchObj'
 	],
 	#classVars : [
@@ -90,7 +86,7 @@ MediaItemMorph >> addStopButton [
 MediaItemMorph >> buildRightSideMorph [
 	"Answers the part of MediaItemMorph that includes the label, the edit/copy or record/play buttons, etc. This includes everything but the sprite image, the number, and the horizontal divider."
 
-	| e c bottom |
+	| e c bottom soundSizeMorph deleteButton |
 	rightMorph := Morph new.
 	rightMorph color: (Color transparent).
 
@@ -155,12 +151,12 @@ MediaItemMorph >> buildRightSideMorph [
 { #category : #initialization }
 MediaItemMorph >> buildSubmorphs [
 
-	| thumbHeight |
+	| thumbHeight minThumbHeight separator |
 	self buildRightSideMorph.
 
 	numberMorph := (StringMorph contents: '345')
 		font: (PhratchFrameMorph getFont: #MediaItemInfo);
-		color: Color white;
+		color: Color white; 
 		position: topRightInset;
 		yourself.
 	self addMorph: numberMorph.

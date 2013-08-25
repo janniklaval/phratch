@@ -15,11 +15,8 @@ Class {
 		'choosingFolder',
 		'newFileTitle',
 		'newFileName',
-		'thumbnailFrameMorph',
 		'thumbnailMorph',
-		'authorLabelMorph',
 		'authorMorph',
-		'commentLabelMorph',
 		'commentMorph',
 		'type',
 		'newTitleBin',
@@ -479,12 +476,12 @@ PhratchFileChooserDialog >> createFileChooserLayout: allowNewFile [
 PhratchFileChooserDialog >> createPhratchFileChooserFor: aPhratchFrameMorph saving: savingFlag [
 	"Create a Phratch file chooser dialog box with a project thumbnail and info box."
 
-	| labelFont contentsFont commentFont thumbnailHolder dumm |
+	| labelFont contentsFont commentFont thumbnailHolder dumm thumbnailFrameMorph commentLabelMorph authorLabelMorph |
 	phratchFrame := aPhratchFrameMorph.
-	readingPhratchFile := savingFlag not.
+	readingPhratchFile := savingFlag not. 
 	list := PhratchFilePicker new extensions: #(#scratch #sb #ypr #phr).
-	self removeAllMorphs.
-	bottomSpacer delete.
+	self removeAllMorphs. 
+	bottomSpacer delete. 
 	bottomSpacer := nil.
 	mainColumn addMorphBack: list.
 	savingFlag

@@ -9,7 +9,6 @@ Class {
 	#superclass : #ArgMorph,
 	#instVars : [
 		'menuIconMorph',
-		'isBoolean',
 		'options',
 		'choice',
 		'getOptionsSelector'
@@ -180,7 +179,6 @@ ChoiceArgMorph >> initFieldsFrom: anObjStream version: classVersion [
 
 	super initFieldsFrom: anObjStream version: classVersion.
 	self initFieldsNamed: #(
-		isBoolean
 		options
 		choice
 	) from: anObjStream.
@@ -356,7 +354,6 @@ ChoiceArgMorph >> storeFieldsOn: anObjStream [
 
 	super storeFieldsOn: anObjStream.
 	self storeFieldsNamed: #(
-		isBoolean
 		options
 		choice
 		getOptionsSelector

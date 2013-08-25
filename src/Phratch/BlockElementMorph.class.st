@@ -42,16 +42,22 @@ BlockElementMorph >> allVariableNames [
 
 { #category : #converting }
 BlockElementMorph >> asSmalltalk [
-	| ws vn|
+	| ws vn |
 	ws := WriteStream on: String new.
 	ws nextPut: $[.
-	(vn := self variableNames) isEmpty ifFalse: [
-		vn do: [:n|
-			ws nextPut: $:.
-			ws nextPutAll: n, ' ' ].
-		ws nextPutAll: '| '].
-	ws nextPutAll: steps asSmalltalk, ']'.
-	^ws contents
+	(vn := self variableNames) isEmpty
+		ifFalse: [ 
+			vn
+				do: [ :n | 
+					ws nextPut: $:.
+					ws
+						nextPutAll: n;
+						nextPutAll: ' ' ].
+			ws nextPutAll: '| ' ].
+	ws
+		nextPutAll: steps asSmalltalk;
+		nextPutAll: ']'.
+	^ ws contents
 ]
 
 { #category : #'as yet unclassified' }

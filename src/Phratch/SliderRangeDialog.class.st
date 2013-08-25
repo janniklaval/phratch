@@ -7,8 +7,7 @@ Class {
 	#superclass : #DialogBoxMorph,
 	#instVars : [
 		'minMorph',
-		'maxMorph',
-		'radioButtons'
+		'maxMorph'
 	],
 	#category : #'Phratch-UI-Dialogs'
 }
@@ -78,7 +77,7 @@ SliderRangeDialog >> initialMin: minVal max: maxVal [
 SliderRangeDialog >> initialize [
 	"Similar to my superclass, but with a string field for the user's response."
 
-	| minLabel maxLabel |
+	| minLabel maxLabel radioButtons |
 	super initialize.
 	self title: '?' translated.
 	self message: 'Slider range:'.
