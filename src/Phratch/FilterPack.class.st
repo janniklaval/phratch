@@ -123,8 +123,6 @@ FilterPack >> applyStaticFiltersTo: srcForm [
 
 	pixelateCount abs >= 5 ifTrue: [self applyPixelateFilter].
 	mosaicCount abs >= 5 ifTrue: [self applyMosaicFilter].
-		
-	cachedForm := resultForm.
 	
 	
 
@@ -149,7 +147,6 @@ FilterPack >> brightnessShift: aNumber [
 FilterPack >> clearFilterCaches [
 	"Clear my caches. This should be called when the costume changes."
 
-	cachedForm := nil.
 	reapply := true.
 
 ]
@@ -159,7 +156,7 @@ FilterPack >> filtersActive [
 	"Answer true if any filters are active."
 
 	reapply ifTrue: [^ true].
-	^ (pointillizeSize ~= 0)
+	^ false
 
 ]
 
@@ -196,7 +193,7 @@ FilterPack >> hueShift: aNumber [
 { #category : #initialize }
 FilterPack >> initialize [
 
-	resultForm := cachedForm := nil.
+	resultForm := nil.
 	reapply := true.
 	self resetAllFilters.
 
@@ -235,7 +232,7 @@ FilterPack >> pixelateCount: aNumber [
 { #category : #filtering }
 FilterPack >> resetAllFilters [
 
-	resultForm := cachedForm := nil.
+	resultForm := nil.
 
 	hueShift := 0.
 	brightnessShift := 0.

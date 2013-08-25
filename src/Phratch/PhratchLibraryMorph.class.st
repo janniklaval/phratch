@@ -21,8 +21,8 @@ PhratchLibraryMorph >> addThumbnailFor: aMorph [
 	"Add a thumbnail for the given morph."
 
 	| newThumbnail |
-	newThumbnail := LibraryItemMorph new.
-	newThumbnail extent: itemExtent thumbWidth: thumbWidth.
+	newThumbnail := LibraryItemMorph new. 
+	newThumbnail extent: itemExtent thumbWidth: 50.
 	newThumbnail  target: aMorph.
 	(newThumbnail target isKindOf: PhratchStageMorph)
 		ifTrue: [stagePane addMorph: newThumbnail]
@@ -148,7 +148,6 @@ PhratchLibraryMorph >> extent: aRectangle [
 	super extent: aRectangle.
 	scrollPane isNil | stagePane isNil ifTrue: [^ self].
 	
-	thumbWidth := 50.
 	nameHeight := (PhratchTranslator stringExtent: ('Sprite1' localized) font: (PhratchFrameMorph getFont: #LibraryItemName)) y.
 	itemExtent := 54@(54 + nameHeight).
 

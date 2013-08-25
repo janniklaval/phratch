@@ -65,7 +65,6 @@ PhratchStackFrame >> initialize [
 	expression := nil.
 	arguments := OrderedCollection new. 
 	pc := 1.
-	shouldUnlight := false.
 
 ]
 
@@ -105,15 +104,13 @@ PhratchStackFrame >> printOn: aStream [
 	aStream
 		nextPutAll: '[';
 		nextPutAll: expression printString;
-		nextPutAll: ' ';
-		nextPutAll: shouldUnlight printString;
 		nextPutAll: ']'
 ]
 
 { #category : #accessing }
 PhratchStackFrame >> shouldUnlight [
 
-	^ shouldUnlight
+	^ false
 
 ]
 

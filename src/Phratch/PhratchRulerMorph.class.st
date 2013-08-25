@@ -24,7 +24,7 @@ PhratchRulerMorph >> drawOn: aCanvas [
 	| space bigSpace currVal s ss |
 	
 	"the amt of space btw each bar.  big Space = the amt of space btw each big bar"
-	space := (self extent x/marks) truncated max: 1.
+	space := (self extent x/20.0) truncated max: 1.
 	bigSpace := 5* space asFloat.
 
 	graph ifNotNil: [ss := graph editor origSamplingRate]
@@ -44,7 +44,7 @@ PhratchRulerMorph >> drawOn: aCanvas [
 				s center: (pos truncated)@(self top + 12).
 				self addMorph: s.]
 				ifFalse: [aCanvas line: (pos truncated)@(self top truncated) to: (pos truncated)@((self top + 1) truncated) color: Color black.]. 
-			currVal := currVal + ((max-min)/(marks*ss)) roundTo: 0.01. ].
+			currVal := currVal + ((max-min)/(20.0*ss)) roundTo: 0.01. ].
 
 
 
@@ -64,7 +64,6 @@ PhratchRulerMorph >> initialize [
 	super initialize.
 	min := 0.0.
 	max := 100.
-	marks := 20.0.
 	graph := nil. "used specifically to coord with PhratchGraphMorph"
 
 	self borderWidth: 1.

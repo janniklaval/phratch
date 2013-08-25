@@ -15,7 +15,8 @@ Class {
 		'transportProcess',
 		'socket',
 		'startMSecs',
-		'totalMSecs'
+		'totalMSecs',
+		'portNumber'
 	],
 	#category : #'Phratch-Networking'
 }

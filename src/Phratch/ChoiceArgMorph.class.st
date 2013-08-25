@@ -130,8 +130,6 @@ ChoiceArgMorph >> evaluate [
 
 	(self isEmptySlot and: [implicitValue notNil])
 		ifTrue: [^implicitValue].
-
-	isBoolean ifTrue: [^ 'true' = choice].
 	^ choice
 
 ]
@@ -206,7 +204,6 @@ ChoiceArgMorph >> initialize [
 	self addMorph: labelMorph.
 	menuIconMorph := ImageMorph new form: DropDownMenuForm.
 	self addMorphFront: menuIconMorph.
-	isBoolean := false.
 	options := #(a b c d).
 	self choice: #a.
 

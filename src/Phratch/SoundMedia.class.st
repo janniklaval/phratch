@@ -12,7 +12,8 @@ Class {
 		'compressedSampleRate',
 		'compressedBitsPerSample',
 		'compressedData',
-		'savedSound'
+		'savedSound',
+		'balance'
 	],
 	#classVars : [
 		'PlaceholderSound'
@@ -424,6 +425,6 @@ SoundMedia >> volume: aNumber [
 
 	volume := (aNumber rounded max: 0) min: 100.
 	playingSound ifNotNil: [
-		playingSound setPan: (balance / 100.0) volume: (volume / 100.0) for: 1].
+		playingSound setPan: (balance / 100.0) volume: (volume / 100.0) for: 1]. 
 
 ]

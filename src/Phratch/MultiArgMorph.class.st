@@ -134,7 +134,7 @@ MultiArgMorph >> evaluate [
 { #category : #other }
 MultiArgMorph >> fixArgLayout [
 	| maxHeight x space shouldHide lines line left maxX parts w y mh h isMultiC |
-	shouldHide := submorphs size - 3 <= minArgCount.
+	shouldHide := submorphs size - 3 <= 0.
 	self lessButton isHidden: shouldHide.
 	self label isHidden: shouldHide.
 	isMultiC := #(#loop #reporterSlot) includes: type.
@@ -227,7 +227,6 @@ MultiArgMorph >> initialize [
 	self borderWidth: 0.
 	text := ''.
 	type := #any.
-	minArgCount := 0.
 	self buildControls.
 
 ]

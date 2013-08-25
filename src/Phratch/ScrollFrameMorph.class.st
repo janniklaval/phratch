@@ -25,9 +25,6 @@ Class {
 ScrollFrameMorph >> abortDelay [
 	"private"
 
-	delay ifNotNil: [
-		delay terminate.
-		delay := nil ]
 ]
 
 { #category : #'scrollbar visibility' }
