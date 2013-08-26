@@ -218,9 +218,13 @@ PhratchInstaller class >> phratchSettingsOn: aBuilder [
 						(aBuilder setting: #visible) 
 							label: e label, ' visible' translated;
 		 					target: e;
-		 					description: 'Do you to see this category ?' translated.
+		 					description: 'Do you want to see this category ?' translated.
 					].
 				].
+			(aBuilder launcher: #updatePhratchView)
+				target: PhratchFrameMorph "; targetSelector: #closeAndOpen";
+				script: #closeAndOpen;
+				label: 'Update the view of Phratch' translated.
 		].
 ]
 

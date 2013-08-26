@@ -98,6 +98,15 @@ PhratchFrameMorph class >> close [
 	PhratchFrameMorph allInstancesDo: [ :i | i delete ]
 ]
 
+{ #category : #'initialize-release' }
+PhratchFrameMorph class >> closeAndOpen [
+	"Close Phratch window but don't quit Pharo"
+	(DialogBoxMorph ask: 'Pay attention, you will loose your current project if not saved.') ifTrue:[
+		PhratchFrameMorph allInstancesDo: [ :i | i delete ].
+		PhratchFrameMorph open.
+	]
+]
+
 { #category : #utilities }
 PhratchFrameMorph class >> defaultSprite [
 "Return the default sprite if one was set, or the cat otherwise"
@@ -1299,11 +1308,8 @@ PhratchFrameMorph >> editMenu: aMenuTitleMorph [
 	menu add: 'Unload unused blocks' localized action: #unloadAllUnusedCustomBlocks.
 	menu add: 'Clear all Variables' localized action: #clearAllVariables.
 
-	menu addLine.
-
-	menu add: workPane showMotorBlocks checkBoxString, 'Show Motor Blocks' localized
-			action: #toggleShowMotorBlocks.
-
+	menu add: 'Settings' localized action: #showSettingBrowser.
+	
 	Sensor shiftPressed ifTrue: [	self isDevelopmentMode ifTrue: [
 			menu addLine.
 		fillScreenFlag
@@ -1312,6 +1318,7 @@ PhratchFrameMorph >> editMenu: aMenuTitleMorph [
 		UseErrorCatcher
 			ifTrue: [menu add: 'turn error catching off' localized action: #toggleErrorCatcher]
 			ifFalse: [menu add: 'turn error catching on' localized action: #toggleErrorCatcher].
+		
 		]].
  
 	menu localize.
@@ -3295,6 +3302,12 @@ PhratchFrameMorph >> showPlay [
 		offForm: (PhratchFrameMorph skinAt: #playButtonGray)
 		overForm: (PhratchFrameMorph skinAt: #playButtonGrayPressed)
 
+]
+
+{ #category : #'menu/button actions' }
+PhratchFrameMorph >> showSettingBrowser [
+
+	^ SettingBrowser new changePackageSet: {PackageOrganizer default mostSpecificPackageOfClass: PhratchInstaller}; open
 ]
 
 { #category : #watchers }
