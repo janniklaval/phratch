@@ -405,6 +405,7 @@ ExpressionArgMorphWithMenu >> mouseDown: evt [
 	(menu isKindOf: PhratchNoteSelector) ifTrue: [
 		menu position: owner bottomLeft + (((owner width - menu width) // 2) @ -4).
 		].
+	menu ifNil:[^self].
 	choice := menu selectedValue.
 	choice ifNil: [^ self].
 	evt hand newKeyboardFocus: nil.  "close mini-editor, if any"

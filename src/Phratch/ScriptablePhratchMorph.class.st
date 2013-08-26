@@ -5866,7 +5866,7 @@ ScriptablePhratchMorph >> mousePressed [
 
 { #category : #'sensing ops' }
 ScriptablePhratchMorph >> mouseX [
-	<phratchItem: 'mouse x' kind: #r category: 'sensing' defaultValues: #() subCategory: #a2>
+	<phratchItem: 'mouse x' kind: #r category: 'sensing' defaultValues: #() subCategory: #a21>
 	| s centerX |
 	DoubleSize ifTrue: [^ (Sensor lastMousePosition x - PhratchOrigin x) // 2].
 
@@ -5882,7 +5882,7 @@ ScriptablePhratchMorph >> mouseX [
 
 { #category : #'sensing ops' }
 ScriptablePhratchMorph >> mouseY [
-	<phratchItem: 'mouse y' kind: #r category: 'sensing' defaultValues: #() subCategory: #a2>
+	<phratchItem: 'mouse y' kind: #r category: 'sensing' defaultValues: #() subCategory: #a21>
 	| s centerY |
 	DoubleSize ifTrue: [^ (Sensor lastMousePosition y - PhratchOrigin y) negated // 2].
 

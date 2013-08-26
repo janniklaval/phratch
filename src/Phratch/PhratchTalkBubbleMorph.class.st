@@ -46,7 +46,7 @@ PhratchTalkBubbleMorph >> drawOn: aCanvas [
 { #category : #geometry }
 PhratchTalkBubbleMorph >> extent: aPoint [
 
-	super extent: (aPoint max: 65@52).
+	super extent: (aPoint max: 100@42).
 
 ]
 
@@ -110,10 +110,10 @@ PhratchTalkBubbleMorph >> message: aString [
 			self addMorphFront: contentsMorph ].
 
 
-	self extent: contentsMorph extent + (0@28).
+	self extent: contentsMorph extent + (30@28).
 	xOffset := contentsMorph width >= maxWidth
 		ifTrue: [3]
-		ifFalse: [((self width - contentsMorph width) // 2) + 3].
+		ifFalse: [((self width - contentsMorph width) // 2) ].
 	contentsMorph position: self position + (xOffset @ 5).
 
 ]
