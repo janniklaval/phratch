@@ -1132,20 +1132,6 @@ PhratchStageMorph >> showBackground: costumeNameOrIndex [
 ]
 
 { #category : #accessing }
-PhratchStageMorph >> showMotorBlocks [
-
-	^ showMotorBlocks
-
-]
-
-{ #category : #accessing }
-PhratchStageMorph >> showMotorBlocks: aBoolean [
-
-	showMotorBlocks := aBoolean.
-
-]
-
-{ #category : #accessing }
 PhratchStageMorph >> sprites [
 
 	^ sprites

@@ -22,19 +22,19 @@ PhratchCategoryMotion class >> order [
 { #category : #drawing }
 PhratchCategoryMotion class >> viewerPageFor: aScriptablePhratchMorph [ 
 
-		| bin isStage addMotorBlocks s font x y m |
+		| bin isStage font x y m |
 	bin := PhratchBlockPaletteMorph new.
 
 	(aScriptablePhratchMorph isKindOf: PhratchStageMorph)
 		ifTrue: [
 			isStage := true.
-			addMotorBlocks := aScriptablePhratchMorph showMotorBlocks]
+			]
 		ifFalse: [
 			isStage := false.
-			s := aScriptablePhratchMorph ownerOrYourselfThatIsA: PhratchStageMorph.
-			addMotorBlocks := s notNil and: [s showMotorBlocks]].
+			aScriptablePhratchMorph ownerOrYourselfThatIsA: PhratchStageMorph.
+			].
 
-	(isStage & addMotorBlocks not) ifTrue: [
+	(isStage) ifTrue: [
 		font := (PhratchFrameMorph getFont: #ViewerPage).
 		x := 20.
 		y := 12.
@@ -57,21 +57,6 @@ PhratchCategoryMotion class >> viewerPageFor: aScriptablePhratchMorph [
 					y := y + 7.
 					bin addMorph: ((ImageMorph new form: (PhratchFrameMorph skinAt: #connector)) position: x@y).
 					y := y + 20]]  "insert a line"
-			ifFalse: [
-				y := aScriptablePhratchMorph createBlock: blockOrSym atPosition: x@y onPage: bin]].
-
-	addMotorBlocks ifFalse: [^ bin].
-
-	isStage ifFalse: [
-		y := y + 7.
-		bin addMorph: ((ImageMorph new form: (PhratchFrameMorph skinAt: #connector)) position: x@y).
-		y := y + 20].
-
-	(aScriptablePhratchMorph blocksFor: 'motor') do: [:blockOrSym |
-		(blockOrSym = #-) | (blockOrSym = #~)
-			ifTrue: [
-				(blockOrSym = #-) ifTrue: [y := y + 15].  "insert a full space"
-				(blockOrSym = #~) ifTrue: [y := y + 5]]  "insert a half space"
 			ifFalse: [
 				y := aScriptablePhratchMorph createBlock: blockOrSym atPosition: x@y onPage: bin]].
 

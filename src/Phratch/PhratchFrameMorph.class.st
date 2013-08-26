@@ -101,10 +101,10 @@ PhratchFrameMorph class >> close [
 { #category : #'initialize-release' }
 PhratchFrameMorph class >> closeAndOpen [
 	"Close Phratch window but don't quit Pharo"
-	(DialogBoxMorph ask: 'Pay attention, you will loose your current project if not saved.') ifTrue:[
-		PhratchFrameMorph allInstancesDo: [ :i | i delete ].
-		PhratchFrameMorph open.
-	]
+	(DialogBoxMorph ask: 'Pay attention, you will loose your current project if not saved.')
+		ifFalse: [ ^ self ].
+	PhratchFrameMorph allInstancesDo: [ :i | i delete ].
+	PhratchFrameMorph open
 ]
 
 { #category : #utilities }
@@ -1872,14 +1872,6 @@ PhratchFrameMorph >> helpMenu: aMenuTitleMorph [
 	menu popUpAt: aMenuTitleMorph bottomLeft + (0 @ 10) inWorld: World
 ]
 
-{ #category : #'menu/button actions' }
-PhratchFrameMorph >> hideMotorBlocks [
-
-	workPane showMotorBlocks: false.
-	viewerPane refresh.
-
-]
-
 { #category : #'file read/write' }
 PhratchFrameMorph >> importPhratchProject [
 	"Allow the user to select a project to open, then merge that project's sprites with the
@@ -2077,8 +2069,8 @@ PhratchFrameMorph >> installNewProject: newWorkpane [
 
 	(projectInfo at: 'isHosting' ifAbsent: [false]) ifTrue: [
 		self enableRemoteSensors].
-	(projectInfo at: 'hasMotorBlocks' ifAbsent: [false]) ifTrue: [
-		self showMotorBlocks].
+	"(projectInfo at: 'hasMotorBlocks' ifAbsent: [false]) ifTrue: [
+		self showMotorBlocks]."
 	(projectInfo includesKey: 'penTrails') ifTrue: [
 		workPane penTrailsForm: (projectInfo at: 'penTrails')].
 
@@ -3276,14 +3268,6 @@ PhratchFrameMorph >> shoutGo [
 
 ]
 
-{ #category : #'menu/button actions' }
-PhratchFrameMorph >> showMotorBlocks [
-
-	workPane showMotorBlocks: true.
-	viewerPane currentCategory: 'motion'.
-	viewerPane pageViewer vScrollRelative: 1.0.
-]
-
 { #category : #byob }
 PhratchFrameMorph >> showPause [
 
@@ -3307,7 +3291,7 @@ PhratchFrameMorph >> showPlay [
 { #category : #'menu/button actions' }
 PhratchFrameMorph >> showSettingBrowser [
 
-	^ SettingBrowser new changePackageSet: {PackageOrganizer default mostSpecificPackageOfClass: PhratchInstaller}; open
+	SettingBrowser new changePackageSet: {PackageOrganizer default mostSpecificPackageOfClass: PhratchInstaller}; open
 ]
 
 { #category : #watchers }
@@ -3545,14 +3529,6 @@ PhratchFrameMorph >> togglePause [
 		ifTrue: [self showPlay]
 		ifFalse: [self showPause]
 
-]
-
-{ #category : #byob }
-PhratchFrameMorph >> toggleShowMotorBlocks [
-
-	workPane showMotorBlocks
-		ifTrue: [self hideMotorBlocks]
-		ifFalse: [self showMotorBlocks]
 ]
 
 { #category : #byob }
