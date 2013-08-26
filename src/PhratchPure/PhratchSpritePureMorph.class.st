@@ -9,7 +9,7 @@ Class {
 
 { #category : #'motion ops' }
 PhratchSpritePureMorph >> forward: distance [
-	<phratchItem: 'move $Number$ cm' kind: #- category: 'pure' defaultValues: #(100) subCategory: 1>
+	<phratchItem: 'move $Number$ cm' kind: #- category: 'pure' defaultValues: #(100) subCategory: #a1>
 	
 	| currentPosition nextPosition |
 	super forward: distance.
@@ -24,7 +24,7 @@ PhratchSpritePureMorph >> forward: distance [
 { #category : #'motion ops' }
 PhratchSpritePureMorph >> gotoX: x y: y [
 
-	<phratchItem: 'go to x:$Number$ y:$Number$' kind: #- category: 'pure' defaultValues: #(0 0) subCategory: 2>
+	<phratchItem: 'go to x:$Number$ y:$Number$' kind: #- category: 'pure' defaultValues: #(0 0) subCategory: #a2>
 	
 	| currentPosition |
 	super gotoX: x y: y.
@@ -38,7 +38,7 @@ PhratchSpritePureMorph >> gotoX: x y: y [
 { #category : #'motion ops' }
 PhratchSpritePureMorph >> heading [
 
-	<phratchItem: 'direction' kind: #r category: 'pure' defaultValues: #() subCategory: 4>
+	<phratchItem: 'direction' kind: #r category: 'pure' defaultValues: #() subCategory: #a4>
 	
 	"super heading."
 	[^ connectedRobot localizationService currentPose orientation.
@@ -48,7 +48,7 @@ PhratchSpritePureMorph >> heading [
 { #category : #'motion ops' }
 PhratchSpritePureMorph >> heading: headingDegrees [
 
-	<phratchItem: 'set orientation to $Number$' kind: #- category: 'pure' defaultValues: #(0) subCategory: 3>
+	<phratchItem: 'set orientation to $Number$' kind: #- category: 'pure' defaultValues: #(0) subCategory: #a3>
 	"super heading: headingDegrees."
 	[^ connectedRobot localizationService x: self xpos y: self ypos orientation: headingDegrees.
 	] on: Exception do: [ Transcript show: 'heading:'; cr ]
@@ -112,7 +112,7 @@ PhratchSpritePureMorph >> laserpos [
 { #category : #'motion ops' }
 PhratchSpritePureMorph >> minInfraredpos [
 
-	<phratchItem: 'min infrared position' kind: #r category: 'pure' defaultValues: #() subCategory: 5>
+	<phratchItem: 'min infrared position' kind: #r category: 'pure' defaultValues: #() subCategory: #a5>
 	| laser notification |
 	laser := connectedRobot irTelemeterService.
 	[laser enableNotificationsEvery: 100.]on: Exception do:[].
@@ -124,7 +124,7 @@ PhratchSpritePureMorph >> minInfraredpos [
 { #category : #'motion ops' }
 PhratchSpritePureMorph >> minLaserpos [
 
-	<phratchItem: 'min laser position' kind: #r category: 'pure' defaultValues: #() subCategory: 5>
+	<phratchItem: 'min laser position' kind: #r category: 'pure' defaultValues: #() subCategory: #a5>
 	| laser notification |
 	laser := connectedRobot laserService.
 	[laser enableNotificationsEvery: 100.]on: Exception do:[].
@@ -135,7 +135,7 @@ PhratchSpritePureMorph >> minLaserpos [
 { #category : #'motion ops' }
 PhratchSpritePureMorph >> minTelemeterpos [
 	
-	<phratchItem: 'min telemeter position' kind: #r category: 'pure' defaultValues: #() subCategory: 5>
+	<phratchItem: 'min telemeter position' kind: #r category: 'pure' defaultValues: #() subCategory: #a5>
 	| laser notification |
 	laser := connectedRobot sonarTelemeterService.
 	[laser enableNotificationsEvery: 100.]on: Exception do:[].
@@ -167,7 +167,7 @@ PhratchSpritePureMorph >> stopPlaying [
 
 { #category : #'as yet unclassified' }
 PhratchSpritePureMorph >> stopRobot [
-	<phratchItem: 'Stop robot' kind: #- category: 'pure' defaultValues: #() subCategory: 1>
+	<phratchItem: 'Stop robot' kind: #- category: 'pure' defaultValues: #() subCategory: #a1>
 	connectedRobot trajectoryService emergencyStop.
 
 
@@ -186,7 +186,7 @@ PhratchSpritePureMorph >> telemeterpos [
 { #category : #'motion ops' }
 PhratchSpritePureMorph >> xpos [
 
-	<phratchItem: 'x position' kind: #r category: 'pure' defaultValues: #() subCategory: 4>
+	<phratchItem: 'x position' kind: #r category: 'pure' defaultValues: #() subCategory: #a4>
 	"super xpos."
 	[^ connectedRobot localizationService currentPosition x * 100.
 	] on: Exception do: [ Transcript show: 'xpos'; cr ]
@@ -195,7 +195,7 @@ PhratchSpritePureMorph >> xpos [
 { #category : #'motion ops' }
 PhratchSpritePureMorph >> xpos: aNumber [ 
 
-	<phratchItem: 'set x to $Number$' kind: #- category: 'pure' defaultValues: #(0) subCategory: 3>
+	<phratchItem: 'set x to $Number$' kind: #- category: 'pure' defaultValues: #(0) subCategory: #a3>
 	"super xpos: (aNumber/100) ."
 	[^ connectedRobot localizationService x: (aNumber/100) y: self ypos orientation: self heading.
 	] on: Exception do: [ Transcript show: 'xpos:'; cr ]
@@ -204,7 +204,7 @@ PhratchSpritePureMorph >> xpos: aNumber [
 { #category : #'motion ops' }
 PhratchSpritePureMorph >> ypos [
 
-	<phratchItem: 'y position' kind: #r category: 'pure' defaultValues: #() subCategory: 4>
+	<phratchItem: 'y position' kind: #r category: 'pure' defaultValues: #() subCategory: #a4>
 	"super ypos."
 	[^ connectedRobot localizationService currentPosition x * 100.
 	] on: Exception do: [ Transcript show: 'ypos'; cr ]
@@ -213,7 +213,7 @@ PhratchSpritePureMorph >> ypos [
 { #category : #'motion ops' }
 PhratchSpritePureMorph >> ypos: aNumber [ 
 
-	<phratchItem: 'set y to $Number$' kind: #- category: 'pure' defaultValues: #(0) subCategory: 3>
+	<phratchItem: 'set y to $Number$' kind: #- category: 'pure' defaultValues: #(0) subCategory: #a3>
 	"super ypos: (aNumber/100)."
 	[^ connectedRobot localizationService x: self xpos y: (aNumber/100) orientation: self heading.
 	] on: Exception do: [ Transcript show: 'ypos:'; cr ]
