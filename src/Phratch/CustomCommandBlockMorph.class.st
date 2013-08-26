@@ -553,10 +553,8 @@ CustomCommandBlockMorph >> rightButtonMenu [
 		ifFalse: [menu add: 'edit' value: #editScript].
 
 	((owner isKindOf: PhratchBlockPaletteMorph) or: [isTemplate]) ifFalse: [
-		menu add: 'relabel' value: #rename.
 		menu addLine.
 		menu add: 'duplicate' value: #duplicate.
-		menu add: '- this block' value: #fastDuplicate.
 
 		(self owner isKindOf: BlockMorph) ifFalse: [  "can't yet delete a blocks inside a script"
 			menu add: 'delete' value: #delete]].

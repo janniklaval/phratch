@@ -151,7 +151,7 @@ MediaItemMorph >> buildRightSideMorph [
 { #category : #initialization }
 MediaItemMorph >> buildSubmorphs [
 
-	| thumbHeight minThumbHeight separator |
+	| thumbHeight separator |
 	self buildRightSideMorph.
 
 	numberMorph := (StringMorph contents: '345')
@@ -162,7 +162,7 @@ MediaItemMorph >> buildSubmorphs [
 	self addMorph: numberMorph.
 	numberMorphTopRight := numberMorph topRight.
 
-	thumbHeight := minThumbHeight max: (rightMorph height - (2 * highlightPadding y)).
+	thumbHeight := 0 max: (rightMorph height - (2 * highlightPadding y)).
 	thumbnailMorph := TranslucentImageMorph new.
 	thumbnailMorph form: (media thumbnailFormExtent: thumbHeight asPoint).
 	thumbnailMorph width > thumbHeight ifTrue: [

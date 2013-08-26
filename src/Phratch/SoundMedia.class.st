@@ -12,8 +12,7 @@ Class {
 		'compressedSampleRate',
 		'compressedBitsPerSample',
 		'compressedData',
-		'savedSound',
-		'balance'
+		'savedSound'
 	],
 	#classVars : [
 		'PlaceholderSound'
@@ -27,6 +26,12 @@ SoundMedia class >> initialize [
 
 	PlaceholderSound := SampledSound samples: SoundBuffer new samplingRate: 22050.
 
+]
+
+{ #category : #accessing }
+SoundMedia >> balance [ 
+
+	^50
 ]
 
 { #category : #compressing }
@@ -165,7 +170,6 @@ SoundMedia >> initialize [
 	mediaName := 'pop' localized.
 	originalSound := ScriptablePhratchMorph popSound.
 	volume := 100.
-	balance := 50.
 
 ]
 
@@ -292,7 +296,7 @@ SoundMedia >> playFrom: startSecs to: endSecs [
 		from: startIndex to: endIndex
 		samplingRate: originalSound originalSamplingRate
 		loudness: 1.0).
-	playingSound add: snd pan: (balance / 100.0) volume: (volume / 100.0).
+	playingSound add: snd pan: (self balance / 100.0) volume: (volume / 100.0).
 	playingSound play.
 
 ]
@@ -425,6 +429,6 @@ SoundMedia >> volume: aNumber [
 
 	volume := (aNumber rounded max: 0) min: 100.
 	playingSound ifNotNil: [
-		playingSound setPan: (balance / 100.0) volume: (volume / 100.0) for: 1]. 
+		playingSound setPan: (self balance / 100.0) volume: (volume / 100.0) for: 1]. 
 
 ]

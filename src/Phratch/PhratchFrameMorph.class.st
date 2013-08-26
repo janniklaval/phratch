@@ -2069,8 +2069,6 @@ PhratchFrameMorph >> installNewProject: newWorkpane [
 
 	(projectInfo at: 'isHosting' ifAbsent: [false]) ifTrue: [
 		self enableRemoteSensors].
-	"(projectInfo at: 'hasMotorBlocks' ifAbsent: [false]) ifTrue: [
-		self showMotorBlocks]."
 	(projectInfo includesKey: 'penTrails') ifTrue: [
 		workPane penTrailsForm: (projectInfo at: 'penTrails')].
 

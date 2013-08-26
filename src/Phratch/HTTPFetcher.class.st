@@ -15,8 +15,7 @@ Class {
 		'transportProcess',
 		'socket',
 		'startMSecs',
-		'totalMSecs',
-		'portNumber'
+		'totalMSecs'
 	],
 	#category : #'Phratch-Networking'
 }
@@ -100,7 +99,7 @@ HTTPFetcher >> connectToServer [
 
 	socket := Socket new.
 	[socket isConnected] whileFalse: [
-		socket connectTo: address port: portNumber.
+		socket connectTo: address port: self portNumber.
 		[socket isWaitingForConnection] whileTrue: [self sleepAWhile].
 		socket isConnected ifFalse: [
 			socket destroy.
@@ -216,7 +215,6 @@ HTTPFetcher >> inProgress [
 HTTPFetcher >> initialize [
 
 	serverName := '127.0.0.1'.
-	portNumber := 80.
 	path := ''.
 	downloadedData := WriteStream on: ByteArray new.
 	status := #inProgress.
@@ -261,6 +259,12 @@ HTTPFetcher >> performWithErrorRecovery: aSymbol [
 
 ]
 
+{ #category : #accessing }
+HTTPFetcher >> portNumber [
+
+	^80
+]
+
 { #category : #printing }
 HTTPFetcher >> printOn: aStream [
 	aStream
@@ -278,7 +282,7 @@ HTTPFetcher >> sendGetRequest [
 	| request i byteCount |
 	request :=
 		'GET ', path, ' HTTP/1.0', String crlf,
-		'Host: ', serverName, ':', portNumber printString, String crlf,
+		'Host: ', serverName, ':', self portNumber printString, String crlf,
 		String crlf.
 
 	i := 1.

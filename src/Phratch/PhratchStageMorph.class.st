@@ -18,7 +18,6 @@ Class {
 		'sprites',
 		'isQuarterSize',
 		'cachedForm',
-		'showMotorBlocks',
 		'feedbackMorph',
 		'phratchServer'
 	],
@@ -592,7 +591,6 @@ PhratchStageMorph >> initialize [
 	midiPortNum := -1.
 	notePlayerDict := Dictionary new.
 	sprites := OrderedCollection new.
-	showMotorBlocks := false.
 
 ]
 
