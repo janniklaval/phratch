@@ -5,6 +5,7 @@ Class {
 		'userSpec',
 		'blockVars',
 		'body',
+		'isReporter',
 		'isAtomic',
 		'isBoolean',
 		'answer',
@@ -38,12 +39,8 @@ CustomBlockDefinition >> allBlocks [
 	body
 		ifNil: [ all := OrderedCollection new]
 		ifNotNil: [
-			(body isKindOf: Morph) 
-				ifFalse:[all := OrderedCollection new]
-				ifTrue:[
-					all := body allMorphs select: [:m|
-					m isKindOf: BlockMorph ]]
-		].
+			all := body allMorphs select: [:m|
+				m isKindOf: BlockMorph ]].
 
 	(answer isKindOf: BlockMorph) ifTrue: [
 		all := all, answer allMorphs select: [:m |
@@ -183,9 +180,9 @@ CustomBlockDefinition >> deduceType [
 	"private - set my return type from the BYOB deprecated legacy attributes #isReporter and #isBoolean.
 	use this when reading an old block from file"
 
-	^ type := #none
-"	isBoolean ifTrue: [ ^ type := #boolean ].
-	^ type := #any"
+	isReporter ifFalse: [ ^ type := #none ].
+	isBoolean ifTrue: [ ^ type := #boolean ].
+	^ type := #any
 ]
 
 { #category : #accessing }
@@ -248,6 +245,7 @@ CustomBlockDefinition >> initFieldsFrom: anObjStream version: classVersion [
 		userSpec
 		blockVars
 		isAtomic
+		isReporter
 		isBoolean
 		body
 		answer
@@ -283,6 +281,7 @@ CustomBlockDefinition >> initialize [
 	declarations := Dictionary new.
 	defaults := Dictionary new.
 	isAtomic := true.
+	isReporter := false.
 	isBoolean := false.
 	blockVars := Set new.
 	isGlobal := true
@@ -326,7 +325,14 @@ CustomBlockDefinition >> isGlobal: bool [
 CustomBlockDefinition >> isReporter [
 	"deprecated, kept for BYOB legacy support"
 
-	^false
+	^isReporter
+]
+
+{ #category : #deprecated }
+CustomBlockDefinition >> isReporter: aBoolean [
+	"deprecated, kept for BYOB legacy support"
+
+	isReporter := aBoolean
 ]
 
 { #category : #migrating }
@@ -339,8 +345,7 @@ CustomBlockDefinition >> migrateBlockVars [
 			color: Color gray;
 			isSpecialForm: true;
 			minArgs: 1;
-			selector: #doDeclareVariables;
-		yourself.
+			selector: #doDeclareVariables.
 
 	vars := self varNames.
 		spec := 'script variables' localized.
@@ -350,8 +355,7 @@ CustomBlockDefinition >> migrateBlockVars [
 		vn := vars at: i.
 		blob := VariableBlockMorph new 
 				isSpecialForm: true;
-				commandSpec: vn;
-		yourself  ";
+				commandSpec: vn  ";
 				color: (ScriptablePhratchMorph blockColorFor: 'variables')".
 		dec replaceArgMorph: (dec argMorphs at: i) by: blob.
 		blockVars remove: vn ].
@@ -444,6 +448,7 @@ CustomBlockDefinition >> storeFieldsOn: anObjStream [
 		userSpec
 		blockVars
 		isAtomic
+		isReporter
 		isBoolean
 		body
 		answer
