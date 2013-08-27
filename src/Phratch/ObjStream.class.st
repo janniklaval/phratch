@@ -45,17 +45,6 @@ Class {
 	#category : #'Phratch-Object IO'
 }
 
-{ #category : #testing }
-ObjStream class >> equalityTest: inObj [
-	"For testing. Serialize and deserialize the given object and compare the result for equality with the original object."
-
-	| outObj |
-	outObj := self serializeAndDeserialize: inObj.
-	outObj class == inObj class ifFalse: [self error: 'output class is not equal to input class'].
-	outObj = inObj ifFalse: [self error: 'output is not equal to input'].
-
-]
-
 { #category : #'class initialization' }
 ObjStream class >> fixedFormatClasses [
 	"Answer an array of records for fixed-format classes."
@@ -103,24 +92,6 @@ ObjStream class >> fixedFormatClasses [
 
 ]
 
-{ #category : #testing }
-ObjStream class >> formEqualityTest: inForm [
-	"For testing. Serialize and deserialize the given form and compare the result for equality with the original."
-
-	| outForm |
-	outForm := self serializeAndDeserialize: inForm.
-	outForm class == inForm class ifFalse: [self error: 'output class is not equal to input class'].
-	((outForm extent = inForm extent) &
-	 (outForm depth = inForm depth) &
-	 (outForm bits = inForm bits) &
-	 (outForm offset = inForm offset))
-		 ifFalse: [self error: 'output Form is not equal to input Form'].
-	(inForm isKindOf: ColorForm) ifTrue: [
-		inForm colors = outForm colors
-			ifFalse: [self error: 'output colors are not equal to input colors']].
-
-]
-
 { #category : #'class initialization' }
 ObjStream class >> iDToClassEntry [
 
@@ -157,12 +128,12 @@ ObjStream class >> phratchFileVersionFrom: aString [
 
 	"changed for the BYOB-prototype -Jens"
 
-	(aString beginsWith: 'BloxExpV') 
+	((aString beginsWith: 'BloxExpV') | (aString beginsWith: 'PhratchV')) 
 		ifTrue: [ScriptablePhratchMorph decodeAsByob]
 		ifFalse: [ScriptablePhratchMorph decodeAsScratch].
 
 	((aString beginsWith: 'BloxExpV') 
-		or: [aString beginsWith: 'ScratchV']) ifFalse: [^ 0].
+		or: [(aString beginsWith: 'ScratchV') or: [aString beginsWith: 'PhratchV']]) ifFalse: [^ 0].
 	^ (aString copyFrom: 9 to: aString size) asNumberNoError
 
 ]
@@ -817,7 +788,8 @@ ObjStream >> readFileHeader [
 	(((stream next: 4) asString = 'ObjS') &
 	 (stream next = 1) &
 	 ((stream next: 4) asString = 'Stch') &
-	 (stream next = 1)) ifFalse: [
+	 (stream next = 1))
+	 ifFalse: [
 		self error: 'bad header'].
 
 ]
@@ -850,7 +822,7 @@ ObjStream >> readObjFrom: aStream showProgress: showProgress [
 					1 to: objCount do: [:i |
 						objects addLast: self readObjectRecord.
 						progressBar value: i].
-
+					
 					firstPass := false.
 					objects do: [:rec | self fixReferencesForObjectRecord: rec].
 					progressBar value: objCount + (tenPercent // 2).

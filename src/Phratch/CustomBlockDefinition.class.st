@@ -38,8 +38,12 @@ CustomBlockDefinition >> allBlocks [
 	body
 		ifNil: [ all := OrderedCollection new]
 		ifNotNil: [
-			all := body allMorphs select: [:m|
-				m isKindOf: BlockMorph ]].
+			(body isKindOf: Morph) 
+				ifFalse:[all := OrderedCollection new]
+				ifTrue:[
+					all := body allMorphs select: [:m|
+					m isKindOf: BlockMorph ]]
+		].
 
 	(answer isKindOf: BlockMorph) ifTrue: [
 		all := all, answer allMorphs select: [:m |
