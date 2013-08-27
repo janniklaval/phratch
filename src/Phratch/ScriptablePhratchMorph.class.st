@@ -1331,7 +1331,7 @@ ScriptablePhratchMorph >> blockFromOldFormTuple: tuple receiver: scriptOwner [
 			(block isKindOf: WhenHatBlockMorph)
 				ifTrue: [ block color: Color red ].
 			^ block ].
-	#phratchComment = k
+	(#phratchComment = k) | (#scratchComment = k) "for compatibility"
 		ifTrue: [ 
 			block := PhratchCommentMorph new.
 			tuple size > 1
@@ -1685,7 +1685,7 @@ ScriptablePhratchMorph >> blockFromTuple: tuple receiver: scriptOwner [
 			(block isKindOf: WhenHatBlockMorph)
 				ifTrue: [ block color: Color red ].
 			^ block ].
-	#phratchComment = k
+	(#phratchComment = k) | (#scratchComment = k) "for compatibility"
 		ifTrue: [ 
 			block := PhratchCommentMorph new.
 			tuple size > 3
