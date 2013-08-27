@@ -305,7 +305,7 @@ MovieMedia >> openAfterLoad [
 	"Attempt to re-open my file. Do nothing if the file is not found."
 
 	| fullName |
-	fullName := self projectDirectory relativeToFullPath: fileName.
+	fullName := self projectDirectory , fileName.
 	(fullName exists) ifFalse: [^ self].
 
 	[self basicLoadFile: fileName] ifError: [^ self].

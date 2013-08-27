@@ -191,13 +191,14 @@ ObjStream class >> userClasses [
 		(111		SketchMorph)
 		
 		(112		MorphExtension)
+		(113		PasteUpMorph)		
 				
 		"(120	SpriteMorph)"
 		"(121		SoundMorph)"
 		"(122	ImageBoxMorph)"
 		"(123		SensorBoardMorph)"
-		(124		#PhratchSpriteMorph)
-		(125		#PhratchStageMorph)
+		(124		PhratchSpriteMorph)
+		(125		PhratchStageMorph)
 
 		(140		ChoiceArgMorph)
 		(141		ColorArgMorph)
@@ -254,7 +255,7 @@ ObjStream class >> userClasses [
 
 		(207		CReporterSlotMorph)
 
-		(300		StringFieldMorph)
+		"(300		StringFieldMorph)"
 		(301		MultiArgReporterBlockMorph)
 
 	)
@@ -404,7 +405,7 @@ ObjStream >> getColor: anObject id: classID [
 	firstPass ifFalse: [^ anObject].
 	rgb := stream uint32.
 	(self classForID: classID) = TranslucentColor
-		ifTrue: [^ TranslucentColor basicNew setRgb: rgb alpha: stream next]
+		ifTrue: [^ TranslucentColor basicNew setRgb: rgb alpha: (stream next / 255)]
 		ifFalse: [^ Color basicNew setRGB: rgb].
 
 ]

@@ -26,6 +26,13 @@ ListMultilineStringMorph >> extent: aPoint [
 
 ]
 
+{ #category : #'as yet unclassified' }
+ListMultilineStringMorph >> fieldsVersion [
+
+	^ 1
+
+]
+
 { #category : #private }
 ListMultilineStringMorph >> fixLayout [
 

@@ -185,7 +185,7 @@ ScriptablePhratchMorph class >> closeCamera [
 
 { #category : #'byob legacy support' }
 ScriptablePhratchMorph class >> currentEncoding [
-		^ObjEncoding ifNil: [^#scratch ]
+		^ObjEncoding ifNil: [^#byob ]
 ]
 
 { #category : #'byob legacy support' }
@@ -4811,7 +4811,6 @@ ScriptablePhratchMorph >> initFieldsFrom: anObjStream version: classVersion [
 		media
 		costume
 	).
-
 	self class currentEncoding = #byob
 		ifTrue: [
 	fields := #(

@@ -13,51 +13,24 @@ ObjStreamTests >> equalityTest: inObj [
 
 	| outObj |
 	outObj := self serializeAndDeserialize: inObj.
-	outObj class == inObj class ifFalse: [self error: 'output class is not equal to input class'].
-	outObj = inObj ifFalse: [self error: 'output is not equal to input'].
-
+	self assert: (outObj class == inObj class).
+	self assert: (outObj = inObj)
 ]
 
 { #category : #tests }
-ObjStreamTests >> fixedFormatClassTests [
-	"Test conversions for fixed-format objects."
-	"self initialize; fixedFormatClassTests"
+ObjStreamTests >> formEqualityTest: inForm [
+	"For testing. Serialize and deserialize the given form and compare the result for equality with the original."
 
-	| shared |
-	self equalityTest: #().
-	self equalityTest: #(1 2 3).
-	self equalityTest: (Array with: nil with: true with: false).
-	self equalityTest: #(123 -123 123456 -123456 123456789000 -123456789000 3.14159).
-	self equalityTest: 'hello'.
-	self equalityTest: 'hello' asSymbol.
-	self equalityTest: #(1 2 3) asByteArray.
-	self equalityTest: (String withAll: 'hello').
-
-	self equalityTest: (SoundBuffer fromArray: #(1 2 3 4)).
-	self equalityTest: (Bitmap withAll: #(0 1 2 2147483647 2147483648 4294967295)).
-
-	self equalityTest: #(1 2 3) asOrderedCollection.
-	self equalityTest: #(1 2 3) asSet.
-	self equalityTest: (IdentitySet new addAll: #(1 2 3); yourself).
-	self equalityTest: (Dictionary new at: 1 put: 'a'; at: 'b' put: 2; yourself).
-	self equalityTest: (IdentityDictionary new at: 1 put: 'a'; at: 'b' put: 2; yourself).
-
-	self equalityTest: (Color gray: 0.3).
-	self equalityTest: (Color red alpha: 0.5).
-	self equalityTest: 2 @ 3.14159.
-	self equalityTest: (0@0 extent: 2.5).
-	self formEqualityTest: (Form fromDisplay: (0@0 extent: 10)).
-	self formEqualityTest: ((Form fromDisplay: (0@0 extent: 10)) colorReduced).
-
-	shared := #Shared.
-	self equalityTest: (Point x: shared y: shared).
-	self equalityTest: ((Point x: shared y: shared) corner: (Point x: shared y: shared)).
-	self equalityTest: (OrderedCollection with: shared with: shared).
-	self equalityTest: (Array with: shared with: (Set new add: shared; yourself)).
-	self equalityTest: (Dictionary new at: shared put: shared; at: 'b' put: shared; yourself).
-	self equalityTest: (IdentityDictionary new at: shared put: shared; at: 'b' put: shared; yourself).
-
-	self inform: 'Fixed-format tests passed.'.
+	| outForm |
+	outForm := self serializeAndDeserialize: inForm.
+	self assert: (outForm class == inForm class).
+	self assert: (((outForm extent = inForm extent) &
+	 (outForm depth = inForm depth) &
+	 (outForm bits = inForm bits) &
+	 (outForm offset = inForm offset))).
+	(inForm isKindOf: ColorForm) ifTrue: [
+		self assert: (inForm colors = outForm colors)
+	].
 
 ]
 
@@ -91,59 +64,45 @@ ObjStreamTests >> serializeAndDeserialize: anObject [
 ]
 
 { #category : #tests }
-ObjStreamTests >> tallyPhratchObjectsFrom: aDirectory [
-	"Tally the object class ID's for all Phratch projects in the given directory into the given array."
+ObjStreamTests >> testFixedFormatClass [
+	"Test conversions for fixed-format objects."
 
-	"self tallyPhratchObjectsFrom: FileDirectory default"
+	| shared |
+	self equalityTest: #().
+	self equalityTest: #(1 2 3).
+	self equalityTest: (Array with: nil with: true with: false).
+	self equalityTest: #(123 -123 123456 -123456 123456789000 -123456789000 3.14159).
+	self equalityTest: 'hello'.
+	self equalityTest: 'hello' asSymbol.
+	self equalityTest: #(1 2 3) asByteArray.
+	self equalityTest: (String withAll: 'hello').
 
-	| classIDCounts objTable id result count cName |
-	classIDCounts := Array new: 256 withAll: 0.
-	aDirectory fileNames
-		do: [ :fn | 
-			(fn endsWith: '.sb') | (fn endsWith: '.ypr') | (fn endsWith: '.phr')
-				ifTrue: [ 
-					objTable := self phratchObjectsFrom: (aDirectory fullNameFor: fn).
-					objTable
-						do: [ :entry | 
-							id := entry at: 2.
-							classIDCounts at: id put: (classIDCounts at: id) + 1 ] ] ].
-	result := WriteStream on: String new.
-	1 to: classIDCounts size do: [ :i | 
-		count := classIDCounts at: i.
-		count > 0
-			ifTrue: [ 
-				cName := (ObjStream iDToClassEntry at: i) at: 2.
-				result
-					nextPutAll: cName;
-					nextPutAll: '	';
-					nextPutAll: count printString;
-					cr ] ].
-	^ result contents
-]
+	self equalityTest: (SoundBuffer fromArray: #(1 2 3 4)).
+	self equalityTest: (Bitmap withAll: #(0 1 2 2147483647 2147483648 4294967295)).
 
-{ #category : #tests }
-ObjStreamTests >> tallyPhratchObjectsFromFile: aFileName [
-	"Read the Phratch project from the file with the given name and tally it's object class IDs."
+	self equalityTest: #(1 2 3) asOrderedCollection.
+	self equalityTest: #(1 2 3) asSet.
+	self equalityTest: (IdentitySet new addAll: #(1 2 3); yourself).
+	self equalityTest: (Dictionary new at: 1 put: 'a'; at: 'b' put: 2; yourself).
+	self equalityTest: (IdentityDictionary new at: 1 put: 1; at: 2 put: 2; yourself).
 
-	| classIDCounts objTable id result count cName |
-	classIDCounts := Array new: 256 withAll: 0.
-	objTable := self phratchObjectsFrom: aFileName.
-	objTable
-		do: [ :entry | 
-			id := entry at: 2.
-			classIDCounts at: id put: (classIDCounts at: id) + 1 ].
-	result := WriteStream on: String new.
-	1 to: classIDCounts size do: [ :i | 
-		count := classIDCounts at: i.
-		count > 0
-			ifTrue: [ 
-				cName := (ObjStream iDToClassEntry at: i) at: 2.
-				result
-					nextPutAll: cName;
-					nextPutAll: '	';
-					nextPutAll: count printString;
-					cr ] ].
-	^ result contents
+	self equalityTest: (Color gray: 0.3).
+	self equalityTest: (Color red alpha: 0.5).
+	self equalityTest: 2 @ 3.14159.
+	self equalityTest: (0@0 extent: 2.5).
+	self formEqualityTest: (Form fromDisplay: (0@0 extent: 10)).
+	self formEqualityTest: ((Form fromDisplay: (0@0 extent: 10)) colorReduced).
+
+	shared := #Shared.
+	self equalityTest: (Point x: shared y: shared).
+	self equalityTest: ((Point x: shared y: shared) corner: (Point x: shared y: shared)).
+	self equalityTest: (OrderedCollection with: shared with: shared).
+	self equalityTest: (Array with: shared with: (Set new add: shared; yourself)).
+	self equalityTest: (Dictionary new at: shared put: shared; at: 'b' put: shared; yourself).
+	self equalityTest: (IdentityDictionary new at: shared put: shared; at: 2 put: shared; yourself).
+
+	self inform: 'Fixed-format tests passed.'.
+
 ]
 
 { #category : #tests }
@@ -170,22 +129,19 @@ ObjStreamTests >> testStoreDictionary [
 ]
 
 { #category : #tests }
-ObjStreamTests >> userClassTests [
+ObjStreamTests >> testUserClass [
 	"Test conversions for fixed-format objects."
 	"self initialize; userClassTests"
 
 	| userClassList suspectClasses |
 	userClassList := ObjStream userClasses collect: [:rec | Smalltalk at: rec second].
 	userClassList := userClassList reject: [:cl | (cl inheritsFrom: BlockMorph) | (cl inheritsFrom: ArgMorph)].
-	userClassList do: [:cl | self serializeAndDeserialize: cl new].
+	userClassList do: [:cl | 
+		self assert: (cl = (self serializeAndDeserialize: cl new) class)].
 
 	suspectClasses := userClassList select: [:cl |
 		(cl includesSelector: #fieldsVersion) not and: [cl instVarNames size > 0]].
-	suspectClasses size > 0 ifTrue: [^ self error: 'not all classes implement #fieldsVersion'].
-
-	self inform: 'User class tests passed.'.
-
-
+	self assert: suspectClasses size = 0.
 ]
 
 { #category : #tests }

@@ -127,6 +127,13 @@ ScrollFrameMorph >> extent: aPoint [
 	self updateScrollbars
 ]
 
+{ #category : #'as yet unclassified' }
+ScrollFrameMorph >> fieldsVersion [
+
+	^ 1
+
+]
+
 { #category : #'scrollbar visibility' }
 ScrollFrameMorph >> fullBounds [
 	"Overridden to clip submorph hit detection to my bounds."
