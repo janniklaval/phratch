@@ -5822,24 +5822,6 @@ ScriptablePhratchMorph >> mosaicEffect: aNumber [
 	self passiveMosaicEffect: aNumber
 ]
 
-{ #category : #'motor ops' }
-ScriptablePhratchMorph >> motorDirection [
-
-	^ {
-		'this way'.
-		'that way'.
-		'reverse'
-	}
-
-]
-
-{ #category : #'motor ops' }
-ScriptablePhratchMorph >> motorNames [
-
-	^ #(' ' A B)
-
-]
-
 { #category : #'event handling' }
 ScriptablePhratchMorph >> mouseDown: evt [
 	"Handle a mouse click. Left button either drags or performs click action. Right button brings up a menu."

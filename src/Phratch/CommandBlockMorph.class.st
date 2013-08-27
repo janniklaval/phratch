@@ -1083,7 +1083,6 @@ CommandBlockMorph >> oldUncoloredArgMorphFor: specString [
 	$l 			= code ifTrue: [^ ChoiceOrExpressionArgMorph new getOptionsSelector: #costumeNames; choice: 'costume1';
 		yourself].
 	$m 				= code ifTrue: [^ SpriteArgMorph new].
-	$M 		= code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #motorNames].
 	$n 			= code ifTrue: [^ ExpressionArgMorph new numExpression: '10'].
 	$N 				= code ifTrue: [^ ExpressionArgMorphWithMenu new numExpression: '60'; menuSelector: #noteSelector;
 		yourself].
@@ -1096,7 +1095,6 @@ CommandBlockMorph >> oldUncoloredArgMorphFor: specString [
 		yourself].
 	$v 			= code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #varNamesMenu; choice: '';
 		yourself].
-	$W 		= code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #motorDirection].
 	$x 		= code ifTrue: [^ ChoiceOrExpressionArgMorph new getOptionsSelector: #sceneNames; choice: '';
 		yourself].
 	$8 		= code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #newCostumeTypes; choice: 'camera';
@@ -1545,7 +1543,6 @@ CommandBlockMorph >> uncoloredArgMorphFor: specString [
 	"l"'Costumes'			= code ifTrue: [^ ChoiceOrExpressionArgMorph new getOptionsSelector: #costumeNames; choice: 'costume1';
 		yourself].
 	"m"'Sprite'				= code ifTrue: [^ SpriteArgMorph new].
-	"M"'MotorNames'		= code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #motorNames].
 	"n"'Number'			= code ifTrue: [^ ExpressionArgMorph new numExpression: '10'].
 	"N"'Notes'				= code ifTrue: [^ ExpressionArgMorphWithMenu new numExpression: '60'; menuSelector: #noteSelector;
 		yourself].
@@ -1558,8 +1555,6 @@ CommandBlockMorph >> uncoloredArgMorphFor: specString [
 	"7"'LayoutStyles'		= code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #layoutStyles; choice: 'large';
 		yourself].
 	"v"'Variable'			= code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #varNamesMenu; choice: '';
-		yourself].
-	"W"'MotorDirection'		= code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #motorDirection;
 		yourself].
 	"x"'SceneNames'		= code ifTrue: [^ ChoiceOrExpressionArgMorph new getOptionsSelector: #sceneNames; choice: '';
 		yourself].

@@ -3694,10 +3694,6 @@ PhratchFrameMorph >> updateHistoryProjectName: projName op: operation [
 		ifTrue: [projectInfo at: 'isHosting' put: true]
 		ifFalse: [projectInfo removeKey: 'isHosting' ifAbsent: []].
 
-	(self allBlocksString includesSubstring: 'motor')
-		ifTrue: [projectInfo at: 'hasMotorBlocks' put: true]
-		ifFalse: [projectInfo removeKey: 'hasMotorBlocks' ifAbsent: []].
-
 	workPane penTrailsForm
 		ifNil: [projectInfo removeKey: 'penTrails' ifAbsent: []]
 		ifNotNil: [projectInfo at: 'penTrails' put: workPane penTrailsForm].
