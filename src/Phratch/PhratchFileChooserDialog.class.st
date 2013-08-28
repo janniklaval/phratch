@@ -196,10 +196,9 @@ PhratchFileChooserDialog class >> getLastFolderForType: type [
 
 { #category : #accessing }
 PhratchFileChooserDialog class >> homeDir [
-	"Return the home directory for this user. By default, this is either provided by the OS via primGetFolderPath: but it can be overridden by adding a 'homedir=path' entry to the .ini folder."
+	"Return the home directory for this user. By default, this is either provided by the OS via primGetFolderPath:."
 
 	| homeDir |
-	UserHomeFolder ifNotNil: [^ UserHomeFolder]. "provided by .ini"
 	"try in order: documents folder, user home folder, Phratch folder"
 	homeDir := FileLocator documents.  "documents"
 	(homeDir exists) ifFalse: [
@@ -325,7 +324,7 @@ PhratchFileChooserDialog class >> setLastFolderTo: dir forType: type [
 
 { #category : #accessing }
 PhratchFileChooserDialog class >> userPhratchProjectsDir [
-	"Return the path to the user's 'Phratch' project folder, usually located inside the user's 'Documents' folder. If the folder does not already exists, attempt to create it. If the .ini file specifies an alternate home directory, create the folder there. If the directory can't be created, return the user's home folder."
+	"Return the path to the user's 'Phratch' project folder, usually located inside the user's 'Documents' folder. If the folder does not already exists, attempt to create it. If the directory can't be created, return the user's home folder."
 
 	| phratchFolderName homeDir |
 	phratchFolderName := 'Phratch Projects'.  "if this were localized a user could get multiple project folders for different languages..."
@@ -746,10 +745,9 @@ PhratchFileChooserDialog >> initialize [
 
 { #category : #shortcuts }
 PhratchFileChooserDialog >> labelForHomeFolder [
-	"Answer the name to use for the home folder. This is the user name unless the home folder location has been overridden by an entry in the .ini file."
+	"Answer the name to use for the home folder."
 
 	| home delimiter |
-	UserHomeFolder notNil ifTrue: [^ 'Home' localized].
 
 	home := PhratchPlugin primGetFolderPathOrNil: 1.
 	home ifNil: [^ 'Home' localized].

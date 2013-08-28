@@ -683,23 +683,8 @@ PhratchFilePicker >> mouseUp: evt [
 
 { #category : #private }
 PhratchFilePicker >> navigationForbidden [
-	"Answer true if navigating the file hierarch is forbidden because there is a visibledrives entry in the .ini file."
 
-	| thisDrive pathParts |
-	PhratchFrameMorph visibleDrives ifNil: [^ false].
-
-	thisDrive := ''.
-	pathParts := (currentDir) path.
-	pathParts size > 0 ifTrue: [thisDrive := pathParts first asUppercase].
-	OSPlatform isMacOSX ifTrue: [
-		((thisDrive = 'volumes') and: [pathParts size > 1]) ifTrue: [
-			thisDrive := pathParts second asUppercase]].
-
-	(PhratchFrameMorph visibleDrives includes: thisDrive) ifTrue: [^ false].
-
-	Beeper beep.
-	^ true
-
+	^ false
 ]
 
 { #category : #private }

@@ -701,19 +701,10 @@ PhratchFrameMorph >> author: aString [
 ]
 
 { #category : #byob }
-PhratchFrameMorph >> blockContrastOff [
-
-	BlockMorph contrastOff.
-	self refreshBlocks.
-	self recordBlockContrast: 0
-]
-
-{ #category : #byob }
 PhratchFrameMorph >> blockContrastStrong [
 
 	BlockMorph contrastStrong.
 	self refreshBlocks.
-	self recordBlockContrast: 1
 ]
 
 { #category : #byob }
@@ -2153,7 +2144,6 @@ PhratchFrameMorph >> languageMenu: aToggleButtonMorph [
 	menu invokeModalAt: aToggleButtonMorph bottomLeft + (0@10) in: World allowKeyboard: true. 
 
 	self stopAll.
-	self recordLanguage: (PhratchTranslator currentLanguage).
 
 ]
 
@@ -2582,9 +2572,8 @@ image in end-user (fillScreen) mode?') ifFalse: [^ self].
 	self enterNormalMode.
 	self blockContrastStrong.
 	ScriptablePhratchMorph keepOnStage: true.
-	self recordKeepOnStage: 1. 
+	
 	EventHatMorph threadSafeMode: false.
-	self recordThreadSafeMode: 0.
 
 	BlockLabelFragmentDialog isExpanded: false.
 
@@ -2694,29 +2683,14 @@ PhratchFrameMorph >> processKeyboardEvents [
 
 { #category : #startup }
 PhratchFrameMorph >> processSettingsFile [
-	"Process settings from the .ini file."
+	"Process settings from the ini file."
 
-	| lang settings k |
+	| lang |
 	self class setVisibleDrives: nil.
 	lang := nil.
 	AllowSharing := true.
 	PhratchFileChooserDialog clearFolderCache. "clear homeDir and last folder cache"
-	settings := self readSettingsFile.
-	settings associationsDo: [:assoc |
-		k := assoc key.
-		k = 'language' ifTrue: [lang := assoc value].
-		k = 'home' ifTrue: [PhratchFileChooserDialog setHomeDir: assoc value].
-		k = 'visibledrives' ifTrue: [self class setVisibleDrives: assoc value].
-		k = 'share' ifTrue: [(assoc value) = '0' ifTrue: [AllowSharing := false]].
-"		k = 'proxyserver' ifTrue: [PhratchUploadProgressDialog proxyServer: assoc value].
-		k = 'proxyport' ifTrue: [PhratchUploadProgressDialog proxyPort: assoc value asNumberNoError]."
-		k = 'keepspritesonstage' ifTrue: [self keepSpritesOnStage: assoc value asNumberNoError].
-		k = 'blockcontrast' ifTrue: [assoc value = '0' ifTrue: [self blockContrastOff] ifFalse: [self blockContrastStrong]].
-		k = 'threadsafemode' ifTrue: [assoc value = '0' ifTrue: [EventHatMorph threadSafeMode: false] ifFalse: [EventHatMorph threadSafeMode: true]].
-		k = 'scopecontrast' ifTrue: [assoc value = '0' ifTrue: [VariableFrame scopeContrast: false] ifFalse: [VariableFrame scopeContrast: true]].
-		k = 'translucentdragging' ifTrue: [assoc value = '0' ifTrue: [HandMorph translucentWhenDragging: false] ifFalse: [HandMorph translucentWhenDragging: true]].
-].
-
+	
 	lang ifNil: [lang := PhratchTranslator guessLanguage].
 	self setLanguage: lang.
 
@@ -2887,27 +2861,6 @@ PhratchFrameMorph >> readDefaultNotes [
 
 ]
 
-{ #category : #startup }
-PhratchFrameMorph >> readSettingsFile [
-	"Read my settings file and answer a Dictionary of settings."
-	"PhratchFrameMorph new readSettingsFile"
-
-	| f dict s tokens k |
-	f := FileStream readOnlyFileNamedOrNil: 'Phratch.ini'.
-	f ifNil: [^ Dictionary new].
-	dict := Dictionary new.
-	f contentsOfEntireFile lines do: [:line |
-		s := line collect: [:c | (c asciiValue < 32) ifTrue: [Character space] ifFalse: [c]].
-		s ifNotEmpty: [
-			tokens := s findTokens: '='.
-			k := tokens first trimBoth asLowercase.
-			tokens size = 2
-				ifTrue: [dict at: k put: tokens second trimBoth]
-				ifFalse: [dict at: k put: '1']]].
-	^ dict
-
-]
-
 { #category : #private }
 PhratchFrameMorph >> rebuildUIForNewLanguage [
 	"Rebuild my UI after the language or font has been changed."
@@ -2921,114 +2874,6 @@ PhratchFrameMorph >> rebuildUIForNewLanguage [
 		category: viewerPane currentCategory.
 
 
-]
-
-{ #category : #byob }
-PhratchFrameMorph >> recordBlockContrast: anInteger [
-	"Record my language in the settings file."
-
-	"PhratchFrameMorph new recordLanguage: 'English'"
-
-	| fName f sz settings all |
-	fName := (FileSystem workingDirectory / 'Phratch.ini') fullName.
-	f := FileStream concreteStream new open: fName forWrite: true.
-	f ifNil: [ ^ self ].
-	sz := f size.
-	settings := (f next: sz) lines.
-	settings := settings reject: [ :s | s asLowercase beginsWith: 'blockcontrast=' ].
-	settings := settings
-		reject: [ :s | 
-			all := s asByteArray asSet.
-			all size = 1 and: [ all asArray first = 0 ] ].
-	settings := settings copyWith: 'BlockContrast=' , anInteger printString.
-	f position: 0.
-	settings
-		do: [ :s | 
-			f
-				nextPutAll: s;
-				nextPutAll: String crlf ].
-	[ f position < sz ] whileTrue: [ f nextPut: 0 asCharacter ].
-	f close
-]
-
-{ #category : #byob }
-PhratchFrameMorph >> recordKeepOnStage: anInteger [
-	"Record a setting in the settings file."
-
-	| fName f sz settings all |
-	fName := (FileSystem workingDirectory / 'Phratch.ini') fullName.
-	f := FileStream concreteStream new open: fName forWrite: true.
-	f ifNil: [ ^ self ].
-	sz := f size.
-	settings := (f next: sz) lines.
-	settings := settings reject: [ :s | s asLowercase beginsWith: 'keepspritesonstage=' ].
-	settings := settings
-		reject: [ :s | 
-			all := s asByteArray asSet.
-			all size = 1 and: [ all asArray first = 0 ] ].
-	settings := settings copyWith: 'KeepSpritesOnStage=' , anInteger printString.
-	f position: 0.
-	settings
-		do: [ :s | 
-			f
-				nextPutAll: s;
-				nextPutAll: String crlf ].
-	[ f position < sz ] whileTrue: [ f nextPut: 0 asCharacter ].
-	f close
-]
-
-{ #category : #private }
-PhratchFrameMorph >> recordLanguage: aString [
-	"Record my language in the settings file."
-
-	"PhratchFrameMorph new recordLanguage: 'English'"
-
-	| fName f sz settings all |
-	fName := (FileSystem workingDirectory / 'Phratch.ini') fullName.
-	f := FileStream concreteStream new open: fName forWrite: true.
-	f ifNil: [ ^ self ].
-	sz := f size.
-	settings := (f next: sz) lines.
-	settings := settings reject: [ :s | s asLowercase beginsWith: 'language=' ].
-	settings := settings
-		reject: [ :s | 
-			all := s asByteArray asSet.
-			all size = 1 and: [ all asArray first = 0 ] ].
-	settings := settings copyWith: 'Language=' , aString.
-	f position: 0.
-	settings
-		do: [ :s | 
-			f
-				nextPutAll: s;
-				nextPutAll: String crlf ].
-	[ f position < sz ] whileTrue: [ f nextPut: 0 asCharacter ].
-	f close
-]
-
-{ #category : #byob }
-PhratchFrameMorph >> recordThreadSafeMode: anInteger [
-	"Record a setting in the settings file."
-
-	| fName f sz settings all |
-	fName := (FileSystem workingDirectory / 'Phratch.ini') fullName.
-	f := FileStream concreteStream new open: fName forWrite: true.
-	f ifNil: [ ^ self ].
-	sz := f size.
-	settings := (f next: sz) lines.
-	settings := settings reject: [ :s | s asLowercase beginsWith: 'threadsafemode=' ].
-	settings := settings
-		reject: [ :s | 
-			all := s asByteArray asSet.
-			all size = 1 and: [ all asArray first = 0 ] ].
-	settings := settings copyWith: 'ThreadSafeMode=' , anInteger printString.
-	f position: 0.
-	settings
-		do: [ :s | 
-			f
-				nextPutAll: s;
-				nextPutAll: String crlf ].
-	[ f position < sz ] whileTrue: [ f nextPut: 0 asCharacter ].
-	f close
 ]
 
 { #category : #byob }
@@ -3082,9 +2927,8 @@ image in end-user (fillScreen) mode?') ifFalse: [^ self].
 	self enterNormalMode.
 	self blockContrastStrong.
 	ScriptablePhratchMorph keepOnStage: true.
-	self recordKeepOnStage: 1. 
+	
 	EventHatMorph threadSafeMode: false.
-	self recordThreadSafeMode: 0.
 
 	BlockLabelFragmentDialog isExpanded: false.
 
@@ -3517,7 +3361,7 @@ PhratchFrameMorph >> toggleKeepSpritesOnStage [
 	choice := ScriptablePhratchMorph keepOnStage
 		ifTrue: [ 1 ]
 		ifFalse: [ 0 ].
-	self recordKeepOnStage: choice
+	
 ]
 
 { #category : #byob }
@@ -3536,7 +3380,6 @@ PhratchFrameMorph >> toggleThreadSafeMode [
 	choice := EventHatMorph threadSafeMode
 		ifTrue: [ 1 ]
 		ifFalse: [ 0 ].
-	self recordThreadSafeMode: choice
 ]
 
 { #category : #byob }
