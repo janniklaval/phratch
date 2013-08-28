@@ -737,7 +737,7 @@ PhratchStageMorph >> newScene [
 ]
 
 { #category : #'looks ops' }
-PhratchStageMorph >> nextCostume [
+PhratchStageMorph >> nextBackground [
 	"Show the next background in my backgrounds list."
 	<phratchItem: 'next background' kind: #- category: 'looks' defaultValues: #() subCategory: #a1>
 	super nextCostume.
