@@ -12,7 +12,7 @@ PhratchSpritePureMorph >> forward: distance [
 	<phratchItem: 'move $Number$ cm' kind: #- category: 'pure' defaultValues: #(100) subCategory: #a1>
 	
 	| currentPosition nextPosition |
-	super forward: distance.
+	"super forward: distance."
 	[currentPosition := connectedRobot localizationService currentPosition.
 	nextPosition :=  (currentPosition x + (distance/100)) @ (currentPosition y). 
 	connectedRobot trajectoryService 
