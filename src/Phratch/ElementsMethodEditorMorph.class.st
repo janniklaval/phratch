@@ -159,7 +159,13 @@ ElementsMethodEditorMorph >> developmentMode [
 	ScriptablePhratchMorph noviceMode: false.
 	ElementsMethodEditorMorph warnIfNoSourcesFile: true.
 	ElementsMethodEditorMorph warnIfNoChangesFile: true.
-	UsersManager default currentUser canShowMorphHalo: true.
+	
+	self flag:'need to be removed after Pharo2.0 version'.
+	SystemVersion current major >= 3 ifTrue:[
+		Smalltalk tools userManager canShowMorphHalo: true. 
+	] ifFalse: [ 
+		(Smalltalk at: #UsersManager) default currentUser canShowMorphHalo: true.
+	].
 
 
 ]
@@ -357,7 +363,13 @@ ElementsMethodEditorMorph >> userMode [
 	ScriptablePhratchMorph noviceMode: true.
 	ElementsMethodEditorMorph warnIfNoSourcesFile: false.
 	ElementsMethodEditorMorph warnIfNoChangesFile: false.
-	UsersManager default currentUser canShowMorphHalo: false.
+	
+	self flag:'need to be removed after Pharo2.0 version'.
+	SystemVersion current major >= 3 ifTrue:[
+		Smalltalk tools userManager canShowMorphHalo: false. 
+	] ifFalse: [ 
+		(Smalltalk at: #UsersManager) default currentUser canShowMorphHalo: false.
+	].
 
 
 ]

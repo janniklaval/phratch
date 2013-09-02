@@ -1361,8 +1361,14 @@ PhratchFrameMorph >> enterPresentationMode [
 	Display fillBlack.
 	Display fullScreenMode: true.
 	TaskbarMorph allInstances do: [: e | e hide ].
-	UsersManager default currentUser canShowMorphHalo: false.
 	
+	self flag:'need to be removed after Pharo2.0 version'.
+	SystemVersion current major >= 3 ifTrue:[
+		Smalltalk tools userManager canShowMorphHalo: false. 
+	] ifFalse: [ 
+		(Smalltalk at: #UsersManager) default currentUser canShowMorphHalo: false.
+	].
+
 	World restoreDisplay.
 	Display fillBlack.
 	World assuredCanvas.  "re-allocate canvas after entering full-screen mode"
@@ -1418,7 +1424,12 @@ PhratchFrameMorph >> exitPresentationMode [
 	"Exit presentation mode."
 
 	TaskbarMorph allInstances do: [: e | e show ].
-	UsersManager default currentUser canShowMorphHalo: true.
+	self flag:'need to be removed after Pharo2.0 version'.
+	SystemVersion current major >= 3 ifTrue:[
+		Smalltalk tools userManager canShowMorphHalo: true. 
+	] ifFalse: [ 
+		(Smalltalk at: #UsersManager) default currentUser canShowMorphHalo: true.
+	].
 	
 	quitFlag ifTrue: [^Smalltalk quitPrimitive].
 
@@ -1615,7 +1626,13 @@ PhratchFrameMorph >> fillScreenOff [
 
 	fillScreenFlag := false.
 	TaskbarMorph allInstances do: [: e | e show ].
-	UsersManager default currentUser canShowMorphHalo: true.
+	
+	self flag:'need to be removed after Pharo2.0 version'.
+	SystemVersion current major >= 3 ifTrue:[
+		Smalltalk tools userManager canShowMorphHalo: true. 
+	] ifFalse: [ 
+		(Smalltalk at: #UsersManager) default currentUser canShowMorphHalo: true.
+	].
 	
 	self isSticky: false.
 	self extent: 1000@600"Display extent - 50".
@@ -1637,7 +1654,13 @@ PhratchFrameMorph >> fillScreenOn [
 
 	fillScreenFlag := true.
 	TaskbarMorph allInstances do: [: e | e hide ].
-	UsersManager default currentUser canShowMorphHalo: false.
+	
+	self flag:'need to be removed after Pharo2.0 version'.
+	SystemVersion current major >= 3 ifTrue:[
+		Smalltalk tools userManager canShowMorphHalo: false. 
+	] ifFalse: [ 
+		(Smalltalk at: #UsersManager) default currentUser canShowMorphHalo: false.
+	].
 	
 	self position: 0@0.
 	self isSticky: true.
