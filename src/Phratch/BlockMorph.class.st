@@ -31,12 +31,6 @@ Class {
 }
 
 { #category : #'class initialization' }
-BlockMorph class >> contrastOff [
-	Contrast := #off.
-	BlockMorph allInstancesDo: [:b | b changed ].
-]
-
-{ #category : #'class initialization' }
 BlockMorph class >> contrastStrong [
 	Contrast := #strong.
 	ReporterBlockMorph allInstancesDo: [:b | b changed ].

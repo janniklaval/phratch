@@ -328,13 +328,6 @@ CustomBlockDefinition >> isReporter [
 	^isReporter
 ]
 
-{ #category : #deprecated }
-CustomBlockDefinition >> isReporter: aBoolean [
-	"deprecated, kept for BYOB legacy support"
-
-	isReporter := aBoolean
-]
-
 { #category : #migrating }
 CustomBlockDefinition >> migrateBlockVars [
 	"turn my block vars into a VariableDeclarationBlockMorph"

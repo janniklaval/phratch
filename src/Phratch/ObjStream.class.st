@@ -93,12 +93,6 @@ ObjStream class >> fixedFormatClasses [
 ]
 
 { #category : #'class initialization' }
-ObjStream class >> iDToClassEntry [
-
-	^IDToClassEntry
-]
-
-{ #category : #'class initialization' }
 ObjStream class >> initialize [
 	"self initialize"
 
@@ -135,24 +129,6 @@ ObjStream class >> phratchFileVersionFrom: aString [
 	((aString beginsWith: 'BloxExpV') 
 		or: [(aString beginsWith: 'ScratchV') or: [aString beginsWith: 'PhratchV']]) ifFalse: [^ 0].
 	^ (aString copyFrom: 9 to: aString size) asNumberNoError
-
-]
-
-{ #category : #testing }
-ObjStream class >> phratchObjectsFrom: aFileName [
-	"Read a Phratch project from the file with the given name and answer the objects array."
-
-	| f version objects |
-	f := (FileStream readOnlyFileNamed: aFileName) binary.
-	version := self phratchFileVersionFrom: (f next: 10) asString.
-	version = 0 ifTrue: [
-		f position: 0.
-		objects := ObjStream new readObjFrom: f].
-	(version = 1) | (version = 2) ifTrue: [
-		f skip: f uint32.  "skip header"
-		objects := ObjStream new readObjsFrom: f].
-	f close.
-	^ objects
 
 ]
 

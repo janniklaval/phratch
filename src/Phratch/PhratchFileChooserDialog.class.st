@@ -261,21 +261,6 @@ PhratchFileChooserDialog class >> openPhratchFileFor: aPhratchFrameMorph [
 
 ]
 
-{ #category : #utilities }
-PhratchFileChooserDialog class >> replaceAsteriskWithUserName: aString [
-	"If the given string includes an asterisk, replace it with the name of the current user. Otherwise, return the string."
-	"self replaceAsteriskWithUserName: '/Users/*/Documents'"
-
-	| i home delimiter userName |
-	(i := aString indexOf: $*) = 0 ifTrue: [^ aString].
-	home := PhratchPlugin primGetFolderPathOrNil: 1.
-	home ifNil: [^ aString].
-	delimiter := FileSystem disk delimiter asString.
-	userName := (home findTokens: delimiter) last.
-	^ (aString copyFrom: 1 to: i - 1), userName, (aString copyFrom: i + 1 to: aString size).
-
-]
-
 { #category : #'instance creation' }
 PhratchFileChooserDialog class >> savePhratchFileFor: aPhratchFrameMorph [
 	"Choose a file for saving the current Phratch project file. Display the thumbnail and info string for the current project and allow the info string to be edited. Answer the full name of the file in which to save the project or #cancelled if the operation is cancelled."
@@ -295,20 +280,6 @@ PhratchFileChooserDialog class >> savePhratchFileFor: aPhratchFrameMorph [
 "	(result asLowercase endsWith: '.sb') ifFalse: [result := result, '.sb']."
 	(result asLowercase endsWith: '.phr') ifFalse: [result := result, '.phr'].
 	^ result
-
-]
-
-{ #category : #accessing }
-PhratchFileChooserDialog class >> setHomeDir: aStringOrNil [
-	"Set the home directory for this user. If the user name contains an asterisk, replace it with the name of logged in user."
-	"self setHomeDir: '/Users/*/Documents'"
-
-	| path |
-	UserHomeFolder := nil.
-	aStringOrNil ifNotNil: [
-		path := self replaceAsteriskWithUserName: aStringOrNil.
-		(path asFileReference ) exists ifTrue: [
-			UserHomeFolder := path asFileReference ]].
 
 ]
 

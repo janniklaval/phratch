@@ -638,32 +638,6 @@ PhratchFrameMorph >> addSpriteMorph [
 ]
 
 { #category : #'falta adaptar' }
-PhratchFrameMorph >> allBlocksString [
-	| s stacks |
-	s := WriteStream on: (String new: 10000).
-	(Array with: workPane) , self phratchObjects
-		do: [ :obj | 
-			stacks := (obj blocksBin isKindOf: Collection)
-				ifFalse: [ obj blocksBin submorphs select: [ :m | m isKindOf: BlockMorph ] ].
-			stacks size > 0
-				ifTrue: [ 
-					s
-						nextPutAll: 'All stacks for ';
-						nextPutAll: obj objName;
-						nextPutAll: ':';
-						cr;
-						cr.
-					stacks
-						do: [ :blocks | 
-							self printTupleList: blocks tupleSequence on: s.
-							s
-								cr;
-								cr ].
-					s cr ] ].
-	^ s contents
-]
-
-{ #category : #'falta adaptar' }
 PhratchFrameMorph >> allProjectMedia [
 	"Answer a collection of all media items in the current project."
 

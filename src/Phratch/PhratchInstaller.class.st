@@ -27,7 +27,7 @@ PhratchInstaller class >> beginInstall [
 	InputEventSensor addInstVarNamed: #keyPressed.
 
 
-	AbstractSoundSystem soundEnabled: true.
+	(Smalltalk at: #SoundSystem ifAbsent: AbstractSoundSystem)  soundEnabled: true.
 	SoundPlayer stopReverb.
 	PhratchFrameMorph initFonts.
 	(Workspace
