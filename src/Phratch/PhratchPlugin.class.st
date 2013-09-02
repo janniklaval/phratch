@@ -80,7 +80,7 @@ PhratchPlugin class >> isHidden: fullPath [
 	"Return true if file or folder with the given path should be hidden from the user. Return false if the primitive fails."
 	"self isHidden: 'testfile.txt'"
 
-	OSPlatform isMacOSX ifTrue: [^ false].
+	Smalltalk os isMacOSX ifTrue: [^ false].
 	((fullPath endsWith: ':\') and: [fullPath size = 3]) ifTrue: [^ false].
 
 	^ self primIsHidden: fullPath

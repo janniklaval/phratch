@@ -2405,13 +2405,13 @@ PhratchFrameMorph >> notEditingBlockDefinition: aCustomBlockDefinition [
 
 { #category : #'menu/button actions' }
 PhratchFrameMorph >> open: aFileName [ 
-	OSPlatform isMacOS ifTrue: [  
+	Smalltalk os isMacOSX ifTrue: [  
 		^ OSProcess command: ('open "', aFileName, '"').
 	].
-	OSPlatform isUnix ifTrue:[
+	Smalltalk os isUnix ifTrue:[
 		^ OSProcess command: ('xdg-open "', aFileName, '"').
 	].
-	OSPlatform isWin32 ifTrue:[
+	Smalltalk os isWin32 ifTrue:[
 		"^NBWin32Shell shellOpen: '', aFileName, ''."
 		^ OSProcess command: ('cmd.exe /k "', aFileName, '"').
 	]
@@ -3519,7 +3519,7 @@ PhratchFrameMorph >> updateHistoryProjectName: projName op: operation [
 	projectInfo at: 'phratch-version' put: Version.
 	projectInfo at: 'language' put: PhratchTranslator currentLanguage.
 
-	platform := OSPlatform platformName.
+	platform :=  OSPlatform platformName.
 	platform ifNil: [platform := 'unknown'].
 	'linux' = platform ifTrue: [
 		Display extent = (1200@900) ifTrue: [platform := 'XO']].

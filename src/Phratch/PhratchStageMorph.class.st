@@ -1453,7 +1453,7 @@ PhratchStageMorph >> tryToOpenMidiPort [
 	"Attempt to open the MIDI port. First try the port selected by the user, if any. If that port number is not a MIDI output port, try to find another port number. If all measures fail, leave midiPort set to nil."
 
 	| possiblePorts dir portNum |
-	OSPlatform isUnix
+	Smalltalk os isUnix
 		ifTrue: [ 
 			midiPort := nil.
 			^ self ].

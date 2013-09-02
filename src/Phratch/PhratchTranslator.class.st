@@ -591,7 +591,7 @@ PhratchTranslator class >> setRenderingHints [
 	"default values:"
 	IsRTL := false.
 	IsRTLMath := false.
-	RenderAntiAliasing := OSPlatform isMacOSX.
+	RenderAntiAliasing := Smalltalk os isMacOSX.
 	RenderFont := nil.
 	RenderHintString := nil.
 	RenderScale := 1.
@@ -608,15 +608,15 @@ PhratchTranslator class >> setRenderingHints [
 			IsRTL := IsRTLMath
 				ifTrue: [ true ]
 				ifFalse: [ (TranslationDict at: 'Language-Direction') = 'RTL'	"asString asUppercase" ] ].
-	OSPlatform isWin32
+	Smalltalk os isWin32
 		ifTrue: [ 
 			((TranslationDict includesKey: 'Win-Font') and: [ (TranslationDict at: 'Win-Font') size > 0 ])
 				ifTrue: [ RenderFont := TranslationDict at: 'Win-Font' ] ].
-	OSPlatform isMacOSX
+	Smalltalk os isMacOSX
 		ifTrue: [ 
 			((TranslationDict includesKey: 'Mac-Font') and: [ (TranslationDict at: 'Mac-Font') size > 0 ])
 				ifTrue: [ RenderFont := TranslationDict at: 'Mac-Font' ] ].
-	OSPlatform isWin32 | OSPlatform isMacOSX
+	Smalltalk os isWin32 | Smalltalk os isMacOSX
 		ifFalse: [ 
 			((TranslationDict includesKey: 'Linux-Font') and: [ (TranslationDict at: 'Linux-Font') size > 0 ])
 				ifTrue: [ RenderFont := TranslationDict at: 'Linux-Font' ] ].
@@ -758,7 +758,7 @@ PhratchTranslator class >> unicodeClipboardPut: unicodeOrString [
 		Clipboard clipboardText: unicodeOrString.
 		^ self].
 
-	useCRLF := OSPlatform isWin32.
+	useCRLF := Smalltalk os isWin32.
 	s := unicodeOrString.
 	buf := WriteStream on: (Array new: 2 * s size).
 	s do: [:ch1 | ch:= ch1.

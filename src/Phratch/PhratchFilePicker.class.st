@@ -433,7 +433,7 @@ PhratchFilePicker >> getLocalDirectoryNames [
 	dirNames := currentDir directoryNames.
 	(visible := PhratchFrameMorph visibleDrives) ifNil: [^ dirNames].
 
-	OSPlatform isMacOSX
+	Smalltalk os isMacOSX
 		ifTrue: [currentDir pathName = '/Volumes' ifFalse: [^ dirNames]]
 		ifFalse: [currentDir pathName = '' ifFalse: [^ dirNames]].
 

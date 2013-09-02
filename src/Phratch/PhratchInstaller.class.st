@@ -238,10 +238,10 @@ PhratchInstaller class >> pluginsPath [
 
 "	^(Smalltalk vmBinary resolve parent / 'Plugins')."
 	"^ FileSystem workingDirectory"
-	^ OSPlatform isMacOS
+	^ Smalltalk os isMacOSX
 		ifTrue: [ ^ Smalltalk vmBinary resolve  parent / 'Plugins' ]
 		ifFalse: [ 
-			(OSPlatform isUnix or: [ OSPlatform isWin32 ])
+			(Smalltalk os isUnix or: [ Smalltalk os isWin32 ])
 				ifTrue: [ ^ Smalltalk vmBinary resolve  parent]
 				ifFalse: [ self error: 'Your operating system is not supported yet by the installer. Please visit https://code.google.com/p/phratch/ for details, and contact developers.' ]
 		]
@@ -249,13 +249,13 @@ PhratchInstaller class >> pluginsPath [
 
 { #category : #installation }
 PhratchInstaller class >> pluginsURL [
-	^ OSPlatform isMacOS
+	^ Smalltalk os isMacOSX
 		ifTrue: [ ^ 'https://phratch.googlecode.com/files/pluginsMacOSX.zip' ]
 		ifFalse: [ 
-			OSPlatform isUnix
+			Smalltalk os isUnix
 				ifTrue: [ ^ 'https://phratch.googlecode.com/files/pluginsGNULinux.zip' ]
 				ifFalse: [ 
-					OSPlatform isWin32
+					Smalltalk os isWin32
 						ifTrue: [ ^ 'https://phratch.googlecode.com/files/pluginsWin32.zip' ]
 						ifFalse: [ 
 							self
