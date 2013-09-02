@@ -1364,7 +1364,7 @@ PhratchFrameMorph >> enterPresentationMode [
 	
 	self flag:'need to be removed after Pharo2.0 version'.
 	SystemVersion current major >= 3 ifTrue:[
-		Smalltalk tools userManager canShowMorphHalo: false. 
+		"Smalltalk tools userManager canShowMorphHalo: false. "
 	] ifFalse: [ 
 		(Smalltalk at: #UsersManager) default currentUser canShowMorphHalo: false.
 	].
@@ -1426,7 +1426,7 @@ PhratchFrameMorph >> exitPresentationMode [
 	TaskbarMorph allInstances do: [: e | e show ].
 	self flag:'need to be removed after Pharo2.0 version'.
 	SystemVersion current major >= 3 ifTrue:[
-		Smalltalk tools userManager canShowMorphHalo: true. 
+		"Smalltalk tools userManager canShowMorphHalo: true. "
 	] ifFalse: [ 
 		(Smalltalk at: #UsersManager) default currentUser canShowMorphHalo: true.
 	].
@@ -1629,7 +1629,7 @@ PhratchFrameMorph >> fillScreenOff [
 	
 	self flag:'need to be removed after Pharo2.0 version'.
 	SystemVersion current major >= 3 ifTrue:[
-		Smalltalk tools userManager canShowMorphHalo: true. 
+		"Smalltalk tools userManager canShowMorphHalo: true. "
 	] ifFalse: [ 
 		(Smalltalk at: #UsersManager) default currentUser canShowMorphHalo: true.
 	].
@@ -1657,7 +1657,7 @@ PhratchFrameMorph >> fillScreenOn [
 	
 	self flag:'need to be removed after Pharo2.0 version'.
 	SystemVersion current major >= 3 ifTrue:[
-		Smalltalk tools userManager canShowMorphHalo: false. 
+		"Smalltalk tools userManager canShowMorphHalo: false. "
 	] ifFalse: [ 
 		(Smalltalk at: #UsersManager) default currentUser canShowMorphHalo: false.
 	].
