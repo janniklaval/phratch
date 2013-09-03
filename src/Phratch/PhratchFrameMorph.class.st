@@ -2120,10 +2120,6 @@ PhratchFrameMorph >> languageMenu: aToggleButtonMorph [
 	"Present a menu of possible languages for blocks."
 
 	| bullet menu |
-	
-	PhratchTranslator canRenderUnicode ifFalse: [
-		"try to find a Unicode plugin in case this is the first use after startup"
-		PhratchTranslator detectRenderPlugin].
 	bullet := String withAll: '*'.
 	menu := MenuMorph new defaultTarget: self.
 	PhratchTranslator languageNames do: [:lang |
@@ -3173,7 +3169,6 @@ PhratchFrameMorph >> startup [
 	HostSystemMenus menuBarControler reviseHostMenus.
 "
 	ScriptablePhratchMorph randomInit.
-	PhratchTranslator detectRenderPlugin.
 	PhratchTranslator importLanguagesList.
 
 	PhratchFrameMorph readShareServerEntry.

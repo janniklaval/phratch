@@ -18,7 +18,6 @@ Class {
 		'RenderCenterOffsetCache',
 		'RenderFont',
 		'RenderHintString',
-		'RenderPlugin',
 		'RenderScale',
 		'RenderSuppressBold',
 		'RenderVerticalTrimCache',
@@ -59,13 +58,6 @@ PhratchTranslator class >> addSensorTranslations [
 PhratchTranslator class >> addUITranslation: aString [
 
 	UITranslationSet add: aString.
-
-]
-
-{ #category : #'Unicode rendering' }
-PhratchTranslator class >> canRenderUnicode [
-
-	^ RenderPlugin notNil
 
 ]
 
@@ -113,17 +105,6 @@ PhratchTranslator class >> currentLanguage [
 
 	Language ifNil: [Language := 'en'].
 	^ Language
-
-]
-
-{ #category : #'Unicode rendering' }
-PhratchTranslator class >> detectRenderPlugin [
-	"Determine which plugin is available for rendering Unicode."
-	"self detectRenderPlugin"
-	RenderPlugin := nil.
-
-	RenderCenterOffsetCache := IdentityDictionary new.
-	RenderVerticalTrimCache := IdentityDictionary new.
 
 ]
 
@@ -191,18 +172,8 @@ PhratchTranslator class >> fixAmbigousRTLPunctuation [
 
 { #category : #'rendering menu' }
 PhratchTranslator class >> fontMenu [
-	"Present a menu of fonts."
-
-	| menu |
-	RenderPlugin ifNil: [^ Beeper beep].
-	menu := MenuMorph new defaultTarget: self.
-	RenderPlugin getFontList do: [:fn | 
-		menu add: fn
-			target: self 
-			selector: #renderFont:
-			argument: fn].
-	menu popUpInWorld.
-	
+	self halt:'Should be removed'.
+	^ Beeper beep
 ]
 
 { #category : #'rendering menu' }
@@ -258,9 +229,7 @@ PhratchTranslator class >> importLanguagesList [
 			code := f copyFrom: 1 to: (f size - 3).
 			lang := self extractLanguageFromFileNamed: (dir / f) asFileReference fullName.
 			lang ifNil: [lang := code].
-			self canRenderUnicode
-				ifTrue: [self insertISOCode: code forLanguage: lang]
-				ifFalse: [self insertISOCode: code forLanguage: code]]].
+			self insertISOCode: code forLanguage: code]].
 
 ]
 
@@ -298,7 +267,6 @@ PhratchTranslator class >> initialize [
 
 	RenderAntiAliasing := false.
 	HeaderString := ''.
-	RenderPlugin := nil.
 	self setRenderingHints.
 
 	ColonSuffix := ':', (String value: 16r200F).
@@ -520,42 +488,6 @@ PhratchTranslator class >> renderingMenu [
 		popUpInWorld
 ]
 
-{ #category : #'Unicode rendering' }
-PhratchTranslator class >> setFont: aStrikeFont antialias: antialiasFlag [
-
-	| font isBold fontName fontSize |
-	font := aStrikeFont.
-	font ifNil: [font := StrikeFont fontName: 'Times' size: 14].
-
-	fontName := font name.
-	fontSize := (font pointSize * RenderScale) rounded.
-	isBold := false.
-
-	(fontName asLowercase endsWith: 'bold') ifTrue: [
-		fontName := fontName copyFrom: 1 to: (fontName size - 4).
-		isBold := true].
-
-	aStrikeFont isOSFont ifFalse: [
-		(fontName beginsWith: 'VerdanaBoldNarrowSpace') ifTrue: [
-			fontName := 'Verdana'.
-			isBold := true].
-
-		(fontName beginsWith: 'Times') ifTrue: [ "Squeak font; not used by Phratch"
-			fontName := 'Comic'.
-			fontSize := font pointSize + 1].
-
-		RenderFont ifNotNil: [fontName := RenderFont].
-		RenderSuppressBold ifTrue: [isBold := false]].
-
-	RenderPlugin
-		primSetFont: fontName
-		size: fontSize
-		bold: isBold
-		italic: false
-		antialias: antialiasFlag.
-
-]
-
 { #category : #'language translation' }
 PhratchTranslator class >> setLanguage: aString [
 	"Set the current language. If the language is not supported, use English (i.e. an empty translation dictionary)."
@@ -566,7 +498,6 @@ PhratchTranslator class >> setLanguage: aString [
 	TranslationDict := Dictionary new.
 	HeaderString := ''.
 	self setRenderingHints.  "clear rendering hints"
-	PhratchTranslator detectRenderPlugin.
 
 	aString = 'en' ifTrue: [^ self].
 
@@ -639,37 +570,12 @@ PhratchTranslator class >> setRenderingHints [
 
 ]
 
-{ #category : #startup }
-PhratchTranslator class >> shutDown [
-	"Clear the rendering plugin."
-
-	RenderPlugin := nil.
-
-]
-
-{ #category : #startup }
-PhratchTranslator class >> startUp [
-	"self startup"
-
-	self detectRenderPlugin.
-
-]
-
 { #category : #'Unicode rendering' }
 PhratchTranslator class >> stringExtent: aString font: aStrikeFont [
 	"Answer the extent of the given string using my font under the current font rendering system."
 	"self stringExtent: 'Hello, Phratch!' font: (StrikeFont fontName: 'Verdana' size: 18)"
 
-	| s |
-	RenderPlugin ifNil: [  "no renderer; use Squeak font size"
-		^ (aStrikeFont widthOfString: aString asString) @ aStrikeFont height].
-
-	aString size = 0 ifTrue: [^ 5@((aStrikeFont pointSize * RenderScale) rounded)].
-
-	s := aString.
-	self setFont: aStrikeFont antialias: RenderAntiAliasing.
-	^ RenderPlugin primMeasureString: s
-
+	^ (aStrikeFont widthOfString: aString asString) @ aStrikeFont height
 ]
 
 { #category : #'rendering menu' }
@@ -713,70 +619,17 @@ PhratchTranslator class >> unicodeClipboard [
 	"self unicodeClipboard asArray"
 	"(StringMorph contents: self unicodeClipboard) openInWorld"
 
-	| n buf raw ch out s ch2 |
-	RenderPlugin ifNil: [
-		"if there is no plugin, return the normal text clipboard as UTF32"
-		^ (String withAll: Clipboard clipboardText)].
-
-	n := RenderPlugin primClipboardSize.
-	n = 0 ifTrue: [
-		"if unicode clipboard is empty, try the normal one"
-		^ (String withAll: Clipboard clipboardText)].
-
-	buf := SoundBuffer new: n.
-	n := RenderPlugin primGetCliboardInto: buf.
-	raw := (1 to: n) collect: [:i |
-		ch := buf at: i.
-		ch < 0 ifTrue: [ch := ch + 65536].
-		ch].
-
-	out := WriteStream on: (String new: n).
-	s := ReadStream on: raw.
-	[s atEnd] whileFalse: [
-		ch := s next.
-		(ch between: 16rD800 and: 16rDBFF)
-			ifTrue: [
-				(s atEnd not and: [s peek between: 16rDC00 and: 16rDFFF]) ifTrue: [
-					ch2 := s next.
-					ch := ((ch bitAnd: 16r3FF) << 10) + (ch2 bitAnd: 16r3FF) + 16r10000.
-					out nextPut: ch]]
-			ifFalse: [
-				((ch = 0) | (ch = 10)) ifFalse: [out nextPut: ch]]].
-
-	^ out contents
-
+	^ (String withAll: Clipboard clipboardText)
 ]
 
 { #category : #'Unicode copy/paste' }
 PhratchTranslator class >> unicodeClipboardPut: unicodeOrString [
 	"Store the given string in the Unicode paste buffer of the underlying OS. If the argument is a String, it is assumed to be encoded in MacRoman and is converted to Unicode."
-	"self unicodeClipboardPut: (UTF32 withAll: #(65 0 0 66 67 13 12354 0 27700 119070))"
+	"self unicodeClipboardPut: (String withAll: #(65 0 0 66 67 13 12354 0 27700 119070))"
  " Corregido error sintaxsis"
-	| useCRLF s buf ch|
-	RenderPlugin ifNil: [
-		"if there is no plugin, put UTF8 for string into the normal text clipboard"
-		Clipboard clipboardText: unicodeOrString.
-		^ self].
 
-	useCRLF := Smalltalk os isWin32.
-	s := unicodeOrString.
-	buf := WriteStream on: (Array new: 2 * s size).
-	s do: [:ch1 | ch:= ch1.
-		ch > 16r10000
-			ifTrue: [
-				"extended range character"
-				ch := ch - 16r10000.
-				buf nextPut: (16rD800 bitOr: ((ch >> 10) bitAnd: 16r3FF)) - 16r10000.
-				buf nextPut: (16rDC00 bitOr: (ch bitAnd: 16r3FF)) - 16r10000]
-			ifFalse: [
-				ch >= 16r8000 ifTrue: [
-					 "make signed to allow storage in SoundBuffer"
-					ch := ch - 16r10000].
-				ch ~= 0 ifTrue: [buf nextPut: ch].
-				(useCRLF and: [ch = 13]) ifTrue: [buf nextPut: 10]]].
-
-	RenderPlugin primCliboardPut: (SoundBuffer withAll: buf contents) size: buf size.
-
+	Clipboard clipboardText: unicodeOrString.
+	^ self
 ]
 
 { #category : #'rendering menu' }
@@ -792,14 +645,7 @@ PhratchTranslator class >> updatePhratchUI [
 { #category : #'Unicode rendering' }
 PhratchTranslator class >> useSqueakRendering [
 	"Answer true if the current langauge can (or must) be rendered using Squeak,based on the availablility of a rendering plugin, the settings in the .po file and the contents of the translations. Assume that the header has already been processed to initialize HeaderDict."
-
-	self canRenderUnicode ifFalse: [^ true].
-
-	IsRTL ifTrue: [^ false].
-	RenderScale ~= 1 ifTrue: [^ false].
-	RenderSuppressBold ifTrue: [^ false].
-
-	^ false
+	^ true
 ]
 
 { #category : #'Unicode rendering' }

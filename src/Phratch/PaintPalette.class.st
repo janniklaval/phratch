@@ -459,10 +459,10 @@ PaintPalette >> textFontMenu [
 		useOSFont := false.
 		fontList := StrikeFont fontNames reject: [:fn |
 			lcName := fn asLowercase.
-			(lcName includesSubString: 'arial') |
-			(lcName includesSubString: 'helvetica') |
-			(lcName includesSubString: 'narrowspace') |
-			(lcName includesSubString: 'newyork')].
+			(lcName includesSubstring: 'arial') |
+			(lcName includesSubstring: 'helvetica') |
+			(lcName includesSubstring: 'narrowspace') |
+			(lcName includesSubstring: 'newyork')].
 
 	menu := MenuMorph new defaultTarget: self.
 	fontList do: [:n | 
