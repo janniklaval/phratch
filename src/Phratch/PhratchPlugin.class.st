@@ -184,23 +184,6 @@ PhratchPlugin class >> primFisheye: inBitmap into: outBitmap width: w power: anI
 
 ]
 
-{ #category : #'OS utilities' }
-PhratchPlugin class >> primGetFolderPathOrNil: anInteger [
-	"Return the folder path for the given ID. Folder ID's are:
-		1	home
-		2	desktop
-		3	documents
-		4	my pictures
-		5	my music.
-	Return nil if the primitive fails."
-	"self primGetFolderPathOrNil: 1"
-
-	<primitive: 'primitiveGetFolderPath' module: #ScratchPlugin>
-	self halt:'should remove'.
-	^ nil
-
-]
-
 { #category : #'image scale primitives' }
 PhratchPlugin class >> primHalfSizeAverage: srcBits w: srcW h: srcH into: dstBits w: dstW h: dstH srcX: x1 srcY: y1 dstX: x2 dstY: y2 dstW: w dstH: h [
 	"Display the source form at half-size onto the destination form at the given location by averaging the colors a 2x2 cell. Does not handle alpha or transparency. Return nil if the target rectangle does not fit entirely within the destination form."

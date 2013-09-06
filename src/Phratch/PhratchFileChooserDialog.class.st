@@ -718,13 +718,7 @@ PhratchFileChooserDialog >> initialize [
 PhratchFileChooserDialog >> labelForHomeFolder [
 	"Answer the name to use for the home folder."
 
-	| home delimiter |
-
-	home := PhratchPlugin primGetFolderPathOrNil: 1.
-	home ifNil: [^ 'Home' localized].
-	delimiter := FileSystem disk delimiter asString.
-
-	^ String withAll: (home findTokens: delimiter) last
+	^FileLocator home absolutePath basename.
 
 ]
 
