@@ -47,7 +47,6 @@ Class {
 		'DefaultSprite',
 		'Fonts',
 		'FontsXO',
-		'MeshServerEnabled',
 		'PhratchServers',
 		'PhratchSkin',
 		'PhratchSkinXO',
