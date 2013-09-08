@@ -59,7 +59,6 @@ Class {
 		'SupportServerPath',
 		'TakeOverScreen',
 		'UseErrorCatcher',
-		'UseLargeFonts',
 		'Version',
 		'VersionDate',
 		'VisibleDrives',
@@ -236,11 +235,6 @@ PhratchFrameMorph class >> isXO [
 
 	^ "IsXO" false
 
-]
-
-{ #category : #accessing }
-PhratchFrameMorph class >> meshServerEnabled [
-	^ MeshServerEnabled  ifNil: [ MeshServerEnabled := true ]
 ]
 
 { #category : #utilities }
@@ -461,11 +455,6 @@ PhratchFrameMorph class >> useErrorCatcher [
 
 	^ UseErrorCatcher
 
-]
-
-{ #category : #accessing }
-PhratchFrameMorph class >> useLargeFonts [
-	^ UseLargeFonts ifNil: [ UseLargeFonts := false ]
 ]
 
 { #category : #utilities }
@@ -1638,8 +1627,6 @@ PhratchFrameMorph >> fillScreenOff [
 	self extent: 1000@600"Display extent - 50".
 	UseErrorCatcher := false.
 	ScriptablePhratchMorph noviceMode: false.
-	ElementsMethodEditorMorph warnIfNoSourcesFile: true.
-	ElementsMethodEditorMorph warnIfNoChangesFile: true.
 	Paragraph insertionPointColor: (Color r: 0.4 g: 1.0 b: 0.0).
 
 ]
@@ -1669,8 +1656,6 @@ PhratchFrameMorph >> fillScreenOn [
 	UseErrorCatcher := true.
 	Sensor useOSEvents: true.
 	ScriptablePhratchMorph noviceMode: true.
-	ElementsMethodEditorMorph warnIfNoSourcesFile: false.
-	ElementsMethodEditorMorph warnIfNoChangesFile: false.
 	Paragraph insertionPointColor: (Color r: 0.353 g: 0.607 b: 0.788).
 	self updateProjectName.
 	self step.
@@ -2558,7 +2543,6 @@ PhratchFrameMorph >> prepareImageForEndUserSilently [
 Close non-Phratch windows and save this
 image in end-user (fillScreen) mode?') ifFalse: [^ self].
 "
-	PhratchFrameMorph isXO ifTrue: [PhratchFrameMorph useLargeFonts].
 
 	self setLanguage: 'en'.
 
@@ -2913,7 +2897,6 @@ PhratchFrameMorph >> saveImageForEndUser [
 Close non-Phratch windows and save this
 image in end-user (fillScreen) mode?') ifFalse: [^ self].
 
-	PhratchFrameMorph isXO ifTrue: [PhratchFrameMorph useLargeFonts].
 
 	self setLanguage: 'en'.
 

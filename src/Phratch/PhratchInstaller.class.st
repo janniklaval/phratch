@@ -175,10 +175,10 @@ PhratchInstaller class >> phratchSettingsOn: aBuilder [
 		label: 'Phratch' translated;
 		description: 'All Phratch settings' translated;
 		with: [ 
-			(aBuilder setting: #insertionPointColor) 
+			"(aBuilder setting: #insertionPointColor) 
 				label: 'insertionPointColor' translated;
 		 		target: Paragraph;
-		 		description: '...' translated.	
+		 		description: '...' translated.	"
 			(aBuilder setting: #noviceMode) 
 				label: 'noviceMode' translated;
 		 		target: ScriptablePhratchMorph;
@@ -191,22 +191,6 @@ PhratchInstaller class >> phratchSettingsOn: aBuilder [
 				label: 'standardMenuFont' translated;
 		 		target: PhratchFrameMorph;
 		 		description: '...' translated.	
-			(aBuilder setting: #useLargeFonts) 
-				label: 'useLargeFonts' translated;
-		 		target: PhratchFrameMorph;
-		 		description: '...' translated.	
-			(aBuilder setting: #warnIfNoChangesFile) 
-				label: 'warnIfNoChangesFile' translated;
-		 		target: ElementsMethodEditorMorph;
-		 		description: '...' translated.	
-			(aBuilder setting: #warnIfNoSourcesFile) 
-				label: 'warnIfNoSourcesFile' translated;
-		 		target: ElementsMethodEditorMorph;
-		 		description: '...' translated.	
-			(aBuilder setting: #meshServerEnabled) 
-				label: 'meshServerEnabled' translated;
-		 		target: PhratchFrameMorph;
-		 		description: 'A mesh server allows to share projects' translated.	
 			(aBuilder setting: #takeOverScreen) 
 				label: 'takeOverScreen' translated;
 		 		target: PhratchFrameMorph;

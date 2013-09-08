@@ -8,21 +8,6 @@ Class {
 }
 
 { #category : #tests }
-PhratchPluginTests >> blurTest: count [
-	"PhratchPlugin blurTest: 10"
-
-	| f outBits |
-	f := (Form fromFileNamed: TestFileName) asFormOfDepth: 32.
-	f display.
-	count timesRepeat: [
-		outBits := f bits copy.
-		PhratchPlugin primBlur: f bits into: outBits width: f width.
-		f bits: outBits.
-		f display].
-
-]
-
-{ #category : #tests }
 PhratchPluginTests >> brightnessShiftTest [
 	"self brightnessShiftTest"
 
@@ -170,14 +155,6 @@ PhratchPluginTests >> hueShiftTest [
 { #category : #tests }
 PhratchPluginTests >> setUp [
 	TestFileName :=  (FileSystem workingDirectory / 'ScratchSkin' / 'defaultSpriteCostume.png') fullName
-]
-
-{ #category : #tests }
-PhratchPluginTests >> testBlur [
-	self blurTest: 100.
-	self assert: true.
-
-	
 ]
 
 { #category : #tests }

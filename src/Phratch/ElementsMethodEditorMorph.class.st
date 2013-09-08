@@ -12,32 +12,8 @@ Class {
 		'currentMethod',
 		'currentClass'
 	],
-	#classVars : [
-		'WarnIfNoChangesFile',
-		'WarnIfNoSourcesFile'
-	],
 	#category : #'Phratch-UI-Support'
 }
-
-{ #category : #accessing }
-ElementsMethodEditorMorph class >> warnIfNoChangesFile [
-	^ WarnIfNoChangesFile ifNil: [ WarnIfNoChangesFile := false ]
-]
-
-{ #category : #accessing }
-ElementsMethodEditorMorph class >> warnIfNoChangesFile: anObject [
-	WarnIfNoChangesFile := anObject
-]
-
-{ #category : #accessing }
-ElementsMethodEditorMorph class >> warnIfNoSourcesFile [
-	^ WarnIfNoSourcesFile ifNil: [ WarnIfNoSourcesFile := false ]
-]
-
-{ #category : #accessing }
-ElementsMethodEditorMorph class >> warnIfNoSourcesFile: anObject [
-	WarnIfNoSourcesFile := anObject
-]
 
 { #category : #menu }
 ElementsMethodEditorMorph >> about [
@@ -157,8 +133,6 @@ ElementsMethodEditorMorph >> developmentMode [
 		arrangePanes.
 	palette arrangePanes.	
 	ScriptablePhratchMorph noviceMode: false.
-	ElementsMethodEditorMorph warnIfNoSourcesFile: true.
-	ElementsMethodEditorMorph warnIfNoChangesFile: true.
 	
 	self flag:'need to be removed after Pharo2.0 version'.
 	SystemVersion current major >= 3 ifTrue:[
@@ -361,8 +335,6 @@ ElementsMethodEditorMorph >> userMode [
 
 	fillScreenOn := true.
 	ScriptablePhratchMorph noviceMode: true.
-	ElementsMethodEditorMorph warnIfNoSourcesFile: false.
-	ElementsMethodEditorMorph warnIfNoChangesFile: false.
 	
 	self flag:'need to be removed after Pharo2.0 version'.
 	SystemVersion current major >= 3 ifTrue:[

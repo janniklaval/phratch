@@ -157,15 +157,6 @@ PhratchPlugin class >> portName: portIndex [
 
 ]
 
-{ #category : #'image filter primitives' }
-PhratchPlugin class >> primBlur: inBitmap into: outBitmap width: w [
-	"Blur all the non-transparent pixels in the given 32-bit image bitmap, storing the result in outBitmap. The two bitmaps must be the same size. Each call to this primitive does one Gausian blur step."
-
-	<primitive: 'primitiveBlur' module: #ScratchPlugin>
-	self primitiveFailed
-
-]
-
 { #category : #'image scale primitives' }
 PhratchPlugin class >> primDouble: srcBitmap w: srcWidth h: srcHeight into: dstBitmap w: dstWidth h: dstHeight x: dstX y: dstY [
 	"Display the source form at double-size onto the destination form at the given location. Fails if the target rectangle does not fit entirely within the destination form."
