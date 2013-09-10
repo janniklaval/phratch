@@ -1529,7 +1529,7 @@ BlockMorph >> resumeProcess [
 { #category : #'event handling' }
 BlockMorph >> rightButtonMenu [
 
-	| menu |
+	| menu choice |
 	menu := MenuMorphNG new defaultTarget: self.
 	menu add: 'help' value: #presentHelpScreen.
 
@@ -1543,7 +1543,10 @@ BlockMorph >> rightButtonMenu [
 		menu addLine.
 		menu add: 'show tuples' value: #showTuples].
 	
-	menu localize; invokeModal" popUpAt: World activeHand position inWorld:  World"  "localize; invokeOn: self"
+	menu localize; invokeModal.
+	choice := menu selectedValue ifNil: [^ self].
+	self perform: choice.
+
 
 ]
 
