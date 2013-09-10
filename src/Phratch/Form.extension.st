@@ -66,8 +66,6 @@ Form >> equals: aForm [
 	self == aForm ifTrue: [^ true].
 
 	self class = aForm class ifFalse: [^ false].
-	self class = ColorForm ifTrue: [
-		self colors = aForm colors  ifFalse: [^ false]].
 	(width = aForm width) & (height = aForm height) ifFalse: [^ false].
 	(depth = aForm depth) & (offset = aForm privateOffset) ifFalse: [^ false].
 
