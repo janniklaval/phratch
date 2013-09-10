@@ -338,7 +338,8 @@ CustomBlockDefinition >> migrateBlockVars [
 			color: Color gray;
 			isSpecialForm: true;
 			minArgs: 1;
-			selector: #doDeclareVariables.
+			selector: #doDeclareVariables;
+			yourself.
 
 	vars := self varNames.
 		spec := 'script variables' localized.
@@ -348,8 +349,7 @@ CustomBlockDefinition >> migrateBlockVars [
 		vn := vars at: i.
 		blob := VariableBlockMorph new 
 				isSpecialForm: true;
-				commandSpec: vn  ";
-				color: (ScriptablePhratchMorph blockColorFor: 'variables')".
+				commandSpec: vn; yourself.
 		dec replaceArgMorph: (dec argMorphs at: i) by: blob.
 		blockVars remove: vn ].
 

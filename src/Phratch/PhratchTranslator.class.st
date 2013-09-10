@@ -418,14 +418,6 @@ PhratchTranslator class >> parseTranslationLines: lineStream [
 ]
 
 { #category : #'as yet unclassified' }
-PhratchTranslator class >> renderFont: choice [
-	choice ifNotNil: [
-		RenderFont := choice.
-		self updatePhratchUI].
-
-]
-
-{ #category : #'as yet unclassified' }
 PhratchTranslator class >> renderFontScale: choice [
 
 		choice ifNotNil: [

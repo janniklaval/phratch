@@ -961,12 +961,6 @@ CommandBlockMorph >> labelColor [
 
 	^ LabelColor
 
-"old:
-	^ self color luminance > 0.8
-		ifTrue: [Color black]
-		ifFalse: [Color white]
-"
-
 ]
 
 { #category : #private }

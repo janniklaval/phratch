@@ -3330,11 +3330,7 @@ PhratchFrameMorph >> toggleErrorCatcher [
 
 { #category : #byob }
 PhratchFrameMorph >> toggleKeepSpritesOnStage [
-	| choice |
 	ScriptablePhratchMorph keepOnStage: ScriptablePhratchMorph keepOnStage not.
-	choice := ScriptablePhratchMorph keepOnStage
-		ifTrue: [ 1 ]
-		ifFalse: [ 0 ].
 	
 ]
 
@@ -3349,11 +3345,9 @@ PhratchFrameMorph >> togglePause [
 
 { #category : #byob }
 PhratchFrameMorph >> toggleThreadSafeMode [
-	| choice |
+
 	EventHatMorph threadSafeMode: EventHatMorph threadSafeMode not.
-	choice := EventHatMorph threadSafeMode
-		ifTrue: [ 1 ]
-		ifFalse: [ 0 ].
+
 ]
 
 { #category : #byob }

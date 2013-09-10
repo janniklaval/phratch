@@ -66,7 +66,7 @@ ArgMorph >> defaultValue [
 	^ val
 ]
 
-{ #category : #other }
+{ #category : #accessing }
 ArgMorph >> defaultValue: anObject [
 	"Set my default value. This default implementation does nothing."
 

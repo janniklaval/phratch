@@ -339,19 +339,6 @@ PhratchPlugin >> bitmap: bitmap at: i putH: hue s: saturation v: brightness [
 ]
 
 { #category : #private }
-PhratchPlugin >> checkedFloatPtrOf: oop [
-	"Return an unsigned int pointer to the first indexable word of oop, which must be a words object."
-
-	self inline: true.
-	self returnTypeC: 'double *'.
-
-	interpreterProxy success: (interpreterProxy isWordsOrBytes: oop).
-	interpreterProxy failed ifTrue: [^ 0].
-	^ self cCoerce: (interpreterProxy firstIndexableField: oop) to: 'double *'
-
-]
-
-{ #category : #private }
 PhratchPlugin >> checkedUnsignedIntPtrOf: oop [
 	"Return an unsigned int pointer to the first indexable word of oop, which must be a words object."
 
@@ -453,25 +440,6 @@ PhratchPlugin >> primClose [
 	self cCode: 'SerialPortClose(portNum)'.
 
 	interpreterProxy pop: 1.  "pop arg, leave rcvr on stack"
-	^ 0
-
-]
-
-{ #category : #'serial port' }
-PhratchPlugin >> primGetOption [
-	"Return the given option value for the given serial port."
-
-	| portNum attrNum result |
-	self export: true.
-	portNum := interpreterProxy stackIntegerValue: 1.
-	attrNum := interpreterProxy stackIntegerValue: 0.
-	interpreterProxy failed ifTrue: [^ nil].
-
-	result := self cCode: 'SerialPortGetOption(portNum, attrNum)'.
-	result = -1 ifTrue: [interpreterProxy success: false. ^ 0].
-
-	interpreterProxy pop: 3.  "pop args and rcvr, push result"
-	interpreterProxy pushInteger: result.
 	^ 0
 
 ]
@@ -645,43 +613,6 @@ PhratchPlugin >> primWrite [
 
 ]
 
-{ #category : #'other filters' }
-PhratchPlugin >> primitiveBlur [
-	| inOop outOop width in out sz height n rTotal gTotal bTotal pix outPix |
-	self export: true.
-	self var: 'in' declareC: 'unsigned int *in'.
-	self var: 'out' declareC: 'unsigned int *out'.
-	inOop := interpreterProxy stackValue: 2.
-	outOop := interpreterProxy stackValue: 1.
-	width := interpreterProxy stackIntegerValue: 0.
-	in := self checkedUnsignedIntPtrOf: inOop.
-	out := self checkedUnsignedIntPtrOf: outOop.
-	sz := interpreterProxy stSizeOf: inOop.
-	interpreterProxy success: (interpreterProxy stSizeOf: outOop) = sz.
-	interpreterProxy failed
-		ifTrue: [ ^ nil ].
-	height := sz // width.
-	1 to: height - 2 do: [ :y | 
-		1 to: width - 2 do: [ :x | 
-			n := rTotal := gTotal := bTotal := 0.
-			-1 to: 1 do: [ :dY | 
-				-1 to: 1 do: [ :dX | 
-					pix := (in at: (y + dY) * width + (x + dX)) bitAnd: 16rFFFFFF.	"add 1 when testing in Squeak"
-					pix = 0
-						ifFalse: [ 
-							"skip transparent pixels"
-							rTotal := rTotal + ((pix bitShift: -16) bitAnd: 16rFF).
-							gTotal := gTotal + ((pix bitShift: -8) bitAnd: 16rFF).
-							bTotal := bTotal + (pix bitAnd: 16rFF).
-							n := n + 1 ] ] ].
-			outPix := n = 0
-				ifTrue: [ 0 ]
-				ifFalse: [ (rTotal // n bitShift: 16) + (gTotal // n bitShift: 8) + (bTotal // n) ].
-			out at: y * width + x put: outPix	"add 1 when testing in Squeak" ] ].
-	interpreterProxy pop: 3.	"pop args, leave rcvr on stack"
-	^ 0
-]
-
 { #category : #'hsv filters' }
 PhratchPlugin >> primitiveBrightnessShift [
 	| inOop outOop shift in sz out pix r g b max min hue saturation brightness |
@@ -833,30 +764,6 @@ PhratchPlugin >> primitiveFisheye [
 			out at: ((y * width) + x "+ 1 for Squeak") put: pix]].
 
 	interpreterProxy pop: 4.  "pop args, leave rcvr on stack"
-	^ 0
-
-]
-
-{ #category : #'os functions' }
-PhratchPlugin >> primitiveGetFolderPath [
-	"Get the path for the special folder with given ID. Fail if the folder ID is out of range."
-
-	| nameStr dst folderID count resultOop |
-	self export: true.
-	self var: 'nameStr' declareC: 'char nameStr[2000]'.
-	self var: 'dst' declareC: 'char* dst'.
-
-	folderID := interpreterProxy stackIntegerValue: 0.
-	interpreterProxy failed ifTrue: [^ 0].
-
-	self cCode: 'GetFolderPathForID(folderID, nameStr, 2000)'.
-
-	count := self cCode: 'strlen(nameStr)'.
-	resultOop := interpreterProxy instantiateClass: interpreterProxy classString indexableSize: count.
-	dst := self cCoerce: (interpreterProxy firstIndexableField: resultOop) to: 'char *'.
-	0 to: count - 1 do: [:i | dst at: i put: (nameStr at: i)].
-
-	interpreterProxy pop: 2 thenPush: resultOop.  "pop arg and rcvr, push result"
 	^ 0
 
 ]

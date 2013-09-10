@@ -22,8 +22,7 @@ Class {
 		'outgoingMessages',
 		'outBuf',
 		'outIndex',
-		'isHttp',
-		'lastActivityTime'
+		'isHttp'
 	],
 	#category : #'Phratch-Networking'
 }
@@ -103,7 +102,6 @@ MessageSocket >> initialize [
 	outgoingMessages := OrderedCollection new.
 	outBuf := nil.
 	outIndex := 1.
-	lastActivityTime := Time totalSeconds.
 	isHttp := false
 
 ]
@@ -135,7 +133,6 @@ MessageSocket >> nextMessage [
 
 	inBuf ifNil: [
 		n := socket readInto: inSizeBuf startingAt: inSizeIndex.
-		n > 0 ifTrue: [lastActivityTime := Time totalSeconds].
 		inSizeIndex := inSizeIndex + n.
 		inSizeIndex > 4 ifTrue: [  "received message size; allocate the message buffer"
 			sz := (ReadStream on: inSizeBuf) uint32.
@@ -157,7 +154,6 @@ MessageSocket >> nextMessage [
 
 	inBuf ifNotNil: [
 	     n := socket readInto: inBuf startingAt: inIndex.
-		n > 0 ifTrue: [lastActivityTime := Time totalSeconds].
 		inIndex := inIndex + n.		
 		((inIndex > inBuf size) or: [isHttp and: [self isHttpCompleted: inBuf]]) ifTrue: [  "received complete message; reset and answer it"
 			msg := inBuf.
@@ -268,7 +264,6 @@ MessageSocket >> sendData [
 		outBuf class isBytes ifFalse: [^ self sendStreamData].
 		n := socket sendDataNoWait: outBuf startIndex: outIndex.
 		n > 0 ifTrue: [
-			lastActivityTime := Time totalSeconds.
 			outIndex := outIndex + n.
 			outIndex > outBuf size ifTrue: [outBuf := nil]]].
 
@@ -293,7 +288,6 @@ MessageSocket >> sendStreamData [
 	outBuf skip: tempBuf size negated.
 	n := socket sendDataNoWait: tempBuf startIndex: 1.
 	n > 0 ifTrue: [
-		lastActivityTime := Time totalSeconds.
 		outBuf skip: n.
 		outBuf atEnd ifTrue: [outBuf := nil]]. "finished sending outbuf"
 
