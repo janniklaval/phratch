@@ -60,11 +60,7 @@ CommandBlockMorph class >> argPermutationForSpec: spec withTranslation: translat
 					put:
 						(parsedTranslatedSpecArgs
 							indexOf: a
-							ifAbsent: [ 
-								Transcript
-									show: 'Permutation failed: ';
-									show: spec.
-								^ originalPermutation ]) ]
+							ifAbsent: [ ^ originalPermutation ]) ]
 			ifFalse: [ 
 				"count copies until now"
 				n := ((parsedSpecArgs copyFrom: 1 to: i) select: [ :s | s = a ]) size.
@@ -73,11 +69,7 @@ CommandBlockMorph class >> argPermutationForSpec: spec withTranslation: translat
 					put:
 						(parsedTranslatedSpecArgs
 							indexOf: a , n asString
-							ifAbsent: [ 
-								Transcript
-									show: 'Permutation failed: ';
-									show: spec.
-								^ originalPermutation ]) ] ].
+							ifAbsent: [^ originalPermutation ]) ] ].
 	^ permutation
 
 ]

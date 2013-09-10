@@ -423,14 +423,14 @@ ScriptablePhratchMorph >> \\ aNumber [
 ScriptablePhratchMorph >> addColor [
 
 	| sFrame result colorName colorOwner |
-	(sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNil: [^ Beeper beep].
+	(sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNil: [^ self beep].
 
 	result := NewVariableDialog ask: 'Color name?'.
 	result = #cancelled ifTrue: [^ self].
 	colorName := result first.
 	colorOwner := result second ifTrue: [self] ifFalse: [sFrame workPane].
 	(colorOwner variableNameInUse: colorName) ifTrue: [
-		Beeper beep.
+		self beep.
 		DialogBoxMorph warn: 'That variable name is already in use'.
 		^ self].
 
@@ -728,13 +728,13 @@ ScriptablePhratchMorph >> addGlobalColor [
 	"Ask the user for a color variable name, then add a background (global) variable of that name."
 
 	| sFrame cName |
-	(sFrame := self ownerThatIsA: PhratchFrameMorph) ifNil: [^ Beeper beep].
+	(sFrame := self ownerThatIsA: PhratchFrameMorph) ifNil: [^ self beep].
 
 	cName := StringDialog ask: 'Variable name?'.
 	cName size = 0 ifTrue: [^ self].
 	cName := cName.
 	(sFrame workPane colorNames includes: cName) ifTrue: [
-		Beeper beep.
+		self beep.
 		DialogBoxMorph warn: 'That variable name is already in use'.
 		^ self].
 

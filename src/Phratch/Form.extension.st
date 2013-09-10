@@ -66,6 +66,8 @@ Form >> equals: aForm [
 	self == aForm ifTrue: [^ true].
 
 	self class = aForm class ifFalse: [^ false].
+	self class = ColorForm ifTrue: [
+		self colors = aForm colors  ifFalse: [^ false]].
 	(width = aForm width) & (height = aForm height) ifFalse: [^ false].
 	(depth = aForm depth) & (offset = aForm privateOffset) ifFalse: [^ false].
 
@@ -503,7 +505,6 @@ Form >> writeBMPFileNamed: fName [
 					1 to: (data size*3)+3//4*4-(data size*3) do: [:j | f nextPut: 0 "pad to 32-bits"]]
 				ifFalse: [
 					1 to: data size do: [:j | f int32: (data at: j)]]]].
-	f position = (bfOffBits + biSizeImage) ifFalse: [self halt].
 	f close.
 ]
 

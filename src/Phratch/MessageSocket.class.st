@@ -161,8 +161,7 @@ MessageSocket >> nextMessage [
 			inSizeIndex := 1.  "ready to read size field of the next message"		
 			isHttp ifTrue: [
 				msg := self processHttpMsg: msg.
-				msg size = 0 ifTrue: [Transcript show: '?';cr].
-				Transcript show: msg;cr.].
+				].
 	  ^ msg]].
 
 	^ nil
