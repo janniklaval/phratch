@@ -53,7 +53,8 @@ OffscreenWorldMorph >> incrRedrawDouble: doubleFlag [
 							primDouble: f bits w: f width h: f height
 							into: Display bits w: Display width h: Display height
 							x: (Display width - (f width*2))/2 y: (Display height - (f height*2))/2.
-					] ifError: [:e | Transcript show: e printString ].
+					] ifError: [:e | 
+						ScriptablePhratchMorph noviceMode ifFalse:[e signal] ].
 					Display forceToScreen: screenR]]
 			ifFalse: [
 				f displayOn: Display at: r topLeft rule: Form over]].
