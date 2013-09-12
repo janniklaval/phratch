@@ -20,11 +20,8 @@ Class {
 ChoiceArgMorph >> acceptsDroppedReporters [
 	"Accept reporter blocks in list blocks"
 
-	(owner respondsTo: #selector) ifFalse: [
-		^ false].
-
-	^ #(
-		listNamed: 
+	^(owner respondsTo: #selector) and: [ 
+		 #(listNamed: 
 		append:toList: 
 		deleteLine:ofList: 
 		insert:at:ofList: 
@@ -33,31 +30,19 @@ ChoiceArgMorph >> acceptsDroppedReporters [
 		lineCountOfList: 
 		list:contains:
 		contentsOfList:
-		
 		getAttribute:of:
 		attribute:of:
 		get:
 		set:to:
 		setVar:to:
-
-"		doRun
-		doRunBlockWithArgs
-		doFork
-		doForkBlockWithArgs
-		doReport
-		doCallBlockWithArgs
-"
-	) includes: owner selector
-
+	) includes: owner selector]
 ]
 
 { #category : #byob }
 ChoiceArgMorph >> acceptsTypeOf: aBlockMorph [
 	"Answer true if I can accept a dropped reporter of the given type."
 
-	aBlockMorph isReporter ifFalse: [^ false].
-	^ aBlockMorph isBooleanReporter not  "must be a number"
-
+	^ aBlockMorph isReporter and:[ aBlockMorph isBooleanReporter not]
 ]
 
 { #category : #accessing }

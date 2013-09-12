@@ -16,8 +16,7 @@ CommandScriptBlockMorph >> acceptsTypeOf: aBlockMorph [
 
 	((aBlockMorph isKindOf: CommandBlockMorph) and: [
 		(aBlockMorph isKindOf: HatBlockMorph) not ])
-			ifTrue: [^true].
-	^super acceptsTypeOf: aBlockMorph
+			or: [ super acceptsTypeOf: aBlockMorph]
 ]
 
 { #category : #adding }
@@ -464,9 +463,9 @@ CommandScriptBlockMorph >> isFunction [
 
 { #category : #'class membership' }
 CommandScriptBlockMorph >> isKindOf: aClass [
-	aClass = CBlockMorph
-		ifTrue: [^true ].
-	^super isKindOf: aClass
+	
+	^ aClass = CBlockMorph
+		or:[ super isKindOf: aClass]
 ]
 
 { #category : #drawing }

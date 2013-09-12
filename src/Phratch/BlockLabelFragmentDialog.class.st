@@ -981,7 +981,7 @@ BlockLabelFragmentDialog >> updateDefaultValue [
 
 	#number = fragment type ifTrue: [
 		defaultField isNumeric: true.
-		(dat = ' ' or: [dat = ''])
+		({' '.''} includes: dat)
 			ifTrue: [ defaultField contents: ' ' ]
 			ifFalse: [ defaultField contents: dat asNumberNoError printString].
 		^ self ].

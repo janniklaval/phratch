@@ -93,7 +93,7 @@ ListMultilineStringMorph >> keyStroke: evt [
 		^ self].
 
 	"skip to next list item with tab or down arrow"
-	(ch = 9) | (ch = 31) ifTrue: [
+	({9 . 31} includes: ch) ifTrue: [
 		ownerList ifNotNil:[
 			ownerList focusIndex: ownerList focusIndex + 1].
 		^ self].

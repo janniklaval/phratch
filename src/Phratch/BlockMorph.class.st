@@ -1480,7 +1480,7 @@ BlockMorph >> printCodeSubmorph: aMorph on: aStream [
 			aStream nextPut: $) ].
 	(aMorph isKindOf: StringMorph)
 		ifFalse: [ ^ self ].
-	(aMorph contents = '?' or:[aMorph contents = '%'])
+	({'?' . '%'} includes: aMorph contents)
 		ifTrue: [ aStream skip: -1 ].	"remove space before ? or %"
 	aStream nextPutAll: aMorph contents
 ]

@@ -83,7 +83,7 @@ PhratchScriptEditorMorph >> addReadouts [
 	y := nameMorph bottom + 5.
 	#(#('x' #xpos) #('y' #ypos) #('direction' #heading))
 		do: [ :spec | 
-			s := (PhratchTranslator isRTL and: [ (spec at: 1) = 'x' or: [ (spec at: 1) = 'y' ] ])
+			s := (PhratchTranslator isRTL and: [ ({'x' . 'y'} includes: (spec at: 1))])
 				ifTrue: [ ':' , spec first ]
 				ifFalse: [ spec first localized , PhratchTranslator colonSuffix ].
 			label := StringMorph new

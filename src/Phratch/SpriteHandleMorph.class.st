@@ -236,7 +236,7 @@ SpriteHandleMorph >> targetBounds [
 	home:= 0 @ 0.
 	stage ifNotNil: [home := stage position ].
 
-	center := target center - home * ratio + home.
+	center := (target center - home) * ratio + home.
 	^Rectangle center: center extent: target extent * ratio
 ]
 

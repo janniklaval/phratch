@@ -507,7 +507,7 @@ StringFieldMorph >> keyStroke: evt [
 				ifFalse: [ m tabToNextField: evt].
 			^ self]].
 
-	(ch = 10) | (ch = 13) ifTrue: [  "cr, lf, or enter key"
+	({10 . 13} includes: ch) ifTrue: [  "cr, lf, or enter key"
 		(m := self ownerOrYourselfThatIsA: DialogBoxMorph) ifNotNil: [^ m enterKeyPressed: evt].
 		(m := self ownerOrYourselfThatIsA: PhratchPrompterMorph) ifNotNil: [^ m enterKeyPressed].
 		evt hand newKeyboardFocus: nil.
@@ -520,7 +520,7 @@ StringFieldMorph >> keyStroke: evt [
 	ch = 8 ifTrue: [^ self backspace].
 	ch = 127 ifTrue: [^ self deleteSelection].
 
-	(evt buttons = 64) | (evt buttons = 16) ifTrue: [	"ctrl (or alt) is pressed"
+	({64 . 16} includes: evt buttons) ifTrue: [	"ctrl (or alt) is pressed"
 		ch = 1 ifTrue: [self selectAll].		"ctrl-a"
 		ch = 3 ifTrue: [self copySelection]. 	"ctrl-c"
 		ch = 22 ifTrue: [self paste].			"ctrl-v"

@@ -58,7 +58,7 @@ InstanceClassSwitchMorph >> choice [
 ]
 
 { #category : #accessing }
-InstanceClassSwitchMorph >> class [
+InstanceClassSwitchMorph >> classSide [
 	(choice = #class) ifTrue: [^self].
 	choice := #class.
 	frame ifNotNil: [

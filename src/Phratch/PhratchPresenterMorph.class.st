@@ -165,7 +165,7 @@ PhratchPresenterMorph >> keyStroke: evt [
 	prompter
 		ifNotNil: [ prompter dispatchKeyStroke: evt ]
 		ifNil: [ 
-			ch = 3 | (ch = 13)
+			({3 . 13} includes: ch)
 				ifTrue: [ ^ self shoutGo ].
 			stage broadcastEventNamed: 'Phratch-KeyPressedEvent' with: evt ]
 ]
@@ -266,7 +266,7 @@ PhratchPresenterMorph >> processKeyboardEvents [
 				ifNotNil: [
 					prompter dispatchKeyStroke: evt]
 				ifNil: [
-					(ch = 3) | (ch = 13) ifTrue: [^ self shoutGo].
+					({3 . 13} includes: ch) ifTrue: [^ self shoutGo].
 					stage broadcastEventNamed: 'Phratch-KeyPressedEvent' with: evt]]].
 
 ]

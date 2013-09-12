@@ -135,9 +135,7 @@ OSlotMorph >> isEmptySlot [
 { #category : #'argument slot behavior' }
 OSlotMorph >> isKindOf: aClass [
 	aClass = ArgMorph 
-		ifTrue: [^ true].
-	^ super isKindOf: aClass
-
+		or:[ super isKindOf: aClass]
 ]
 
 { #category : #'argument slot behavior' }

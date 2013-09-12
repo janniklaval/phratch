@@ -155,8 +155,7 @@ FilterPack >> clearFilterCaches [
 FilterPack >> filtersActive [
 	"Answer true if any filters are active."
 
-	reapply ifTrue: [^ true].
-	^ false
+	^ reapply
 
 ]
 

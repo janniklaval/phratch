@@ -426,9 +426,7 @@ CBlockMorph >> nestedBlockAt: aPoint [
 { #category : #private }
 CBlockMorph >> nests: aCommandBlock [
 
-	(nestedBlock isKindOf: BlockMorph) 
-		ifFalse: [^ false].
-	^nestedBlock blockSequence includes: aCommandBlock
+	^ (nestedBlock isKindOf: BlockMorph) and: [  nestedBlock blockSequence includes: aCommandBlock]
 ]
 
 { #category : #private }

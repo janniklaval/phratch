@@ -8,8 +8,7 @@ Class {
 ColorBlockMorph >> acceptsTypeOf: aBlockMorph [
 	"Answer true if I can accept a dropped reporter of the given type. Answer false by default."
 
-	aBlockMorph isReporter ifFalse: [^ false].
-	^ aBlockMorph isKindOf: ColorBlockMorph
+	^aBlockMorph isReporter and:[ aBlockMorph isKindOf: ColorBlockMorph]
 ]
 
 { #category : #watcher }

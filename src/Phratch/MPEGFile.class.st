@@ -466,7 +466,7 @@ MPEGFile >> videoReadFrameInto: aForm stream: aStream [
 	"Read the next video frame from the given stream into the given 16- or 32-bit Form. The movie frame will be scaled to fit the Form if necessary."
 
 	| colorModel bytesPerRow |
-	((aForm depth = 16) | (aForm depth = 32)) ifFalse: [self error: 'must use 16- or 32-bit Form'].
+	({16 . 32} includes: aForm depth) ifFalse: [self error: 'must use 16- or 32-bit Form'].
 	isBigEndian ifNil: [isBigEndian := Smalltalk isBigEndian].  "cache for speed"
 	aForm depth = 16
 		ifTrue: [

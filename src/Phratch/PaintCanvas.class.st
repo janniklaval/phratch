@@ -390,7 +390,7 @@ PaintCanvas >> dragTo: aPoint [
 
 	| mode c |
 	mode := palette mode.
-	#paint = mode | (#erase = mode)
+	({#paint . #erase} includes: mode)
 		ifTrue: [ ^ self dragBrushTo: aPoint ].
 	(#(#line #oval #rect) includes: mode)
 		ifTrue: [ ^ self dragShapeTo: aPoint ].
@@ -705,7 +705,7 @@ PaintCanvas >> extractProjectFrom: aByteArray [
 	version = 0 ifTrue: [
 		s position: 0.
 		proj := ObjStream new readObjFrom: s showProgress: true].
-	(version = 1) | (version = 2) ifTrue: [
+	({1 . 2} includes: version) ifTrue: [
 		s skip: s uint32.  "skip header"
 		proj := ObjStream new readObjFrom: s showProgress: true].
 
@@ -1518,9 +1518,8 @@ PaintCanvas >> textColor: aColor [
 PaintCanvas >> textHandleContainsPoint: aPoint [
 	"Answer true if the the text handle contains the given point in canvas coordinates."
 
-	#text = palette mode ifFalse: [^ false].
-	^ (textBox topLeft - 5 extent: 9) containsPoint: aPoint
-
+	^ #text = palette mode and:[
+	 	(textBox topLeft - 5 extent: 9) containsPoint: aPoint] 
 ]
 
 { #category : #'event handling' }

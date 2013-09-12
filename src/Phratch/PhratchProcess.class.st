@@ -116,8 +116,7 @@ PhratchProcess >> applyTimedCommand [
 	totalMSecs := arguments last * 1000.
 	block selector = #glideSecs:toX:y:elapsed:from: ifTrue: [totalMSecs := arguments first * 1000].
 	block selector = #mwait:elapsed:from: ifTrue: [totalMSecs := arguments last].
-	((block selector = #drum:duration:elapsed:from:) or:
-	 [block selector = #noteOn:duration:elapsed:from:])
+	({ #drum:duration:elapsed:from: . #noteOn:duration:elapsed:from:} includes: block selector)
 		ifTrue: [totalMSecs := (60000 * arguments second) / block receiver tempo].
 	block selector = #rest:elapsed:from:
 		ifTrue: [totalMSecs := (60000 * arguments first) / block receiver tempo].

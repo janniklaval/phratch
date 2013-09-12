@@ -139,7 +139,7 @@ MessageSocket >> nextMessage [
 			sz = 0 ifTrue: [    "empty message"
 				inSizeIndex := 1.
 				^ ByteArray new].
-			isHttp := ((inSizeBuf  asString = 'POST') or: [inSizeBuf  asString = 'GET '] ).
+			isHttp := ({'POST'. 'GET '} includes: inSizeBuf  asString ).
 			isHttp ifTrue: 
 				[sz := 2048.
 				 inBuf := ByteArray new: sz.

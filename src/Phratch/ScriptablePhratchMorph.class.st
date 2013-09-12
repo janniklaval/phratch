@@ -591,7 +591,7 @@ ScriptablePhratchMorph >> addGenericColorBlocksTo: page x: x y: startY [
 	y := startY.
 
 	(self blocksFor: 'colors') do: [:blockOrSym |
-		(blockOrSym = #-) | (blockOrSym = #~)
+		({#- . #~} includes: blockOrSym)
 			ifTrue: [
 				(blockOrSym = #-) ifTrue: [y := y + 15].	"insert a full space"
 				(blockOrSym = #~) ifTrue: [y := y + 5]]	"insert a half space"
@@ -635,7 +635,7 @@ ScriptablePhratchMorph >> addGenericListBlocksTo: page y: startY [
 
 
 	(self blocksFor: 'list') do: [:blockOrSym |
-		(blockOrSym = #-) | (blockOrSym = #~) | (blockOrSym = #=)
+		({#- . #~ . #=} includes: blockOrSym)
 			ifTrue: [
 				(blockOrSym = #-) ifTrue: [y := y + 15].  "insert a full space"
 				(blockOrSym = #~) ifTrue: [y := y + 5].  "insert a half space"
@@ -694,7 +694,7 @@ ScriptablePhratchMorph >> addGenericVariableBlocksTo: page x: x y: startY [
 	varBlocks add: block afterIndex: 5.
 	varBlocks
 		do: [ :blockOrSym | 
-			blockOrSym = #- | (blockOrSym = #~) | (blockOrSym = #=)
+			({#- . #~ . #=} includes: blockOrSym)
 				ifTrue: [ 
 					blockOrSym = #-
 						ifTrue: [ y := y + 15 ].	"insert a full space"
@@ -1331,7 +1331,7 @@ ScriptablePhratchMorph >> blockFromOldFormTuple: tuple receiver: scriptOwner [
 			(block isKindOf: WhenHatBlockMorph)
 				ifTrue: [ block color: Color red ].
 			^ block ].
-	(#phratchComment = k) | (#scratchComment = k) "for compatibility"
+	({#phratchComment . #scratchComment} includes: k) "for compatibility"
 		ifTrue: [ 
 			block := PhratchCommentMorph new.
 			tuple size > 1
@@ -1685,7 +1685,7 @@ ScriptablePhratchMorph >> blockFromTuple: tuple receiver: scriptOwner [
 			(block isKindOf: WhenHatBlockMorph)
 				ifTrue: [ block color: Color red ].
 			^ block ].
-	(#phratchComment = k) | (#scratchComment = k) "for compatibility"
+	({#phratchComment . #scratchComment} includes: k) "for compatibility"
 		ifTrue: [ 
 			block := PhratchCommentMorph new.
 			tuple size > 3
@@ -1991,7 +1991,7 @@ ScriptablePhratchMorph >> blocksFor: aCategory [
 			ifTrue: [category := spec]
 			ifFalse: [
 				category = aCategory ifTrue: [
-					(spec = #-) | (spec = #~)  | (spec = #=)
+					({#- . #~ . #=} includes: spec)
 						ifTrue: [blocksList addLast: spec]
 						ifFalse: [
 							(b := self blockFromSpec: spec color: blockColor) ifNotNil: [
@@ -5037,8 +5037,8 @@ ScriptablePhratchMorph >> isObject: object type: type [
 		^ object isKindOf: PhratchListMorph]. 
 
 	'command' "localized" = type ifTrue: [
-		(object isKindOf: LambdaBlockMorph) ifFalse: [^ false].
-		^ object isFunction not].
+		^ (object isKindOf: LambdaBlockMorph) and:[
+		object isFunction not]].
 
 	'reporter' "localized" = type ifTrue: [
 		(object isKindOf: LambdaBlockMorph) ifFalse: [^ false].
@@ -6601,7 +6601,6 @@ ScriptablePhratchMorph >> replaceCostume: aNumber with: aString [
 		ifFalse: [^ self]]."]]]."
 	aString = 'stage' ifTrue: [newC := ImageMedia new form: ((self ownerOrYourselfThatIsA: PhratchStageMorph) stageShotForm"Sized: 480@360")].
 	aString = 'paint new' ifTrue: [self editDrawingOldCostumeName: name deleteOnCancel: false deleteCostume: false.
-		self flag:'crappy line to solve Issue 53:	some blocks are executable only once'.
 		^ self updateAfterPopUp.
 		].
 	aString = 'import' ifTrue: [
@@ -6992,7 +6991,6 @@ ScriptablePhratchMorph >> showAskDialogWithText: text [
 	"Show an information dialog with the given title and text."
 	PhratchPrompterMorph lastAnswer: (StringDialog ask: text).
 	
-	self flag:'crappy line to solve Issue 53:	some blocks are executable only once'.
 	self updateAfterPopUp.
 	
 ]
@@ -7042,7 +7040,6 @@ ScriptablePhratchMorph >> showInformDialog: title withText: text [
 	"Show an information dialog with the given title and text."
 	DialogBoxMorph inform: text title: title.
 	
-	self flag:'crappy line to solve Issue 53:	some blocks are executable only once'.
 	self updateAfterPopUp.
 ]
 
@@ -7377,7 +7374,7 @@ ScriptablePhratchMorph >> stopPlaying [
 ScriptablePhratchMorph >> stopScriptsFor: eventName [
 	"Stop all my running stacks with an EventHat matching the given event name."
 
-	((eventName = 'Phratch-KeyPressedEvent') | (eventName = 'Phratch-MouseClickEvent'))
+	({'Phratch-KeyPressedEvent' . 'Phratch-MouseClickEvent'} includes: eventName)
 		ifFalse: [ self scripts do: [:s |
 			((s class == EventHatMorph) and: [s eventName caseInsensitiveEqual: eventName])
 				ifTrue: [s stop]]]
@@ -7446,7 +7443,7 @@ ScriptablePhratchMorph >> stringToBoolean: aString [
 	<phratchItem: '$String$ as boolean' kind: #b category: 'operators' defaultValues: #('true') subCategory: #b1>
 	| s |
 	s := aString asString.
-	((s = '0') or: [s = '' or: [s = 'false']]) ifTrue: [^ false] ifFalse: [^ true].
+	({'0' . '' . 'false'} includes: s) ifTrue: [^ false] ifFalse: [^ true].
 ]
 
 { #category : #media }

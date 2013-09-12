@@ -793,7 +793,7 @@ PhratchStageMorph >> openMIDI [
 	possiblePorts := (0 to: SimpleMIDIPort primPortCount - 1)
 		select: [ :i | 
 			dir := SimpleMIDIPort primPortDirectionalityOf: i.
-			dir = 2 | (dir = 3) ].	"out or in/out port"
+			{2 . 3} includes: dir ].	"out or in/out port"
 	possiblePorts size = 0
 		ifTrue: [ ^ self inform: 'No MIDI ports currently available.' ].
 	menu := MenuMorph new
@@ -1460,7 +1460,7 @@ PhratchStageMorph >> tryToOpenMidiPort [
 	possiblePorts := (0 to: SimpleMIDIPort primPortCount - 1)
 		select: [ :i | 
 			dir := SimpleMIDIPort primPortDirectionalityOf: i.
-			dir = 2 | (dir = 3) ].	"out or in/out port"
+			{2 . 3} includes: dir ].	"out or in/out port"
 	possiblePorts size = 0
 		ifTrue: [ 
 			midiPort := nil.

@@ -1464,7 +1464,7 @@ PhratchFrameMorph >> extractInfoFrom: aByteArray [
 	| s version |
 	s := ReadStream on: aByteArray.
 	version := ObjStream phratchFileVersionFrom: (s next: 10) asString.
-	(version = 1) | (version = 2)
+	({1 . 2} includes: version)
 		ifTrue: [
 			s skip: 4.  "skip info header byte count"
 			^ ObjStream new readObjFrom: s showProgress: false]
@@ -1489,7 +1489,7 @@ Note: this is a compatibility force method for BYOB - jens"
 		ScriptablePhratchMorph decodeAsScratch.	"this is the forcing part. -Jens"
 		s position: 0.
 		proj := ObjStream new readObjFrom: s showProgress: true].
-	(version = 1) | (version = 2) ifTrue: [
+	({1 . 2} includes: version) ifTrue: [
 		s skip: s uint32.  "skip header"
 		proj := ObjStream new readObjFrom: s showProgress: true].
 
@@ -1535,7 +1535,7 @@ PhratchFrameMorph >> extractProjectFrom: aByteArray [
 		s position: 0.
 		[proj := ObjStream new readObjFrom: s showProgress: true] ifError: [
 		^ self extractPhratchProjectFrom: aByteArray]].
-	(version = 1) | (version = 2) ifTrue: [
+	({1 . 2} includes: version) ifTrue: [
 		s skip: s uint32.  "skip header"
 		proj := ObjStream new readObjFrom: s showProgress: true].
 
@@ -2086,7 +2086,7 @@ PhratchFrameMorph >> keyStroke: evt [
 	|ch|
 	ch := evt keyValue.
 			evt commandKeyPressed ifTrue: [ch := ch \\ 32].	"map cmd/alt keys to control keys"
-			(ch = 3) | (ch = 13) ifTrue: [^ self pressGreenFlagButton].
+			({3 . 13} includes: ch) ifTrue: [^ self pressGreenFlagButton].
 			ch = 15 ifTrue: [^ self openPhratchProject].
 			ch = 17 ifTrue: [^ self quitPhratch].
 			ch = 19 ifTrue: [^ self savePhratchProjectNoDialog].       
@@ -2643,7 +2643,7 @@ PhratchFrameMorph >> processKeyboardEvents [
 		[(evt := h nextUnclaimedKeystrokeOrNil) notNil] whileTrue: [
 			ch := evt keyValue.
 			evt commandKeyPressed ifTrue: [ch := ch \\ 32].	"map cmd/alt keys to control keys"
-			(ch = 3) | (ch = 13) ifTrue: [^ self pressGreenFlagButton].
+			({3 . 13} includes: ch) ifTrue: [^ self pressGreenFlagButton].
 			ch = 15 ifTrue: [^ self openPhratchProject].
 			ch = 17 ifTrue: [^ self quitPhratch].
 			ch = 19 ifTrue: [^ self savePhratchProjectNoDialog].
@@ -3642,7 +3642,6 @@ PhratchFrameMorph >> updateViewModeButtons [
 { #category : #private }
 PhratchFrameMorph >> updateWorkPane [
 
-	| |
 	self flag:'crappy line to solve Issue 53:	some blocks are executable only once'.	
 	World startSteppingSubmorphsOf: self.
 

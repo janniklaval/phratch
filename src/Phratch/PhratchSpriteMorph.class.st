@@ -502,7 +502,7 @@ PhratchSpriteMorph >> directionMenu [
 { #category : #'as yet unclassified' }
 PhratchSpriteMorph >> dist: t1 and: t2 [ 
 	<phratchItem: 'distance to x $Number$ y $Number$' kind: #r category: 'sensing' defaultValues: #(0 0) subCategory: #sensor>
-    ^ (self xpos - t1 * (self xpos - t1) + (self ypos - t2 * (self ypos - t2))) abs sqrt
+    ^ ((self xpos - t1) * (self xpos - t1) + ((self ypos - t2) * (self ypos - t2))) abs sqrt
 ]
 
 { #category : #'as yet unclassified' }

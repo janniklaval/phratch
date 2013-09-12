@@ -150,7 +150,7 @@ ResizableToggleButton >> keyStroke: evt [
 			"escape key"
 			(m := self ownerOrYourselfThatIsA: DialogBoxMorph) ifNotNil: [ m escapeKeyPressed: evt ].
 			^ self ].
-	ch = 10 | (ch = 13)
+	({10 . 13} includes: ch)
 		ifFalse: [ ^ self ].
 	(m := self ownerOrYourselfThatIsA: DialogBoxMorph) ifNotNil: [ ^ m enterKeyPressed: evt ].
 	evt hand newKeyboardFocus: nil.

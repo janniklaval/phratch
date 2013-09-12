@@ -908,7 +908,7 @@ CommandBlockMorph >> isCShape [
 { #category : #accessing }
 CommandBlockMorph >> isForever [
 
-	^ (selector = #doForever) | (selector = #doForeverIf)
+	^ ({#doForever . #doForeverIf} includes: selector)
 
 ]
 
@@ -916,10 +916,7 @@ CommandBlockMorph >> isForever [
 CommandBlockMorph >> isMaxNestedAt: int [
 	"kludge-alert!"
 
-	(receiver isKindOf: VariableFrame)
-		ifFalse: [^ false].
-	^ receiver isMaxNestedAt: int + 1
-
+	^ (receiver isKindOf: VariableFrame) and:[ receiver isMaxNestedAt: int + 1]
 ]
 
 { #category : #accessing }
@@ -1223,9 +1220,7 @@ CommandBlockMorph >> receiver: anObject [
 CommandBlockMorph >> references: obj [
 	"kludge-alert: answer true if any part of me contains a reference to obj"
 
-	(receiver isKindOf: VariableFrame)
-		ifFalse: [^ false].
-	^ receiver references: obj
+	^ (receiver isKindOf: VariableFrame) and: [receiver references: obj]
 ]
 
 { #category : #private }

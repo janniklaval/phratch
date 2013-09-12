@@ -268,11 +268,9 @@ VariableBlockMorph >> isBlockTemplate [
 { #category : #'byob lambdas' }
 VariableBlockMorph >> isPrototypeTemplate [
 
-	(owner isKindOf: CommandBlockMorph)
-		ifFalse: [^ false].
-	(owner isCustomBlock and: [owner isTemplate])
-		ifFalse: [^ false].
-	^ true
+	^(owner isKindOf: CommandBlockMorph)
+		and:[(owner isCustomBlock and: [owner isTemplate])].
+
 ]
 
 { #category : #initialization }

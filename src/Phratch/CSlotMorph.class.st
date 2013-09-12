@@ -11,11 +11,9 @@ Class {
 CSlotMorph >> acceptsTypeOf: aBlockMorph [
 	"Answer true if I can accept a dropped reporter of the given type. Answer false by default."
 
-	aBlockMorph isReporter ifFalse: [^ false].
-	^ (aBlockMorph isKindOf: VariableBlockMorph) or: [
-
-		^ #(
-			autoLambda
+	^ aBlockMorph isReporter and: [  
+		(aBlockMorph isKindOf: VariableBlockMorph) or: [
+			#(autoLambda
 			loopLambda
 			getLine:ofList:
 			getVar:
@@ -27,7 +25,7 @@ CSlotMorph >> acceptsTypeOf: aBlockMorph [
 			doCustomBlock
 			getAttribute:of:
 			attribute:of:
-		) includes: aBlockMorph selector]
+		) includes: aBlockMorph selector]]
 ]
 
 { #category : #private }
@@ -274,9 +272,8 @@ CSlotMorph >> isEmptySlot [
 
 { #category : #'argument slot behavior' }
 CSlotMorph >> isKindOf: aClass [
-	aClass = ArgMorph 
-		ifTrue: [^ true].
-	^ super isKindOf: aClass
+	
+	^ (aClass = ArgMorph ) or:[ super isKindOf: aClass]
 
 ]
 

@@ -478,8 +478,8 @@ PhratchListMorph >> deleteLineAt: aNumber [
 { #category : #'byob lambdas' }
 PhratchListMorph >> equals: another [
 
-	another class == self class ifFalse: [^ false].
-	^ self asArray = another asArray
+	^ another class == self class and:[
+		self asArray = another asArray]
 ]
 
 { #category : #'import/export' }

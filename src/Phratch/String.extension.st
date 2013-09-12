@@ -11,7 +11,7 @@ String >> asNumberNoError [
 	s skipSeparators.	"read sign character, if any"
 	sign := 1.
 	ch := s peek.
-	ch = $+ | (ch = $-)
+	({$+ . $-} includes: ch)
 		ifTrue: [ 
 			ch = $-
 				ifTrue: [ sign := -1 ].

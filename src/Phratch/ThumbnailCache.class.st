@@ -123,7 +123,7 @@ ThumbnailCache >> thumbnailFromSpriteData: aByteArray [
 
 		s position: 0.
 		proj := ObjStream new readObjFrom: s showProgress: false].
-	(version = 1) | (version = 2) ifTrue: [
+	({1 . 2} includes: version) ifTrue: [
 		s skip: s uint32.  "skip header"
 		proj := ObjStream new readObjFrom: s showProgress: false].
 

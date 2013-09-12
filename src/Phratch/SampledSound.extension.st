@@ -217,9 +217,9 @@ SampledSound classSide >> readWAVFrom: aBinaryStream [
 	bitsPerSample := s littleEndianUint16.
 
 	"check the format"
-	((encoding = 1) | (encoding = 7)) ifFalse: [
+	({1 . 7} includes: encoding) ifFalse: [
 		^ self error: 'Unsupported WAV format: ', encoding printString].
-	((bitsPerSample = 8) | (bitsPerSample = 16)) ifFalse: [
+	({8 . 16} includes: encoding) ifFalse: [
 		^ self error: 'Unsupported wave bits/sample: ', bitsPerSample printString].
 
 	"read samples"

@@ -160,7 +160,7 @@ PhratchFilePicker >> checkForPhratchInfoFetchDone [
 		ifFalse: [ ^ self ].
 	s := ReadStream on: data.
 	version := ObjStream phratchFileVersionFrom: (s next: 10) asString.
-	version = 1 | (version = 2)
+	({1 . 2} includes: version)
 		ifTrue: [ 
 			infoSize := s uint32.
 			infoSize <= (s size - s position)
@@ -542,18 +542,18 @@ PhratchFilePicker >> keyStroke: evt [
 		(m := self ownerOrYourselfThatIsA: DialogBoxMorph) ifNotNil: [m escapeKeyPressed: evt].
 		^ self].
 
-	((ch = 1) | (ch = 11)) ifTrue: [ "home or page up"
+	({1 . 11} includes: ch) ifTrue: [ "home or page up"
 		self selectedEntryOrNil ifNotNil: [self selectedEntryOrNil highlight: false].
 		^ self highlightAndScrollToEntry: contentsPaneMorph contents submorphs first].
 
-	((ch = 4) | (ch = 12)) ifTrue: [ "end or page down"
+	({4 . 12} includes: ch) ifTrue: [ "end or page down"
 		self selectedEntryOrNil ifNotNil: [self selectedEntryOrNil highlight: false].
 		^ self highlightAndScrollToEntry: contentsPaneMorph contents submorphs last].
 
-	((ch = 8) | (ch = 127)) ifTrue: [ "delete key"
+	({8 . 127} includes: ch) ifTrue: [ "delete key"
 		self deleteDirectory].
 
-	((ch = 10) | (ch = 13)) ifTrue: [  "cr, lf, or enter key"
+	({10 . 13} includes: ch) ifTrue: [  "cr, lf, or enter key"
 		(entry := self selectedEntryOrNil) ifNil: [^ self].
 		(entry entryIsDirectory and:
 		 [(owner isKindOf: PhratchFileChooserDialog)])

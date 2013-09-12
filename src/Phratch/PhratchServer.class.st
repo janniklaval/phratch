@@ -391,7 +391,7 @@ PhratchServer >> readNext [
 
 	ch := in peek.
 	ch = $" ifTrue: [^ self readQuotedString].
-	(ch = $-) | (ch = $.) | ch isDigit ifTrue: [^ self readNumber].
+	(({$- . $.} includes: ch) or:[ ch isDigit]) ifTrue: [^ self readNumber].
 
 	"unquoted string or boolean"
 	s := self readString.
