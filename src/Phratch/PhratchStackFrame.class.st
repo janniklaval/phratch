@@ -172,11 +172,10 @@ PhratchStackFrame >> stopMIDI [
 
 { #category : #accessing }
 PhratchStackFrame >> stopTalkThinkAsk [
-	| s |
-	(expression isKindOf: CommandBlockMorph)
-		ifFalse: [ ^ self ].
-	#say:duration:elapsed:from: = expression selector | (#think:duration:elapsed:from: = expression selector)
-		ifTrue: [ expression receiver sayNothing ].
-	#doAsk = expression selector
-		ifTrue: [ (s := expression receiver ownerOrYourselfThatIsA: PhratchStageMorph) ifNotNil: [ s stopAsks ] ]
+	
+	| query |
+	
+	query := Query from: expression asArgumentWrapper on: self.
+	
+	^ query stopTalkThinkAsk
 ]

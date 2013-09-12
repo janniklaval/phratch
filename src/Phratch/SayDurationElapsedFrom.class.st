@@ -22,3 +22,9 @@ SayDurationElapsedFrom >> defaultArguments [
 
 	^ Array with: 'Hello!' localized with: 2
 ]
+
+{ #category : #protocol }
+SayDurationElapsedFrom >> stopTalkThinkAsk [
+
+	self model receiver sayNothing
+]

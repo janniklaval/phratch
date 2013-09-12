@@ -16,20 +16,20 @@ Class {
 }
 
 { #category : #private }
-Query class >> findHandlerFor: aSelector with: blockSpec on: anObject [
+Query class >> findHandlerFor: aSelector with: wrapper on: anObject [
 	| class |
 	
 	class := self allSubclasses detect: [ :e | e handlesQuery: aSelector ] ifNone: [ self ].
-	^ class with: blockSpec on: anObject
+	^ class with: wrapper on: anObject
 ]
 
 { #category : #protocol }
-Query class >> from: blockSpec on: anObject [
+Query class >> from: wrapper on: anObject [
 	
 	| selector |
-	selector := (blockSpec at: 3) asSymbol.
+	selector := wrapper selector.
 	
-	^ self findHandlerFor: selector with: blockSpec on: anObject
+	^ self findHandlerFor: selector with: wrapper on: anObject
 ]
 
 { #category : #'instance creation' }
@@ -56,7 +56,7 @@ Query >> blockSpec: anObject [
 { #category : #protocol }
 Query >> defaultArguments [
 
-	^  blockSpec copyFrom: 4 to: blockSpec size.
+	^ blockSpec copyFrom: 4 to: blockSpec size.
 ]
 
 { #category : #accessing }
@@ -69,4 +69,10 @@ Query >> model [
 Query >> model: anObject [
 	
 	model := anObject
+]
+
+{ #category : #protocol }
+Query >> stopTalkThinkAsk [
+
+	^ self
 ]

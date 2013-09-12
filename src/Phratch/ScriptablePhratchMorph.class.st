@@ -2962,7 +2962,7 @@ ScriptablePhratchMorph >> defaultArgsFor: blockSpec [
 	"Answer the default argument for the given block specification."
 	| query |
 	
-	query := Query from: blockSpec on: self.
+	query := Query from: blockSpec asArgumentWrapper on: self.
 	
 	^ query defaultArguments
 	

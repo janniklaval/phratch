@@ -24,3 +24,9 @@ ThinkDurationElapsedFrom >> defaultArguments [
 		with: 'Hmm...' localized
 		with: 2
 ]
+
+{ #category : #protocol }
+ThinkDurationElapsedFrom >> stopTalkThinkAsk [
+
+	self model receiver sayNothing
+]

@@ -22,3 +22,10 @@ DoAsk >> defaultArguments [
 	
 	^ Array with: 'What''s your name?' localized
 ]
+
+{ #category : #protocol }
+DoAsk >> stopTalkThinkAsk [
+	 | s |
+
+	(s := self model receiver ownerOrYourselfThatIsA: PhratchStageMorph) ifNotNil: [ s stopAsks ] 
+]

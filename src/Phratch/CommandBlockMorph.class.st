@@ -286,6 +286,12 @@ CommandBlockMorph >> argumentCount [
 
 ]
 
+{ #category : #'*Phratch-DefaultArguments' }
+CommandBlockMorph >> asArgumentWrapper [
+
+	^ ExpressionWrapper with: self
+]
+
 { #category : #'stack/tuple conversion' }
 CommandBlockMorph >> asBlockTuple [
 	"Answer a tuple (Array) describing this block and its arguments."
