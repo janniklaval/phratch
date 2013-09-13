@@ -583,7 +583,7 @@ ScrollingStringMorph >> font: aFont [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #fonts }
 ScrollingStringMorph >> fontChangeName:fName size: fSize [
 	self font: (StrikeFont fontName: fName size: fSize).
 	self changed.
@@ -606,7 +606,7 @@ ScrollingStringMorph >> fontMenu [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #fonts }
 ScrollingStringMorph >> fontSizeFor: fName [
 
 	| menu |

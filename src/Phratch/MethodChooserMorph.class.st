@@ -15,7 +15,7 @@ MethodChooserMorph >> addCategory [
 	class organization addCategory: ans
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 MethodChooserMorph >> chooseMethod [
 	| menu list |
 	menu := MenuMorph new.
@@ -45,7 +45,7 @@ MethodChooserMorph >> initialize [
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #menu }
 MethodChooserMorph >> menuForCategory: categoryName [
 
 	|menu list |
@@ -66,7 +66,7 @@ MethodChooserMorph >> mouseDown: evt [
 	self chooseMethod
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 MethodChooserMorph >> reclassify [
 	class organization letUserReclassify: selector
 ]

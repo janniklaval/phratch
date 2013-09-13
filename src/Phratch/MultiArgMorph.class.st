@@ -52,7 +52,7 @@ MultiArgMorph >> argMorphToReplace: aBlock [
 	^ self newSlot
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #other }
 MultiArgMorph >> buildControls [
 
 	submorphs do: [:sm | sm delete].
@@ -254,12 +254,12 @@ MultiArgMorph >> label [
 	^ submorphs first
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #other }
 MultiArgMorph >> lessButton [
 	^ submorphs at: submorphs size - 1
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 MultiArgMorph >> listValue [
 	| list item |
 	list := PhratchListMorph new.
@@ -277,7 +277,7 @@ MultiArgMorph >> listValue [
 	^ list
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #other }
 MultiArgMorph >> loopsWidth: anInteger [
 
 	| parts |
@@ -351,7 +351,7 @@ MultiArgMorph >> receiver [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'block enumerating' }
 MultiArgMorph >> removeArgSlot [
 
 	| oldArg  |
@@ -413,7 +413,7 @@ MultiArgMorph >> topBlock [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 MultiArgMorph >> transparentRect [
 	^ self position corner: (self right@submorphs last top)
 ]

@@ -26,13 +26,13 @@ ElementsEditorFrameMorph class >> minExtent [
 	^500 @ 400.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'initialize-release' }
 ElementsEditorFrameMorph class >> resetDimensions [
 	UserPos := nil.
 	UserSize := self minExtent.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'initialize-release' }
 ElementsEditorFrameMorph class >> setUserPos: aPoint size: anExtent [
 	UserPos := aPoint.
 	UserSize := anExtent.

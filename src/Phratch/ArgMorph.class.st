@@ -20,7 +20,7 @@ ArgMorph class >> dropDownMenuForm [
 	^DropDownMenuForm
 ]
 
-{ #category : #'class initialization' }
+{ #category : #'initialize-release' }
 ArgMorph class >> initialize [
 	"self initialize"
 
@@ -36,7 +36,7 @@ ArgMorph class >> initialize [
 
 ]
 
-{ #category : #other }
+{ #category : #visitor }
 ArgMorph >> acceptsDroppedReporters [
 	"Answer true if I accept dropped reporter blocks. Answer false by default."
 
@@ -44,7 +44,7 @@ ArgMorph >> acceptsDroppedReporters [
 
 ]
 
-{ #category : #byob }
+{ #category : #visitor }
 ArgMorph >> acceptsTypeOf: aBlockMorph [
 	"Answer true if I can accept a dropped reporter of the given type. Answer false by default."
 
@@ -83,7 +83,7 @@ ArgMorph >> drawHLineFrom: startX to: endX y: yOffset color: c on: aCanvas [
 
 ]
 
-{ #category : #other }
+{ #category : #evaluation }
 ArgMorph >> evaluate [
 
 	self subclassResponsibility
@@ -101,7 +101,7 @@ ArgMorph >> fixArgLayout [
 	"Fix my layout. This default implementation does nothing."
 ]
 
-{ #category : #byob }
+{ #category : #accessing }
 ArgMorph >> implicitValue: anObject [
 	implicitValue := anObject
 ]
@@ -116,7 +116,7 @@ ArgMorph >> initFieldsFrom: anObjStream version: classVersion [
 
 ]
 
-{ #category : #other }
+{ #category : #testing }
 ArgMorph >> isArgMorph [
 	"True only for ArgMorphs."
 
@@ -132,7 +132,7 @@ ArgMorph >> isBlockMorph [
 
 ]
 
-{ #category : #byob }
+{ #category : #testing }
 ArgMorph >> isEmptySlot [
 	^true
 ]

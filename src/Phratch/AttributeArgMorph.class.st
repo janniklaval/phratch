@@ -59,7 +59,7 @@ AttributeArgMorph >> choice: aSymbol [
 
 ]
 
-{ #category : #accessing }
+{ #category : #drawing }
 AttributeArgMorph >> drawOn: aCanvas [
 
 	| target |

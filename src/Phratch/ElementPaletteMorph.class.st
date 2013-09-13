@@ -7,7 +7,7 @@ Class {
 	#category : #'Phratch-UI-Support'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ElementPaletteMorph class >> basics [
 	^self new
 		addElement: StepElementMorph new;
@@ -27,7 +27,7 @@ ElementPaletteMorph class >> basics [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ElementPaletteMorph class >> classVarsFor: aClass [
 	| pal |
 	pal := self new.
@@ -53,7 +53,7 @@ ElementPaletteMorph class >> classes [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ElementPaletteMorph class >> currentPackageClasses: aClass [
 	| pal packages pkg |
 	pkg := ((SystemOrganization categoryOfElement: aClass name asSymbol) asString findTokens: #- ) first.
@@ -75,7 +75,7 @@ ElementPaletteMorph class >> globals [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ElementPaletteMorph class >> instVarsFor: aClass [
 	| pal |
 	pal := self new.
@@ -101,7 +101,7 @@ ElementPaletteMorph class >> labelFont [
 	^StrikeFont fontName: 'Verdana' size: 9
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ElementPaletteMorph class >> messagesFor: aClass [
 	
 	| pal me |
@@ -128,7 +128,7 @@ ElementPaletteMorph class >> messagesFor: aClass [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ElementPaletteMorph class >> packageClassesDict [
 	| packages pkg ans |
 	packages := Dictionary new.

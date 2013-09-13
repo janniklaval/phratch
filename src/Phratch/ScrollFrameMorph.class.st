@@ -127,7 +127,7 @@ ScrollFrameMorph >> extent: aPoint [
 	self updateScrollbars
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'*Phratch-extensions' }
 ScrollFrameMorph >> fieldsVersion [
 
 	^ 1

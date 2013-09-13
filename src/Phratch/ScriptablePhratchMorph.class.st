@@ -1073,7 +1073,7 @@ ScriptablePhratchMorph >> asListElement: anObject [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #byob }
 ScriptablePhratchMorph >> asReferenceTuple [
 
 	self subclassResponsibility 
@@ -1134,7 +1134,7 @@ ScriptablePhratchMorph >> askForFileIO [
 	^ dialog getUserResponse.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'byob OOP' }
 ScriptablePhratchMorph >> attribute: attr [
 
 	self subclassResponsibility 
@@ -2126,7 +2126,7 @@ ScriptablePhratchMorph >> changed [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'block API' }
 ScriptablePhratchMorph >> checkNil: str [
 	<phratchItem: 'is $String$ nil?' kind: #b category: 'operators' defaultValues: #() subCategory: #b1>
 	^ str isNil
@@ -2152,7 +2152,7 @@ ScriptablePhratchMorph >> clearMediaAndCostume [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'pen ops' }
 ScriptablePhratchMorph >> clearPenTrails [
 
 	self subclassResponsibility 
@@ -3996,7 +3996,7 @@ ScriptablePhratchMorph >> existsBlockId: id global: bool [
 	^ stage sprites , {stage} anySatisfy: [ :obj | obj existsBlockId: id ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'block API' }
 ScriptablePhratchMorph >> exitPhratch [
 	<phratchItem: 'quit Phratch' kind: #- category: 'control' defaultValues: #() subCategory: #project>
     Smalltalk snapshot: false andQuit: true
@@ -4041,7 +4041,7 @@ ScriptablePhratchMorph >> exportObject [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'block API' }
 ScriptablePhratchMorph >> factorial: t1 [ 
 	<phratchItem: 'factorial of $Number$' kind: #r category: 'operators' defaultValues: #() subCategory: #a9>
     | answer t1store |
@@ -4649,7 +4649,7 @@ ScriptablePhratchMorph >> inPresentationMode [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'block API' }
 ScriptablePhratchMorph >> indexOf: t1 List: t2 [ 
 	<phratchItem: 'first index of $String$ in $List$' kind: #r category: 'list' defaultValues: #('' 'list') subCategory: #a5>  
   | t3 |
@@ -5965,7 +5965,7 @@ ScriptablePhratchMorph >> numberInParens: aNumber [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'block API' }
 ScriptablePhratchMorph >> numberSort: t1 [ 
 	<phratchItem: 'sort items of $List$ by numerical value' kind: #- category: 'list' defaultValues: #('list') subCategory: #a6>
     | t2 t3 t4 t5 t6 |
@@ -6115,7 +6115,7 @@ ScriptablePhratchMorph >> passiveFisheyeEffect: aNumber [
 	self propagate: #fisheye
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'byob OOP' }
 ScriptablePhratchMorph >> passiveLookLike: costumeName [
 
 	self subclassResponsibility 
@@ -6293,7 +6293,7 @@ ScriptablePhratchMorph >> prepareForExport [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'block API' }
 ScriptablePhratchMorph >> pressGreenFlag [
 	<phratchItem: 'press green flag' kind: #- category: 'control' defaultValues: #() subCategory: #startstop>
 	| sFrame |
@@ -6748,7 +6748,7 @@ ScriptablePhratchMorph >> savePhoto: aForm [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'block API' }
 ScriptablePhratchMorph >> saveProj [
 	<phratchItem: 'save project' kind: #- category: 'control' defaultValues: #() subCategory: #project>
 | t1 |
@@ -7418,7 +7418,7 @@ ScriptablePhratchMorph >> stringLength: anObject [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'block API' }
 ScriptablePhratchMorph >> stringSort: t1 [
 	<phratchItem: 'sort items of $List$ by string value' kind: #- category: 'list' defaultValues: #('list') subCategory: #a6> 
     | t2 t3 |
@@ -7494,7 +7494,7 @@ ScriptablePhratchMorph >> timerReset [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'block API' }
 ScriptablePhratchMorph >> times: t1 List: t2 [ 
 <phratchItem: 'times $String$ appears in $List$' kind: #r category: 'list' defaultValues: #('' 'list') subCategory: #a5>
     | t3 t4 |
@@ -7659,7 +7659,7 @@ ScriptablePhratchMorph >> unusedMediaNameFromBaseName: baseName forMedia: aMedia
 	^ nm , (greatestNum + 1) printString
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'debug and other' }
 ScriptablePhratchMorph >> updateAfterPopUp [
 
 	self flag:'crappy line to solve Issue 53:	some blocks are executable only once'.

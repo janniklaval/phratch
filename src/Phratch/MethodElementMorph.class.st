@@ -23,7 +23,7 @@ MethodElementMorph >> asSmalltalk [
 	^ws contents
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #menu }
 MethodElementMorph >> contextMenu [
 	| m |
 	m := super contextMenu.
@@ -34,7 +34,7 @@ MethodElementMorph >> contextMenu [
 	^ m
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'instance creation' }
 MethodElementMorph >> editSelector [
 	header editSelector
 ]
@@ -88,7 +88,7 @@ MethodElementMorph >> isRenameable [
 	^true
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 MethodElementMorph >> localVariableNames [
 	^super variableNames
 ]
@@ -112,7 +112,7 @@ MethodElementMorph >> selector: aSymbol arguments: aCollection [
 	header selector: aSymbol arguments: aCollection
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 MethodElementMorph >> stackBottom [
 	steps contents isNil
 		ifTrue: [^self bottom ]
@@ -120,7 +120,7 @@ MethodElementMorph >> stackBottom [
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #enumerating }
 MethodElementMorph >> variableNames [
 	^super variableNames, header variableNames
 ]

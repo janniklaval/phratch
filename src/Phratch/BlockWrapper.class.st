@@ -4,13 +4,13 @@ Class {
 	#category : #'Phratch-DefaultArguments'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #copying }
 BlockWrapper >> copyFrom: anInteger to: anotherInteger [
 
 	^ self data copyFrom: anInteger to: anotherInteger
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 BlockWrapper >> selector [ 
 
 	^ (data at: 3) asSymbol

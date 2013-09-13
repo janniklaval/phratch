@@ -26,7 +26,7 @@ ListMultilineStringMorph >> extent: aPoint [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'object i/o' }
 ListMultilineStringMorph >> fieldsVersion [
 
 	^ 1

@@ -36,7 +36,7 @@ MultiArgCommandBlockMorph >> addLabel [
 	self adjustInternals
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #evaluation }
 MultiArgCommandBlockMorph >> adjustInputParadigm: choice [
 	"private"
 
@@ -60,7 +60,7 @@ MultiArgCommandBlockMorph >> adjustInputParadigm: choice [
 	self commandSpec: newSpec
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 MultiArgCommandBlockMorph >> adjustInternals [
 	"private"
 
@@ -272,7 +272,7 @@ MultiArgCommandBlockMorph >> mouseDown: evt [
 	^super mouseDown: evt
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #deleting }
 MultiArgCommandBlockMorph >> removeItem [
 	self stop.
 	argMorphs size > self minArgs ifTrue: [

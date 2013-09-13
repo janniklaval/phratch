@@ -69,13 +69,13 @@ PaletteElementMorph >> isPartsBin [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #color }
 PaletteElementMorph >> ownerColor [
 	owner ifNotNil: [^owner color].
 	^Color gray
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #variable }
 PaletteElementMorph >> removeVariable: element [
 
 	element delete.
@@ -96,7 +96,7 @@ PaletteElementMorph >> rootForGrabOf: aMorph [
 	^owner
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 PaletteElementMorph >> varColor [
 	| oc |
 	oc := owner color.
@@ -105,7 +105,7 @@ PaletteElementMorph >> varColor [
 "	^owner color mixed: 0.93 with: Color black"
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #enumerating }
 PaletteElementMorph >> variableNames [
 	^variables collect: [:m| m name ]
 ]

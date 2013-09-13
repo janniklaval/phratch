@@ -134,7 +134,7 @@ PhratchScrollBar >> drawVSliderOn: aCanvas [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'*Phratch-Extensions' }
 PhratchScrollBar >> fieldsVersion [
 
 	^ 1

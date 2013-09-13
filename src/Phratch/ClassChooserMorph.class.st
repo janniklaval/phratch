@@ -10,7 +10,7 @@ Class {
 	#category : #'Phratch-UI-Support'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 ClassChooserMorph >> chooseClass [
 
 	|menu packages pkg pkgMenu catMenu |
@@ -58,7 +58,7 @@ ClassChooserMorph >> class: aClass [
 		frame selectClass: class]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 ClassChooserMorph >> fitMorphs [
 	button extent: (label height @ label height) * 2//3.
 	button position: self left @ self top + (label height - button height // 2).
@@ -98,7 +98,7 @@ ClassChooserMorph >> labelFont [
 	^StrikeFont fontName: 'VerdanaBold' size: 12
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #menu }
 ClassChooserMorph >> menuForCategory: categoryName [
 
 	|menu list |
@@ -121,7 +121,7 @@ ClassChooserMorph >> selectedClass [
 	^class
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ClassChooserMorph >> wordsFrom: camelCase [
 	^SyntaxElementMorph wordsFrom: camelCase
 

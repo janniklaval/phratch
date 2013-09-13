@@ -361,7 +361,7 @@ BlockDialog >> formTypeReporterOver [
 
 ]
 
-{ #category : #initialization }
+{ #category : #interaction }
 BlockDialog >> getUserResponse [
 
 	| newBlockSpec |

@@ -78,12 +78,12 @@ MessageElementMorph >> assign [
 	(arguments at: 1) removeContents
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'instance creation' }
 MessageElementMorph >> beBinary [
 	self binarySelector: selector
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 MessageElementMorph >> binarySelector: aString [
 
 	| lb arg |
@@ -104,7 +104,7 @@ MessageElementMorph >> binarySelector: aString [
 	self fit
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #other }
 MessageElementMorph >> buildLabelsAndArgs [
 
 	| tokens lb arg |
@@ -129,7 +129,7 @@ MessageElementMorph >> buildLabelsAndArgs [
 		
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #other }
 MessageElementMorph >> cascadeCode [
 	| ws |
 	ws := WriteStream on: String new.
@@ -163,7 +163,7 @@ MessageElementMorph >> contextMenu [
 	^ m
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'instance creation' }
 MessageElementMorph >> editSelector [
 	|ans|
 
@@ -171,13 +171,13 @@ MessageElementMorph >> editSelector [
 	(ans size > 0) ifTrue: [self selector: ans]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #other }
 MessageElementMorph >> embedAsCascade [
 	receiver isHidden: true.
 	self fit
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #other }
 MessageElementMorph >> extractFromCascade [
 	receiver isHidden: false.
 	self fit
@@ -194,7 +194,7 @@ MessageElementMorph >> fit [
 		ifFalse: [ self fitInLine ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #other }
 MessageElementMorph >> fitCascaded [
 	| cw bw bw2 x y arg lb maxHeight maxRight labelTop labelBottom cntr |
 	cw := self labelFont widthOf: $ .
@@ -250,7 +250,7 @@ MessageElementMorph >> fitCascaded [
 		ifTrue: [owner fit]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #other }
 MessageElementMorph >> fitForCascade [
 
 	| cw bw bw2 x arg lb maxHeight |
@@ -285,7 +285,7 @@ MessageElementMorph >> fitForCascade [
 		ifTrue: [owner fit]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #other }
 MessageElementMorph >> fitInLine [
 
 	| h w cw bw bw2 x arg lb maxHeight |
@@ -332,7 +332,7 @@ MessageElementMorph >> fitInLine [
 		ifTrue: [owner fit]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #other }
 MessageElementMorph >> fitStacked [
 
 	| h w cw bw bw2 x y arg lb maxRight |
@@ -386,7 +386,7 @@ MessageElementMorph >> fullCopy [
 	^copy
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #other }
 MessageElementMorph >> hasCascade [
 	^cascade isEmpty not
 ]
@@ -465,7 +465,7 @@ MessageElementMorph >> isUnary [
 	^arguments isEmpty
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #other }
 MessageElementMorph >> keywordsAndArgs [
 	| kw ws |
 	kw := selector keywords.
@@ -493,7 +493,7 @@ MessageElementMorph >> receiver: anElement [
 	receiver contents: anElement
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #other }
 MessageElementMorph >> removeCascadedElement: element [
 
 	cascade remove: element ifAbsent: [].
@@ -562,7 +562,7 @@ MessageElementMorph >> wantsDroppedMorph: aMorph event: evt [
 	^(aMorph isKindOf: self class) and: [ (aMorph hasCascade not) & (aMorph receiver isNil) ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #other }
 MessageElementMorph >> yesNo [
 	^self selector: #ifTrue:ifFalse: arguments: { BlockElementMorph new. BlockElementMorph new }.
 

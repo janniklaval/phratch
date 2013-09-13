@@ -31,7 +31,7 @@ LambdaBlockMorph >> allVarNames [
 	^ (parameters, variables) asSortedCollection
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 LambdaBlockMorph >> bind: varName to: varFrame as: alias [
 
 	"for externalized local variables"
@@ -116,18 +116,18 @@ LambdaBlockMorph >> displayForm [
 	^ block imageForm withOutlineColor: PhratchFrameMorph scriptsPaneColor width: 4
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #evaluation }
 LambdaBlockMorph >> evaluate [
 	^self optimized
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #evaluation }
 LambdaBlockMorph >> evaluateWithArgs: rawArgs [
 
 	^self optimized
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 LambdaBlockMorph >> fixInitialFrame [
 	initialFrame := VariableFrame forNames: self allVarNames.
 	self allMorphsDo: [:m |
@@ -177,7 +177,7 @@ LambdaBlockMorph >> isPartsBin [
 	^true
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #visualisation }
 LambdaBlockMorph >> morphToShow [
 "	^ self body ifNil: [self]"
 
@@ -271,12 +271,12 @@ LambdaBlockMorph >> parameters: anOrderedCollection [
 	 parameters := anOrderedCollection
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 LambdaBlockMorph >> privateBody [
 	self subclassResponsibility
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #deleting }
 LambdaBlockMorph >> removeLastArg [
 
 	| idx |
@@ -288,7 +288,7 @@ LambdaBlockMorph >> removeLastArg [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #variable }
 LambdaBlockMorph >> removeVariable: aVariable [
 	variables remove: aVariable.
 	initialFrame remove: aVariable.
@@ -297,7 +297,7 @@ LambdaBlockMorph >> removeVariable: aVariable [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'events-processing' }
 LambdaBlockMorph >> renameParm: old to: new [
 
 	(self allVarNames includes: new) ifTrue: [
@@ -392,7 +392,7 @@ LambdaBlockMorph >> sequence [
 	^self body blockSequence
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #other }
 LambdaBlockMorph >> showValue [
 
 	| tooltip w worldBounds |

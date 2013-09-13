@@ -417,7 +417,7 @@ PhratchTranslator class >> parseTranslationLines: lineStream [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'rendering menu' }
 PhratchTranslator class >> renderFontScale: choice [
 
 		choice ifNotNil: [

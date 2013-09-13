@@ -26,7 +26,7 @@ ReporterScriptBlockMorph >> addItem [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 ReporterScriptBlockMorph >> adjustInternals [
 	"private"
 
@@ -92,7 +92,7 @@ ReporterScriptBlockMorph >> body [
 	^ nil
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #deleting }
 ReporterScriptBlockMorph >> deleteVariableTemplate: aVarBlockMorph [
 
 	aVarBlockMorph delete.
@@ -178,7 +178,7 @@ ReporterScriptBlockMorph >> optimized [
 	^ newBlock
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 ReporterScriptBlockMorph >> privateBody [
 	"no copy"
 	(argMorphs first isKindOf: BlockMorph)
@@ -186,7 +186,7 @@ ReporterScriptBlockMorph >> privateBody [
 	^ nil
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #deleting }
 ReporterScriptBlockMorph >> removeItem [
 	argMorphs size > self minArgs
 		ifFalse: [ ^ self ].

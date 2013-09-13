@@ -10,7 +10,7 @@ ObjectElementMorph >> asSmalltalk [
 	^name ifNil: ['undefined']
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #menu }
 ObjectElementMorph >> contextMenu [
 	| m |
 	m := MenuMorph new.	"	m add: 'duplicate' action: #duplicate. "
@@ -25,7 +25,7 @@ ObjectElementMorph >> contextMenu [
 	^ m
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #editing }
 ObjectElementMorph >> editLabel [
 	|ans|
 
@@ -82,12 +82,12 @@ ObjectElementMorph >> label: aString [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #editing }
 ObjectElementMorph >> removeFromPalette [
 	owner removeVariable: self
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ObjectElementMorph >> representsNil [
 	^name = 'nil'
 ]

@@ -8,7 +8,7 @@ Class {
 	#category : #'Phratch-UI-Elements'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 SyntaxElementMorph class >> classNameFrom: aUserString [
 	"answer a camel-cased uppercased String"
 
@@ -33,7 +33,7 @@ SyntaxElementMorph class >> fromString: aString [
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 SyntaxElementMorph class >> objectNameFrom: aUserString [
 	"answer a camel-cased String beginning with a lowercase character"
 
@@ -43,7 +43,7 @@ SyntaxElementMorph class >> objectNameFrom: aUserString [
 	^ans
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 SyntaxElementMorph class >> selectorFrom: aUserString [
 	"answer a camel-cased Symbol beginning with a lowercase character"
 
@@ -64,7 +64,7 @@ SyntaxElementMorph class >> test [
 	1 even ifTrue:[] ifFalse:[^'yes']
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 SyntaxElementMorph class >> wordsFrom: camelCase [
 	| ws cap |
 	
@@ -272,7 +272,7 @@ SyntaxElementMorph >> name [
 	^name
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 SyntaxElementMorph >> representsNil [
 	^false
 ]
@@ -287,23 +287,23 @@ SyntaxElementMorph >> rootForGrabOf: aMorph [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #display }
 SyntaxElementMorph >> showGeneratedSmalltalk [
 	"StringHolder new contents: self asSmalltalk; openLabel: self class printString"	
 	self inform: self asSmalltalk
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #display }
 SyntaxElementMorph >> showResult [
 	self inform: self evaluate printString
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #evaluation }
 SyntaxElementMorph >> throwAway [
 	self aboutToBeGrabbedBy: nil; delete
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 SyntaxElementMorph >> wordsFrom: camelCase [
 	^self class wordsFrom: camelCase
 ]

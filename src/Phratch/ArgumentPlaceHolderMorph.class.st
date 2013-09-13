@@ -8,7 +8,7 @@ Class {
 	#category : #'Phratch-UI-Support'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #dimension }
 ArgumentPlaceHolderMorph class >> dimensions [
 	^ 16@10
 ]

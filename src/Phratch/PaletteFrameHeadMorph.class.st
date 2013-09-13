@@ -14,7 +14,7 @@ Class {
 	#category : #'Phratch-UI-Support'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PaletteFrameHeadMorph >> adjustToClass: aClass [
 	(aClass isKindOf: Metaclass)
 		ifTrue: [
@@ -110,7 +110,7 @@ PaletteFrameHeadMorph >> choice [
 	^choice
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PaletteFrameHeadMorph >> chooseClassForMethods [
 	| menu packages pkg pkgMenu catMenu superc subc smenu currentClass |
 	self messages.
@@ -152,7 +152,7 @@ PaletteFrameHeadMorph >> chooseClassForMethods [
 	menu popUpInWorld 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #menu }
 PaletteFrameHeadMorph >> classMenu [
 	| menu |
 	menu := MenuMorph new.
@@ -163,7 +163,7 @@ PaletteFrameHeadMorph >> classMenu [
 	menu popUpInWorld 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PaletteFrameHeadMorph >> classVars [
 	choice := #classVars.
 	self refresh
@@ -175,21 +175,21 @@ PaletteFrameHeadMorph >> classes [
 	self refresh
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PaletteFrameHeadMorph >> currentMessages [
 	choice := #currentMessages.
 	lastMsgChoice := choice.
 	self refresh
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PaletteFrameHeadMorph >> currentMethodsClass [
 
 	^(self ownerThatIsA: ElementsPaletteFrameMorph) currentMethodsClass.
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PaletteFrameHeadMorph >> currentPackageClasses [
 	choice := #currentPackageClasses.
 	self refresh
@@ -200,7 +200,7 @@ PaletteFrameHeadMorph >> frame: aMorph [
 	frame := aMorph
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PaletteFrameHeadMorph >> globalVars [
 	choice := #globalVars.
 	self refresh
@@ -218,13 +218,13 @@ PaletteFrameHeadMorph >> initialize [
 	self refresh
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PaletteFrameHeadMorph >> instanceVars [
 	choice := #instanceVars.
 	self refresh
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #menu }
 PaletteFrameHeadMorph >> menuForCategory: categoryName [
 
 	|menu list submenu |
@@ -270,7 +270,7 @@ PaletteFrameHeadMorph >> refresh [
 	frame ifNotNil: [frame refresh]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #interaction }
 PaletteFrameHeadMorph >> setMethodsClass: aClass [
 	choice := #methodsClass.
 	lastMsgChoice := choice.
@@ -278,7 +278,7 @@ PaletteFrameHeadMorph >> setMethodsClass: aClass [
 	self refresh	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #interaction }
 PaletteFrameHeadMorph >> varMenu [
 	| menu isClassSide |
 	menu := MenuMorph new.

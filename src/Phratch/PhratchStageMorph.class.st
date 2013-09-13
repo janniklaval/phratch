@@ -46,7 +46,7 @@ PhratchStageMorph >> addBackgroundTyped: aString [
 	self addCostumeTyped: aString.
 ]
 
-{ #category : #'-- all --' }
+{ #category : #byob }
 PhratchStageMorph >> adjustedCursorPoint [
 	"Answer the current mouse cursorPoint adjusted for the scaling presentation and q-mode."
 
@@ -279,7 +279,7 @@ PhratchStageMorph >> deleteAllClones [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'byob OOP' }
 PhratchStageMorph >> deleteBackgroundAt: aNumber [
 	<phratchItem: 'delete background $Number$' kind: #- category: 'looks' defaultValues: #(1) subCategory: #a2>
 	self deleteCostumeAt: aNumber.
@@ -1001,7 +1001,7 @@ PhratchStageMorph >> rerecordScene [
 	menu popUpInWorld.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'byob OOP' }
 PhratchStageMorph >> rerecordScene: sceneName [
 	sceneStates at: sceneName put: self backgroundIndex.
 	submorphs do: [:m |

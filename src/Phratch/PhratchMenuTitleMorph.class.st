@@ -11,7 +11,7 @@ Class {
 	#category : #'Phratch-UI-Support'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #menus }
 PhratchMenuTitleMorph class >> closeAllMenus [
 
 	self menuBarIsActive ifFalse: [^self ].
@@ -21,7 +21,7 @@ PhratchMenuTitleMorph class >> closeAllMenus [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #menus }
 PhratchMenuTitleMorph class >> menuBarIsActive [
 
 	^ MenuBarIsActive ifNil: [MenuBarIsActive := false].

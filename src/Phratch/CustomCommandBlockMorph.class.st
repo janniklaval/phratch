@@ -324,17 +324,17 @@ CustomCommandBlockMorph >> definition [
 	^receiver definitionFor: self id
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #editing }
 CustomCommandBlockMorph >> deleteDefinition [
 	receiver deleteDefinitionId: self id
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #editing }
 CustomCommandBlockMorph >> editScript [
 	receiver editScriptId: self id
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #editing }
 CustomCommandBlockMorph >> editSpec [
 	(World allMorphs detect: [:m| m isKindOf: BlockDialog] ifNone: [nil])
 		ifNotNil: [^self].
@@ -469,7 +469,7 @@ CustomCommandBlockMorph >> parameterNames [
 	^self definition parameterNames
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 CustomCommandBlockMorph >> privateSetUserSpec: aString [
 
 	userSpec := aString.
@@ -599,7 +599,7 @@ CustomCommandBlockMorph >> sequence [
 	^self firstBlockList
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #editing }
 CustomCommandBlockMorph >> setDefaultArgs [
 
 	| a def parms typ |

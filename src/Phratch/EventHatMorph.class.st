@@ -11,12 +11,12 @@ Class {
 	#category : #'Phratch-Blocks'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #settings }
 EventHatMorph class >> threadSafeMode [
 	^ThreadSafeMode ifNil: [false]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #settings }
 EventHatMorph class >> threadSafeMode: bool [
 	ThreadSafeMode := bool
 ]

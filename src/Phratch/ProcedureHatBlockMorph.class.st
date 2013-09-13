@@ -179,7 +179,7 @@ ProcedureHatBlockMorph >> template: aBlock [
 	self replaceArgMorph: self argMorph by: aBlock
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #copying }
 ProcedureHatBlockMorph >> veryDeepFixupWith: deepCopier [
 	"If fields were weakly copied, fix them here.  If they were in the tree being copied, fix them up, otherwise point to the originals."
 

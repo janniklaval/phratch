@@ -106,7 +106,7 @@ BlockMorph >> addPoint: aPoint color: c to: coll [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #converting }
 BlockMorph >> asBlockTuple [
 
 	self subclassResponsibility 

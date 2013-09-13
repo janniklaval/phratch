@@ -29,13 +29,13 @@ DebuggerFrameMorph class >> minExtent [
 	^350 @ 180.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'initialize-release' }
 DebuggerFrameMorph class >> resetDimensions [
 	UserPos := nil.
 	UserSize := self minExtent.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'initialize-release' }
 DebuggerFrameMorph class >> setUserPos: aPoint size: anExtent [
 	UserPos := aPoint.
 	UserSize := anExtent.

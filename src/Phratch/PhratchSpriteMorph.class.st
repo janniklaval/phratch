@@ -83,7 +83,7 @@ PhratchSpriteMorph >> area [
 ^self height * self width
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'blocks API' }
 PhratchSpriteMorph >> arrowMove: i1 [ 
 "Made using Scramble by Hardmath123"
 <phratchItem: 'Arrow key move with speed $Number$' kind: #- category: 'motion' defaultValues: #() subCategory: #a1>
@@ -167,7 +167,7 @@ PhratchSpriteMorph >> attributeNames [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'blocks API' }
 PhratchSpriteMorph >> betweenX: t1 Y: t2 X: t3 Y: t4 [
 <phratchItem: 'go in between x: $Number$ y: $Number$ and x: $Number$ y: $Number$' kind: #- category: 'motion' defaultValues: #() subCategory: #a3>
 | newX newY |
@@ -177,7 +177,7 @@ newY:= (t2 + t4) / 2.
 self referencePosition: newX @ newY
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'blocks API' }
 PhratchSpriteMorph >> bounceIfBoolean: condition [
 	<phratchItem: 'if $Boolean$ bounce' kind: #- category: 'motion' defaultValues: #() subCategory: #a5>
      condition ifTrue: [self turnRight: 180]
@@ -210,7 +210,7 @@ PhratchSpriteMorph >> bounceOffEdge [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'blocks API' }
 PhratchSpriteMorph >> bounceOffSprite: aName [ 
 	<phratchItem: 'if touching $Sprite$ bounce' kind: #- category: 'motion' defaultValues: #() subCategory: #a5>
     | sprite oldDir |
@@ -469,7 +469,7 @@ PhratchSpriteMorph >> copyForExport [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'blocks API' }
 PhratchSpriteMorph >> deleteCostAt: aNumber [
 	<phratchItem: 'delete costume $Number$' kind: #- category: 'looks' defaultValues: #(1) subCategory: #a2>
 	self deleteCostumeAt: aNumber.
@@ -499,13 +499,13 @@ PhratchSpriteMorph >> directionMenu [
 	^ menu selectedValue
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'blocks API' }
 PhratchSpriteMorph >> dist: t1 and: t2 [ 
 	<phratchItem: 'distance to x $Number$ y $Number$' kind: #r category: 'sensing' defaultValues: #(0 0) subCategory: #sensor>
     ^ ((self xpos - t1) * (self xpos - t1) + ((self ypos - t2) * (self ypos - t2))) abs sqrt
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'blocks API' }
 PhratchSpriteMorph >> distance: t1 X: t2 Y: t3 [ 
 	<phratchItem: 'go $Number$ of the way to x: $Number$ y: $Number$' kind: #- category: 'motion' defaultValues: #() subCategory: #a3>
     | newX newY |
@@ -681,13 +681,13 @@ PhratchSpriteMorph >> forward: distance [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'blocks API' }
 PhratchSpriteMorph >> function [
 
 	<phratchItem: 'the $SAReporter$ block' kind: #Q category: 'operators' defaultValues: #() subCategory: #b2>
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'blocks API' }
 PhratchSpriteMorph >> functionWithArgs [
 
 	<phratchItem: 'the $SAReporter$ block. Input names: $String$' kind: #Q category: 'operators' defaultValues: #() subCategory: #b2>
@@ -872,7 +872,7 @@ PhratchSpriteMorph >> grabFromScreen [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'blocks API' }
 PhratchSpriteMorph >> hFlip [
 	<phratchItem: 'h flip' kind: #- category: 'looks' defaultValues: #() subCategory: #a5>
     costume form: (self form flipBy: #horizontal centerAt: 0 @ 0).
@@ -1179,7 +1179,7 @@ PhratchSpriteMorph >> multiplySizeBy: factor [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'looks ops' }
 PhratchSpriteMorph >> nextCostume [
 	"Show the next costume in my costumes list."
 	<phratchItem: 'next costume' kind: #- category: 'looks' defaultValues: #() subCategory: #a1>
@@ -1516,7 +1516,7 @@ PhratchSpriteMorph >> penSize: aNumber [
 	self passivePenSize: aNumber
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'blocks API' }
 PhratchSpriteMorph >> perimeter [
 	<phratchItem: 'perimeter' kind: #r category: 'looks' defaultValues: #() subCategory: #a4>
 ^ (2 * self height) + (2 * self width)
@@ -1600,13 +1600,13 @@ PhratchSpriteMorph >> privateSubsprites: anOrderedCollection [
 	subsprites := anOrderedCollection
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'blocks API' }
 PhratchSpriteMorph >> procedure [
 
 	<phratchItem: 'the script' kind: #q category: 'operators' defaultValues: #() subCategory: #b2>
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'blocks API' }
 PhratchSpriteMorph >> procedureWithArgs [
 
 	<phratchItem: 'the script. Input names: $String$' kind: #q category: 'operators' defaultValues: #() subCategory: #b2>
@@ -1650,7 +1650,7 @@ PhratchSpriteMorph >> putPenUp [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'blocks API' }
 PhratchSpriteMorph >> randxypos [
 	<phratchItem: 'point at random coordinate' kind: #- category: 'motion' defaultValues: #() subCategory: #a6>
     self pointToX: (self randomFrom: -240 to: 240)
@@ -1745,7 +1745,7 @@ PhratchSpriteMorph >> removeSubsprite: aSprite [
 	self makeVisible
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'blocks API' }
 PhratchSpriteMorph >> replaceCost: name with: sel [
 	<phratchItem: 'replace costume $Number$ with $NewCostume$' kind: #- category: 'looks' defaultValues: #(1) subCategory: #a2>
 	self replaceCostume: name with: sel.
@@ -1904,7 +1904,7 @@ PhratchSpriteMorph >> rotationStyle: aSymbol [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'motion ops' }
 PhratchSpriteMorph >> rotationStyleChanger [
     ^ #('normal' 'leftRight' 'none' )
 ]
@@ -2397,7 +2397,7 @@ PhratchSpriteMorph >> unhingeAll [
 	LibraryItemMorph allInstances do: [:each| each updateThumbnail]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'blocks API' }
 PhratchSpriteMorph >> vFlip [
 	<phratchItem: 'v flip' kind: #- category: 'looks' defaultValues: #() subCategory: #a5>
     costume form: (self form flipBy: #vertical centerAt: 0 @ 0).

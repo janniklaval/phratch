@@ -143,7 +143,7 @@ OSlotMorph >> isLambdaForm [
 	^ false
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #other }
 OSlotMorph >> printArgOn: aStream [
 	"Print this argument morph on the given stream."
 

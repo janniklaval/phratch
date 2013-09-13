@@ -7,7 +7,7 @@ Class {
 	#category : #'Phratch-UI-Dialogs'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #status }
 FileIOAskerDialog >> always [
 	"Set the file I/O preference to 'always' and never prompt the user again."
 	
@@ -21,7 +21,7 @@ FileIOAskerDialog >> always [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 FileIOAskerDialog >> forPhratchFrame: aPhratchFrameMorph [
 
 	phratchFrame := aPhratchFrameMorph
@@ -60,7 +60,7 @@ harmful or useful.'.
 				ifTrue: [ tabFields add: b ] ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #status }
 FileIOAskerDialog >> never [
 	"Set the file I/O preference to 'never' and never prompt the user again."
 	

@@ -429,7 +429,7 @@ PhratchFrameMorph class >> skinAt: aSymbolOrString ifAbsent: aBlock [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #font }
 PhratchFrameMorph class >> standardButtonFont [
 	^ StandardButtonFont   ifNil: [ StandardButtonFont := StandardFonts defaultFont ] 
 ]

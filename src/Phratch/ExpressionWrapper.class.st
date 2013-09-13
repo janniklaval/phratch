@@ -4,7 +4,7 @@ Class {
 	#category : #'Phratch-DefaultArguments'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ExpressionWrapper >> selector [ 
 	
 	^ data selector

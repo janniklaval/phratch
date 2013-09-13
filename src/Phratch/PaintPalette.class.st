@@ -502,7 +502,7 @@ PaintPalette >> toggleRotationPoint [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #menus }
 PaintPalette >> updateFontMenu: choice withOsFont: useOSFont [
 	| fontSize font |
 	fontSize := textSizeMorph contents asNumber.
@@ -709,7 +709,7 @@ PaintPalette >> updateOptionsPane [
 				@ (optionsPane top + (optionsPane height // 2) - (options height // 2))
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #menus }
 PaintPalette >> updateSizeMenu: aSize [
 	| choice oldFont newFont font |
 	font := canvasMorph canvasTextBox font.

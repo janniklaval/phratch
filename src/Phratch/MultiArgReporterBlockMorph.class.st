@@ -33,7 +33,7 @@ MultiArgReporterBlockMorph >> addLabel [
 	self adjustInternals
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #evaluation }
 MultiArgReporterBlockMorph >> adjustInputParadigm: choice [
 	"private"
 
@@ -57,7 +57,7 @@ MultiArgReporterBlockMorph >> adjustInputParadigm: choice [
 	self commandSpec: newSpec
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 MultiArgReporterBlockMorph >> adjustInternals [
 	"private"
 
@@ -326,7 +326,7 @@ MultiArgReporterBlockMorph >> organizeArgs: argList [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #deleting }
 MultiArgReporterBlockMorph >> removeItem [
 	self stop.
 	argMorphs size > self minArgs ifTrue: [

@@ -12,7 +12,7 @@ ElementsDoubleToggleMorph >> chooser: aSelector [
 	chooser selector: aSelector
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 ElementsDoubleToggleMorph >> fitMorphs [
 	| bw x y |
 	chooser ifNil: [^super fitMorphs].

@@ -35,7 +35,7 @@ BlockElementMorph >> addVariables [
 	(ans size > 0) ifTrue: [self addVarNames: (ans findTokens: ' ')]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #enumerating }
 BlockElementMorph >> allVariableNames [
 	^self variableNames
 ]
@@ -60,7 +60,7 @@ BlockElementMorph >> asSmalltalk [
 	^ ws contents
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #menu }
 BlockElementMorph >> contextMenu [
 	| m |
 	m := MenuMorph new.	"	m add: 'duplicate' action: #duplicate. "
@@ -112,7 +112,7 @@ BlockElementMorph >> initialize [
 	self fit.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 BlockElementMorph >> refreshVarColors [
 
 	self allMorphsDo: [:m|
@@ -131,12 +131,12 @@ BlockElementMorph >> rootForGrabOf: aMorph [
 	^super rootForGrabOf: aMorph
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 BlockElementMorph >> varColor [
 	^palette varColor
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #enumerating }
 BlockElementMorph >> variableNames [
 	^palette variableNames
 ]

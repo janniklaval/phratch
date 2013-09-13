@@ -30,13 +30,13 @@ BlockEditorFrameMorph class >> minExtent [
 	^400 @ 300.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'initialize-release' }
 BlockEditorFrameMorph class >> resetDimensions [
 	UserPos := nil.
 	UserSize := self minExtent.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'initialize-release' }
 BlockEditorFrameMorph class >> setUserPos: aPoint size: anExtent [
 	UserPos := aPoint.
 	UserSize := anExtent.

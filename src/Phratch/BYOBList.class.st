@@ -66,7 +66,7 @@ BYOBList >> deleteLineAt: aNumber [
 	self changed
 ]
 
-{ #category : #initializing }
+{ #category : #'initialize-release' }
 BYOBList >> initialize [
 	contents := OrderedCollection new.
 	lastChanged := Time millisecondClockValue

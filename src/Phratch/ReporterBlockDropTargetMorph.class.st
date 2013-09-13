@@ -9,7 +9,7 @@ Class {
 	#category : #'Phratch-Blocks'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 ReporterBlockDropTargetMorph class >> booleanLabelled: aString argument: aMorphOrNumber [
 	 | m |
 	m := self new isBoolean: true; label: aString; color: Color  lightGray twiceLighter twiceLighter;
@@ -23,7 +23,7 @@ ReporterBlockDropTargetMorph class >> labelled: aString [
 	^self new label: aString
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 ReporterBlockDropTargetMorph class >> labelled: aString argument: aMorphOrNumber [
 	^self new label: aString; argument: aMorphOrNumber;
 		yourself
