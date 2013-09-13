@@ -219,7 +219,7 @@ SampledSound classSide >> readWAVFrom: aBinaryStream [
 	"check the format"
 	({1 . 7} includes: encoding) ifFalse: [
 		^ self error: 'Unsupported WAV format: ', encoding printString].
-	({8 . 16} includes: encoding) ifFalse: [
+	({8 . 16} includes: bitsPerSample) ifFalse: [
 		^ self error: 'Unsupported wave bits/sample: ', bitsPerSample printString].
 
 	"read samples"
