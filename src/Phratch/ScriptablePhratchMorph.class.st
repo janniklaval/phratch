@@ -4036,7 +4036,7 @@ ScriptablePhratchMorph >> exportObject [
 
 	] ifError: [
 		f ifNotNil: [f close].
-		self inform: 'Could not write file' withDetails: 'Export failed' localized].
+		PhratchError errorWithDialog: 'Could not write file'].
 
 
 ]
@@ -4086,7 +4086,7 @@ ScriptablePhratchMorph >> filteredForm [
 	filterPack filtersActive ifTrue: [  "filter parameters have changed; apply filters"
 		PhratchFrameMorph useErrorCatcher
 			ifTrue: [[filterPack applyFiltersTo: self rotatedForm]
-						ifError: [UIManager inform:  'There is a problem with FilterPack'. filterPack := nil. ^ self rotatedForm]]
+						ifError: [PhratchError error:  'There is a problem with FilterPack'. filterPack := nil. ^ self rotatedForm]]
 			ifFalse: [filterPack applyFiltersTo: self rotatedForm]].
 
 	^ filterPack resultForm as8BitColorForm
@@ -4629,7 +4629,7 @@ ScriptablePhratchMorph >> importSound [
 
 	el := [SoundMedia new loadFile: result]
 		ifError: [:err :rcvr |
-			DialogBoxMorph warn: err.
+			PhratchError errorWithDialog: err.
 			nil].
 	el ifNil: [^ self].
 

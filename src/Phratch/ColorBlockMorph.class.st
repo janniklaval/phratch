@@ -72,7 +72,7 @@ ColorBlockMorph >> showValue [
 	msg := ''.
 	[self evaluate asString] ifError: [
 		gotError := true.
-		msg := 'Error!'].
+		msg := 'Error!'. PhratchError error].
 
 	msg := msg localized.
 	tooltip := (PhratchReporterToolTipMorph string: msg for: self)

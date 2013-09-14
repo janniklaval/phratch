@@ -250,7 +250,7 @@ PhratchTranslator class >> importTranslation: aFilename [
 
 	lstream := ReadStream on: lines.
 	[result := self parseTranslationLines: lstream] ifError: [
-		DialogBoxMorph inform: 'Error reading file: ', aFilename,' at line ', (lstream position asString), '.'].
+		PhratchError errorWithDialog: 'Error reading file: ', aFilename,' at line ', (lstream position asString), '.'].
 
 	^ result
 

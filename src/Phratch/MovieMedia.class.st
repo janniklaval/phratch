@@ -308,7 +308,7 @@ MovieMedia >> openAfterLoad [
 	fullName := self projectDirectory , fileName.
 	(fullName exists) ifFalse: [^ self].
 
-	[self basicLoadFile: fileName] ifError: [^ self].
+	[self basicLoadFile: fileName] ifError: [^ PhratchError error:'MovieMedia can not load file'].
 	self currentFrame: currentFrame.
 	self updateOutForm.  "update output form for still images"
 

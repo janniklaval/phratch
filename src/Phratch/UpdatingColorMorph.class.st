@@ -129,6 +129,6 @@ UpdatingColorMorph >> valueFromTargetOrNil [
 		ifTrue: [ ^ nil ].
 	result := nil.
 	[ result := parameter ifNil: [ target perform: selector ] ifNotNil: [ target perform: selector with: parameter ] ]
-		ifError: [  ].
+		ifError: [ PhratchError error  ].
 	^ result
 ]

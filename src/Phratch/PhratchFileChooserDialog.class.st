@@ -304,7 +304,7 @@ PhratchFileChooserDialog class >> userPhratchProjectsDir [
 
 	"try to create Phratch Projects folder in the user's homeDir"
 	(homeDir / phratchFolderName) exists ifFalse: [
-		[(homeDir / phratchFolderName) ensureDirectory] ifError: []].
+		[(homeDir / phratchFolderName) ensureDirectory] ifError: [ PhratchError error:'Directory does not exist']].
 
 	^ (homeDir / phratchFolderName) exists
 		ifTrue: [(homeDir / phratchFolderName) asFileReference]

@@ -617,7 +617,7 @@ PhratchFrameMorph >> addSpriteMorph [
 	((result basename asLowercase endsWith: '.sprite') | (result basename asLowercase endsWith: '.ysp'))
 		ifTrue: [^ self importSpriteOrProject: result].
 
-	[f := Form fromFileNamed: result] ifError: [^ self].
+	[f := Form fromFileNamed: result] ifError: [ PhratchError error. ^ self].
 	el := ImageMedia new form: (PhratchFrameMorph scaledFormForPaintEditor: f).
 	m := PhratchSpriteMorph new soleCostume: el.
 	el mediaName: (m unusedMediaNameFromBaseName: (result basename)).
@@ -1332,9 +1332,9 @@ PhratchFrameMorph >> enterPresentationMode [
 	"Go into presentation mode."
 
 	| presenter |
-	PhratchPlugin pluginAvailable ifFalse: [
+	"PhratchPlugin pluginAvailable ifFalse: [
 		self updateViewModeButtons.
-		^ Beeper beepPrimitive].
+		^ Beeper beepPrimitive]."
 	(viewMode = #presentation) ifTrue: [^ self].
 
 	lastViewMode := viewMode.
@@ -2593,7 +2593,7 @@ PhratchFrameMorph >> presentHelpScreen: aStringOrNil [
 
 	World doOneCycle.  "update cursor before fetching helpForm"
 	[helpForm := Form fromFileNamed: (helpDir / helpFileName) fullName]
-		ifError: [^ Beeper beep].
+		ifError: [PhratchError error].
 
 	HelpDialog showForm: helpForm.
 

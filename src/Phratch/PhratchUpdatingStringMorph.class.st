@@ -54,6 +54,6 @@ PhratchUpdatingStringMorph >> valueFromTargetOrNil [
 	[ 
 	result := self parameter
 		ifNil: [ target perform: getSelector ]
-		ifNotNil: [ target perform: getSelector with: self parameter ] ] ifError: [  ].
+		ifNotNil: [ target perform: getSelector with: self parameter ] ] ifError: [PhratchError error  ].
 	^ result
 ]

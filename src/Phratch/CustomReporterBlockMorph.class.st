@@ -648,7 +648,7 @@ CustomReporterBlockMorph >> showValue [
 	msg := phratchProc answer ]
 		ifError: [ 
 			gotError := true.
-			msg := 'Error!' ].
+			msg := 'Error!'. PhratchError error ].
 	msg := (msg isKindOf: Morph)
 		ifTrue: [ 
 			(msg respondsTo: #displayForm)

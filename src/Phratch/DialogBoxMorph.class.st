@@ -132,6 +132,7 @@ DialogBoxMorph class >> warn: informationString [
 	"DialogBoxMorph warn: 'File not found'"
 
 	| dialogBox |
+	 PhratchError error: informationString.
 	dialogBox := self new
 		title: '!' translated;
 		withButtonsForYes: false

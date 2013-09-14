@@ -302,7 +302,7 @@ PhratchServer >> processCommandFrom: requestSock [
 	(msg := requestSock nextMessage) ifNil: [^ self].
 
 	[self dispatch: msg asString from: requestSock]
-		ifError: [:err :rcvr | err].
+		ifError: [:err :rcvr | PhratchError error].
 
 ]
 

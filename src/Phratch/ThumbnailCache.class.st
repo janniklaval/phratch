@@ -54,7 +54,7 @@ ThumbnailCache >> readThumbnailFile [
 			f := (FileStream readOnlyFileNamed: fName) binary.
 			buf := f contentsOfEntireFile.
 			dict := ObjStream new readObjFrom: (ReadStream on: buf)].
-	] ifError: [].
+	] ifError: [PhratchError error].
 
 ]
 
@@ -172,7 +172,7 @@ ThumbnailCache >> updateThumbnails [
 							buf := (FileStream readOnlyFileNamed: (directory / fn) fullName) binary contentsOfEntireFile.
 							thumb := (fn asLowercase endsWith: '.sprite') | (fn asLowercase endsWith: '.ysp')
 								ifTrue: [ self thumbnailFromSpriteData: buf ]
-								ifFalse: [ self thumbnailFromImageData: buf ] ] ifError: [  ].
+								ifFalse: [ self thumbnailFromImageData: buf ] ] ifError: [ PhratchError error ].
 							fSize := fileSizes at: fn ifAbsent: [ 0 ].
 							thumb ifNotNil: [ dict at: fn put: (Array with: fSize with: thumb colorReduced) ].
 							n := n + 1 ] ] ].
@@ -194,6 +194,6 @@ ThumbnailCache >> writeThumbnailFile [
 			f := (FileStream fileNamed: (directory / ThumbnailFileName) fullName) binary.
 			ObjStream new storeObj: dict on: f.
 			f close].
-	] ifError: [].
+	] ifError: [PhratchError error].
 
 ]

@@ -640,7 +640,7 @@ PhratchListMorph >> importListFromFileNamed: aFilename [
 	"Assume the file was encoded as UTF8"
 	[	self newContents:
 			(f contentsOfEntireFile lines collect: [:s | String withAll: s]).
-	] ifError: [Beeper beep].
+	] ifError: [PhratchError error].
 
 ]
 

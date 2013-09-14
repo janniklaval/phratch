@@ -255,7 +255,10 @@ HTTPFetcher >> performWithErrorRecovery: aSymbol [
 	"Send myself the given selector and ignore any errors that occur."
 
 	[self perform: aSymbol]
-		ifError: [:err :rcvr | self abort: err].
+		ifError: [:err :rcvr | 
+			self abort: err.
+			PhratchError error: 'HTTPFetcher error'.
+			].
 
 ]
 
