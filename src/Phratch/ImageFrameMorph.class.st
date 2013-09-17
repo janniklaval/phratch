@@ -229,7 +229,7 @@ ImageFrameMorph >> initFrontFromForm: aForm [
 
 	c := (aForm colorAt: aForm extent // 2).
 	f := aForm deepCopy.
-	f shapeFill: Color transparent interiorPoint: aForm extent // 2.
+	"f shapeFill: Color transparent interiorPoint: aForm extent // 2."
 	self initFromForm: f.
 	color := c.
 

@@ -42,12 +42,6 @@ Query class >> with: blockSpec on: anObject [
 ]
 
 { #category : #accessing }
-Query >> blockSpec [
-	
-	^ blockSpec
-]
-
-{ #category : #accessing }
 Query >> blockSpec: anObject [
 	
 	blockSpec := anObject
