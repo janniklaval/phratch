@@ -1488,12 +1488,19 @@ PhratchStageMorph >> unloadAllUnusedCustomBlocks [
 ]
 
 { #category : #'event handling' }
+PhratchStageMorph >> unlockedMorphsAt: aPoint [
+	"Return a collection of all unlocked morphs in this morph structure that contain the given point, possibly including the receiver itself.  Simplified "
+
+	^ self unlockedMorphsAt: aPoint addTo: OrderedCollection new
+]
+
+{ #category : #'event handling' }
 PhratchStageMorph >> unlockedMorphsAt: aPoint addTo: mList [
 	"Adjust aPoint to handle quarter-size case if necessary."
 
 	| p |
 	self isQuarterSize ifFalse: [
-		super unlockedMorphsAt: aPoint addTo: mList.
+	"	super unlockedMorphsAt: aPoint addTo: mList."
 		^ mList].
 
 	(self containsPoint: aPoint) ifFalse: [^ mList]. "quick elimination"

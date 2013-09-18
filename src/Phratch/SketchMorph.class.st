@@ -469,7 +469,7 @@ SketchMorph >> setRotationCenter [
 	oldRotation := rotationDegrees.
 	oldScale := scalePoint.
 	self rotationDegrees: 0.0 scalePoint: 1.0@1.0.
-	self positionTalkBubble.
+	"self positionTalkBubble."
 
 	w displayWorldSafely.
 

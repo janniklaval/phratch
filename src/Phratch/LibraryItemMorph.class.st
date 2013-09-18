@@ -248,8 +248,7 @@ LibraryItemMorph >> mouseDown: evt [
 		 [(target isKindOf: PhratchStageMorph) not]) ifTrue: [
 			duplicate := self target duplicate.
 			self world activeHand
-				attachMorph: duplicate;
-				formerOwner: self target owner position: self target owner center].
+				attachMorph: duplicate].
 		^ self].
 
 	target ifNotNil: [

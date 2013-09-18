@@ -12,7 +12,7 @@ Class {
 SyntaxElementMorph class >> classNameFrom: aUserString [
 	"answer a camel-cased uppercased String"
 
-	^(aUserString allWordsCapitalized reject: [:c|
+	^(aUserString asUppercase reject: [:c|
 		c = $ ]) capitalized
 ]
 
@@ -28,7 +28,7 @@ SyntaxElementMorph class >> fromString: aString [
 		notifying: nil.
 
 	method := compiler translate: (ReadStream on: strg) noPattern: true ifFail: nil.
-	World activeHand attachMorph: method asElementFromText
+	"World activeHand attachMorph: method asElementFromText"
 
 	
 ]

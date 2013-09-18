@@ -1,6 +1,20 @@
 Extension { #name : #MenuMorph }
 
 { #category : #'*Phratch' }
+MenuMorph >> addIcon: aForm toolTip: helpString action: aSymbol [ 
+	"Append the given submenu with the given label."
+	
+	self
+		addToggle: ''
+		target: defaultTarget
+		selector: aSymbol.
+	self lastItem
+		icon: aForm.
+	helpString isNil
+		ifFalse: [self lastItem setBalloonText: helpString].
+]
+
+{ #category : #'*Phratch' }
 MenuMorph >> labels [
 
 	^ self menuItems 

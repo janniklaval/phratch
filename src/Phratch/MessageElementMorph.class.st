@@ -65,8 +65,8 @@ MessageElementMorph >> asSmalltalk [
 		ifFalse: [ ^ self cascadeCode ].
 	ws := WriteStream on: String new.
 	^ ws
-		nextPutString: receiver asSmalltalk , ' ';
-		nextPutString: self keywordsAndArgs;
+		nextPutAll: receiver asSmalltalk , ' ';
+		nextPutAll: self keywordsAndArgs;
 		contents;
 		yourself
 ]
@@ -133,13 +133,13 @@ MessageElementMorph >> buildLabelsAndArgs [
 MessageElementMorph >> cascadeCode [
 	| ws |
 	ws := WriteStream on: String new.
-	ws nextPutString: receiver asSmalltalk.
+	ws nextPutAll: receiver asSmalltalk.
 	cascade do: [:msg|
 		ws cr;
-			nextPutString: msg asSmalltalk, ' ';
+			nextPutAll: msg asSmalltalk, ' ';
 			nextPut:$; ].
 	^ws
-		nextPutString: self keywordsAndArgs;
+		nextPutAll: self keywordsAndArgs;
 		cr; 
 		contents;
 		yourself
@@ -474,7 +474,7 @@ MessageElementMorph >> keywordsAndArgs [
 	1 to: kw size do: [:i|
 		ws nextPutAll: (kw at: i).
 		(arguments size < i) ifFalse: [
-			ws nextPutString: ' ', (arguments at: i) asSmalltalk, ' ' ]].
+			ws nextPutAll: ' ', (arguments at: i) asSmalltalk, ' ' ]].
 	^ws contents
 ]
 

@@ -51,7 +51,7 @@ Morph >> copyRecordingIn: dict [
 			(submorphs collect: [:m |
 				(m copyRecordingIn: dict) privateOwner: new])].
 
-	self otherProperties ifNotNil: [new setProperties: self otherProperties copyAll].
+	self otherProperties ifNotNil: [new setProperties: self otherProperties copy].
 	^ new
 
 ]

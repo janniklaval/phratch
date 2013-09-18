@@ -35,6 +35,11 @@ ManifestPhratch class >> ruleJustSendsSuperRuleV1FalsePositive [
 ]
 
 { #category : #'meta data' }
+ManifestPhratch class >> ruleSentNotImplementedRuleV1FalsePositive [
+^ #(#(#(#RGMethodDefinition #(#BlockMorph #disinheritAttribute #false)) #'2013-09-18T22:09:04.971000006+02:00') #(#(#RGMethodDefinition #(#BlockMorph #inheritAttribute #false)) #'2013-09-18T22:09:04.971000001+02:00') #(#(#RGMethodDefinition #(#BlockMorph #justDroppedInto:event: #false)) #'2013-09-18T22:09:04.971000004+02:00') #(#(#RGMethodDefinition #(#CommandBlockMorph #fixBlockLayoutNoWrap #false)) #'2013-09-18T22:09:04.971+02:00') #(#(#RGMethodDefinition #(#CommandBlockMorph #fixBlockLayoutWrap #false)) #'2013-09-18T22:09:04.971000002+02:00') #(#(#RGMethodDefinition #(#BlockMorph #isInheritableAttribute #false)) #'2013-09-18T22:09:04.971000003+02:00') #(#(#RGMethodDefinition #(#BlockMorph #closestAttachTargetIn: #false)) #'2013-09-18T22:09:04.971000005+02:00') )
+]
+
+{ #category : #'meta data' }
 ManifestPhratch class >> ruleVariableAssignedLiteralRuleV1FalsePositive [
 ^ #(#(#(#RGClassDefinition #(#CustomBlockDefinition)) #'2013-09-15T18:32:09.903+02:00') )
 ]

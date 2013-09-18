@@ -411,7 +411,7 @@ SoundMedia >> totalSeconds [
 SoundMedia >> updateReferencesUsing: aDictionary [
 	"Nil out my playing sound."
 
-	super updateReferencesUsing: aDictionary.
+	"super updateReferencesUsing: aDictionary."
 	playingSound := nil.
 
 ]

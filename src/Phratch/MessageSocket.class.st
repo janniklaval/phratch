@@ -226,7 +226,7 @@ MessageSocket >> request: aByteArrayOrString [
 		sending := self sendData.
 		reply := self nextMessage.
 		reply ifNotNil: [^ reply].
-		sending ifFalse: [socket waitForDataUntil: (self deadlineSecs: 1)]].
+		sending ifFalse: [socket waitForDataFor: (self deadlineSecs: 1)]].
 
 	"connection was broken"
 	self destroy.  "close my end"
@@ -306,6 +306,6 @@ MessageSocket >> socket [
 MessageSocket >> waitForData [
 	"Wait a little while for data to arrive. Return when data arrives or when the deadline time is reached, whichever comes first. Calling this allows other threads to run while this thread is waiting for data."
 
-	^ socket waitForDataUntil: (self deadlineSecs: 1)
+	^ socket waitForDataFor: (self deadlineSecs: 1)
 
 ]

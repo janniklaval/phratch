@@ -17,7 +17,7 @@ MessageHeaderElementMorph >> asSmalltalk [
 	1 to: kw size do: [:i|
 		ws nextPutAll: (kw at: i).
 		(variables size < i) ifFalse: [
-			ws nextPutString: ' ', (variables at: i) asSmalltalk, ' ' ]].
+			ws nextPutAll: ' ', (variables at: i) asSmalltalk, ' ' ]].
 	^ws contents
 ]
 

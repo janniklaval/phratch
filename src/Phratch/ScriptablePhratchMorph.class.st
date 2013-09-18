@@ -3618,9 +3618,9 @@ ScriptablePhratchMorph >> duplicate [
 	newSprite := self duplicateNoAttach.
 	self world activeHand attachMorph: newSprite.
 
-	((s := self ownerOrYourselfThatIsA: PhratchStageMorph) notNil and:
-	 [s isQuarterSize]) ifTrue: [
-		self world activeHand drawHalfSize: true].
+	"((s := self ownerOrYourselfThatIsA: PhratchStageMorph) notNil and:"
+	" [s isQuarterSize]) ifTrue: [
+		self world activeHand drawHalfSize: true]."
 
 	^ newSprite
 
@@ -3814,7 +3814,7 @@ ScriptablePhratchMorph >> editSpecId: id [
 		ifFalse: [ sf viewerPane categoryChanged: oldCat asString ].
 	def isGlobal
 		ifFalse: [ ^ self updateLocalId: id withSpec: ans first ].
-	stage ifNil: [ ^ self updateId: id withSpec: ans first ].
+	"stage ifNil: [ ^ self updateId: id withSpec: ans first ]."
 	stage sprites , {stage}
 		do: [ :obj | 
 			obj

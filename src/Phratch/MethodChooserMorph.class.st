@@ -28,7 +28,7 @@ MethodChooserMorph >> chooseMethod [
 			menu addLine ].
 	list := class organization categories asSortedCollection.
 	list do: [ :each | menu add: each asString subMenu: (self menuForCategory: each) ].
-	menu popUpAt: button center x @ (self bottom + 5) forHand: World activeHand
+	menu popUpAt: button center x @ (self bottom + 5) forHand: World activeHand in: World
 ]
 
 { #category : #accessing }
@@ -68,7 +68,7 @@ MethodChooserMorph >> mouseDown: evt [
 
 { #category : #'event handling' }
 MethodChooserMorph >> reclassify [
-	class organization letUserReclassify: selector
+	class organization recategorizeMethodSelector: selector
 ]
 
 { #category : #accessing }

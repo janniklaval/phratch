@@ -11,7 +11,7 @@ StepHolderElementMorph >> asSmalltalk [
 	stack := contents stack.
 	ws := WriteStream on: String new.
 	stack do: [:eachStep|
-		ws nextPutString: eachStep asSmalltalk.
+		ws nextPutAll: eachStep asSmalltalk.
 		(eachStep == stack last)
 			ifFalse: [ws nextPut: $.;cr]].
 	^ws contents

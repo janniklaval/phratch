@@ -13,6 +13,17 @@ SoundBuffer >> beginsWith: aCollection [
 ]
 
 { #category : #'*Phratch-Extensions' }
+SoundBuffer >> mixIn: aSoundBuffer [
+	"Answer mix the contents of the given SoundBuffers with the receiver. The receiver is modified."
+
+	| n |
+	n :=  self monoSampleCount min: aSoundBuffer monoSampleCount.
+	1 to: n do: [:i | self at: i put: ((self at: i) + (aSoundBuffer at: i)) // 2].
+
+
+]
+
+{ #category : #'*Phratch-Extensions' }
 SoundBuffer >> reverseEndiannessStereo: stereoFlag [
 	"Swap the bytes of each 16-bit word, using a fast BitBlt hack. If stereoFlag is true the channels must also be reversed."
 
