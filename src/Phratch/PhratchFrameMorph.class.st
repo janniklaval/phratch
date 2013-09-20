@@ -1292,21 +1292,6 @@ PhratchFrameMorph >> editNotes [
 
 ]
 
-{ #category : #'falta adaptar' }
-PhratchFrameMorph >> enableRemoteSensors [
-	"Start running the Phratch server, allowing Phratch and other applications to interact with this Phratch remotely."
-
-	| server |
-	workPane phratchServer ifNil: [
-		server := PhratchServer new userName: 'Phratch'.
-		server stage: workPane.
-		workPane phratchServer: server].
-
-	workPane phratchServer startHosting.
-	DialogBoxMorph inform: 'Remote sensor connections enabled' localized.
-
-]
-
 { #category : #'view mode' }
 PhratchFrameMorph >> enterNormalMode [
 	"Go into normal (full-stage) mode."
@@ -2039,8 +2024,8 @@ PhratchFrameMorph >> installNewProject: newWorkpane [
 	PhratchProcess blockHighlightMSecs: 1.
 	PhratchPrompterMorph clearLastAnswer.
 
-	(projectInfo at: 'isHosting' ifAbsent: [false]) ifTrue: [
-		self enableRemoteSensors].
+	"(projectInfo at: 'isHosting' ifAbsent: [false]) ifTrue: [
+		self enableRemoteSensors]."
 	(projectInfo includesKey: 'penTrails') ifTrue: [
 		workPane penTrailsForm: (projectInfo at: 'penTrails')].
 

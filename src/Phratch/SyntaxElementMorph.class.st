@@ -19,7 +19,7 @@ SyntaxElementMorph class >> classNameFrom: aUserString [
 { #category : #'instance creation' }
 SyntaxElementMorph class >> fromString: aString [
 
-	|strg method compiler|
+	|strg compiler|
 	strg := aString, '.^self'.
 	compiler := Compiler new.
 	compiler from: (ReadStream on: strg)
@@ -27,7 +27,7 @@ SyntaxElementMorph class >> fromString: aString [
 		context: nil
 		notifying: nil.
 
-	method := compiler translate: (ReadStream on: strg) noPattern: true ifFail: nil.
+	compiler translate: (ReadStream on: strg) noPattern: true ifFail: nil.
 	"World activeHand attachMorph: method asElementFromText"
 
 	

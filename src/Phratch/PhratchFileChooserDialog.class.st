@@ -237,7 +237,7 @@ PhratchFileChooserDialog class >> openPhratchFileFor: aPhratchFrameMorph [
 	As the user selects files in the file picker, preview the project thumbnail and info string for the selected project. If the file 'servers.txt' is found in the Phratch folder, then allow browsing and selecting of Phratch projects on a remote HTTP server."
 	"PhratchFileChooserDialog openPhratchFileFor: nil"
 
-	| m response s |
+	| m response |
 	PhratchFileChooserDialog deleteDuplicates.
 	m := self new
 		createPhratchFileChooserFor: aPhratchFrameMorph saving: false;
@@ -247,17 +247,17 @@ PhratchFileChooserDialog class >> openPhratchFileFor: aPhratchFrameMorph [
 	response := m getUserResponse.
 	response = #cancelled ifTrue: [^ nil].
 
-	(response isKindOf: FileReference) ifTrue: [^ response].  "answer the full name of a local file"
+	"(response isKindOf: FileReference) ifTrue: ["^ response"]."  "answer the full name of a local file"
 
 	"get contents of a remote file, giving the user the option of aborting"
-	self assert: [response isKindOf: HTTPFetcher].
+	"self assert: [response isKindOf: HTTPFetcher].
 	self waitForCompletionOrCancelOfFetch: response.
 	response succeeded ifFalse: [response stopDownload. ^ nil].
 
 	s := (response path findTokens: '/') last.
 	aPhratchFrameMorph projectName: (aPhratchFrameMorph nameFromFileName: s).
 
-	^ response bodyData
+	^ response bodyData"
 
 ]
 
@@ -287,7 +287,7 @@ PhratchFileChooserDialog class >> savePhratchFileFor: aPhratchFrameMorph [
 PhratchFileChooserDialog class >> setLastFolderTo: dir forType: type [
 	"Remember the given dir as the last folder used for the given type of file."
 
-	(dir isKindOf: PhratchServerDirectory) ifTrue: [^ self].
+	"(dir isKindOf: PhratchServerDirectory) ifTrue: [^ self]."
 	LastFolderForType at: type put: dir.
 
 
@@ -628,9 +628,9 @@ PhratchFileChooserDialog >> getUserResponse [
 		phratchFrame author: authorMorph contents trimBoth.
 		phratchFrame projectComment: commentMorph contents].
 
-	(list currentDirectory isKindOf: PhratchServerDirectory)
+	"(list currentDirectory isKindOf: PhratchServerDirectory)
 		ifTrue: [^ list projectFetcher]
-		ifFalse: [^ (list currentDirectory / list selectedFile)].
+		ifFalse: ["^ (list currentDirectory / list selectedFile)"]."
 
 ]
 

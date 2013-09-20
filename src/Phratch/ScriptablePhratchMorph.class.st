@@ -3614,7 +3614,7 @@ ScriptablePhratchMorph >> drum: midiKey duration: beats elapsed: elapsedMSecs fr
 { #category : #scripts }
 ScriptablePhratchMorph >> duplicate [
 
-	| newSprite s |
+	| newSprite |
 	newSprite := self duplicateNoAttach.
 	self world activeHand attachMorph: newSprite.
 

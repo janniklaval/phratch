@@ -183,10 +183,10 @@ PhratchFilePicker >> currentDirectory: aDirectoryOrString [
 	"Set my current directory to the given directory or path String."
 
 	| s truncated w eWidth |
-	(currentDir isKindOf: PhratchServerDirectory)
+	"(currentDir isKindOf: PhratchServerDirectory)
 		ifTrue: [ 
 			fetchInProgress := false.
-			currentDir stopFetching ].
+			currentDir stopFetching ]."
 	currentDir := (aDirectoryOrString isKindOf: String)
 		ifTrue: [ aDirectoryOrString asFileReference ]
 		ifFalse: [ aDirectoryOrString ].
@@ -238,7 +238,7 @@ PhratchFilePicker >> deleteDirectory [
 PhratchFilePicker >> directoryMenu [
 	"Present a drop-down menu of all directories in my current path."
 
-	| menu pathParts prefix serverEntries choice s serverPath entry1 pathArg n |
+	| menu pathParts prefix serverEntries choice entry1 pathArg n |
 	
 	self navigationForbidden ifTrue: [^ self].
 	menu := MenuMorph new defaultTarget: self.
@@ -277,9 +277,9 @@ PhratchFilePicker >> directoryMenu [
 	menu invokeModal.
 
 	choice := self currentDirectory.
-	((choice isKindOf: String) or:[choice isKindOf: FileReference]) ifTrue: [^ self currentDirectory: choice].
+	"((choice isKindOf: String) or:[choice isKindOf: FileReference]) ifTrue: ["^ self currentDirectory: choice"]."
 
-	choice path size > pathParts size ifTrue: [
+	"choice path size > pathParts size ifTrue: [
 		entry1 := serverEntries at: choice - pathParts size.
 		^ self currentDirectory: (PhratchServerDirectory new
 			serverName: (entry1 at: 2);
@@ -297,7 +297,7 @@ PhratchFilePicker >> directoryMenu [
 			(serverPath endsWith: '/') ifFalse: [serverPath := serverPath, '/'].
 			self currentDirectory: (currentDir copy path: serverPath)]
 		ifFalse: [
-			self currentDirectory: s contents].
+			self currentDirectory: s contents]."
 
 ]
 
@@ -704,28 +704,6 @@ PhratchFilePicker >> phratchInfoClient: anObject [
 	"Set the object to be informed when a Phratch project file with an info dictionary is selected. The client will be sent the message #phratchInfo: once each time such a file is selected, allowing the project thumbnail and other project information to be displayed."
 
 	phratchInfoClient := anObject.
-
-]
-
-{ #category : #accessing }
-PhratchFilePicker >> projectFetcher [
-
-	| fullPath |
-	fullPath := currentDir path, self selectedFile, '.scratch'.
-
-	phratchProjectFetcher ifNotNil: [  "try to use the existing fetcher"
-		(phratchProjectFetcher serverName = currentDir serverName and:
-		 [phratchProjectFetcher path = fullPath])
-			ifTrue: [^ phratchProjectFetcher]
-			ifFalse: [
-				phratchProjectFetcher stopDownload.
-				phratchProjectFetcher := nil]].
-
-	"make a new fetcher"
-	^ HTTPFetcher new
-		startDownload: fullPath
-		fromServer: currentDir serverName.
-
 
 ]
 

@@ -79,19 +79,6 @@ PhratchServer class >> portNumber [
 	^ 42001
 ]
 
-{ #category : #'private-server' }
-PhratchServer >> acceptNewConnections [
-	"Accept new connections, if any. Also process any newly connected outgoing sockets."
-
-	| newSock |
-	serverSocket ifNil: [^ self].
-	[serverSocket isConnected] whileTrue: [
-		newSock := serverSocket accept.
-		peerSockets addLast: (MessageSocket new on: newSock).
-		self resendAllVars].
-
-]
-
 { #category : #'private-variables' }
 PhratchServer >> broadcastMessageFor: aString [
 	"Answer a message to broadcast the given string."
@@ -332,23 +319,7 @@ PhratchServer >> processIncomingCommands [
 				sock destroy.
 				peerSockets remove: sock ifAbsent: []]].
 
-	self processUDPCommands.
-
-]
-
-{ #category : #'private-server' }
-PhratchServer >> processUDPCommands [
-	"Process incoming UDP commands."
-
-	| buf n msg |
-	incomingUDPSocket ifNil: [^ self].
-	buf := String new: 3000.
-	[true] whileTrue: [
-		n := [incomingUDPSocket receiveDataInto: buf] ifError: [0].
-		n = 0 ifTrue: [^ self].
-
-		msg := buf copyFrom: 1 to: n.
-		[self dispatch: msg from: nil] ifError: []].
+	"self processUDPCommands."
 
 ]
 
@@ -611,7 +582,7 @@ PhratchServer >> stepServer [
 	"Note: processIncomingCommands clears outgoingBroadcasts, so do sendOutgoingCommands first."
 
 	self sessionInProgress ifFalse: [^ self].
-	self acceptNewConnections.
+	"self acceptNewConnections."
 	self sendOutgoingCommands.
 	self processIncomingCommands.
 	self processIncomingBroadcasts.

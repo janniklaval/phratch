@@ -642,9 +642,9 @@ DialogBoxMorph >> title: aString [
 	titleBin removeAllMorphs.
 	titleMorph ifNotNil: [titleMorph delete].
 
-	titleMorph := ShadowedStringMorph new
-		contents: aString localized
-		color: Color white
+	titleMorph := StringMorph new
+		contents: aString localized;
+		color: Color white;
 		font: (PhratchFrameMorph getFont: #DialogBoxTitle).
 
 	titleBin

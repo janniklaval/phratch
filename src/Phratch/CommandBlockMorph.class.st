@@ -1288,7 +1288,7 @@ CommandBlockMorph >> rightButtonMenu [
 	
 	(choice := (menu localize; invokeModal"popUpAt: World activeHand position  inWorld:   World"; yourself)selectedValue) ifNil: [^ self].
 	(#(presentHelpScreen duplicate fastDuplicate rename delete showElements editElements inheritAttribute disinheritAttribute) includes: choice) ifTrue: [^ self perform: choice].
-	choice = #enableRemoteSensors ifTrue: [ ^ self].
+	"choice = #enableRemoteSensors ifTrue: [ ^ self]."
 	choice = #exitPhratchSession ifTrue: [ ^ self].
 	choice = #showTuples ifTrue: [^ self showTuples].
 

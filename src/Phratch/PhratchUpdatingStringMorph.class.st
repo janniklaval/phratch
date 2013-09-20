@@ -1,7 +1,7 @@
 Class {
 	#name : #PhratchUpdatingStringMorph,
 	#superclass : #UpdatingStringMorph,
-	#category : #'Phratch-UI-Panes'
+	#category : #'Phratch-UI-Watchers'
 }
 
 { #category : #'target access' }

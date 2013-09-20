@@ -190,7 +190,7 @@ ObjStream class >> userClasses [
 		(151		HatBlockMorph)
 		"(152	PhratchButtonMorph)"
 		(153		#PhratchScriptsMorph)
-		(154		#PhratchSliderMorph)
+		"(154		#PhratchSliderMorph)"
 		(155		WatcherMorph)
 		"(156	ParameterMorph)"
 		(157		SetterBlockMorph)
