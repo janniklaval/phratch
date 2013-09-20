@@ -345,10 +345,7 @@ LibraryItemMorph >> rightButtonMenu [
 	menu add: 'show' translated action: #makeVisible.
 	menu add: 'export this sprite' translated action: #exportObject.
 	stage := self target ownerOrYourselfThatIsA: PhratchStageMorph.
-	stage
-		ifNotNil: [ 
-			(stage phratchServer notNil and: [ stage phratchServer sessionInProgress ])
-				ifTrue: [ menu add: 'share this sprite' translated action: #shareObject ] ].
+
 	menu addLine.
 	menu add: 'duplicate' translated action: #duplicateNoAttach.
 	menu add: 'delete' translated action: #undoableDeleteSprite.

@@ -18,7 +18,6 @@ Class {
 		'titleMorph',
 		'buttonRow',
 		'messageLineMorphs',
-		'percentMorph',
 		'done',
 		'response',
 		'topLeftForms',
@@ -550,36 +549,6 @@ DialogBoxMorph >> no [
 
 ]
 
-{ #category : #interaction }
-DialogBoxMorph >> percentDone: aNumber [
-	"Show a percent complete indicator. The argument should be in the range 0-100."
-
-	| percent fullWidth indicator |
-	percentMorph ifNil: [
-		percentMorph := BorderedMorph new
-			extent: 104@16;
-			borderWidth: 1;
-			color: Color transparent;
-			borderColor: (Color gray: 0.5);
-		yourself.
-		indicator := Morph new
-			extent: 0@12;
-			color: (Color r: 0.35 g: 0.50 b: 0.67);
-			position: percentMorph position + 2;
-		yourself.
-		percentMorph addMorph: indicator.
-		percentMorph position: (self center x - (percentMorph width // 2) - 5)@(buttonRow top - 27).
-		mainColumn addMorph: percentMorph].
-
-	fullWidth := percentMorph width - 4.
-	indicator := percentMorph firstSubmorph.
-	percent := (aNumber * fullWidth / 100.0) rounded within: 0 and: fullWidth.
-	indicator width: percent.
-
-	World displayWorld.
-
-]
-
 { #category : #accessing }
 DialogBoxMorph >> shortcutButtonLabel: labelString action: actionSelector icon: aSymbol [
 	"Answer a new shortcut button with the given label and selector. A shortcut button has a folder icon on it. The button target will be me and it will use my button forms. Icon can be: #folderIcon, #folderCatIcon, #folderHouseIcon #folderPicIcon, #folderSoundIcon"
@@ -645,7 +614,8 @@ DialogBoxMorph >> title: aString [
 	titleMorph := StringMorph new
 		contents: aString localized;
 		color: Color white;
-		font: (PhratchFrameMorph getFont: #DialogBoxTitle).
+		font: (PhratchFrameMorph getFont: #DialogBoxTitle);
+		yourself.
 
 	titleBin
 		addMorph: (AlignmentMorph newSpacer: Color transparent);

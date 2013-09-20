@@ -47,7 +47,6 @@ Class {
 		'DefaultSprite',
 		'Fonts',
 		'FontsXO',
-		'PhratchServers',
 		'PhratchSkin',
 		'PhratchSkinXO',
 		'ShareServer',
@@ -255,62 +254,9 @@ PhratchFrameMorph class >> palettePaneColor [
 ]
 
 { #category : #utilities }
-PhratchFrameMorph class >> phratchServers [
-
-	^ PhratchServers
-
-]
-
-{ #category : #utilities }
 PhratchFrameMorph class >> putInClipboard: anObject [
 	
 	Clipboard := anObject.
-]
-
-{ #category : #utilities }
-PhratchFrameMorph class >> readShareServerEntry [
-	"Check for a file containing a list of Phratch servers.
-	If this file is found and it includes an entry labled '*share*' then make that entry the server and path for 'Share' uploads. 
-	If this file includes an entry labeled *support* then make that entry the server and path for the 'Support' site link.
-	This is meant to be done once when Phratch is first started. Other entries in this file used to appear as Phratch servers in the Phratch project open dialog."
-	"self readShareServerEntry"
-
-	| s zentry entryList servers key shareExists |
-	"set defaults in case there is no 'servers.txt' file"
-	ShareServer := 'scratch.mit.edu'.
-	ShareServerPath := '/services/upload'.
-	SupportServer := ShareServer.
-	SupportServerPath := '/support'.
-	PhratchServers := #().	"xxx
-		('LTC Scratch Server'		'ltc.smm.org'			'/scratch/')
-		('MIT Scratch Server'		'web.media.mit.edu'		'/~jmaloney/mit_scratch/')
-xxx"
-	(FileSystem workingDirectory / 'servers.txt') exists
-		ifFalse: [ ^ self ].
-	[ s := (FileStream readOnlyFileNamed: 'servers.txt') contentsOfEntireFile ] ifError: [ ^ self ].
-	entryList := #()." HtmlChunker parseTabbedString: s."	"collect Scratch servers for open dialog"
-	servers := entryList reject: [ :entry | entry first beginsWith: '*share*' ].
-	servers
-		do: [ :entry | 
-			entry size >= 3
-				ifTrue: [ 
-					key := entry first asLowercase.
-					PhratchServers := PhratchServers reject: [ :e | e first asLowercase = key ].
-					PhratchServers := PhratchServers copyWith: entry ] ].
-	PhratchServers sort: [ :e1 :e2 | (e1 first compare: e2 first) <= 2 ].
-	shareExists := true.	"if there is a file *share* entry, it overrides the default Share server"
-	zentry := entryList detect: [ :e | e first beginsWith: '*share*' ] ifNone: [ shareExists := false ].
-	shareExists
-		ifTrue: [ 
-			zentry size >= 3
-				ifTrue: [ 
-					ShareServer := zentry at: 2.
-					ShareServerPath := zentry at: 3 ] ].	"if there is a file *support* entry, it overrides the default Support server"
-	zentry := entryList detect: [ :e | e first beginsWith: '*support*' ] ifNone: [ ^ self ].
-	zentry size >= 3
-		ifFalse: [ ^ self ].
-	SupportServer := zentry at: 2.
-	SupportServerPath := zentry at: 3
 ]
 
 { #category : #'scratch skin' }
@@ -1382,16 +1328,6 @@ PhratchFrameMorph >> enterQuarterMode [
 
 ]
 
-{ #category : #'menu/button actions' }
-PhratchFrameMorph >> exitPhratchSession [
-	"Close all connections to remote collaborators."
-
-	workPane phratchServer ifNil: [^ self].
-	workPane phratchServer endPhratchSession.
-	workPane phratchServer: nil.
-
-]
-
 { #category : #'view mode' }
 PhratchFrameMorph >> exitPresentationMode [
 	"Exit presentation mode."
@@ -1977,11 +1913,6 @@ PhratchFrameMorph >> installNewProject: newWorkpane [
 
 	newWorkpane class = PhratchStageMorph
 		ifFalse: [^ self inform: 'Incompatible Phratch file format'].
-
-	workPane phratchServer ifNotNil: [
-		workPane phratchServer clearCaches.
-		workPane phratchServer stage: newWorkpane.
-		newWorkpane phratchServer: workPane phratchServer].
 
 	newWorkpane isQuarterSize: workPane isQuarterSize.
 	newWorkpane bounds: workPane bounds.
@@ -3138,7 +3069,7 @@ PhratchFrameMorph >> startup [
 	ScriptablePhratchMorph randomInit.
 	PhratchTranslator importLanguagesList.
 
-	PhratchFrameMorph readShareServerEntry.
+"	PhratchFrameMorph readShareServerEntry."
 	BlockMorph contrastStrong.
 	self keepSpritesOnStage: 1.
 	EventHatMorph threadSafeMode: false.
@@ -3233,13 +3164,11 @@ PhratchFrameMorph >> step [
 	Sensor processOSMenuEvents.
 	paintingInProgress ifTrue: [^ self].
 
-"	workPane phratchServer ifNotNil: [workPane phratchServer stepServer]." "see later"
 "	self checkForWeDo." "simplify at the moment"
 	self updateToolButtons.
 	self processWhenConditions.
 	self processKeyboardEvents. 
 	workPane stepProcesses.
-"	workPane phratchServer ifNotNil: [workPane phratchServer stepServer]." "see later"
 "	self processDroppedFiles." "simplify at the moment"
 	workPane processesToRun size > 0
 		ifTrue: [flagButton on]
@@ -3484,11 +3413,6 @@ PhratchFrameMorph >> updateHistoryProjectName: projName op: operation [
 	osVersion :=  OSPlatform osVersion.
 	osVersion ifNil: [osVersion := 'unknown'].
 	projectInfo at: 'os-version' put: osVersion.
-
-	(workPane phratchServer notNil and:
-	 [workPane phratchServer isHosting])
-		ifTrue: [projectInfo at: 'isHosting' put: true]
-		ifFalse: [projectInfo removeKey: 'isHosting' ifAbsent: []].
 
 	workPane penTrailsForm
 		ifNil: [projectInfo removeKey: 'penTrails' ifAbsent: []]

@@ -65,7 +65,8 @@ MessageElementMorph >> asSmalltalk [
 		ifFalse: [ ^ self cascadeCode ].
 	ws := WriteStream on: String new.
 	^ ws
-		nextPutAll: receiver asSmalltalk , ' ';
+		nextPutAll: receiver asSmalltalk;
+		nextPutAll: ' ';
 		nextPutAll: self keywordsAndArgs;
 		contents;
 		yourself
@@ -134,13 +135,16 @@ MessageElementMorph >> cascadeCode [
 	| ws |
 	ws := WriteStream on: String new.
 	ws nextPutAll: receiver asSmalltalk.
-	cascade do: [:msg|
-		ws cr;
-			nextPutAll: msg asSmalltalk, ' ';
-			nextPut:$; ].
-	^ws
+	cascade
+		do: [ :msg | 
+			ws
+				cr;
+				nextPutAll: msg asSmalltalk;
+				nextPutAll: ' ';
+				nextPut: $; ].
+	^ ws
 		nextPutAll: self keywordsAndArgs;
-		cr; 
+		cr;
 		contents;
 		yourself
 ]
@@ -469,13 +473,18 @@ MessageElementMorph >> isUnary [
 MessageElementMorph >> keywordsAndArgs [
 	| kw ws |
 	kw := selector keywords.
-	(selector = ':=') ifTrue: [kw := #('_')].
+	selector = ':='
+		ifTrue: [ kw := #('_') ].
 	ws := WriteStream on: String new.
-	1 to: kw size do: [:i|
+	1 to: kw size do: [ :i | 
 		ws nextPutAll: (kw at: i).
-		(arguments size < i) ifFalse: [
-			ws nextPutAll: ' ', (arguments at: i) asSmalltalk, ' ' ]].
-	^ws contents
+		arguments size < i
+			ifFalse: [ 
+				ws
+					nextPutAll: ' ';
+					nextPutAll: (arguments at: i) asSmalltalk;
+					nextPutAll: ' ' ] ].
+	^ ws contents
 ]
 
 { #category : #private }

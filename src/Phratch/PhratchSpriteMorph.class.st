@@ -1766,10 +1766,7 @@ PhratchSpriteMorph >> rightButtonMenu [
 	menu add: 'grab screen region for new costume' translated action: #grabFromScreen.
 	menu add: 'export this sprite' translated action: #exportObject.
 	stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
-	stage
-		ifNotNil: [ 
-			(stage phratchServer notNil and: [ stage phratchServer sessionInProgress ])
-				ifTrue: [ menu add: 'share this sprite' translated action: #shareObject ] ].
+
 	menu addLine.
 	menu add: 'duplicate' translated action: #duplicate.
 	menu add: 'clone' translated action: #spawn.

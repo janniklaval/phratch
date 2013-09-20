@@ -56,16 +56,8 @@ Class {
 	#name : #PhratchServer,
 	#superclass : #Object,
 	#instVars : [
-		'stage',
 		'userName',
-		'serverSocket',
-		'incomingUDPSocket',
-		'peerSockets',
-		'peerNames',
 		'sensors',
-		'lastSentValues',
-		'incomingBroadcasts',
-		'outgoingBroadcasts',
 		'in',
 		'broadcastCache'
 	],
@@ -79,19 +71,6 @@ PhratchServer class >> portNumber [
 	^ 42001
 ]
 
-{ #category : #'private-variables' }
-PhratchServer >> broadcastMessageFor: aString [
-	"Answer a message to broadcast the given string."
-
-	| msg |
-	msg := WriteStream on: String new.
-	msg nextPutAll: 'broadcast '.
-	self putString: aString on: msg.
-
-	^ msg contents
-
-]
-
 { #category : #accessing }
 PhratchServer >> broadcastsSeen [
 
@@ -99,162 +78,17 @@ PhratchServer >> broadcastsSeen [
 
 ]
 
-{ #category : #'server control' }
-PhratchServer >> clearCaches [
-
-	broadcastCache := broadcastCache species new.
-	sensors := sensors species new.
-	lastSentValues := lastSentValues species new.
-	self resend: 'send-vars' toPeersExcept: nil.
-
-]
-
-{ #category : #'private-incoming commands' }
-PhratchServer >> dispatch: aString from: requestSock [
-	"Dispatch an incoming command from a remote Phratch."
-
-	| cmd op |
-	aString size = 0
-		ifTrue: [ 
-			requestSock sendMessage: 'version "PhratchServer 0.1 alpha"'.
-			^ self ].
-	op := self opcodeFrom: aString.
-	op size = 0
-		ifTrue: [ ^ self ].
-	(#('broadcast' 'sensor-update' 'peer-name' 'send-vars' 'sprite') includes: op)
-		ifFalse: [ ^ self ].
-	'sprite' = op
-		ifTrue: [ 
-			cmd := self parseMixedMsg: aString.
-			self doSprite: cmd from: requestSock.
-			^ self resend: aString toPeersExcept: requestSock ].
-	cmd := self parse: aString.
-	'broadcast' = op
-		ifTrue: [ 
-			self doBroadcast: cmd from: requestSock.
-			^ self resend: aString toPeersExcept: requestSock ].
-	'sensor-update' = op
-		ifTrue: [ 
-			self doSensorUpdate: cmd from: requestSock.
-			^ self resend: aString toPeersExcept: requestSock ].
-	'peer-name' = op
-		ifTrue: [ ^ self doPeerName: cmd from: requestSock ].
-	'send-vars' = op
-		ifFalse: [ ^ self ].
-	self doSendVars: cmd from: requestSock.
-	^ self resend: aString toPeersExcept: requestSock
-]
-
-{ #category : #'private-incoming commands' }
-PhratchServer >> doBroadcast: cmd from: requestSocket [
-	"Handle a broadcast command: broadcast <event-name>"
-
-	| evtName |
-	cmd size = 2 ifFalse: [^ self].
-	((evtName := cmd at: 2) isKindOf: String) ifFalse: [^ self].
-
-	incomingBroadcasts add: evtName.
-	broadcastCache add: evtName.
-
-]
-
-{ #category : #'private-incoming commands' }
-PhratchServer >> doPeerName: cmd from: requestSock [
-	"Handle a peer-name command: peer-name <peerName>"
-
-	| peerName |
-	cmd size = 2 ifFalse: [^ self].
-	((peerName := cmd at: 2) isKindOf: String) ifFalse: [^ self].
-
-	peerNames at: requestSock put: peerName.
-	self dispatch: 'send-vars' from: nil.
-
-]
-
-{ #category : #'private-incoming commands' }
-PhratchServer >> doSendVars: cmd from: requestSock [
-	"Handle a variable send request: send-vars"
-
-	"force all my global variables to be re-transmitted"
-	lastSentValues := lastSentValues species new.
-
-]
-
-{ #category : #'private-incoming commands' }
-PhratchServer >> doSensorUpdate: cmd from: requestSocket [
-	"Handle a sensor update command: sensor-update [<sensor-name> <sensor-value>]"
-
-	| i sName sValue |
-	i := 2.
-	[i < cmd size] whileTrue: [
-		sName := cmd at: i.
-		sValue := cmd at: i + 1.
-		(sName isKindOf: String)
-			ifTrue: [sensors at: sName put: sValue].
-		i := i + 2].
-
-]
-
-{ #category : #'private-incoming commands' }
-PhratchServer >> doSprite: cmd from: requestSock [
-	"Handle a sprite command: sprite <senderName> <spriteData>"
-
-	| sf spriteData|
-	cmd size = 3 ifFalse: [^ self].
-	((spriteData := cmd at: 3) isKindOf: ByteArray) ifFalse: [^ self].
-	sf := stage ownerOrYourselfThatIsA: PhratchFrameMorph.
-	sf ifNil: [^self].
-	sf importSpriteOrProject: spriteData
-
-]
-
-{ #category : #'server control' }
-PhratchServer >> endPhratchSession [
-	"Close all sockets. If I am hosting, this will end the session for everyone. If I am only a client, then I will leave the session but the session itself can continue to exist."
-
-	self shutdownServer.
-
-
-]
-
 { #category : #initialization }
 PhratchServer >> initialize [
 
 	userName := 'anonymous'.
-	peerSockets :=  OrderedCollection new.
-	peerNames := IdentityDictionary new.
 	sensors := Dictionary new.
-	lastSentValues := Dictionary new.
-	incomingBroadcasts := OrderedCollection new.
-	outgoingBroadcasts := OrderedCollection new.
 	broadcastCache := Set new.
-
-]
-
-{ #category : #'server control' }
-PhratchServer >> isHosting [
-	"Answer true if this is the host of a Phratch session."
-
-	^ serverSocket notNil
-
-]
-
-{ #category : #'private-incoming commands' }
-PhratchServer >> opcodeFrom: aString [
-	"Answer the command opcode for the given message. The opcode is the unquoted string at the beginning of the message up to the first whitespace character."
-
-	| i |
-	i := 1.
-	[i <= aString size and: [(aString at: i) asciiValue > 32]]
-		whileTrue: [i := i + 1].
-
-	^ (aString copyFrom: 1 to: i - 1) asLowercase
 
 ]
 
 { #category : #'private-command parsing' }
 PhratchServer >> parse: aString [
-	"PhratchServer new parse: 'test abc 1 -1 .01 -.01 true false'"
 
 	| out token |
 	in := ReadStream on: aString asString.
@@ -263,90 +97,6 @@ PhratchServer >> parse: aString [
 		token := self readNext.
 		token ifNotNil: [out addLast: token]].
 	^ out asArray
-
-]
-
-{ #category : #'private-command parsing' }
-PhratchServer >> parseMixedMsg: aString [
-	"answer an Array containting both textual and binary information:
-	op <senderName> <binaryData>"
-
-	| op senderName i binaryData |
-	op := self opcodeFrom: aString.
-	i := aString findString: String crlf.
-	i = 0 ifTrue: [^self error: 'delimiter for binary data not found'].
-	senderName := aString copyFrom: op size + 2 to: i-1.
-	binaryData := aString copyFrom: i + 2  to: aString size.
-	^Array with: op with: senderName with: binaryData asByteArray
-
-]
-
-{ #category : #'private-incoming commands' }
-PhratchServer >> processCommandFrom: requestSock [
-	"Handle a command from the given socket. Do nothing if there are no messages."
-
-	| msg |
-	(msg := requestSock nextMessage) ifNil: [^ self].
-
-	[self dispatch: msg asString from: requestSock]
-		ifError: [:err :rcvr | PhratchError error].
-
-]
-
-{ #category : #'private-server' }
-PhratchServer >> processIncomingBroadcasts [
-	"NOTE: Broadcast events are added to the outgoingBroadcasts queue as a side-effect of re-broadcasting them locally. To avoid having broadcasts bounce from peer to peer forever, the outgoingBroadcasts queue is cleard after incoming commands have been processed."
-
-	stage ifNotNil: [
-		incomingBroadcasts do: [:evtName |
-			stage broadcastEventNamed: evtName with: 0]].
-
-	incomingBroadcasts := incomingBroadcasts species new: 100.
-	outgoingBroadcasts := outgoingBroadcasts species new: 100.
-
-]
-
-{ #category : #'private-server' }
-PhratchServer >> processIncomingCommands [
-	"Process incoming commands from my peers."
-
-	peerSockets copy do: [:sock |
-		sock isConnected
-			ifTrue: [
-				self processCommandFrom: sock.
-				sock sendData]
-			ifFalse: [
-				sock destroy.
-				peerSockets remove: sock ifAbsent: []]].
-
-	"self processUDPCommands."
-
-]
-
-{ #category : #'private-variables' }
-PhratchServer >> putString: aString on: aStream [
-	"Append the given string to the given stream. Double any embedded double-quote characters."
-
-	aStream nextPut: $".
-	aString do: [:ch |
-		aStream nextPut: ch.
-		ch = $" ifTrue: [aStream nextPut: ch]].
-	aStream nextPut: $".
-
-]
-
-{ #category : #'private-server' }
-PhratchServer >> queueBroadcast: aString [
-	"Queue the given broadcast event to be sent to my peers."
-
-	self sessionInProgress ifFalse: [^ self].
-
-	(#(	'Phratch-KeyPressedEvent'
-		'Phratch-MouseClickEvent'
-		'Phratch-StartClicked'
-	) includes: aString) ifTrue: [^ self].
-
-	outgoingBroadcasts add: aString.
 
 ]
 
@@ -420,209 +170,9 @@ PhratchServer >> readString [
 
 ]
 
-{ #category : #'private-variables' }
-PhratchServer >> recordVariableValues [
-	"Record the current values of my global variables."
-
-	lastSentValues := Dictionary new.
-
-	stage ifNotNil: [
-		stage varNames do: [:v | lastSentValues at: v put: (stage getVar: v)]].
-
-]
-
-{ #category : #'private-incoming commands' }
-PhratchServer >> resend: msgString toPeersExcept: requestSocket [
-	"Handle a broadcast command: broadcast <event-name>"
-
-	peerSockets do: [:sock |
-		sock ~= requestSocket ifTrue: [sock sendMessage: msgString]].
-
-]
-
-{ #category : #'private-variables' }
-PhratchServer >> resendAllVars [
-	"Force all my global variables to be re-transmitted."
-
-	lastSentValues := lastSentValues species new.
-
-]
-
-{ #category : #'private-server' }
-PhratchServer >> sendOutgoingCommands [
-	"Send broadcasts and variable updates to my peers."
-
-	| varUpdateMsg |
-	varUpdateMsg := self someVariableHasChanged
-		ifTrue: [ self variableUpdateMessage ]
-		ifFalse: [ nil ].
-	peerSockets copy
-		do: [ :sock | 
-			sock isConnected
-				ifTrue: [ 
-					varUpdateMsg ifNotNil: [ sock sendMessage: varUpdateMsg ].
-					outgoingBroadcasts do: [ :evt | sock sendMessage: (self broadcastMessageFor: evt) ].
-					sock sendData ]
-				ifFalse: [ 
-					sock destroy.
-					peerSockets remove: sock ifAbsent: [  ] ] ].
-	self recordVariableValues
-]
-
-{ #category : #'private-sprites' }
-PhratchServer >> sendSprite: aPhratchSpriteMorph [
-	"send the given sprite to all peers"
-
-	| msg |
-	msg := self spriteMessageFor: aPhratchSpriteMorph.
-	peerSockets copy do: [:sock |
-		sock isConnected
-			ifTrue: [
-				sock sendMessage: msg.
-				sock sendData]
-			ifFalse: [
-				sock destroy.
-				peerSockets remove: sock ifAbsent: []]].
-]
-
-{ #category : #accessing }
-PhratchServer >> sensorNames [
-
-	^ sensors keys asArray sort
-
-
-]
-
-{ #category : #'server control' }
-PhratchServer >> sessionInProgress [
-	"Answer true if this Phratch server has any external connections."
-
-	^ (peerSockets size > 0) | (serverSocket notNil)
-
-
-]
-
-{ #category : #'server control' }
-PhratchServer >> shutdownServer [
-	"Destroy all open sockets."
-
-	serverSocket ifNotNil: [
-		serverSocket destroy.
-		serverSocket := nil].
-
-	incomingUDPSocket ifNotNil: [
-		incomingUDPSocket destroy.
-		incomingUDPSocket := nil].
-
-	peerSockets do: [:sock | sock destroy].
-	peerSockets := peerSockets species new.
-
-	peerNames := peerNames species new.
-	sensors := sensors species new.
-	lastSentValues := lastSentValues species new.
-	outgoingBroadcasts := outgoingBroadcasts species new.
-
-]
-
-{ #category : #'private-variables' }
-PhratchServer >> someVariableHasChanged [
-	"Answer true if a global variable has changed since I last sent variable updates to my peers."
-
-	| lastVal |
-	stage ifNil: [^ false].
-
-	stage varNames do: [:v |
-		lastVal := lastSentValues at: v ifAbsent: [nil].
-		lastVal ifNil: [^ true].
-		(lastVal = (stage getVar: v)) ifFalse: [^ true]].
-
-	^ false
-
-]
-
-{ #category : #'private-sprites' }
-PhratchServer >> spriteMessageFor: aPhratchSpriteMorph [
-	"answer a valid msg for the given sprite: sprite <senderName><crlf><binaryData>"
-
-	|msg|
-	msg := WriteStream on: (ByteArray new: 100000).
-	msg 
-		nextPutAll: 'sprite ' asByteArray;
-		nextPutAll: userName asByteArray;
-		nextPutAll: String crlf asByteArray;
-		nextPutAll: aPhratchSpriteMorph serialized.
-	^msg contents 
-		
-]
-
-{ #category : #accessing }
-PhratchServer >> stage: aPhratchStageMorph [
-
-	stage := aPhratchStageMorph.
-
-]
-
-{ #category : #'server control' }
-PhratchServer >> startHosting [
-	"Open a socket on my port and start accepting connections."
-
-	Socket initializeNetwork.
-	self shutdownServer.
-
-	serverSocket := Socket new.
-	serverSocket listenOn: self class portNumber backlogSize: 20.
-
-	incomingUDPSocket := Socket newUDP setPort: self class portNumber.
-
-]
-
-{ #category : #'server control' }
-PhratchServer >> stepServer [
-	"Do one server step."
-	"Note: processIncomingCommands clears outgoingBroadcasts, so do sendOutgoingCommands first."
-
-	self sessionInProgress ifFalse: [^ self].
-	"self acceptNewConnections."
-	self sendOutgoingCommands.
-	self processIncomingCommands.
-	self processIncomingBroadcasts.
-
-
-]
-
 { #category : #accessing }
 PhratchServer >> userName [
 
 	^ userName
-
-]
-
-{ #category : #accessing }
-PhratchServer >> userName: aString [
-
-	userName := aString.
-
-]
-
-{ #category : #'private-variables' }
-PhratchServer >> variableUpdateMessage [
-	"Answer a variable update message for all variables whose values have not already been sent."
-
-	| msg currentValue lastValue v |
-	msg := WriteStream on: String new.
-	msg nextPutAll: 'sensor-update '.
-	stage varNames do: [:varName |
-		currentValue := stage getVar: varName.
-		lastValue := lastSentValues at: varName ifAbsent: [nil].
-		lastValue = currentValue ifFalse: [
-			self putString: varName on: msg.
-			msg space.
-			v := stage interpretStringAsNumberIfPossible: currentValue.
-			v isNumber
-				ifTrue: [msg nextPutAll: v printString]
-				ifFalse: [self putString: v asString on: msg].
-			msg space]].
-
-	^ msg contents
 
 ]

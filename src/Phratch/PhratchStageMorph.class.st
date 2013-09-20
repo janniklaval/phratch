@@ -82,9 +82,6 @@ PhratchStageMorph >> allEventNames [
 			m addEventNamesTo: result]].
 	self addEventNamesTo: result.
 
-	phratchServer ifNotNil: [
-		result addAll: phratchServer broadcastsSeen].
-
 	"remove empty string"
 	result remove: '' ifAbsent: [].
 
@@ -143,7 +140,6 @@ PhratchStageMorph >> broadcastEventNamed: name with: value [
 	"Broadcast a PhratchEvent with given name and argument value to all Phratch objects and answer a collection of the newly created processes. This is done by finding all public scripts that respond to this event, and starting new processes for any not already running."
 
 	| event objList newProcs |
-	phratchServer ifNotNil: [phratchServer queueBroadcast: name].
 	event := PhratchEvent new name: name argument: value.
 	newProcs := OrderedCollection new.
 
@@ -906,20 +902,6 @@ PhratchStageMorph >> penUpOrDownChangeFor: aSprite [
 
 ]
 
-{ #category : #accessing }
-PhratchStageMorph >> phratchServer [
-
-	^ phratchServer
-
-]
-
-{ #category : #accessing }
-PhratchStageMorph >> phratchServer: anObject [
-
-	phratchServer := anObject.
-
-]
-
 { #category : #'scratch processes/events' }
 PhratchStageMorph >> processesToRun [
 	"Answer a collection of processes to run. Filter out any processes for objects have been picked up. Always return a copy of the processes list."
@@ -1364,7 +1346,6 @@ PhratchStageMorph >> stopAllProcesses [
 PhratchStageMorph >> stopAllScriptsFor: eventName [
 
 "	remember to implement this in the mesh network later -jens"
-"	phratchServer ifNotNil: [phratchServer queueBroadcast: name]."
 
 	"stop scripts"
 	submorphs do: [:m | (m isKindOf: ScriptablePhratchMorph) ifTrue: [

@@ -14,11 +14,15 @@ MessageHeaderElementMorph >> asSmalltalk [
 	| kw ws |
 	kw := selector keywords.
 	ws := WriteStream on: String new.
-	1 to: kw size do: [:i|
+	1 to: kw size do: [ :i | 
 		ws nextPutAll: (kw at: i).
-		(variables size < i) ifFalse: [
-			ws nextPutAll: ' ', (variables at: i) asSmalltalk, ' ' ]].
-	^ws contents
+		variables size < i
+			ifFalse: [ 
+				ws
+					nextPutAll: ' ';
+					nextPutAll: (variables at: i) asSmalltalk;
+					nextPutAll: ' ' ] ].
+	^ ws contents
 ]
 
 { #category : #'instance creation' }

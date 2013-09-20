@@ -4490,7 +4490,7 @@ ScriptablePhratchMorph >> hookupBooleanSensorNames [
 { #category : #'sensing ops' }
 ScriptablePhratchMorph >> hookupSensorNames [
 
-	| sensorNames stage virtualSensors |
+	| sensorNames |
 	sensorNames := #(
 		'slider'
 		'light'
@@ -4499,12 +4499,6 @@ ScriptablePhratchMorph >> hookupSensorNames [
 	).
 
 	sensorNames := sensorNames, #('-' 'tilt' 'distance'). "WeDo sensors"
-
-	(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNotNil: [
-		stage phratchServer ifNotNil: [
-			virtualSensors := stage phratchServer sensorNames.
-			virtualSensors size > 0 ifTrue: [
-				^ sensorNames, {'-'}, stage phratchServer sensorNames]]].
 
 	^ sensorNames
 
@@ -6971,17 +6965,6 @@ ScriptablePhratchMorph >> setVolumeTo: aNumber [
 	<phratchItem: 'set volume to $Number$' kind: #- category: 'sound' defaultValues: #(100) subCategory: #a4>
 	self undeleteAttribute: #volume.
 	self passiveSetVolumeTo: aNumber
-
-]
-
-{ #category : #networking }
-ScriptablePhratchMorph >> shareObject [
-	"send this object to all peers"
-
-	| server |
-	server := (self ownerOrYourselfThatIsA: PhratchStageMorph) phratchServer.
-	server ifNil: [^self].
-	server sendSprite: self
 
 ]
 

@@ -287,7 +287,6 @@ PhratchFileChooserDialog class >> savePhratchFileFor: aPhratchFrameMorph [
 PhratchFileChooserDialog class >> setLastFolderTo: dir forType: type [
 	"Remember the given dir as the last folder used for the given type of file."
 
-	"(dir isKindOf: PhratchServerDirectory) ifTrue: [^ self]."
 	LastFolderForType at: type put: dir.
 
 
@@ -309,42 +308,6 @@ PhratchFileChooserDialog class >> userPhratchProjectsDir [
 	^ (homeDir / phratchFolderName) exists
 		ifTrue: [(homeDir / phratchFolderName) asFileReference]
 		ifFalse: [homeDir asFileReference]
-
-]
-
-{ #category : #utilities }
-PhratchFileChooserDialog class >> waitForCompletionOrCancelOfFetch: anHTTPFetcher [
-	"Put up dialog box until the given fetch completes, fails, or is cancelled by the user."
-	"self waitForCompletionOrCancelOfFetch: nil"
-
-	| dialogBox total |
-	dialogBox := DialogBoxMorph new
-		title: 'Downloading...' translated;
-		withButtonsForYes: false
-			no: false
-			okay: false
-			cancel: true;
-		extent: 200 @ 150;
-		percentDone: 0;
-		yourself.
-
-	dialogBox center: World center.
-	dialogBox openInWorld.
-
-	total := nil.
-	[ dialogBox isDone not & anHTTPFetcher inProgress ]
-		whileTrue: [ 
-			(Delay forMilliseconds: 100) wait.
-			total ifNil: [ total := anHTTPFetcher contentLength ].
-			total ifNotNil: [ dialogBox percentDone: 100 * anHTTPFetcher bytesDownloaded // total ].
-			World doOneCycle ].	"wait for user to press a button"
-	anHTTPFetcher succeeded
-		ifFalse: [ 
-			dialogBox message: 'Failed: ' , anHTTPFetcher failureReason.
-			[ dialogBox isDone ] whileFalse: [ World doOneCycle ] ].
-
-	dialogBox delete.
-	World doOneCycle
 
 ]
 
@@ -628,9 +591,7 @@ PhratchFileChooserDialog >> getUserResponse [
 		phratchFrame author: authorMorph contents trimBoth.
 		phratchFrame projectComment: commentMorph contents].
 
-	"(list currentDirectory isKindOf: PhratchServerDirectory)
-		ifTrue: [^ list projectFetcher]
-		ifFalse: ["^ (list currentDirectory / list selectedFile)"]."
+	^ (list currentDirectory / list selectedFile)
 
 ]
 

@@ -147,29 +147,6 @@ PhratchFilePicker >> changeSelectionIndexBy: anInteger [
 
 ]
 
-{ #category : #private }
-PhratchFilePicker >> checkForPhratchInfoFetchDone [
-	"Try to retrieve info for the currently selected Phratch project and, if successful, report it to our client."
-
-	"Details: The fetcher is allowed to keep running even after the info dictionary is retrieved. Thus if the user decides to open this project, we'll have a head start on fetching it."
-
-	| data s version infoSize infoDict |
-	phratchProjectFetcher ifNil: [ ^ self ].
-	data := phratchProjectFetcher bodyData.
-	data size >= 14
-		ifFalse: [ ^ self ].
-	s := ReadStream on: data.
-	version := ObjStream phratchFileVersionFrom: (s next: 10) asString.
-	({1 . 2} includes: version)
-		ifTrue: [ 
-			infoSize := s uint32.
-			infoSize <= (s size - s position)
-				ifTrue: [ 
-					infoDict := [ ObjStream new readObjFrom: s ] ifError: [ Dictionary new ].
-					phratchInfoClient phratchInfo: infoDict ] ]
-		ifFalse: [ phratchInfoClient phratchInfo: Dictionary new ]
-]
-
 { #category : #accessing }
 PhratchFilePicker >> currentDirectory [
 	"Answer the directory that is currently being viewed."
@@ -183,10 +160,7 @@ PhratchFilePicker >> currentDirectory: aDirectoryOrString [
 	"Set my current directory to the given directory or path String."
 
 	| s truncated w eWidth |
-	"(currentDir isKindOf: PhratchServerDirectory)
-		ifTrue: [ 
-			fetchInProgress := false.
-			currentDir stopFetching ]."
+
 	currentDir := (aDirectoryOrString isKindOf: String)
 		ifTrue: [ aDirectoryOrString asFileReference ]
 		ifFalse: [ aDirectoryOrString ].
@@ -238,7 +212,7 @@ PhratchFilePicker >> deleteDirectory [
 PhratchFilePicker >> directoryMenu [
 	"Present a drop-down menu of all directories in my current path."
 
-	| menu pathParts prefix serverEntries choice entry1 pathArg n |
+	| menu pathParts prefix choice pathArg n |
 	
 	self navigationForbidden ifTrue: [^ self].
 	menu := MenuMorph new defaultTarget: self.
@@ -263,41 +237,11 @@ PhratchFilePicker >> directoryMenu [
 	"if opening a Phratch project, allow access to servers"
 	"TODO: Looks like n is not correct arg here."
 	n := 1.
-	phratchInfoClient ifNotNil: [
-		serverEntries := PhratchFrameMorph phratchServers.
-		(serverEntries notNil and:[serverEntries size > 0]) ifTrue: [
-			menu addLine.
-			serverEntries do: [:entry | entry1:= entry.
-				menu add: entry first
-					target: self 
-					selector: #currentDirectory:
-					argument: n.
-				n := n + 1]]].
 
 	menu invokeModal.
 
 	choice := self currentDirectory.
 	"((choice isKindOf: String) or:[choice isKindOf: FileReference]) ifTrue: ["^ self currentDirectory: choice"]."
-
-	"choice path size > pathParts size ifTrue: [
-		entry1 := serverEntries at: choice - pathParts size.
-		^ self currentDirectory: (PhratchServerDirectory new
-			serverName: (entry1 at: 2);
-			path: (entry1 at: 3);
-		yourself)].
-
-	s := WriteStream on: String new.
-	1 to: choice do: [:i |
-		s nextPutAll: (pathParts at: i).
-		i < choice ifTrue: [s nextPut: FileSystem disk delimiter]].
-
-	(currentDir isKindOf: PhratchServerDirectory)
-		ifTrue: [
-			serverPath := '/', s contents.
-			(serverPath endsWith: '/') ifFalse: [serverPath := serverPath, '/'].
-			self currentDirectory: (currentDir copy path: serverPath)]
-		ifFalse: [
-			self currentDirectory: s contents]."
 
 ]
 
@@ -341,52 +285,6 @@ PhratchFilePicker >> getDirectoryContents [
 	contentsPaneMorph vScrollRelative: 0.
 	self addMorphFront: feedbackMorph.
 	fetchInProgress := true.
-
-]
-
-{ #category : #private }
-PhratchFilePicker >> getFetchedServerDirectoryContents [
-	"Generate and layout the morphs in my contents pane for the files and folder in the recently server directory contents. If the fetch generated an error, display the error."
-	"Assume that the page morph exists already."
-
-	| page m morphsToAdd x y nm isDir |
-	page := contentsPaneMorph contents.
-
-	currentDir fetchSucceeded ifFalse: [
-		m := StringMorph contents: 'Failed: ', currentDir fetchFailureReason.
-		page addMorph: (m position: page topLeft + (10@30)).
-		^ self].
-
-	morphsToAdd := OrderedCollection new: 1000.
-	x := page left + 7.
-	y := page top + 5.
-	currentDir allNames do: [:n |
-		nm := n.
-		isDir := true.
-		(n asLowercase endsWith: '.scratch') ifTrue: [
-			nm := n copyFrom: 1 to: n size - '.scratch' size.
-			isDir := false].
-		(n asLowercase endsWith: '.sb') ifTrue: [
-			nm := n copyFrom: 1 to: n size - '.sb' size.
-			isDir := false].
-		(n asLowercase endsWith: '.ypr') ifTrue: [
-			nm := n copyFrom: 1 to: n size - '.ypr' size.
-			isDir := false].
-		(n asLowercase endsWith: '.phr') ifTrue: [
-			nm := n copyFrom: 1 to: n size - '.phr' size.
-			isDir := false].
-		m := PhratchFilePickerEntry new
-			name: nm dir: currentDir isDirectory: isDir;
-			width: self width - 60;
-			color: self color;
-		yourself.
-		morphsToAdd add: (m position: x@y).
-		y := y + m height].
-
-	feedbackMorph delete.
-	page removeAllMorphs.
-	page addAllMorphs: morphsToAdd.
-	self changeSelectionIndexBy: 1.
 
 ]
 
@@ -557,7 +455,7 @@ PhratchFilePicker >> keyStroke: evt [
 		(entry := self selectedEntryOrNil) ifNil: [^ self].
 		(entry entryIsDirectory and:
 		 [(owner isKindOf: PhratchFileChooserDialog)])
-			ifTrue: [self currentDirectory: (currentDir directoryNamed: entry entryName)]
+			ifTrue: [self currentDirectory: (currentDir / entry entryName)]
 			ifFalse: [(self ownerOrYourselfThatIsA: PhratchFileChooserDialog) yes].
 		^ self].
 
@@ -714,9 +612,9 @@ PhratchFilePicker >> reportPhratchProjectInfo [
 	| fullPath |
 	phratchInfoClient ifNil: [^ self].
 
-	phratchProjectFetcher ifNotNil: [
+	"phratchProjectFetcher ifNotNil: [
 		phratchProjectFetcher stopDownload.
-		phratchProjectFetcher := nil].
+		phratchProjectFetcher := nil]."
 
 	self selectedFile ifNil: [phratchInfoClient phratchInfo: nil. ^ self].
 
@@ -726,15 +624,14 @@ PhratchFilePicker >> reportPhratchProjectInfo [
 	"directory is on a server: start a fetcher to get the project info"
 	fullPath := currentDir / self selectedFile, '.scratch'.
 	
-	((phratchProjectFetcher serverName ~= currentDir serverName) |
+	"((phratchProjectFetcher serverName ~= currentDir serverName) |
 	 (phratchProjectFetcher path ~= fullPath)) ifTrue: [
-		"start fetching from the new path"
 		phratchProjectFetcher
 			startDownload: fullPath 
-			fromServer: currentDir serverName].
+			fromServer: currentDir serverName]."
 
-	(Delay forMilliseconds: 50) wait.
-	self checkForPhratchInfoFetchDone.
+	"(Delay forMilliseconds: 50) wait.
+	self checkForPhratchInfoFetchDone."
 
 ]
 
@@ -842,13 +739,13 @@ PhratchFilePicker >> step [
 		contentsPaneMorph contents submorphsDo: [:m |
 			m thumbnailReady ifTrue: [m clearThumbnailReady]]].
 
-	fetchInProgress ifTrue: [
+	"fetchInProgress ifTrue: [
 		currentDir fetchInProgress ifFalse: [
 			self getFetchedServerDirectoryContents.
-			fetchInProgress := false]].
+			fetchInProgress := false]]."
 
-	phratchProjectFetcher ifNotNil: [
-		self checkForPhratchInfoFetchDone].
+	"phratchProjectFetcher ifNotNil: [
+		self checkForPhratchInfoFetchDone]."
 
 ]
 

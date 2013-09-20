@@ -334,7 +334,6 @@ PhratchPresenterMorph >> step [
 
 	ScriptablePhratchMorph phratchOrigin: stage center.
 
-	stage phratchServer ifNotNil: [stage phratchServer stepServer].
 	self processWhenConditions.
 	self processKeyboardEvents.
 	stage stepProcesses.
