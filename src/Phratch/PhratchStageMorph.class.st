@@ -18,8 +18,7 @@ Class {
 		'sprites',
 		'isQuarterSize',
 		'cachedForm',
-		'feedbackMorph',
-		'phratchServer'
+		'feedbackMorph'
 	],
 	#category : #'Phratch-Objects'
 }

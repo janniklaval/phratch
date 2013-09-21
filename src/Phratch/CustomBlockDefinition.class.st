@@ -22,7 +22,7 @@ Class {
 CustomBlockDefinition class >> idFromSpec: aUserSpecOrCommandSpec [
 
 	|cmd out|
-	cmd := PhratchServer new parse: aUserSpecOrCommandSpec.
+	cmd := PhratchCustomBlockParser new parse: aUserSpecOrCommandSpec.
 	out := WriteStream on: String new.
 	cmd do: [:each|
 		(each asString beginsWith: '$')
@@ -152,7 +152,7 @@ CustomBlockDefinition >> commandSpec [
 { #category : #accessing }
 CustomBlockDefinition >> commandSpecFrom: aUserSpec [
 	|cmd out pname ptype|
-	cmd := PhratchServer new parse: aUserSpec.
+	cmd := PhratchCustomBlockParser new parse: aUserSpec.
 	out := WriteStream on: String new. 
 	cmd do: [:each|
 		(each asString beginsWith: '$')
@@ -379,7 +379,7 @@ CustomBlockDefinition >> parameterNames [
 CustomBlockDefinition >> parameterNamesInSpec: aString [
 
 	| cmd out |
-	cmd := PhratchServer new parse: aString.
+	cmd := PhratchCustomBlockParser new parse: aString.
 	out := OrderedCollection new.
 	cmd do: [:each|
 		(each asString beginsWith: '$')

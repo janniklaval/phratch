@@ -53,42 +53,16 @@ Scratch outputs these commands when broadcasts or global variable changes occur.
 
 "
 Class {
-	#name : #PhratchServer,
+	#name : #PhratchCustomBlockParser,
 	#superclass : #Object,
 	#instVars : [
-		'userName',
-		'sensors',
-		'in',
-		'broadcastCache'
+		'in'
 	],
-	#category : #'Phratch-Networking'
+	#category : #'Phratch-UI-Support'
 }
 
-{ #category : #utilities }
-PhratchServer class >> portNumber [
-	"Answer the port number for the Phratch server."
-
-	^ 42001
-]
-
-{ #category : #accessing }
-PhratchServer >> broadcastsSeen [
-
-	^ broadcastCache asArray sort
-
-]
-
-{ #category : #initialization }
-PhratchServer >> initialize [
-
-	userName := 'anonymous'.
-	sensors := Dictionary new.
-	broadcastCache := Set new.
-
-]
-
 { #category : #'private-command parsing' }
-PhratchServer >> parse: aString [
+PhratchCustomBlockParser >> parse: aString [
 
 	| out token |
 	in := ReadStream on: aString asString.
@@ -101,7 +75,7 @@ PhratchServer >> parse: aString [
 ]
 
 { #category : #'private-command parsing' }
-PhratchServer >> readNext [
+PhratchCustomBlockParser >> readNext [
 	"Read the next command line token from 'in' or nil if there are not more tokens. A token is a quoted string, a number, a boolean, or an unquoted string with no embedded whitespace. Strings that start with a digit or minus sign must be quoted to avoid being treated as an integer."
 
 	| ch s |
@@ -123,7 +97,7 @@ PhratchServer >> readNext [
 ]
 
 { #category : #'private-command parsing' }
-PhratchServer >> readNumber [
+PhratchCustomBlockParser >> readNumber [
 
 	| orig s sign |
 	s := self readString.
@@ -139,7 +113,7 @@ PhratchServer >> readNumber [
 ]
 
 { #category : #'private-command parsing' }
-PhratchServer >> readQuotedString [
+PhratchCustomBlockParser >> readQuotedString [
 
 	| result ch |
 	result := WriteStream on: String new.
@@ -157,7 +131,7 @@ PhratchServer >> readQuotedString [
 ]
 
 { #category : #'private-command parsing' }
-PhratchServer >> readString [
+PhratchCustomBlockParser >> readString [
 
 	| result ch |
 	result := WriteStream on: String new.
@@ -167,12 +141,5 @@ PhratchServer >> readString [
 		result nextPut: in next].
 
 	^ result contents
-
-]
-
-{ #category : #accessing }
-PhratchServer >> userName [
-
-	^ userName
 
 ]

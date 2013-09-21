@@ -11,7 +11,6 @@ Class {
 		'feedbackMorph',
 		'currentDir',
 		'extensions',
-		'fetchInProgress',
 		'showThumbnails',
 		'thumbnailFetchProcess',
 		'lastUpMSecs',
@@ -22,8 +21,7 @@ Class {
 		'freezeFocus',
 		'topBarMorph',
 		'directoryBarArrowMorph',
-		'phratchInfoClient',
-		'phratchProjectFetcher'
+		'phratchInfoClient'
 	],
 	#category : #'Phratch-UI-Dialogs'
 }
@@ -277,15 +275,15 @@ PhratchFilePicker >> getDirectoryContents [
 		ifTrue: [^ self getLocalDirectoryContents].
 
 	"remote case: start fetching directory contents and give feedback that fetch is started"
-	feedbackMorph
+	"feedbackMorph
 		contents: 'Reading from ', currentDir fullName asString, '...';
 		position: self topLeft + (20@60).
 
 	contentsPaneMorph contents removeAllMorphs.
 	contentsPaneMorph vScrollRelative: 0.
 	self addMorphFront: feedbackMorph.
-	fetchInProgress := true.
-
+	fetchInProgress := true."
+	self halt.
 ]
 
 { #category : #private }
@@ -403,7 +401,7 @@ PhratchFilePicker >> initialize [
 
 	super initialize.
 	self initFromForm: (PhratchFrameMorph skinAt: #filePickerFrame).
-	fetchInProgress := false.
+	"fetchInProgress := false."
 	showThumbnails := false.
 	finalSelection := false.
 	feedbackMorph := StringMorph new.  "used to show a remote directory fetch in progress"
@@ -734,11 +732,6 @@ PhratchFilePicker >> startThumbnailFetchProcess [
 PhratchFilePicker >> step [
 	"If I am showing thumbnails, poll my contents for thumbnails that are ready for display."
 
-	showThumbnails ifTrue: [
-		(Delay forMilliseconds: 10) wait .
-		contentsPaneMorph contents submorphsDo: [:m |
-			m thumbnailReady ifTrue: [m clearThumbnailReady]]].
-
 	"fetchInProgress ifTrue: [
 		currentDir fetchInProgress ifFalse: [
 			self getFetchedServerDirectoryContents.
@@ -747,6 +740,13 @@ PhratchFilePicker >> step [
 	"phratchProjectFetcher ifNotNil: [
 		self checkForPhratchInfoFetchDone]."
 
+	showThumbnails
+		ifFalse: [ ^ self ].
+	(Delay forMilliseconds: 10) wait.
+	contentsPaneMorph contents
+		submorphsDo: [ :m | 
+			m thumbnailReady
+				ifTrue: [ m clearThumbnailReady ] ]
 ]
 
 { #category : #stepping }
