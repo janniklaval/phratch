@@ -1761,12 +1761,11 @@ PhratchSpriteMorph >> resizeHandle [
 PhratchSpriteMorph >> rightButtonMenu [
 	"Present the right button menu."
 
-	| menu stage |
+	| menu |
 	menu := MenuMorph new defaultTarget: self.
 	menu add: 'grab screen region for new costume' translated action: #grabFromScreen.
 	menu add: 'export this sprite' translated action: #exportObject.
-	stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
-
+	
 	menu addLine.
 	menu add: 'duplicate' translated action: #duplicate.
 	menu add: 'clone' translated action: #spawn.

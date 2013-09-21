@@ -340,11 +340,10 @@ LibraryItemMorph >> rejectDropEvent: evt [
 LibraryItemMorph >> rightButtonMenu [
 	"Present the right button menu."
 
-	| menu stage |
+	| menu |
 	menu := MenuMorphNG new defaultTarget: self target.
 	menu add: 'show' translated action: #makeVisible.
-	menu add: 'export this sprite' translated action: #exportObject.
-	stage := self target ownerOrYourselfThatIsA: PhratchStageMorph.
+	menu add: 'export this sprite' translated action: #exportObject
 
 	menu addLine.
 	menu add: 'duplicate' translated action: #duplicateNoAttach.

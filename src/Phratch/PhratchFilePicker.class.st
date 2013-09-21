@@ -210,7 +210,7 @@ PhratchFilePicker >> deleteDirectory [
 PhratchFilePicker >> directoryMenu [
 	"Present a drop-down menu of all directories in my current path."
 
-	| menu pathParts prefix choice pathArg n |
+	| menu pathParts prefix choice pathArg |
 	
 	self navigationForbidden ifTrue: [^ self].
 	menu := MenuMorph new defaultTarget: self.
@@ -232,14 +232,10 @@ PhratchFilePicker >> directoryMenu [
 
 	self addDriveShortcuts: menu.
 
-	"if opening a Phratch project, allow access to servers"
-	"TODO: Looks like n is not correct arg here."
-	n := 1.
-
 	menu invokeModal.
 
 	choice := self currentDirectory.
-	"((choice isKindOf: String) or:[choice isKindOf: FileReference]) ifTrue: ["^ self currentDirectory: choice"]."
+	^ self currentDirectory: choice
 
 ]
 
@@ -607,7 +603,6 @@ PhratchFilePicker >> phratchInfoClient: anObject [
 PhratchFilePicker >> reportPhratchProjectInfo [
 	"Try to retrieve info for the currently selected Phratch project and, if successful, report it to our client."
 
-	| fullPath |
 	phratchInfoClient ifNil: [^ self].
 
 	"phratchProjectFetcher ifNotNil: [
@@ -619,18 +614,7 @@ PhratchFilePicker >> reportPhratchProjectInfo [
 	(currentDir isKindOf: AbstractFileReference ) ifTrue: [
 		^ phratchInfoClient phratchInfo: self getPhratchInfoFromFile].
 
-	"directory is on a server: start a fetcher to get the project info"
-	fullPath := currentDir / self selectedFile, '.scratch'.
-	
-	"((phratchProjectFetcher serverName ~= currentDir serverName) |
-	 (phratchProjectFetcher path ~= fullPath)) ifTrue: [
-		phratchProjectFetcher
-			startDownload: fullPath 
-			fromServer: currentDir serverName]."
-
-	"(Delay forMilliseconds: 50) wait.
-	self checkForPhratchInfoFetchDone."
-
+	self halt.
 ]
 
 { #category : #private }

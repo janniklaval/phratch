@@ -8,16 +8,6 @@ Class {
 	#category : #'Phratch-Objects'
 }
 
-{ #category : #demo }
-BYOBList class >> test [
-	"BYOBList test"
-
-	| myList |
-	myList := BYOBList new.
-	3 timesRepeat: [
-		(PhratchListMorph on: myList) openInWorld; startStepping]
-]
-
 { #category : #accessing }
 BYOBList >> at: index [
 

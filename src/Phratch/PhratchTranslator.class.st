@@ -171,12 +171,6 @@ PhratchTranslator class >> fixAmbigousRTLPunctuation [
 ]
 
 { #category : #'rendering menu' }
-PhratchTranslator class >> fontMenu [
-	self halt:'Should be removed'.
-	^ Beeper beep
-]
-
-{ #category : #'rendering menu' }
 PhratchTranslator class >> fontScaleMenu [
 	"Present a menu of font scales."
 

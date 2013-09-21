@@ -160,13 +160,7 @@ ArgMorph >> printArgOn: aStream [
 	self labelMorph
 		ifNotNil: [ 
 			v := self evaluate.
-			(v isKindOf: String)
-				ifTrue: [ 
-					aStream
-						nextPutAll: '"';
-						nextPutAll: v;
-						nextPutAll: '"' ]
-				ifFalse: [ aStream nextPutAll: v asString ] ]
+			aStream nextPutAll: v asArgString]
 ]
 
 { #category : #'object i/o' }

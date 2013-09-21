@@ -1,6 +1,11 @@
 Extension { #name : #String }
 
 { #category : #'*Phratch-Extensions' }
+String >> asArgString [
+	^ '"', self, '"'
+]
+
+{ #category : #'*Phratch-Extensions' }
 String >> asNumberNoError [
 	"Convert the given string to a number without giving errors about its format. Ignore non-digit characters and allow a leading '+', which kids sometimes type. Answer zero if empty."
 

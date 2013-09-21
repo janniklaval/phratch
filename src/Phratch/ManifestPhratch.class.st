@@ -11,7 +11,7 @@ ManifestPhratch class >> rejectClasses [
 
 { #category : #'meta data' }
 ManifestPhratch class >> rejectRules [
-^ #()
+^ #('InconsistentMethodClassificationRule')
 ]
 
 { #category : #'meta data' }
