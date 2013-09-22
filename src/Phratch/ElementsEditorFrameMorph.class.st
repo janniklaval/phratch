@@ -249,9 +249,6 @@ ElementsEditorFrameMorph >> updateResizeMorph [
 { #category : #interaction }
 ElementsEditorFrameMorph >> yes [
 	"Yes button was pressed."
-	SyntaxElementMorph allSubInstances do: [:element |
-		(element ownerThatIsA: ElementsMethodEditorMorph)
-			ifNil: [element delete]].
 	self rememberUserDimensions.
 	super yes.
 ]

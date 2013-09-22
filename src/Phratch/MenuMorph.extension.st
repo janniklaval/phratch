@@ -27,13 +27,6 @@ MenuMorph >> localize [
 ]
 
 { #category : #'*Phratch' }
-MenuMorph >> popUpAt: aPosition forActiveHandIn: aWorld [
-	"Present this menu under control of the given hand."
-	^self popUpAt: aPosition forHand: aWorld activeHand in: aWorld
-
-]
-
-{ #category : #'*Phratch' }
 MenuMorph >> popUpAt: aPosition inWorld: aWorld [
 	"Present this menu under control of the given hand."
 	^self popUpAt: aPosition forHand: aWorld primaryHand in: aWorld

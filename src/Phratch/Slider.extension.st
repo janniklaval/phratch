@@ -8,10 +8,6 @@ Slider >> fieldsVersion [
 ]
 
 { #category : #'*Phratch-Extensions' }
-Slider >> hasMenuButton: ignored [
-]
-
-{ #category : #'*Phratch-Extensions' }
 Slider >> initFieldsFrom: anObjStream version: classVersion [
 	super initFieldsFrom: anObjStream version: classVersion.
 	self

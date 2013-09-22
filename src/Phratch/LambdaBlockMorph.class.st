@@ -288,15 +288,6 @@ LambdaBlockMorph >> removeLastArg [
 
 ]
 
-{ #category : #variable }
-LambdaBlockMorph >> removeVariable: aVariable [
-	variables remove: aVariable.
-	initialFrame remove: aVariable.
-	variables isEmpty ifFalse: [
-		self rightButtonMenu]
-
-]
-
 { #category : #'events-processing' }
 LambdaBlockMorph >> renameParm: old to: new [
 
