@@ -7575,17 +7575,6 @@ ScriptablePhratchMorph >> undeleteAttribute: aSymbol [
 	w setCategoryColor: block color
 ]
 
-{ #category : #private }
-ScriptablePhratchMorph >> undoableDeleteSprite [
-	"Delete the sprite and store it in the clipboard in case of an undo."
-
-	self notEditingBlock ifFalse: [^self].
-	self unhinge; unhingeAll.
-	PhratchFrameMorph putInClipboard: self.
-	self deleteSprite.
-
-]
-
 { #category : #byob }
 ScriptablePhratchMorph >> unloadUnusedCustomBlocks [
 

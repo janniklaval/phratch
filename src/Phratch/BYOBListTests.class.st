@@ -4,7 +4,7 @@ Class {
 	#category : #'Phratch-Tests'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #tests }
 BYOBListTests >> test [
 
 	| myList |

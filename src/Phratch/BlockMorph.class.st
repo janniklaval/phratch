@@ -223,9 +223,7 @@ BlockMorph >> closestAttachTargetIn: newOwner [
 
 	| xThresh yThresh attachPoints best bestDist targetP dist ref topUsed bottomUsed |
 	xThresh := 65.
-	yThresh := ((self isKindOf: CBlockMorph) and: [ (self nestedBlockAt: self top + self topBarHeight) isNil ])
-		ifTrue: [ 25 ]
-		ifFalse: [ 14 ].
+	yThresh := self yThresh.
 	topUsed := false.
 	bottomUsed := false.
 	attachPoints := OrderedCollection new: 100.
@@ -1748,4 +1746,10 @@ BlockMorph >> updateCachedForm [
 	cachedForm := c form.
 	lastLayoutTime := Time millisecondClockValue.
 
+]
+
+{ #category : #accessing }
+BlockMorph >> yThresh [
+	
+	^ 14
 ]

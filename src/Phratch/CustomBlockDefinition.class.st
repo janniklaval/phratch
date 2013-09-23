@@ -5,7 +5,6 @@ Class {
 		'userSpec',
 		'blockVars',
 		'body',
-		'isReporter',
 		'isAtomic',
 		'isBoolean',
 		'answer',
@@ -180,7 +179,7 @@ CustomBlockDefinition >> deduceType [
 	"private - set my return type from the BYOB deprecated legacy attributes #isReporter and #isBoolean.
 	use this when reading an old block from file"
 
-	isReporter ifFalse: [ ^ type := #none ].
+	self isReporter ifFalse: [ ^ type := #none ].
 	isBoolean ifTrue: [ ^ type := #boolean ].
 	^ type := #any
 ]
@@ -245,7 +244,6 @@ CustomBlockDefinition >> initFieldsFrom: anObjStream version: classVersion [
 		userSpec
 		blockVars
 		isAtomic
-		isReporter
 		isBoolean
 		body
 		answer
@@ -281,7 +279,6 @@ CustomBlockDefinition >> initialize [
 	declarations := Dictionary new.
 	defaults := Dictionary new.
 	isAtomic := true.
-	isReporter := false.
 	isBoolean := false.
 	blockVars := Set new.
 	isGlobal := true
@@ -325,7 +322,7 @@ CustomBlockDefinition >> isGlobal: bool [
 CustomBlockDefinition >> isReporter [
 	"deprecated, kept for BYOB legacy support"
 
-	^isReporter
+	^false
 ]
 
 { #category : #migrating }
@@ -441,7 +438,6 @@ CustomBlockDefinition >> storeFieldsOn: anObjStream [
 		userSpec
 		blockVars
 		isAtomic
-		isReporter
 		isBoolean
 		body
 		answer

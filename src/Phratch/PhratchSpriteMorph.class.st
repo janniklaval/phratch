@@ -2371,6 +2371,17 @@ PhratchSpriteMorph >> turnRight: degrees [
 
 ]
 
+{ #category : #private }
+PhratchSpriteMorph >> undoableDeleteSprite [
+	"Delete the sprite and store it in the clipboard in case of an undo."
+
+	self notEditingBlock ifFalse: [^self].
+	self unhinge; unhingeAll.
+	PhratchFrameMorph putInClipboard: self.
+	self deleteSprite.
+
+]
+
 { #category : #nesting }
 PhratchSpriteMorph >> unhinge [
 

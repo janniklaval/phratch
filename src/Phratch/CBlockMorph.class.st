@@ -532,3 +532,11 @@ CBlockMorph >> topBarHeight [
 
 
 ]
+
+{ #category : #accessing }
+CBlockMorph >> yThresh [
+
+	(self nestedBlockAt: self top + self topBarHeight) 
+		ifNil: [ ^ 25 ].
+	^ 14
+]
