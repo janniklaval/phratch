@@ -7,8 +7,12 @@ Class {
 { #category : #tests }
 BYOBListTests >> test [
 
-	| myList |
+	| myList morphs |
 	myList := BYOBList new.
+	morphs := OrderedCollection new.
 	3 timesRepeat: [
-		(PhratchListMorph on: myList) openInWorld; startStepping]
+		morphs add: ((PhratchListMorph on: myList) openInWorld; startStepping)].
+	morphs do: [:aMorph |
+		aMorph hide].
+	self assert: true.
 ]

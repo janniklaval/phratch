@@ -6797,7 +6797,7 @@ ScriptablePhratchMorph >> serialized [
 	objToExport := self copyForExport.
 	objToExport firstSubmorph allSubsprites do: [:eachSub |
 		eachSub owner ifNil: [objToExport addMorphBack: eachSub ]].
-	ObjStream new storeObj: objToExport on: s showProgress: false.
+	ObjStream new storeObj: objToExport on: s.
 	^ s contents
 
 
