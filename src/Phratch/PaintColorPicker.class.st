@@ -53,10 +53,11 @@ PaintColorPicker >> createColorWheels [
 		h := x * 360 // fx.
 		0 to: (fy // 2) do: [:y |
 			c := Color h: h s: (y / (fy // 2)) v: 1.0.
-			f fill: (x@y extent: 1) fillColor: c].
+			
+			f fill: (x@y extent: 1@1) fillColor: c].
 		((fy // 2) + 1) to: fy do: [:y |
 			c := Color h: h s: 1.0 v: (fy - y) / (fy // 2).
-			f fill: (x@y extent: 1) fillColor: c]].
+			f fill: (x@y extent: 1@1) fillColor: c]].
 	0 to: fx2 do: [:x |
 		c := Color gray: (x / fx2).
 		f2 fill: ((x@0) extent: (1@fy2)) fillColor: c].

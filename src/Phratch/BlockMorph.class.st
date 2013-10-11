@@ -100,9 +100,17 @@ BlockMorph >> addHLineFrom: startX to: endX y: yOffset color: c to: coll [
 { #category : #byob }
 BlockMorph >> addPoint: aPoint color: c to: coll [
 
-	coll add: (Array 
+	self flag:'need to be removed after Pharo2.0 version'.
+	SystemVersion current major >= 3 ifTrue:[
+		coll add: (Array 
+				with: (self topLeft + aPoint extent: 1@1)
+				with: c)
+	] ifFalse: [ 
+		coll add: (Array 
 				with: (self topLeft + aPoint extent: 1)
 				with: c)
+	].
+	
 
 ]
 
@@ -577,7 +585,8 @@ BlockMorph >> drawOn: aCanvas [
 { #category : #drawing }
 BlockMorph >> drawPoint: aPoint color: c on: aCanvas [
 
-	aCanvas fillRectangle: (self topLeft + aPoint extent: 1) color: c.
+	aCanvas fillRectangle: (self topLeft + aPoint extent: 1@1) color: c.
+	
 
 ]
 

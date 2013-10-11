@@ -516,7 +516,7 @@ PaintFrame >> newFormTextBoxAndRegPoint [
 		ifFalse: [
 			r := canvasMorph canvasForm rectangleEnclosingPixelsNotOfColor: Color transparent.
 			((r area = 0) & textBox isNil) ifTrue: [^ nil].  "empty canvas and no text"
-			r area = 0 ifTrue: [r := textBox position extent: 1].  "text only"
+			r area = 0 ifTrue: [r := textBox position extent: 1@1].  "text only"
 			textBox ifNotNil: [
 				r := r merge: textBox bounds.
 				textBox position: textBox position - r origin].

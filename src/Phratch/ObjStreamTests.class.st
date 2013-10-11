@@ -90,8 +90,8 @@ ObjStreamTests >> testFixedFormatClass [
 	self equalityTest: (Color red alpha: 0.5).
 	self equalityTest: 2 @ 3.14159.
 	self equalityTest: (0@0 extent: 2.5).
-	self formEqualityTest: (Form fromDisplay: (0@0 extent: 10)).
-	self formEqualityTest: ((Form fromDisplay: (0@0 extent: 10)) colorReduced).
+	self formEqualityTest: (Form fromDisplay: (0@0 extent: 10@10)).
+	self formEqualityTest: ((Form fromDisplay: (0@0 extent: 10@10)) colorReduced).
 
 	shared := #Shared.
 	self equalityTest: (Point x: shared y: shared).
