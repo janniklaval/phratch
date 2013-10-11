@@ -19,7 +19,15 @@ PhratchInstaller class >> beginInstall [
              name: 'Phratch external files'
              code: [PhratchInstaller externalVerification.]).
 	StartupLoader default addAtStartupInImageDirectory: items.
-	StartupLoader default loadStartupScript.
+	
+	self flag:'need to be removed after Pharo2.0 version'.
+	SystemVersion current major >= 3 ifTrue:[
+		StartupLoader default loadFromDefaultLocations.
+	] ifFalse: [ 
+		StartupLoader default loadStartupScript.
+	].
+
+	
 
 	AbstractSound initialize.
 	SampledSound initialize.
