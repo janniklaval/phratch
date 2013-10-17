@@ -3400,13 +3400,13 @@ PhratchFrameMorph >> updateHistoryProjectName: projName op: operation [
 	projectInfo at: 'phratch-version' put: Version.
 	projectInfo at: 'language' put: PhratchTranslator currentLanguage.
 
-	platform :=  OSPlatform platformName.
+	platform :=  Smalltalk os name.
 	platform ifNil: [platform := 'unknown'].
 	'linux' = platform ifTrue: [
 		Display extent = (1200@900) ifTrue: [platform := 'XO']].
 	projectInfo at: 'platform' put: platform.
 
-	osVersion :=  OSPlatform osVersion.
+	osVersion :=  Smalltalk os version.
 	osVersion ifNil: [osVersion := 'unknown'].
 	projectInfo at: 'os-version' put: osVersion.
 

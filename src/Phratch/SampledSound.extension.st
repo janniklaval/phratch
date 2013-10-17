@@ -264,7 +264,6 @@ SampledSound >> setSamples: anArray from: startIndex to: endIndex samplingRate: 
 	originalSamplingRate := rate.
 	self loudness: loudness.
 	initialCount := (endIndex - (startIndex - 1)) * SoundPlayer samplingRate // rate.
-	scaledInitialIndex := startIndex * IncrementScaleFactor.	"scaled index of the first sample to play"
 	self reset
 ]
 
