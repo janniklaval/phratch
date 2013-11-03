@@ -6,12 +6,8 @@ Class {
 
 { #category : #'error handling' }
 PhratchError class >> error [	
-	ScriptablePhratchMorph noviceMode ifTrue:[
-		^Beeper beep]
-	ifFalse:[
-		^super error.
-	]
-
+	
+	self error: 'an error occured in Phratch'
 ]
 
 { #category : #'error handling' }

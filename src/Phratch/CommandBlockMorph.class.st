@@ -583,23 +583,23 @@ CommandBlockMorph >> evaluateInfixWithArgs: rawArgs [
 			((args first isKindOf: String) and: [ args second isKindOf: Boolean ])
 				ifTrue: [ 
 					args first = 'true'
-						ifTrue: [ ^ args second = true ].
+						ifTrue: [ ^ args second ].
 					args first = 'false'
-						ifTrue: [ ^ args second = false ].
+						ifTrue: [ ^ args second not ].
 					args first = (PhratchTranslator translationFor: 'true')
-						ifTrue: [ ^ args second = true ].
+						ifTrue: [ ^ args second ].
 					args first = (PhratchTranslator translationFor: 'false')
-						ifTrue: [ ^ args second = false ] ].
+						ifTrue: [ ^ args second not ] ].
 			((args first isKindOf: Boolean) and: [ args second isKindOf: String ])
 				ifTrue: [ 
 					args second = 'true'
-						ifTrue: [ ^ args first = true ].
+						ifTrue: [ ^ args first ].
 					args second = 'false'
-						ifTrue: [ ^ args first = false ].
+						ifTrue: [ ^ args first not ].
 					args second = (PhratchTranslator translationFor: 'true')
-						ifTrue: [ ^ args first = true ].
+						ifTrue: [ ^ args first ].
 					args second = (PhratchTranslator translationFor: 'false')
-						ifTrue: [ ^ args first = false ] ] ].
+						ifTrue: [ ^ args first not ] ] ].
 	(#(#< #= #>) includes: selector)
 		ifTrue: [ 
 			((args first isKindOf: String) or: [ args second isKindOf: String ])

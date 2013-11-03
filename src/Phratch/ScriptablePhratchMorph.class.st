@@ -448,7 +448,7 @@ ScriptablePhratchMorph >> addColor: colorName [
 	isGlobal := false.
 	(stage := self ownerOrYourselfThatIsA: PhratchStageMorph)
 		ifNotNil: [isGlobal := stage colorNames includes: colorName asString].
-	((colors includesKey: colorName asString) or: [isGlobal = true]) ifFalse: [
+	((colors includesKey: colorName asString) or: [isGlobal]) ifFalse: [
 		colors at: colorName asString put: (Color black)].
 	sFrame viewerPane categoryChanged: 'colors'.
 ]
@@ -3865,7 +3865,7 @@ ScriptablePhratchMorph >> ensureCustomBlockExists: aBlockDef global: bool [
 
 	stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
 
-	(bool = false or: [stage isNil]) ifTrue: [
+	(bool not or: [stage isNil]) ifTrue: [
 		^ self ensureCustomBlockExists: aBlockDef].
 
 	stage sprites, {stage} do: [:obj |

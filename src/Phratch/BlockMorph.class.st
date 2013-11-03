@@ -100,18 +100,9 @@ BlockMorph >> addHLineFrom: startX to: endX y: yOffset color: c to: coll [
 { #category : #byob }
 BlockMorph >> addPoint: aPoint color: c to: coll [
 
-	self flag:'need to be removed after Pharo2.0 version'.
-	SystemVersion current major >= 3 ifTrue:[
-		coll add: (Array 
+	coll add: (Array 
 				with: (self topLeft + aPoint extent: 1@1)
 				with: c)
-	] ifFalse: [ 
-		coll add: (Array 
-				with: (self topLeft + aPoint extent: 1)
-				with: c)
-	].
-	
-
 ]
 
 { #category : #converting }
@@ -1447,7 +1438,8 @@ BlockMorph >> phratchProc [
 { #category : #processes }
 BlockMorph >> phratchProc: aPhratchProcess [
 
-	hadError == true ifTrue: [cachedFeedbackForm := nil].
+	hadError ifNil:[hadError := false].
+	hadError ifTrue: [cachedFeedbackForm := nil].
 	hadError := false.
 	phratchProc := aPhratchProcess.
 	self changed.

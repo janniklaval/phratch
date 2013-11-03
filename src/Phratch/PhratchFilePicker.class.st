@@ -267,19 +267,7 @@ PhratchFilePicker >> getDirectoryContents [
 
 	feedbackMorph delete.
 
-	(currentDir isKindOf: FileReference )
-		ifTrue: [^ self getLocalDirectoryContents].
-
-	"remote case: start fetching directory contents and give feedback that fetch is started"
-	"feedbackMorph
-		contents: 'Reading from ', currentDir fullName asString, '...';
-		position: self topLeft + (20@60).
-
-	contentsPaneMorph contents removeAllMorphs.
-	contentsPaneMorph vScrollRelative: 0.
-	self addMorphFront: feedbackMorph.
-	fetchInProgress := true."
-	self halt.
+	^ self getLocalDirectoryContents
 ]
 
 { #category : #private }
@@ -604,17 +592,9 @@ PhratchFilePicker >> reportPhratchProjectInfo [
 	"Try to retrieve info for the currently selected Phratch project and, if successful, report it to our client."
 
 	phratchInfoClient ifNil: [^ self].
-
-	"phratchProjectFetcher ifNotNil: [
-		phratchProjectFetcher stopDownload.
-		phratchProjectFetcher := nil]."
-
 	self selectedFile ifNil: [phratchInfoClient phratchInfo: nil. ^ self].
 
-	(currentDir isKindOf: AbstractFileReference ) ifTrue: [
-		^ phratchInfoClient phratchInfo: self getPhratchInfoFromFile].
-
-	self halt.
+	^ phratchInfoClient phratchInfo: self getPhratchInfoFromFile
 ]
 
 { #category : #private }
