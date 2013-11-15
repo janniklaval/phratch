@@ -129,9 +129,13 @@ ConfigurationOfPhratch >> baseline10: spec [
 					repository: 'http://www.squeaksource.com/MetacelloRepository'; 
 					className: 'ConfigurationOfOSProcess';
 					version: #stable ].
-			spec package: 'Phratch' with: [ 
-				spec requires: #('Sound' 'OSProcess')
-			].
+	].
+	spec for: #'pharo2.x' do: [
+			spec repository: 'http://smalltalkhub.com/mc/JLaval/Phratch/main'.
+			spec
+				package: 'Phratch' with: [ 
+					spec requires: #('Sound' 'OSProcess')
+			]
 	].
 	spec for: #'pharo3.x' do: [
 			spec repository: 'http://smalltalkhub.com/mc/JLaval/Phratch/main'.
@@ -140,7 +144,7 @@ ConfigurationOfPhratch >> baseline10: spec [
 			spec
 				package: 'Phratch' with: [ 
 					spec requires: #('Sound' 'OSProcess' 'PhratchCompatibilityPharo3')
-				]
+			]
 	]
 ]
 
