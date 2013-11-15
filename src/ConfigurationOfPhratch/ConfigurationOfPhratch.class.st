@@ -136,8 +136,10 @@ ConfigurationOfPhratch >> baseline10: spec [
 	spec for: #'pharo3.x' do: [
 			spec repository: 'http://smalltalkhub.com/mc/JLaval/Phratch/main'.
 			spec
-				package: 'PhratchCompatibilityPharo3' with: [ 
-					spec requires: #('Phratch')
+				package: 'PhratchCompatibilityPharo3'.
+			spec
+				package: 'Phratch' with: [ 
+					spec requires: #('Sound' 'OSProcess' 'PhratchCompatibilityPharo3')
 				]
 	]
 ]
