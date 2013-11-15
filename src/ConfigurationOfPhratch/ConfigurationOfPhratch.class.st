@@ -133,6 +133,13 @@ ConfigurationOfPhratch >> baseline10: spec [
 				spec requires: #('Sound' 'OSProcess')
 			].
 	].
+	spec for: #'pharo3.x' do: [
+			spec repository: 'http://smalltalkhub.com/mc/JLaval/Phratch/main'.
+			spec
+				package: 'PhratchCompatibilityPharo3' with: [ 
+					spec requires: #('Phratch')
+				]
+	]
 ]
 
 { #category : #'as yet unclassified' }
@@ -171,5 +178,10 @@ ConfigurationOfPhratch >> version10: spec [
 			spec
 				project: 'Sound' with: #stable;
 				project: 'OSProcess' with: #stable.
+	].
+	spec for: #'pharo3.x' do: [
+			spec repository: 'http://smalltalkhub.com/mc/JLaval/Phratch/main'.
+			spec
+				package: 'PhratchCompatibilityPharo3'.
 	]
 ]
