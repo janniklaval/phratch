@@ -2392,6 +2392,36 @@ PhratchFrameMorph >> openPhratchProjectNamed: fName [
 
 ]
 
+{ #category : #'falta adaptar' }
+PhratchFrameMorph >> openSilentlyPhratchProjectNamed: fName [
+	"Open a Phratch project with the given name."
+
+	| f projData newProj dir fn|
+	"self closeMediaEditorsAndDialogs ifFalse: [^ self]."
+	fn := fName.
+	f := FileStream readOnlyFileNamedOrNil: fn.
+ 	f ifNil: ["try a different encoding, fixes a Firefox bug, -Jens"
+		fn := fName fullName.
+		f := FileStream readOnlyFileNamedOrNil: fn.
+		f ifNil: [^ self" inform: 'Could not read' withDetails: fName"]].
+
+	"["
+		projData := f binary contentsOfEntireFile.
+		newProj := self extractProjectFrom: projData.
+		projectInfo := self extractInfoFrom: projData.
+	"] ifError: [:err :rcvr | ^ self inform: 'Could not read project; file may be damaged' withDetails: '(', err, ')']."
+
+	dir := (fn) parent.
+	projectDirectory := dir.
+	PhratchFileChooserDialog setLastFolderTo: projectDirectory forType: #project.
+	projectName := ( fn) basename.
+
+	self installNewProject: newProj.
+	self initializeWatcherPositions.
+	viewerPane updateContents.
+
+]
+
 { #category : #'menu/button actions' }
 PhratchFrameMorph >> ownerChanged [
 	"The receiver's owner has changed its layout.

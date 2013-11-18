@@ -37,7 +37,7 @@ PhratchFileTests >> firstSprite [
 
 { #category : #useful }
 PhratchFileTests >> openProject: fileName [
-	window openPhratchProjectNamed: window projectDirectory / fileName
+	window openSilentlyPhratchProjectNamed: window projectDirectory / fileName
 ]
 
 { #category : #useful }
