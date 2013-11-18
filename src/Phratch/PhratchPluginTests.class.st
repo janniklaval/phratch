@@ -17,7 +17,7 @@ PhratchPluginTests >> brightnessShiftTest [
 	"[Sensor anyButtonPressed] whileFalse: ["
 		shift := ((Sensor cursorPoint x - Display center x) * 220) // Display width.
 		PhratchPlugin primShiftBrightness: f bits into: fOut bits by: shift.
-		fOut display"]".
+		"fOut display""]".
 
 ]
 
@@ -29,7 +29,7 @@ PhratchPluginTests >> doubleTest [
 	f := (Form fromFileNamed: TestFileName) asFormOfDepth: 32.
 	fOut := Form extent: (2 * f extent) + 20 depth: 32.
 	PhratchPlugin primDouble: f bits w: f width h: f height into: fOut bits w: fOut width h: fOut height x: 9 y: 10.
-	fOut display.
+	"fOut display."
 
 
 ]
@@ -48,14 +48,14 @@ PhratchPluginTests >> filterBenchmark: count [
 		nextPutAll: (msecs asFloat / count roundTo: 0.01) printString;
 		nextPutAll: ' msecs';
 		cr.
-	fOut display.
+	"fOut display."
 	msecs := [ count timesRepeat: [ PhratchPlugin primShiftBrightness: f bits into: fOut bits by: 50 ] ] timeToRun.
 	s
 		nextPutAll: 'brightness shift: ';
 		nextPutAll: (msecs asFloat / count roundTo: 0.01) printString;
 		nextPutAll: ' msecs';
 		cr.
-	fOut display.
+	"fOut display."
 	msecs := [ 
 	count
 		timesRepeat: [ 
@@ -69,7 +69,7 @@ PhratchPluginTests >> filterBenchmark: count [
 		nextPutAll: (msecs asFloat / count roundTo: 0.01) printString;
 		nextPutAll: ' msecs';
 		cr.
-	fOut display.
+	"fOut display."
 	msecs := [ 
 	count
 		timesRepeat: [ 
@@ -83,7 +83,7 @@ PhratchPluginTests >> filterBenchmark: count [
 		nextPutAll: (msecs asFloat / count roundTo: 0.01) printString;
 		nextPutAll: ' msecs';
 		cr.
-	fOut display.
+	"fOut display."
 	msecs := [ count timesRepeat: [ fOut display ] ] timeToRun.
 	s
 		nextPutAll: 'display: ';
@@ -100,10 +100,10 @@ PhratchPluginTests >> fisheyeTest [
 	| f fOut |
 	f := (Form fromFileNamed: TestFileName) asFormOfDepth: 32.
 	fOut := f deepCopy.
-	f display.
+	"f display."
 	100 to: 300 by: 10 do: [:power |
 		PhratchPlugin primFisheye: f bits into: fOut bits width: f width power: power.
-		fOut display].
+		"fOut display"].
 
 ]
 
@@ -114,9 +114,9 @@ PhratchPluginTests >> fisheyeTest2: power [
 	| f fOut |
 	f := (Form fromFileNamed: TestFileName) asFormOfDepth: 32.
 	fOut := f deepCopy.
-	f display.
+	"f display."
 	PhratchPlugin primFisheye: f bits into: fOut bits width: f width power: power.
-	fOut display.
+"	fOut display."
 
 ]
 
@@ -132,8 +132,8 @@ PhratchPluginTests >> halfSizeAverageTest [
 		into: fOut bits w: fOut width h: fOut height
 		srcX: 0 srcY: 0
 		dstX: 0 dstY: 0 dstW: fOut width dstH: fOut height.
-	f display.
-	fOut display.
+	"f display.
+	fOut display."
 
 
 ]
@@ -148,7 +148,7 @@ PhratchPluginTests >> hueShiftTest [
 	"[Sensor anyButtonPressed] whileFalse: ["
 		shift := ((Sensor cursorPoint x - Display center x) * 380 * 2) // Display width.
 		PhratchPlugin primShiftHue: f bits into: fOut bits byDegrees: shift.
-		fOut display"]".
+		"fOut display""]".
 
 ]
 
@@ -228,7 +228,7 @@ PhratchPluginTests >> videoTest [
 		
 			startTime ifNil: [startTime := Time millisecondClockValue].
 			frameCount := frameCount + 1.
-			f display.
+		"	f display."
 	Sensor waitNoButton.
 	msecs := Time millisecondClockValue - startTime.
 	CameraPlugin closeCamera: 1.
@@ -247,6 +247,6 @@ PhratchPluginTests >> whirlTest [
 	"[Sensor anyButtonPressed] whileFalse: ["
 		degrees := ((Sensor cursorPoint x - Display center x) * 450 * 2) // Display width.
 		PhratchPlugin primWhirl: f bits into: fOut bits width: f width angle: degrees.
-		fOut display"]".
+		"fOut display""]".
 
 ]

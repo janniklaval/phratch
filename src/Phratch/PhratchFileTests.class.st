@@ -48,7 +48,8 @@ PhratchFileTests >> saveProject: fileName [
 
 { #category : #running }
 PhratchFileTests >> setUp [
-	window := PhratchFrameMorph open
+	window := PhratchFrameMorph new startup .
+	"window := PhratchFrameMorph open"
 ]
 
 { #category : #useful }
