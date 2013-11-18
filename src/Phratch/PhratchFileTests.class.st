@@ -250,3 +250,108 @@ PhratchFileTests >> testSaveTenBlocks [
 	blocksStage paddedWith: commandBlocksSprite do: [:a :b | self assert:( a codeString = b codeString) ].
 
 ]
+
+{ #category : #tests }
+PhratchFileTests >> testSaveWithBroadcast [
+	"Test that saving scripts with variables works. 
+	Currently this fails as variables are loaded back with name replaced by int."
+
+	| sprite fileName commandBlock1 commandBlock2 blocks |
+	fileName := '_testSaveScriptWithBroadcast.phr'.
+	sprite := self firstSprite.
+	self assert: sprite objName = 'Sprite1'.
+	
+	
+	commandBlock1 := self addBlock: #('broadcast $Event$' - broadcast: 'aBroadcast') toSprite: self firstSprite.
+	commandBlock1 defaultArgs: #('aBroadcast').
+	commandBlock2 := self addBlock: #('when I receive $Event$' #E whenEventReceived) toSprite: self firstSprite.
+	commandBlock2 eventName: 'aBroadcast'.
+
+	self saveProject: fileName.
+	window newPhratchProject.
+	self openProject: fileName.
+	
+	"Use codeString to compare blocks, to check that they are equivalent"
+	blocks := self firstSprite blocksBin submorphs.
+	self assert: blocks first codeString = commandBlock1 codeString.
+	self assert: blocks second codeString = commandBlock2 codeString.
+
+]
+
+{ #category : #tests }
+PhratchFileTests >> testSaveWithList [
+	"Test that saving scripts with variables works. 
+	Currently this fails as variables are loaded back with name replaced by int."
+
+	| sprite fileName |
+	fileName := '_testSaveScriptWithVariable.phr'.
+	sprite := self firstSprite.
+	self assert: sprite objName = 'Sprite1'.
+	
+	sprite createListNamed: 'aList'.
+	self assert: (sprite lists includesKey: 'aList').
+	
+	sprite append: '42' toList: 'aList'.
+	self assert: (sprite getLine: 1 ofList:  'aList') = '42'.
+	
+	self saveProject: fileName.
+	window newPhratchProject.
+	sprite := self firstSprite.
+	self assert: (sprite lists includesKey: 'aList') not.
+	
+	self openProject: fileName.
+	sprite := self firstSprite.
+	self assert: (sprite lists includesKey: 'aList'). "fails"
+	self assert: (sprite getLine: 1 ofList:  'aList') = '42'.
+	
+]
+
+{ #category : #tests }
+PhratchFileTests >> testSaveWithVariable [
+	"Test that saving scripts with variables works. 
+	Currently this fails as variables are loaded back with name replaced by int."
+
+	| sprite fileName |
+	fileName := '_testSaveScriptWithVariable.phr'.
+	sprite := self firstSprite.
+	self assert: sprite objName = 'Sprite1'.
+	
+	sprite addVariable: 'name'.
+	self assert: (sprite varNames includes: 'name').
+	
+	self saveProject: fileName.
+	window newPhratchProject.
+	sprite := self firstSprite.
+	self assert: (sprite varNames includes: 'name') not.
+	
+	self openProject: fileName.
+	sprite := self firstSprite.
+	self assert: (sprite varNames includes: 'name'). "fails"
+	
+	
+]
+
+{ #category : #tests }
+PhratchFileTests >> testSaveWithVariableValued [
+	"Test that saving scripts with variables works. 
+	Currently this fails as variables are loaded back with name replaced by int."
+
+	| sprite fileName |
+	fileName := '_testSaveScriptWithVariable.phr'.
+	sprite := self firstSprite.
+	self assert: sprite objName = 'Sprite1'.
+	
+	sprite addVariable: 'aNumber' value: 42.
+	self assert: (sprite varNames includes: 'aNumber').
+	
+	self saveProject: fileName.
+	window newPhratchProject.
+	sprite := self firstSprite.
+	self assert: (sprite varNames includes: 'aNumber') not.
+	
+	self openProject: fileName.
+	sprite := self firstSprite.
+	self assert: (sprite varNames includes: 'aNumber'). "fails"
+	self assert: (sprite getVar: 'aNumber') = 42.
+	
+]
