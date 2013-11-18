@@ -3156,7 +3156,7 @@ PhratchFrameMorph >> startup [
 	self newPhratchProject.
 
 	fileName := startupFileNames
-		detect: [:fn | (fn asLowercase endsWith: '.sprite') or: [fn asLowercase endsWith: '.ysp']]
+		detect: [:fn | (fn asLowercase endsWith: '.sprite') or: [(fn asLowercase endsWith: '.ysp') or: [fn asLowercase endsWith: '.phr']]]
 		ifNone: [^ self].
 
 	"open a .sprite file"
