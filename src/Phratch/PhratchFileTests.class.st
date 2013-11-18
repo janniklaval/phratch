@@ -65,6 +65,26 @@ PhratchFileTests >> tearDown [
 ]
 
 { #category : #tests }
+PhratchFileTests >> testNewProject [
+	"Test that newPhratchProject clears out changes"
+
+	| sprite fileName |
+	fileName := '_testNewProject.phr'.
+	sprite := self firstSprite.
+	self assert: sprite objName = 'Sprite1'.	
+	
+	"Make a change and save"
+	sprite objName: 'A sprite'.
+	self saveProject: fileName.	
+		
+	"Now create new project and confirm all back to start"
+	window newPhratchProject.
+	sprite := self firstSprite.
+	self assert: sprite objName = 'Sprite1'.	
+	
+]
+
+{ #category : #tests }
 PhratchFileTests >> testSave [
 	"Test a simple save, with a sprite name change, and that reloading the saved file works."
 
@@ -83,38 +103,6 @@ PhratchFileTests >> testSave [
 	
 	sprite := self firstSprite.
 	self assert: sprite objName = 'A sprite'.
-]
-
-{ #category : #tests }
-PhratchFileTests >> testSaveAgain [
-	"Test repeated saves, with a sprite name change, and that reloading the saved file works. 
-	
-	We use savePhratchProjectNoDialog instead of writePhratchProject as this mirrors the menu 
-	actions (and at the time of writing is buggy)."
-
-	| sprite projectName |
-	projectName := '_testSaveAgain'.
-	window projectName: projectName.
-	
-	sprite := self firstSprite.
-	self assert: sprite objName = 'Sprite1'.	
-	
-	"Make a change and save"
-	sprite objName: 'Cat'.
-	window savePhratchProjectNoDialog.
-	self assert: window projectName = projectName.
-		
-	"Make another change"
-	sprite objName: 'TopCat'.
-	window savePhratchProjectNoDialog.
-	self assert: window projectName = projectName.
-	
-	"Now make some changes that will get overwritten when we reload the project"
-	sprite objName: 'Another Name'.
-	self openProject: projectName, '.phr'.
-	
-	sprite := self firstSprite.
-	self assert: sprite objName = 'TopCat'.
 ]
 
 { #category : #tests }
