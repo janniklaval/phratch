@@ -3728,6 +3728,8 @@ PhratchFrameMorph >> writePhratchProject [
 				out nextPutAll: 'PhratchV01' asByteArray. "changed the internal version marker for the byob-prototype -Jens"
 				self storeProjectInfoOn: out.
 				ObjStream new storeObj: workPane on: out.
+				"FLSerializer serialize: workPane on: out."
+				
 				out close].
 	] ifError: [:err :rcvr |
 		out ifNotNil: [

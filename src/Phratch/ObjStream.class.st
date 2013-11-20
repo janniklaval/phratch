@@ -784,6 +784,7 @@ ObjStream >> readObjFrom: aStream showProgress: showProgress [
 
 	| objCount tenPercent |
 	objects := OrderedCollection new.
+	"stream := FLMaterializer newDefault materializeFrom: aStream."
 	stream := aStream.
 	self readFileHeader.
 	firstPass := true.

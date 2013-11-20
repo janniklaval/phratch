@@ -343,7 +343,7 @@ LibraryItemMorph >> rightButtonMenu [
 	| menu |
 	menu := MenuMorphNG new defaultTarget: self target.
 	menu add: 'show' translated action: #makeVisible.
-	menu add: 'export this sprite' translated action: #exportObject
+	menu add: 'export this sprite' translated action: #exportObject.
 
 	menu addLine.
 	menu add: 'duplicate' translated action: #duplicateNoAttach.
