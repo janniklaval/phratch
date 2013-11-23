@@ -1058,8 +1058,6 @@ CommandBlockMorph >> oldUncoloredArgMorphFor: specString [
 		yourself].
 	$4 		= code ifTrue: [^ ExpressionArgMorphWithMenu new stringExpression: 'a color'; menuSelector: #colorsMenu;
 		yourself].
-	$H 		= code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #hookupSensorNames].
-	$h 		= code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #hookupBooleanSensorNames].
 	$I 		= code ifTrue: [^ ExpressionArgMorphWithMenu new numExpression: '1'; menuSelector: #midiInstrumentMenu;
 		yourself].
 	$i 			= code ifTrue: [^ ExpressionArgMorphWithMenu new numExpression: '1'; menuSelector: #listIndexMenu;
@@ -1488,67 +1486,16 @@ CommandBlockMorph >> typeOfArg: aMorph [
 	^#any
 ]
 
-{ #category : #private }
+{ #category : #accessing }
 CommandBlockMorph >> uncoloredArgMorphFor: specString [
 	"Answer an argument morph for the given argument specification string."
 
-	| code |
+	| code allPragmas prag|
 	code := specString copyFrom: 2 to: specString size-1.
 	
-	"%a"'Attributes'			= code ifTrue: [^ AttributeArgMorph new choice: ''].
-	"b"'Boolean'			= code ifTrue: [^ BooleanArgMorph new].
-	""'CheckBox'			= code ifTrue: [^ CheckBoxArgMorph new].
-	"c"'Color'				= code ifTrue: [^ ColorArgMorph new showPalette: true].
-	"C"'ScreenColor'		= code ifTrue: [^ ColorArgMorph new showPalette: false]. 
-	"d"'Directions'			= code ifTrue: [^ ExpressionArgMorphWithMenu new numExpression: '0'; menuSelector: #directionMenu;
-		yourself].
-	"D"'Drums'				= code ifTrue: [^ ExpressionArgMorphWithMenu new numExpression: '48'; menuSelector: #midiDrumMenu;
-		yourself].
-	"e"'Event'				= code ifTrue: [^ EventTitleMorph new].
-	"f"'MathFunctions'		= code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #mathFunctionNames; choice: #sqrt;
-		yourself].
-	"3"'Constants'			= code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #constantNames;
-		yourself].
-	"g"'Effects'				= code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #graphicEffectNames; choice: #color;
-		yourself].
-	"4"'ColorVar'			= code ifTrue: [^ ExpressionArgMorphWithMenu new stringExpression: 'a color'; menuSelector: #colorsMenu;
-		yourself].
-	"H"'SensorNames'		= code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #hookupSensorNames;
-		yourself].
-	"h"'SensorBooleans'		= code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #hookupBooleanSensorNames;
-		yourself].
-	"I"'Instruments'		= code ifTrue: [^ ExpressionArgMorphWithMenu new numExpression: '1'; menuSelector: #midiInstrumentMenu;
-		yourself].
-	"i"'ListIndex'			= code ifTrue: [^ ExpressionArgMorphWithMenu new numExpression: '1'; menuSelector: #listIndexMenu;
-		yourself].
-	"k"'Keys'				= code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #keyNames; choice: 'space';
-		yourself].
-	"5"'NamedColors'		= code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #namedColors; choice: #black;
-		yourself].
-	"L"'List'				= code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #listVarMenu;
-		yourself].
-	"l"'Costumes'			= code ifTrue: [^ ChoiceOrExpressionArgMorph new getOptionsSelector: #costumeNames; choice: 'costume1';
-		yourself].
-	"m"'Sprite'				= code ifTrue: [^ SpriteArgMorph new].
-	"n"'Number'			= code ifTrue: [^ ExpressionArgMorph new numExpression: '10'].
-	"N"'Notes'				= code ifTrue: [^ ExpressionArgMorphWithMenu new numExpression: '60'; menuSelector: #noteSelector;
-		yourself].
-	"s"'String'				= code ifTrue: [^ ExpressionArgMorph new stringExpression: '';
-		yourself].
-	"S"'SoundNames'		= code ifTrue: [^ ChoiceOrExpressionArgMorph new getOptionsSelector: #soundNames; choice: 'pop';
-		yourself].
-	"6"'TimeDates'			= code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #timeDates; choice: 'time';
-		yourself].
-	"7"'LayoutStyles'		= code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #layoutStyles; choice: 'large';
-		yourself].
-	"v"'Variable'			= code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #varNamesMenu; choice: '';
-		yourself].
-	"x"'SceneNames'		= code ifTrue: [^ ChoiceOrExpressionArgMorph new getOptionsSelector: #sceneNames; choice: '';
-		yourself].
-	"8"'NewCostume'		= code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #newCostumeTypes; choice: 'camera';
-		yourself].
-	"y"'ListDelete'			= code ifTrue: [^ ExpressionArgMorphWithMenu new numExpression: '1'; menuSelector: #listIndexForDeleteMenu;
-		yourself].
+	allPragmas := Pragma allNamed: #phratchType: in: PhratchType sortedByArgument: 1.
+	prag := allPragmas detect: [:pragma | (pragma arguments at: 1) asString = code asString] ifNone:[nil].
+	prag = nil ifFalse: [^ PhratchType new perform: (prag method selector)].
 	
 	"$B"'BlockId' = code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #blockId; choice: '';
 		yourself].
@@ -1596,6 +1543,7 @@ CommandBlockMorph >> uncoloredArgMorphFor: specString [
 	
 	"$r"'Rotation' = code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #rotationStyleChanger; choice: 'normal';
 		yourself].
+	
 	
 	^self oldUncoloredArgMorphFor: specString.
 	"^ ExpressionArgMorph new numExpression: '10'"

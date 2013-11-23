@@ -246,29 +246,11 @@ ChoiceArgMorph >> presentMenu [
 			ifTrue: [menu addLine]
 			ifFalse: [
 				option := sym localized.
-
-				((#(hookupSensorNames hookupBooleanSensorNames) includes: getOptionsSelector) and:
-				 [(#(connected resistance) includes: sym)])
-					ifTrue: [#(A B C D) do: [:c |
-						self owner isBooleanReporter
-							ifFalse: [
-								menu
-								 	add: (option, '-', c)
-									target: self 
-									selector: #choice:
-									argument: (sym, '-', c)]
-							ifTrue: [
-								menu
-								 	add: (c, ' ', option)
-									target: self 
-									selector: #choice:
-									argument: (c, ' ' ,sym)]]]
-					ifFalse: [
-						menu
+				menu
 							add: (option)
 							target: self 
 							selector: #choice:
-							argument: (sym)]]].
+							argument: (sym)]].
 
 
 	menu invokeModal

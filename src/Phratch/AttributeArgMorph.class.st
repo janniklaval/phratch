@@ -156,25 +156,6 @@ AttributeArgMorph >> presentMenu [
 					option := doLocalization
 						ifTrue: [ sym localized ]
 						ifFalse: [ sym ].
-					((#(#hookupSensorNames #hookupBooleanSensorNames) includes: getOptionsSelector)
-						and: [ #(#connected #resistance) includes: sym ])
-						ifTrue: [ 
-							#(#A #B #C #D)
-								do: [ :c | 
-									self owner isBooleanReporter
-										ifFalse: [ 
-											menu
-												add: option , '-' , c
-												target: self
-												selector: #choice:
-												argument: option , '-' , c ]
-										ifTrue: [ 
-											menu
-												add: c , ' ' , option
-												target: self
-												selector: #choice:
-												argument: c , ' ' , sym ] ] ]
-						ifFalse: [ 
 							(blockIds includes: sym)
 								ifTrue: [ menu addIcon: (target lambda: sym) imageForm toolTip: nil action: sym ]
 								ifFalse: [ 
@@ -182,7 +163,7 @@ AttributeArgMorph >> presentMenu [
 										add: (String withAll: option)
 										target: self
 										selector: #choice:
-										argument: sym ] ] ] ].
+										argument: sym ]  ] ].
 	menu popUpInWorld
 ]
 

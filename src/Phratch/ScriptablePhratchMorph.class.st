@@ -4477,33 +4477,6 @@ ScriptablePhratchMorph >> hideVariable: varName [
 
 ]
 
-{ #category : #'sensing ops' }
-ScriptablePhratchMorph >> hookupBooleanSensorNames [
-
-	^ #(
-		'button pressed'
-		'connected'
-	)
-
-]
-
-{ #category : #'sensing ops' }
-ScriptablePhratchMorph >> hookupSensorNames [
-
-	| sensorNames |
-	sensorNames := #(
-		'slider'
-		'light'
-		'sound'
-		'resistance'
-	).
-
-	sensorNames := sensorNames, #('-' 'tilt' 'distance'). "WeDo sensors"
-
-	^ sensorNames
-
-]
-
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> if: aCondition then: trueString else: falseString [
 "Answer the first string if the given condition is true, otherwise answer the second."
