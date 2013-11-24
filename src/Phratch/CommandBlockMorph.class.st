@@ -1495,58 +1495,9 @@ CommandBlockMorph >> uncoloredArgMorphFor: specString [
 	
 	allPragmas := Pragma allNamed: #phratchType: in: PhratchType sortedByArgument: 1.
 	prag := allPragmas detect: [:pragma | (pragma arguments at: 1) asString = code asString] ifNone:[nil].
-	prag = nil ifFalse: [^ PhratchType new perform: (prag method selector)].
-	
-	"$B"'BlockId' = code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #blockId; choice: '';
-		yourself].
-	"special args for BYOB"
-	"$o $E"'CSlot' = code ifTrue: [ ^ CSlotMorph new "SpecialArgMorph new type: #command"].
-	"$O"'MACommand' = code ifTrue: [ ^ MultiArgMorph type: #command].
-	"$r"'OSReporter' = code ifTrue: [ ^ OSlotMorph new receiver: receiver; type: #reporterslot; yourself "SpecialArgMorph new type: #reporter"].
-	"$R"'MAReporter' = code ifTrue: [ ^ MultiArgMorph type: #reporter].
-	"$p"'OSBoolean' = code ifTrue: [ ^ OSlotMorph new receiver: receiver; type: #booleanslot; yourself "SpecialArgMorph new type: #predicate"].
-	"$P"'MAPredicate' = code ifTrue: [ ^ MultiArgMorph type: #predicate].
-	"$t"'SAList' = code ifTrue: [ ^ SpecialArgMorph new type: #list;
-		yourself].
-	"$u"'MAList' = code ifTrue: [ ^ MultiArgMorph type: #list].
-	"$T"'Text' = code ifTrue: [ ^ ExpressionArgMorph new stringExpression: ''; isText: true;
-		yourself.  "SpecialArgMorph new type: #text"].
-	"$U"'MAText' = code ifTrue: [ ^ MultiArgMorph type: #text].
-	"$V"'MABoolean' = code ifTrue: [ ^ MultiArgMorph type: #boolean].
-	"$w"'MANumber' = code ifTrue: [ ^ MultiArgMorph type: #number].
-	"$X"'MAAny' = code ifTrue: [ ^ MultiArgMorph type: #any].
-	"$z"'SpecialVar' = code ifTrue: [ ^ VariableBlockMorph new 
-							isSpecialForm: true; 
-							selector: #getVar:;
-							commandSpec: '?';
-		yourself].
-	"$Z"'SAReporter' = code ifTrue: [ ^ SpecialArgMorph new type: #reporterslot;
-		yourself].
-	"$Y"'SABoolean' = code ifTrue: [ ^ SpecialArgMorph new type: #booleanslot;
-		yourself].
-	
-	"$A"'Input' = code ifTrue: [ ^ ChoiceArgMorph new options: {'with inputs' localized. 'with input list' localized}; choice: 'with inputs';
-		yourself].
-	"$F"'Type' = code ifTrue: [ ^ ChoiceArgMorph new options: {'number' localized. 'text' localized. 'boolean' localized. 'list' localized. 'command' localized. 'reporter' localized. 'predicate' localized. 'object' localized}; choice: 'number' localized;
-		yourself].
-
-	"$G"'CArgSlot' = code ifTrue: [ ^ CArgSlotMorph new].
-	"$J"'Loop' = code ifTrue: [ ^ MultiArgMorph type: #loop].
-
-	"$j"'UnEExp' = code ifTrue: [ ^ UnevaluatedExpressionArgMorph new stringExpression: ''].
-	"$q"'MAUneval' = code ifTrue: [ ^ MultiArgMorph type: #unevaluated].
-	"$Q"'UnEBool' = code ifTrue: [ ^ UnevaluatedBooleanArgMorph new].
-	"$K"'MAUnEBool' = code ifTrue: [ ^ MultiArgMorph type: #unevaluatedBoolean].
-
-	"$1"'SAObjS' = code ifTrue: [ ^ SpecialArgMorph new type: #objSlot].
-	"$2"'MAObjS' = code ifTrue: [ ^ MultiArgMorph type: #objSlot].	
-	
-	"$r"'Rotation' = code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #rotationStyleChanger; choice: 'normal';
-		yourself].
-	
+	prag = nil ifFalse: [^ PhratchType new receiver: self receiver; perform: (prag method selector)].
 	
 	^self oldUncoloredArgMorphFor: specString.
-	"^ ExpressionArgMorph new numExpression: '10'"
 ]
 
 { #category : #private }

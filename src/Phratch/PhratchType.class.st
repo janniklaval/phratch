@@ -1,6 +1,9 @@
 Class {
 	#name : #PhratchType,
 	#superclass : #Object,
+	#instVars : [
+		'receiver'
+	],
 	#category : #'Phratch-Type'
 }
 
@@ -12,10 +15,32 @@ PhratchType >> attributes [
 ]
 
 { #category : #'as yet unclassified' }
+PhratchType >> blockId [
+	
+	<phratchType: #'BlockId'>
+	^ ChoiceArgMorph new getOptionsSelector: #blockId; choice: '';
+		yourself
+]
+
+{ #category : #'as yet unclassified' }
 PhratchType >> boolean [
 	
 	<phratchType: #'Boolean'>
 	^ BooleanArgMorph new
+]
+
+{ #category : #'as yet unclassified' }
+PhratchType >> cArgSlot [
+	
+	<phratchType: #'CArgSlot'>
+	 ^ CArgSlotMorph new
+]
+
+{ #category : #'as yet unclassified' }
+PhratchType >> cSlot [
+	
+	<phratchType: #'CSlot'>
+	^ CSlotMorph new "SpecialArgMorph new type: #command"
 ]
 
 { #category : #'as yet unclassified' }
@@ -99,6 +124,14 @@ PhratchType >> event [
 ]
 
 { #category : #'as yet unclassified' }
+PhratchType >> input [
+	
+	<phratchType: #'Input'>
+	 ^ ChoiceArgMorph new options: {'with inputs' localized. 'with input list' localized}; choice: 'with inputs';
+		yourself
+]
+
+{ #category : #'as yet unclassified' }
 PhratchType >> instruments [
 	
 	<phratchType: #'Instruments'>
@@ -158,6 +191,90 @@ PhratchType >> listIndex [
 ]
 
 { #category : #'as yet unclassified' }
+PhratchType >> loop [
+	
+	<phratchType: #'Loop'>
+	^ MultiArgMorph type: #loop
+]
+
+{ #category : #'as yet unclassified' }
+PhratchType >> mAAny [
+	
+	<phratchType: #'MAAny'>
+	^ MultiArgMorph type: #any
+]
+
+{ #category : #'as yet unclassified' }
+PhratchType >> mABoolean [
+	
+	<phratchType: #'MABoolean'>
+	^ MultiArgMorph type: #boolean
+]
+
+{ #category : #'as yet unclassified' }
+PhratchType >> mACommand [
+	
+	<phratchType: #'MACommand'>
+	^ MultiArgMorph type: #command
+]
+
+{ #category : #'as yet unclassified' }
+PhratchType >> mAList [
+	
+	<phratchType: #'MAList'>
+	^ MultiArgMorph type: #list
+]
+
+{ #category : #'as yet unclassified' }
+PhratchType >> mANumber [
+	
+	<phratchType: #'MANumber'>
+	^ MultiArgMorph type: #number
+]
+
+{ #category : #'as yet unclassified' }
+PhratchType >> mAObjS [
+	
+	<phratchType: #'MAObjS'>
+	^ MultiArgMorph type: #objSlot
+]
+
+{ #category : #'as yet unclassified' }
+PhratchType >> mAPredicate [
+	
+	<phratchType: #'MAPredicate'>
+	^ MultiArgMorph type: #predicate
+]
+
+{ #category : #'as yet unclassified' }
+PhratchType >> mAReporter [
+	
+	<phratchType: #'MAReporter'>
+	^ MultiArgMorph type: #reporter
+]
+
+{ #category : #'as yet unclassified' }
+PhratchType >> mAText [
+	
+	<phratchType: #'MAText'>
+	^ MultiArgMorph type: #text
+]
+
+{ #category : #'as yet unclassified' }
+PhratchType >> mAUnEBool [
+	
+	<phratchType: #'MAUnEBool'>
+	^ MultiArgMorph type: #unevaluatedBoolean
+]
+
+{ #category : #'as yet unclassified' }
+PhratchType >> mAUneval [
+	
+	<phratchType: #'MAUneval'>
+	^ MultiArgMorph type: #unevaluated
+]
+
+{ #category : #'as yet unclassified' }
 PhratchType >> mathFunctions [
 	
 	<phratchType: #'MathFunctions'>
@@ -205,6 +322,69 @@ PhratchType >> number [
 ]
 
 { #category : #'as yet unclassified' }
+PhratchType >> oSBoolean [
+	
+	<phratchType: #'OSBoolean'>
+	^ OSlotMorph new receiver: receiver; type: #booleanslot; yourself "SpecialArgMorph new type: #predicate"
+]
+
+{ #category : #'as yet unclassified' }
+PhratchType >> oSReporter [
+	
+	<phratchType: #'OSReporter'>
+	^ OSlotMorph new receiver: receiver; type: #reporterslot; yourself "SpecialArgMorph new type: #reporter"
+]
+
+{ #category : #accessing }
+PhratchType >> receiver [
+	^ receiver
+]
+
+{ #category : #accessing }
+PhratchType >> receiver: anObject [
+	receiver := anObject
+]
+
+{ #category : #'as yet unclassified' }
+PhratchType >> rotation [
+	
+	<phratchType: #'Rotation'>
+	^ ChoiceArgMorph new getOptionsSelector: #rotationStyleChanger; choice: 'normal';
+		yourself
+]
+
+{ #category : #'as yet unclassified' }
+PhratchType >> sABoolean [
+	
+	<phratchType: #'SABoolean'>
+	^ SpecialArgMorph new type: #booleanslot;
+		yourself
+]
+
+{ #category : #'as yet unclassified' }
+PhratchType >> sAList [
+	
+	<phratchType: #'SAList'>
+	^ SpecialArgMorph new type: #list;
+		yourself
+]
+
+{ #category : #'as yet unclassified' }
+PhratchType >> sAObjS [
+	
+	<phratchType: #'SAObjS'>
+	^ SpecialArgMorph new type: #objSlot
+]
+
+{ #category : #'as yet unclassified' }
+PhratchType >> sAReporter [
+	
+	<phratchType: #'SAReporter'>
+	 ^ SpecialArgMorph new type: #reporterslot;
+		yourself
+]
+
+{ #category : #'as yet unclassified' }
 PhratchType >> sceneNames [
 	
 	<phratchType: #'SceneNames'>
@@ -232,6 +412,17 @@ PhratchType >> soundNames [
 ]
 
 { #category : #'as yet unclassified' }
+PhratchType >> specialVar [
+	
+	<phratchType: #'SpecialVar'>
+	^ VariableBlockMorph new 
+							isSpecialForm: true; 
+							selector: #getVar:;
+							commandSpec: '?';
+		yourself
+]
+
+{ #category : #'as yet unclassified' }
 PhratchType >> sprite [
 	
 	<phratchType: #'Sprite'>
@@ -248,6 +439,14 @@ PhratchType >> string [
 ]
 
 { #category : #'as yet unclassified' }
+PhratchType >> text [
+	
+	<phratchType: #'Text'>
+	 ^ ExpressionArgMorph new stringExpression: ''; isText: true;
+		yourself.  "SpecialArgMorph new type: #text"
+]
+
+{ #category : #'as yet unclassified' }
 PhratchType >> timeDates [
 	
 	<phratchType: #'TimeDates'>
@@ -255,6 +454,28 @@ PhratchType >> timeDates [
 		getOptionsSelector: #timeDates; 
 		choice: 'time';
 		yourself
+]
+
+{ #category : #'as yet unclassified' }
+PhratchType >> type [
+	
+	<phratchType: #'Type'>
+	^ ChoiceArgMorph new options: {'number' localized. 'text' localized. 'boolean' localized. 'list' localized. 'command' localized. 'reporter' localized. 'predicate' localized. 'object' localized}; choice: 'number' localized;
+		yourself
+]
+
+{ #category : #'as yet unclassified' }
+PhratchType >> unEBool [
+	
+	<phratchType: #'UnEBool'>
+	^ UnevaluatedBooleanArgMorph new
+]
+
+{ #category : #'as yet unclassified' }
+PhratchType >> unEExp [
+	
+	<phratchType: #'UnEExp'>
+	^ UnevaluatedExpressionArgMorph new stringExpression: ''
 ]
 
 { #category : #'as yet unclassified' }
