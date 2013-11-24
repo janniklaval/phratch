@@ -548,6 +548,31 @@ PhratchFrameMorph >> addShortcutButtonsTo: rowMorph [
 ]
 
 { #category : #'menu/button actions' }
+PhratchFrameMorph >> addSpecialSprite [
+
+	|menu m newSprite frame |
+	menu := MenuMorphNG new defaultTarget: self.
+	
+	PhratchSpriteMorph withAllSubclassesDo: [ :e |
+		menu add: ('create ',e name) translated value: e.
+	].
+	
+	m := (menu
+		localize;
+		invokeModal; yourself) selectedValue.
+	
+	m ifNotNil:[
+		newSprite := m new.
+	
+		frame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
+		frame ifNotNil: [
+			frame workPane addMorphFront: newSprite.
+			frame workPane sprites addLast: newSprite].
+		^ newSprite
+	]
+]
+
+{ #category : #'menu/button actions' }
 PhratchFrameMorph >> addSpriteMorph [
 
 	| result f m el |

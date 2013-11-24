@@ -228,7 +228,8 @@ PhratchLibraryMorph >> makeNewSpriteButtons: aPhratchFrameMorph [
 		"	icon name				selector					tooltip"
 		(newSpritePaint			paintSpriteMorph		'Paint new sprite')
 		(newSpriteLibrary		addSpriteMorph			'Choose new sprite from file')
-		(newSpriteSurprise 		surpriseSpriteMorph		'Get surprise sprite')
+		(newSpriteSurprise 	surpriseSpriteMorph		'Get surprise sprite')
+		(newSpriteLibrary 		addSpecialSprite		'Choose a special sprite')
 	).
 
 	buttons := buttonSpecs collect: [:spec |
