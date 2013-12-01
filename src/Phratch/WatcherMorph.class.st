@@ -17,7 +17,8 @@ Class {
 		'sliderMin',
 		'sliderMax',
 		'phratchSlider',
-		'isColor'
+		'isColor',
+		'stepTime'
 	],
 	#category : #'Phratch-UI-Watchers'
 }
@@ -30,7 +31,7 @@ WatcherMorph >> buildReadout [
 		readout := UpdatingStringMorph new
 		contents: '';
 		floatPrecision: 0.1;
-		stepTime: 100;
+		stepTime: self stepTime;
 		yourself.
 	readout
 		font: (PhratchFrameMorph getFont: #Watcher);
@@ -235,6 +236,7 @@ WatcherMorph >> initialize [
 	isColor := false.
 	sliderMin := 0.
 	sliderMax := 100.
+	stepTime:= 100.
 	watcher := AlignmentMorph new
 		color: Color transparent;
 		borderWidth: 0;
@@ -606,8 +608,16 @@ WatcherMorph >> step [
 { #category : #stepping }
 WatcherMorph >> stepTime [
 
-	^ 100
+	^ stepTime
 
+]
+
+{ #category : #stepping }
+WatcherMorph >> stepTime: aValue [
+
+	stepTime := aValue.
+	self buildReadout
+	
 ]
 
 { #category : #'object i/o' }

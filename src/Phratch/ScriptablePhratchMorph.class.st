@@ -1404,7 +1404,7 @@ ScriptablePhratchMorph >> blockFromOldFormTuple: tuple receiver: scriptOwner [
 	^ block
 ]
 
-{ #category : #'list ops' }
+{ #category : #blocks }
 ScriptablePhratchMorph >> blockFromSpec: spec color: blockColor [
 	"Create a block from the given block specification. Answer nil if I don't implement the block spec selector."
 

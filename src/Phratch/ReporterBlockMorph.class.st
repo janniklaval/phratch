@@ -2,7 +2,8 @@ Class {
 	#name : #ReporterBlockMorph,
 	#superclass : #CommandBlockMorph,
 	#instVars : [
-		'isBoolean'
+		'isBoolean',
+		'stepTimeForWatcher'
 	],
 	#category : #'Phratch-Blocks'
 }
@@ -75,6 +76,7 @@ ReporterBlockMorph >> createWatcher [
 
 	| newWatcher |
 	newWatcher := WatcherMorph new setCategoryColor: self color.
+	newWatcher stepTime: self stepTimeForWatcher.
 	self argumentCount = 1
 		ifTrue: [newWatcher target: receiver selector: selector parameter: self args first]
 		ifFalse: [newWatcher target: receiver selector: selector parameter: nil].
@@ -462,6 +464,7 @@ ReporterBlockMorph >> initialize [
 
 	super initialize.
 	isBoolean := false.
+	stepTimeForWatcher := 100.
 	self extent: 80@20.
 
 ]
@@ -624,6 +627,18 @@ ReporterBlockMorph >> showValue [
 	self setProperty: #toolTip toValue: tooltip.
 	tooltip initialCursorPoint: Sensor cursorPoint.
 	tooltip startStepping
+]
+
+{ #category : #accessing }
+ReporterBlockMorph >> stepTimeForWatcher [
+
+	^ stepTimeForWatcher
+]
+
+{ #category : #accessing }
+ReporterBlockMorph >> stepTimeForWatcher: aValue [
+
+	stepTimeForWatcher := aValue
 ]
 
 { #category : #'object i/o' }
