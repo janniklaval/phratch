@@ -129,7 +129,7 @@ PhratchStageMorph >> attributeNames [
 { #category : #'looks ops' }
 PhratchStageMorph >> backgroundIndex [
 	"Answer the index of my current costume."
-	<phratchItem: 'background #' kind: #r category: 'looks' defaultValues: #() subCategory: #a2 special: #()>
+	<phratchItem: 'background #' kind: #ReporterBlockType category: 'looks' defaultValues: #() subCategory: #a2 special: #()>
 	^ self costumeIndex
 
 ]

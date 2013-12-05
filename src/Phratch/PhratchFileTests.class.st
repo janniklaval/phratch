@@ -316,7 +316,7 @@ PhratchFileTests >> testSaveWithBroadcast [
 	
 	commandBlock1 := self addBlock: #('broadcast $Event$' - broadcast: #() 'aBroadcast' ) toSprite: self firstSprite.
 	commandBlock1 defaultArgs: #('aBroadcast').
-	commandBlock2 := self addBlock: #('when I receive $Event$' #E whenEventReceived #()) toSprite: self firstSprite.
+	commandBlock2 := self addBlock: #('when I receive $Event$' #EventHatBlockType whenEventReceived #()) toSprite: self firstSprite.
 	commandBlock2 eventName: 'aBroadcast'.
 
 	self saveProject: fileName.
