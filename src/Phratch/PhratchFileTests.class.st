@@ -145,20 +145,20 @@ PhratchFileTests >> testSaveAllBlocks [
 	| fileName allPragmasStage commandBlocksStage allPragmasSprite commandBlocksSprite blocksSprite blocksStage |
 	fileName := '_testSaveAllBlocks.phr'.
 	
-	allPragmasStage := Pragma allNamed: #phratchItem:kind:category:defaultValues:subCategory: from: self stage class to:  ScriptablePhratchMorph  sortedByArgument: 5.
+	allPragmasStage := Pragma allNamed: #phratchItem:kind:category:defaultValues:subCategory:special: from: self stage class to:  ScriptablePhratchMorph  sortedByArgument: 5.
 	commandBlocksStage := OrderedCollection new.
 	allPragmasStage do:[:aP |
 		|prov|
-		prov := { aP arguments at: 1 . aP arguments at: 2 . aP method selector},  (aP arguments at: 4).
+		prov := { aP arguments at: 1 . aP arguments at: 2 . aP method selector . aP arguments at: 6},  (aP arguments at: 4).
 		commandBlocksStage add: (self addBlock: prov toSprite: self stage).
 	].
 	self assert: commandBlocksStage size > 0.
 
-	allPragmasSprite := Pragma allNamed: #phratchItem:kind:category:defaultValues:subCategory: from: self firstSprite class to:  ScriptablePhratchMorph  sortedByArgument: 5.
+	allPragmasSprite := Pragma allNamed: #phratchItem:kind:category:defaultValues:subCategory:special: from: self firstSprite class to:  ScriptablePhratchMorph  sortedByArgument: 5.
 	commandBlocksSprite := OrderedCollection new.
 	allPragmasSprite do:[:aP |
 		|prov|
-		prov := { aP arguments at: 1 . aP arguments at: 2 . aP method selector}.
+		prov := { aP arguments at: 1 . aP arguments at: 2 . aP method selector . aP arguments at: 6}.
 		(aP arguments at: 4) ifNotEmpty: [prov := prov,  (aP arguments at: 4)].
 		commandBlocksSprite add: (self addBlock: prov toSprite: self firstSprite).
 	].
@@ -188,11 +188,11 @@ PhratchFileTests >> testSaveAllBlocksSprite [
 	fileName := '_testSaveAllBlocksSprite.phr'.
 
 
-	allPragmasSprite := Pragma allNamed: #phratchItem:kind:category:defaultValues:subCategory: from: self firstSprite class to:  ScriptablePhratchMorph  sortedByArgument: 5.
+	allPragmasSprite := Pragma allNamed: #phratchItem:kind:category:defaultValues:subCategory:special: from: self firstSprite class to:  ScriptablePhratchMorph  sortedByArgument: 5.
 	commandBlocksSprite := OrderedCollection new.
 	allPragmasSprite do:[:aP |
 		|prov|
-		prov := { aP arguments at: 1 . aP arguments at: 2 . aP method selector}.
+		prov := { aP arguments at: 1 . aP arguments at: 2 . aP method selector . aP arguments at: 6}.
 		(aP arguments at: 4) ifNotEmpty: [prov := prov,  (aP arguments at: 4)].
 		commandBlocksSprite add: (self addBlock: prov toSprite: self firstSprite).
 	].
@@ -216,11 +216,11 @@ PhratchFileTests >> testSaveAllBlocksStage [
 	| fileName allPragmasStage commandBlocksStage blocksStage |
 	fileName := '_testSaveAllBlocks.phr'.
 	
-	allPragmasStage := Pragma allNamed: #phratchItem:kind:category:defaultValues:subCategory: from: self stage class to:  ScriptablePhratchMorph  sortedByArgument: 5.
+	allPragmasStage := Pragma allNamed: #phratchItem:kind:category:defaultValues:subCategory:special: from: self stage class to:  ScriptablePhratchMorph  sortedByArgument: 5.
 	commandBlocksStage := OrderedCollection new.
 	allPragmasStage do:[:aP |
 		|prov|
-		prov := { aP arguments at: 1 . aP arguments at: 2 . aP method selector},  (aP arguments at: 4).
+		prov := { aP arguments at: 1 . aP arguments at: 2 . aP method selector . aP arguments at: 6},  (aP arguments at: 4).
 		commandBlocksStage add: (self addBlock: prov toSprite: self stage).
 	].
 	self assert: commandBlocksStage size > 0.
@@ -244,8 +244,8 @@ PhratchFileTests >> testSaveBlocks [
 
 	| fileName commandBlock1 commandBlock2 blocks |
 	fileName := '_testSaveBlocks.phr'.
-	commandBlock1 := self addBlock: #('move $Number$ steps' - forward:) toSprite: self firstSprite.
-	commandBlock2 := self addBlock: #('turn $Number$ degrees' - turnRight: 15) toSprite: self firstSprite.
+	commandBlock1 := self addBlock: #('move $Number$ steps' - forward: #()) toSprite: self firstSprite.
+	commandBlock2 := self addBlock: #('turn $Number$ degrees' - turnRight: #() 15) toSprite: self firstSprite.
 
 	self saveProject: fileName.
 	window newPhratchProject.
@@ -266,21 +266,21 @@ PhratchFileTests >> testSaveTenBlocks [
 	| fileName allPragmasStage commandBlocksStage commandBlocksSprite allPragmasSprite blocksSprite blocksStage |
 	fileName := '_testSaveTenBlocks.phr'.
 	
-	allPragmasStage := Pragma allNamed: #phratchItem:kind:category:defaultValues:subCategory: from: self stage class to:  ScriptablePhratchMorph  sortedByArgument: 5.
+	allPragmasStage := Pragma allNamed: #phratchItem:kind:category:defaultValues:subCategory:special: from: self stage class to:  ScriptablePhratchMorph  sortedByArgument: 5.
 	commandBlocksStage := OrderedCollection new.
 	allPragmasStage from:1 to:5 do:[:aP |
 		|prov|
-		prov := { aP arguments at: 1 . aP arguments at: 2 . aP method selector}.
+		prov := { aP arguments at: 1 . aP arguments at: 2 . aP method selector . aP arguments at: 6}.
 		(aP arguments at: 4) ifNotEmpty: [prov := prov,  (aP arguments at: 4)].
 		commandBlocksStage add: (self addBlock: prov toSprite: self stage).
 	].
 	self assert: commandBlocksStage size > 0.
 
-	allPragmasSprite := Pragma allNamed: #phratchItem:kind:category:defaultValues:subCategory: from: self firstSprite class to:  ScriptablePhratchMorph  sortedByArgument: 5.
+	allPragmasSprite := Pragma allNamed: #phratchItem:kind:category:defaultValues:subCategory:special: from: self firstSprite class to:  ScriptablePhratchMorph  sortedByArgument: 5.
 	commandBlocksSprite := OrderedCollection new.
 	allPragmasSprite from:1 to:5  do:[:aP |
 		|prov|
-		prov := { aP arguments at: 1 . aP arguments at: 2 . aP method selector}.
+		prov := { aP arguments at: 1 . aP arguments at: 2 . aP method selector . aP arguments at: 6}.
 		(aP arguments at: 4) ifNotEmpty: [prov := prov,  (aP arguments at: 4)].
 		commandBlocksSprite add: (self addBlock: prov toSprite: self firstSprite).
 	].
@@ -314,9 +314,9 @@ PhratchFileTests >> testSaveWithBroadcast [
 	self assert: sprite objName = 'Sprite1'.
 	
 	
-	commandBlock1 := self addBlock: #('broadcast $Event$' - broadcast: 'aBroadcast') toSprite: self firstSprite.
+	commandBlock1 := self addBlock: #('broadcast $Event$' - broadcast: #() 'aBroadcast' ) toSprite: self firstSprite.
 	commandBlock1 defaultArgs: #('aBroadcast').
-	commandBlock2 := self addBlock: #('when I receive $Event$' #E whenEventReceived) toSprite: self firstSprite.
+	commandBlock2 := self addBlock: #('when I receive $Event$' #E whenEventReceived #()) toSprite: self firstSprite.
 	commandBlock2 eventName: 'aBroadcast'.
 
 	self saveProject: fileName.

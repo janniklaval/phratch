@@ -50,7 +50,7 @@ Query >> blockSpec: anObject [
 { #category : #protocol }
 Query >> defaultArguments [
 
-	^ blockSpec copyFrom: 4 to: blockSpec size.
+	^ blockSpec copyFrom: 5 to: blockSpec size.
 ]
 
 { #category : #accessing }

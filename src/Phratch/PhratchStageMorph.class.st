@@ -41,7 +41,7 @@ PhratchStageMorph >> acceptDroppingMorph: aMorph event: evt [
 
 { #category : #'panther actions' }
 PhratchStageMorph >> addBackgroundTyped: aString [
-	<phratchItem: 'add $NewCostume$ to backgrounds' kind: #- category: 'looks' defaultValues: #() subCategory: #a2>
+	<phratchItem: 'add $NewCostume$ to backgrounds' kind: #- category: 'looks' defaultValues: #() subCategory: #a2 special: #()>
 	self addCostumeTyped: aString.
 ]
 
@@ -129,7 +129,7 @@ PhratchStageMorph >> attributeNames [
 { #category : #'looks ops' }
 PhratchStageMorph >> backgroundIndex [
 	"Answer the index of my current costume."
-	<phratchItem: 'background #' kind: #r category: 'looks' defaultValues: #() subCategory: #a2>
+	<phratchItem: 'background #' kind: #r category: 'looks' defaultValues: #() subCategory: #a2 special: #()>
 	^ self costumeIndex
 
 ]
@@ -155,7 +155,7 @@ PhratchStageMorph >> broadcastEventNamed: name with: value [
 { #category : #'looks ops' }
 PhratchStageMorph >> changeHPanBy: amount [
 	"Change my horizontal pan by the given amount."
-	<phratchItem: 'change horizontal pan by $Number$' kind: #- category: 'looks' defaultValues: #() subCategory: #a4>
+	<phratchItem: 'change horizontal pan by $Number$' kind: #- category: 'looks' defaultValues: #() subCategory: #a4 special: #()>
 	hPan := hPan + amount truncated.
 	self changed.
 
@@ -164,7 +164,7 @@ PhratchStageMorph >> changeHPanBy: amount [
 { #category : #'looks ops' }
 PhratchStageMorph >> changeVPanBy: amount [
 	"Change my vertical pan by the given amount."
-	<phratchItem: 'change vertical pan by $Number$' kind: #- category: 'looks' defaultValues: #() subCategory: #a4>
+	<phratchItem: 'change vertical pan by $Number$' kind: #- category: 'looks' defaultValues: #() subCategory: #a4 special: #()>
 	vPan := vPan + amount truncated.
 	self changed.
 
@@ -182,7 +182,7 @@ PhratchStageMorph >> clearAllVariables [
 { #category : #'pen support' }
 PhratchStageMorph >> clearPenTrails [
 	"Remove my pen trails Form. It will be recreated later if it is needed."
-	<phratchItem: 'clear pen trails' kind: #- category: 'pen' defaultValues: #() subCategory: #a5>
+	<phratchItem: 'clear pen trails' kind: #- category: 'pen' defaultValues: #() subCategory: #a5 special: #()>
 	penTrailsForm := nil.
 	self changed.
 
@@ -276,7 +276,7 @@ PhratchStageMorph >> deleteAllClones [
 
 { #category : #'byob OOP' }
 PhratchStageMorph >> deleteBackgroundAt: aNumber [
-	<phratchItem: 'delete background $Number$' kind: #- category: 'looks' defaultValues: #(1) subCategory: #a2>
+	<phratchItem: 'delete background $Number$' kind: #- category: 'looks' defaultValues: #(1) subCategory: #a2 special: #()>
 	self deleteCostumeAt: aNumber.
 ]
 
@@ -734,7 +734,7 @@ PhratchStageMorph >> newScene [
 { #category : #'looks ops' }
 PhratchStageMorph >> nextBackground [
 	"Show the next background in my backgrounds list."
-	<phratchItem: 'next background' kind: #- category: 'looks' defaultValues: #() subCategory: #a1>
+	<phratchItem: 'next background' kind: #- category: 'looks' defaultValues: #() subCategory: #a1 special: #()>
 	self nextCostume.
 
 ]
@@ -962,7 +962,7 @@ PhratchStageMorph >> removeTerminatedProcesses [
 
 { #category : #'panther actions' }
 PhratchStageMorph >> replaceBackground: name with: sel [
-	<phratchItem: 'replace background $Number$ with $NewCostume$' kind: #- category: 'looks' defaultValues: #(1) subCategory: #a2>
+	<phratchItem: 'replace background $Number$ with $NewCostume$' kind: #- category: 'looks' defaultValues: #(1) subCategory: #a2 special: #()>
 	self replaceCostume: name with: sel.
 ]
 
@@ -1078,7 +1078,7 @@ PhratchStageMorph >> sceneNames [
 { #category : #'looks ops' }
 PhratchStageMorph >> setHPanTo: aNumber [
 	"Set my horizontal pan to the given offset."
-	<phratchItem: 'set horizontal pan to $Number$' kind: #- category: 'looks' defaultValues: #(0) subCategory: #a4>
+	<phratchItem: 'set horizontal pan to $Number$' kind: #- category: 'looks' defaultValues: #(0) subCategory: #a4 special: #()>
 	hPan := aNumber truncated.
 	self changed.
 
@@ -1095,7 +1095,7 @@ PhratchStageMorph >> setTempoTo: aNumber [
 { #category : #'looks ops' }
 PhratchStageMorph >> setVPanTo: aNumber [
 	"Set my vertical pan to the given offset."
-	<phratchItem: 'set vertical pan to $Number$' kind: #- category: 'looks' defaultValues: #(0) subCategory: #a4>
+	<phratchItem: 'set vertical pan to $Number$' kind: #- category: 'looks' defaultValues: #(0) subCategory: #a4 special: #()>
 	vPan := aNumber truncated.
 	self changed.
 
@@ -1105,7 +1105,7 @@ PhratchStageMorph >> setVPanTo: aNumber [
 { #category : #'looks ops' }
 PhratchStageMorph >> showBackground: costumeNameOrIndex [
 	"This is lookLike: for the stage..."
-	<phratchItem: 'switch to background $Costumes$' kind: #- category: 'looks' defaultValues: #('background1') subCategory: #a1>
+	<phratchItem: 'switch to background $Costumes$' kind: #- category: 'looks' defaultValues: #('background1') subCategory: #a1 special: #()>
 	self lookLike: costumeNameOrIndex.
 
 ]
