@@ -2639,21 +2639,6 @@ PhratchFrameMorph >> processSettingsFile [
 
 ]
 
-{ #category : #'falta adaptar' }
-PhratchFrameMorph >> processWhenConditions [
-	"Trigger any 'when <condition>' hats."
-
-	^ self.  "disabled"
-	"objList := workPane submorphs select: [:m | m isKindOf: ScriptablePhratchMorph].
-	objList := objList copyWith: workPane.
-	objList do: [:obj |
-		obj scripts do: [:hat |
-			(hat isMemberOf: WhenHatBlockMorph) ifTrue: [
-				(hat hasRunningProcess not and: [hat evaluateCondition]) ifTrue: [
-					hat start; layoutChanged]]]].
-"
-]
-
 { #category : #'view mode' }
 PhratchFrameMorph >> projectComment: aString [
 
@@ -3217,7 +3202,6 @@ PhratchFrameMorph >> step [
 
 "	self checkForWeDo." "simplify at the moment"
 	self updateToolButtons.
-	self processWhenConditions.
 	self processKeyboardEvents. 
 	workPane stepProcesses.
 "	self processDroppedFiles." "simplify at the moment"

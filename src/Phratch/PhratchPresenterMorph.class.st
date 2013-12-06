@@ -271,21 +271,6 @@ PhratchPresenterMorph >> processKeyboardEvents [
 
 ]
 
-{ #category : #'event handling' }
-PhratchPresenterMorph >> processWhenConditions [
-	"Trigger any 'when <condition>' hats."
-
-	^ self.  "disabled"
-	"objList := stage submorphs select: [:m | m isKindOf: ScriptablePhratchMorph].
-	objList := objList copyWith: stage.
-	objList do: [:obj |
-		obj scripts do: [:hat |
-			(hat isMemberOf: WhenHatBlockMorph) ifTrue: [
-				(hat hasRunningProcess not and: [hat evaluateCondition]) ifTrue: [
-					hat start; layoutChanged]]]].
-"
-]
-
 { #category : #'button actions' }
 PhratchPresenterMorph >> shoutGo [
 
@@ -334,7 +319,6 @@ PhratchPresenterMorph >> step [
 
 	ScriptablePhratchMorph phratchOrigin: stage center.
 
-	self processWhenConditions.
 	self processKeyboardEvents.
 	stage stepProcesses.
 	stage step.

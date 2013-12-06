@@ -93,29 +93,9 @@ ScriptablePhratchMorph class >> blockSpecs [
 	"To obtain all the items of the menu, execute:
 	SystemNavigation default allCallsOn: #phratchItem:kind:category:defaultValues:subCategory:special:
 	"
-
-	"Answer a collection of block specifications for the blocks that are common to all objects. Block specificatons (Arrays) are interspersed with category names (Strings). A block specification is an Array of the form: (<block spec string> <block type> <selector> [optional initial argument values]).
-
-	Explanation of flags:
-		-	no flags
-		b	boolean reporter
-		c	c-shaped block containing a sequence of commands (always special form)
-		r	reporter
-		g	color reporter
-		R	special form reporter with its own evaluation rule
-		s	special form command with its own evaluation rule
-		t	timed command, like wait or glide
-		E	message event hat
-		K	key event hat
-		M	mouse-click event hat
-		S	start event hat
-		W	when <condition> hat (obsolete)"
-
 	| blocks allPragmas |
 	blocks := #().
 	
-	
-	"Add the block with the new method of declaration:"
 	allPragmas := Pragma allNamed: #phratchItem:kind:category:defaultValues:subCategory:special: from: self to:  ScriptablePhratchMorph  sortedByArgument: 5.
 
 	PhratchCategory allSubclassesDo: [ :c |
@@ -133,19 +113,6 @@ ScriptablePhratchMorph class >> blockSpecs [
 	].
 
 	^ blocks
-	
-"'control'"
-			"-"
-			"('debug'							s	doPauseThread)
-			('debug $String$'						R	doPauseThreadReporter)"
-"'files'
-			('host mesh'										-	hostMesh)
-			('hosting mesh?'									b	isHostingMesh)
-			-
-			('join mesh $String$'							-	joinMesh:)
-			('leave mesh'									-	leaveMesh)
-			-
-			('mesh IP address'								r	getMeshIPAddress)"
 ]
 
 { #category : #'block specs' }
@@ -1325,11 +1292,9 @@ ScriptablePhratchMorph >> blockFromOldFormTuple: tuple receiver: scriptOwner [
 						"argument is a value"
 						(block argumentAt: i) stringExpression: arg asString ] ].
 			^ block ].
-	(#(#EventHatMorph #KeyEventHatMorph #MouseClickEventHatMorph #WhenHatBlockMorph) includes: k)
+	(#(#EventHatMorph #KeyEventHatMorph #MouseClickEventHatMorph) includes: k)
 		ifTrue: [ 
 			block := self hatBlockFromTuple: tuple receiver: scriptOwner.
-			(block isKindOf: WhenHatBlockMorph)
-				ifTrue: [ block color: Color red ].
 			^ block ].
 	({#phratchComment . #scratchComment} includes: k) "for compatibility"
 		ifTrue: [ 
@@ -1640,11 +1605,9 @@ ScriptablePhratchMorph >> blockFromTuple: tuple receiver: scriptOwner [
 						"argument is a value"
 						(block argumentAt: i) stringExpression: arg asString ] ].
 			^ block ].
-	(#(#EventHatMorph #KeyEventHatMorph #MouseClickEventHatMorph #WhenHatBlockMorph #CreationEventHatMorph) includes: k)
+	(#(#EventHatMorph #KeyEventHatMorph #MouseClickEventHatMorph #CreationEventHatMorph) includes: k)
 		ifTrue: [ 
 			block := self hatBlockFromTuple: tuple receiver: rcvr.
-			(block isKindOf: WhenHatBlockMorph)
-				ifTrue: [ block color: Color red ].
 			^ block ].
 	({#phratchComment . #scratchComment} includes: k) "for compatibility"
 		ifTrue: [ 
@@ -4308,7 +4271,7 @@ ScriptablePhratchMorph >> handlesMouseDown: evt [
 ScriptablePhratchMorph >> hatBlockFromTuple: tuple receiver: scriptOwner [
 	"Answer a new block for the given variable reference tuple."
 
-	| blockClass block eventName arg |
+	| blockClass block eventName |
 
 	#byob = tuple first ifFalse: [
 		^self hatBlockFromTupleOldForm: tuple receiver: scriptOwner ].
@@ -4325,11 +4288,6 @@ ScriptablePhratchMorph >> hatBlockFromTuple: tuple receiver: scriptOwner [
 	blockClass = KeyEventHatMorph ifTrue: [
 		block choice: (tuple at: 4)].
 
-	blockClass = WhenHatBlockMorph ifTrue: [
-		(tuple at: 4) ~= false ifTrue: [
-			arg := self blockFromTuple: (tuple at: 4) receiver: scriptOwner.
-			block replaceArgMorph: block argMorph by: arg]].
-
 	^ block
 
 ]
@@ -4338,7 +4296,7 @@ ScriptablePhratchMorph >> hatBlockFromTuple: tuple receiver: scriptOwner [
 ScriptablePhratchMorph >> hatBlockFromTupleOldForm: tuple receiver: scriptOwner [
 	"Answer a new block for the given variable reference tuple."
 
-	| blockClass block eventName arg |
+	| blockClass block eventName |
 	blockClass := Smalltalk at: tuple first.
 	block := blockClass new scriptOwner: scriptOwner.
 
@@ -4351,31 +4309,7 @@ ScriptablePhratchMorph >> hatBlockFromTupleOldForm: tuple receiver: scriptOwner 
 	blockClass = KeyEventHatMorph ifTrue: [
 		block choice: (tuple at: 2)].
 
-	blockClass = WhenHatBlockMorph ifTrue: [
-		(tuple at: 2) ~= false ifTrue: [
-			arg := self blockFromTuple: (tuple at: 2) receiver: scriptOwner.
-			block replaceArgMorph: block argMorph by: arg]].
-
 	^ block
-
-]
-
-{ #category : #blocks }
-ScriptablePhratchMorph >> hatBlockType: blockType [
-
-	| stage evtName |
-	'E' = blockType ifTrue: [
-		evtName := ''.
-		(stage := self ownerOrYourselfThatIsA: PhratchStageMorph)
-			ifNotNil: [evtName := stage defaultEventName].
-		^ EventHatMorph new scriptOwner: self; eventName: evtName;
-		yourself].
-
-	'K' = blockType ifTrue: [^ KeyEventHatMorph new scriptOwner: self].
-	'M' = blockType ifTrue: [^ MouseClickEventHatMorph new scriptOwner: self].
-	'S' = blockType ifTrue: [^ EventHatMorph new forStartEvent scriptOwner: self].
-	'W' = blockType ifTrue: [^ WhenHatBlockMorph new scriptOwner: self].
-	'C' = blockType ifTrue: [^ CreationEventHatMorph new scriptOwner: self]
 
 ]
 

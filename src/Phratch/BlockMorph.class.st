@@ -54,7 +54,7 @@ BlockMorph >> aboutToBeGrabbedBy: aHandMorph [
 	"if I was being used as argument, replace myself with a generic argument morph"
 
 	| m |
-	(owner isKindOf: CommandBlockMorph) | (owner isKindOf: WhenHatBlockMorph) | (owner isKindOf: MultiArgMorph)
+	(owner isKindOf: CommandBlockMorph) | (owner isKindOf: MultiArgMorph)
 		ifFalse: [ ^ self ].
 	m := owner argMorphToReplace: self.
 	m ifNotNil: [ owner replaceArgMorph: self by: m ]

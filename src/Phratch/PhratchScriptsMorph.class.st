@@ -433,11 +433,7 @@ PhratchScriptsMorph >> topArgMorphAt: aRectangle exclude: aMorph [
 				(((area value: argM) intersects: aRectangle) and:
 				 [argM acceptsDroppedReporters])
 					ifTrue: [^ argM]]].
-		(b isKindOf: WhenHatBlockMorph) ifTrue: [
-			argM := b argMorph.
-			((argM bounds intersects: aRectangle) and:
-			 [argM acceptsDroppedReporters])
-				ifTrue: [^ argM]]].
+	].
 	^ nil
 
 ]
