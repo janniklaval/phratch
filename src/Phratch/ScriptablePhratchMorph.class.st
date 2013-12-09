@@ -1605,7 +1605,7 @@ ScriptablePhratchMorph >> blockFromTuple: tuple receiver: scriptOwner [
 						"argument is a value"
 						(block argumentAt: i) stringExpression: arg asString ] ].
 			^ block ].
-	(#(#EventHatMorph #KeyEventHatMorph #MouseClickEventHatMorph #CreationEventHatMorph) includes: k)
+	(#(#EventHatMorph #KeyEventHatMorph #MouseClickEventHatMorph #CreationEventHatMorph #StartEventHatMorph) includes: k)
 		ifTrue: [ 
 			block := self hatBlockFromTuple: tuple receiver: rcvr.
 			^ block ].
