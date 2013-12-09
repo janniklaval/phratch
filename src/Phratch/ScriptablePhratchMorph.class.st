@@ -3876,7 +3876,7 @@ ScriptablePhratchMorph >> eventReceived: event [
 				ifFalse: [ 
 					targetScripts := event name = 'Phratch-CreationEvent'
 						ifTrue: [ self scripts select: [ :s | s class == CreationEventHatMorph ] ]
-						ifFalse: [ self scripts select: [ :s | s class == EventHatMorph and: [ s eventName caseInsensitiveEqual: event name ] ] ] ] ].
+						ifFalse: [ self scripts select: [ :s | (s class == EventHatMorph or: [s class == StartEventHatMorph]) and: [ s eventName caseInsensitiveEqual: event name ] ] ] ] ].
 	newProcs := targetScripts asArray collect: [ :script | script startForEvent: event ].
 	^ newProcs select: [ :p | p notNil ]
 ]
@@ -3888,7 +3888,7 @@ ScriptablePhratchMorph >> eventReceivedNamed: eventName [
 	| targetScripts procs |
 	self isSprite ifTrue: [^ (self ownerThatIsA: PhratchStageMorph) eventReceivedNamed: eventName].
 	targetScripts := self scripts select: [:s |
-		(s class == EventHatMorph) and: [s eventName caseInsensitiveEqual: eventName]].
+		((s class == EventHatMorph) or: [s class == StartEventHatMorph]) and: [s eventName caseInsensitiveEqual: eventName]].
 	targetScripts := targetScripts asOrderedCollection.
 	self submorphsDo: [:m |
 		(m isKindOf: ScriptablePhratchMorph) ifTrue: [
@@ -7231,7 +7231,7 @@ ScriptablePhratchMorph >> stopScriptsFor: eventName [
 
 	({'Phratch-KeyPressedEvent' . 'Phratch-MouseClickEvent'} includes: eventName)
 		ifFalse: [ self scripts do: [:s |
-			((s class == EventHatMorph) and: [s eventName caseInsensitiveEqual: eventName])
+			(((s class == EventHatMorph) or:[s class == StartEventHatMorph]) and: [s eventName caseInsensitiveEqual: eventName])
 				ifTrue: [s stop]]]
 ]
 
