@@ -204,7 +204,6 @@ WatcherMorph >> initFieldsFrom: anObjStream version: classVersion [
 	"fields added in version 2"
 	self initFieldsNamed: #(
 		isSpriteSpecific
-		unused
 	) from: anObjStream.
 
 	"fields added in version 4"
@@ -631,7 +630,6 @@ WatcherMorph >> storeFieldsOn: anObjStream [
 		phratchSlider
 		watcher
 		isSpriteSpecific
-		unused
 		sliderMin
 		sliderMax
 		isLarge

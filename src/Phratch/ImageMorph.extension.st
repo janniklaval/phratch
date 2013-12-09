@@ -23,8 +23,6 @@ ImageMorph >> initFieldsFrom: anObjStream version: classVersion [
 
 	super initFieldsFrom: anObjStream version: classVersion.
 	self initFieldsNamed: #(
-		form
-		transparency
 	) from: anObjStream.
 
 ]
@@ -34,8 +32,6 @@ ImageMorph >> storeFieldsOn: anObjStream [
 
 	super storeFieldsOn: anObjStream.
 	self storeFieldsNamed: #(
-		form
-		transparency
 	) on: anObjStream.
 
 ]

@@ -17,7 +17,6 @@ SimpleSliderMorph >> initFieldsFrom: anObjStream version: classVersion [
 		minVal
 		maxVal
 		truncate
-		sliderThickness
 	) from: anObjStream.
 ]
 
@@ -31,7 +30,6 @@ SimpleSliderMorph >> storeFieldsOn: anObjStream [
 		minVal
 		maxVal
 		truncate
-		sliderThickness
 	) on: anObjStream.
 
 ]
