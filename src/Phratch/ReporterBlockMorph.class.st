@@ -8,6 +8,14 @@ Class {
 	#category : #'Phratch-Blocks'
 }
 
+{ #category : #'as yet unclassified' }
+ReporterBlockMorph class >> blockTypeOn: aScriptablePhratchMorph spec: spec color: blockColor [
+	
+	|block|
+	block :=  self new.
+	^block
+]
+
 { #category : #other }
 ReporterBlockMorph >> acceptsTypeOf: aBlockMorph [
 	"Answer true if I can accept a dropped reporter of the given type. Answer false by default."

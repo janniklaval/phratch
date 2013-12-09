@@ -75,6 +75,14 @@ CommandBlockMorph class >> argPermutationForSpec: spec withTranslation: translat
 ]
 
 { #category : #utilities }
+CommandBlockMorph class >> blockTypeOn: aScriptablePhratchMorph spec: spec color: blockColor [
+	
+	|block|
+	block :=  self new.
+	^block
+]
+
+{ #category : #utilities }
 CommandBlockMorph class >> isArgSpec: aString [
 	"Answer true if the given string is an argument specification."
 	^ ((aString size > 1) and: [aString first = $$ and:[aString last = $$]])

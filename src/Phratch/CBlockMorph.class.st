@@ -16,6 +16,14 @@ Class {
 	#category : #'Phratch-Blocks'
 }
 
+{ #category : #'as yet unclassified' }
+CBlockMorph class >> blockTypeOn: aScriptablePhratchMorph spec: spec color: blockColor [
+	
+	|block|
+	block :=  self new isSpecialForm: true.
+	^block
+]
+
 { #category : #private }
 CBlockMorph >> addCommandIcons [
 	"Add additional icons to certain blocks. Do nothing if this isn't one of those blocks."

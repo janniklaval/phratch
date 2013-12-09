@@ -195,7 +195,7 @@ ObjStream class >> userClasses [
 		"(156	ParameterMorph)"
 		(157		SetterBlockMorph)
 		(158		EventHatMorph)
-		"(159	EventArgMorph)"
+		(159		StartEventHatMorph)
 		(160		VariableBlockMorph)
 		"(161		IACTHatBlock)"
 		(162		ImageMedia)

@@ -17,6 +17,14 @@ Class {
 	#category : #'Phratch-Blocks'
 }
 
+{ #category : #'as yet unclassified' }
+IfElseBlockMorph class >> blockTypeOn: aScriptablePhratchMorph spec: spec color: blockColor [
+	
+	|block|
+	block :=  self new isSpecialForm: true.
+	^block
+]
+
 { #category : #private }
 IfElseBlockMorph >> addLabel [
 	"Also add the else label"

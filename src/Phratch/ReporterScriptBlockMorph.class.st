@@ -4,6 +4,15 @@ Class {
 	#category : #'Phratch-Blocks'
 }
 
+{ #category : #'as yet unclassified' }
+ReporterScriptBlockMorph class >> blockTypeOn: aScriptablePhratchMorph spec: spec color: blockColor [
+	
+	|block|
+	block :=  self new minArgs: 1.
+	block isSpecialForm: false.
+	^block
+]
+
 { #category : #adding }
 ReporterScriptBlockMorph >> addItem [
 	| varBlock pos pname |

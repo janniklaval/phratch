@@ -10,6 +10,19 @@ Class {
 	#category : #'Phratch-Blocks'
 }
 
+{ #category : #'as yet unclassified' }
+MultiArgReporterBlockMorph class >> blockTypeOn: aScriptablePhratchMorph spec: spec color: blockColor [
+	
+	|block selector|
+	selector := (spec at: 3) asSymbol.
+	
+	block := self new.
+	(#(#doCallBlockWithArgs #doReport) includes: selector)
+		ifTrue: [ block minArgs: 1 ].
+	block isSpecialForm: true.
+	^block
+]
+
 { #category : #adding }
 MultiArgReporterBlockMorph >> addItem [
 	self stop.

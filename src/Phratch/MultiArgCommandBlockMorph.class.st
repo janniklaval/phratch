@@ -10,6 +10,16 @@ Class {
 	#category : #'Phratch-Blocks'
 }
 
+{ #category : #'as yet unclassified' }
+MultiArgCommandBlockMorph class >> blockTypeOn: aScriptablePhratchMorph spec: spec color: blockColor [
+	
+	|block|
+	block := self new.
+	block minArgs: 1.
+	block isSpecialForm: true.
+	^block
+]
+
 { #category : #adding }
 MultiArgCommandBlockMorph >> addItem [
 	self stop.

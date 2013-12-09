@@ -244,8 +244,8 @@ PhratchFileTests >> testSaveBlocks [
 
 	| fileName commandBlock1 commandBlock2 blocks |
 	fileName := '_testSaveBlocks.phr'.
-	commandBlock1 := self addBlock: #('move $Number$ steps' - forward: #()) toSprite: self firstSprite.
-	commandBlock2 := self addBlock: #('turn $Number$ degrees' - turnRight: #() 15) toSprite: self firstSprite.
+	commandBlock1 := self addBlock: #('move $Number$ steps' #- #forward: #()) toSprite: self firstSprite.
+	commandBlock2 := self addBlock: #('turn $Number$ degrees' #- #turnRight: #() 15) toSprite: self firstSprite.
 
 	self saveProject: fileName.
 	window newPhratchProject.
@@ -316,7 +316,7 @@ PhratchFileTests >> testSaveWithBroadcast [
 	
 	commandBlock1 := self addBlock: #('broadcast $Event$' - broadcast: #() 'aBroadcast' ) toSprite: self firstSprite.
 	commandBlock1 defaultArgs: #('aBroadcast').
-	commandBlock2 := self addBlock: #('when I receive $Event$' #EventHatBlockType whenEventReceived #()) toSprite: self firstSprite.
+	commandBlock2 := self addBlock: #('when I receive $Event$' #EventHatMorph whenEventReceived #()) toSprite: self firstSprite.
 	commandBlock2 eventName: 'aBroadcast'.
 
 	self saveProject: fileName.

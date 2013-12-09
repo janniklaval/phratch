@@ -79,7 +79,7 @@ PhratchSpriteMorph >> allSubsprites [
 
 { #category : #accessing }
 PhratchSpriteMorph >> area [
-	<phratchItem: 'area' kind: #ReporterBlockType category: 'looks' defaultValues: #() subCategory: #a4 special: #()>
+	<phratchItem: 'area' kind: #ReporterBlockMorph category: 'looks' defaultValues: #() subCategory: #a4 special: #()>
 ^self height * self width
 ]
 
@@ -398,7 +398,7 @@ PhratchSpriteMorph >> cloneMe [
 { #category : #'motion ops' }
 PhratchSpriteMorph >> color: sensitiveColor sees: soughtColor [
 	"Return true if any of my pixels of sensitiveColor intersect with pixels of soughtColor in the world."
-	<phratchItem: 'color $ScreenColor$ is touching $ScreenColor$?' kind: #BooleanReporterBlockType category: 'sensing' defaultValues: #() subCategory: #sensor special: #()>
+	<phratchItem: 'color $ScreenColor$ is touching $ScreenColor$?' kind: #BooleanBlockMorph category: 'sensing' defaultValues: #() subCategory: #sensor special: #()>
 	| r myImage sensitivePixelsMask map index imageBelowMe result |
 	r := self bounds intersect: owner bounds.
 	r area = 0 ifTrue: [^ false].
@@ -501,7 +501,7 @@ PhratchSpriteMorph >> directionMenu [
 
 { #category : #'blocks API' }
 PhratchSpriteMorph >> dist: t1 and: t2 [ 
-	<phratchItem: 'distance to x $Number$ y $Number$' kind: #ReporterBlockType category: 'sensing' defaultValues: #(0 0) subCategory: #sensor special: #()>
+	<phratchItem: 'distance to x $Number$ y $Number$' kind: #ReporterBlockMorph category: 'sensing' defaultValues: #(0 0) subCategory: #sensor special: #()>
     ^ ((self xpos - t1) * (self xpos - t1) + ((self ypos - t2) * (self ypos - t2))) abs sqrt
 ]
 
@@ -517,7 +517,7 @@ PhratchSpriteMorph >> distance: t1 X: t2 Y: t3 [
 { #category : #'motion ops' }
 PhratchSpriteMorph >> distanceTo: anObject [
 	"Answer the distance to the given sprite."
-	<phratchItem: 'distance to $Sprite$' kind: #ReporterBlockType category: 'sensing' defaultValues: #() subCategory: #sensor special: #()>
+	<phratchItem: 'distance to $Sprite$' kind: #ReporterBlockMorph category: 'sensing' defaultValues: #() subCategory: #sensor special: #()>
 	| aSpriteOrSymbol |
 	aSpriteOrSymbol := self coerceSpriteArg: anObject.
 
@@ -684,13 +684,13 @@ PhratchSpriteMorph >> forward: distance [
 { #category : #'blocks API' }
 PhratchSpriteMorph >> function [
 
-	<phratchItem: 'the $SAReporter$ block' kind: #ReporterScriptBlockType category: 'operators' defaultValues: #() subCategory: #b2 special: #()>
+	<phratchItem: 'the $SAReporter$ block' kind: #ReporterScriptBlockMorph category: 'operators' defaultValues: #() subCategory: #b2 special: #()>
 ]
 
 { #category : #'blocks API' }
 PhratchSpriteMorph >> functionWithArgs [
 
-	<phratchItem: 'the $SAReporter$ block. Input names: $String$' kind: #ReporterScriptBlockType category: 'operators' defaultValues: #() subCategory: #b2 special: #()>
+	<phratchItem: 'the $SAReporter$ block. Input names: $String$' kind: #ReporterScriptBlockMorph category: 'operators' defaultValues: #() subCategory: #b2 special: #()>
 ]
 
 { #category : #private }
@@ -768,7 +768,7 @@ PhratchSpriteMorph >> getRotationStyle [
 PhratchSpriteMorph >> glideSecs: duration toX: endX y: endY elapsed: elapsed from: startPoint [
 	"Interpolate my position from my current postion to the given x and y over the given duration. If startPoint is nil, just answer my current position; this sets the starting point for the interpolation."
 
-	<phratchItem: 'glide $Number$ secs to x:$Number$ y:$Number$' kind: #TimeCommandBlockType category: 'motion' defaultValues: #(1 50 50)
+	<phratchItem: 'glide $Number$ secs to x:$Number$ y:$Number$' kind: #TimeBlockMorph category: 'motion' defaultValues: #(1 50 50)
 	subCategory: #a3 special: #()>
 	| fraction endPoint rPos |
 	startPoint ifNil: [ ^ self referencePosition ].
@@ -881,7 +881,7 @@ PhratchSpriteMorph >> hFlip [
 
 { #category : #'panther actions' }
 PhratchSpriteMorph >> hScale [
-	<phratchItem: 'hStretch' kind: #ReporterBlockType category: 'looks' defaultValues: #() subCategory: #a5 special: #()>
+	<phratchItem: 'hStretch' kind: #ReporterBlockMorph category: 'looks' defaultValues: #() subCategory: #a5 special: #()>
 	^ (100 * scalePoint x) rounded
 ]
 
@@ -893,7 +893,7 @@ PhratchSpriteMorph >> hasSubsprites [
 { #category : #accessing }
 PhratchSpriteMorph >> heading [
 	"Answer my heading in degrees, a number between -180 and 180."
-	<phratchItem: 'direction' kind: #ReporterBlockType category: 'motion' defaultValues: #() subCategory: #a7 special: #()>
+	<phratchItem: 'direction' kind: #ReporterBlockMorph category: 'motion' defaultValues: #() subCategory: #a7 special: #()>
 	| result att |
 	att := #heading.
 	self prototype ifNotNil: [
@@ -918,7 +918,7 @@ PhratchSpriteMorph >> heading: headingDegrees [
 
 { #category : #geometry }
 PhratchSpriteMorph >> height [
-	<phratchItem: 'height' kind: #ReporterBlockType category: 'looks' defaultValues: #() subCategory: #a4 special: #()>
+	<phratchItem: 'height' kind: #ReporterBlockMorph category: 'looks' defaultValues: #() subCategory: #a4 special: #()>
 ^super height
 ]
 
@@ -1020,7 +1020,7 @@ PhratchSpriteMorph >> initializeNodes [
 
 { #category : #'motion ops' }
 PhratchSpriteMorph >> isClone [
-	<phratchItem: 'Am I a clone?' kind: #BooleanReporterBlockType category: 'control' defaultValues: #() subCategory: #self special: #()>
+	<phratchItem: 'Am I a clone?' kind: #BooleanBlockMorph category: 'control' defaultValues: #() subCategory: #self special: #()>
 	^ isClone
 
 ]
@@ -1034,7 +1034,7 @@ PhratchSpriteMorph >> isClone: aBoolean [
 
 { #category : #'panther actions' }
 PhratchSpriteMorph >> isDraggable [
-	<phratchItem: 'draggable?' kind: #BooleanReporterBlockType category: 'motion' defaultValues: #() subCategory: #a8 special: #()>
+	<phratchItem: 'draggable?' kind: #BooleanBlockMorph category: 'motion' defaultValues: #() subCategory: #a8 special: #()>
 	^ draggable.
 ]
 
@@ -1076,7 +1076,7 @@ PhratchSpriteMorph >> isSprite [
 { #category : #'looks ops' }
 PhratchSpriteMorph >> isVisible [
 	"Make myself invisible."
-	<phratchItem: 'visible?' kind: #BooleanReporterBlockType category: 'looks' defaultValues: #() subCategory: #a6 special: #()>
+	<phratchItem: 'visible?' kind: #BooleanBlockMorph category: 'looks' defaultValues: #() subCategory: #a6 special: #()>
 	^super isVisible
 
 ]
@@ -1431,7 +1431,7 @@ PhratchSpriteMorph >> passiveYpos: aNumber [
 
 { #category : #'pen ops' }
 PhratchSpriteMorph >> penColor [
-	<phratchItem: 'pen color' kind: #ReporterBlockType category: 'pen' defaultValues: #() subCategory: #a1 special: #()>
+	<phratchItem: 'pen color' kind: #ReporterBlockMorph category: 'pen' defaultValues: #() subCategory: #a1 special: #()>
 	^ penColor
 
 ]
@@ -1466,7 +1466,7 @@ PhratchSpriteMorph >> penDown: aBoolean [
 
 { #category : #'BYOB attributes' }
 PhratchSpriteMorph >> penHue [
-	<phratchItem: 'pen hue' kind: #ReporterBlockType category: 'pen' defaultValues: #() subCategory: #a1 special: #()>
+	<phratchItem: 'pen hue' kind: #ReporterBlockMorph category: 'pen' defaultValues: #() subCategory: #a1 special: #()>
 	| att |
 	att := #penColor.
 	self prototype ifNotNil: [
@@ -1485,7 +1485,7 @@ PhratchSpriteMorph >> penPosition [
 
 { #category : #'BYOB attributes' }
 PhratchSpriteMorph >> penShade [
-	<phratchItem: 'pen shade' kind: #ReporterBlockType category: 'pen' defaultValues: #() subCategory: #a1 special: #()>
+	<phratchItem: 'pen shade' kind: #ReporterBlockMorph category: 'pen' defaultValues: #() subCategory: #a1 special: #()>
 	| att |
 	att := #penShade.
 	self prototype ifNotNil: [
@@ -1497,7 +1497,7 @@ PhratchSpriteMorph >> penShade [
 
 { #category : #'pen ops' }
 PhratchSpriteMorph >> penSize [
-	<phratchItem: 'pen size' kind: #ReporterBlockType category: 'pen' defaultValues: #() subCategory: #a1 special: #()>
+	<phratchItem: 'pen size' kind: #ReporterBlockMorph category: 'pen' defaultValues: #() subCategory: #a1 special: #()>
 	| att |
 	att := #penSize.
 	self prototype ifNotNil: [
@@ -1518,7 +1518,7 @@ PhratchSpriteMorph >> penSize: aNumber [
 
 { #category : #'blocks API' }
 PhratchSpriteMorph >> perimeter [
-	<phratchItem: 'perimeter' kind: #ReporterBlockType category: 'looks' defaultValues: #() subCategory: #a4 special: #()>
+	<phratchItem: 'perimeter' kind: #ReporterBlockMorph category: 'looks' defaultValues: #() subCategory: #a4 special: #()>
 ^ (2 * self height) + (2 * self width)
 ]
 
@@ -1603,13 +1603,13 @@ PhratchSpriteMorph >> privateSubsprites: anOrderedCollection [
 { #category : #'blocks API' }
 PhratchSpriteMorph >> procedure [
 
-	<phratchItem: 'the script' kind: #CommandScriptBlockType category: 'operators' defaultValues: #() subCategory: #b2 special: #()>
+	<phratchItem: 'the script' kind: #CommandScriptBlockMorph category: 'operators' defaultValues: #() subCategory: #b2 special: #()>
 ]
 
 { #category : #'blocks API' }
 PhratchSpriteMorph >> procedureWithArgs [
 
-	<phratchItem: 'the script. Input names: $String$' kind: #CommandScriptBlockType category: 'operators' defaultValues: #() subCategory: #b2 special: #()>
+	<phratchItem: 'the script. Input names: $String$' kind: #CommandScriptBlockMorph category: 'operators' defaultValues: #() subCategory: #b2 special: #()>
 ]
 
 { #category : #'byob OOP' }
@@ -1883,7 +1883,7 @@ PhratchSpriteMorph >> rotationDegrees: newRotationDegrees scalePoint: newScalePo
 
 { #category : #accessing }
 PhratchSpriteMorph >> rotationStyle [
-	<phratchItem: 'rotation style' kind: #ReporterBlockType category: 'motion' defaultValues: #() subCategory: #a6 special: #()>
+	<phratchItem: 'rotation style' kind: #ReporterBlockMorph category: 'motion' defaultValues: #() subCategory: #a6 special: #()>
     ^ rotationStyle
 ]
 
@@ -1915,7 +1915,7 @@ PhratchSpriteMorph >> say: aValue [
 
 { #category : #'looks ops' }
 PhratchSpriteMorph >> say: stringOrNum duration: durationSecs elapsed: elapsedMSecs from: startPoint [
-	<phratchItem: 'say $String$ for $Number$ secs' kind: #TimeCommandBlockType category: 'looks' defaultValues: #('Hello!' 2) subCategory: #a3 special: #()>
+	<phratchItem: 'say $String$ for $Number$ secs' kind: #TimeBlockMorph category: 'looks' defaultValues: #('Hello!' 2) subCategory: #a3 special: #()>
 	startPoint ifNil: [^ self say: stringOrNum].  "first call, show talk bubble"
 	elapsedMSecs >= (1000 * durationSecs) ifTrue: [self sayNothing].  "clear bubble"
 
@@ -1934,7 +1934,7 @@ PhratchSpriteMorph >> sayNothing [
 
 { #category : #accessing }
 PhratchSpriteMorph >> scale [
-	<phratchItem: 'size' kind: #ReporterBlockType category: 'looks' defaultValues: #() subCategory: #a4 special: #()>
+	<phratchItem: 'size' kind: #ReporterBlockMorph category: 'looks' defaultValues: #() subCategory: #a4 special: #()>
 	| att |
 	att := #size.
 	self prototype ifNotNil: [
@@ -2069,7 +2069,7 @@ PhratchSpriteMorph >> slideBackToFormerSituation: evt [
 { #category : #'byob OOP' }
 PhratchSpriteMorph >> spawn [
 
-	<phratchItem: 'duplicate' kind: #ReporterBlockType category: 'operators' defaultValues: #() subCategory: #b3 special: #()>
+	<phratchItem: 'duplicate' kind: #ReporterBlockMorph category: 'operators' defaultValues: #() subCategory: #b3 special: #()>
 	| stage child |
 "
 	(frame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNil: [^ nil].
@@ -2229,7 +2229,7 @@ PhratchSpriteMorph >> think: aValue [
 
 { #category : #'looks ops' }
 PhratchSpriteMorph >> think: stringOrNum duration: durationSecs elapsed: elapsedMSecs from: startPoint [
-	<phratchItem: 'think $String$ for $Number$ secs' kind: #TimeCommandBlockType category: 'looks' defaultValues: #('Hmm...' 2) subCategory: #a3 special: #()>
+	<phratchItem: 'think $String$ for $Number$ secs' kind: #TimeBlockMorph category: 'looks' defaultValues: #('Hmm...' 2) subCategory: #a3 special: #()>
 	startPoint ifNil: [^ self think: stringOrNum].  "first call, show think bubble"
 	elapsedMSecs >= (1000 * durationSecs) ifTrue: [self sayNothing].  "clear bubble"
 
@@ -2245,7 +2245,7 @@ PhratchSpriteMorph >> toggleRotationRule [
 PhratchSpriteMorph >> touching: anObject [
 	"Answer true if any visible part of me touches a visible part of the given sprite."
 	"Details: Currently uses the bounding box; should follow this up with comparison of visible pixels."
-	<phratchItem: 'touching $Sprite$?' kind: #BooleanReporterBlockType category: 'sensing' defaultValues: #() subCategory: #sensor special: #()>
+	<phratchItem: 'touching $Sprite$?' kind: #BooleanBlockMorph category: 'sensing' defaultValues: #() subCategory: #sensor special: #()>
 	| aSpriteOrSymbol stage intersection f1 f2 map oldVis result |
 	aSpriteOrSymbol := self coerceSpriteArg: anObject.
 
@@ -2293,7 +2293,7 @@ PhratchSpriteMorph >> touching: anObject [
 { #category : #accessing }
 PhratchSpriteMorph >> touchingColor: soughtColor [
 	"Answer true if any of my non-transparent pixels touch pixels of the given color in the world."
-	<phratchItem: 'touching color $ScreenColor$?' kind: #BooleanReporterBlockType category: 'sensing' defaultValues: #() subCategory: #sensor special: #()>
+	<phratchItem: 'touching color $ScreenColor$?' kind: #BooleanBlockMorph category: 'sensing' defaultValues: #() subCategory: #sensor special: #()>
 	| r myImage sensitivePixelsMask map imageBelowMe result |
 	r := self bounds intersect: owner bounds.
 	r area = 0 ifTrue: [^ false].
@@ -2413,7 +2413,7 @@ PhratchSpriteMorph >> vFlip [
 
 { #category : #'panther actions' }
 PhratchSpriteMorph >> vScale [
-	<phratchItem: 'vStretch' kind: #ReporterBlockType category: 'looks' defaultValues: #() subCategory: #a5 special: #()>
+	<phratchItem: 'vStretch' kind: #ReporterBlockMorph category: 'looks' defaultValues: #() subCategory: #a5 special: #()>
 	^ (100 * scalePoint y) rounded
 ]
 
@@ -2468,20 +2468,20 @@ PhratchSpriteMorph >> warn: t1 [
 
 { #category : #'motion ops' }
 PhratchSpriteMorph >> whenSpriteCreated [
-	<phratchItem: 'when $Sprite$ created' kind: #CreationEventHatBlockType category: 'control' defaultValues: #() subCategory: #ahat special: #()>
+	<phratchItem: 'when $Sprite$ created' kind: #CreationEventHatMorph category: 'control' defaultValues: #() subCategory: #ahat special: #()>
 
 
 ]
 
 { #category : #geometry }
 PhratchSpriteMorph >> width [
-	<phratchItem: 'width' kind: #ReporterBlockType category: 'looks' defaultValues: #() subCategory: #a4 special: #()>
+	<phratchItem: 'width' kind: #ReporterBlockMorph category: 'looks' defaultValues: #() subCategory: #a4 special: #()>
 ^super width
 ]
 
 { #category : #accessing }
 PhratchSpriteMorph >> xpos [
-	<phratchItem: 'x position' kind: #ReporterBlockType category: 'motion' defaultValues: #() subCategory: #a7 special: #()>
+	<phratchItem: 'x position' kind: #ReporterBlockMorph category: 'motion' defaultValues: #() subCategory: #a7 special: #()>
 	| att |
 	att := #xPosition.
 	self prototype ifNotNil: [
@@ -2501,7 +2501,7 @@ PhratchSpriteMorph >> xpos: aNumber [
 
 { #category : #accessing }
 PhratchSpriteMorph >> ypos [
-	<phratchItem: 'y position' kind: #ReporterBlockType category: 'motion' defaultValues: #() subCategory: #a7 special: #()>
+	<phratchItem: 'y position' kind: #ReporterBlockMorph category: 'motion' defaultValues: #() subCategory: #a7 special: #()>
 	| att |
 	att := #yPosition.
 	self prototype ifNotNil: [

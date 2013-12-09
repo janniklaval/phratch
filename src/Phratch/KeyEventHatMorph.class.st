@@ -8,6 +8,12 @@ Class {
 	#category : #'Phratch-Blocks'
 }
 
+{ #category : #'as yet unclassified' }
+KeyEventHatMorph class >> blockTypeOn: aScriptablePhratchMorph spec: spec color: blockColor [
+	
+	^ (self new scriptOwner: aScriptablePhratchMorph) color: blockColor
+]
+
 { #category : #other }
 KeyEventHatMorph >> asBlockTuple [
 	"Answer a tuple (Array) describing this block and its arguments."

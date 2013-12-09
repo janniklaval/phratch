@@ -12,6 +12,20 @@ Class {
 }
 
 { #category : #settings }
+EventHatMorph class >> blockTypeOn: aScriptablePhratchMorph spec: spec color: blockColor [
+	
+	|stage evtName|
+	
+	evtName := ''.
+	(stage := aScriptablePhratchMorph ownerOrYourselfThatIsA: PhratchStageMorph)
+		ifNotNil: [evtName := stage defaultEventName].
+	^ (self new 
+		scriptOwner: aScriptablePhratchMorph; 
+		eventName: evtName;
+		yourself) color: blockColor
+]
+
+{ #category : #settings }
 EventHatMorph class >> threadSafeMode [
 	^ThreadSafeMode ifNil: [false]
 ]
@@ -80,8 +94,8 @@ EventHatMorph >> helpScreenName [
 
 	(self isKindOf: MouseClickEventHatMorph) ifTrue: [^ 'mouseclickHat'].
 	(self isKindOf: KeyEventHatMorph) ifTrue: [^ 'keyHat'].
+	(self isKindOf: StartEventHatMorph) ifTrue: [^ 'startHat'].
 	self eventName = 'Phratch-StartClicked'
-		ifTrue: [^ 'startHat']
 		ifFalse: [^ 'broadcastHat'].
 
 	^ nil

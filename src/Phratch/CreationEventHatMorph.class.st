@@ -4,6 +4,12 @@ Class {
 	#category : #'Phratch-Blocks'
 }
 
+{ #category : #'as yet unclassified' }
+CreationEventHatMorph class >> blockTypeOn: aScriptablePhratchMorph spec: spec color: blockColor [
+	
+	^ (self new scriptOwner: aScriptablePhratchMorph) color: blockColor.
+]
+
 { #category : #other }
 CreationEventHatMorph >> eventName [
 
