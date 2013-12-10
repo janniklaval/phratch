@@ -41,7 +41,7 @@ WatcherMorph >> buildReadout [
 	ifTrue: [
 		readout := UpdatingColorMorph new
 			color: (Color black);
-			stepTime: 100;
+			stepTime: self stepTime;
 		yourself].
 	readoutFrame := WatcherReadoutFrameMorph new addMorph: readout.
 
