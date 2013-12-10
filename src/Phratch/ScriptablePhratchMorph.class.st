@@ -238,9 +238,11 @@ ScriptablePhratchMorph class >> isSpriteSpecificTarget: anObject selector: selec
 	"I determine whether the given selector is specific to a particular Sprite. ."
 
 	| i |
+	
+	self flag: 'This is crappy, it gives another receiver than the one expected. Should be removed, but carefully '.
 	(anObject isKindOf: PhratchSpriteMorph) ifFalse: [^ false].
 	i := selector asString
-		findAnySubStr: #('answer' 'key' 'Loud' 'mouse' 'sensor' 'soundLevel' 'tempo' 'timer')
+		findAnySubStr: #('answer' 'key' 'Loud' 'mouse' 'soundLevel' 'tempo' 'timer')
 		startingAt: 1.
 	^ i > selector asString size
 

@@ -649,7 +649,7 @@ CommandBlockMorph >> evaluateWithArgs: rawArgs [
 	"special case for math and boolean infix operators"
 	selector isInfix ifTrue: [^ self evaluateInfixWithArgs: rawArgs].
 
-	args := self coerceArgs: rawArgs..
+	args := self coerceArgs: rawArgs.
 
 	"special case for unary operators"
 	(#(abs not rounded sqrt truncated) includes: selector) ifTrue: [^ args first perform: selector].
