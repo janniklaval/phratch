@@ -180,6 +180,24 @@ ConfigurationOfPhratch >> version10: spec [
 	spec for: #common do: [
 			spec repository: 'http://smalltalkhub.com/mc/JLaval/Phratch/main'.
 			spec
+				package: 'Phratch-janniklaval.224'.
+			spec
+				project: 'Sound' with: #stable;
+				project: 'OSProcess' with: #stable.
+	].
+	spec for: #'pharo3.x' do: [
+			spec repository: 'http://smalltalkhub.com/mc/JLaval/Phratch/main'.
+			spec
+				package: 'PhratchCompatibilityPharo3'.
+	]
+]
+
+{ #category : #'as yet unclassified' }
+ConfigurationOfPhratch >> version20: spec [
+	<version:'2.0' imports: #('1.0-baseline' )>
+	spec for: #common do: [
+			spec repository: 'http://smalltalkhub.com/mc/JLaval/Phratch/main'.
+			spec
 				package: 'Phratch'.
 			spec
 				project: 'Sound' with: #stable;
