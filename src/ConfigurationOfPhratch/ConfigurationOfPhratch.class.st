@@ -180,7 +180,7 @@ ConfigurationOfPhratch >> version10: spec [
 	spec for: #common do: [
 			spec repository: 'http://smalltalkhub.com/mc/JLaval/Phratch/main'.
 			spec
-				package: 'Phratch-janniklaval.224'.
+				package: 'Phratch' with: 'Phratch-janniklaval.224'.
 			spec
 				project: 'Sound' with: #stable;
 				project: 'OSProcess' with: #stable.
