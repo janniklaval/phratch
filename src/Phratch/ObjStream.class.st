@@ -552,6 +552,99 @@ ObjStream >> objects [
 
 ]
 
+{ #category : #'entry points' }
+ObjStream >> oldReadObjFrom: aStream [
+	"Read the root object from the given binary stream."
+
+	^ self oldReadObjFrom: aStream showProgress: false
+
+]
+
+{ #category : #'entry points' }
+ObjStream >> oldReadObjFrom: aStream showProgress: showProgress [
+	"Read the root object from the given binary stream. If showProgress is true, display a progress bar."
+
+	| objCount tenPercent |
+	objects := OrderedCollection new.
+	"stream := FLMaterializer newDefault materializeFrom: aStream."
+	stream := aStream.
+	self readFileHeader.
+	firstPass := true.
+	objCount := stream uint32.
+	showProgress
+		ifTrue: [
+			tenPercent := objCount // 10.
+			('Reading...' localized, PhratchTranslator ellipsesSuffix)
+				displayProgressAt: Display center - (32@5)  "Sensor cursorPoint"
+				from: 0 to: objCount + tenPercent
+				during: [:progressBar |
+					1 to: objCount do: [:i |
+						objects addLast: self readObjectRecord.
+						progressBar value: i].
+					
+					firstPass := false.
+					objects do: [:rec | self fixReferencesForObjectRecord: rec].
+					progressBar value: objCount + (tenPercent // 2).
+					objects do: [:rec | self initializeUserDefinedFields: rec].
+					progressBar value: objCount + tenPercent.
+					(Delay forMilliseconds: 200) wait]]
+		ifFalse: [
+			objCount timesRepeat: [objects addLast: self readObjectRecord].
+			firstPass := false.
+			objects do: [:rec | self fixReferencesForObjectRecord: rec].
+			objects do: [:rec | self initializeUserDefinedFields: rec]].
+
+	^ objects first first
+
+]
+
+{ #category : #'entry points' }
+ObjStream >> oldStoreObj: anObject on: aStream [
+	"Write the given object and all the objects that can be reached from it on the given binary stream. Do not display a progress bar."
+
+	self oldStoreObj: anObject on: aStream showProgress: false.
+
+]
+
+{ #category : #'entry points' }
+ObjStream >> oldStoreObj: anObject on: aStream showProgress: showProgress [
+	"Write the given object and all the objects that can be reached from it on the given binary stream. If showProgress is true, display a progress bar."
+
+	| sortedObjEntries i obj |
+	objects := IdentityDictionary new.
+	objectIndex := 1.
+
+	"collect objects"
+	stream := nil.
+	firstPass := true.
+	toDo := OrderedCollection new.
+	self recordObject: anObject id: (self classEntryFor: anObject) first.
+	[toDo size > 0] whileTrue: [self recordFieldsOf: toDo removeFirst].
+
+	"write object table"
+	stream := aStream.
+	firstPass := false.
+	sortedObjEntries := objects asArray sort: [:e1 :e2 | e1 first < e2 first].
+	self writeFileHeader.
+	stream uint32: sortedObjEntries size.
+	showProgress
+		ifTrue: [
+			i := 0.  "object counter for progress bar"
+			'Saving...'
+				displayProgressAt: Sensor cursorPoint
+				from: 0 to: sortedObjEntries size
+				during:  [:progressBar |
+					sortedObjEntries do: [:objEntry |
+						progressBar value: (i := i + 1).
+						obj := objEntry at: 2.
+						self writeObject: obj objEntry: objEntry]]]
+		ifFalse: [
+			sortedObjEntries do: [:objEntry |
+				obj := objEntry at: 2.
+				self writeObject: obj objEntry: objEntry]].
+
+]
+
 { #category : #'fixed format-writing' }
 ObjStream >> putArray: anObject id: classID [
 
@@ -782,38 +875,8 @@ ObjStream >> readObjFrom: aStream [
 ObjStream >> readObjFrom: aStream showProgress: showProgress [
 	"Read the root object from the given binary stream. If showProgress is true, display a progress bar."
 
-	| objCount tenPercent |
-	objects := OrderedCollection new.
-	"stream := FLMaterializer newDefault materializeFrom: aStream."
-	stream := aStream.
-	self readFileHeader.
-	firstPass := true.
-	objCount := stream uint32.
-	showProgress
-		ifTrue: [
-			tenPercent := objCount // 10.
-			('Reading...' localized, PhratchTranslator ellipsesSuffix)
-				displayProgressAt: Display center - (32@5)  "Sensor cursorPoint"
-				from: 0 to: objCount + tenPercent
-				during: [:progressBar |
-					1 to: objCount do: [:i |
-						objects addLast: self readObjectRecord.
-						progressBar value: i].
-					
-					firstPass := false.
-					objects do: [:rec | self fixReferencesForObjectRecord: rec].
-					progressBar value: objCount + (tenPercent // 2).
-					objects do: [:rec | self initializeUserDefinedFields: rec].
-					progressBar value: objCount + tenPercent.
-					(Delay forMilliseconds: 200) wait]]
-		ifFalse: [
-			objCount timesRepeat: [objects addLast: self readObjectRecord].
-			firstPass := false.
-			objects do: [:rec | self fixReferencesForObjectRecord: rec].
-			objects do: [:rec | self initializeUserDefinedFields: rec]].
-
-	^ objects first first
-
+	objects := (FLMaterializer newDefault materializeFrom: aStream) root.
+	^ objects
 ]
 
 { #category : #'private-reading' }
@@ -897,39 +960,7 @@ ObjStream >> storeObj: anObject on: aStream [
 ObjStream >> storeObj: anObject on: aStream showProgress: showProgress [
 	"Write the given object and all the objects that can be reached from it on the given binary stream. If showProgress is true, display a progress bar."
 
-	| sortedObjEntries i obj |
-	objects := IdentityDictionary new.
-	objectIndex := 1.
-
-	"collect objects"
-	stream := nil.
-	firstPass := true.
-	toDo := OrderedCollection new.
-	self recordObject: anObject id: (self classEntryFor: anObject) first.
-	[toDo size > 0] whileTrue: [self recordFieldsOf: toDo removeFirst].
-
-	"write object table"
-	stream := aStream.
-	firstPass := false.
-	sortedObjEntries := objects asArray sort: [:e1 :e2 | e1 first < e2 first].
-	self writeFileHeader.
-	stream uint32: sortedObjEntries size.
-	showProgress
-		ifTrue: [
-			i := 0.  "object counter for progress bar"
-			'Saving...'
-				displayProgressAt: Sensor cursorPoint
-				from: 0 to: sortedObjEntries size
-				during:  [:progressBar |
-					sortedObjEntries do: [:objEntry |
-						progressBar value: (i := i + 1).
-						obj := objEntry at: 2.
-						self writeObject: obj objEntry: objEntry]]]
-		ifFalse: [
-			sortedObjEntries do: [:objEntry |
-				obj := objEntry at: 2.
-				self writeObject: obj objEntry: objEntry]].
-
+	^FLSerializer serialize: anObject on: aStream.
 ]
 
 { #category : #'private-reading' }

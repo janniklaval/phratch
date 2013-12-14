@@ -2,13 +2,13 @@
 Tests ObjStream separately from Phratch.
 "
 Class {
-	#name : #ObjStreamTests,
+	#name : #OldObjStreamTests,
 	#superclass : #TestCase,
 	#category : #'Phratch-Tests'
 }
 
 { #category : #tests }
-ObjStreamTests >> equalityTest: inObj [
+OldObjStreamTests >> equalityTest: inObj [
 	"For testing. Serialize and deserialize the given object and compare the result for equality with the original object."
 
 	| outObj |
@@ -18,7 +18,7 @@ ObjStreamTests >> equalityTest: inObj [
 ]
 
 { #category : #tests }
-ObjStreamTests >> formEqualityTest: inForm [
+OldObjStreamTests >> formEqualityTest: inForm [
 	"For testing. Serialize and deserialize the given form and compare the result for equality with the original."
 
 	| outForm |
@@ -35,7 +35,7 @@ ObjStreamTests >> formEqualityTest: inForm [
 ]
 
 { #category : #tests }
-ObjStreamTests >> phratchObjectsFrom: aFileName [
+OldObjStreamTests >> phratchObjectsFrom: aFileName [
 	"Read a Phratch project from the file with the given name and answer the objects array."
 
 	| f version objects |
@@ -43,7 +43,7 @@ ObjStreamTests >> phratchObjectsFrom: aFileName [
 	version := ObjStream phratchFileVersionFrom: (f next: 10) asString.
 	version = 0 ifTrue: [
 		f position: 0.
-		objects := ObjStream new readObjFrom: f].
+		objects := ObjStream new oldReadObjFrom: f].
 	(version = 1) | (version = 2) ifTrue: [
 		f skip: f uint32.  "skip header"
 		objects := ObjStream new readObjsFrom: f].
@@ -53,18 +53,19 @@ ObjStreamTests >> phratchObjectsFrom: aFileName [
 ]
 
 { #category : #tests }
-ObjStreamTests >> serializeAndDeserialize: anObject [
+OldObjStreamTests >> serializeAndDeserialize: anObject [
 	"For testing. Serialize and de-serialize the given object and answer the result."
 
 	| stream |
 	stream := WriteStream on: ByteArray new.
-	ObjStream new storeObj: anObject on: stream showProgress: false.
-	^ ObjStream new readObjFrom: (ReadStream on: stream contents)
+	ObjStream new oldStoreObj: anObject on: stream showProgress: false.
+	
+	^ ObjStream new oldReadObjFrom: (ReadStream on: stream contents)
 
 ]
 
 { #category : #tests }
-ObjStreamTests >> testFixedFormatClass [
+OldObjStreamTests >> testFixedFormatClass [
 	"Test conversions for fixed-format objects."
 
 	| shared |
@@ -106,7 +107,7 @@ ObjStreamTests >> testFixedFormatClass [
 ]
 
 { #category : #tests }
-ObjStreamTests >> testStoreDictionary [
+OldObjStreamTests >> testStoreDictionary [
 	"Failing test for storing and reading dictionaries."
 	
 	| stream objstreamer d d2 |
@@ -115,21 +116,21 @@ ObjStreamTests >> testStoreDictionary [
 	objstreamer := ObjStream new.
 	d := Dictionary new.
 	d at: 'score' put: 10.
-	objstreamer storeObj: d on: stream.
+	objstreamer oldStoreObj: d on: stream.
 	stream close.
 	
 	"Now try and read back the object"
 	stream := FileStream readOnlyFileNamed: '_test.out'.
 	stream binary.
 	objstreamer := ObjStream new.
-	d2 := objstreamer readObjFrom: stream.
+	d2 := objstreamer oldReadObjFrom: stream.
 	stream close.
 	
 	self assert: (d = d2).
 ]
 
 { #category : #tests }
-ObjStreamTests >> testUserClass [
+OldObjStreamTests >> testUserClass [
 	"Test conversions for fixed-format objects."
 	"self initialize; userClassTests"
 
@@ -145,7 +146,7 @@ ObjStreamTests >> testUserClass [
 ]
 
 { #category : #tests }
-ObjStreamTests >> writeTestFile [
+OldObjStreamTests >> writeTestFile [
 	"self writeTestFile"
 
 	| all objects s |
@@ -177,7 +178,7 @@ ObjStreamTests >> writeTestFile [
 
 	objects := (Array with: nil), all asArray.
 	s := (FileStream newFileNamed: 'test.obj') binary.
-	ObjStream new storeObj: objects on: s.
+	ObjStream new oldStoreObj: objects on: s.
 	s close.
 
 ]

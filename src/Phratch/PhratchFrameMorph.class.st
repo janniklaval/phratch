@@ -1416,6 +1416,52 @@ PhratchFrameMorph >> extractInfoFrom: aByteArray [
 ]
 
 { #category : #'file read/write' }
+PhratchFrameMorph >> extractOldProjectFrom: aByteArray [
+	"Answer a Phratch project (i.e. a PhratchStageMorph possibly containing sprites) from the given ByteArray. Answer nil if the project cannot be unpacked."
+
+	| s version proj |
+
+	ObjStream initialize. "just to make sure this works in filed-in changesets, -Jens"
+	s := ReadStream on: aByteArray.
+	version := ObjStream phratchFileVersionFrom: (s next: 10) asString.
+	version = 0 ifTrue: [
+		ScriptablePhratchMorph decodeAsByob.	"make sure we initialize every field - this breaks compatibility with Phratch-sprites. -Jens"
+		s position: 0.
+		[proj := ObjStream new oldReadObjFrom: s showProgress: true] ifError: [
+		^ self extractPhratchProjectFrom: aByteArray]].
+	({1 . 2} includes: version) ifTrue: [
+		s skip: s uint32.  "skip header"
+		proj := ObjStream new readObjFrom: s showProgress: true].
+
+	proj class = PhratchStageMorph ifFalse: [
+		version > 2
+			ifTrue: [self error: 'Project created by a later version of Phratch']
+			ifFalse: [self error: 'Problem reading project.'].
+		^ nil].
+
+	ScriptablePhratchMorph buildBlockSpecDictionary.
+
+	'initializing...' 
+		displayProgressAt: self center - (32@5)  "Sensor cursorPoint"
+		from: 0 to: ((proj allMorphs) select: [:m| m isKindOf: ScriptablePhratchMorph]) size * 2
+		during: [:bar | | i | i := 0.
+
+	proj allMorphsDo: [:m |
+		(m isKindOf: ScriptablePhratchMorph) ifTrue: [
+			 i := i + 1. bar value: i.
+			m convertTuplesToDefinitions]].
+
+	proj allMorphsDo: [:m |
+		(m isKindOf: ScriptablePhratchMorph) ifTrue: [  "convert to new blocks" 
+			i := i + 1. bar value: i.
+			m convertStacksToTuples.
+			m convertTuplesToStacks]]].
+
+	^ proj
+
+]
+
+{ #category : #'file read/write' }
 PhratchFrameMorph >> extractPhratchProjectFrom: aByteArray [
 	"Answer a Phratch project (i.e. a PhratchStageMorph possibly containing sprites) from the given ByteArray. Answer nil if the project cannot be unpacked.
 
@@ -1515,6 +1561,7 @@ PhratchFrameMorph >> fileMenu: aMenuTitleMorph [
 	menu := MenuMorph new defaultTarget: self.
 	menu add: 'New' translated action: #newPhratchProject.
 	menu add: 'Open' translated action: #openPhratchProject.
+	menu add: 'Open older' translated action: #openScratchProject.
 	menu add: 'Save' translated action: #savePhratchProjectNoDialog.
 	menu add: 'Save As' translated action: #savePhratchProject.
 	menu addLine.
@@ -2415,6 +2462,37 @@ PhratchFrameMorph >> openPhratchProjectNamed: fName [
 	self initializeWatcherPositions.
 	viewerPane updateContents.
 
+]
+
+{ #category : #'file read/write' }
+PhratchFrameMorph >> openScratchProject [
+	"Allow the user to select a project to open, then open that project."
+
+	| response newProj |
+	self closeMediaEditorsAndDialogs
+		ifFalse: [ ^ self ].
+	self stopAll.
+	(justSaved or: [ self projectIsEmpty ])
+		ifFalse: [ 
+			"ask the user if they want to save the current project"
+			response := DialogBoxMorph askWithCancel: 'Save the current project?'.
+			response = #cancelled
+				ifTrue: [ ^ self ].
+			response
+				ifTrue: [ self savePhratchProjectNoDialog ] ].
+	response := PhratchFileChooserDialog openPhratchFileFor: self.
+	response = #cancelled
+		ifTrue: [ ^ self ].
+	(response isKindOf: FileReference)
+		ifTrue: [ 
+			"read the contents of a local file"
+			^ self openPhratchProjectNamed: response ].
+	(response isKindOf: ByteArray)
+		ifFalse: [ ^ self ].
+	[ projectInfo := self extractInfoFrom: response ] ifError: [ projectInfo := Dictionary new ].
+	[ newProj := self extractOldProjectFrom: response ] ifError: [ ^ self ].
+	self installNewProject: newProj.
+	projectDirectory := PhratchFileChooserDialog getDefaultFolderForType: #project
 ]
 
 { #category : #'falta adaptar' }
@@ -3764,7 +3842,7 @@ PhratchFrameMorph >> writePhratchProject [
 		ifNil: [
 			justSaved := true.
 			self updateProjectName.
-			(projectDirectory / projectName) delete.
+			(projectDirectory / projectName) exists ifTrue:[(projectDirectory / projectName) delete].
 			[(projectDirectory / out localName) renameTo: projectName]
 				ifError: [^ self inform: 'Save failed' withDetails: 'Is the folder read-only?' localized].
 			FilePluginPrims new setMacFileNamed: (projectDirectory / projectName) fullName type: 'STpb' creator: 'PHRA']

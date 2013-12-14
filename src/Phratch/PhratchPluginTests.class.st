@@ -45,14 +45,14 @@ PhratchPluginTests >> filterBenchmark: count [
 	msecs := [ count timesRepeat: [ PhratchPlugin primShiftHue: f bits into: fOut bits byDegrees: 100 ] ] timeToRun.
 	s
 		nextPutAll: 'hue shift: ';
-		nextPutAll: (msecs asFloat / count roundTo: 0.01) printString;
+		nextPutAll: (msecs asMilliSeconds / count roundTo: 0.01) printString;
 		nextPutAll: ' msecs';
 		cr.
 	"fOut display."
 	msecs := [ count timesRepeat: [ PhratchPlugin primShiftBrightness: f bits into: fOut bits by: 50 ] ] timeToRun.
 	s
 		nextPutAll: 'brightness shift: ';
-		nextPutAll: (msecs asFloat / count roundTo: 0.01) printString;
+		nextPutAll: (msecs asMilliSeconds / count roundTo: 0.01) printString;
 		nextPutAll: ' msecs';
 		cr.
 	"fOut display."
@@ -66,7 +66,7 @@ PhratchPluginTests >> filterBenchmark: count [
 				power: 300 ] ] timeToRun.
 	s
 		nextPutAll: 'fisheye: ';
-		nextPutAll: (msecs asFloat / count roundTo: 0.01) printString;
+		nextPutAll: (msecs asMilliSeconds / count roundTo: 0.01) printString;
 		nextPutAll: ' msecs';
 		cr.
 	"fOut display."
@@ -80,14 +80,14 @@ PhratchPluginTests >> filterBenchmark: count [
 				angle: 1000 ] ] timeToRun.
 	s
 		nextPutAll: 'whirl: ';
-		nextPutAll: (msecs asFloat / count roundTo: 0.01) printString;
+		nextPutAll: (msecs asMilliSeconds / count roundTo: 0.01) printString;
 		nextPutAll: ' msecs';
 		cr.
 	"fOut display."
 	msecs := [ count timesRepeat: [ fOut display ] ] timeToRun.
 	s
 		nextPutAll: 'display: ';
-		nextPutAll: (msecs asFloat / count roundTo: 0.01) printString;
+		nextPutAll: (msecs asMilliSeconds / count roundTo: 0.01) printString;
 		nextPutAll: ' msecs';
 		cr.
 	^ s contents
