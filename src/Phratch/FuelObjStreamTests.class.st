@@ -80,8 +80,6 @@ FuelObjStreamTests >> testFixedFormatClass [
 	self equalityTest: (Dictionary new at: shared put: shared; at: 'b' put: shared; yourself).
 	self equalityTest: (IdentityDictionary new at: shared put: shared; at: 2 put: shared; yourself).
 
-	self inform: 'Fixed-format tests passed.'.
-
 ]
 
 { #category : #tests }
