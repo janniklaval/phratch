@@ -134,7 +134,7 @@ ObjStreamTests >> testUserClass [
 	"self initialize; userClassTests"
 
 	| userClassList suspectClasses |
-	userClassList := ObjStream userClasses collect: [:rec | Smalltalk at: rec second ifAbsent:[]] thenReject:[:e | e = nil].
+	userClassList := (ObjStream userClasses collect: [:rec | Smalltalk at: rec second ifAbsent:[]]) reject:[:e | e = nil].
 	userClassList := userClassList reject: [:cl | (cl inheritsFrom: BlockMorph) | (cl inheritsFrom: ArgMorph)].
 	userClassList do: [:cl | 
 		self assert: (cl = (self serializeAndDeserialize: cl new) class)].
