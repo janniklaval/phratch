@@ -3768,9 +3768,6 @@ PhratchFrameMorph >> writePhratchProject [
 		(m isKindOf: WatcherMorph) ifTrue: [m delete]].
 	
 	self stopAll.
-
-	FuelObjStream initialize. "just to make sure this works in filed-in changesets, -Jens"
-
 	self world ifNotNil: [self world activeHand newKeyboardFocus: nil].  "terminates active editor"
 
 	"share duplicate sounds and images"
@@ -3815,8 +3812,6 @@ PhratchFrameMorph >> writePhratchProject [
 				out nextPutAll: 'PhratchV01' asByteArray. "changed the internal version marker for the byob-prototype -Jens"
 				self storeProjectInfoOn: out.
 				FuelObjStream new storeObj: workPane on: out.
-				"FLSerializer serialize: workPane on: out."
-				
 				out close].
 	] ifError: [:err :rcvr |
 		out ifNotNil: [
