@@ -79,13 +79,6 @@ ColorArgMorph >> evaluate [
 
 ]
 
-{ #category : #'object i/o' }
-ColorArgMorph >> fieldsVersion [
-
-	^ 1
-
-]
-
 { #category : #'event handling' }
 ColorArgMorph >> handlesMouseDown: evt [
 

@@ -124,13 +124,6 @@ SetterBlockMorph >> expressionArg [
 	^ nil
 ]
 
-{ #category : #'object i/o' }
-SetterBlockMorph >> fieldsVersion [
-
-	^ 1
-
-]
-
 { #category : #accessing }
 SetterBlockMorph >> helpScreenName [
 	"Answer the name of the help screen for this hat block, or nil if no help is available."
@@ -153,17 +146,6 @@ SetterBlockMorph >> initChangerForVar: varName [
 	argPermutation := CommandBlockMorph argPermutationForSpec: 'set $Variable$ to $String$' withTranslation: commandSpec.
 	self selector: #changeVar:by:.
 	self variable: var.
-
-]
-
-{ #category : #'object i/o' }
-SetterBlockMorph >> initFieldsFrom: anObjStream version: classVersion [
-
-	super initFieldsFrom: anObjStream version: classVersion.
-	self initFieldsNamed: #(
-		variable
-	) from: anObjStream.
-	self variable: variable.
 
 ]
 
@@ -209,17 +191,6 @@ SetterBlockMorph >> replaceArgMorph: oldMorph by: newMorph [
 	super replaceArgMorph: oldMorph by: newMorph.
 	oldMorph = argMorphs first ifTrue: [
 		self determineIfSpecialForm]
-]
-
-{ #category : #'object i/o' }
-SetterBlockMorph >> storeFieldsOn: anObjStream [
-
-	super storeFieldsOn: anObjStream.
-	variable := self variable.
-	self storeFieldsNamed: #(
-		variable
-	) on: anObjStream.
-
 ]
 
 { #category : #accessing }

@@ -1,11 +1,6 @@
 Extension { #name : #UpdatingStringMorph }
 
 { #category : #'*Phratch-Extensions' }
-UpdatingStringMorph >> fieldsVersion [
-	^ 1
-]
-
-{ #category : #'*Phratch-Extensions' }
 UpdatingStringMorph >> formatValue: v [
 
 	format = #string ifTrue: [
@@ -30,21 +25,6 @@ UpdatingStringMorph >> formatValue: v [
 
 	^ v printString
 
-]
-
-{ #category : #'*Phratch-Extensions' }
-UpdatingStringMorph >> initFieldsFrom: anObjStream version: classVersion [
-	super initFieldsFrom: anObjStream version: classVersion.
-	self
-		initFieldsNamed: #(
-			#format
-			#target
-			#getSelector
-			#putSelector
-			#floatPrecision
-			#growable
-			#stepTime)
-		from: anObjStream
 ]
 
 { #category : #'*Phratch-Extensions' }
@@ -73,21 +53,6 @@ UpdatingStringMorph >> readFromTarget [
 	lastValue := v.
 	^ self formatValue: v
 
-]
-
-{ #category : #'*Phratch-Extensions' }
-UpdatingStringMorph >> storeFieldsOn: anObjStream [
-
-	super storeFieldsOn: anObjStream.
-	self storeFieldsNamed: #(
-		format
-		target
-		getSelector
-		putSelector
-		floatPrecision
-		growable
-		stepTime
-	) on: anObjStream.
 ]
 
 { #category : #'*Phratch-Extensions' }

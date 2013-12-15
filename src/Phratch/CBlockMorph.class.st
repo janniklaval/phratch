@@ -312,13 +312,6 @@ CBlockMorph >> drawVerticalBarOn: aCanvas [
 
 ]
 
-{ #category : #'object i/o' }
-CBlockMorph >> fieldsVersion [
-
-	^ 1
-
-]
-
 { #category : #private }
 CBlockMorph >> firstBlockList [
 	"Answer an array containing the block sequence for my first (and only) nested block. (An if-then-else block would have a second block list.)"
@@ -393,17 +386,6 @@ CBlockMorph >> fixBlockLayout [
 
 ]
 
-{ #category : #'object i/o' }
-CBlockMorph >> initFieldsFrom: anObjStream version: classVersion [
-
-	super initFieldsFrom: anObjStream version: classVersion.
-	self initFieldsNamed: #(
-		nestedBlock
-		nextBlock
-	) from: anObjStream.
-
-]
-
 { #category : #initialization }
 CBlockMorph >> initialize [
 
@@ -475,17 +457,6 @@ CBlockMorph >> printCodeOn: aStream indent: indent [
 	aStream cr.
 	nestedBlock ifNotNil: [nestedBlock printCodeOn: aStream indent: indent + 1].
 	nextBlock ifNotNil: [nextBlock printCodeOn: aStream indent: indent].
-
-]
-
-{ #category : #'object i/o' }
-CBlockMorph >> storeFieldsOn: anObjStream [
-
-	super storeFieldsOn: anObjStream.
-	self storeFieldsNamed: #(
-		nestedBlock
-		nextBlock
-	) on: anObjStream.
 
 ]
 

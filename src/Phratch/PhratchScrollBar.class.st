@@ -134,13 +134,6 @@ PhratchScrollBar >> drawVSliderOn: aCanvas [
 
 ]
 
-{ #category : #'*Phratch-Extensions' }
-PhratchScrollBar >> fieldsVersion [
-
-	^ 1
-
-]
-
 { #category : #initialization }
 PhratchScrollBar >> hFrameForm: frameForm sliderForm: sliderForm [
 	"Initialize myself as a horizontal slider, setting my forms by cutting up the given forms."

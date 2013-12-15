@@ -120,34 +120,10 @@ ToggleButton >> extent: aRectangle [
 
 ]
 
-{ #category : #'object i/o' }
-ToggleButton >> fieldsVersion [
-
-	^ 1
-
-]
-
 { #category : #'event handling' }
 ToggleButton >> handlesMouseOver: evt [
 
 	^ true
-
-]
-
-{ #category : #'object i/o' }
-ToggleButton >> initFieldsFrom: anObjStream version: classVersion [
-
-	super initFieldsFrom: anObjStream version: classVersion.
-	self initFieldsNamed: #(
-		onForm
-		offForm
-		overForm
-		disabledForm
-		isMomentary
-		toggleMode
-		isOn
-		isDisabled
-	) from: anObjStream.
 
 ]
 
@@ -368,24 +344,6 @@ ToggleButton >> setLabelColor: aColor [
 	| s |
 	s := self findA: StringMorph.
 	s color: aColor.
-
-]
-
-{ #category : #'object i/o' }
-ToggleButton >> storeFieldsOn: anObjStream [
-
-	super storeFieldsOn: anObjStream.
-	self storeFieldsNamed: #(
-		onForm
-		offForm
-		overForm
-		disabledForm
-		isMomentary
-		toggleMode
-		isOn
-		isDisabled
-	) on: anObjStream.
-
 
 ]
 

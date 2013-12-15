@@ -21,15 +21,6 @@ PhratchMedia >> infoString [
 
 ]
 
-{ #category : #'object i/o' }
-PhratchMedia >> initFieldsFrom: anObjStream version: classVersion [
-
-	self initFieldsNamed: #(
-		mediaName
-	) from: anObjStream.
-
-]
-
 { #category : #initialization }
 PhratchMedia >> initialize [
 
@@ -123,15 +114,6 @@ PhratchMedia >> startPlaying [
 { #category : #playing }
 PhratchMedia >> stopPlaying [
 	"Stop playing if I am a movie or animation."
-
-]
-
-{ #category : #'object i/o' }
-PhratchMedia >> storeFieldsOn: anObjStream [
-
-	self storeFieldsNamed: #(
-		mediaName
-	) on: anObjStream.
 
 ]
 

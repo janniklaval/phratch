@@ -144,13 +144,6 @@ VariableFrame >> convertTuplesToStacks [
 				ifTrue: [ obj convertTuplesToStacks ] ]
 ]
 
-{ #category : #'object i/o' }
-VariableFrame >> fieldsVersion [
-
-	^ 1
-
-]
-
 { #category : #private }
 VariableFrame >> forNames: aCollectionOfStrings [
 	aCollectionOfStrings do:[:eachVarName |
@@ -170,16 +163,6 @@ VariableFrame >> getVar: varName block: aVariableBlockMorph [
 	"Answer the value of the given user variable of this object, or 0 if the variable has been deleted."
 
 	^ vars at: varName asString ifAbsent: [0]
-
-]
-
-{ #category : #'object i/o' }
-VariableFrame >> initFieldsFrom: anObjStream version: classVersion [
-	"Set my instance variables from the given object stream."
-
-	self initFieldsNamed: #(
-		vars
-	) from: anObjStream.
 
 ]
 
@@ -299,16 +282,6 @@ VariableFrame >> setVar: varName to: newValue [
 	v := self interpretStringAsNumberIfPossible: newValue."
 
 	vars at: varName put: newValue.
-
-]
-
-{ #category : #'object i/o' }
-VariableFrame >> storeFieldsOn: anObjStream [
-
-	self storeFieldsNamed: #(
-		vars
-	) on: anObjStream.
-
 
 ]
 

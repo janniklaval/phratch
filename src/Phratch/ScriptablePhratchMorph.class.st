@@ -3956,7 +3956,7 @@ ScriptablePhratchMorph >> exportObject [
 
 		objToExport firstSubmorph allSubsprites do: [:eachSub |
 			eachSub owner ifNil: [objToExport addMorphBack: eachSub ]].
-		ObjStream new storeObj: objToExport on: f showProgress: true.
+		FuelObjStream new storeObj: objToExport on: f showProgress: true.
 		f close.
 		FilePluginPrims new setMacFileNamed: (dir / fName) fullName type: 'STyp' creator: 'PHRATCH'.
 
@@ -4591,36 +4591,6 @@ ScriptablePhratchMorph >> inheritedBlocks [
 
 	^ self inheritedBlockIds collect: [:id | 
 		self prototype definitionFor: id ]
-]
-
-{ #category : #'object i/o' }
-ScriptablePhratchMorph >> initFieldsFrom: anObjStream version: classVersion [
-
-	| fields |
-
-	fields := #(
-		objName
-		vars
-		blocksBin
-		isClone
-		media
-		costume
-	).
-	self class currentEncoding = #byob
-		ifTrue: [
-	fields := #(
-		objName
-		vars
-		blocksBin
-		customBlocks
-		isClone
-		media
-		costume
-	) ].
-
-	super initFieldsFrom: anObjStream version: classVersion.
-	self initFieldsNamed: fields from: anObjStream.
-
 ]
 
 { #category : #initialization }
@@ -6671,7 +6641,7 @@ ScriptablePhratchMorph >> serialized [
 	objToExport := self copyForExport.
 	objToExport firstSubmorph allSubsprites do: [:eachSub |
 		eachSub owner ifNil: [objToExport addMorphBack: eachSub ]].
-	ObjStream new storeObj: objToExport on: s.
+	FuelObjStream new storeObj: objToExport on: s.
 	^ s contents
 
 
@@ -7235,31 +7205,6 @@ ScriptablePhratchMorph >> stopScriptsFor: eventName [
 		ifFalse: [ self scripts do: [:s |
 			(((s class == EventHatMorph) or:[s class == StartEventHatMorph]) and: [s eventName caseInsensitiveEqual: eventName])
 				ifTrue: [s stop]]]
-]
-
-{ #category : #'object i/o' }
-ScriptablePhratchMorph >> storeFieldsOn: anObjStream [
-
-	| oldBlockBinOwner |
-	super storeFieldsOn: anObjStream.
-	(blocksBin isKindOf: Morph) ifTrue: [
-		oldBlockBinOwner := blocksBin owner.
-		blocksBin delete].
-
-	self purgeVarsAndLists.
-
-	self storeFieldsNamed: #(
-		objName
-		vars
-		blocksBin
-		customBlocks
-		isClone
-		media
-		costume
-	) on: anObjStream.
-
-	oldBlockBinOwner ifNotNil: [oldBlockBinOwner addMorph: blocksBin].
-
 ]
 
 { #category : #'panther actions' }

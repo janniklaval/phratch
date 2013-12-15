@@ -24,13 +24,6 @@ SampledSound >> equals: aSampledSound [
 ]
 
 { #category : #'*Phratch-Extensions' }
-SampledSound >> fieldsVersion [
-
-	^ 2
-
-]
-
-{ #category : #'*Phratch-Extensions' }
 SampledSound classSide >> findWAVEChunk: chunkID in: aBinaryStream ifAbsent: notFoundBlock [
 	"Search the given stream from its beginning for a chunk with the given four-letter id and answer the size of the chunk. The stream is left positioned at the start of the chunk data. If  no chunk of the given type is found, answer the result of evaluating notFoundBlock."
 
@@ -76,26 +69,6 @@ SampledSound classSide >> fromFileNamed: fileName [
 
 	^ snd
 
-]
-
-{ #category : #'*Phratch-Extensions' }
-SampledSound >> initFieldsFrom: anObjStream version: classVersion [
-
-	self initFieldsNamed: #(
-		envelopes
-		scaledVol
-		initialCount
-		samples
-		originalSamplingRate
-		samplesSize
-		scaledIncrement
-	) from: anObjStream.
-
-	classVersion = 1 ifFalse: [^ self].
-
-	self initFieldsNamed: #(
-		scaledInitialIndex 
-	) from: anObjStream.
 ]
 
 { #category : #'*Phratch-Extensions' }
@@ -265,20 +238,4 @@ SampledSound >> setSamples: anArray from: startIndex to: endIndex samplingRate: 
 	self loudness: loudness.
 	initialCount := (endIndex - (startIndex - 1)) * SoundPlayer samplingRate // rate.
 	self reset
-]
-
-{ #category : #'*Phratch-Extensions' }
-SampledSound >> storeFieldsOn: anObjStream [
-
-	self storeFieldsNamed: #(
-		envelopes
-		scaledVol
-		initialCount
-		samples
-		originalSamplingRate
-		samplesSize
-		scaledIncrement
-	"	scaledInitialIndex " "version 1"
-	) on: anObjStream.
-
 ]

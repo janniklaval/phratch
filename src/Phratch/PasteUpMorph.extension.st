@@ -33,22 +33,6 @@ PasteUpMorph >> doOneCycleNoInput [
 ]
 
 { #category : #'*Phratch-Extensions' }
-PasteUpMorph >> fieldsVersion [
-
-	^ 1
-]
-
-{ #category : #'*Phratch-Extensions' }
-PasteUpMorph >> initFieldsFrom: anObjStream version: classVersion [
-
-	super initFieldsFrom: anObjStream version: classVersion.
-	self initFieldsNamed: #(
-		backgroundMorph 
-	) from: anObjStream.
-
-]
-
-{ #category : #'*Phratch-Extensions' }
 PasteUpMorph >> patchAt: patchRect without: stopMorph andNothingAbove: stopThere [
 	"Return a complete rendering of this patch of the display screen without drawing stopMorph and, if stopThere is true, without drawing any morph above it."
 
@@ -85,15 +69,5 @@ PasteUpMorph >> rootForGrabOf: aMorph [
 		root := root owner].
 
 	^ super rootForGrabOf: aMorph
-
-]
-
-{ #category : #'*Phratch-Extensions' }
-PasteUpMorph >> storeFieldsOn: anObjStream [
-
-	super storeFieldsOn: anObjStream.
-	self storeFieldsNamed: #(
-		backgroundMorph 
-	) on: anObjStream.
 
 ]

@@ -334,13 +334,6 @@ CustomReporterBlockMorph >> evaluateWithArgs: rawArgs [
 	^phratchProc answer	
 ]
 
-{ #category : #'object i/o' }
-CustomReporterBlockMorph >> fieldsVersion [
-
-	^ 1
-
-]
-
 { #category : #'block enumerating' }
 CustomReporterBlockMorph >> firstBlockList [
 
@@ -384,17 +377,6 @@ CustomReporterBlockMorph >> hideArgumentPlaceHolders [
 { #category : #identification }
 CustomReporterBlockMorph >> id [
 	^CustomBlockDefinition idFromSpec: userSpec
-]
-
-{ #category : #'object i/o' }
-CustomReporterBlockMorph >> initFieldsFrom: anObjStream version: classVersion [
-
-	super initFieldsFrom: anObjStream version: classVersion.
-	self initFieldsNamed: #(
-		userSpec
-	) from: anObjStream.
-
-
 ]
 
 { #category : #initialization }
@@ -673,16 +655,6 @@ CustomReporterBlockMorph >> showValue [
 	self setProperty: #toolTip toValue: tooltip.
 	tooltip initialCursorPoint: Sensor cursorPoint.
 	tooltip startStepping
-]
-
-{ #category : #'object i/o' }
-CustomReporterBlockMorph >> storeFieldsOn: anObjStream [
-
-	super storeFieldsOn: anObjStream.
-	self storeFieldsNamed: #(
-		userSpec
-	) on: anObjStream.
-
 ]
 
 { #category : #template }

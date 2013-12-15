@@ -150,13 +150,6 @@ MovieMedia >> fadeColor [
 
 ]
 
-{ #category : #'object i/o' }
-MovieMedia >> fieldsVersion [
-
-	^ 1
-
-]
-
 { #category : #accessing }
 MovieMedia >> fileName [
 
@@ -193,25 +186,6 @@ MovieMedia >> infoString [
 	"Answer a string for this media, typically something about its size."
 
 	^ self totalSeconds hhmmss
-
-]
-
-{ #category : #'object i/o' }
-MovieMedia >> initFieldsFrom: anObjStream version: classVersion [
-
-	super initFieldsFrom: anObjStream version: classVersion.
-	self initFieldsNamed: #(
-		fileName
-		fade
-		fadeColor
-		zoom
-		hPan
-		vPan
-		msecsPerFrame
-		currentFrame
-		moviePlaying
-	) from: anObjStream.
-	self openAfterLoad.
 
 ]
 
@@ -438,24 +412,6 @@ MovieMedia >> stopPlaying [
 
 	sound ifNotNil: [sound pause].
 	moviePlaying := false.
-
-]
-
-{ #category : #'object i/o' }
-MovieMedia >> storeFieldsOn: anObjStream [
-
-	super storeFieldsOn: anObjStream.
-	self storeFieldsNamed: #(
-		fileName
-		fade
-		fadeColor
-		zoom
-		hPan
-		vPan
-		msecsPerFrame
-		currentFrame
-		moviePlaying
-	) on: anObjStream.
 
 ]
 

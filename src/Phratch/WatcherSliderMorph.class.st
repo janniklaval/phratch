@@ -55,13 +55,6 @@ WatcherSliderMorph >> drawOn: aCanvas [
 
 ]
 
-{ #category : #'object i/o' }
-WatcherSliderMorph >> fieldsVersion [
-
-	^ 1
-
-]
-
 { #category : #'event handling' }
 WatcherSliderMorph >> handlesMouseDown: evt [
 

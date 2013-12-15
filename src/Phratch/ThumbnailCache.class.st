@@ -53,7 +53,7 @@ ThumbnailCache >> readThumbnailFile [
 	[	(FileStream isAFileNamed: fName) ifTrue: [
 			f := (FileStream readOnlyFileNamed: fName) binary.
 			buf := f contentsOfEntireFile.
-			dict := ObjStream new readObjFrom: (ReadStream on: buf)].
+			dict := FuelObjStream new readObjFrom: (ReadStream on: buf)].
 	] ifError: [PhratchError error].
 
 ]
@@ -117,15 +117,15 @@ ThumbnailCache >> thumbnailFromSpriteData: aByteArray [
 	| s version proj sprite scriptCount f scale thumbF spriteBlock p label labelForm |
 	s := ReadStream on: aByteArray.
 
-	version := ObjStream phratchFileVersionFrom: (s next: 10) asString.
+	version := FuelObjStream phratchFileVersionFrom: (s next: 10) asString.
 	version = 0 ifTrue: [
 		ScriptablePhratchMorph decodeAsByob.	"make sure we initialize every field - this breaks compatibility with Phratch-sprites. -Jens". 
 
 		s position: 0.
-		proj := ObjStream new readObjFrom: s showProgress: false].
+		proj := FuelObjStream new readObjFrom: s showProgress: false].
 	({1 . 2} includes: version) ifTrue: [
 		s skip: s uint32.  "skip header"
-		proj := ObjStream new readObjFrom: s showProgress: false].
+		proj := FuelObjStream new readObjFrom: s showProgress: false].
 
 	proj class = PhratchStageMorph ifFalse: [^ nil].
 	sprite := proj submorphs detect: [:m | m isKindOf: ScriptablePhratchMorph] ifNone: [^ nil].
@@ -192,7 +192,7 @@ ThumbnailCache >> writeThumbnailFile [
 	[	directory delete: ThumbnailFileName.  "delete may fail if directory is read-only or is an alias"
 		((dict size > 0) or: [directory exists: ThumbnailFileName]) ifTrue: [
 			f := (FileStream fileNamed: (directory / ThumbnailFileName) fullName) binary.
-			ObjStream new storeObj: dict on: f.
+			FuelObjStream new storeObj: dict on: f.
 			f close].
 	] ifError: [PhratchError error].
 

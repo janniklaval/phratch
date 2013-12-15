@@ -217,13 +217,6 @@ ReporterBlockMorph >> drawOn: aCanvas [
 
 ]
 
-{ #category : #'object i/o' }
-ReporterBlockMorph >> fieldsVersion [
-
-	^ 2
-
-]
-
 { #category : #other }
 ReporterBlockMorph >> fixBlockLayout [
 	"Update the positions of my submorphs."
@@ -453,20 +446,6 @@ ReporterBlockMorph >> getAssociatedSprite [
 
 ]
 
-{ #category : #'object i/o' }
-ReporterBlockMorph >> initFieldsFrom: anObjStream version: classVersion [
-
-	super initFieldsFrom: anObjStream version: classVersion.
-	classVersion = 1 ifTrue: [^ self].
-
-	"fields added in version 2"
-	self initFieldsNamed: #(
-		isBoolean
-	) from: anObjStream.
-
-
-]
-
 { #category : #initialization }
 ReporterBlockMorph >> initialize [
 
@@ -647,16 +626,6 @@ ReporterBlockMorph >> stepTimeForWatcher [
 ReporterBlockMorph >> stepTimeForWatcher: aValue [
 
 	stepTimeForWatcher := aValue
-]
-
-{ #category : #'object i/o' }
-ReporterBlockMorph >> storeFieldsOn: anObjStream [
-
-	super storeFieldsOn: anObjStream.
-	self storeFieldsNamed: #(
-		isBoolean
-	) on: anObjStream.
-
 ]
 
 { #category : #other }

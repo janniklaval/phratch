@@ -315,13 +315,6 @@ IfElseBlockMorph >> falseBlockList [
 
 ]
 
-{ #category : #'object i/o' }
-IfElseBlockMorph >> fieldsVersion [
-
-	^ 1
-
-]
-
 { #category : #private }
 IfElseBlockMorph >> fixBlockLayout [
 	"Update the positions of my submorphs."
@@ -371,18 +364,6 @@ IfElseBlockMorph >> fixBlockLayout [
 			+ ((PhratchTranslator centerOffsetForButtonWithFont: (PhratchFrameMorph getFont: #Label)) // 4))]
 		ifFalse: [elseMorph position: (self left + 6)@(self top + elseBarY
 			+ ((PhratchTranslator centerOffsetForButtonWithFont: (PhratchFrameMorph getFont: #Label)) // 4))].
-
-]
-
-{ #category : #'object i/o' }
-IfElseBlockMorph >> initFieldsFrom: anObjStream version: classVersion [
-
-	super initFieldsFrom: anObjStream version: classVersion.
-	self initFieldsNamed: #(
-		trueBlock
-		falseBlock
-		nextBlock
-	) from: anObjStream.
 
 ]
 
@@ -477,18 +458,6 @@ IfElseBlockMorph >> printCodeOn: aStream indent: indent [
 	aStream nextPutAll: 'else'; cr.
 	falseBlock ifNotNil: [falseBlock printCodeOn: aStream indent: indent + 1].
 	nextBlock ifNotNil: [nextBlock printCodeOn: aStream indent: indent].
-
-]
-
-{ #category : #'object i/o' }
-IfElseBlockMorph >> storeFieldsOn: anObjStream [
-
-	super storeFieldsOn: anObjStream.
-	self storeFieldsNamed: #(
-		trueBlock
-		falseBlock
-		nextBlock
-	) on: anObjStream.
 
 ]
 

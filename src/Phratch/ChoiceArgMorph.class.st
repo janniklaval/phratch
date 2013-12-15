@@ -119,13 +119,6 @@ ChoiceArgMorph >> evaluate [
 
 ]
 
-{ #category : #'object i/o' }
-ChoiceArgMorph >> fieldsVersion [
-
-	^ 2
-
-]
-
 { #category : #other }
 ChoiceArgMorph >> fixArgLayout [
 	"Set my color to my owner's color."
@@ -154,23 +147,6 @@ ChoiceArgMorph >> handlesMouseDown: evt [
 
 	^ evt hand toolType isNil and:
 		[(self topRight - (14@0) corner: self bottomRight) containsPoint: evt cursorPoint]
-
-]
-
-{ #category : #'object i/o' }
-ChoiceArgMorph >> initFieldsFrom: anObjStream version: classVersion [
-
-	super initFieldsFrom: anObjStream version: classVersion.
-	self initFieldsNamed: #(
-		options
-		choice
-	) from: anObjStream.
-	classVersion = 1 ifTrue: [^ self].
-
-	"fields added in version 2"
-	self initFieldsNamed: #(
-		getOptionsSelector
-	) from: anObjStream.
 
 ]
 
@@ -310,17 +286,5 @@ ChoiceArgMorph >> privateSetChoice: aSymbol [
 	(block := self ownerOrYourselfThatIsA: BlockMorph) ifNil: [^ self].
 
 	block isReporter ifTrue: [palette updateWatcherButtonsForFrame: frame].
-
-]
-
-{ #category : #'object i/o' }
-ChoiceArgMorph >> storeFieldsOn: anObjStream [
-
-	super storeFieldsOn: anObjStream.
-	self storeFieldsNamed: #(
-		options
-		choice
-		getOptionsSelector
-	) on: anObjStream.
 
 ]

@@ -701,13 +701,13 @@ PaintCanvas >> extractProjectFrom: aByteArray [
 
 	| s version proj |
 	s := ReadStream on: aByteArray.
-	version := ObjStream phratchFileVersionFrom: (s next: 10) asString.
+	version := FuelObjStream phratchFileVersionFrom: (s next: 10) asString.
 	version = 0 ifTrue: [
 		s position: 0.
-		proj := ObjStream new readObjFrom: s showProgress: true].
+		proj := FuelObjStream new readObjFrom: s showProgress: true].
 	({1 . 2} includes: version) ifTrue: [
 		s skip: s uint32.  "skip header"
-		proj := ObjStream new readObjFrom: s showProgress: true].
+		proj := FuelObjStream new readObjFrom: s showProgress: true].
 
 	proj class = PhratchStageMorph ifFalse: [
 		version > 2

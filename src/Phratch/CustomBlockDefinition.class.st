@@ -202,13 +202,6 @@ CustomBlockDefinition >> defaults: aDictionary [
 	defaults := aDictionary
 ]
 
-{ #category : #'object i/o' }
-CustomBlockDefinition >> fieldsVersion [
-
-	^ 4
-
-]
-
 { #category : #private }
 CustomBlockDefinition >> fixBlockVarReporters [
 
@@ -235,40 +228,6 @@ CustomBlockDefinition >> getVar: vName [
 { #category : #accessing }
 CustomBlockDefinition >> id [
 	^self class idFromSpec: userSpec
-]
-
-{ #category : #'object i/o' }
-CustomBlockDefinition >> initFieldsFrom: anObjStream version: classVersion [
-
-	self initFieldsNamed: #(
-		userSpec
-		blockVars
-		isAtomic
-		isBoolean
-		body
-		answer
-	) from: anObjStream.
-
-	classVersion = 1 ifTrue: [
-		^ self deduceType ].
-
-	"fields added in version 2:"
-	self initFieldsNamed: #(
-		type
-		category
-		declarations
-	) from: anObjStream.
-
-	"fields added in version 3:"
-	self initFieldsNamed: #(
-		defaults
-	) from: anObjStream.
-
-	"fields added in version 4:"
-	self initFieldsNamed: #(
-		isGlobal
-	) from: anObjStream.
-
 ]
 
 { #category : #initializing }
@@ -429,25 +388,6 @@ CustomBlockDefinition >> specFor: typeSym [
 		at: #objectList put: '$MAObjS$'.
 
 	^specs at: typeSym ifAbsent: ['$String$']
-]
-
-{ #category : #'object i/o' }
-CustomBlockDefinition >> storeFieldsOn: anObjStream [
-
-	self storeFieldsNamed: #(
-		userSpec
-		blockVars
-		isAtomic
-		isBoolean
-		body
-		answer
-		type
-		category
-		declarations
-		defaults
-		isGlobal
-	) on: anObjStream.
-
 ]
 
 { #category : #accessing }

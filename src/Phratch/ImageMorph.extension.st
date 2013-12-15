@@ -7,31 +7,7 @@ ImageMorph >> colorform: anImage [
 ]
 
 { #category : #'*Phratch-Extensions' }
-ImageMorph >> fieldsVersion [
-
-	^ 1
-]
-
-{ #category : #'*Phratch-Extensions' }
 ImageMorph >> form: anImage [
 
 	self image: anImage
-]
-
-{ #category : #'*Phratch-Extensions' }
-ImageMorph >> initFieldsFrom: anObjStream version: classVersion [
-
-	super initFieldsFrom: anObjStream version: classVersion.
-	self initFieldsNamed: #(
-	) from: anObjStream.
-
-]
-
-{ #category : #'*Phratch-Extensions' }
-ImageMorph >> storeFieldsOn: anObjStream [
-
-	super storeFieldsOn: anObjStream.
-	self storeFieldsNamed: #(
-	) on: anObjStream.
-
 ]

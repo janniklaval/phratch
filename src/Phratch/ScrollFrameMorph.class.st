@@ -127,13 +127,6 @@ ScrollFrameMorph >> extent: aPoint [
 	self updateScrollbars
 ]
 
-{ #category : #'*Phratch-extensions' }
-ScrollFrameMorph >> fieldsVersion [
-
-	^ 1
-
-]
-
 { #category : #'scrollbar visibility' }
 ScrollFrameMorph >> fullBounds [
 	"Overridden to clip submorph hit detection to my bounds."

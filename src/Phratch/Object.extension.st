@@ -33,16 +33,6 @@ Object >> initFieldsNamed: varList from: anObjStream [
 
 ]
 
-{ #category : #'*Phratch' }
-Object >> initObsoleteFieldNamed: varName from: anObjStream [
-
-	"|value |"
-	"value := "anObjStream nextField.
-	"self setProperty: varName toValue: value."
-	 Transcript show: self; show: ' >> '; show: varName; cr.
-
-]
-
 { #category : #'*Phratch-Extensions' }
 Object >> storeFieldsNamed: varList on: anObjStream [
 	"Store the instance variables in the given list on the given object stream."

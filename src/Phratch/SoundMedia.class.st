@@ -117,49 +117,12 @@ SoundMedia >> exportFilename: fileName for: stageOrSprite [
 
 ]
 
-{ #category : #'object i/o' }
-SoundMedia >> fieldsVersion [
-
-	^ 2
-
-]
-
 { #category : #accessing }
 SoundMedia >> infoString [
 	"Answer a string for this media, typically something about its size."
 
 	^ self totalSeconds hhmmss
 	
-
-]
-
-{ #category : #'object i/o' }
-SoundMedia >> initFieldsFrom: anObjStream version: classVersion [
-
-	| samples |
-	super initFieldsFrom: anObjStream version: classVersion.
-	self initFieldsNamed: #(
-		originalSound
-		volume
-	) from: anObjStream.
-
-	classVersion = 1 ifTrue: [^ self].
-
-	"fields added in version 2"
-	self initFieldsNamed: #(
-		compressedSampleRate
-		compressedBitsPerSample
-		compressedData
-	) from: anObjStream.
-
-	compressedData ifNotNil: [
-		samples := (ADPCMCodec newBitsPerSample: compressedBitsPerSample)
-			decodeCompressedData: compressedData.
-
-		originalSound := SampledSound
-			samples: samples
-			samplingRate: compressedSampleRate].
-
 
 ]
 
@@ -358,27 +321,6 @@ SoundMedia >> startPlaying [
 	 [playingSound samplesRemaining = 0]])
 		ifTrue: [self playFromStart]
 		ifFalse: [playingSound resumePlaying].
-
-]
-
-{ #category : #'object i/o' }
-SoundMedia >> storeFieldsOn: anObjStream [
-
-	| oldSnd |
-	super storeFieldsOn: anObjStream.
-
-	oldSnd := originalSound.
-	compressedData ifNotNil: [originalSound := PlaceholderSound].  "for backward compatability"
-
-	self storeFieldsNamed: #(
-		originalSound
-		volume
-		compressedSampleRate
-		compressedBitsPerSample
-		compressedData
-	) on: anObjStream.
-
-	originalSound := oldSnd.
 
 ]
 

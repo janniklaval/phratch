@@ -509,13 +509,6 @@ MultilineStringMorph >> extent: aPoint [
 
 ]
 
-{ #category : #'object i/o' }
-MultilineStringMorph >> fieldsVersion [
-
-	^ 1
-
-]
-
 { #category : #private }
 MultilineStringMorph >> fitContents [
 	"Set my extent to just fit around my contents."
@@ -626,27 +619,6 @@ MultilineStringMorph >> indexForPoint: aPoint [
 	lineNum = lines size
 		ifTrue: [^ lineStart + line size + 1]
 		ifFalse: [^ lineStart + line size].
-
-]
-
-{ #category : #'object i/o' }
-MultilineStringMorph >> initFieldsFrom: anObjStream version: classVersion [
-
-	| fontSpec isOSFont |
-	super initFieldsFrom: anObjStream version: classVersion.
-
-	fontSpec := anObjStream nextField.
-	isOSFont := ((fontSpec size > 2) and: [fontSpec at: 3]).
-	isOSFont
-		ifTrue: [self font: (StrikeFont osFontName: fontSpec first size: fontSpec second)]
-		ifFalse: [self font: (StrikeFont fontName: fontSpec first size: fontSpec second)].
-
-	self initFieldsNamed: #(
-		textColor
-		selectionColor
-		lines
-	) from: anObjStream.
-	lines := lines collect: [:s | s].
 
 ]
 
@@ -1056,23 +1028,6 @@ MultilineStringMorph >> step [
 MultilineStringMorph >> stepTime [
 
 	^ 600
-
-]
-
-{ #category : #'object i/o' }
-MultilineStringMorph >> storeFieldsOn: anObjStream [
-
-	super storeFieldsOn: anObjStream.
-
-	lines := lines collect: [:s | s].
-	anObjStream putField: {font name. font pointSize. font isOSFont}.  "font spec"
-	self storeFieldsNamed: #(
-		textColor
-		selectionColor
-		lines
-	) on: anObjStream.
-	lines := lines collect: [:s | s].
-
 
 ]
 

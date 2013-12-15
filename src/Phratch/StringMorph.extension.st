@@ -19,23 +19,7 @@ StringMorph >> contents: aString font: aFont [
 ]
 
 { #category : #'*Phratch-Extensions' }
-StringMorph >> fieldsVersion [
-
-	^ 1
-
-]
-
-{ #category : #'*Phratch-Extensions' }
 StringMorph >> forceUnicodeRendering: ignored [
-]
-
-{ #category : #'*Phratch-Extensions' }
-StringMorph >> initFieldsFrom: anObjStream version: classVersion [
-	| fontSpec |
-	super initFieldsFrom: anObjStream version: classVersion.
-	fontSpec := anObjStream nextField.
-	fontSpec ifNotNil: [ font := StrikeFont fontName: fontSpec first size: fontSpec second ].
-	self initFieldsNamed: #(#emphasis #contents) from: anObjStream
 ]
 
 { #category : #'*Phratch-Extensions' }
@@ -55,21 +39,6 @@ StringMorph >> leftMargin [
 
 { #category : #'*Phratch-Extensions' }
 StringMorph >> rightJustify:  ignored [
-]
-
-{ #category : #'*Phratch-Extensions' }
-StringMorph >> storeFieldsOn: anObjStream [
-
-	self closeEditor.
-	super storeFieldsOn: anObjStream.
-	font
-		ifNil: [anObjStream putField: nil]
-		ifNotNil: [anObjStream putField: (Array with: font name with: font pointSize)].
-	self storeFieldsNamed: #(
-		emphasis
-		contents
-	) on: anObjStream.
-
 ]
 
 { #category : #'*Phratch-Extensions' }

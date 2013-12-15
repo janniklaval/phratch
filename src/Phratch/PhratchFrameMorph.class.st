@@ -1405,11 +1405,11 @@ PhratchFrameMorph >> extractInfoFrom: aByteArray [
 
 	| s version |
 	s := ReadStream on: aByteArray.
-	version := ObjStream phratchFileVersionFrom: (s next: 10) asString.
+	version := FuelObjStream phratchFileVersionFrom: (s next: 10) asString.
 	({1 . 2} includes: version)
 		ifTrue: [
 			s skip: 4.  "skip info header byte count"
-			^ ObjStream new readObjFrom: s showProgress: false]
+			^ FuelObjStream new readObjFrom: s showProgress: false]
 		ifFalse: [^ Dictionary new].
 
 
@@ -1469,17 +1469,17 @@ Note: this is a compatibility force method for BYOB - jens"
 
 	| s version proj |
 
-	ObjStream initialize. "just to make sure this works in filed-in changesets, -Jens"
+	FuelObjStream initialize. "just to make sure this works in filed-in changesets, -Jens"
 
 	s := ReadStream on: aByteArray.
-	version := ObjStream phratchFileVersionFrom: (s next: 10) asString.
+	version := FuelObjStream phratchFileVersionFrom: (s next: 10) asString.
 	version = 0 ifTrue: [
 		ScriptablePhratchMorph decodeAsScratch.	"this is the forcing part. -Jens"
 		s position: 0.
-		proj := ObjStream new readObjFrom: s showProgress: true].
+		proj := FuelObjStream new readObjFrom: s showProgress: true].
 	({1 . 2} includes: version) ifTrue: [
 		s skip: s uint32.  "skip header"
-		proj := ObjStream new readObjFrom: s showProgress: true].
+		proj := FuelObjStream new readObjFrom: s showProgress: true].
 
 	proj class = PhratchStageMorph ifFalse: [
 		version > 2
@@ -1515,17 +1515,17 @@ PhratchFrameMorph >> extractProjectFrom: aByteArray [
 
 	| s version proj |
 
-	ObjStream initialize. "just to make sure this works in filed-in changesets, -Jens"
+	FuelObjStream initialize. "just to make sure this works in filed-in changesets, -Jens"
 	s := ReadStream on: aByteArray.
-	version := ObjStream phratchFileVersionFrom: (s next: 10) asString.
+	version := FuelObjStream phratchFileVersionFrom: (s next: 10) asString.
 	version = 0 ifTrue: [
 		ScriptablePhratchMorph decodeAsByob.	"make sure we initialize every field - this breaks compatibility with Phratch-sprites. -Jens"
 		s position: 0.
-		[proj := ObjStream new readObjFrom: s showProgress: true] ifError: [
+		[proj := FuelObjStream new readObjFrom: s showProgress: true] ifError: [
 		^ self extractPhratchProjectFrom: aByteArray]].
 	({1 . 2} includes: version) ifTrue: [
 		s skip: s uint32.  "skip header"
-		proj := ObjStream new readObjFrom: s showProgress: true].
+		proj := FuelObjStream new readObjFrom: s showProgress: true].
 
 	proj class = PhratchStageMorph ifFalse: [
 		version > 2
@@ -1561,7 +1561,7 @@ PhratchFrameMorph >> fileMenu: aMenuTitleMorph [
 	menu := MenuMorph new defaultTarget: self.
 	menu add: 'New' translated action: #newPhratchProject.
 	menu add: 'Open' translated action: #openPhratchProject.
-	menu add: 'Open older' translated action: #openScratchProject.
+	menu add: 'Open Scratch' translated action: #openScratchProject.
 	menu add: 'Save' translated action: #savePhratchProjectNoDialog.
 	menu add: 'Save As' translated action: #savePhratchProject.
 	menu addLine.
@@ -3317,7 +3317,7 @@ PhratchFrameMorph >> storeProjectInfoOn: aBinaryStream [
 	projectInfo at: 'keepOnStage' put: ScriptablePhratchMorph keepOnStage.
 
 	s := WriteStream on: (ByteArray new: 100000).
-	ObjStream new storeObj: projectInfo on: s.
+	FuelObjStream new storeObj: projectInfo on: s.
 
 	aBinaryStream uint32: s size.
 	aBinaryStream nextPutAll: s contents.
@@ -3769,7 +3769,7 @@ PhratchFrameMorph >> writePhratchProject [
 	
 	self stopAll.
 
-	ObjStream initialize. "just to make sure this works in filed-in changesets, -Jens"
+	FuelObjStream initialize. "just to make sure this works in filed-in changesets, -Jens"
 
 	self world ifNotNil: [self world activeHand newKeyboardFocus: nil].  "terminates active editor"
 
@@ -3814,7 +3814,7 @@ PhratchFrameMorph >> writePhratchProject [
 				out binary.
 				out nextPutAll: 'PhratchV01' asByteArray. "changed the internal version marker for the byob-prototype -Jens"
 				self storeProjectInfoOn: out.
-				ObjStream new storeObj: workPane on: out.
+				FuelObjStream new storeObj: workPane on: out.
 				"FLSerializer serialize: workPane on: out."
 				
 				out close].

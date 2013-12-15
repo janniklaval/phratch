@@ -103,13 +103,6 @@ HatBlockMorph >> drawOn: aCanvas [
 
 ]
 
-{ #category : #'object i/o' }
-HatBlockMorph >> fieldsVersion [
-
-	^ 1
-
-]
-
 { #category : #private }
 HatBlockMorph >> fixBlockLayout [
 	"Update the positions of my submorphs."
@@ -161,24 +154,6 @@ HatBlockMorph >> fixBlockLayout [
 HatBlockMorph >> hatTopForm [
 
 	^ PhratchFrameMorph skinAt: #hatBlockTop
-
-]
-
-{ #category : #'object i/o' }
-HatBlockMorph >> initFieldsFrom: anObjStream version: classVersion [
-
-	super initFieldsFrom: anObjStream version: classVersion.
-	self initFieldsNamed: #(
-		scriptNameMorph
-		indicatorMorph
-		scriptOwner
-		isClickable
-	) from: anObjStream.
-
-	"remove the indicator morph when reading in an older project"
-	indicatorMorph ifNotNil: [
-		submorphs := submorphs copyWithout: indicatorMorph.
-		indicatorMorph := nil].
 
 ]
 
@@ -276,20 +251,6 @@ HatBlockMorph >> start [
 		(stage := self receiver ownerOrYourselfThatIsA: PhratchStageMorph) ifNil: [^ self].
 		phratchProc := stage startProcessFor: self.
 		self changed].
-
-]
-
-{ #category : #'object i/o' }
-HatBlockMorph >> storeFieldsOn: anObjStream [
-
-	super storeFieldsOn: anObjStream.
-	self storeFieldsNamed: #(
-		scriptNameMorph
-		indicatorMorph
-		scriptOwner
-		parameters
-		isClickable
-	) on: anObjStream.
 
 ]
 

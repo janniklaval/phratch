@@ -658,13 +658,6 @@ CommandBlockMorph >> evaluateWithArgs: rawArgs [
 
 ]
 
-{ #category : #'object i/o' }
-CommandBlockMorph >> fieldsVersion [
-
-	^ 1
-
-]
-
 { #category : #private }
 CommandBlockMorph >> fixBlockLayout [
 	"Update the positions of my submorphs."
@@ -873,24 +866,6 @@ CommandBlockMorph >> helpScreenName [
 
 	"answer the selector with colons mapped to underscores"
 	^ selector asString collect: [:ch | ch = $: ifTrue: [$_] ifFalse: [ch]]
-
-]
-
-{ #category : #'object i/o' }
-CommandBlockMorph >> initFieldsFrom: anObjStream version: classVersion [
-
-	super initFieldsFrom: anObjStream version: classVersion.
-	self initFieldsNamed: #(
-		commandSpec
-		argMorphs
-		titleMorph
-		receiver
-		selector
-		isReporter
-		isTimed
-		wantsName
-		wantsPossession
-	) from: anObjStream.
 
 ]
 
@@ -1405,24 +1380,6 @@ CommandBlockMorph >> stopFrame [
 CommandBlockMorph >> stopFrame: aFrame [
 
 		stopFrame := aFrame
-]
-
-{ #category : #'object i/o' }
-CommandBlockMorph >> storeFieldsOn: anObjStream [
-
-	super storeFieldsOn: anObjStream.
-	self storeFieldsNamed: #(
-		commandSpec
-		argMorphs
-		titleMorph
-		receiver
-		selector
-		isReporter
-		isTimed
-		wantsName
-		wantsPossession
-	) on: anObjStream.
-
 ]
 
 { #category : #private }

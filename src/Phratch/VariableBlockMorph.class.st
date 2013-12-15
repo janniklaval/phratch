@@ -197,13 +197,6 @@ VariableBlockMorph >> evaluateWithArgs: args [
 
 ]
 
-{ #category : #'object i/o' }
-VariableBlockMorph >> fieldsVersion [
-
-	^ 1
-
-]
-
 { #category : #'byob lambdas' }
 VariableBlockMorph >> handlesMouseOver: evt [
 

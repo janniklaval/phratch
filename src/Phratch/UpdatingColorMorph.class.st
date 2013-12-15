@@ -12,12 +12,6 @@ Class {
 }
 
 { #category : #accessing }
-UpdatingColorMorph >> fieldsVersion [
-
-	^ 1
-]
-
-{ #category : #accessing }
 UpdatingColorMorph >> getSelector [
 
 	^ selector.
@@ -27,19 +21,6 @@ UpdatingColorMorph >> getSelector [
 UpdatingColorMorph >> getSelector: sym [
 
 	selector := sym asString asSymbol.
-]
-
-{ #category : #accessing }
-UpdatingColorMorph >> initFieldsFrom: anObjStream version: classVersion [
-
-	super initFieldsFrom: anObjStream version: classVersion.
-	self initFieldsNamed: #(
-		target
-		selector
-		parameter
-		stepTime
-	) from: anObjStream.
-
 ]
 
 { #category : #initialization }
@@ -95,18 +76,6 @@ UpdatingColorMorph >> stepTime [
 UpdatingColorMorph >> stepTime: anInteger [
 
 	stepTime := anInteger asInteger.
-]
-
-{ #category : #accessing }
-UpdatingColorMorph >> storeFieldsOn: anObjStream [
-
-	super storeFieldsOn: anObjStream.
-	self storeFieldsNamed: #(
-		target
-		selector
-		parameter
-		stepTime
-	) on: anObjStream.
 ]
 
 { #category : #accessing }

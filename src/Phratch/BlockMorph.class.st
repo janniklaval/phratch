@@ -737,13 +737,6 @@ BlockMorph >> fastDuplicate [
 
 ]
 
-{ #category : #'object i/o' }
-BlockMorph >> fieldsVersion [
-
-	^ 1
-
-]
-
 { #category : #'block enumerating' }
 BlockMorph >> firstBlockList [
 	"If I am a control block, answer an array containing the block sequences for my first nested block (i.e., the blocks for the 'true' case of an if-then-else block). If I'm not a control structure block, just answer an empty array."
@@ -1002,17 +995,6 @@ BlockMorph >> inheritAttribute [
 		(oi at: att) second = sel ifTrue: [
 			^ rcv deleteAttribute: att]].
 	^ false
-]
-
-{ #category : #'object i/o' }
-BlockMorph >> initFieldsFrom: anObjStream version: classVersion [
-
-	super initFieldsFrom: anObjStream version: classVersion.
-	self initFieldsNamed: #(
-		isSpecialForm
-		oldColor
-	) from: anObjStream.
-
 ]
 
 { #category : #initialization }
@@ -1674,17 +1656,6 @@ BlockMorph >> stop [
 		self changed.
 		phratchProc stop.
 		phratchProc := nil].
-
-]
-
-{ #category : #'object i/o' }
-BlockMorph >> storeFieldsOn: anObjStream [
-
-	super storeFieldsOn: anObjStream.
-	self storeFieldsNamed: #(
-		isSpecialForm
-		oldColor
-	) on: anObjStream.
 
 ]
 

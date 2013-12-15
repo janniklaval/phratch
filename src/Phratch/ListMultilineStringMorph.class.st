@@ -26,13 +26,6 @@ ListMultilineStringMorph >> extent: aPoint [
 
 ]
 
-{ #category : #'object i/o' }
-ListMultilineStringMorph >> fieldsVersion [
-
-	^ 1
-
-]
-
 { #category : #private }
 ListMultilineStringMorph >> fixLayout [
 

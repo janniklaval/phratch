@@ -89,13 +89,6 @@ ArgMorph >> evaluate [
 	self subclassResponsibility
 ]
 
-{ #category : #'object i/o' }
-ArgMorph >> fieldsVersion [
-
-	^ 1
-
-]
-
 { #category : #other }
 ArgMorph >> fixArgLayout [
 	"Fix my layout. This default implementation does nothing."
@@ -104,16 +97,6 @@ ArgMorph >> fixArgLayout [
 { #category : #accessing }
 ArgMorph >> implicitValue: anObject [
 	implicitValue := anObject
-]
-
-{ #category : #'object i/o' }
-ArgMorph >> initFieldsFrom: anObjStream version: classVersion [
-
-	super initFieldsFrom: anObjStream version: classVersion.
-	self initFieldsNamed: #(
-		labelMorph
-	) from: anObjStream.
-
 ]
 
 { #category : #testing }
@@ -161,14 +144,4 @@ ArgMorph >> printArgOn: aStream [
 		ifNotNil: [ 
 			v := self evaluate.
 			aStream nextPutAll: v asArgString]
-]
-
-{ #category : #'object i/o' }
-ArgMorph >> storeFieldsOn: anObjStream [
-
-	super storeFieldsOn: anObjStream.
-	self storeFieldsNamed: #(
-		labelMorph
-	) on: anObjStream.
-
 ]

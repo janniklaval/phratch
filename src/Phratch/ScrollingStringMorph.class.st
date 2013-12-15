@@ -535,13 +535,6 @@ ScrollingStringMorph >> extent: aPoint [
 
 ]
 
-{ #category : #'object i/o' }
-ScrollingStringMorph >> fieldsVersion [
-
-	^ 1
-
-]
-
 { #category : #private }
 ScrollingStringMorph >> fitContents [
 	"Set my extent to just fit around my contents."
@@ -668,31 +661,6 @@ ScrollingStringMorph >> indexForPoint: aPoint [
 	lineNum = lines size
 		ifTrue: [^ lineStart + line size + 1]
 		ifFalse: [^ lineStart + line size].
-
-]
-
-{ #category : #'object i/o' }
-ScrollingStringMorph >> initFieldsFrom: anObjStream version: classVersion [
-
-	| fontSpec showScrollbar |
-	super initFieldsFrom: anObjStream version: classVersion.
-	fontSpec := anObjStream nextField.
-	fontSpec ifNotNil: [
-		font := StrikeFont fontName: fontSpec first size: fontSpec second].
-
-	showScrollbar := anObjStream nextField.
-
-	self initFieldsNamed: #(
-		firstVisibleLine
-		textColor
-		selectionColor
-		lines
-	) from: anObjStream.
-
-	self font: font.
-	self showScrollbar: false.
-	self showScrollbar: showScrollbar.
-
 
 ]
 
@@ -1083,31 +1051,6 @@ ScrollingStringMorph >> step [
 ScrollingStringMorph >> stepTime [
 
 	^ 600
-
-]
-
-{ #category : #'object i/o' }
-ScrollingStringMorph >> storeFieldsOn: anObjStream [
-
-	| showScrollbar |
-	showScrollbar := scrollbar owner = self.
-	self showScrollbar: false.
-
-	super storeFieldsOn: anObjStream.
-	font
-		ifNil: [anObjStream putField: nil]
-		ifNotNil: [anObjStream putField: (Array with: font name with: font pointSize)].
-
-	anObjStream putField: showScrollbar.
-
-	self storeFieldsNamed: #(
-		firstVisibleLine
-		textColor
-		selectionColor
-		lines
-	) on: anObjStream.
-
-	self showScrollbar: showScrollbar.
 
 ]
 

@@ -94,13 +94,6 @@ ExpressionArgMorph >> evaluate [
 
 ]
 
-{ #category : #'object i/o' }
-ExpressionArgMorph >> fieldsVersion [
-
-	^ 1
-
-]
-
 { #category : #private }
 ExpressionArgMorph >> fixArgLayout [
 
@@ -131,16 +124,6 @@ ExpressionArgMorph >> fixArgLayout [
 ExpressionArgMorph >> getExpression [
 
 	^ labelMorph savedContents
-]
-
-{ #category : #'object i/o' }
-ExpressionArgMorph >> initFieldsFrom: anObjStream version: classVersion [
-
-	super initFieldsFrom: anObjStream version: classVersion.
-	self initFieldsNamed: #(
-		isNumber
-	) from: anObjStream.
-
 ]
 
 { #category : #initialization }
@@ -206,16 +189,6 @@ ExpressionArgMorph >> numExpression: aNumber [
 		ifTrue: [labelMorph contents: aNumber printStringNoExponent]
 		ifFalse: [labelMorph contents: aNumber asString].
 	self fixArgLayout.
-
-]
-
-{ #category : #'object i/o' }
-ExpressionArgMorph >> storeFieldsOn: anObjStream [
-
-	super storeFieldsOn: anObjStream.
-	self storeFieldsNamed: #(
-		isNumber
-	) on: anObjStream.
 
 ]
 

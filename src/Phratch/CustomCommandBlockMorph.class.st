@@ -341,13 +341,6 @@ CustomCommandBlockMorph >> editSpec [
 	receiver editSpecId: self id
 ]
 
-{ #category : #'object i/o' }
-CustomCommandBlockMorph >> fieldsVersion [
-
-	^ 1
-
-]
-
 { #category : #'block enumerating' }
 CustomCommandBlockMorph >> firstBlockList [
 
@@ -387,17 +380,6 @@ CustomCommandBlockMorph >> hideArgumentPlaceHolders [
 { #category : #identification }
 CustomCommandBlockMorph >> id [
 	^CustomBlockDefinition idFromSpec: userSpec
-]
-
-{ #category : #'object i/o' }
-CustomCommandBlockMorph >> initFieldsFrom: anObjStream version: classVersion [
-
-	super initFieldsFrom: anObjStream version: classVersion.
-	self initFieldsNamed: #(
-		userSpec
-	) from: anObjStream.
-
-
 ]
 
 { #category : #initialization }
@@ -656,16 +638,6 @@ CustomCommandBlockMorph >> showPlaceHoldersNear: aLabelFragment [
 CustomCommandBlockMorph >> start [
 	isTemplate ifTrue: [^self].
 	super start
-]
-
-{ #category : #'object i/o' }
-CustomCommandBlockMorph >> storeFieldsOn: anObjStream [
-
-	super storeFieldsOn: anObjStream.
-	self storeFieldsNamed: #(
-		userSpec
-	) on: anObjStream.
-
 ]
 
 { #category : #template }

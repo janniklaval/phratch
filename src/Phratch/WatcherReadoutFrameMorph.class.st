@@ -89,13 +89,6 @@ WatcherReadoutFrameMorph >> drawOn: aCanvas [
 	aCanvas paintImage: form at: self position + (5 @ 5)
 ]
 
-{ #category : #'object i/o' }
-WatcherReadoutFrameMorph >> fieldsVersion [
-
-	^ 1
-
-]
-
 { #category : #encapsulatedScripts }
 WatcherReadoutFrameMorph >> fixLayout [
 	| watcher readout isLarge s e readoutWidth yOffset w inset blist |

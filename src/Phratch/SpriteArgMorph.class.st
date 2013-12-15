@@ -92,13 +92,6 @@ SpriteArgMorph >> evaluate [
 
 ]
 
-{ #category : #'object i/o' }
-SpriteArgMorph >> fieldsVersion [
-
-	^ 1
-
-]
-
 { #category : #other }
 SpriteArgMorph >> fixArgLayout [
 	"Set my color to my owner's color."
@@ -148,16 +141,6 @@ SpriteArgMorph >> implicitValue: anObject [
 
 	implicitValue := anObject.
 	morph := anObject
-]
-
-{ #category : #'object i/o' }
-SpriteArgMorph >> initFieldsFrom: anObjStream version: classVersion [
-
-	super initFieldsFrom: anObjStream version: classVersion.
-	self initFieldsNamed: #(
-		morph
-	) from: anObjStream.
-
 ]
 
 { #category : #initialize }
@@ -307,16 +290,6 @@ SpriteArgMorph >> step [
 SpriteArgMorph >> stepTime [
 
 	^ 500
-
-]
-
-{ #category : #'object i/o' }
-SpriteArgMorph >> storeFieldsOn: anObjStream [
-
-	super storeFieldsOn: anObjStream.
-	self storeFieldsNamed: #(
-		morph
-	) on: anObjStream.
 
 ]
 

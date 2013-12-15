@@ -426,13 +426,6 @@ PhratchStageMorph >> exportFileName: fileName [
 	(form asFormOfDepth: 32) writeBMPFileNamed: fName
 ]
 
-{ #category : #'object i/o' }
-PhratchStageMorph >> fieldsVersion [
-
-	^ 5
-
-]
-
 { #category : #drawing }
 PhratchStageMorph >> fullBounds [
 	"Overridden to clip submorph hit detection to my bounds."
@@ -528,45 +521,6 @@ PhratchStageMorph >> grabSpriteFromScreen [
 	m onlyCostume: f.
 	frame addAndView: m.
 
-
-]
-
-{ #category : #'object i/o' }
-PhratchStageMorph >> initFieldsFrom: anObjStream version: classVersion [
-
-	super initFieldsFrom: anObjStream version: classVersion.
-	self initFieldsNamed: #(
-		"zoom"
-		hPan
-		vPan
-	) from: anObjStream.
-	classVersion = 1 ifTrue: [^ self].
-
-	"fields added in version 2"
-	"self initFieldsNamed: #(
-		obsoleteSavedState
-	) from: anObjStream."
-	classVersion = 2 ifTrue: [^ self].
-
-	"fields added in version 3"
-	self initFieldsNamed: #(
-		sprites
-	) from: anObjStream.
-	classVersion = 3 ifTrue: [^ self].
-
-	"fields added in version 4"
-	self initFieldsNamed: #(
-		volume
-		tempoBPM
-	) from: anObjStream.
-	classVersion = 4 ifTrue: [^ self].
-
-	"fields added in version 5"
-	self initFieldsNamed: #(
-		sceneStates
-		lists
-	) from: anObjStream.
-	lists ifNil: [lists := Dictionary new].  "work around"
 
 ]
 
@@ -1369,24 +1323,6 @@ PhratchStageMorph >> stopAsks [
 
 	PhratchPrompterMorph allInstancesDo: [:m | m stopAsk].
 	PhratchPrompterMorph clearLastAnswer.
-
-]
-
-{ #category : #'object i/o' }
-PhratchStageMorph >> storeFieldsOn: anObjStream [
-
-	super storeFieldsOn: anObjStream.
-	self storeFieldsNamed: #(
-		"zoom"
-		hPan
-		vPan
-		"obsoleteSavedState"
-		sprites
-		volume
-		tempoBPM
-		sceneStates
-		lists
-	) on: anObjStream.
 
 ]
 
