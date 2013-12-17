@@ -2464,37 +2464,6 @@ PhratchFrameMorph >> openPhratchProjectNamed: fName [
 
 ]
 
-{ #category : #'file read/write' }
-PhratchFrameMorph >> openScratchProject [
-	"Allow the user to select a project to open, then open that project."
-
-	| response newProj |
-	self closeMediaEditorsAndDialogs
-		ifFalse: [ ^ self ].
-	self stopAll.
-	(justSaved or: [ self projectIsEmpty ])
-		ifFalse: [ 
-			"ask the user if they want to save the current project"
-			response := DialogBoxMorph askWithCancel: 'Save the current project?'.
-			response = #cancelled
-				ifTrue: [ ^ self ].
-			response
-				ifTrue: [ self savePhratchProjectNoDialog ] ].
-	response := PhratchFileChooserDialog openPhratchFileFor: self.
-	response = #cancelled
-		ifTrue: [ ^ self ].
-	(response isKindOf: FileReference)
-		ifTrue: [ 
-			"read the contents of a local file"
-			^ self openPhratchProjectNamed: response ].
-	(response isKindOf: ByteArray)
-		ifFalse: [ ^ self ].
-	[ projectInfo := self extractInfoFrom: response ] ifError: [ projectInfo := Dictionary new ].
-	[ newProj := self extractOldProjectFrom: response ] ifError: [ ^ self ].
-	self installNewProject: newProj.
-	projectDirectory := PhratchFileChooserDialog getDefaultFolderForType: #project
-]
-
 { #category : #'falta adaptar' }
 PhratchFrameMorph >> openSilentlyPhratchProjectNamed: fName [
 	"Open a Phratch project with the given name."
