@@ -12,16 +12,16 @@ PhratchStageMorph >> initFieldsFrom: anObjStream version: classVersion [
 
 	super initFieldsFrom: anObjStream version: classVersion.
 	self initFieldsNamed: #(
-		"zoom"
+		zoom
 		hPan
 		vPan
 	) from: anObjStream.
 	classVersion = 1 ifTrue: [^ self].
 
 	"fields added in version 2"
-	"self initFieldsNamed: #(
+	self initFieldsNamed: #(
 		obsoleteSavedState
-	) from: anObjStream."
+	) from: anObjStream.
 	classVersion = 2 ifTrue: [^ self].
 
 	"fields added in version 3"
@@ -51,10 +51,10 @@ PhratchStageMorph >> storeFieldsOn: anObjStream [
 
 	super storeFieldsOn: anObjStream.
 	self storeFieldsNamed: #(
-		"zoom"
+		zoom
 		hPan
 		vPan
-		"obsoleteSavedState"
+		obsoleteSavedState
 		sprites
 		volume
 		tempoBPM
