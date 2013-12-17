@@ -53,7 +53,7 @@ ThumbnailCache >> readThumbnailFile [
 	[	(FileStream isAFileNamed: fName) ifTrue: [
 			f := (FileStream readOnlyFileNamed: fName) binary.
 			buf := f contentsOfEntireFile.
-			dict := FuelObjStream new readObjFrom: (ReadStream on: buf)].
+			dict := ObjStream new oldReadObjFrom: (ReadStream on: buf)].
 	] ifError: [PhratchError error].
 
 ]
@@ -117,15 +117,15 @@ ThumbnailCache >> thumbnailFromSpriteData: aByteArray [
 	| s version proj sprite scriptCount f scale thumbF spriteBlock p label labelForm |
 	s := ReadStream on: aByteArray.
 
-	version := FuelObjStream phratchFileVersionFrom: (s next: 10) asString.
+	version := ObjStream phratchFileVersionFrom: (s next: 10) asString.
 	version = 0 ifTrue: [
 		ScriptablePhratchMorph decodeAsByob.	"make sure we initialize every field - this breaks compatibility with Phratch-sprites. -Jens". 
 
 		s position: 0.
-		proj := FuelObjStream new readObjFrom: s showProgress: false].
+		proj := ObjStream new oldReadObjFrom: s showProgress: false].
 	({1 . 2} includes: version) ifTrue: [
 		s skip: s uint32.  "skip header"
-		proj := FuelObjStream new readObjFrom: s showProgress: false].
+		proj := ObjStream new oldReadObjFrom: s showProgress: false].
 
 	proj class = PhratchStageMorph ifFalse: [^ nil].
 	sprite := proj submorphs detect: [:m | m isKindOf: ScriptablePhratchMorph] ifNone: [^ nil].
@@ -168,10 +168,11 @@ ThumbnailCache >> updateThumbnails [
 						do: [ :fn | 
 							bar value: n.
 							thumb := nil.
-							[ 
+							[
 							buf := (FileStream readOnlyFileNamed: (directory / fn) fullName) binary contentsOfEntireFile.
+							self flag:'We cannot read sprite for now'.
 							thumb := (fn asLowercase endsWith: '.sprite') | (fn asLowercase endsWith: '.ysp')
-								ifTrue: [ self thumbnailFromSpriteData: buf ]
+								"ifTrue: [ self thumbnailFromSpriteData: buf ]"
 								ifFalse: [ self thumbnailFromImageData: buf ] ] ifError: [ PhratchError error ].
 							fSize := fileSizes at: fn ifAbsent: [ 0 ].
 							thumb ifNotNil: [ dict at: fn put: (Array with: fSize with: thumb colorReduced) ].
@@ -189,10 +190,11 @@ ThumbnailCache >> writeThumbnailFile [
 		(FileStream isAFileNamed: (directory / ThumbnailFileName) fullName)
 			ifFalse: [^ self]].
 
-	[	directory delete: ThumbnailFileName.  "delete may fail if directory is read-only or is an alias"
-		((dict size > 0) or: [directory exists: ThumbnailFileName]) ifTrue: [
-			f := (FileStream fileNamed: (directory / ThumbnailFileName) fullName) binary.
-			FuelObjStream new storeObj: dict on: f.
+	[
+		(directory / ThumbnailFileName) delete.  "delete may fail if directory is read-only or is an alias"
+		((dict size > 0) or: [(directory / ThumbnailFileName) exists]) ifTrue: [
+			f := (FileStream fileNamed: ((directory / ThumbnailFileName) fullName)) binary.
+			ObjStream new oldStoreObj: dict on: f.
 			f close].
 	] ifError: [PhratchError error].
 
