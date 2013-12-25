@@ -553,6 +553,8 @@ PhratchFrameMorph >> addSpecialSprite [
 	|menu m newSprite frame |
 	menu := MenuMorphNG new defaultTarget: self.
 	
+	PhratchSpriteMorph withAllSubclasses size = 1 ifTrue:[^ self paintSpriteMorph].
+	
 	PhratchSpriteMorph withAllSubclassesDo: [ :e |
 		menu add: ('create ',e name) translated value: e.
 	].
