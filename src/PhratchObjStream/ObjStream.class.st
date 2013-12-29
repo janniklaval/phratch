@@ -875,9 +875,9 @@ ObjStream >> readObjFrom: aStream [
 ObjStream >> readObjFrom: aStream showProgress: showProgress [
 	"Read the root object from the given binary stream. If showProgress is true, display a progress bar."
 
-	showProgress 
-		ifTrue: [ objects := (FLMaterializer newDefault "showProgress;" materializeFrom: aStream) root. ]
-		ifFalse: [ objects := (FLMaterializer newDefault materializeFrom: aStream) root. ].
+	objects := showProgress
+		ifTrue: [ (FLMaterializer newDefault materializeFrom: aStream) root	"showProgress;" ]
+		ifFalse: [ (FLMaterializer newDefault materializeFrom: aStream) root ].
 	^ objects
 ]
 
@@ -962,11 +962,13 @@ ObjStream >> storeObj: anObject on: aStream [
 ObjStream >> storeObj: anObject on: aStream showProgress: showProgress [
 	"Write the given object and all the objects that can be reached from it on the given binary stream. If showProgress is true, display a progress bar."
 
-	showProgress 
-		ifTrue: [ objects := (FLSerializer newDefault showProgress; serialize: anObject on: aStream) ]
-		ifFalse: [ objects := (FLSerializer newDefault serialize: anObject on: aStream)].
+	objects := showProgress
+		ifTrue: [ 
+			FLSerializer newDefault
+				showProgress;
+				serialize: anObject on: aStream ]
+		ifFalse: [ FLSerializer newDefault serialize: anObject on: aStream ].
 	^ objects
-
 ]
 
 { #category : #'private-reading' }
