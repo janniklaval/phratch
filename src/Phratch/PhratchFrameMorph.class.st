@@ -1418,52 +1418,6 @@ PhratchFrameMorph >> extractInfoFrom: aByteArray [
 ]
 
 { #category : #'file read/write' }
-PhratchFrameMorph >> extractOldProjectFrom: aByteArray [
-	"Answer a Phratch project (i.e. a PhratchStageMorph possibly containing sprites) from the given ByteArray. Answer nil if the project cannot be unpacked."
-
-	| s version proj |
-
-	ObjStream initialize. "just to make sure this works in filed-in changesets, -Jens"
-	s := ReadStream on: aByteArray.
-	version := ObjStream phratchFileVersionFrom: (s next: 10) asString.
-	version = 0 ifTrue: [
-		ScriptablePhratchMorph decodeAsByob.	"make sure we initialize every field - this breaks compatibility with Phratch-sprites. -Jens"
-		s position: 0.
-		[proj := ObjStream new oldReadObjFrom: s showProgress: true] ifError: [
-		^ self extractPhratchProjectFrom: aByteArray]].
-	({1 . 2} includes: version) ifTrue: [
-		s skip: s uint32.  "skip header"
-		proj := ObjStream new readObjFrom: s showProgress: true].
-
-	proj class = PhratchStageMorph ifFalse: [
-		version > 2
-			ifTrue: [self error: 'Project created by a later version of Phratch']
-			ifFalse: [self error: 'Problem reading project.'].
-		^ nil].
-
-	ScriptablePhratchMorph buildBlockSpecDictionary.
-
-	'initializing...' 
-		displayProgressAt: self center - (32@5)  "Sensor cursorPoint"
-		from: 0 to: ((proj allMorphs) select: [:m| m isKindOf: ScriptablePhratchMorph]) size * 2
-		during: [:bar | | i | i := 0.
-
-	proj allMorphsDo: [:m |
-		(m isKindOf: ScriptablePhratchMorph) ifTrue: [
-			 i := i + 1. bar value: i.
-			m convertTuplesToDefinitions]].
-
-	proj allMorphsDo: [:m |
-		(m isKindOf: ScriptablePhratchMorph) ifTrue: [  "convert to new blocks" 
-			i := i + 1. bar value: i.
-			m convertStacksToTuples.
-			m convertTuplesToStacks]]].
-
-	^ proj
-
-]
-
-{ #category : #'file read/write' }
 PhratchFrameMorph >> extractPhratchProjectFrom: aByteArray [
 	"Answer a Phratch project (i.e. a PhratchStageMorph possibly containing sprites) from the given ByteArray. Answer nil if the project cannot be unpacked.
 

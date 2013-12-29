@@ -16,7 +16,7 @@ Class {
 ThumbnailCache class >> initialize [
 	"self initialize"
 
-	ThumbnailFileName := 'scratchthumbs.db'.
+	ThumbnailFileName := 'phratchthumbs.db'.
 
 ]
 
@@ -41,21 +41,6 @@ ThumbnailCache >> filesToUpdate [
 	extensions := #(#gif #jpeg #jpg #bmp #png #sprite) asSet.
 	imageFiles := directory fileNames select: [ :fn | extensions includes: (directory / fn) extension asSymbol ].
 	^ imageFiles reject: [ :fn | dict includesKey: fn ]
-]
-
-{ #category : #other }
-ThumbnailCache >> readThumbnailFile [
-	"Attempt to read the thumbnail file in my directory and store the result in dict. If the file doesn't exist or can't be read, make dict be an empty dictionary."
-
-	| fName f buf |
-	dict := Dictionary new.
-	fName := (directory / ThumbnailFileName) fullName.
-	[	(FileStream isAFileNamed: fName) ifTrue: [
-			f := (FileStream readOnlyFileNamed: fName) binary.
-			buf := f contentsOfEntireFile.
-			dict := ObjStream new oldReadObjFrom: (ReadStream on: buf)].
-	] ifError: [PhratchError error].
-
 ]
 
 { #category : #other }
@@ -111,49 +96,11 @@ ThumbnailCache >> thumbnailFromImageData: aByteArray [
 ]
 
 { #category : #other }
-ThumbnailCache >> thumbnailFromSpriteData: aByteArray [
-	"Answer a thumbnail for the sprite stored in the given ByteArray (the contents of a binary file)."
-
-	| s version proj sprite scriptCount f scale thumbF spriteBlock p label labelForm |
-	s := ReadStream on: aByteArray.
-
-	version := ObjStream phratchFileVersionFrom: (s next: 10) asString.
-	version = 0 ifTrue: [
-		ScriptablePhratchMorph decodeAsByob.	"make sure we initialize every field - this breaks compatibility with Phratch-sprites. -Jens". 
-
-		s position: 0.
-		proj := ObjStream new oldReadObjFrom: s showProgress: false].
-	({1 . 2} includes: version) ifTrue: [
-		s skip: s uint32.  "skip header"
-		proj := ObjStream new oldReadObjFrom: s showProgress: false].
-
-	proj class = PhratchStageMorph ifFalse: [^ nil].
-	sprite := proj submorphs detect: [:m | m isKindOf: ScriptablePhratchMorph] ifNone: [^ nil].
-	f := sprite costumeForm asFormOfDepth: 16.
-	scale := (56.0 / f width) min: (42.0 / f height).
-	f := f magnifyBy: scale.
-	thumbF := Form extent: 80@60 depth: 16.
-	f displayOn: thumbF at: ((thumbF width - f width) // 2) @ 0 rule: Form paint.
-	spriteBlock := PhratchFrameMorph skinAt: #spriteBlock.
-	p := ((thumbF width - spriteBlock width) // 2) @ (thumbF height - spriteBlock height).
-	spriteBlock displayOn: thumbF at: p rule: Form paint.
-
-	scriptCount := self scriptCountFor: sprite.
-	label := 'Scripts' localized, PhratchTranslator colonSuffix, ' ', scriptCount printString.
-	scriptCount = 0 ifTrue: [label := 'no scripts' localized].
-	scriptCount = 1 ifTrue: [label := '1 script' localized].
-	labelForm := (StringMorph contents: label font: (StrikeFont fontName: 'Verdana' size: 10)) imageForm.
-	labelForm displayOn: thumbF at: p + (((spriteBlock width - labelForm width // 2) + 1)@ 5) rule: Form paint.
-
-	^ thumbF
-
-]
-
-{ #category : #other }
 ThumbnailCache >> updateThumbnails [
 	"Update my dictionary by creating thumbnails for all the image files in my directory. If updates were needed, try to save save the thumbnails cache."
 
 	| didRemove fList n thumb buf fSize |
+	
 	didRemove := self removeObsoleteEntries.
 	fList := self filesToUpdate.
 	fList size > 0
@@ -170,32 +117,11 @@ ThumbnailCache >> updateThumbnails [
 							thumb := nil.
 							[
 							buf := (FileStream readOnlyFileNamed: (directory / fn) fullName) binary contentsOfEntireFile.
-							self flag:'We cannot read sprite for now'.
+							
 							thumb := (fn asLowercase endsWith: '.sprite') | (fn asLowercase endsWith: '.ysp')
 								"ifTrue: [ self thumbnailFromSpriteData: buf ]"
 								ifFalse: [ self thumbnailFromImageData: buf ] ] ifError: [ PhratchError error ].
 							fSize := fileSizes at: fn ifAbsent: [ 0 ].
 							thumb ifNotNil: [ dict at: fn put: (Array with: fSize with: thumb colorReduced) ].
 							n := n + 1 ] ] ].
-	didRemove | (fList size > 0) | (dict size = 0)
-		ifTrue: [ self writeThumbnailFile ]
-]
-
-{ #category : #other }
-ThumbnailCache >> writeThumbnailFile [
-	"Write dict to the thumbnail file in my directory. Do nothing if the file cannot be written."
-
-	| f |
-	dict size = 0 ifTrue: [  "if no thumbnails and no thumbnails file to delete, do nothing"
-		(FileStream isAFileNamed: (directory / ThumbnailFileName) fullName)
-			ifFalse: [^ self]].
-
-	[
-		(directory / ThumbnailFileName) delete.  "delete may fail if directory is read-only or is an alias"
-		((dict size > 0) or: [(directory / ThumbnailFileName) exists]) ifTrue: [
-			f := (FileStream fileNamed: ((directory / ThumbnailFileName) fullName)) binary.
-			ObjStream new oldStoreObj: dict on: f.
-			f close].
-	] ifError: [PhratchError error].
-
 ]

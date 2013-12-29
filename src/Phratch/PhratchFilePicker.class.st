@@ -734,7 +734,7 @@ PhratchFilePicker >> thumbnailFetchLoop [
 
 	contentsPaneMorph contents submorphs do: [:m |
 		self isInWorld ifFalse: [^ self].
-		m computeThumbnail.
+		"m computeThumbnail."
 		(Delay forMilliseconds:  100) wait].
 
 	thumbnailFetchProcess := nil.
@@ -754,7 +754,7 @@ PhratchFilePicker >> thumbnailStylePageFor: allNames [
 
 	dirNames := currentDir directoryNames asSet.
 	thumbnailCache := ThumbnailCache new directory: currentDir.
-	thumbnailCache readThumbnailFile; updateThumbnails.
+	thumbnailCache updateThumbnails.
 	morphsToAdd := OrderedCollection new: 1000.
 	leftMargin := page left + 7.
 	rightMargin := page width - 75.
