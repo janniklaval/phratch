@@ -802,7 +802,7 @@ PaintCanvas >> import [
 	fName := PhratchFileChooserDialog chooseImageFileType: type title: 'Import Image'.
 	(fName isNil or: [ fName = #cancelled ])
 		ifTrue: [ ^ self ].
-	(fName asLowercase endsWith: '.sprite') | (fName asLowercase endsWith: '.ysp')
+	(fName asLowercase endsWith: '.sprite') | (fName asLowercase endsWith: '.ysp')  | (fName asLowercase endsWith: '.phsp')
 		ifTrue: [ f := self importCostumeFromSprite: fName ]
 		ifFalse: [ [ f := Form fromFileNamed: fName ] ifError: [ nil ] ].
 	f ifNil: [ ^ self ].

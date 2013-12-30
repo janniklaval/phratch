@@ -583,7 +583,7 @@ PhratchFrameMorph >> addSpriteMorph [
 
 	result := PhratchFileChooserDialog chooseSpriteCostumeFor: self.
 	result = #cancelled ifTrue: [^ self].
-	((result basename asLowercase endsWith: '.sprite') | (result basename asLowercase endsWith: '.ysp'))
+	((result basename asLowercase endsWith: '.sprite') | (result basename asLowercase endsWith: '.ysp')  | (result basename asLowercase endsWith: '.phsp'))
 		ifTrue: [^ self importSpriteOrProject: result].
 
 	[f := Form fromFileNamed: result] ifError: [ PhratchError error. ^ self].
@@ -1249,9 +1249,7 @@ PhratchFrameMorph >> editMenu: aMenuTitleMorph [
 		menu labels at: n put:
 			((menu labels at: n) copyFrom: 1 to: (menu labels at: n) size - 1), PhratchTranslator ellipsesSuffix].
 "
-	menu popUpAt: aMenuTitleMorph bottomLeft + (0@10) 
-		forHand: World primaryHand in: World.
-
+	menu invokeModalAt: aMenuTitleMorph bottomLeft + (0@10).
 ]
 
 { #category : #'falta adaptar' }
@@ -1504,7 +1502,6 @@ PhratchFrameMorph >> fileMenu: aMenuTitleMorph [
 	menu := MenuMorph new defaultTarget: self.
 	menu add: 'New' translated action: #newPhratchProject.
 	menu add: 'Open' translated action: #openPhratchProject.
-	menu add: 'Open Scratch' translated action: #openScratchProject.
 	menu add: 'Save' translated action: #savePhratchProjectNoDialog.
 	menu add: 'Save As' translated action: #savePhratchProject.
 	menu addLine.
@@ -3139,7 +3136,7 @@ PhratchFrameMorph >> startup [
 	self newPhratchProject.
 
 	fileName := startupFileNames
-		detect: [:fn | (fn asLowercase endsWith: '.sprite') or: [(fn asLowercase endsWith: '.ysp') or: [fn asLowercase endsWith: '.phr']]]
+		detect: [:fn | (fn asLowercase endsWith: '.sprite') or: [(fn asLowercase endsWith: '.ysp') or: [(fn asLowercase endsWith: '.phr') or: [fn asLowercase endsWith: '.phsp']]]]
 		ifNone: [^ self].
 
 	"open a .sprite file"

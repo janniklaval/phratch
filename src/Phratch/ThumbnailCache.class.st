@@ -118,7 +118,7 @@ ThumbnailCache >> updateThumbnails [
 							[
 							buf := (FileStream readOnlyFileNamed: (directory / fn) fullName) binary contentsOfEntireFile.
 							self flag: 'cannot load sprite for now'.
-							thumb := (fn asLowercase endsWith: '.sprite') | (fn asLowercase endsWith: '.ysp')
+							thumb := (fn asLowercase endsWith: '.sprite') | (fn asLowercase endsWith: '.ysp') | (fn asLowercase endsWith: '.phsp')
 								"ifTrue: [ self thumbnailFromSpriteData: buf ]"
 								ifFalse: [ self thumbnailFromImageData: buf ] ] ifError: [ PhratchError error ].
 							fSize := fileSizes at: fn ifAbsent: [ 0 ].
