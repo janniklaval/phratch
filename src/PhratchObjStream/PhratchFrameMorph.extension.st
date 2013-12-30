@@ -109,6 +109,44 @@ PhratchFrameMorph >> extractScratchProjectFrom: aByteArray [
 ]
 
 { #category : #'*PhratchObjStream' }
+PhratchFrameMorph >> fileMenu: aMenuTitleMorph [
+	| menu |
+	menu := MenuMorph new defaultTarget: self.
+	menu add: 'New' translated action: #newPhratchProject.
+	menu add: 'Open' translated action: #openPhratchProject.
+	menu add: 'Open Scratch' translated action: #openScratchProject.
+	menu add: 'Save' translated action: #savePhratchProjectNoDialog.
+	menu add: 'Save As' translated action: #savePhratchProject.
+	menu addLine.
+	menu add: 'Import Project' translated action: #importPhratchProject.
+	menu add: 'Export Sprite' translated action: #exportSprite.
+	menu addLine.
+	menu add: 'Project Notes' translated action: #editNotes.
+	Sensor shiftPressed
+		ifTrue: [ 
+			"developer menu"
+			menu addLine.
+			menu add: 'Write Project Summary' translated action: #writeSummaryFile.
+			menu add: 'Write Multiple Project Summaries' translated action: #writeMultipleSummaries.
+			menu addLine.
+			fillScreenFlag
+				ifTrue: [ menu add: 'Exit User Mode' translated action: #fillScreenOff ]
+				ifFalse: [ 
+					menu add: 'Enter User Mode' translated action: #fillScreenOn.
+					menu add: 'Save Image in User Mode' translated action: #saveImageForEndUser ] ].
+	menu addLine.
+	menu add: 'Quit' translated action: #quitPhratch.
+	menu localize.
+	#(2 4 5 6 7)
+		do: [ :n | 
+			menu labels
+				at: n
+				put:
+					((menu labels at: n) contents copyFrom: 1 to: (menu labels at: n) contents size - 1) , PhratchTranslator ellipsesSuffix ].
+	menu popUpAt: aMenuTitleMorph bottomLeft + (0 @ 10) inWorld: World
+]
+
+{ #category : #'*PhratchObjStream' }
 PhratchFrameMorph >> openScratchProject [
 	"Allow the user to select a project to open, then open that project."
 
