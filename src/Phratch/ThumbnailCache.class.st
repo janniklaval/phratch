@@ -88,7 +88,7 @@ ThumbnailCache >> thumbnailFromImageData: aByteArray [
 
 	| f scale |
 	f := Form fromBinaryStream: (ReadStream on: aByteArray).
-	f depth < 16 ifTrue: [f := f asFormOfDepth: 16].
+	"f depth < 16 ifTrue: [f := f asFormOfDepth: 16]."
 	scale := (80.0 / f width) min: (60.0 / f height).
 	f := f magnifyBy: scale.
 	^ f
@@ -117,11 +117,11 @@ ThumbnailCache >> updateThumbnails [
 							thumb := nil.
 							[
 							buf := (FileStream readOnlyFileNamed: (directory / fn) fullName) binary contentsOfEntireFile.
-							
+							self flag: 'cannot load sprite for now'.
 							thumb := (fn asLowercase endsWith: '.sprite') | (fn asLowercase endsWith: '.ysp')
 								"ifTrue: [ self thumbnailFromSpriteData: buf ]"
 								ifFalse: [ self thumbnailFromImageData: buf ] ] ifError: [ PhratchError error ].
 							fSize := fileSizes at: fn ifAbsent: [ 0 ].
-							thumb ifNotNil: [ dict at: fn put: (Array with: fSize with: thumb colorReduced) ].
+							thumb ifNotNil: [ dict at: fn put: (Array with: fSize with: thumb) ].
 							n := n + 1 ] ] ].
 ]

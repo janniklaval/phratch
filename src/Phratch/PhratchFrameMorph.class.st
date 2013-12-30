@@ -1303,13 +1303,6 @@ PhratchFrameMorph >> enterPresentationMode [
 	Display fillBlack.
 	Display fullScreenMode: true.
 	TaskbarMorph allInstances do: [: e | e hide ].
-	
-	self flag:'need to be removed after Pharo2.0 version'.
-	SystemVersion current major >= 3 ifTrue:[
-		"Smalltalk tools userManager canShowMorphHalo: false. "
-	] ifFalse: [ 
-		(Smalltalk at: #UsersManager) default currentUser canShowMorphHalo: false.
-	].
 
 	World restoreDisplay.
 	Display fillBlack.
@@ -1356,12 +1349,6 @@ PhratchFrameMorph >> exitPresentationMode [
 	"Exit presentation mode."
 
 	TaskbarMorph allInstances do: [: e | e show ].
-	self flag:'need to be removed after Pharo2.0 version'.
-	SystemVersion current major >= 3 ifTrue:[
-		"Smalltalk tools userManager canShowMorphHalo: true. "
-	] ifFalse: [ 
-		(Smalltalk at: #UsersManager) default currentUser canShowMorphHalo: true.
-	].
 	
 	quitFlag ifTrue: [^Smalltalk quitPrimitive].
 
@@ -1560,13 +1547,6 @@ PhratchFrameMorph >> fillScreenOff [
 	fillScreenFlag := false.
 	TaskbarMorph allInstances do: [: e | e show ].
 	
-	self flag:'need to be removed after Pharo2.0 version'.
-	SystemVersion current major >= 3 ifTrue:[
-		"Smalltalk tools userManager canShowMorphHalo: true. "
-	] ifFalse: [ 
-		(Smalltalk at: #UsersManager) default currentUser canShowMorphHalo: true.
-	].
-	
 	self isSticky: false.
 	self extent: 1000@600"Display extent - 50".
 	UseErrorCatcher := false.
@@ -1586,19 +1566,11 @@ PhratchFrameMorph >> fillScreenOn [
 	fillScreenFlag := true.
 	TaskbarMorph allInstances do: [: e | e hide ].
 	
-	self flag:'need to be removed after Pharo2.0 version'.
-	SystemVersion current major >= 3 ifTrue:[
-		"Smalltalk tools userManager canShowMorphHalo: false. "
-	] ifFalse: [ 
-		(Smalltalk at: #UsersManager) default currentUser canShowMorphHalo: false.
-	].
-	
 	self position: 0@0.
 	self isSticky: true.
 	self extent: Display extent.
 	self comeToFront.
 	UseErrorCatcher := true.
-	Sensor useOSEvents: true.
 	ScriptablePhratchMorph noviceMode: true.
 	Paragraph insertionPointColor: (Color r: 0.353 g: 0.607 b: 0.788).
 	self updateProjectName.
@@ -2872,7 +2844,6 @@ image in end-user (fillScreen) mode?') ifFalse: [^ self].
 	ImageCleaner cleanUpForProduction.
 	Smalltalk snapshot: true andQuit: true.
 	self startup.
-	Sensor useOSEvents: true.
 
 ]
 
@@ -2886,7 +2857,6 @@ image in end-user (fillScreen) mode?') ifFalse: [^ self].
 	self prepareImageForEndUserSilently.
 	Smalltalk snapshot: true andQuit: true.
 	self startup.
-	Sensor useOSEvents: true.
 
 ]
 
@@ -3200,7 +3170,6 @@ PhratchFrameMorph >> step [
 			ifTrue: [workPane viewBlocksAndScripts]
 			ifFalse: [viewerPane target isInWorld ifFalse: [workPane viewBlocksAndScriptsQuickly]]].
 
-	Sensor processOSMenuEvents.
 	paintingInProgress ifTrue: [^ self].
 
 "	self checkForWeDo." "simplify at the moment"
