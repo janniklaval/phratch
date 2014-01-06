@@ -2897,7 +2897,7 @@ PhratchFrameMorph >> savePhratchProjectNoDialog [
 
 	"Do we need to ask for a filename or directory?"
 	dir := PhratchFileChooserDialog getLastFolderForType: #project.
-	(fName size = 0 | (dir asFileReference / fName , 'phr') exists not) ifTrue: [^ self savePhratchProject].
+	"(fName size = 0 | (dir asFileReference / fName , 'phr') exists not) ifTrue: [^ self savePhratchProject]."
 	PhratchFileChooserDialog lastFolderIsSampleProjectsFolder ifTrue:  [^ self savePhratchProject].
 	projectDirectory := dir.
 

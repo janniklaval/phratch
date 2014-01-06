@@ -346,7 +346,7 @@ PhratchStageMorph >> drawPenTrailFor: aMorph from: oldPoint to: newPoint [
 	p1 := ((oldPoint * (1 @ -1)) + offset) rounded.
 	p2 := ((newPoint * (1 @ -1)) + offset) rounded.
 	pen drawFrom: p1 to: p2.
-	r := ((p1 rect: p2) expandBy: penSize + 1) translateBy: self topLeft.
+	r := ((p1 rectangle: p2) expandBy: penSize + 1) translateBy: self topLeft.
 	self invalidRect: r.
 
 ]

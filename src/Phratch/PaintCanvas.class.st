@@ -329,7 +329,7 @@ PaintCanvas >> dragBrushTo: aPoint [
 	| p |
 	p := (aPoint max: scrollX@scrollY) min: (scrollX@scrollY) + (bounds extent // scale).
 	brush goto: p.
-	self canvasChanged: ((lastPoint rect: p) expandBy: (brush sourceForm width / 2.0) ceiling).
+	self canvasChanged: ((lastPoint rectangle: p) expandBy: (brush sourceForm width / 2.0) ceiling).
 	lastPoint := p.
 
 ]
@@ -358,25 +358,25 @@ PaintCanvas >> dragShapeTo: aPoint [
 				color: Color black ].
 	#oval = mode
 		ifTrue: [ 
-			r := startPoint rect: aPoint.
+			r := startPoint rectangle: aPoint.
 			Sensor shiftPressed
 				ifTrue: [ 
 					dx := aPoint x - startPoint x.
 					dy := aPoint y - startPoint y.
 					side := dx abs max: dy abs.
-					r := startPoint rect: startPoint + (side * (dx sign @ dy sign)) ].
+					r := startPoint rectangle: startPoint + (side * (dx sign @ dy sign)) ].
 			palette shapeFilling
 				ifTrue: [ shapeCanvas fillOval: r color: Color black ]
 				ifFalse: [ shapeCanvas frameOval: r width: w color: Color black ] ].
 	#rect = mode
 		ifTrue: [ 
-			r := startPoint rect: aPoint.
+			r := startPoint rectangle: aPoint.
 			Sensor shiftPressed
 				ifTrue: [ 
 					dx := aPoint x - startPoint x.
 					dy := aPoint y - startPoint y.
 					side := dx abs max: dy abs.
-					r := startPoint rect: startPoint + (side * (dx sign @ dy sign)) ].
+					r := startPoint rectangle: startPoint + (side * (dx sign @ dy sign)) ].
 			palette shapeFilling
 				ifTrue: [ shapeCanvas fillRectangle: r color: Color black ]
 				ifFalse: [ shapeCanvas frameRectangle: r width: w color: Color black ] ].
@@ -949,7 +949,7 @@ PaintCanvas >> makeCheckerboard [
 	blt := (BitBlt toForm: f)
 		fillColor: Color black;
 		combinationRule: Form over;
-		destRect: (0@0 extent: squareSize); 
+		destRect: (0@0 extent: squareSize@squareSize); 
 		yourself.
 
 	0 to: f height by: (2 * squareSize) do: [:y |
@@ -1403,7 +1403,7 @@ PaintCanvas >> selectRectangleStartingAt: aPoint [
 			p := Sensor cursorPoint.
 			self autoScroll: p.
 			self canvasChanged: selectionRect.
-			selectionRect := aPoint rect: (self screenToCanvas: p).
+			selectionRect := aPoint rectangle: (self screenToCanvas: p).
 			selectionRect := selectionRect intersect: canvasForm boundingBox.
 			self canvasChanged: selectionRect.
 			World displayWorld]].
