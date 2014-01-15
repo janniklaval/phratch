@@ -1500,29 +1500,29 @@ PhratchFrameMorph >> extractProjectFrom: aByteArray [
 PhratchFrameMorph >> fileMenu: aMenuTitleMorph [
 	| menu |
 	menu := MenuMorph new defaultTarget: self.
-	menu add: 'New' translated action: #newPhratchProject.
-	menu add: 'Open' translated action: #openPhratchProject.
-	menu add: 'Save' translated action: #savePhratchProjectNoDialog.
-	menu add: 'Save As' translated action: #savePhratchProject.
+	menu add: 'New' localized action: #newPhratchProject.
+	menu add: 'Open' localized action: #openPhratchProject.
+	menu add: 'Save' localized action: #savePhratchProjectNoDialog.
+	menu add: 'Save As' localized action: #savePhratchProject.
 	menu addLine.
-	menu add: 'Import Project' translated action: #importPhratchProject.
-	menu add: 'Export Sprite' translated action: #exportSprite.
+	menu add: 'Import Project' localized action: #importPhratchProject.
+	menu add: 'Export Sprite' localized action: #exportSprite.
 	menu addLine.
-	menu add: 'Project Notes' translated action: #editNotes.
+	menu add: 'Project Notes' localized action: #editNotes.
 	Sensor shiftPressed
 		ifTrue: [ 
 			"developer menu"
 			menu addLine.
-			menu add: 'Write Project Summary' translated action: #writeSummaryFile.
-			menu add: 'Write Multiple Project Summaries' translated action: #writeMultipleSummaries.
+			menu add: 'Write Project Summary' localized action: #writeSummaryFile.
+			menu add: 'Write Multiple Project Summaries' localized action: #writeMultipleSummaries.
 			menu addLine.
 			fillScreenFlag
-				ifTrue: [ menu add: 'Exit User Mode' translated action: #fillScreenOff ]
+				ifTrue: [ menu add: 'Exit User Mode' localized action: #fillScreenOff ]
 				ifFalse: [ 
-					menu add: 'Enter User Mode' translated action: #fillScreenOn.
-					menu add: 'Save Image in User Mode' translated action: #saveImageForEndUser ] ].
+					menu add: 'Enter User Mode' localized action: #fillScreenOn.
+					menu add: 'Save Image in User Mode' localized action: #saveImageForEndUser ] ].
 	menu addLine.
-	menu add: 'Quit' translated action: #quitPhratch.
+	menu add: 'Quit' localized action: #quitPhratch.
 	menu localize.
 	#(2 4 5 6 7)
 		do: [ :n | 
