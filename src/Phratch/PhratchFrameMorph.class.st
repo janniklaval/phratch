@@ -231,12 +231,28 @@ PhratchFrameMorph class >> isXO [
 
 ]
 
+{ #category : #'scratch skin' }
+PhratchFrameMorph class >> menuCommandOn: aBuilder [
+
+	<worldMenu>  
+	(aBuilder item: #Phratch)
+		order: 0.1;
+		icon: ((ImageMorph fromStream: (FileStream fileNamed: (FileSystem workingDirectory /  'ScratchSkin' / 'phratchicon.png'))) form magnifyBy: 0.35);
+		action:[self openOneInstance].
+]
+
 { #category : #utilities }
 PhratchFrameMorph class >> open [
 "	InputEventSensor startUp."
 	"SoundPlayer initialize; shutDown; startUp. "
 		
 	^ self new startup openInWorld
+]
+
+{ #category : #'as yet unclassified' }
+PhratchFrameMorph class >> openOneInstance [
+
+	PhratchFrameMorph allInstances size > 1 ifFalse: [ ^ self new startup openInWorld].
 ]
 
 { #category : #utilities }
@@ -731,6 +747,22 @@ PhratchFrameMorph >> clearStage [
 	self initializeWatcherPositions.
 	justSaved := true.
 
+]
+
+{ #category : #'as yet unclassified' }
+PhratchFrameMorph >> close [
+
+	| response |
+	self closeMediaEditorsAndDialogs ifFalse: [^ self].
+	self stopAll.
+
+	(justSaved or: [self projectIsEmpty]) ifFalse: [
+		response := PhratchCloseDialog new getUserResponse.
+		response = #cancelled ifTrue: [^ self].
+		response ifTrue: [
+			self savePhratchProjectNoDialog.
+			justSaved ifFalse: [^ self]]].
+	self class close
 ]
 
 { #category : #byob }
@@ -1522,6 +1554,7 @@ PhratchFrameMorph >> fileMenu: aMenuTitleMorph [
 					menu add: 'Enter User Mode' localized action: #fillScreenOn.
 					menu add: 'Save Image in User Mode' localized action: #saveImageForEndUser ] ].
 	menu addLine.
+	menu add: 'Close' localized action: #close.
 	menu add: 'Quit' localized action: #quitPhratch.
 	menu localize.
 	#(2 4 5 6 7)
@@ -2726,7 +2759,7 @@ PhratchFrameMorph >> quitPhratch [
 			self savePhratchProjectNoDialog.
 			justSaved ifFalse: [^ self]]].
 
-	Smalltalk snapshot: false andQuit: true.
+	Smalltalk snapshot: true andQuit: true.
 
 ]
 
