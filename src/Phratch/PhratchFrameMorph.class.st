@@ -2298,7 +2298,7 @@ PhratchFrameMorph >> nextSurpriseCostumeName [
 				((ext size > 0) and: [#(gif png jpg) includes: ext])
 					ifTrue: [shuffledCostumeNames add: fn]]]].
 
-	shuffledCostumeNames := shuffledCostumeNames shuffledBy: Random new.
+	shuffledCostumeNames shuffleBy: Random new.
 	shuffledCostumeNames size = 0
 		ifTrue: [^ nil]
 		ifFalse: [^ shuffledCostumeNames removeFirst].
