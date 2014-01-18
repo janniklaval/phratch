@@ -81,7 +81,7 @@ ObjStream class >> fixedFormatClasses [
 		(28	SmallIdentityDictionary		getDict:id:			putDict:id:)							
 	"28-29 reserved for additional collections"
 		(30	Color					getColor:id:			putColor:id:)
-		(31	TranslucentColor		getColor:id:			putColor:id:)
+		(31	Color		getColor:id:			putColor:id:)
 		(32	Point					getPoint:id:			putPoint:id:)
 		(33	Rectangle				getRect:id:			putRect:id:)
 		(34	Form					getForm:id:			putForm:id:)
@@ -379,9 +379,9 @@ ObjStream >> getColor: anObject id: classID [
 	| rgb |
 	firstPass ifFalse: [^ anObject].
 	rgb := stream uint32.
-	(self classForID: classID) = TranslucentColor
-		ifTrue: [^ TranslucentColor basicNew setRgb: rgb alpha: (stream next / 255)]
-		ifFalse: [^ Color basicNew setRGB: rgb].
+	(classID) = 31
+		ifTrue: [|c| c:= Color basicNew setRGB: rgb. c setAlpha: (stream next / 255). ^c]
+		ifFalse: [^ Color basicNew setRGB: rgb; setAlpha: 255; yourself].
 
 ]
 
@@ -704,12 +704,12 @@ ObjStream >> putCollection: anObject id: classID [
 
 { #category : #'fixed format-writing' }
 ObjStream >> putColor: anObject id: classID [
-	| a |
+	|  a |
 	firstPass
 		ifTrue: [ ^ self ].
 	stream nextPut: classID.
 	stream uint32: anObject privateRGB.
-	anObject class = TranslucentColor
+	anObject class = Color
 		ifFalse: [ ^ self ].
 	a := (anObject privateAlpha asInteger min: 255) max: 0.
 	stream nextPut: a
