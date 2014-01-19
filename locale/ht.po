@@ -1,0 +1,1924 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Phratch\n"
+"Report-Msgid-Bugs-To: Jannik LAVAL <jannik.laval@gmail.com>\n"
+"POT-Creation-Date: 2008-07-08 11:50-0400\n"
+"PO-Revision-Date: 2014-01-17 11:27-0400\n"
+"Last-Translator: Chris Leonard <cjl@laptop.org>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Pootle 1.1.0rc2\n"
+
+############################################
+# FORMATTING
+############################################
+
+# Language name as you'd like it to appear in the Languages menu
+# (Required)
+msgid "Language-Name"
+msgstr "Creole"
+
+# Directionality of language
+# LTR = Left to Right
+# RTL = Right to Left
+msgid "Language-Direction"
+msgstr "LTR"
+
+# Scale to apply to font size (2 for twice as large)
+# Use this if the font is too small for legibility on the Scratch interface
+msgid "Font-Scale"
+msgstr ""
+
+# Set to 'true' or 'false'
+# Use this if you do not want any of the text to be bolded, for legibility
+msgid "Suppress-Bold"
+msgstr ""
+
+# Font to use on a Windows system
+msgid "Win-Font"
+msgstr ""
+
+# Font to use on a Mac system
+msgid "Mac-Font"
+msgstr ""
+
+# Font to use on a Linux system
+msgid "Linux-Font"
+msgstr ""
+
+############################################
+# BLOCKS
+############################################
+
+msgid "%H sensor value"
+msgstr ""
+
+msgid "$List$ contains $String$"
+msgstr ""
+
+msgid "$Attributes$ of $Sprite$"
+msgstr "$Attributes$ nan $Sprite$"
+
+msgid "$Boolean$ and $Boolean$"
+msgstr "$Boolean$ ak $Boolean$"
+
+msgid "$Boolean$ or $Boolean$"
+msgstr "$Boolean$ oubyen $Boolean$"
+
+msgid "$MathFunctions$ of $Number$"
+msgstr "$MathFunctions$ sou $Number$"
+
+msgid "$Number$ mod $Number$"
+msgstr "$Number$ mod $Number$"
+
+msgid "add $String$ to $List$"
+msgstr "mete $String$ sou $List$"
+
+msgid "answer"
+msgstr ""
+
+msgid "ask $String$ and wait"
+msgstr ""
+
+msgid "background #"
+msgstr "# fon ekran"
+
+msgid "broadcast $Event$"
+msgstr "voye bay tout moun $Event$"
+
+msgid "broadcast $Event$ and wait"
+msgstr "voye bay tout moun $Event$ epi tann"
+
+msgid "change $Effects$ effect by $Number$"
+msgstr "mete $Effects$ nan plas $Number$"
+
+msgid "change $Variable$ by $Number$"
+msgstr "mete $Variable$ nan plas $Number$"
+
+msgid "change pen color by $Number$"
+msgstr "ranplase koulè plim avek $Number$"
+
+msgid "change pen shade by $Number$"
+msgstr "ranplase entansite plim ak $Number$"
+
+msgid "change pen size by $Number$"
+msgstr "ranplase gwosè pwent plim nan avek $Number$"
+
+msgid "change size by $Number$"
+msgstr "ranplase gwosè a avek $Number$"
+
+msgid "change tempo by $Number$"
+msgstr "ranplase tempo ak $Number$"
+
+msgid "change volume by $Number$"
+msgstr "mete volim la sou $Number$"
+
+msgid "change x by $Number$"
+msgstr "mete $Number$ nan plas x"
+
+msgid "change y by $Number$"
+msgstr "mete $Number$ nan plas y"
+
+msgid "clear"
+msgstr "efase tout"
+
+msgid "clear graphic effects"
+msgstr "retire efè grafik yo"
+
+msgid "color $ScreenColor$ is touching $ScreenColor$?"
+msgstr "koulè $ScreenColor$ touche $ScreenColor$"
+
+msgid "control"
+msgstr "Kontwòl"
+
+msgid "costume #"
+msgstr "# kostim "
+
+msgid "delete $ListDelete$ of $List$"
+msgstr "efase $ListDelete$ nan $List$"
+
+msgid "direction"
+msgstr "direksyon"
+
+msgid "distance to $Sprite$"
+msgstr "distans jiska $Sprite$"
+
+msgid "else"
+msgstr "sinon"
+
+msgid "forever"
+msgstr "repete nèt ale"
+
+msgid "forever if $Boolean$"
+msgstr "repete nèt ale si $Boolean$"
+
+msgid "glide $Number$ secs to x:$Number$ y:$Number$"
+msgstr "glise pandan $Number$ segond ale nan pozisyon x:$Number$ y:$Number$"
+
+msgid "go back $Number$ layers"
+msgstr "retounen $Number$ kouch"
+
+msgid "go to $Sprite$"
+msgstr "ale nan $Sprite$"
+
+msgid "go to front"
+msgstr "ale sou devan"
+
+msgid "go to x:$Number$ y:$Number$"
+msgstr "ale nan pozisyon x:$Number$ y:$Number$"
+
+msgid "hide"
+msgstr "kache"
+
+msgid "hide variable $Variable$"
+msgstr "sere varyab $Variable$ a"
+
+msgid "if $Boolean$"
+msgstr "si $Boolean$"
+
+msgid "if on edge, bounce"
+msgstr "mate si li rive sou bo a "
+
+msgid "insert $String$ at $ListIndex$ of $List$"
+msgstr "Mete $String$ nan pozisyon $ListIndex$ nan $List$"
+
+msgid "item $ListIndex$ of $List$"
+msgstr "eleman $ListIndex$ nan $List$"
+
+msgid "join $String$ $String$"
+msgstr ""
+
+msgid "key $Keys$ pressed?"
+msgstr "touch $Keys$ peze?"
+
+msgid "length of $List$"
+msgstr "longè $List$"
+
+msgid "length of $String$"
+msgstr ""
+
+msgid "letter $Number$ of $String$"
+msgstr ""
+
+msgid "list"
+msgstr "lis"
+
+msgid "looks"
+msgstr "aparans"
+
+msgid "loud?"
+msgstr "son fò?"
+
+msgid "loudness"
+msgstr "volim son"
+
+msgid "motion"
+msgstr "mouvman"
+
+msgid "motor direction %W"
+msgstr ""
+
+msgid "motor off"
+msgstr ""
+
+msgid "motor on"
+msgstr ""
+
+msgid "motor on for $Number$ secs"
+msgstr ""
+
+msgid "motor power $Number$"
+msgstr ""
+
+msgid "mouse down?"
+msgstr ""
+
+msgid "mouse x"
+msgstr "souri x"
+
+msgid "mouse y"
+msgstr "souri y"
+
+msgid "move $Number$ steps"
+msgstr "fè $Number$ pa devan "
+
+msgid "next background"
+msgstr "pwochen fon ekran"
+
+msgid "next costume"
+msgstr "pwochenn kostim"
+
+msgid "not $Boolean$"
+msgstr "non $Boolean$"
+
+msgid "operators"
+msgstr ""
+
+msgid "pen"
+msgstr "plim"
+
+msgid "pen down"
+msgstr "bese plim la"
+
+msgid "pen up"
+msgstr "leve plim la"
+
+msgid "pick random $Number$ to $Number$"
+msgstr "chwazi yon chif pa aza ant $Number$ ak $Number$"
+
+msgid "play drum $Drums$ for $Number$ beats"
+msgstr ""
+
+msgid "play note $Notes$ for $Number$ beats"
+msgstr ""
+
+msgid "play sound $SoundNames$"
+msgstr "Jwe son $SoundNames$ la"
+
+msgid "play sound $SoundNames$ until done"
+msgstr "jwe son $SoundNames$ la nèt"
+
+msgid "point in direction $Directions$"
+msgstr "vize nan direksyon $Directions$"
+
+msgid "point towards $Sprite$"
+msgstr "vize $Sprite$"
+
+msgid "repeat $Number$"
+msgstr "repete $Number$ fwa"
+
+msgid "repeat until $Boolean$"
+msgstr "repete jiska $Boolean$"
+
+msgid "replace item $ListIndex$ of $List$ with $String$"
+msgstr "Ranplase $ListIndex$ nan $List$ avek $String$"
+
+msgid "reset timer"
+msgstr "rekòmanse Kronomèt la"
+
+msgid "rest for $Number$ beats"
+msgstr ""
+
+msgid "round $Number$"
+msgstr "awondi $Number$"
+
+msgid "say $String$"
+msgstr "di $String$"
+
+msgid "say $String$ for $Number$ secs"
+msgstr "di $String$ pandan $Number$ segond"
+
+msgid "sensing"
+msgstr ""
+
+msgid "sensor %h?"
+msgstr ""
+
+msgid "set $Effects$ effect to $Number$"
+msgstr "mete efè $Effects$ a sou $Number$"
+
+msgid "set $Variable$ to $Number$"
+msgstr "mete $Variable$ sou $Number$"
+
+msgid "set instrument to $Instruments$"
+msgstr ""
+
+msgid "set pen color to $Color$"
+msgstr "mete koulè plim la sou $Color$"
+
+msgid "set pen color to $Number$"
+msgstr "mete koulè plim la sou $Number$"
+
+msgid "set pen shade to $Number$"
+msgstr "mete entansite plim nan sou $Number$"
+
+msgid "set pen size to $Number$"
+msgstr "mete gwosè plim la sou $Number$"
+
+msgid "set size to $Number$%"
+msgstr "mete gwosè a sou $Number$%"
+
+msgid "set tempo to $Number$ bpm"
+msgstr "mete tempo a sou $Number$ bpm"
+
+msgid "set volume to $Number$%"
+msgstr "mete volim la sou $Number$%"
+
+msgid "set x to $Number$"
+msgstr "mete x sou $Number$"
+
+msgid "set y to $Number$"
+msgstr "mete y sou $Number$"
+
+msgid "show"
+msgstr "montre"
+
+msgid "show variable $Variable$"
+msgstr "montre varyab $Variable$ a"
+
+msgid "size"
+msgstr "gwosè"
+
+msgid "sound"
+msgstr "son"
+
+msgid "stamp"
+msgstr "mete so"
+
+msgid "stop all"
+msgstr "kanpe tout"
+
+msgid "stop all sounds"
+msgstr "koupe tout son"
+
+msgid "stop script"
+msgstr "kanpe script la"
+
+msgid "switch to background $Costumes$"
+msgstr "ale sou fon ekran $Costumes$"
+
+msgid "switch to costume $Costumes$"
+msgstr "al sou kostim $Costumes$"
+
+msgid "tempo"
+msgstr "tempo"
+
+msgid "think $String$"
+msgstr "panse ak $String$"
+
+msgid "think $String$ for $Number$ secs"
+msgstr "panse ak $String$ pandan $Number$ segond"
+
+msgid "timer"
+msgstr "kronomèt"
+
+msgid "touching $Sprite$?"
+msgstr "ap manyen $Sprite$?"
+
+msgid "touching color $ScreenColor$?"
+msgstr "ap manyen koulè $ScreenColor$?"
+
+msgid "turn $Number$ degrees"
+msgstr ""
+
+msgid "variables"
+msgstr "varyab"
+
+msgid "volume"
+msgstr "volim"
+
+msgid "wait $Number$ secs"
+msgstr "tann $Number$ segond"
+
+msgid "wait until $Boolean$"
+msgstr "tann jouk $Boolean$"
+
+msgid "when $Keys$ key pressed"
+msgstr "lè yo peze touch $Keys$ a"
+
+msgid "when $Sprite$ clicked"
+msgstr "lè yo klike $Sprite$"
+
+msgid "when I receive $Event$"
+msgstr "lèm resevwa $Event$"
+
+msgid "x position"
+msgstr "pozisyon x"
+
+msgid "y position"
+msgstr "pozisyon y"
+
+############################################
+# USER INTERFACE
+############################################
+
+msgid "(empty)"
+msgstr "(vid)"
+
+msgid "1 script"
+msgstr "1 script"
+
+msgid "About Scratch"
+msgstr "enfòmasyon sou Scratch"
+
+msgid "About this project:"
+msgstr "enfòmasyon sou pwojè sa"
+
+msgid "abs"
+msgstr "abs"
+
+msgid "add comment"
+msgstr "mete kòmantè"
+
+msgid "add comment here"
+msgstr "ajoute yon kòmantè la a"
+
+msgid "all"
+msgstr "tout"
+
+msgid "and"
+msgstr "ak"
+
+msgid "Animation"
+msgstr ""
+
+msgid "any"
+msgstr "nenpòt"
+
+msgid "Art"
+msgstr ""
+
+msgid "background"
+msgstr "fon ekran"
+
+msgid "backgrounds"
+msgstr "fon ekran yo"
+
+msgid "Backgrounds"
+msgstr "Fon ekran yo"
+
+msgid "brightness"
+msgstr "nivo limyè"
+
+msgid "Brush size: "
+msgstr "Gwosè penso"
+
+msgid "button"
+msgstr "bouton"
+
+msgid "button pressed"
+msgstr "bouton peze"
+
+msgid "Camera"
+msgstr ""
+
+msgid "can rotate"
+msgstr "kapab vire"
+
+msgid "cancel"
+msgstr "kanpe"
+
+msgid "Cancel"
+msgstr "kanpe"
+
+msgid "Choose a folder"
+msgstr "Chwazi yon dosye"
+
+msgid "Choose new sprite from file"
+msgstr "chwazi yon nouvo sprite apati yon fichye"
+
+msgid "clean up"
+msgstr "netwaye"
+
+msgid "Clear"
+msgstr "Pwòpte"
+
+msgid "Clear canvas"
+msgstr "Efase strikti a"
+
+msgid "Close and continue"
+msgstr ""
+
+msgid "Close dialog?"
+msgstr "Fèmen dyalog la?"
+
+msgid "Close paint editor?"
+msgstr "Fèmen zouti kap fè desen an?"
+
+msgid "close port"
+msgstr "Fèmen pò a"
+
+msgid "Close sound recorder?"
+msgstr "Fèmen bwat kab kenbe son a?"
+
+msgid "color"
+msgstr "koulè"
+
+msgid "Compress Images"
+msgstr "konprese imaj yo"
+
+msgid "Compress Sounds"
+msgstr "konprese son yo"
+
+msgid "Compress sounds and images"
+msgstr "konprese son ak imaj yo"
+
+msgid "Computer"
+msgstr "Òdinatè"
+
+msgid "connected"
+msgstr "konekte"
+
+msgid "Connecting to "
+msgstr "ap konekte avèk"
+
+msgid "Copy"
+msgstr "Kopye"
+
+msgid "costume"
+msgstr "kostim"
+
+msgid "costumes"
+msgstr "kostim"
+
+msgid "Costumes"
+msgstr "Kostim"
+
+msgid "Could not read"
+msgstr "Pa ka li'l"
+
+msgid "Could not read project; file may be damaged"
+msgstr "Pa ka li pwojè a; fichye a ka petèt kowonpi"
+
+msgid "Could not write file"
+msgstr "Pa kapab ekri fichye a"
+
+msgid "Create account"
+msgstr "Kreye yon kont"
+
+msgid "Create an empty project"
+msgstr "Kreye yon pwojè tounèf"
+
+msgid "Data sent. Waiting for response..."
+msgstr "Enfòmasyon yo ale. Ap tann yon repons..."
+
+msgid "delete"
+msgstr "efase"
+
+msgid "Delete"
+msgstr "Efase"
+
+msgid "Delete a list"
+msgstr "Efase yon lis"
+
+msgid "Delete a variable"
+msgstr "Efase yon varyab"
+
+msgid "Delete this background"
+msgstr ""
+
+msgid "Delete this costume"
+msgstr "Efase kostim sa"
+
+msgid "Delete this sound"
+msgstr "Efase son sa"
+
+msgid "Delete this sprite"
+msgstr ""
+
+msgid "Desktop"
+msgstr ""
+
+msgid "disable remote sensor connections"
+msgstr ""
+
+msgid "distance"
+msgstr ""
+
+msgid "Documents"
+msgstr "Dokiman"
+
+msgid "don't rotate"
+msgstr "pa vire"
+
+msgid "Don't Save"
+msgstr ""
+
+msgid "Done"
+msgstr ""
+
+msgid "down"
+msgstr "anba"
+
+msgid "down arrow"
+msgstr "flèch anba"
+
+msgid "drag to resize"
+msgstr ""
+
+msgid "drag to rotate"
+msgstr ""
+
+msgid "draggable on website?"
+msgstr "kapab glise sou sit web la?"
+
+msgid "duplicate"
+msgstr "kopye"
+
+msgid "Duplicate"
+msgstr "Kopye"
+
+msgid "edge"
+msgstr "arebò"
+
+msgid "Edit"
+msgstr "Korije"
+
+msgid "Ellipse tool (draw outlined or filled ellipse or circle)"
+msgstr "Zouti elips (desinen yon elips oubyen yon sèk, plen oubyen vid)"
+
+msgid "enable remote sensor connections"
+msgstr ""
+
+msgid "Enter presentation mode"
+msgstr "Antre nan mòd pezantasyon"
+
+msgid "Eraser"
+msgstr "Gòm"
+
+msgid "Eraser size"
+msgstr "Gwosè gòm la"
+
+msgid "Error!"
+msgstr ""
+
+msgid "Examples"
+msgstr ""
+
+msgid "Exit presentation"
+msgstr ""
+
+msgid "Exit presentation mode"
+msgstr "Soti nan mòd presamtasyon a"
+
+msgid "export"
+msgstr "ekspòte"
+
+msgid "Export Background"
+msgstr "Ekspòte fon ekran an"
+
+msgid "Export Costume"
+msgstr "ekspòte kostim"
+
+msgid "Export failed"
+msgstr "Ekspòtasyon an pa fèt"
+
+msgid "Export Sound"
+msgstr "ekspòte son"
+
+msgid "Export Sprite"
+msgstr "ekspòte yon Sprite"
+
+msgid "export this costume"
+msgstr ""
+
+msgid "export this sound"
+msgstr ""
+
+msgid "export this sprite"
+msgstr "ekspòte sprite sa"
+
+msgid "Extras menu"
+msgstr "Meni bagay anplis yo"
+
+msgid "Eyedropper tool (select a color)"
+msgstr "zouti piplèt (pou chwazi koulè)"
+
+msgid "Failed:"
+msgstr "Echwe:"
+
+msgid "false"
+msgstr "fo"
+
+msgid "File"
+msgstr ""
+
+msgid "File not found"
+msgstr "pa ka jwenn fichye a"
+
+msgid "Fill tool (fill areas with color or gradient)"
+msgstr "zouti bokit penti (plen yon zòn ak yon koulè oubyen yon degrade)"
+
+msgid "first"
+msgstr "premye"
+
+msgid "fisheye"
+msgstr "je pwason"
+
+msgid "Flash blocks (fast)"
+msgstr "Blok kap kliyote (rapid)"
+
+msgid "Flash blocks (slow)"
+msgstr "Blok kap kliyote (lan)"
+
+msgid "Flip horizontally"
+msgstr "Miwa orizontal"
+
+msgid "Flip vertically"
+msgstr "Miwa vètikal"
+
+msgid "For all sprites"
+msgstr "Pou tout sprite yo"
+
+msgid "For this sprite only"
+msgstr "Pou sprite sa sèlman"
+
+msgid "Game"
+msgstr ""
+
+msgid "Get surprise sprite"
+msgstr "Jwenn yon sprite sipriz"
+
+msgid "Get the last thing deleted"
+msgstr "Jwenn dènye bagay ki te efase a"
+
+msgid "Getting Started"
+msgstr ""
+
+msgid "ghost"
+msgstr "Fantom"
+
+msgid "Go To Scratch Website"
+msgstr ""
+
+msgid "grab screen region for new costume"
+msgstr "Pran yon moso nan ekran an kòm nouvo kostim"
+
+msgid "grab screen region for new sprite"
+msgstr "Pran yon moso nan ekran an kòm nouvo sprite"
+
+msgid "Grow"
+msgstr "Grandi"
+
+msgid "Grow sprite"
+msgstr "Fè sprite la grandi"
+
+msgid "hello "
+msgstr ""
+
+msgid "Hello!"
+msgstr "Bonjou!"
+
+msgid "help"
+msgstr "èd"
+
+msgid "Help"
+msgstr "èd"
+
+msgid "Help Page"
+msgstr ""
+
+msgid "Help Screens"
+msgstr ""
+
+msgid "Hide Motor Blocks"
+msgstr ""
+
+msgid "High (biggest)"
+msgstr "Wo (pi wo a)"
+
+msgid "Hmm..."
+msgstr "Mmmh..."
+
+msgid "Home"
+msgstr "Lakay"
+
+msgid "Images compressed"
+msgstr "imaj ki konprese yo"
+
+msgid "import"
+msgstr "enpote"
+
+msgid "Import"
+msgstr "enpòte"
+
+msgid "Import an image on top of your current canvas"
+msgstr ""
+
+msgid "Import Background"
+msgstr "Enpòte yon fon ekran"
+
+msgid "Import Costume"
+msgstr "Enpòte Kostim"
+
+msgid "Import Image"
+msgstr "enpòte yon imaj"
+
+msgid "Import List"
+msgstr "enpòte yon lis"
+
+msgid "Import Project"
+msgstr "enpòte yon pwojè"
+
+msgid "import project"
+msgstr "enpòte yon pwojè"
+
+msgid "Import Sound"
+msgstr "enpòte yon son"
+
+msgid "Incompatible Scratch file format"
+msgstr "Fòma fichye Scratch la enkonpatib"
+
+msgid "Is the folder read-only?"
+msgstr "èske se yon fichye yo ka li sèlman"
+
+msgid "JPEG Quality (10-100)?"
+msgstr "Kalite Jpeg (10-100)"
+
+msgid "kbytes"
+msgstr ""
+
+msgid "Language"
+msgstr "Lang"
+
+msgid "large readout"
+msgstr ""
+
+msgid "last"
+msgstr "dènye"
+
+msgid "left"
+msgstr "goch"
+
+msgid "left arrow"
+msgstr "flèch goch"
+
+msgid "length"
+msgstr "longè"
+
+msgid "light"
+msgstr "limyè"
+
+msgid "Line tool (draw lines)"
+msgstr "Zouti liy (desinen liy)"
+
+msgid "List name?"
+msgstr "Non lis la?"
+
+msgid "Low"
+msgstr "Ba"
+
+msgid "Lowest (smallest)"
+msgstr "Pi ba (pi piti)"
+
+msgid "Make a list"
+msgstr "Fè yon nouvo lis"
+
+msgid "Make a variable"
+msgstr "Fè yon nouvo varyab"
+
+msgid "Max:"
+msgstr "Max.:"
+
+msgid "meow"
+msgstr "Myaw"
+
+msgid "Message name:"
+msgstr "Non mesaj la"
+
+msgid "Min:"
+msgstr "Min.:"
+
+msgid "mod"
+msgstr ""
+
+msgid "more"
+msgstr "plis"
+
+msgid "More tags:"
+msgstr ""
+
+msgid "mosaic"
+msgstr "Mozayik"
+
+msgid "mouse x:"
+msgstr "souri x:"
+
+msgid "mouse y:"
+msgstr "souri y:"
+
+#, fuzzy
+msgid "mouse-pointer"
+msgstr "flèch souri a"
+
+msgid "Move"
+msgstr "Deplase"
+
+msgid "Music"
+msgstr "Mizik"
+
+msgid "My Projects"
+msgstr ""
+
+msgid "new"
+msgstr "nouvo"
+
+msgid "New"
+msgstr "Nouvo"
+
+msgid "New background:"
+msgstr "Nouvo fon ekran"
+
+msgid "New costume:"
+msgstr "Nouvo kostim"
+
+msgid "New file name?"
+msgstr ""
+
+msgid "New Filename:"
+msgstr "Nouvo non fichye"
+
+msgid "New sound:"
+msgstr "Nouvo son"
+
+msgid "New Sprite"
+msgstr "Nouvo Sprite"
+
+msgid "New sprite:"
+msgstr ""
+
+msgid "No"
+msgstr "Non"
+
+msgid "No MIDI ports currently available."
+msgstr "Pa gen pò MIDI ki disponib kounye a"
+
+msgid "No motion blocks"
+msgstr "Okenn blok mouvman"
+
+msgid "no scripts"
+msgstr "Pa gen script"
+
+#, fuzzy
+msgid "No serial ports found"
+msgstr "Pa jwenn okenn pò seri"
+
+msgid "No variables."
+msgstr "Pa gen varyab"
+
+msgid "Normal"
+msgstr "Nòmal"
+
+msgid "normal readout"
+msgstr ""
+
+msgid "Off"
+msgstr "Off"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "On"
+msgstr "On"
+
+#, fuzzy
+msgid "only face left-right"
+msgstr "vire adwat agoch sèlman"
+
+msgid "Open"
+msgstr "Louvri"
+
+msgid "Open a Scratch project"
+msgstr "Louvri yon pwojè Scratch"
+
+msgid "Open Project"
+msgstr "Louvri yon pwojè"
+
+msgid "or"
+msgstr "oubyen"
+
+msgid "Paint"
+msgstr "Desen"
+
+msgid "Paint Editor"
+msgstr "Korektè desen"
+
+msgid "Paint new sprite"
+msgstr "Desine yon nouvo Sprite"
+
+msgid "Paintbrush"
+msgstr "Penso"
+
+msgid "Password:"
+msgstr "Kòd"
+
+msgid "Percent? (100 gives original size)"
+msgstr "Pousan?(100 bay gwosè orjinal la)"
+
+msgid "Pictures"
+msgstr "Imaj"
+
+msgid "pixelate"
+msgstr ""
+
+msgid "play"
+msgstr "Jwe"
+
+msgid "Please enter a number"
+msgstr "Souple tape yon nimewo"
+
+msgid "pop"
+msgstr "pop"
+
+msgid "Position the cross-hair to set the rotation center"
+msgstr "Bay kwa yon pozisyon pou defini sant wotasyon a"
+
+msgid "Preparing project..."
+msgstr "Ap prepare pwojè a"
+
+msgid "Project author:"
+msgstr "Moun ki fè pwojè a:"
+
+msgid "Project name"
+msgstr "Non pwòjè a"
+
+msgid "Project Notes"
+msgstr "Nòt sou pwojè a"
+
+msgid "Project notes"
+msgstr "Nòt sou pwojè a"
+
+msgid "Project uploaded."
+msgstr "Pwojè a ale"
+
+msgid "Projects"
+msgstr "Pwojè"
+
+msgid "Quit"
+msgstr "Kite"
+
+msgid "Quit Scratch"
+msgstr "Kite Scratch"
+
+msgid "Reading"
+msgstr ""
+
+msgid "record"
+msgstr "Anrejistre"
+
+msgid "Record"
+msgstr "Anrejistre"
+
+msgid "recording"
+msgstr "ap anrejistre"
+
+msgid "Rectangle tool (draw outlined or filled rectangle or square)"
+msgstr "Zouti rektang (desinen yon kare oubyen yon rektang, plen oubyen vid)"
+
+msgid "Redo"
+msgstr "Refè"
+
+msgid "Reference Guide"
+msgstr ""
+
+msgid "Remote sensor connections enabled"
+msgstr ""
+
+msgid "Remove viewer from stage"
+msgstr ""
+
+msgid "resistance"
+msgstr "Rezistans"
+
+msgid "resize this sprite"
+msgstr ""
+
+msgid "reverse"
+msgstr ""
+
+msgid "right"
+msgstr "dwat"
+
+msgid "right arrow"
+msgstr "flèch dwat"
+
+msgid "Rotate clock-wise"
+msgstr ""
+
+msgid "Rotate counter-clock-wise"
+msgstr ""
+
+msgid "rotate this sprite"
+msgstr ""
+
+msgid "Rotation degrees?"
+msgstr ""
+
+msgid "Save"
+msgstr "Sere"
+
+msgid "Save a copy of the current project"
+msgstr "Sere yon kopi pwojè sa a"
+
+msgid "Save As"
+msgstr "Sere Tankou"
+
+msgid "Save changes before quitting?"
+msgstr ""
+
+msgid "Save failed"
+msgstr "Pa ka sere pwojè a"
+
+msgid "save picture of scripts"
+msgstr "sere foto script yo"
+
+msgid "save picture of stage..."
+msgstr "Sere yon foto sèn la"
+
+msgid "Save Project"
+msgstr "Sere pwojè a"
+
+msgid "Save Scripts Snapshot"
+msgstr "Sere apèsi Script yo"
+
+msgid "Save Stage Shot"
+msgstr "Sere Foto Sèn la"
+
+msgid "Save the current project"
+msgstr "Sere pwojè sa a"
+
+msgid "Save the current project?"
+msgstr "Sere pwojè sa a?"
+
+msgid "Save this project"
+msgstr ""
+
+msgid "Scripts"
+msgstr "Script yo"
+
+msgid "select serial/USB port"
+msgstr "chwazi port seri/USB"
+
+msgid "Select tool (move, modify, or delete selection)"
+msgstr "Chwazi zouti (bouje, modifye, oubyen efase sa ki chwazi a)"
+
+msgid "Set costume center"
+msgstr ""
+
+msgid "Set language"
+msgstr ""
+
+msgid "Set rotation center"
+msgstr "Chwazi sant wotasyon a"
+
+msgid "Set Single Stepping"
+msgstr ""
+
+msgid "set slider min and max"
+msgstr ""
+
+msgid "Share"
+msgstr "Pataje"
+
+msgid "Share this project"
+msgstr ""
+
+msgid "Share This Project Online"
+msgstr "Pataje pwojè sa online"
+
+msgid "Show Motor Blocks"
+msgstr ""
+
+msgid "show ScratchBoard watcher"
+msgstr ""
+
+msgid "Shrink"
+msgstr "Fè vinn pi piti"
+
+msgid "Shrink sprite"
+msgstr "Fè sprite la vinn pi piti"
+
+msgid "Simulation"
+msgstr ""
+
+msgid "Single-step speed?"
+msgstr "Vitès pazapa a"
+
+msgid "slider"
+msgstr ""
+
+msgid "Slider range:"
+msgstr ""
+
+msgid "Sound quality:"
+msgstr "Kalite son a"
+
+msgid "Sound Recorder"
+msgstr ""
+
+msgid "Sounds"
+msgstr "Son yo"
+
+msgid "Sounds compressed"
+msgstr "Son konprese"
+
+msgid "space"
+msgstr "espas"
+
+msgid "Sprite"
+msgstr "Sprite"
+
+msgid "Sprites"
+msgstr ""
+
+msgid "sqrt"
+msgstr "rasin"
+
+msgid "Stage"
+msgstr "sèn"
+
+msgid "Stage selected:"
+msgstr "Sèn ki chwazi a:"
+
+msgid "Stamp tool (select area, then stamp copies of it)"
+msgstr "Zouti so (chwazi yon zòn, epi sèvi avèl tankou so)"
+
+msgid "Start green flag scripts"
+msgstr "Komanse script ak drapo vè yo"
+
+msgid "Start Single Stepping"
+msgstr "kòmanse pazapa a"
+
+msgid "stop"
+msgstr "kanpe"
+
+msgid "Stop everything"
+msgstr "Kanpe tout bagay"
+
+msgid "Stop Single Stepping"
+msgstr "kanpe pazapa a"
+
+msgid "Story"
+msgstr ""
+
+msgid "Support Site"
+msgstr ""
+
+msgid "Switch colors"
+msgstr "Chanje koulè yo"
+
+msgid "Switch to full stage"
+msgstr ""
+
+msgid "Switch to presentation mode"
+msgstr ""
+
+msgid "Switch to small stage"
+msgstr ""
+
+msgid "Tags:"
+msgstr "Etikèt:"
+
+msgid "Text tool (edit text layer)"
+msgstr "Zouti tèks (modifye kouch tèks la)"
+
+msgid "That variable name is already in use"
+msgstr "Non varyab sa itiize deja"
+
+msgid "that way"
+msgstr ""
+
+msgid "The file name already exists. Overwrite existing file?"
+msgstr "Non Fichye sa a egziste deja. Ranplase li?"
+
+msgid "thing"
+msgstr "bagay"
+
+msgid "this way"
+msgstr ""
+
+msgid "tilt"
+msgstr ""
+
+msgid "true"
+msgstr "vre"
+
+msgid "Turbo speed"
+msgstr "Vitès tibo"
+
+msgid "turn into new sprite"
+msgstr "Fè li tounen yon nouvo sprite"
+
+msgid "Undelete"
+msgstr ""
+
+msgid "Undo"
+msgstr "Defèt"
+
+msgid "up"
+msgstr "anwo"
+
+msgid "up arrow"
+msgstr "Flèch anwo"
+
+msgid "Updating thumbnails"
+msgstr ""
+
+msgid "Upload succeeded!"
+msgstr ""
+
+msgid "Upload to Scratch Server"
+msgstr "Voye bay sèvè Scratch la"
+
+msgid "Uploading"
+msgstr "Ap voye li ale"
+
+msgid "Variable name?"
+msgstr "Non yon varyab?"
+
+msgid "View on stage"
+msgstr "Afiche sou sèn la"
+
+msgid "What's your name?"
+msgstr ""
+
+msgid "whirl"
+msgstr "Toubiyon"
+
+msgid "world"
+msgstr ""
+
+msgid "Write Multiple Project Summaries"
+msgstr " Ekri rezime plizyè pwojè"
+
+msgid "Write Project Summary"
+msgstr "Ekri rezime pwojè a"
+
+msgid "Yes"
+msgstr "Wi"
+
+msgid "Your project is now online at"
+msgstr ""
+
+msgid "Your Scratch website login name:"
+msgstr "Non ki idantifye ou sou sit web Scratch la se:"
+
+msgid "Zoom in"
+msgstr "Rale vini"
+
+msgid "Zoom out"
+msgstr "Pouse ale"
+
+############################################
+# MIDI INSTRUMENTS
+############################################
+
+msgid "Accordion"
+msgstr "Akòdeyon"
+
+msgid "Acoustic Bass"
+msgstr "Bas Akoustik"
+
+msgid "Acoustic Bass Drum"
+msgstr "Bas Akoustik Tanbou"
+
+msgid "Acoustic Grand"
+msgstr ""
+
+msgid "Acoustic Snare"
+msgstr ""
+
+msgid "Agogo"
+msgstr ""
+
+msgid "Alto Sax"
+msgstr "Sax Alto"
+
+msgid "Applause"
+msgstr "Aplodi"
+
+msgid "Bagpipe"
+msgstr ""
+
+msgid "Banjo"
+msgstr "Banjo"
+
+msgid "Baritone Sax"
+msgstr ""
+
+msgid "Bass Drum 1"
+msgstr "Tanbou Bas 1"
+
+msgid "Bassoon"
+msgstr ""
+
+msgid "Bird Tweet"
+msgstr "Chante zwazo"
+
+msgid "Blown Bottle"
+msgstr "Souf nan yon boutèy"
+
+msgid "Brass Section"
+msgstr ""
+
+msgid "Breath Noise"
+msgstr "Bri souf"
+
+msgid "Bright Acoustic"
+msgstr ""
+
+msgid "Cabasa"
+msgstr ""
+
+msgid "Celesta"
+msgstr ""
+
+msgid "Cello"
+msgstr "Vyolonsèl"
+
+msgid "Chinese Cymbal"
+msgstr "Senbal Chinwa"
+
+msgid "Choir Aahs"
+msgstr "Koral Aah"
+
+msgid "Church Organ"
+msgstr "òg legliz"
+
+msgid "Clarinet"
+msgstr "Klarinèt"
+
+msgid "Claves"
+msgstr ""
+
+msgid "Clavinet"
+msgstr "Klavinèt"
+
+msgid "Closed Hi-Hat"
+msgstr ""
+
+msgid "Contrabass"
+msgstr ""
+
+msgid "Cowbell"
+msgstr "Kloch bèf"
+
+msgid "Crash Cymbal 1"
+msgstr ""
+
+msgid "Crash Cymbal 2"
+msgstr ""
+
+msgid "Distortion Guitar"
+msgstr ""
+
+msgid "Drawbar Organ"
+msgstr ""
+
+msgid "Dulcimer"
+msgstr ""
+
+msgid "Electric Bass (finger)"
+msgstr "Bas elektrik (dwèt)"
+
+msgid "Electric Bass (pick)"
+msgstr "Bas elektrik (pense)"
+
+msgid "Electric Clean Guitar"
+msgstr ""
+
+msgid "Electric Grand"
+msgstr ""
+
+msgid "Electric Jazz Guitar"
+msgstr "Gita elektrik Jazz"
+
+msgid "Electric Muted Guitar"
+msgstr ""
+
+msgid "Electric Piano 1"
+msgstr "Pyano elektrik 1"
+
+msgid "Electric Piano 2"
+msgstr "Pyano elektrik 2"
+
+msgid "Electric Snare"
+msgstr ""
+
+msgid "English Horn"
+msgstr ""
+
+msgid "FX 1 (rain)"
+msgstr "FX 1 (lapli)"
+
+msgid "FX 2 (soundtrack)"
+msgstr ""
+
+msgid "FX 3 (crystal)"
+msgstr "FX 3 (kristal)"
+
+msgid "FX 4 (atmosphere)"
+msgstr "FX 4 (atmosfè)"
+
+msgid "FX 5 (brightness)"
+msgstr "FX (Klere)"
+
+#, fuzzy
+msgid "FX 6 (goblins)"
+msgstr "FX ()"
+
+msgid "FX 7 (echoes)"
+msgstr "FX 7 (eko)"
+
+msgid "FX 8 (sci-fi)"
+msgstr "FX (syans-fiksyon)"
+
+msgid "Fiddle"
+msgstr "Vyolon"
+
+msgid "Flute"
+msgstr "Flit"
+
+msgid "French Horn"
+msgstr ""
+
+msgid "Fretless Bass"
+msgstr ""
+
+msgid "Glockenspiel"
+msgstr ""
+
+msgid "Guitar Fret Noise"
+msgstr ""
+
+msgid "Guitar Harmonics"
+msgstr "Gita amonik"
+
+#, fuzzy
+msgid "Gunshot"
+msgstr "Kout fizi"
+
+msgid "Hand Clap"
+msgstr "Bravo"
+
+msgid "Harmonica"
+msgstr "Amonika"
+
+msgid "Harpsichord"
+msgstr ""
+
+msgid "Helicopter"
+msgstr "Elikoptè"
+
+msgid "Hi Bongo"
+msgstr ""
+
+msgid "Hi Wood Block"
+msgstr ""
+
+msgid "Hi-Mid Tom"
+msgstr ""
+
+msgid "High Agogo"
+msgstr ""
+
+msgid "High Floor Tom"
+msgstr ""
+
+msgid "High Timbale"
+msgstr ""
+
+msgid "High Tom"
+msgstr ""
+
+msgid "Honky-Tonk"
+msgstr ""
+
+msgid "Kalimba"
+msgstr ""
+
+msgid "Koto"
+msgstr ""
+
+msgid "Lead 1 (square)"
+msgstr "Lead 1 (kare)"
+
+msgid "Lead 2 (sawtooth)"
+msgstr ""
+
+msgid "Lead 3 (calliope)"
+msgstr ""
+
+msgid "Lead 4 (chiff)"
+msgstr ""
+
+msgid "Lead 5 (charang)"
+msgstr ""
+
+msgid "Lead 6 (voice)"
+msgstr "Lead 6 (vwa)"
+
+msgid "Lead 7 (fifths)"
+msgstr ""
+
+msgid "Lead 8 (bass+lead)"
+msgstr ""
+
+msgid "Long Guiro"
+msgstr ""
+
+msgid "Long Whistle"
+msgstr ""
+
+msgid "Low Agogo"
+msgstr ""
+
+msgid "Low Bongo"
+msgstr ""
+
+msgid "Low Conga"
+msgstr ""
+
+msgid "Low Floor Tom"
+msgstr ""
+
+msgid "Low Timbale"
+msgstr ""
+
+msgid "Low Tom"
+msgstr ""
+
+msgid "Low Wood Block"
+msgstr ""
+
+msgid "Low-Mid Tom"
+msgstr ""
+
+msgid "Maracas"
+msgstr ""
+
+msgid "Marimba"
+msgstr ""
+
+msgid "Melodic Tom"
+msgstr ""
+
+msgid "Music Box"
+msgstr "bwat mizik"
+
+msgid "Mute Cuica"
+msgstr ""
+
+msgid "Mute Hi Conga"
+msgstr ""
+
+msgid "Mute Triangle"
+msgstr ""
+
+msgid "Muted Trumpet"
+msgstr ""
+
+msgid "Nylon String Guitar"
+msgstr ""
+
+msgid "Oboe"
+msgstr ""
+
+msgid "Ocarina"
+msgstr ""
+
+msgid "Open Cuica"
+msgstr ""
+
+msgid "Open Hi Conga"
+msgstr ""
+
+msgid "Open Hi-Hat"
+msgstr ""
+
+msgid "Open Triangle"
+msgstr ""
+
+msgid "Orchestra Hit"
+msgstr ""
+
+msgid "Orchestral Strings"
+msgstr ""
+
+msgid "Overdriven Guitar"
+msgstr ""
+
+msgid "Pad 1 (new age)"
+msgstr ""
+
+msgid "Pad 2 (warm)"
+msgstr ""
+
+msgid "Pad 3 (polysynth)"
+msgstr ""
+
+msgid "Pad 4 (choir)"
+msgstr ""
+
+msgid "Pad 5 (bowed)"
+msgstr ""
+
+msgid "Pad 6 (metallic)"
+msgstr ""
+
+msgid "Pad 7 (halo)"
+msgstr ""
+
+msgid "Pad 8 (sweep)"
+msgstr ""
+
+msgid "Pan Flute"
+msgstr ""
+
+msgid "Pedal Hi-Hat"
+msgstr ""
+
+msgid "Percussive Organ"
+msgstr ""
+
+msgid "Piccolo"
+msgstr ""
+
+msgid "Pizzicato Strings"
+msgstr ""
+
+msgid "Recorder"
+msgstr "Anrejistrè"
+
+msgid "Reed Organ"
+msgstr ""
+
+msgid "Reverse Cymbal"
+msgstr ""
+
+msgid "Ride Bell"
+msgstr ""
+
+msgid "Ride Cymbal 1"
+msgstr ""
+
+msgid "Ride Cymbal 2"
+msgstr ""
+
+msgid "Rock Organ"
+msgstr ""
+
+msgid "Seashore"
+msgstr ""
+
+msgid "Shakuhachi"
+msgstr ""
+
+msgid "Shamisen"
+msgstr ""
+
+msgid "Shanai"
+msgstr ""
+
+msgid "Short Guiro"
+msgstr ""
+
+msgid "Short Whistle"
+msgstr ""
+
+msgid "Side Stick"
+msgstr ""
+
+msgid "Sitar"
+msgstr ""
+
+msgid "Slap Bass 1"
+msgstr ""
+
+msgid "Slap Bass 2"
+msgstr ""
+
+msgid "Soprano Sax"
+msgstr ""
+
+msgid "Splash Cymbal"
+msgstr ""
+
+msgid "Steel Drums"
+msgstr ""
+
+msgid "Steel String Guitar"
+msgstr ""
+
+msgid "String Ensemble 1"
+msgstr ""
+
+msgid "String Ensemble 2"
+msgstr ""
+
+msgid "Synth Bass 1"
+msgstr ""
+
+msgid "Synth Bass 2"
+msgstr ""
+
+msgid "Synth Drum"
+msgstr ""
+
+msgid "Synth Voice"
+msgstr ""
+
+msgid "SynthBrass 1"
+msgstr ""
+
+msgid "SynthBrass 2"
+msgstr ""
+
+msgid "SynthStrings 1"
+msgstr ""
+
+msgid "SynthStrings 2"
+msgstr ""
+
+msgid "Taiko Drum"
+msgstr ""
+
+msgid "Tambourine"
+msgstr "tanbou"
+
+msgid "Tango Accordion"
+msgstr "Akòdeyon Tango"
+
+msgid "Telephone Ring"
+msgstr "Sonri Telefònn"
+
+msgid "Tenor Sax"
+msgstr "Saxofòn tenò"
+
+msgid "Timpani"
+msgstr ""
+
+msgid "Tinkle Bell"
+msgstr ""
+
+msgid "Tremolo Strings"
+msgstr ""
+
+msgid "Trombone"
+msgstr ""
+
+msgid "Trumpet"
+msgstr "twompèt"
+
+msgid "Tuba"
+msgstr ""
+
+msgid "Tubular Bells"
+msgstr ""
+
+msgid "Vibraphone"
+msgstr ""
+
+msgid "Vibraslap"
+msgstr ""
+
+msgid "Viola"
+msgstr ""
+
+msgid "Violin"
+msgstr ""
+
+msgid "Voice Oohs"
+msgstr ""
+
+msgid "Whistle"
+msgstr "sifle"
+
+msgid "Woodblock"
+msgstr ""
+
+msgid "Xylophone"
+msgstr "xylofòn"
+
