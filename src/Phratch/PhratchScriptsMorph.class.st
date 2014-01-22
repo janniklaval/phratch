@@ -240,7 +240,7 @@ PhratchScriptsMorph >> screenshot [
 		topY := topY min: m top.
 		rightX := rightX max: m right.
 		bottomY := bottomY max: m bottom].
-	saveForm := saveForm copy: (((leftX @ topY) - self position) rectangle: ((rightX @ bottomY) - self position)).
+	saveForm := saveForm copy: (((leftX @ topY) - self position) rect: ((rightX @ bottomY) - self position)).
 
 	screenshooting := false.
 	self changed.

@@ -337,7 +337,7 @@ LambdaBlockMorph >> rightButtonMenu [
 		
 		menu addIcon: (self newSetVarBlock: vn) imageForm toolTip: nil action: #setVar.
 		menu addIcon: (self newChangeVarBlock: vn) imageForm toolTip: nil action: #changeVar ]."
-initialFrame varNamesMenu size = 0 ifFalse: [
+
 vn := initialFrame varNamesMenu first.
 	(choice := menu localize; popUpInWorld;
 		yourself) selectedValue ifNil: [^ self].
@@ -357,7 +357,7 @@ vn := initialFrame varNamesMenu first.
 		block center: World activeHand position.
 		^ self ].
 	self perform: choice.
-]
+
 ]
 
 { #category : #'dropping/grabbing' }

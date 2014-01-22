@@ -231,28 +231,12 @@ PhratchFrameMorph class >> isXO [
 
 ]
 
-{ #category : #'scratch skin' }
-PhratchFrameMorph class >> menuCommandOn: aBuilder [
-
-	<worldMenu>  
-	(aBuilder item: #Phratch)
-		order: 0.1;
-		icon: ((ImageMorph fromStream: (FileStream fileNamed: (FileSystem workingDirectory /  'ScratchSkin' / 'phratchicon.png'))) form magnifyBy: 0.35);
-		action:[self openOneInstance].
-]
-
 { #category : #utilities }
 PhratchFrameMorph class >> open [
 "	InputEventSensor startUp."
 	"SoundPlayer initialize; shutDown; startUp. "
 		
 	^ self new startup openInWorld
-]
-
-{ #category : #'as yet unclassified' }
-PhratchFrameMorph class >> openOneInstance [
-
-	PhratchFrameMorph allInstances size > 1 ifFalse: [ ^ self new startup openInWorld].
 ]
 
 { #category : #utilities }
@@ -599,7 +583,7 @@ PhratchFrameMorph >> addSpriteMorph [
 
 	result := PhratchFileChooserDialog chooseSpriteCostumeFor: self.
 	result = #cancelled ifTrue: [^ self].
-	((result basename asLowercase endsWith: '.sprite') | (result basename asLowercase endsWith: '.ysp')  | (result basename asLowercase endsWith: '.phsp'))
+	((result basename asLowercase endsWith: '.sprite') | (result basename asLowercase endsWith: '.ysp'))
 		ifTrue: [^ self importSpriteOrProject: result].
 
 	[f := Form fromFileNamed: result] ifError: [ PhratchError error. ^ self].
@@ -747,22 +731,6 @@ PhratchFrameMorph >> clearStage [
 	self initializeWatcherPositions.
 	justSaved := true.
 
-]
-
-{ #category : #'as yet unclassified' }
-PhratchFrameMorph >> close [
-
-	| response |
-	self closeMediaEditorsAndDialogs ifFalse: [^ self].
-	self stopAll.
-
-	(justSaved or: [self projectIsEmpty]) ifFalse: [
-		response := PhratchCloseDialog new getUserResponse.
-		response = #cancelled ifTrue: [^ self].
-		response ifTrue: [
-			self savePhratchProjectNoDialog.
-			justSaved ifFalse: [^ self]]].
-	self class close
 ]
 
 { #category : #byob }
@@ -1281,7 +1249,9 @@ PhratchFrameMorph >> editMenu: aMenuTitleMorph [
 		menu labels at: n put:
 			((menu labels at: n) copyFrom: 1 to: (menu labels at: n) size - 1), PhratchTranslator ellipsesSuffix].
 "
-	menu invokeModalAt: aMenuTitleMorph bottomLeft + (0@10).
+	menu popUpAt: aMenuTitleMorph bottomLeft + (0@10) 
+		forHand: World primaryHand in: World.
+
 ]
 
 { #category : #'falta adaptar' }
@@ -1333,6 +1303,13 @@ PhratchFrameMorph >> enterPresentationMode [
 	Display fillBlack.
 	Display fullScreenMode: true.
 	TaskbarMorph allInstances do: [: e | e hide ].
+	
+	self flag:'need to be removed after Pharo2.0 version'.
+	SystemVersion current major >= 3 ifTrue:[
+		"Smalltalk tools userManager canShowMorphHalo: false. "
+	] ifFalse: [ 
+		(Smalltalk at: #UsersManager) default currentUser canShowMorphHalo: false.
+	].
 
 	World restoreDisplay.
 	Display fillBlack.
@@ -1379,6 +1356,12 @@ PhratchFrameMorph >> exitPresentationMode [
 	"Exit presentation mode."
 
 	TaskbarMorph allInstances do: [: e | e show ].
+	self flag:'need to be removed after Pharo2.0 version'.
+	SystemVersion current major >= 3 ifTrue:[
+		"Smalltalk tools userManager canShowMorphHalo: true. "
+	] ifFalse: [ 
+		(Smalltalk at: #UsersManager) default currentUser canShowMorphHalo: true.
+	].
 	
 	quitFlag ifTrue: [^Smalltalk quitPrimitive].
 
@@ -1431,6 +1414,52 @@ PhratchFrameMorph >> extractInfoFrom: aByteArray [
 			^ FuelObjStream new readObjFrom: s showProgress: false]
 		ifFalse: [^ Dictionary new].
 
+
+]
+
+{ #category : #'file read/write' }
+PhratchFrameMorph >> extractOldProjectFrom: aByteArray [
+	"Answer a Phratch project (i.e. a PhratchStageMorph possibly containing sprites) from the given ByteArray. Answer nil if the project cannot be unpacked."
+
+	| s version proj |
+
+	ObjStream initialize. "just to make sure this works in filed-in changesets, -Jens"
+	s := ReadStream on: aByteArray.
+	version := ObjStream phratchFileVersionFrom: (s next: 10) asString.
+	version = 0 ifTrue: [
+		ScriptablePhratchMorph decodeAsByob.	"make sure we initialize every field - this breaks compatibility with Phratch-sprites. -Jens"
+		s position: 0.
+		[proj := ObjStream new oldReadObjFrom: s showProgress: true] ifError: [
+		^ self extractPhratchProjectFrom: aByteArray]].
+	({1 . 2} includes: version) ifTrue: [
+		s skip: s uint32.  "skip header"
+		proj := ObjStream new readObjFrom: s showProgress: true].
+
+	proj class = PhratchStageMorph ifFalse: [
+		version > 2
+			ifTrue: [self error: 'Project created by a later version of Phratch']
+			ifFalse: [self error: 'Problem reading project.'].
+		^ nil].
+
+	ScriptablePhratchMorph buildBlockSpecDictionary.
+
+	'initializing...' 
+		displayProgressAt: self center - (32@5)  "Sensor cursorPoint"
+		from: 0 to: ((proj allMorphs) select: [:m| m isKindOf: ScriptablePhratchMorph]) size * 2
+		during: [:bar | | i | i := 0.
+
+	proj allMorphsDo: [:m |
+		(m isKindOf: ScriptablePhratchMorph) ifTrue: [
+			 i := i + 1. bar value: i.
+			m convertTuplesToDefinitions]].
+
+	proj allMorphsDo: [:m |
+		(m isKindOf: ScriptablePhratchMorph) ifTrue: [  "convert to new blocks" 
+			i := i + 1. bar value: i.
+			m convertStacksToTuples.
+			m convertTuplesToStacks]]].
+
+	^ proj
 
 ]
 
@@ -1532,30 +1561,30 @@ PhratchFrameMorph >> extractProjectFrom: aByteArray [
 PhratchFrameMorph >> fileMenu: aMenuTitleMorph [
 	| menu |
 	menu := MenuMorph new defaultTarget: self.
-	menu add: 'New' localized action: #newPhratchProject.
-	menu add: 'Open' localized action: #openPhratchProject.
-	menu add: 'Save' localized action: #savePhratchProjectNoDialog.
-	menu add: 'Save As' localized action: #savePhratchProject.
+	menu add: 'New' translated action: #newPhratchProject.
+	menu add: 'Open' translated action: #openPhratchProject.
+	menu add: 'Open Scratch' translated action: #openScratchProject.
+	menu add: 'Save' translated action: #savePhratchProjectNoDialog.
+	menu add: 'Save As' translated action: #savePhratchProject.
 	menu addLine.
-	menu add: 'Import Project' localized action: #importPhratchProject.
-	menu add: 'Export Sprite' localized action: #exportSprite.
+	menu add: 'Import Project' translated action: #importPhratchProject.
+	menu add: 'Export Sprite' translated action: #exportSprite.
 	menu addLine.
-	menu add: 'Project Notes' localized action: #editNotes.
+	menu add: 'Project Notes' translated action: #editNotes.
 	Sensor shiftPressed
 		ifTrue: [ 
 			"developer menu"
 			menu addLine.
-			menu add: 'Write Project Summary' localized action: #writeSummaryFile.
-			menu add: 'Write Multiple Project Summaries' localized action: #writeMultipleSummaries.
+			menu add: 'Write Project Summary' translated action: #writeSummaryFile.
+			menu add: 'Write Multiple Project Summaries' translated action: #writeMultipleSummaries.
 			menu addLine.
 			fillScreenFlag
-				ifTrue: [ menu add: 'Exit User Mode' localized action: #fillScreenOff ]
+				ifTrue: [ menu add: 'Exit User Mode' translated action: #fillScreenOff ]
 				ifFalse: [ 
-					menu add: 'Enter User Mode' localized action: #fillScreenOn.
-					menu add: 'Save Image in User Mode' localized action: #saveImageForEndUser ] ].
+					menu add: 'Enter User Mode' translated action: #fillScreenOn.
+					menu add: 'Save Image in User Mode' translated action: #saveImageForEndUser ] ].
 	menu addLine.
-	menu add: 'Close' localized action: #close.
-	menu add: 'Quit' localized action: #quitPhratch.
+	menu add: 'Quit' translated action: #quitPhratch.
 	menu localize.
 	#(2 4 5 6 7)
 		do: [ :n | 
@@ -1577,6 +1606,13 @@ PhratchFrameMorph >> fillScreenOff [
 	fillScreenFlag := false.
 	TaskbarMorph allInstances do: [: e | e show ].
 	
+	self flag:'need to be removed after Pharo2.0 version'.
+	SystemVersion current major >= 3 ifTrue:[
+		"Smalltalk tools userManager canShowMorphHalo: true. "
+	] ifFalse: [ 
+		(Smalltalk at: #UsersManager) default currentUser canShowMorphHalo: true.
+	].
+	
 	self isSticky: false.
 	self extent: 1000@600"Display extent - 50".
 	UseErrorCatcher := false.
@@ -1596,11 +1632,19 @@ PhratchFrameMorph >> fillScreenOn [
 	fillScreenFlag := true.
 	TaskbarMorph allInstances do: [: e | e hide ].
 	
+	self flag:'need to be removed after Pharo2.0 version'.
+	SystemVersion current major >= 3 ifTrue:[
+		"Smalltalk tools userManager canShowMorphHalo: false. "
+	] ifFalse: [ 
+		(Smalltalk at: #UsersManager) default currentUser canShowMorphHalo: false.
+	].
+	
 	self position: 0@0.
 	self isSticky: true.
 	self extent: Display extent.
 	self comeToFront.
 	UseErrorCatcher := true.
+	Sensor useOSEvents: true.
 	ScriptablePhratchMorph noviceMode: true.
 	Paragraph insertionPointColor: (Color r: 0.353 g: 0.607 b: 0.788).
 	self updateProjectName.
@@ -2298,7 +2342,7 @@ PhratchFrameMorph >> nextSurpriseCostumeName [
 				((ext size > 0) and: [#(gif png jpg) includes: ext])
 					ifTrue: [shuffledCostumeNames add: fn]]]].
 
-	shuffledCostumeNames shuffleBy: Random new.
+	shuffledCostumeNames := shuffledCostumeNames shuffledBy: Random new.
 	shuffledCostumeNames size = 0
 		ifTrue: [^ nil]
 		ifFalse: [^ shuffledCostumeNames removeFirst].
@@ -2759,7 +2803,7 @@ PhratchFrameMorph >> quitPhratch [
 			self savePhratchProjectNoDialog.
 			justSaved ifFalse: [^ self]]].
 
-	Smalltalk snapshot: true andQuit: true.
+	Smalltalk snapshot: false andQuit: true.
 
 ]
 
@@ -2874,6 +2918,7 @@ image in end-user (fillScreen) mode?') ifFalse: [^ self].
 	ImageCleaner cleanUpForProduction.
 	Smalltalk snapshot: true andQuit: true.
 	self startup.
+	Sensor useOSEvents: true.
 
 ]
 
@@ -2887,6 +2932,7 @@ image in end-user (fillScreen) mode?') ifFalse: [^ self].
 	self prepareImageForEndUserSilently.
 	Smalltalk snapshot: true andQuit: true.
 	self startup.
+	Sensor useOSEvents: true.
 
 ]
 
@@ -2930,7 +2976,7 @@ PhratchFrameMorph >> savePhratchProjectNoDialog [
 
 	"Do we need to ask for a filename or directory?"
 	dir := PhratchFileChooserDialog getLastFolderForType: #project.
-	"(fName size = 0 | (dir asFileReference / fName , 'phr') exists not) ifTrue: [^ self savePhratchProject]."
+	(fName size = 0 | (dir asFileReference / fName , 'phr') exists not) ifTrue: [^ self savePhratchProject].
 	PhratchFileChooserDialog lastFolderIsSampleProjectsFolder ifTrue:  [^ self savePhratchProject].
 	projectDirectory := dir.
 
@@ -3169,7 +3215,7 @@ PhratchFrameMorph >> startup [
 	self newPhratchProject.
 
 	fileName := startupFileNames
-		detect: [:fn | (fn asLowercase endsWith: '.sprite') or: [(fn asLowercase endsWith: '.ysp') or: [(fn asLowercase endsWith: '.phr') or: [fn asLowercase endsWith: '.phsp']]]]
+		detect: [:fn | (fn asLowercase endsWith: '.sprite') or: [(fn asLowercase endsWith: '.ysp') or: [fn asLowercase endsWith: '.phr']]]
 		ifNone: [^ self].
 
 	"open a .sprite file"
@@ -3200,6 +3246,7 @@ PhratchFrameMorph >> step [
 			ifTrue: [workPane viewBlocksAndScripts]
 			ifFalse: [viewerPane target isInWorld ifFalse: [workPane viewBlocksAndScriptsQuickly]]].
 
+	Sensor processOSMenuEvents.
 	paintingInProgress ifTrue: [^ self].
 
 "	self checkForWeDo." "simplify at the moment"

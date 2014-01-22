@@ -63,7 +63,15 @@ InputEventSensor >> processEvent: evt [
 ]
 
 { #category : #'*Phratch-Extensions' }
+InputEventSensor >> processOSMenuEvents [
+]
+
+{ #category : #'*Phratch-Extensions' }
 InputEventSensor >> rightButtonPressed [
 
 ^ self blueButtonPressed 
+]
+
+{ #category : #'*Phratch-Extensions' }
+InputEventSensor >> useOSEvents: bool [
 ]

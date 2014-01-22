@@ -290,7 +290,7 @@ PhratchFilePicker >> getLocalDirectoryContents [
 	allNames := allNames
 		reject: [ :n | 
 			ext := (currentDir / n) extension asLowercase.
-			#(#app #dll #exe #ini #image #changes #sprite) includes: ext ].
+			#(#app #dll #exe #ini #image #changes) includes: ext ].
 	"allNames := allNames reject: [ :n | PhratchPlugin isHidden: (currentDir / n) fullName ]."	"suppress hidden files/folders on Win32"
 	currentDir fullName = FileSystem workingDirectory fullName
 		ifTrue: [ 
@@ -734,7 +734,7 @@ PhratchFilePicker >> thumbnailFetchLoop [
 
 	contentsPaneMorph contents submorphs do: [:m |
 		self isInWorld ifFalse: [^ self].
-		"m computeThumbnail."
+		m computeThumbnail.
 		(Delay forMilliseconds:  100) wait].
 
 	thumbnailFetchProcess := nil.
@@ -754,7 +754,7 @@ PhratchFilePicker >> thumbnailStylePageFor: allNames [
 
 	dirNames := currentDir directoryNames asSet.
 	thumbnailCache := ThumbnailCache new directory: currentDir.
-	thumbnailCache updateThumbnails.
+	thumbnailCache readThumbnailFile; updateThumbnails.
 	morphsToAdd := OrderedCollection new: 1000.
 	leftMargin := page left + 7.
 	rightMargin := page width - 75.
