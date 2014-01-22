@@ -97,7 +97,8 @@ PhratchInstaller class >> getPhratchLocales [
 	UIManager inform:  'Downloading Local'.
 	
 	{ 'eu' . 'is' . 'ne' . 'sv' . 'fa' . 'it' . 'nl' . 'th' . 'ar' . 'fi' . 'ja' . 'no' . 'tr' . 'bg' . 'fr' . 'ja_HIRA' . 'pl' . 'uk' . 'ca' . 'fr_CA' . 'kn' . 'pt' . 'vi' . 'cs' . 'gl' . 'ko' . 'pt_BR' . 'zh_CN' . 'da' . 'he' . 'lt' . 'ro' . 'zh_TW' . 'de' . 'hr' . 'mk' . 'ru' . 'el' . 'ht' . 'mn' . 'rw' . 'es' . 'hu' . 'mr' . 'sk' . 'et' . 'id' . 'ms' . 'sl' } do: [:lang | |f|
-		f:=(FileStream forceNewFileNamed: ('locale' asFileReference / lang,'.po')fullName).
+		('locale' asFileReference) ensureCreateDirectory.
+		f:=( ('locale' asFileReference / lang,'po') writeStream).
 		f nextPutAll: (ZnHTTPSocketFacade httpGet: 'https://raw.github.com/janniklaval/phratch/master/locale/',lang,'.po' )
 	].
 ]
