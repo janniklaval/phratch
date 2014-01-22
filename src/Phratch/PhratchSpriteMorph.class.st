@@ -312,7 +312,7 @@ PhratchSpriteMorph >> changeSizeBy: delta [
 { #category : #'looks ops' }
 PhratchSpriteMorph >> changeStretchBy: delta [
 	"Change my aspect ratio by the given amount."
-	<phratchItem: 'change hStretch by $Number$' kind: #- category: 'looks' defaultValues: #() subCategory: #a5 special: #()>
+	<phratchItem: 'change horizontal stretch by $Number$%' kind: #- category: 'looks' defaultValues: #() subCategory: #a5 special: #()>
 	| currentStretch |
 	currentStretch := (100.0 * scalePoint x) / scalePoint y.
 	self setStretchTo: (currentStretch + delta).
@@ -322,7 +322,7 @@ PhratchSpriteMorph >> changeStretchBy: delta [
 { #category : #'panther actions' }
 PhratchSpriteMorph >> changeVStretchBy: delta [
 	"Change my aspect ratio by the given amount."
-	<phratchItem: 'change vStretch by $Number$' kind: #- category: 'looks' defaultValues: #() subCategory: #a5 special: #()>
+	<phratchItem: 'change vertical stretch by $Number$%' kind: #- category: 'looks' defaultValues: #() subCategory: #a5 special: #()>
 	| currentVStretch |
 	currentVStretch := (100.0 * scalePoint y) / scalePoint x.
 	self setVStretchTo: (currentVStretch + delta).
@@ -867,14 +867,14 @@ PhratchSpriteMorph >> grabFromScreen [
 
 { #category : #'blocks API' }
 PhratchSpriteMorph >> hFlip [
-	<phratchItem: 'h flip' kind: #- category: 'looks' defaultValues: #() subCategory: #a5 special: #()>
+	<phratchItem: 'horizontal flip' kind: #- category: 'looks' defaultValues: #() subCategory: #a5 special: #()>
     costume form: (self form flipBy: #horizontal centerAt: 0 @ 0).
     self costumeChanged
 ]
 
 { #category : #'panther actions' }
 PhratchSpriteMorph >> hScale [
-	<phratchItem: 'hStretch' kind: #ReporterBlockMorph category: 'looks' defaultValues: #() subCategory: #a5 special: #()>
+	<phratchItem: 'horizontal stretch' kind: #ReporterBlockMorph category: 'looks' defaultValues: #() subCategory: #a5 special: #()>
 	^ (100 * scalePoint x) rounded
 ]
 
@@ -1942,7 +1942,7 @@ PhratchSpriteMorph >> setRotationStyle: aNumber [
 { #category : #'looks ops' }
 PhratchSpriteMorph >> setSizeTo: percent [
 	"Set my size to the given percent of the original size. Limit the range to avoid accidentally making me invisibly tiny or really huge. Retain my aspect ratio (i.e., my stretch)."
-	<phratchItem: 'set size to $Number$' kind: #- category: 'looks' defaultValues: #(100) subCategory: #a4 special: #()>
+	<phratchItem: 'set size to $Number$%' kind: #- category: 'looks' defaultValues: #(100) subCategory: #a4 special: #()>
 	self undeleteAttribute: #size.
 	self passiveSetSizeTo: percent
 
@@ -1951,7 +1951,7 @@ PhratchSpriteMorph >> setSizeTo: percent [
 { #category : #'looks ops' }
 PhratchSpriteMorph >> setStretchTo: percent [
 	"Set x stretch percent relative to y. For example, a stretch of 200 stretches x by a factor of two relative to y while a stretch of 50 compresses x by a factor of two. As my stretch is changed, my x scale changes but my y scale remains the same."
-	<phratchItem: 'set hStretch to $Number$' kind: #- category: 'looks' defaultValues: #(100) subCategory: #a5 special: #()>
+	<phratchItem: 'set horizontal stretch to $Number$%' kind: #- category: 'looks' defaultValues: #(100) subCategory: #a5 special: #()>
 	| baseScale origExtent minStretch maxStretch newStretchFactor |
 	baseScale := scalePoint y.
 	origExtent := self costumeForm extent.
@@ -1965,7 +1965,7 @@ PhratchSpriteMorph >> setStretchTo: percent [
 { #category : #'panther actions' }
 PhratchSpriteMorph >> setVStretchTo: percent [
 	"Set x stretch percent relative to y. For example, a stretch of 200 stretches x by a factor of two relative to y while a stretch of 50 compresses x by a factor of two. As my stretch is changed, my x scale changes but my y scale remains the same."
-	<phratchItem: 'set vStretch to $Number$' kind: #- category: 'looks' defaultValues: #(100) subCategory: #a5 special: #()>
+	<phratchItem: 'set vertical stretch to $Number$%' kind: #- category: 'looks' defaultValues: #(100) subCategory: #a5 special: #()>
 	| baseScale origExtent minStretch maxStretch newStretchFactor |
 	baseScale := scalePoint x.
 	origExtent := self costumeForm extent.
@@ -2310,14 +2310,14 @@ PhratchSpriteMorph >> unhingeAll [
 
 { #category : #'blocks API' }
 PhratchSpriteMorph >> vFlip [
-	<phratchItem: 'v flip' kind: #- category: 'looks' defaultValues: #() subCategory: #a5 special: #()>
+	<phratchItem: 'vertical flip' kind: #- category: 'looks' defaultValues: #() subCategory: #a5 special: #()>
     costume form: (self form flipBy: #vertical centerAt: 0 @ 0).
     self costumeChanged
 ]
 
 { #category : #'panther actions' }
 PhratchSpriteMorph >> vScale [
-	<phratchItem: 'vStretch' kind: #ReporterBlockMorph category: 'looks' defaultValues: #() subCategory: #a5 special: #()>
+	<phratchItem: 'vertical stretch' kind: #ReporterBlockMorph category: 'looks' defaultValues: #() subCategory: #a5 special: #()>
 	^ (100 * scalePoint y) rounded
 ]
 

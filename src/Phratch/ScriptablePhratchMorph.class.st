@@ -2314,7 +2314,7 @@ ScriptablePhratchMorph >> computeFunction: functionName of: aNumber [
 { #category : #'string ops' }
 ScriptablePhratchMorph >> concatenate: arg1 with: arg2 [
 	"Concatenate two strings. Arguments are converted to strings."
-	<phratchItem: 'join $String$ $String$' kind: #ReporterBlockMorph category: 'operators' defaultValues: #('hello ' 'world') subCategory: #a6 special: #()>
+	<phratchItem: 'join $String$ and $String$' kind: #ReporterBlockMorph category: 'operators' defaultValues: #('hello ' 'world') subCategory: #a6 special: #()>
 	^ arg1 asString, arg2 asString
 
 ]
@@ -3940,7 +3940,7 @@ ScriptablePhratchMorph >> exportObject [
 	fName = #cancelled ifTrue: [^ self].
 	fName size = 0 ifTrue: [^ self].
 "	(fName endsWith: '.sprite') ifFalse: [fName := fName, '.sprite']."
-	(fName endsWith: '.ysp') ifFalse: [fName := fName, '.ysp'].
+	(fName endsWith: '.phsp') ifFalse: [fName := fName, '.phsp'].
 	dir := fName asFileReference parent.
 	fName := fName asFileReference basename.  "ignore path, if any; save in default directory"
 
@@ -3956,9 +3956,9 @@ ScriptablePhratchMorph >> exportObject [
 
 		objToExport firstSubmorph allSubsprites do: [:eachSub |
 			eachSub owner ifNil: [objToExport addMorphBack: eachSub ]].
-		FuelObjStream new storeObj: objToExport on: f showProgress: true.
+		FuelObjStream new storeObj: objToExport on: f showProgress: false.
 		f close.
-		FilePluginPrims new setMacFileNamed: (dir / fName) fullName type: 'STyp' creator: 'PHRATCH'.
+		FilePluginPrims new setMacFileNamed: (dir / fName) fullName type: 'phsp' creator: 'PHRA'.
 
 	] ifError: [
 		f ifNotNil: [f close].
@@ -6806,7 +6806,7 @@ ScriptablePhratchMorph >> setVar: varName to: newValue [
 
 { #category : #'sound ops' }
 ScriptablePhratchMorph >> setVolumeTo: aNumber [
-	<phratchItem: 'set volume to $Number$' kind: #- category: 'sound' defaultValues: #(100) subCategory: #a4 special: #()>
+	<phratchItem: 'set volume to $Number$%' kind: #- category: 'sound' defaultValues: #(100) subCategory: #a4 special: #()>
 	self undeleteAttribute: #volume.
 	self passiveSetVolumeTo: aNumber
 

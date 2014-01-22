@@ -15,6 +15,14 @@ MenuMorph >> addIcon: aForm toolTip: helpString action: aSymbol [
 ]
 
 { #category : #'*Phratch' }
+MenuMorph >> invokeModalAt: aPoint [
+	"Invoke this menu and don't return until the user has chosen a value.  If the allowKeyboarControl boolean is true, permit keyboard control of the menu"
+	
+	^ self invokeModalAt: aPoint in: ActiveWorld allowKeyboard: self menuKeyboardControl.
+	
+]
+
+{ #category : #'*Phratch' }
 MenuMorph >> labels [
 
 	^ self menuItems 

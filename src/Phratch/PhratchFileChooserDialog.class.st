@@ -114,7 +114,7 @@ PhratchFileChooserDialog class >> chooseSpriteCostumeFor: aPhratchFrameMorph [
 		title: 'New Sprite' translated;
 		showThumbnails: true;
 		type: #costume;
-		extensions: #(#gif #jpeg #jpg #bmp #png #sprite #ysp);
+		extensions: #(#gif #jpeg #jpg #bmp #png #sprite #ysp #phsp);
 		phratchFrame: aPhratchFrameMorph;
 		listExtent: 550 @ 300;
 		yourself.

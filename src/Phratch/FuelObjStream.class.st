@@ -56,6 +56,43 @@ FuelObjStream >> readObjFrom: aStream showProgress: showProgress [
 ]
 
 { #category : #'entry points' }
+FuelObjStream >> readSpriteFrom: aStream showProgress: showProgress [
+	"Read the root object from the given binary stream. If showProgress is true, display a progress bar."
+
+	| objCount tenPercent stream firstPass |
+	objects := OrderedCollection new.
+	"stream := FLMaterializer newDefault materializeFrom: aStream."
+	stream := aStream.
+	self readFileHeader: aStream.
+	firstPass := true.
+	objCount := stream uint32.
+	showProgress
+		ifTrue: [
+			tenPercent := objCount // 10.
+			('Reading...' localized, PhratchTranslator ellipsesSuffix)
+				displayProgressAt: Display center - (32@5)  "Sensor cursorPoint"
+				from: 0 to: objCount + tenPercent
+				during: [:progressBar |
+					1 to: objCount do: [:i |
+						objects addLast: self readObjectRecord.
+						progressBar value: i].
+					
+					firstPass := false.
+					objects do: [:rec | self fixReferencesForObjectRecord: rec].
+					progressBar value: objCount + (tenPercent // 2).
+					objects do: [:rec | self initializeUserDefinedFields: rec].
+					progressBar value: objCount + tenPercent.
+					(Delay forMilliseconds: 200) wait]]
+		ifFalse: [
+			objCount timesRepeat: [objects addLast: self readObjectRecord].
+			firstPass := false.
+			objects do: [:rec | self fixReferencesForObjectRecord: rec].
+			objects do: [:rec | self initializeUserDefinedFields: rec]].
+
+	^ objects first first
+]
+
+{ #category : #'entry points' }
 FuelObjStream >> storeObj: anObject on: aStream [
 	"Write the given object and all the objects that can be reached from it on the given binary stream. Do not display a progress bar."
 

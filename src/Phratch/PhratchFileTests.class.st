@@ -61,7 +61,9 @@ PhratchFileTests >> stage [
 PhratchFileTests >> tearDown [
 	"Close any open Phratch windows"
 	"PhratchFrameMorph close."
-	window := nil
+	window projectDirectory allFiles do: [:e | e delete].
+	window := nil.
+	
 ]
 
 { #category : #tests }
