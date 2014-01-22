@@ -96,7 +96,7 @@ PhratchInstaller class >> getPhratchLicence [
 PhratchInstaller class >> getPhratchLocales [
 	UIManager inform:  'Downloading Local'.
 	self
-		downloadFileFromUrl: 'https://phratch.googlecode.com/files/locale.zip'
+		downloadFileFromUrl: 'https://github.com/janniklaval/phratch/raw/master/locale.zip'
 		andUnzipIntoDirectory: FileSystem workingDirectory
 ]
 
