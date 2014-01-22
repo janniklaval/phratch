@@ -4,7 +4,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: Jannik LAVAL <jannik.laval@gmail.com>\n"
 "POT-Creation-Date: 2008-03-13\n"
 "PO-Revision-Date: 2014-01-17 11:27-0400\n"
-"Last-Translator: Torbjorn Skauli <torbjorn.skauli@ffi.no>\n"
+"Last-Translator: hqnghi88 <hqnghi88@gmail.com>\n"
 "Language-Team: \n"
 "Language: no\n"
 "MIME-Version: 1.0\n"
@@ -1944,4 +1944,389 @@ msgstr "Trekloss"
 
 msgid "Xylophone"
 msgstr "Xylofon"
+
+msgid "files" 
+msgstr "filer"
+
+msgid "colors" 
+msgstr "farger"
+
+msgid "Arrow key move with speed $Number$" 
+msgstr "Piltast beveger med fart $Number$"
+
+msgid "go in between x: $Number$ y: $Number$ and x: $Number$ y: $Number$" 
+msgstr "gå mellom x: $Number$ y: $Number$ og x: $Number$ y: $Number$"
+
+msgid "go $Number$ of the way to x: $Number$ y: $Number$" 
+msgstr "gå $Number$ av veien til x: $Number$ y: $Number$"
+
+msgid "if $Boolean$ bounce" 
+msgstr "hvis $Boolean$, sprett"
+
+msgid "if touching $Sprite$ bounce" 
+msgstr "hvis $Sprite$ berøres, sprett"
+
+msgid "point at x:$Number$ y:$Number$" 
+msgstr "punkt på x:$Number$ y:$Number$"
+
+msgid "point at random coordinate" 
+msgstr "punkt på tilfeldig koordinat"
+
+msgid "rotation style" 
+msgstr "rotasjonsstil"
+
+msgid "set rotation style to $Rotation$" 
+msgstr "sett rotasjonsstil til $Rotation$"
+
+msgid "draggable?" 
+msgstr "flyttbar?"
+
+msgid "make undraggable" 
+msgstr "gjør uflyttbar"
+
+msgid "make draggable" 
+msgstr "gjør flyttbar"
+
+msgid "when $Sprite$ created" 
+msgstr "når $Sprite$ er opprettet"
+
+msgid "$Event$ received?" 
+msgstr "$Event$ mottatt?"
+
+msgid "if $Boolean$ then $Boolean$ else $Boolean$" 
+msgstr "hvis $Boolean$ gjør $Boolean$ ellers $Boolean$"
+
+msgid "repeat $Number$ times" 
+msgstr "gjenta $Number$ ganger"
+
+msgid "save project" 
+msgstr "lagre prosjekt"
+
+msgid "quit Phratch" 
+msgstr "Avslutt Phratch"
+
+msgid "clone me" 
+msgstr "klon meg"
+
+msgid "Am I a clone?" 
+msgstr "Er jeg en klone?"
+
+msgid "delete me if I am a clone" 
+msgstr "Slett meg om jeg er en klone"
+
+msgid "stop all scripts for $Event$" 
+msgstr "Stopp alle hendelser for $Event$"
+
+msgid "press green flag" 
+msgstr "Trykk grønt flagg"
+
+msgid "pause" 
+msgstr "paus"
+
+msgid "replace costume $Number$ with $NewCostume$" 
+msgstr "skift kostyme $Number$ med $NewCostume$"
+
+msgid "add $NewCostume$ to costumes" 
+msgstr "legg $NewCostume$ til som nytt kostyme"
+
+msgid "delete costume $Number$" 
+msgstr "slett kostyme $Number$"
+
+msgid "$Effects$ effect" 
+msgstr "$Effects$ effekt"
+
+msgid "width" 
+msgstr "bredde"
+
+msgid "perimeter" 
+if perimeter as in "The perimeter of the cube is ..." then
+msgstr "omkrets"
+else if perimeter as in "Secure the perimeter!" then
+msgstr "perimeter"
+
+msgid "height" 
+msgstr "høyde"
+
+msgid "area" 
+if area as in "The area of the cube is ..." then
+msgstr "areal"
+else if area as in "I lived in that area for many years" then
+msgstr "område"
+
+msgid "set horizontal stretch to $Number$%" 
+msgstr "sett horisontal strekking til $Number$%"
+
+msgid "vertical flip" 
+msgstr "vertikal flipp"
+
+msgid "vertical stretch" 
+msgstr "vertikal strekking"
+
+msgid "change horizontal stretch by $Number$%" 
+msgstr "modifiser horisontal strekking med $Number$%"
+
+msgid "horizontal stretch" 
+msgstr "horisontal strekking"
+
+msgid "set vertical stretch to $Number$%" 
+msgstr "sett vertikal strekking til $Number$%"
+
+msgid "horizontal flip" 
+msgstr "horisontal flipp"
+
+msgid "change vertical stretch by $Number$%" 
+msgstr "modifiser horisontal strekking med $Number$%"
+
+msgid "camera is open?" 
+msgstr "kamera er åpent?"
+
+msgid "close camera" 
+msgstr "lukk kamera"
+
+msgid "do with camera open" 
+msgstr "gjør med kamera åpent"
+
+msgid "open camera" 
+msgstr "åpne kamera"
+
+msgid "show dialog $String$ with text $String$" 
+msgstr "vis en dialog $String$ med tekst $String$"
+
+msgid "ask $String$ in dialog" 
+msgstr "spør $String$ i en dialog"
+
+msgid "set sprite name to $String$" 
+msgstr "sett navn på animasjon til $String$"
+
+msgid "warn $String$" 
+msgstr "advar $String$"
+
+msgid "key pressed" 
+msgstr "tast trykket"
+
+msgid "get $Attributes$ of $Sprite$" 
+msgstr "hent $Attributes$ til $Sprite$"
+
+msgid "attribute $Attributes$" 
+msgstr "attributt $Attributes$"
+
+msgid "date/time: $TimeDates$" 
+msgstr "dato/tid: $TimeDates$"
+
+msgid "index of $String$ starting at $Number$ in $String$" 
+msgstr "plass $String$ finnes på i $String$ fra og med plass $Number$"
+
+msgid "letters $Number$ - $Number$ of $String$" 
+msgstr "bokstav $Number$ - $Number$ i $String$"
+
+msgid "join $String$ and $String$" 
+msgstr "legg sammen $String$ og $String$"
+
+msgid "factorial of $Number$" 
+msgstr "fakultet av $Number$"
+
+msgid "$Number$ mod $Number$" 
+msgstr "$Number$ modulo $Number$"
+
+msgid "$Number$ is a Fibonacci number?" 
+msgstr "er $Number$ et Fibonnaci-nummer?"
+
+msgid "$Number$ is prime?" 
+msgstr "er $Number$ et primtall?"
+
+msgid "$Number$ is an integer?" 
+msgstr "er $Number$ et heltall?"
+
+msgid "is $String$ nil?" 
+msgstr "er $String$ nil?"
+
+msgid "$String$ as boolean" 
+msgstr "$String$ som boolsk variabel"
+
+msgid "set $Attributes$ to $String$" 
+msgstr "sett $Attributes$ til $String$"
+
+msgid "delete $Sprite$" 
+msgstr "fjern $Sprite$"
+
+msgid "clear pen trails" 
+msgstr "fjern pennestrøk"
+
+msgid "pen color" 
+msgstr "penn-farge"
+
+msgid "pen size" 
+msgstr "penn-størrelse"
+
+msgid "pen hue" 
+msgstr "penn-fargetone"
+
+msgid "pen shade" 
+msgstr "penn-skygge"
+
+msgid "make $String$" 
+msgstr "lag $String$"
+
+msgid "delete $OSReporter$" 
+msgstr "fjern $OSReporter$"
+
+msgid "variable named $String$" 
+msgstr "variabel navngitt $String$"
+
+msgid "move $Variable$ to x: $Number$ y: $Number$" 
+msgstr "flytt $Variable$ til x: $Number$ y: $Number$"
+
+msgid "set layout of $Variable$ to $LayoutStyles$" 
+msgstr "sett planløsning for $Variable$ til $LayoutStyles$"
+
+msgid "make list $String$" 
+msgstr "lag listen $String$"
+
+msgid "delete list $String$" 
+msgstr "fjern listen $String$"
+
+msgid "hide list $List$" 
+msgstr "skjul listen $List$"
+
+msgid "show list $List$" 
+msgstr "vis listen $List$"
+
+msgid "first index of $String$ in $List$" 
+msgstr "plass i $List$ der $String$ først finnes"
+
+msgid "a List" 
+msgstr "en liste"
+
+msgid "times $String$ appears in $List$" 
+msgstr "ganger $String$ finnes i $List$"
+
+msgid "sort items of $List$ by numerical value" 
+msgstr "sorter $List$ som tall-verdier"
+
+msgid "sort items of $List$ by string value" 
+msgstr "sorter $List$ som setninger"
+
+msgid "contents of file $String$" 
+msgstr "inhold i fil $String$"
+
+msgid "number of lines of file at URL $String$" 
+msgstr "antall linjer i fila fra lenke $String$"
+
+msgid "number of lines of file $String$" 
+msgstr "antall linjer i fila $String$"
+
+msgid "create file $String$" 
+msgstr "lag fil $String$"
+
+msgid "line $Number$ of file $String$" 
+msgstr "linje $Number" i fila $String$"
+
+msgid "delete file $String$" 
+msgstr "slett fila $String$"
+
+msgid "line $Number$ of file at URL $String$" 
+msgstr "linje $Number$ i fila fra lenke $String$"
+
+msgid "write $String$ to file $String$" 
+msgstr "skriv $String$ til fila $String$"
+
+msgid "contents of file at URL $String$" 
+msgstr "innhold i fila fra lenke $String$"
+
+msgid "clear file $String$" 
+msgstr "slett innhold i fila $String$"
+
+msgid "make a color" 
+msgstr "lag en farge"
+
+msgid "set $ColorVar$ to $Color$" 
+msgstr "sett $ColorVar$ til $Color$"
+
+msgid "hide color $ColorVar$" 
+msgstr "skjul fargen $ColorVar$"
+
+msgid "show color $ColorVar$" 
+msgstr "vis fargen $ColorVar$"
+
+msgid "delete color $String$" 
+msgstr "slett fargen $String$"
+
+msgid "make color $String$" 
+msgstr "lag fargen $String$"
+
+msgid "a color" 
+msgstr "en farge"
+
+msgid "color of pixel x: $Number$ y: $Number$" 
+msgstr "farge til punkt x: $Number$ y: $Number$"
+
+msgid "$Color$ blue" 
+msgstr "$Color$ blå"
+
+msgid "color r: $Number$ g: $Number$ b: $Number$" 
+msgstr "farge r: $Number$ g: $Number$ b: $Number$"
+
+msgid "$Color$ green" 
+msgstr "$Color$ grønn"
+
+msgid "$Color$ red" 
+msgstr "$Color$ rød"
+
+msgid "$Color$ saturation" 
+msgstr "$Color$ metning"
+
+msgid "$Color$ brightness" 
+msgstr "$Color$ lysstyrke"
+
+msgid "$Color$ hue" 
+msgstr "$Color$ fargetone"
+
+msgid "color h: $Number$ s: $Number$ b: $Number$" 
+msgstr "farge f: $Number$ m: $Number$ l: $Number$"
+
+msgid "mix $Color$ with $Color$" 
+msgstr "bland $Color$ med $Color$"
+
+msgid "mix $Color$ $Number$ : $Number$ with $Color$" 
+msgstr "bland $Color$ $Number$ : $Number$ med $Color$"
+
+msgid "color named $NamedColors$" 
+msgstr "farge navngitt $NamedColors$"
+
+msgid "$String$ as color" 
+msgstr "$String$ som farge"
+
+msgid "$Color$ as string" 
+msgstr "$Color$ som setning"
+
+msgid "Allow Sprites offstage" 
+msgstr "Tillat animasjoner utenfor scenen"
+
+msgid "Thread safe scripts" 
+msgstr "Trådsikre hendelser"
+
+msgid "Clear all Variables" 
+msgstr "Tilbakestill alle variabler"
+
+msgid "Settings" 
+msgstr "Innstillinger"
+
+msgid "Phratch Website" 
+msgstr "Phratch-nettside"
+
+msgid "Scratch Help Page" 
+msgstr "Scratch hjelpe-side"
+
+msgid "Help Screens" 
+msgstr "Vis Hjelp"
+
+msgid "BYOB Reference Manual" 
+msgstr "BYOB referanse-manual"
+
+msgid "Panther Tutorials" 
+msgstr "Panther veiledninger"
+
+msgid "About Phratch" 
+msgstr "Om Phratch"
+
 

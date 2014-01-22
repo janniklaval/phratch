@@ -4,8 +4,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: Jannik LAVAL <jannik.laval@gmail.com>\n"
 "POT-Creation-Date: 2008-05-02\n"
 "PO-Revision-Date: 2014-01-17 11:27-0400\n"
-"Last-Translator: Kazuhiro Abe <abee@squeakland.jp>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Last-Translator: Eiichiro Ito <Eiichiro.Ito@gmail.com>\n"
+"Language-Team: Jannik LAVAL <jannik.laval@gmail.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1916,4 +1916,381 @@ msgstr "ウッドブロック"
 
 msgid "Xylophone"
 msgstr "シロホン"
+msgid "files"
+msgstr "ファイル"
+
+msgid "colors"
+msgstr "色"
+
+msgid "Arrow key move with speed $Number$"
+msgstr "$Number$ の早さで"
+
+msgid "go in between x: $Number$ y: $Number$ and x: $Number$ y: $Number$"
+msgstr "x: $Number$ y: $Number$ と x: $Number$ y: $Number$ の間へ行く"
+
+msgid "go $Number$ of the way to x: $Number$ y: $Number$"
+msgstr "$Number$ 歩だけ x: $Number$ y: $Number$ に向かって動かす"
+
+msgid "if $Boolean$ bounce"
+msgstr "もし $Boolean$ ならば、跳ね返る"
+
+msgid "if touching $Sprite$ bounce"
+msgstr "もし $Sprite$ に触れたら、跳ね返る"
+
+msgid "point at x:$Number$ y:$Number$"
+msgstr "x:$Number$ y:$Number$ へ向ける"
+
+msgid "point at random coordinate"
+msgstr "ランダムな位置へ向ける"
+
+msgid "rotation style"
+msgstr "回転のスタイル"
+
+msgid "set rotation style to $Rotation$"
+msgstr "回転のスタイルを $Rotation$ に設定"
+
+msgid "draggable?"
+msgstr "ドラッグできるか?"
+
+msgid "make undraggable"
+msgstr "ドラッグできないようにする"
+
+msgid "make draggable"
+msgstr "ドラッグできるようにする"
+
+msgid "when $Sprite$ created"
+msgstr "$Sprite$ が作られたとき"
+
+msgid "$Event$ received?"
+msgstr "$Event$ を受け取ったか?"
+
+msgid "if $Boolean$ then $Boolean$ else $Boolean$"
+msgstr "もし $Boolean$ ならば $Boolean$ そうでなければ $Boolean$"
+
+msgid "repeat $Number$ times"
+msgstr "$Number$ 回繰り返す"
+
+msgid "save project"
+msgstr "プロジェクトを保存"
+
+msgid "quit Phratch"
+msgstr "Phratchを終了"
+
+msgid "clone me"
+msgstr "自分のクローンを作る"
+
+msgid "Am I a clone?"
+msgstr "クローンか?"
+
+msgid "delete me if I am a clone"
+msgstr "クローンなら削除する"
+
+msgid "stop all scripts for $Event$"
+msgstr "$Event$ に対するすべてのスクリプトを止める"
+
+msgid "press green flag"
+msgstr "緑の旗を押す"
+
+msgid "pause"
+msgstr "一時停止"
+
+msgid "replace costume $Number$ with $NewCostume$"
+msgstr "$Number$ 番目のコスチュームを $NewCostume$ で置き換える"
+
+msgid "add $NewCostume$ to costumes"
+msgstr "$NewCostume$ をコスチュームに追加する"
+
+msgid "delete costume $Number$"
+msgstr "$Number$ 番目のコスチュームを削除する"
+
+msgid "$Effects$ effect"
+msgstr "$Effects$ の効果"
+
+msgid "width"
+msgstr "幅"
+
+msgid "perimeter"
+msgstr "周囲の長さ"
+
+msgid "height"
+msgstr "高さ"
+
+msgid "area"
+msgstr "面積"
+
+msgid "set horizontal stretch to $Number$%"
+msgstr "水平方向の伸縮率を $Number$%に設定"
+
+msgid "vertical flip"
+msgstr "垂直に反転"
+
+msgid "vertical stretch"
+msgstr "垂直方向の伸縮率"
+
+msgid "change horizontal stretch by $Number$%"
+msgstr "水平方向の伸縮率を $Number$% ずつ変える"
+
+msgid "horizontal stretch"
+msgstr "水平方向の伸縮率"
+
+msgid "set vertical stretch to $Number$%"
+msgstr "垂直方向の伸縮率を $Number$%に設定"
+
+msgid "horizontal flip"
+msgstr "水平に反転"
+
+msgid "change vertical stretch by $Number$%"
+msgstr "垂直方向の伸縮率を $Number$% ずつ変える"
+
+msgid "camera is open?"
+msgstr "カメラ撮影中?"
+
+msgid "close camera"
+msgstr "カメラ撮影を止める"
+
+msgid "do with camera open"
+msgstr "カメラ撮影して実行する"
+
+msgid "open camera"
+msgstr "カメラ撮影を始める"
+
+msgid "show dialog $String$ with text $String$"
+msgstr "ダイアログ $String$ を開いて $String$ を表示する"
+
+msgid "ask $String$ in dialog"
+msgstr "ダイアログで $String$ と聞く"
+
+msgid "set sprite name to $String$"
+msgstr "スプライトの名前を $String$ にする"
+
+msgid "warn $String$"
+msgstr "$String$ と警告する"
+
+msgid "key pressed"
+msgstr "押されたキー"
+
+msgid "get $Attributes$ of $Sprite$"
+msgstr "$Sprite$ の $Attributes$"
+
+msgid "attribute $Attributes$"
+msgstr "属性 $Attributes$"
+
+msgid "date/time: $TimeDates$"
+msgstr "日付/時刻: $TimeDates$"
+
+msgid "index of $String$ starting at $Number$ in $String$"
+msgstr "$String$ が $String$ の $Number$ 番目以降で現れる位置"
+
+msgid "letters $Number$ - $Number$ of $String$"
+msgstr "$String$ の $Number$ から $Number$ 番目までの文字"
+
+msgid "join $String$ and $String$"
+msgstr "$String$ と $String$ をつなぐ"
+
+msgid "factorial of $Number$"
+msgstr "$Number$ の階乗"
+
+msgid "$Number$ mod $Number$"
+msgstr "$Number$ を $Number$ で割った余り"
+
+msgid "$Number$ is a Fibonacci number?"
+msgstr "$Number$ はフィボナッチ数か?"
+
+msgid "$Number$ is prime?"
+msgstr "$Number$ は素数か?"
+
+msgid "$Number$ is an integer?"
+msgstr "$Number$ は整数か?"
+
+msgid "is $String$ nil?"
+msgstr "$String$ はnilか?"
+
+msgid "$String$ as boolean"
+msgstr "$String$ の真偽値"
+
+msgid "set $Attributes$ to $String$"
+msgstr "$Attributes$ の値を $String$ に設定"
+
+msgid "delete $Sprite$"
+msgstr "$Sprite$ を削除する"
+
+msgid "clear pen trails"
+msgstr "ペンの跡を消す"
+
+msgid "pen color"
+msgstr "ペンの色"
+
+msgid "pen size"
+msgstr "ペンの大きさ"
+
+msgid "pen hue"
+msgstr "ペンの色相"
+
+msgid "pen shade"
+msgstr "ペンの濃淡"
+
+msgid "make $String$"
+msgstr "変数 $String$ を作る"
+
+msgid "delete $OSReporter$"
+msgstr "$OSReporter$ を削除する"
+
+msgid "variable named $String$"
+msgstr "変数 $String$"
+
+msgid "move $Variable$ to x: $Number$ y: $Number$"
+msgstr "$Variable$ のモニタを x: $Number$ y: $Number$ に移動する"
+
+msgid "set layout of $Variable$ to $LayoutStyles$"
+msgstr "$Variable$ のモニタのレイアウトを $LayoutStyles$ に設定"
+
+msgid "make list $String$"
+msgstr "リスト $String$ を作る"
+
+msgid "delete list $String$"
+msgstr "リスト $String$ を削除する"
+
+msgid "hide list $List$"
+msgstr "リスト $List$ を隠す"
+
+msgid "show list $List$"
+msgstr "リスト $List$ を表示する"
+
+msgid "first index of $String$ in $List$"
+msgstr "$List$ に現れる $String$ の位置"
+
+msgid "a List"
+msgstr "リスト"
+
+msgid "times $String$ appears in $List$"
+msgstr " $String$ が $List$ に現れる回数"
+
+msgid "sort items of $List$ by numerical value"
+msgstr "$List$ を数値として並べ替える"
+
+msgid "sort items of $List$ by string value"
+msgstr "$List$ を文字列として並べ替える"
+
+msgid "contents of file $String$"
+msgstr "$String$ ファイルの内容"
+
+msgid "number of lines of file at URL $String$"
+msgstr "URL $String$ にあるファイルの行数"
+
+msgid "number of lines of file $String$"
+msgstr "$String$ ファイルの行数"
+
+msgid "create file $String$"
+msgstr "$String$ ファイルを作成する"
+
+msgid "line $Number$ of file $String$"
+msgstr "$String$ ファイルの $Number$ 行目"
+
+msgid "delete file $String$"
+msgstr "$String$ ファイルを削除する"
+
+msgid "line $Number$ of file at URL $String$"
+msgstr "URL $String$ にあるファイルの $Number$ 行目"
+
+msgid "write $String$ to file $String$"
+msgstr "文字列 $String$ を $String$ ファイルに書き込む"
+
+msgid "contents of file at URL $String$"
+msgstr "URL $String$ にあるファイルの内容"
+
+msgid "clear file $String$"
+msgstr "$String$ の内容を空にする"
+
+msgid "make a color"
+msgstr "色を作る"
+
+msgid "set $ColorVar$ to $Color$"
+msgstr "$ColorVar$ の色を $Color$ にする"
+
+msgid "hide color $ColorVar$"
+msgstr "色 $ColorVar$ を隠す"
+
+msgid "show color $ColorVar$"
+msgstr "色 $ColorVar$ を表示する"
+
+msgid "delete color $String$"
+msgstr "色 $ColorVar$ を削除する"
+
+msgid "make color $String$"
+msgstr "色 $ColorVar$ を作る"
+
+msgid "a color"
+msgstr "色"
+
+msgid "color of pixel x: $Number$ y: $Number$"
+msgstr "x: $Number$ y: $Number$ のピクセルの色"
+
+msgid "$Color$ blue"
+msgstr "$Color$ の青成分"
+
+msgid "color r: $Number$ g: $Number$ b: $Number$"
+msgstr "赤: $Number$ 緑: $Number$ 青: $Number$ の色"
+
+msgid "$Color$ green"
+msgstr "$Color$ の緑成分"
+
+msgid "$Color$ red"
+msgstr "$Color$ の赤成分"
+
+msgid "$Color$ saturation"
+msgstr "$Color$ の彩度"
+
+msgid "$Color$ brightness"
+msgstr "$Color$ の明るさ"
+
+msgid "$Color$ hue"
+msgstr "$Color$ の色相"
+
+msgid "color h: $Number$ s: $Number$ b: $Number$"
+msgstr "色相: $Number$ 彩度: $Number$ 明るさ: $Number$ の色"
+
+msgid "mix $Color$ with $Color$"
+msgstr "$Color$ と $Color$ を混ぜる"
+
+msgid "mix $Color$ $Number$ : $Number$ with $Color$"
+msgstr "$Color$ と $Color$ を $Number$ 対 $Number$ で混ぜる"
+
+msgid "color named $NamedColors$"
+msgstr "$NamedColors$ の色"
+
+msgid "$String$ as color"
+msgstr "$String$ の色"
+
+msgid "$Color$ as string"
+msgstr "$Color$ の16進文字列"
+
+msgid "Allow Sprites offstage"
+msgstr "スプライトがステージからはみ出せる"
+
+msgid "Thread safe scripts"
+msgstr "スレッドセーフなスクリプト"
+
+msgid "Clear all Variables"
+msgstr "全ての変数をクリアする"
+
+msgid "Settings"
+msgstr "設定"
+
+msgid "Phratch Website"
+msgstr "Phratchのウェブサイト"
+
+msgid "Scratch Help Page"
+msgstr "Scratchのヘルプページ"
+
+msgid "Help Screens"
+msgstr "ヘルプ画面"
+
+msgid "BYOB Reference Manual"
+msgstr "BYOBリファレンスマニュアル"
+
+msgid "Panther Tutorials"
+msgstr "Pantherチュートリアル"
+
+msgid "About Phratch"
+msgstr "Phratchについて"
 
