@@ -184,7 +184,7 @@ ConfigurationOfPhratch >> version10: spec [
 	spec for: #common do: [
 			spec repository: 'http://smalltalkhub.com/mc/JLaval/Phratch/main'.
 			spec
-				package: 'Phratch' with: 'Phratch-janniklaval.234';
+				package: 'Phratch' with: 'Phratch-janniklavalpharo20.235';
 				package: 'PhratchObjStream' with: 'PhratchObjStream-janniklaval.5'.
 			spec
 				project: 'Sound' with: #stable;
