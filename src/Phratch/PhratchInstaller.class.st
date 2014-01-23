@@ -106,9 +106,18 @@ PhratchInstaller class >> getPhratchLocales [
 { #category : #installation }
 PhratchInstaller class >> getPhratchMedia [
 	UIManager inform: 'Downloading Media'.
+	(FileSystem workingDirectory / 'Media') ensureCreateDirectory.
 	self
-		downloadFileFromUrl: 'https://github.com/janniklaval/phratch/raw/master/Media.zip'
-		andUnzipIntoDirectory: FileSystem workingDirectory 
+		downloadFileFromUrl: 'https://github.com/janniklaval/phratch/raw/master/Media/Backgrounds.zip'
+		andUnzipIntoDirectory: (FileSystem workingDirectory / 'Media'). 
+		
+	self
+		downloadFileFromUrl: 'https://github.com/janniklaval/phratch/raw/master/Media/Costumes.zip'
+		andUnzipIntoDirectory: (FileSystem workingDirectory / 'Media').
+		
+	self
+		downloadFileFromUrl: 'https://github.com/janniklaval/phratch/raw/master/Media/Sounds.zip'
+		andUnzipIntoDirectory: (FileSystem workingDirectory / 'Media')
 ]
 
 { #category : #installation }
