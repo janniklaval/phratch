@@ -74,7 +74,7 @@ PhratchInstaller class >> externalVerification [
 PhratchInstaller class >> getBYOBManual [
 	UIManager inform:  'Downloading BYOB Manual'.
 	self
-		downloadFileFromUrl: 'https://phratch.googlecode.com/files/Manual.zip' 
+		downloadFileFromUrl: 'https://github.com/janniklaval/phratch/raw/master/Manual.zip' 
 		andUnzipIntoDirectory: FileSystem workingDirectory
 ]
 
@@ -82,14 +82,14 @@ PhratchInstaller class >> getBYOBManual [
 PhratchInstaller class >> getPhratchHelp [
 	UIManager inform: 'Downloading Help'.
 	self
-		downloadFileFromUrl: 'https://phratch.googlecode.com/files/Help.zip' 
+		downloadFileFromUrl: 'https://github.com/janniklaval/phratch/raw/master/Help.zip' 
 		andUnzipIntoDirectory: FileSystem workingDirectory
 ]
 
 { #category : #installation }
 PhratchInstaller class >> getPhratchLicence [
 	UIManager inform:  'Downloading licence.txt'.
-	(FileStream newFileNamed: 'license.txt') nextPutAll: ((ZnHTTPSocketFacade httpGet: 'https://phratch.googlecode.com/files/license.txt'))
+	(FileStream newFileNamed: 'license.txt') nextPutAll: ((ZnHTTPSocketFacade httpGet: 'https://github.com/janniklaval/phratch/raw/master/license.txt'))
 ]
 
 { #category : #installation }
@@ -107,7 +107,7 @@ PhratchInstaller class >> getPhratchLocales [
 PhratchInstaller class >> getPhratchMedia [
 	UIManager inform: 'Downloading Media'.
 	self
-		downloadFileFromUrl: 'https://phratch.googlecode.com/files/Media.zip'
+		downloadFileFromUrl: 'https://github.com/janniklaval/phratch/raw/master/Media.zip'
 		andUnzipIntoDirectory: FileSystem workingDirectory 
 ]
 
@@ -124,7 +124,7 @@ PhratchInstaller class >> getPhratchPlugins [
 PhratchInstaller class >> getPhratchSkins [
 	UIManager inform: 'Downloading ScratchSkin'.
 	self
-		downloadFileFromUrl: 'https://phratch.googlecode.com/files/ScratchSkin.zip'
+		downloadFileFromUrl: 'https://github.com/janniklaval/phratch/raw/master/ScratchSkin.zip'
 		andUnzipIntoDirectory: (FileSystem workingDirectory)
 ]
 
@@ -237,13 +237,13 @@ PhratchInstaller class >> pluginsPath [
 { #category : #installation }
 PhratchInstaller class >> pluginsURL [
 	^ Smalltalk os isMacOSX
-		ifTrue: [ ^ 'https://phratch.googlecode.com/files/pluginsMacOSX.zip' ]
+		ifTrue: [ ^ 'https://github.com/janniklaval/phratch/raw/master/pluginsMacOSX.zip' ]
 		ifFalse: [ 
 			Smalltalk os isUnix
-				ifTrue: [ ^ 'https://phratch.googlecode.com/files/pluginsGNULinux.zip' ]
+				ifTrue: [ ^ 'https://github.com/janniklaval/phratch/raw/master/pluginsGNULinux.zip' ]
 				ifFalse: [ 
 					Smalltalk os isWin32
-						ifTrue: [ ^ 'https://phratch.googlecode.com/files/pluginsWin32.zip' ]
+						ifTrue: [ ^ 'https://github.com/janniklaval/phratch/raw/master/pluginsWin32.zip' ]
 						ifFalse: [ 
 							self
 								error:
