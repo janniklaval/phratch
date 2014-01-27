@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Phratch\n"
 "Report-Msgid-Bugs-To: Jannik LAVAL <jannik.laval@gmail.com>\n"
 "POT-Creation-Date: 2008-02-18 00:26-0400\n"
-"PO-Revision-Date: 2014-01-17 11:27-0400\n"
-"Last-Translator:  Guillermo Polito <guillermopolito@gmail.com>\n"
+"PO-Revision-Date: 2014-01-27 11:27-0400\n"
+"Last-Translator:  Vanessa Peña Araya <van.c.pena@gmail.com>\n"
 "Language-Team: Jannik Laval <jannik.laval@gmail.com>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -2372,3 +2372,41 @@ msgstr "Tutoriales de Panther"
 msgid "About Phratch" 
 msgstr "Acerca de Phratch"
 
+msgid "time" 
+msgstr "tiempo"
+
+msgid "hour" 
+msgstr "hora"
+
+msgid "minute" 
+msgstr "minuto"
+
+msgid "second" 
+msgstr "segundo"
+
+msgid "date" 
+msgstr "fecha"
+
+msgid "day of month" 
+msgstr "día del mes"
+
+msgid "day of year" 
+msgstr "día del año"
+
+msgid "weekday-name" 
+msgstr "nombre-del-día-de-la-semana"
+
+msgid "weekday-#" 
+msgstr "día-de-la-semana"
+
+msgid "month-name" 
+msgstr "nombre-del-mes"
+
+msgid "month-#" 
+msgstr "mes"
+
+msgid "year" 
+msgstr "año"
+
+msgid "self" 
+msgstr "yo"
