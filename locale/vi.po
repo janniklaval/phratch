@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: Phratch\n"
 "Report-Msgid-Bugs-To: Jannik LAVAL <jannik.laval@gmail.com>\n"
 "POT-Creation-Date: 08/08/2008\n"
-"PO-Revision-Date: 2014-01-17 11:27-0400\n"
+"PO-Revision-Date: 2014-01-27 11:27-0400\n"
 "Last-Translator:  hqnghi <hqnghi88@gmail.com>\n"
 "Language-Team: Jannik LAVAL <jannik.laval@gmail.com>\n"
 "Language: vi\n"
@@ -2297,3 +2297,41 @@ msgstr "hướng dẫn Panther"
 msgid "About Phratch" 
 msgstr "Thông tin về Phratch"
 
+msgid "time"
+msgstr "thời gian"
+
+msgid "hour"
+msgstr "giờ"
+
+msgid "minute"
+msgstr "phút"
+
+msgid "second"
+msgstr "giây"
+
+msgid "date"
+msgstr "ngày"
+
+msgid "day of month"
+msgstr "ngày trong tháng"
+
+msgid "day of year"
+msgstr "ngày trong năm"
+
+msgid "weekday-name"
+msgstr "tên của ngày trong tuần"
+
+msgid "weekday-#"
+msgstr "số thứ tự của ngày trong tuần"
+
+msgid "month-name"
+msgstr "tên của tháng"
+
+msgid "month-#"
+msgstr "số thứ tự của tháng"
+
+msgid "year"
+msgstr "năm"
+
+msgid "self"
+msgstr "bản thân"
