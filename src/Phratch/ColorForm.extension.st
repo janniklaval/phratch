@@ -4,7 +4,7 @@ Extension { #name : #ColorForm }
 ColorForm >> equals: aForm [
 	"Answer true if the receiver is exactly the same as the given Form."
 
-	^ self colors = aForm colors and: [super equals: aForm]
+	^ (super equals: aForm) and: [self colors = aForm colors]
 ]
 
 { #category : #'*Phratch-Extensions' }
