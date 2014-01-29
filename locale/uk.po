@@ -1918,252 +1918,252 @@ msgstr "Ксилофон"
 # Phratch #
 ###########
 
-#msgid "files" 
-#msgstr "файли"
-#
-#msgid "colors" 
-#msgstr "кольори"
-#
-#msgid "Arrow key move with speed $Number$" 
-#msgstr ""
-#
-#msgid "go in between x: $Number$ y: $Number$ and x: $Number$ y: $Number$" 
-#msgstr  "стати між точками з коорданатами x: $Number$ y: $Number$ та x: $Number$ y: $Number$"
-#
-#msgid "go $Number$ of the way to x: $Number$ y: $Number$" 
-#msgstr ""
-#
-#msgid "if $Boolean$ bounce" 
-#msgstr ""
-#
-#msgid "if touching $Sprite$ bounce" 
-#msgstr ""
-#
-#msgid "point at x:$Number$ y:$Number$" 
-#msgstr "точка з координатами x:$Number$ y:$Number$"
-#
-#msgid "point at random coordinate" 
-#msgstr "точка з випадковими координатами"
-#
-#msgid "rotation style" 
-#msgstr ""
-#
-#msgid "set rotation style to $Rotation$" 
-#msgstr ""
-#
-#msgid "draggable?" 
-#msgstr ""
-#
-#msgid "make undraggable" 
-#msgstr ""
-#
-#msgid "make draggable" 
-#msgstr ""
-#
-#msgid "when $Sprite$ created" 
-#msgstr ""
-#
-#msgid "$Event$ received?" 
-#msgstr ""
-#
-#msgid "if $Boolean$ then $Boolean$ else $Boolean$" 
-#msgstr ""
-#
-#msgid "repeat $Number$ times" 
-#msgstr "повторити $Number$ раз/рази/разів"
-#
-#msgid "save project" 
-#msgstr "зберегти проект"
-#
-#msgid "quit Phratch" 
-#msgstr "закрити Phratch"
-#
-#msgid "clone me" 
-#msgstr "зробити клон себе"
-#
-#msgid "Am I a clone?" 
-#msgstr "Чи я є клоном?"
-#
-#msgid "delete me if I am a clone" 
-#msgstr "видалити, якщо я клон"
-#
-#msgid "stop all scripts for $Event$" 
-#msgstr "зупинити всі скрипти для $Event$"
-#
-#msgid "press green flag" 
-#msgstr "натиснути зелений прапорець"
-#
-#msgid "pause" 
-#msgstr "пауза"
-#
-#msgid "replace costume $Number$ with $NewCostume$" 
-#msgstr "замінити _______________? $NewCostume$"
-#
-#msgid "add $NewCostume$ to costumes" 
-#msgstr "додати $NewCostume$ до ____?"
-#
-#msgid "delete costume $Number$" 
-#msgstr ""
-#
-#msgid "$Effects$ effect" 
-#msgstr "ефект $Effects$"
-#
-#msgid "width" 
-#msgstr "ширина"
-#
-#msgid "perimeter" 
-#msgstr "периметр"
-#
-#msgid "height" 
-#msgstr "висота"
-#
-#msgid "area" 
-#msgstr "площа"
-#
-#msgid "set horizontal stretch to $Number$%" 
-#msgstr ""
-#
-#msgid "vertical flip" 
-#msgstr ""
-#
-#msgid "vertical stretch" 
-#msgstr ""
-#
-#msgid "change horizontal stretch by $Number$%" 
-#msgstr ""
-#
-#msgid "horizontal stretch" 
-#msgstr ""
-#
-#msgid "set vertical stretch to $Number$%" 
-#msgstr ""
-#
-#msgid "horizontal flip" 
-#msgstr ""
-#
-#msgid "change vertical stretch by $Number$%" 
-#msgstr ""
-#
-#msgid "camera is open?" 
-#msgstr "камера ввімкнена"
-#
-#msgid "close camera" 
-#msgstr "закрити камеру"
-#
-#msgid "do with camera open" 
-#msgstr "виконувати з працюючою камерою"
-#
-#msgid "open camera" 
-#msgstr "запустити камеру"
-#
-#msgid "show dialog $String$ with text $String$" 
-#msgstr "показати діалог між $String$ ітекстом $String$"
-#
-#msgid "ask $String$ in dialog" 
-#msgstr "запитати $String$ в діалозі"
-#
-#msgid "set sprite name to $String$" 
-#msgstr ""
-#
-#msgid "warn $String$" 
-#msgstr ""
-#
-#msgid "key pressed" 
-#msgstr "клавіша натиснена"
-#
-#msgid "get $Attributes$ of $Sprite$" 
-#msgstr "отримати $Attributes$ від  $Sprite$"
-#
-#msgid "attribute $Attributes$" 
-#msgstr "атрибут $Attributes$"
-#
-#msgid "date/time: $TimeDates$" 
-#msgstr "дата/час: $TimeDates$"
-#
-#msgid "index of $String$ starting at $Number$ in $String$" 
-#msgstr "індекс $String$, який почанається з $Number$ в $String$"
-#
-#msgid "letters $Number$ - $Number$ of $String$" 
-#msgstr ""
-#
-#msgid "join $String$ and $String$" 
-#msgstr "об'єднати___________?додати ? $String$ і $String$"
-#
-#msgid "factorial of $Number$" 
-#msgstr "факторіал $Number$"
-#
-#msgid "$Number$ mod $Number$" 
-#msgstr "$Number$ по модулю $Number$"
-#
-#msgid "$Number$ is a Fibonacci number?" 
-#msgstr "$Number$ є числом Фібоначчі?"
-#
-#msgid "$Number$ is prime?" 
-#msgstr "$Number$ є простим?"
-#
-#msgid "$Number$ is an integer?" 
-#msgstr "$Number$ є цілим?"
-#
-#msgid "is $String$ nil?" 
-#msgstr "чи $String$ nil?"
-#
-#msgid "$String$ as boolean" 
-#msgstr "String$ як boolean"
-#
-#msgid "set $Attributes$ to $String$" 
-#msgstr ""
-#
-#msgid "delete $Sprite$" 
-#msgstr "видалити $Sprite$"
-#
-#msgid "clear pen trails" 
-#msgstr ""
-#
-#msgid "pen color" 
-#msgstr "колір ручки"
-#
-#msgid "pen size" 
-#msgstr "розмір ручки"
-#
-#msgid "pen hue" 
-#msgstr ""
-#
-#msgid "pen shade" 
-#msgstr ""
-#
-#msgid "make $String$" 
-#msgstr ""
-#
-#msgid "delete $OSReporter$" 
-#msgstr "видалити $OSReporter$"
-#
-#msgid "variable named $String$" 
-#msgstr "змінна названа $String$"
-#
-#msgid "move $Variable$ to x: $Number$ y: $Number$" 
-#msgstr "перемістити $Variable$ у точку з координатами x: $Number$ y: $Number$"
-#
-#msgid "set layout of $Variable$ to $LayoutStyles$" 
-#msgstr ""
-#
-#msgid "make list $String$" 
-#msgstr "створити список $String$"
-#
-#msgid "delete list $String$" 
-#msgstr "видалити список $String$"
-#
-#msgid "hide list $List$" 
-#msgstr ""
-#
-#msgid "show list $List$" 
-#msgstr ""
-#
-#msgid "first index of $String$ in $List$" 
-#msgstr "перший індекс $String$ в $List$"
-#
-#msgid "a List" 
-#msgstr ""
-#
+msgid "files" 
+msgstr "файли"
+
+msgid "colors" 
+msgstr "кольори"
+
+msgid "Arrow key move with speed $Number$" 
+msgstr "Переміститись на $Number$ в напрямку клавіші навігації"
+
+msgid "go in between x: $Number$ y: $Number$ and x: $Number$ y: $Number$" 
+msgstr  "стати між точкою x: $Number$ y: $Number$ та x: $Number$ y: $Number$"
+
+msgid "go $Number$ of the way to x: $Number$ y: $Number$" 
+msgstr "переміститись на $Number$ до x: $Number$ y: $Number$"
+
+msgid "if $Boolean$ bounce" 
+msgstr "якщо $Boolean$ - розвернутись"
+
+msgid "if touching $Sprite$ bounce" 
+msgstr "якщо торкається $Sprite$ - розвернутись"
+
+msgid "point at x:$Number$ y:$Number$" 
+msgstr "точка з координатами x:$Number$ y:$Number$"
+
+msgid "point at random coordinate" 
+msgstr "точка з випадковими координатами"
+
+msgid "rotation style" 
+msgstr "стиль обертання"
+
+msgid "set rotation style to $Rotation$" 
+msgstr "встановити $Rotation$ стиль обертання"
+
+msgid "draggable?" 
+msgstr "перетягується?"
+
+msgid "make undraggable" 
+msgstr "заборонити перетягування"
+
+msgid "make draggable" 
+msgstr "дозволити перетягування"
+
+msgid "when $Sprite$ created" 
+msgstr "коли створено $Sprite$"
+
+msgid "$Event$ received?" 
+msgstr "$Event$ відбулося?"
+
+msgid "if $Boolean$ then $Boolean$ else $Boolean$" 
+msgstr "якщо $Boolean$ то $Boolean$ інакше $Boolean$"
+
+msgid "repeat $Number$ times" 
+msgstr "повторити $Number$ рази(ів)"
+
+msgid "save project" 
+msgstr "зберегти проект"
+
+msgid "quit Phratch" 
+msgstr "закрити Phratch"
+
+msgid "clone me" 
+msgstr "клонувати мене"
+
+msgid "Am I a clone?" 
+msgstr "Чи є я клоном?"
+
+msgid "delete me if I am a clone" 
+msgstr "видалитись, якщо я - клон"
+
+msgid "stop all scripts for $Event$" 
+msgstr "зупинити всі скрипти для $Event$"
+
+msgid "press green flag" 
+msgstr "натиснути зелений прапорець"
+
+msgid "pause" 
+msgstr "пауза"
+
+msgid "replace costume $Number$ with $NewCostume$" 
+msgstr "замінити костюм $Number$ на $NewCostume$"
+
+msgid "add $NewCostume$ to costumes" 
+msgstr "додати $NewCostume$ до костюмів"
+
+msgid "delete costume $Number$" 
+msgstr "видалити костюм $Number$"
+
+msgid "$Effects$ effect" 
+msgstr "ефект $Effects$"
+
+msgid "width" 
+msgstr "ширина"
+
+msgid "perimeter" 
+msgstr "периметр"
+
+msgid "height" 
+msgstr "висота"
+
+msgid "area" 
+msgstr "площа"
+
+msgid "set horizontal stretch to $Number$%" 
+msgstr "розтягнути горизонтально до $Number$%"
+
+msgid "vertical flip" 
+msgstr "перевернути вертикально"
+
+msgid "vertical stretch" 
+msgstr "розтягнути вертикально"
+
+msgid "change horizontal stretch by $Number$%" 
+msgstr "розтягнути горизонтально на $Number$%"
+
+msgid "horizontal stretch" 
+msgstr "розтягнути горизонтально"
+
+msgid "set vertical stretch to $Number$%" 
+msgstr "розтягнути вертикально до $Number$%"
+
+msgid "horizontal flip" 
+msgstr "перевернути горизонтально"
+
+msgid "change vertical stretch by $Number$%" 
+msgstr "розтягнути вертикально на $Number$%"
+
+msgid "camera is open?" 
+msgstr "камера ввімкнена?"
+
+msgid "close camera" 
+msgstr "закрити камеру"
+
+msgid "do with camera open" 
+msgstr "виконувати з працюючою камерою"
+
+msgid "open camera" 
+msgstr "запустити камеру"
+
+msgid "show dialog $String$ with text $String$" 
+msgstr "показати діалог $String$ із текстом $String$"
+
+msgid "ask $String$ in dialog" 
+msgstr "запитати $String$ в діалозі"
+
+msgid "set sprite name to $String$" 
+msgstr "Встановити ім'я спрайту: $String$"
+
+msgid "warn $String$" 
+msgstr "попередження: $String$"
+
+msgid "key pressed" 
+msgstr "клавіша натиснена"
+
+msgid "get $Attributes$ of $Sprite$" 
+msgstr "отримати $Attributes$ із $Sprite$"
+
+msgid "attribute $Attributes$" 
+msgstr "атрибут $Attributes$"
+
+msgid "date/time: $TimeDates$" 
+msgstr "дата/час: $TimeDates$"
+
+msgid "index of $String$ starting at $Number$ in $String$" 
+msgstr "індекс $String$, почанаючи з $Number$ в $String$"
+
+msgid "letters $Number$ - $Number$ of $String$" 
+msgstr "букви $Number$ - $Number$ із $String$"
+
+msgid "join $String$ and $String$" 
+msgstr "об'єднати $String$ та $String$"
+
+msgid "factorial of $Number$" 
+msgstr "$Number$ факторіал"
+
+msgid "$Number$ mod $Number$" 
+msgstr "$Number$ по модулю $Number$"
+
+msgid "$Number$ is a Fibonacci number?" 
+msgstr "$Number$ є числом Фібоначчі?"
+
+msgid "$Number$ is prime?" 
+msgstr "$Number$ є простим?"
+
+msgid "$Number$ is an integer?" 
+msgstr "$Number$ є цілим?"
+
+msgid "is $String$ nil?" 
+msgstr "чи $String$ nil?"
+
+msgid "$String$ as boolean" 
+msgstr "String$ як boolean"
+
+msgid "set $Attributes$ to $String$" 
+msgstr "встановити $String$ для $Attributes$"
+
+msgid "delete $Sprite$" 
+msgstr "видалити $Sprite$"
+
+msgid "clear pen trails" 
+msgstr "очистити сліди ручки"
+
+msgid "pen color" 
+msgstr "колір ручки"
+
+msgid "pen size" 
+msgstr "розмір ручки"
+
+msgid "pen hue" 
+msgstr "відтінок ручки"
+
+msgid "pen shade" 
+msgstr "яскравіснь ручки"
+
+msgid "make $String$" 
+msgstr "створити $String$"
+
+msgid "delete $OSReporter$" 
+msgstr "видалити $OSReporter$"
+
+msgid "variable named $String$" 
+msgstr "змінна із назвою $String$"
+
+msgid "move $Variable$ to x: $Number$ y: $Number$" 
+msgstr "перемістити $Variable$ на x: $Number$ y: $Number$"
+
+msgid "set layout of $Variable$ to $LayoutStyles$" 
+msgstr "Встановити $LayoutStyles$ як схему $Variable$"
+
+msgid "make list $String$" 
+msgstr "створити список $String$"
+
+msgid "delete list $String$" 
+msgstr "видалити список $String$"
+
+msgid "hide list $List$" 
+msgstr "сховати список $List$"
+
+msgid "show list $List$" 
+msgstr "показати список $List$"
+
+msgid "first index of $String$ in $List$" 
+msgstr "перший індекс $String$ в $List$"
+
+msgid "a List" 
+msgstr "Список"
+
 #msgid "times $String$ appears in $List$" 
 #msgstr ""
 #
