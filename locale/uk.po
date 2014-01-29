@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Phratch\n"
 "Report-Msgid-Bugs-To: Jannik LAVAL <jannik.laval@gmail.com>\n"
 "POT-Creation-Date: 2008-03-13\n"
-"PO-Revision-Date: 2014-01-29 12:06+0100\n"
+"PO-Revision-Date: 2014-01-29 13:56+0100\n"
 "Last-Translator: Natalia Tymchuk <natalia.tymchuk@unikernel.net>\n"
 "Language-Team: Tymchuk family <tymchuk.me>\n"
 "Language: uk\n"
@@ -2164,50 +2164,50 @@ msgstr "перший індекс $String$ в $List$"
 msgid "a List" 
 msgstr "Список"
 
-#msgid "times $String$ appears in $List$" 
-#msgstr ""
-#
-#msgid "sort items of $List$ by numerical value" 
-#msgstr ""
-#
-#msgid "sort items of $List$ by string value" 
-#msgstr ""
-#
-#msgid "contents of file $String$" 
-#msgstr ""
-#
-#msgid "number of lines of file at URL $String$" 
-#msgstr ""
-#
-#msgid "number of lines of file $String$" 
-#msgstr ""
-#
-#msgid "create file $String$" 
-#msgstr ""
-#
-#msgid "line $Number$ of file $String$" 
-#msgstr ""
-#
-#msgid "delete file $String$" 
-#msgstr ""
-#
-#msgid "line $Number$ of file at URL $String$" 
-#msgstr ""
-#
-#msgid "write $String$ to file $String$" 
-#msgstr ""
-#
-#msgid "contents of file at URL $String$" 
-#msgstr ""
-#
-#msgid "clear file $String$" 
-#msgstr ""
-#
-#msgid "make a color" 
-#msgstr ""
+msgid "times $String$ appears in $List$" 
+msgstr "разів $String$ з'являється в $List$"
+
+msgid "sort items of $List$ by numerical value" 
+msgstr "сортувати дані $List$ за числовим значенням"
+
+msgid "sort items of $List$ by string value" 
+msgstr "сортувати дані $List$ за текстовим значенням"
+
+msgid "contents of file $String$" 
+msgstr "вміст файлу $String$"
+
+msgid "number of lines of file at URL $String$" 
+msgstr "кількість рядків файлу за посиланням $String$"
+
+msgid "number of lines of file $String$" 
+msgstr "кількість рядків в файлі $String$"
+
+msgid "create file $String$" 
+msgstr "створити файл $String$"
+
+msgid "line $Number$ of file $String$" 
+msgstr "$Number$ рядок в файлі $String$"
+
+msgid "delete file $String$" 
+msgstr "видалити файл $String$"
+
+msgid "line $Number$ of file at URL $String$" 
+msgstr "$Number$ рядок файлу за посиланням $String$"
+
+msgid "write $String$ to file $String$" 
+msgstr "дописати $String$" в файл $String$"
+
+msgid "contents of file at URL $String$" 
+msgstr "вміст файлу за посиланням $String$"
+
+msgid "clear file $String$" 
+msgstr "очистити файл $String$"
+
+msgid "make a color" 
+msgstr "створити колір"
 #
 #msgid "set $ColorVar$ to $Color$" 
-#msgstr ""
+#msgstr "установити?????спрямувати------- $ColorVar$ до $Color$"
 
 msgid "hide color $ColorVar$" 
 msgstr "сховати $ColorVar$ кольора"
@@ -2223,9 +2223,9 @@ msgstr "створити $String$ кольора"
 
 msgid "a color" 
 msgstr "колір"
-#
-#msgid "color of pixel x: $Number$ y: $Number$" 
-#msgstr ""
+
+msgid "color of pixel x: $Number$ y: $Number$" 
+msgstr "колір пікселя x: $Number$ y: $Number$"
 
 msgid "$Color$ blue" 
 msgstr "блакитний $Color$"
@@ -2238,15 +2238,15 @@ msgstr "зелений $Color$"
 
 msgid "$Color$ red" 
 msgstr "червоний $Color$"
-#
-#msgid "$Color$ saturation" 
-#msgstr ""
+
+msgid "$Color$ saturation" 
+msgstr "насичення $Color$"
 
 msgid "$Color$ brightness" 
 msgstr "яскравість $Color$"
 
-#msgid "$Color$ hue" 
-#msgstr ""
+msgid "$Color$ hue" 
+msgstr "відтінок $Color$"
 
 msgid "color h: $Number$ s: $Number$ b: $Number$" 
 msgstr "колір h: $Number$ s: $Number$ b: $Number$"
@@ -2267,13 +2267,13 @@ msgid "$Color$ as string"
 msgstr "$Color$ як рядок (string)"
 #
 #msgid "Allow Sprites offstage" 
-#msgstr ""
+#msgstr "Дозволити Sprites????__________"
 #
 #msgid "Thread safe scripts" 
-#msgstr ""
+#msgstr "Нанизити????------------- безпечні скрипти"
 #
 #msgid "Clear all Variables" 
-#msgstr "очистити _______ всі змінні"
+#msgstr "очистити ???_______ всі змінні"
 
 msgid "Settings" 
 msgstr "Налаштування"
@@ -2283,16 +2283,16 @@ msgstr "веб сторінка Phratch"
 
 msgid "Scratch Help Page" 
 msgstr "сторінка для допомоги з Scratch"
-#
-#msgid "Help Screens" 
-#msgstr ""
+
+msgid "Help Screens" 
+msgstr "Допоміжні екрани"
 #
 #msgid "BYOB Reference Manual" 
 #msgstr ""
-#
-#msgid "Panther Tutorials" 
-#msgstr ""
-#
+
+msgid "Panther Tutorials" 
+msgstr "Туторіал Panther"
+
 msgid "About Phratch" 
 msgstr "Інформація про Phratch"
 
@@ -2331,6 +2331,6 @@ msgstr "місяць-#"
 
 msgid "year" 
 msgstr "рік"
-#
-#msgid "self" 
-#msgstr ""
+
+msgid "self" 
+msgstr "себе"
