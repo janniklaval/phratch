@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Phratch\n"
 "Report-Msgid-Bugs-To: Jannik LAVAL <jannik.laval@gmail.com>\n"
 "POT-Creation-Date: 2008-03-13\n"
-"PO-Revision-Date: 2014-01-29 10:03+0100\n"
-"Last-Translator: Yuriy Tymchuk <yuriy.tymchuk@usi.ch>\n"
+"PO-Revision-Date: 2014-01-29 12:06+0100\n"
+"Last-Translator: Natalia Tymchuk <natalia.tymchuk@unikernel.net>\n"
 "Language-Team: Tymchuk family <tymchuk.me>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
@@ -2208,63 +2208,63 @@ msgstr "Список"
 #
 #msgid "set $ColorVar$ to $Color$" 
 #msgstr ""
-#
-#msgid "hide color $ColorVar$" 
-#msgstr ""
-#
-#msgid "show color $ColorVar$" 
-#msgstr ""
-#
-#msgid "delete color $String$" 
-#msgstr ""
-#
-#msgid "make color $String$" 
-#msgstr ""
-#
-#msgid "a color" 
-#msgstr ""
+
+msgid "hide color $ColorVar$" 
+msgstr "сховати $ColorVar$ кольора"
+
+msgid "show color $ColorVar$" 
+msgstr "показати $ColorVar$ кольора"
+
+msgid "delete color $String$" 
+msgstr "видалити $String$ кольра"
+
+msgid "make color $String$" 
+msgstr "створити $String$ кольора"
+
+msgid "a color" 
+msgstr "колір"
 #
 #msgid "color of pixel x: $Number$ y: $Number$" 
 #msgstr ""
-#
-#msgid "$Color$ blue" 
-#msgstr ""
-#
-#msgid "color r: $Number$ g: $Number$ b: $Number$" 
-#msgstr ""
-#
-#msgid "$Color$ green" 
-#msgstr ""
-#
-#msgid "$Color$ red" 
-#msgstr ""
+
+msgid "$Color$ blue" 
+msgstr "блакитний $Color$"
+
+msgid "color r: $Number$ g: $Number$ b: $Number$" 
+msgstr "колір r: $Number$ g: $Number$ b: $Number$"
+
+msgid "$Color$ green" 
+msgstr "зелений $Color$"
+
+msgid "$Color$ red" 
+msgstr "червоний $Color$"
 #
 #msgid "$Color$ saturation" 
 #msgstr ""
-#
-#msgid "$Color$ brightness" 
-#msgstr ""
-#
+
+msgid "$Color$ brightness" 
+msgstr "яскравість $Color$"
+
 #msgid "$Color$ hue" 
 #msgstr ""
-#
-#msgid "color h: $Number$ s: $Number$ b: $Number$" 
-#msgstr ""
-#
-#msgid "mix $Color$ with $Color$" 
-#msgstr ""
-#
-#msgid "mix $Color$ $Number$ : $Number$ with $Color$" 
-#msgstr ""
-#
-#msgid "color named $NamedColors$" 
-#msgstr ""
-#
-#msgid "$String$ as color" 
-#msgstr ""
-#
-#msgid "$Color$ as string" 
-#msgstr ""
+
+msgid "color h: $Number$ s: $Number$ b: $Number$" 
+msgstr "колір h: $Number$ s: $Number$ b: $Number$"
+
+msgid "mix $Color$ with $Color$" 
+msgstr "змішати $Color$ з $Color$"
+
+msgid "mix $Color$ $Number$ : $Number$ with $Color$" 
+msgstr "змішати $Color$ $Number$ : $Number$ з $Color$"
+
+msgid "color named $NamedColors$" 
+msgstr "колір з назвою $NamedColors$"
+
+msgid "$String$ as color" 
+msgstr "$String$ як колір"
+
+msgid "$Color$ as string" 
+msgstr "$Color$ як рядок (string)"
 #
 #msgid "Allow Sprites offstage" 
 #msgstr ""
@@ -2273,16 +2273,16 @@ msgstr "Список"
 #msgstr ""
 #
 #msgid "Clear all Variables" 
-#msgstr ""
-#
-#msgid "Settings" 
-#msgstr ""
-#
-#msgid "Phratch Website" 
-#msgstr ""
-#
-#msgid "Scratch Help Page" 
-#msgstr ""
+#msgstr "очистити _______ всі змінні"
+
+msgid "Settings" 
+msgstr "Налаштування"
+
+msgid "Phratch Website" 
+msgstr "веб сторінка Phratch"
+
+msgid "Scratch Help Page" 
+msgstr "сторінка для допомоги з Scratch"
 #
 #msgid "Help Screens" 
 #msgstr ""
@@ -2293,44 +2293,44 @@ msgstr "Список"
 #msgid "Panther Tutorials" 
 #msgstr ""
 #
-#msgid "About Phratch" 
-#msgstr ""
-#
-#msgid "time" 
-#msgstr ""
-#
-#msgid "hour" 
-#msgstr ""
-#
-#msgid "minute" 
-#msgstr ""
-#
-#msgid "second" 
-#msgstr ""
-#
-#msgid "date" 
-#msgstr ""
-#
-#msgid "day of month" 
-#msgstr ""
-#
-#msgid "day of year" 
-#msgstr ""
-#
-#msgid "weekday-name" 
-#msgstr ""
-#
-#msgid "weekday-#" 
-#msgstr ""
-#
-#msgid "month-name" 
-#msgstr ""
-#
-#msgid "month-#" 
-#msgstr ""
-#
-#msgid "year" 
-#msgstr ""
+msgid "About Phratch" 
+msgstr "Інформація про Phratch"
+
+msgid "time" 
+msgstr "час"
+
+msgid "hour" 
+msgstr "година"
+
+msgid "minute" 
+msgstr "хвилина"
+
+msgid "second" 
+msgstr "секунда"
+
+msgid "date" 
+msgstr "дата"
+
+msgid "day of month" 
+msgstr "порядковий день місяця"
+
+msgid "day of year" 
+msgstr "порядковий день року"
+
+msgid "weekday-name" 
+msgstr "назва дня тижня"
+
+msgid "weekday-#" 
+msgstr "день тижня-#"
+
+msgid "month-name" 
+msgstr "назва місяця"
+
+msgid "month-#" 
+msgstr "місяць-#"
+
+msgid "year" 
+msgstr "рік"
 #
 #msgid "self" 
 #msgstr ""
