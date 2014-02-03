@@ -1534,6 +1534,7 @@ PhratchFrameMorph >> fileMenu: aMenuTitleMorph [
 	menu := MenuMorph new defaultTarget: self.
 	menu add: 'New' localized action: #newPhratchProject.
 	menu add: 'Open' localized action: #openPhratchProject.
+	menu add: 'Open Scratch' translated action: #openScratchProject.
 	menu add: 'Save' localized action: #savePhratchProjectNoDialog.
 	menu add: 'Save As' localized action: #savePhratchProject.
 	menu addLine.
