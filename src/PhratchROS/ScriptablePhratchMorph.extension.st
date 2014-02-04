@@ -18,3 +18,17 @@ ScriptablePhratchMorph >> addGenericROSBlocksTo: page x: x y: startY [
 
 	^ y
 ]
+
+{ #category : #'*PhratchROS' }
+ScriptablePhratchMorph >> addRos [
+
+	| newSprite frame |
+	newSprite := PhratchSpriteRosMorph new.
+	
+	frame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
+	frame ifNotNil: [
+		frame workPane addMorphFront: newSprite.
+		frame workPane sprites addLast: newSprite].
+	^ newSprite
+
+]
