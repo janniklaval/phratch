@@ -157,6 +157,50 @@ ConfigurationOfPhratch >> baseline10: spec [
 ]
 
 { #category : #'as yet unclassified' }
+ConfigurationOfPhratch >> baseline20: spec [
+	<version:'2.0-baseline'>
+	spec for: #common do: [
+			spec blessing: #baseline.
+			spec repository: 'http://smalltalkhub.com/mc/JLaval/Phratch/main'.
+			
+			spec project: 'Sound' with: [
+				spec 
+					className: 'ConfigurationOfPharoSound';
+					file: 'ConfigurationOfPharoSound' ;
+					version: #stable;
+					repository: 'http://smalltalkhub.com/mc/PharoExtras/Sound/main'.
+			].
+			spec project: 'OSProcess' with: [
+				spec
+					repository: 'http://www.squeaksource.com/MetacelloRepository'; 
+					className: 'ConfigurationOfOSProcess';
+					version: #stable ].
+	].
+	spec for: #'pharo2.x' do: [
+			spec repository: 'http://smalltalkhub.com/mc/JLaval/Phratch/main'.
+			spec
+				package: 'Phratch' with: [ 
+					spec requires: #('Sound' 'OSProcess')
+			].
+			spec
+				package: 'PhratchObjStream' with: [ 
+					spec requires: #('Phratch')
+			]
+	].
+	spec for: #'pharo3.x' do: [
+			spec repository: 'http://smalltalkhub.com/mc/JLaval/Phratch/main'.
+			spec
+				package: 'Phratch' with: [ 
+					spec requires: #('Sound' 'OSProcess')
+			].
+			spec
+				package: 'PhratchObjStream' with: [ 
+					spec requires: #('Phratch')
+			]
+	]
+]
+
+{ #category : #'as yet unclassified' }
 ConfigurationOfPhratch >> project [
 	^ project ifNil: [
 		 | constructor |
@@ -203,7 +247,7 @@ ConfigurationOfPhratch >> version10: spec [
 
 { #category : #'as yet unclassified' }
 ConfigurationOfPhratch >> version20: spec [
-	<version:'2.0' imports: #('1.0-baseline' )>
+	<version:'2.0' imports: #('2.0-baseline' )>
 	spec for: #common do: [
 			spec repository: 'http://smalltalkhub.com/mc/JLaval/Phratch/main'.
 			spec
@@ -213,9 +257,4 @@ ConfigurationOfPhratch >> version20: spec [
 				project: 'Sound' with: #stable;
 				project: 'OSProcess' with: #stable.
 	].
-	spec for: #'pharo3.x' do: [
-			spec repository: 'http://smalltalkhub.com/mc/JLaval/Phratch/main'.
-			spec
-				package: 'PhratchCompatibilityPharo3'.
-	]
 ]
