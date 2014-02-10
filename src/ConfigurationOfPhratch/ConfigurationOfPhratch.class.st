@@ -241,7 +241,7 @@ ConfigurationOfPhratch >> version10: spec [
 	spec for: #'pharo3.x' do: [
 			spec repository: 'http://smalltalkhub.com/mc/JLaval/Phratch/main'.
 			spec
-				package: 'PhratchCompatibilityPharo3'.
+				package: 'PhratchCompatibilityPharo3-janniklaval.5'.
 	]
 ]
 
