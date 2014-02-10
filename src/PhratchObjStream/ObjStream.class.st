@@ -199,7 +199,7 @@ ObjStream class >> userClasses [
 		(160		VariableBlockMorph)
 		"(161		IACTHatBlock)"
 		(162		ImageMedia)
-		(163		MovieMedia)
+"		(163		MovieMedia)"
 		(164		SoundMedia)
 		(165		KeyEventHatMorph)
 		(166		BooleanArgMorph)
