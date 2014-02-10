@@ -28,7 +28,7 @@ WatcherReadoutFrameMorph >> complexObject: anObject [
 			anObject fixLayout.
 			anObject startStepping.
 			^ self ].
-	(anObject isKindOf: BYOBList)
+	(anObject isKindOf: PhratchList)
 		ifFalse: [ ^ self ].
 	newListWatcher := PhratchListMorph new
 		listName: '' target: nil;

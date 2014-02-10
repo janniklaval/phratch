@@ -680,7 +680,7 @@ PhratchListMorph >> initialize [
 	self addScrollPane.
 
 	self extent: 65@115.
-	list := BYOBList new.
+	list := PhratchList new.
 	lastUpdated := list lastChanged.
 	isUpdating := false
 ]
@@ -850,7 +850,7 @@ PhratchListMorph >> mouseDown: evt [
 		^ self insertLine: '' at: (self lineCount + 1)].
 
 	((addSublistMorph bounds expandBy: 2) containsPoint: p) ifTrue: [
-		^ list insertLine: BYOBList new at: (self lineCount + 1)].
+		^ list insertLine: PhratchList new at: (self lineCount + 1)].
 
 	listOwner := self listOwner.
 	(((deleteMorph bounds expandBy: 2) containsPoint: p) and: [listOwner notNil]) ifTrue: [

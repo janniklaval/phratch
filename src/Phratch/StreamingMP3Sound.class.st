@@ -136,19 +136,6 @@ StreamingMP3Sound >> millisecondsSinceStart [
 
 ]
 
-{ #category : #'file ops' }
-StreamingMP3Sound >> mpegFileIsOpen [
-	"Answer true if I have an open, valid MPEG file handle. If the handle is not valid, try to re-open the file."
-
-	mpegFile ifNil: [^ false].
-	mpegFile fileHandle ifNil: [
-		"try to reopen the file, which may have been saved in a snapshot"
-		mpegFile openFile: mpegFile fileName.
-		mpegFile fileHandle ifNil: [mpegFile := nil]].
-	^ mpegFile notNil
-
-]
-
 { #category : #playing }
 StreamingMP3Sound >> playSampleCount: n into: aSoundBuffer startingAt: startIndex [
 	"Mix the next n samples of this sound into the given buffer starting at the given index"
@@ -223,20 +210,6 @@ StreamingMP3Sound >> setPan: newPan volume: newVol for: channel [
 				mixer setPan: 0 volume: leftVol for: 1.
 				mixer setPan: 1 volume: rightVol for: 2]].
 
-]
-
-{ #category : #accessing }
-StreamingMP3Sound >> soundPosition: fraction [
-	"Jump to the position the given fraction through the sound file. The argument is a number between 0.0 and 1.0."
-
-	| sampleIndex |
-	self mpegFileIsOpen
-		ifFalse: [ ^ self ].
-	mpegFile hasAudio
-		ifFalse: [ ^ self ].
-	sampleIndex := ((totalSamples * fraction) truncated max: 0) min: totalSamples.
-	mpegFile audioSetSample: 0 stream: 0.	"work around for library bug: first seek to zero"
-	mpegFile audioSetSample: sampleIndex stream: 0
 ]
 
 { #category : #converting }

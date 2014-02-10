@@ -59,12 +59,11 @@ FuelObjStream >> readObjFrom: aStream showProgress: showProgress [
 FuelObjStream >> readSpriteFrom: aStream showProgress: showProgress [
 	"Read the root object from the given binary stream. If showProgress is true, display a progress bar."
 
-	| objCount tenPercent stream firstPass |
+	| objCount tenPercent stream |
 	objects := OrderedCollection new.
 	"stream := FLMaterializer newDefault materializeFrom: aStream."
 	stream := aStream.
 	self readFileHeader: aStream.
-	firstPass := true.
 	objCount := stream uint32.
 	showProgress
 		ifTrue: [
@@ -76,8 +75,6 @@ FuelObjStream >> readSpriteFrom: aStream showProgress: showProgress [
 					1 to: objCount do: [:i |
 						objects addLast: self readObjectRecord.
 						progressBar value: i].
-					
-					firstPass := false.
 					objects do: [:rec | self fixReferencesForObjectRecord: rec].
 					progressBar value: objCount + (tenPercent // 2).
 					objects do: [:rec | self initializeUserDefinedFields: rec].
@@ -85,7 +82,6 @@ FuelObjStream >> readSpriteFrom: aStream showProgress: showProgress [
 					(Delay forMilliseconds: 200) wait]]
 		ifFalse: [
 			objCount timesRepeat: [objects addLast: self readObjectRecord].
-			firstPass := false.
 			objects do: [:rec | self fixReferencesForObjectRecord: rec].
 			objects do: [:rec | self initializeUserDefinedFields: rec]].
 

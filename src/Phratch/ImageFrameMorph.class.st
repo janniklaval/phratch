@@ -191,13 +191,6 @@ ImageFrameMorph >> fullDrawOn: aCanvas [
 
 ]
 
-{ #category : #drawing }
-ImageFrameMorph >> hasTranslucentColor [
-
-	^ true
-
-]
-
 { #category : #intialization }
 ImageFrameMorph >> initFromForm: aForm [
 	"Initialize myself by cutting up the given Form. The corners are taken to extend to one pixel short of the center in each dimension. A one-pixel strip from the center of each edge will be replicated to stretch the edge. The color of the center pixel of the rectangle will be used as the fill color. (You can suppress color filling by setting my color to transparent after calling this method)."

@@ -1,14 +1,14 @@
 Class {
-	#name : #BYOBListTests,
+	#name : #PhratchListTests,
 	#superclass : #TestCase,
 	#category : #'Phratch-Tests'
 }
 
 { #category : #tests }
-BYOBListTests >> test [
+PhratchListTests >> test [
 
 	| myList morphs |
-	myList := BYOBList new.
+	myList := PhratchList new.
 	morphs := OrderedCollection new.
 	3 timesRepeat: [
 		morphs add: ((PhratchListMorph on: myList) "openInWorld;" startStepping)].

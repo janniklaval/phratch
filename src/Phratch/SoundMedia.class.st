@@ -79,13 +79,6 @@ SoundMedia >> compressedSampleRate [
 
 ]
 
-{ #category : #accessing }
-SoundMedia >> currentSeconds: ignored [
-	"Currently, this doesn't do anything. It should jump to the given seconds offset."
-
-
-]
-
 { #category : #compressing }
 SoundMedia >> decompress [
 	"Decompress sound from compressed data so result of compression can be heard. Do nothing if sound is not compressed."
@@ -309,18 +302,6 @@ SoundMedia >> sound: aSampledSound [
 		samplingRate: aSampledSound originalSamplingRate).
 	compressedSampleRate := compressedBitsPerSample := compressedData := nil.
 	savedSound := nil.
-
-]
-
-{ #category : #'scratch ops' }
-SoundMedia >> startPlaying [
-	"Resume playing if the sound was paused before the end. Otherwise, start playing from the beginning."
-
-	(playingSound isNil or:
-	 [playingSound isEmpty or:
-	 [playingSound samplesRemaining = 0]])
-		ifTrue: [self playFromStart]
-		ifFalse: [playingSound resumePlaying].
 
 ]
 

@@ -1166,15 +1166,17 @@ PhratchFrameMorph >> delete [
 PhratchFrameMorph >> deleteWatchersForSprite: aSprite [
 	"The given sprite is being deleted. Delete all watchers associated with it."
 
-	aSprite lists do: [:m | m delete].
-
-	workPane submorphsDo: [:m |
-		(m isKindOf: WatcherMorph) ifTrue: [
-			(m target = aSprite) ifTrue: [m delete]]].
-
-	watcherPositions keys do: [:k | 
-		(k at: 1) = aSprite ifTrue: [watcherPositions removeKey: k]].
-
+	aSprite lists do: [ :m | m delete ].
+	workPane
+		submorphsDo: [ :m | 
+			(m isKindOf: WatcherMorph)
+				ifTrue: [ 
+					m target = aSprite
+						ifTrue: [ m delete ] ] ].
+	watcherPositions
+		keysDo: [ :k | 
+			(k at: 1) = aSprite
+				ifTrue: [ watcherPositions removeKey: k ] ]
 ]
 
 { #category : #watchers }
@@ -2923,11 +2925,11 @@ PhratchFrameMorph >> savePhratchProject [
 { #category : #'file read/write' }
 PhratchFrameMorph >> savePhratchProjectNoDialog [
 
-	| fName dir |
+	|  dir |
 	self closeMediaEditorsAndDialogs ifFalse: [^ self].
 
 	projectName ifNil: [projectName := ''].
-	fName := self nameFromFileName: projectName.
+	self nameFromFileName: projectName.
 
 	"Do we need to ask for a filename or directory?"
 	dir := PhratchFileChooserDialog getLastFolderForType: #project.

@@ -106,12 +106,6 @@ PhratchMedia >> resumePlaying [
 ]
 
 { #category : #playing }
-PhratchMedia >> startPlaying [
-	"Start playing if I am a movie or animation."
-
-]
-
-{ #category : #playing }
 PhratchMedia >> stopPlaying [
 	"Stop playing if I am a movie or animation."
 

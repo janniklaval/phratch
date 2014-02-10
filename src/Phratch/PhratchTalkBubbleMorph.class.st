@@ -50,13 +50,6 @@ PhratchTalkBubbleMorph >> extent: aPoint [
 
 ]
 
-{ #category : #drawing }
-PhratchTalkBubbleMorph >> hasTranslucentColor [
-
-	^ false
-
-]
-
 { #category : #intialization }
 PhratchTalkBubbleMorph >> initialize [
 	"Initialize the forms for all my elements."

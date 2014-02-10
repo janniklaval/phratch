@@ -189,25 +189,27 @@ PhratchTranslator class >> fontScaleMenu [
 { #category : #locale }
 PhratchTranslator class >> guessLanguage [
 	"Try to guess a language setting based on the local."
+
 	"PhratchTranslator guessLanguage"
 
 	| lang country myLocale |
-	(lang := Locale current primLanguage) ifNil: [^ 'en'].
-	lang size > 2 ifTrue: [lang := lang copyFrom: 1 to: 2].
-	country := Locale current primCountry ifNil: [^ lang].
-	country size > 2 ifTrue: [country := country copyFrom: 1 to: 2].
-
-	"first try lang + country:"
-	myLocale := lang asLowercase, '_', country asLowercase.
-	ISODict keys do: [:code | code asLowercase = myLocale ifTrue: [^ code]].
-
-	"then try just lang:"
+	(lang := Locale current primLanguage) ifNil: [ ^ 'en' ].
+	lang size > 2
+		ifTrue: [ lang := lang copyFrom: 1 to: 2 ].
+	country := Locale current primCountry ifNil: [ ^ lang ].
+	country size > 2
+		ifTrue: [ country := country copyFrom: 1 to: 2 ].	"first try lang + country:"
+	myLocale := lang asLowercase , '_' , country asLowercase.
+	ISODict
+		keysDo: [ :code | 
+			code asLowercase = myLocale
+				ifTrue: [ ^ code ] ].	"then try just lang:"
 	myLocale := lang asLowercase.
-	ISODict keys do: [:code | code asLowercase = myLocale ifTrue: [^ code]].
-
-	^ 'en'  "if no match, use English"
-
-
+	ISODict
+		keysDo: [ :code | 
+			code asLowercase = myLocale
+				ifTrue: [ ^ code ] ].
+	^ 'en'	"if no match, use English"
 ]
 
 { #category : #'language translation' }

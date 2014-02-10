@@ -5126,7 +5126,7 @@ ScriptablePhratchMorph >> list: listName contains: anObject [
 	<phratchItem: '$List$ contains $String$' kind: #BooleanBlockMorph category: 'list' defaultValues: #('list' 'thing') subCategory: #a5 special: #()>
 	| list |
 	list := self listNamed: listName ifNone: [^ false].
-	^ list contains: anObject
+	^ list includes: anObject
 
 ]
 
@@ -5669,7 +5669,7 @@ ScriptablePhratchMorph >> n: aNumber toPower: aPower [
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> namedColors [
 
-	^ Color colorNames.
+	^ self colorNames.
 ]
 
 { #category : #'panther actions' }
@@ -6629,21 +6629,6 @@ ScriptablePhratchMorph >> scripts [
 
 	(blocksBin isKindOf: Morph) ifFalse: [^ blocksBin].
 	^ blocksBin submorphs select: [:m | m isKindOf: HatBlockMorph]
-
-]
-
-{ #category : #networking }
-ScriptablePhratchMorph >> serialized [
-	"Answer a ByteArray containing this Phratch object in serialized form."
-
-	| s objToExport |
-	s := WriteStream on: (ByteArray new: 100000).
-	objToExport := self copyForExport.
-	objToExport firstSubmorph allSubsprites do: [:eachSub |
-		eachSub owner ifNil: [objToExport addMorphBack: eachSub ]].
-	FuelObjStream new storeObj: objToExport on: s.
-	^ s contents
-
 
 ]
 

@@ -301,32 +301,22 @@ LambdaBlockMorph >> renameParm: old to: new [
 
 { #category : #byob }
 LambdaBlockMorph >> rightButtonMenu [
-
-	| menu choice block vn atomic |
 	"first create the widest label"
 
-	atomic := self checkBoxLabelled: 'atomic'
-				marked: self isAtomic
-				width: 0.
-
+	| menu choice block vn atomic |
+	atomic := self checkBoxLabelled: 'atomic' marked: self isAtomic width: 0.
 	menu := MenuMorphNG new defaultTarget: self.
 	menu add: 'help' value: #presentHelpScreen.
 	menu addLine.
 	menu add: 'duplicate' value: #duplicate.
-	(self owner isKindOf: BlockMorph) ifFalse: [  "can't yet delete a blocks inside a script"
-		menu add: 'delete' value: #delete].
+	(self owner isKindOf: BlockMorph)
+		ifFalse: [ 
+			"can't yet delete a blocks inside a script"
+			menu add: 'delete' value: #delete ].
 	menu addLine.
-
-	menu addIcon: atomic
-			tooltip: 'execute as single block'
-			value: #toggleAtomicity.
-
-
-"
+	menu addIcon: atomic tooltip: 'execute as single block' value: #toggleAtomicity.	"
 	menu add: (isAtomic ifTrue: ['atomic -> interleafed'] ifFalse: ['interleafed -> atomic']) action: #toggleAtomicity.
-"
-
-	"menu add: 'make a block variable' action: #addVariable.
+"	"menu add: 'make a block variable' action: #addVariable.
 	variables isEmpty ifFalse: [
 		menu add: 'delete a bock variable' action: #removeVariable.
 		menu addLine.
@@ -337,27 +327,32 @@ LambdaBlockMorph >> rightButtonMenu [
 		
 		menu addIcon: (self newSetVarBlock: vn) imageForm toolTip: nil action: #setVar.
 		menu addIcon: (self newChangeVarBlock: vn) imageForm toolTip: nil action: #changeVar ]."
-initialFrame varNamesMenu size = 0 ifFalse: [
-vn := initialFrame varNamesMenu first.
-	(choice := menu localize; popUpInWorld;
-		yourself) selectedValue ifNil: [^ self].
-	(choice isKindOf: Array) ifTrue: [
-		block := self newVarBlock: choice first.
-		World activeHand attachMorph: block.
-		block center: World activeHand position.
-		^ self ].
-	#setVar = choice ifTrue: [
-		block := self newSetVarBlock: vn.
-		World activeHand attachMorph: block.
-		block center: World activeHand position.
-		^ self ].
-	#changeVar = choice ifTrue: [
-		block := self newChangeVarBlock: vn.
-		World activeHand attachMorph: block.
-		block center: World activeHand position.
-		^ self ].
-	self perform: choice.
-]
+	initialFrame varNamesMenu size = 0
+		ifTrue: [ ^ self ].
+	vn := initialFrame varNamesMenu first.
+	(choice := menu
+		localize;
+		popUpInWorld;
+		yourself) selectedValue ifNil: [ ^ self ].
+	(choice isKindOf: Array)
+		ifTrue: [ 
+			block := self newVarBlock: choice first.
+			World activeHand attachMorph: block.
+			block center: World activeHand position.
+			^ self ].
+	#setVar = choice
+		ifTrue: [ 
+			block := self newSetVarBlock: vn.
+			World activeHand attachMorph: block.
+			block center: World activeHand position.
+			^ self ].
+	#changeVar = choice
+		ifTrue: [ 
+			block := self newChangeVarBlock: vn.
+			World activeHand attachMorph: block.
+			block center: World activeHand position.
+			^ self ].
+	self perform: choice
 ]
 
 { #category : #'dropping/grabbing' }

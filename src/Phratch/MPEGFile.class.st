@@ -73,15 +73,6 @@ MPEGFile >> audioGetSample: aStream [
 ]
 
 { #category : #audio }
-MPEGFile >> audioPlayerForChannel: channelNumber [
-	"Answer a streaming sound for playing the audio channel with the given index."
-	"Note: The MP3 player can not yet isolate a single channel from a multi-channel audio stream."
-
-	^ StreamingMP3Sound new initMPEGFile: self streamIndex: 0
-
-]
-
-{ #category : #audio }
 MPEGFile >> audioReReadBuffer: aBuffer stream: aStreamNumber channel: aChannelNumber [
 	"Used to read other channels after first ReadBuffer 
 	Returns -1 if error, otherwise 0"
@@ -146,16 +137,6 @@ MPEGFile >> closeFile [
 	self fileHandle = fileBits ifTrue: [Smalltalk unregisterExternalObject: fileIndex].
 	fileBits := nil.	
 	fileIndex := 0.
-
-]
-
-{ #category : #access }
-MPEGFile >> currentSeconds: streamIndex [
-	"Answer the position of the stream with the given index in seconds."
-
-	self hasAudio
-		ifTrue: [^ (self audioGetSample: streamIndex) asFloat / (self audioSampleRate: streamIndex)]
-		ifFalse: [^ (self videoGetFrame: streamIndex) asFloat / (self videoFrameRate: streamIndex)].
 
 ]
 
@@ -423,14 +404,6 @@ MPEGFile >> primVideoWidth: aFileHandle  stream: aStream [
 ]
 
 { #category : #video }
-MPEGFile >> videoFrameHeight: aStream [
-	"Returns video frame height, -1 if error "
-	self hasVideo ifFalse: [^-1].
-	^[self primVideoHeight: self fileHandle stream: aStream] ifError: [-1]
-
-]
-
-{ #category : #video }
 MPEGFile >> videoFrameRate: aStream [
 	"Returns video frame rate (float), -1 if error"
 	self hasVideo ifFalse: [^-1].
@@ -439,84 +412,10 @@ MPEGFile >> videoFrameRate: aStream [
 ]
 
 { #category : #video }
-MPEGFile >> videoFrameWidth: aStream [
-	"Returns video frame width, -1 if error"
-	self hasVideo ifFalse: [^-1].
-	^[self primVideoWidth: self fileHandle stream: aStream] ifError: [-1]
-
-]
-
-{ #category : #video }
 MPEGFile >> videoFrames: aStream [
 	"Total number of frames" 
 	^(self primVideoFrames: self fileHandle stream: aStream) asInteger
 
-]
-
-{ #category : #video }
-MPEGFile >> videoGetFrame: aStream [
-	"Returns frame number, or -1 if error"
-	self hasVideo ifFalse: [^-1].
-	^[(self primGetFrame: self fileHandle stream: aStream) asInteger] ifError: [-1]
-
-]
-
-{ #category : #video }
-MPEGFile >> videoReadFrameInto: aForm stream: aStream [
-	"Read the next video frame from the given stream into the given 16- or 32-bit Form. The movie frame will be scaled to fit the Form if necessary."
-
-	| colorModel bytesPerRow |
-	({16 . 32} includes: aForm depth) ifFalse: [self error: 'must use 16- or 32-bit Form'].
-	isBigEndian ifNil: [isBigEndian := Smalltalk isBigEndian].  "cache for speed"
-	aForm depth = 16
-		ifTrue: [
-			colorModel := isBigEndian ifTrue: [14] ifFalse: [16].
-			bytesPerRow := 2 * (aForm width roundUpTo: 2)]
-		ifFalse: [
-			colorModel := isBigEndian ifTrue: [13] ifFalse: [1].
-			bytesPerRow := 4 * aForm width].
- 	^ self
-		videoReadNextFrameInto: aForm bits
-		x: 0 y: 0
-		width: (self videoFrameWidth: aStream)
-		height: (self videoFrameHeight: aStream)
-		outWidth: aForm width
-		outHeight: aForm height
-		colorModel: colorModel
-		stream: aStream
-		bytesPerRow: bytesPerRow
-
-]
-
-{ #category : #video }
-MPEGFile >> videoReadNextFrameInto: aFormBuffer x: x y: y width: width height: height outWidth: aTargetWidth outHeight: aTargetHeight colorModel: colorModel stream: aStream bytesPerRow: aByteCount [
-	"return nonZero if failure "
-
-	self hasVideo ifFalse: [^-1].
-	^[self primVideoReadNextFrameFor: self fileHandle into: aFormBuffer x: x y: y width: width height: height outWidth: aTargetWidth outHeight: aTargetHeight colorModel: colorModel stream: aStream bytesPerRow: aByteCount] ifError: [-1]
-
-"/* Supported color models for mpeg3:=read:=frame */
-#define MPEG3:=RGB565 2
-#define MPEG3:=RGB555 14  //JMM for mac
-#define MPEG3:=RGBI555 16  //SVP for intel
-#define MPEG3:=BGR888 0
-#define MPEG3:=BGRA8888 1
-#define MPEG3:=RGB888 3
-#define MPEG3:=RGBA8888 4  
-#define MPEG3:=ARGB8888 13  //JMM for mac
-#define MPEG3:=RGBA16161616 5
-
-/* Color models for the 601 to RGB conversion */
-/* 601 not implemented for scalar code */
-#define MPEG3:=601:=RGB565 11
-#define MPEG3:=601:=RGB555 15 //JMM for Squeak
-#define MPEG3:=601:=RGBI555 17 //SVP for intel
-#define MPEG3:=601:=BGR888 7
-#define MPEG3:=601:=BGRA8888 8
-#define MPEG3:=601:=RGB888 9
-#define MPEG3:=601:=RGBA8888 10
-#define MPEG3:=601:=ARGB8888 12 //JMM for Squeak
-"
 ]
 
 { #category : #video }
