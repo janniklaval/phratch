@@ -5,17 +5,16 @@ Class {
 	#name : #MultiDisplayScanner,
 	#superclass : #MultiCharacterScanner,
 	#instVars : [
-		'bitBlt',
 		'lineY',
 		'runX',
 		'foregroundColor',
 		'backgroundColor',
 		'fillBlt',
 		'lineHeight',
-		'paragraph',
 		'paragraphColor',
 		'morphicOffset',
-		'ignoreColorChanges'
+		'ignoreColorChanges',
+		'bitBlt'
 	],
 	#pools : [
 		'TextConstants'
@@ -34,10 +33,10 @@ MultiDisplayScanner >> cr [
 	into the paragraph."
 
 	pendingKernX := 0.
-	(lastIndex < text size and: [(text at: lastIndex) = CR and: [(text at: lastIndex+1) = Character lf]])
-		ifTrue: [lastIndex := lastIndex + 2]
-		ifFalse: [lastIndex := lastIndex + 1].
-	^false
+	lastIndex := (lastIndex < text size and: [ (text at: lastIndex) = CR and: [ (text at: lastIndex + 1) = Character lf ] ])
+		ifTrue: [ lastIndex + 2 ]
+		ifFalse: [ lastIndex + 1 ].
+	^ false
 ]
 
 { #category : #'stop conditions' }
@@ -55,6 +54,7 @@ MultiDisplayScanner >> crossedX [
 { #category : #scanning }
 MultiDisplayScanner >> displayLine: textLine offset: offset leftInRun: leftInRun [
 	"The call on the primitive (scanCharactersFrom:to:in:rightX:) will be interrupted according to an array of stop conditions passed to the scanner at which time the code to handle the stop condition is run and the call on the primitive continued until a stop condition returns true (which means the line has terminated).  leftInRun is the # of characters left to scan in the current run; when 0, it is time to call setStopConditions."
+
 	| stopCondition nowLeftInRun startIndex string lastPos |
 	line := textLine.
 	morphicOffset := offset.
@@ -62,50 +62,62 @@ MultiDisplayScanner >> displayLine: textLine offset: offset leftInRun: leftInRun
 	lineHeight := line lineHeight.
 	rightMargin := line rightMargin + offset x.
 	lastIndex := line first.
-	leftInRun <= 0 ifTrue: [self setStopConditions].
+	leftInRun <= 0
+		ifTrue: [ self setStopConditions ].
 	leftMargin := (line leftMarginForAlignment: alignment) + offset x.
 	destX := runX := leftMargin.
-	fillBlt == nil ifFalse:
-		["Not right"
-		fillBlt destX: line left destY: lineY
-			width: line width left height: lineHeight; copyBits].
+	fillBlt == nil
+		ifFalse: [ 
+			"Not right"
+			fillBlt
+				destX: line left
+					destY: lineY
+					width: line width left
+					height: lineHeight;
+				copyBits ].
 	lastIndex := line first.
-	leftInRun <= 0
-		ifTrue: [nowLeftInRun := text runLengthFor: lastIndex]
-		ifFalse: [nowLeftInRun := leftInRun].
+	nowLeftInRun := leftInRun <= 0
+		ifTrue: [ text runLengthFor: lastIndex ]
+		ifFalse: [ leftInRun ].
 	baselineY := lineY + line baseline.
 	destY := baselineY - font ascent.
 	runStopIndex := lastIndex + (nowLeftInRun - 1) min: line last.
 	spaceCount := 0.
 	string := text string.
-	[
-		startIndex := lastIndex.
-		lastPos := destX@destY.
-		stopCondition := self scanCharactersFrom: lastIndex to: runStopIndex
-						in: string rightX: rightMargin stopConditions: stopConditions
-						kern: kern.
-		lastIndex >= startIndex ifTrue:[
-			bitBlt displayString: string 
-				from: startIndex 
-	"XXXX: The following is an interesting bug. All stopConditions exept #endOfRun
+	[ 
+	startIndex := lastIndex.
+	lastPos := destX @ destY.
+	stopCondition := self
+		scanCharactersFrom: lastIndex
+		to: runStopIndex
+		in: string
+		rightX: rightMargin
+		stopConditions: stopConditions
+		kern: kern.
+	lastIndex >= startIndex
+		ifTrue: [  
+			bitBlt
+				displayString: string
+				from: startIndex
+				to:
+					(stopCondition == #endOfRun
+						ifTrue: [ lastIndex ]
+						ifFalse: [ lastIndex - 1 ])
+				at: lastPos
+				kern: kern
+				baselineY: baselineY
+				font: font	"XXXX: The following is an interesting bug. All stopConditions exept #endOfRun
 		have lastIndex past the last character displayed. #endOfRun sets it *on* the character.
 		If we display up until lastIndex then we will also display invisible characters like
 		CR and tab. This problem should be fixed in the scanner (i.e., position lastIndex
 		consistently) but I don't want to deal with the fallout right now so we keep the
-		fix minimally invasive."
-				to: (stopCondition == #endOfRun ifTrue:[lastIndex] ifFalse:[lastIndex-1])
-				at: lastPos kern: kern baselineY: baselineY font: font].
-		(emphasisCode allMask: 4) ifTrue:[
-			font displayUnderlineOn: bitBlt from: lastPos x@baselineY to: destX@baselineY.
-		].
-		(emphasisCode allMask: 16) ifTrue:[
-			font displayStrikeoutOn: bitBlt from: lastPos x@baselineY to: destX@baselineY.
-		].
-		"see setStopConditions for stopping conditions for displaying."
-		self perform: stopCondition.
-		"or: [lastIndex > runStopIndex]."
-	] whileFalse.
-	^ runStopIndex - lastIndex   "Number of characters remaining in the current run"
+		fix minimally invasive." ].
+	(emphasisCode allMask: 4)
+		ifTrue: [ font displayUnderlineOn: bitBlt from: lastPos x @ baselineY to: destX @ baselineY ].
+	(emphasisCode allMask: 16)
+		ifTrue: [ font displayStrikeoutOn: bitBlt from: lastPos x @ baselineY to: destX @ baselineY ].	"see setStopConditions for stopping conditions for displaying."
+	self perform: stopCondition	"or: [lastIndex > runStopIndex]." ] whileFalse.
+	^ runStopIndex - lastIndex	"Number of characters remaining in the current run"
 ]
 
 { #category : #'stop conditions' }
@@ -155,11 +167,11 @@ MultiDisplayScanner >> placeEmbeddedObject: anchoredMorph [
 	(super placeEmbeddedObject: anchoredMorph) ifFalse: [^ false].
 	anchoredMorph isMorph ifTrue: [
 		anchoredMorph position: ((destX - anchoredMorph width)@lineY) - morphicOffset
-	] ifFalse: [
+	] ifFalse: [ 
 		destY := lineY.
 		baselineY := lineY + anchoredMorph height..
 		runX := destX.
-		anchoredMorph 
+		anchoredMorph  
 			displayOn: bitBlt destForm 
 			at: destX - anchoredMorph width @ destY
 			clippingBox: bitBlt clipRect
@@ -176,13 +188,6 @@ MultiDisplayScanner >> plainTab [
 	super plainTab.
 	fillBlt == nil ifFalse:
 		[fillBlt destX: oldX destY: destY width: destX - oldX height: font height; copyBits]
-]
-
-{ #category : #private }
-MultiDisplayScanner >> presentationText: t [
-
-	text := t.
-
 ]
 
 { #category : #private }

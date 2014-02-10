@@ -19,14 +19,9 @@ Class {
 		'emphasisCode',
 		'kern',
 		'indentationLevel',
-		'wantsColumnBreaks',
-		'presentation',
-		'presentationLine',
-		'numOfComposition',
 		'baselineY',
 		'firstDestX',
-		'pendingKernX',
-		'lastWidth'
+		'pendingKernX'
 	],
 	#classVars : [
 		'DefaultStopConditions',
@@ -48,8 +43,8 @@ MultiCharacterScanner class >> initialize [
 	| a |
 	a := TextStopConditions new.
 	a at: 1 + 1 put: #embeddedObject.
-	a at: Tab asciiValue + 1 put: #tab.
-	a at: CR asciiValue + 1 put: #cr.
+	a at: Character tab asciiValue + 1 put: #tab.
+	a at: Character cr asciiValue + 1 put: #cr.
 	a at: Character lf asciiValue + 1 put: #cr.
 	
 	NilCondition := a copy.
@@ -60,15 +55,6 @@ MultiCharacterScanner class >> initialize [
 	
 	SpaceCondition := a copy.
 	SpaceCondition at: Space asciiValue + 1 put: #space.
-
-]
-
-{ #category : #'multilingual scanning' }
-MultiCharacterScanner >> addCharToPresentation: char [
-
-	lastWidth := self widthOf: char inFont: font.
-	destX := destX + lastWidth.
-
 
 ]
 
@@ -146,12 +132,6 @@ MultiCharacterScanner >> columnBreak [
 	^true
 ]
 
-{ #category : #'scanner methods' }
-MultiCharacterScanner >> combinableChar: char for: prevEntity [
-
-
-]
-
 { #category : #scanning }
 MultiCharacterScanner >> embeddedObject [
 	| savedIndex |
@@ -190,13 +170,6 @@ MultiCharacterScanner >> initialize [
 	destX := destY := leftMargin := 0.
 ]
 
-{ #category : #initialize }
-MultiCharacterScanner >> initializeStringMeasurer [
-
-	stopConditions := TextStopConditions new
-
-]
-
 { #category : #'scanner methods' }
 MultiCharacterScanner >> isBreakableAt: index in: sourceString in: encodingClass [
 
@@ -210,17 +183,6 @@ MultiCharacterScanner >> leadingTab [
 	line first to: lastIndex do:
 		[:i | (text at: i) == Tab ifFalse: [^ false]].
 	^ true
-]
-
-{ #category : #scanning }
-MultiCharacterScanner >> measureString: aString inFont: aFont from: startIndex to: stopIndex [
-	"WARNING: In order to use this method the receiver has to be set up using #initializeStringMeasurer"
-	destX := destY := lastIndex := 0.
-	baselineY := aFont ascent.
-	font := aFont.  " added Dec 03, 2004 "
-"	map := aFont characterToGlyphMap."
-	self scanCharactersFrom: startIndex to: stopIndex in: aString rightX: 999999 stopConditions: stopConditions kern: 0.
-	^destX
 ]
 
 { #category : #scanning }
@@ -247,11 +209,6 @@ MultiCharacterScanner >> registerBreakableIndex [
 
 	^ false.
 
-]
-
-{ #category : #'multilingual scanning' }
-MultiCharacterScanner >> removeLastCharFromPresentation [
-	destX := destX - lastWidth.
 ]
 
 { #category : #scanning }
@@ -293,94 +250,105 @@ MultiCharacterScanner >> scanCharactersFrom: startIndex to: stopIndex in: source
 
 { #category : #'scanner methods' }
 MultiCharacterScanner >> scanJapaneseCharactersFrom: startIndex to: stopIndex in: sourceString rightX: rightX stopConditions: stops kern: kernDelta [
-
 	| ascii encoding f nextDestX maxAscii startEncoding |
 	lastIndex := startIndex.
-	lastIndex > stopIndex ifTrue: [lastIndex := stopIndex. ^ stops endOfRun].
+	lastIndex > stopIndex
+		ifTrue: [ 
+			lastIndex := stopIndex.
+			^ stops endOfRun ].
 	startEncoding := (sourceString at: startIndex) leadingChar.
-	font ifNil: [font := (TextSharedInformation at: #DefaultMultiStyle) fontArray at: 1].
-	font isFontSet ifTrue: [
-		f := [font fontArray at: startEncoding + 1]
-			on: Exception do: [:ex | nil].
-		f ifNil: [ f := font fontArray at: 1].
-		maxAscii := f maxAscii.
-		"xTable := f xTable.
+	font ifNil: [ font := (TextSharedInformation at: #DefaultMultiStyle) fontArray at: 1 ].
+	font isFontSet
+		ifTrue: [ 
+			f := [ font fontArray at: startEncoding + 1 ]
+				on: Exception
+				do: [ :ex | nil ].
+			f ifNil: [ f := font fontArray at: 1 ].
+			maxAscii := f maxAscii.	"xTable := f xTable.
 		maxAscii := xTable size - 2."
-		spaceWidth := f widthOf: Space.
-	] ifFalse: [
-		maxAscii := font maxAscii.
-	].
-	[lastIndex <= stopIndex] whileTrue: [
-		"self halt."
-		encoding := (sourceString at: lastIndex) leadingChar.
-		encoding ~= startEncoding ifTrue: [lastIndex := lastIndex - 1. ^ stops endOfRun].
-		ascii := (sourceString at: lastIndex) charCode.
-		ascii > maxAscii ifTrue: [ascii := maxAscii].
-		(encoding = 0 and: [ascii < stops size and: [(stops at: ascii + 1) ~~ nil]]) ifTrue: [^ stops at: ascii + 1].
-		(self isBreakableAt: lastIndex in: sourceString in: (EncodedCharSet charsetAt: encoding)) ifTrue: [
-			self registerBreakableIndex.
-		].
-		nextDestX := destX + (font widthOf: (sourceString at: lastIndex)).
-		nextDestX > rightX ifTrue: [firstDestX ~= destX ifTrue: [^ stops crossedX]].
-		destX := nextDestX + kernDelta.
-		lastIndex := lastIndex + 1.
-	].
+			spaceWidth := f widthOf: Space ]
+		ifFalse: [ maxAscii := font maxAscii ].
+	[ lastIndex <= stopIndex ]
+		whileTrue: [ 
+			"self halt."
+			encoding := (sourceString at: lastIndex) leadingChar.
+			encoding ~= startEncoding
+				ifTrue: [ 
+					lastIndex := lastIndex - 1.
+					^ stops endOfRun ].
+			ascii := (sourceString at: lastIndex) charCode.
+			ascii := ascii min: maxAscii.
+			(encoding = 0 and: [ ascii < stops size and: [ (stops at: ascii + 1) ~~ nil ] ])
+				ifTrue: [ ^ stops at: ascii + 1 ].
+			(self isBreakableAt: lastIndex in: sourceString in: (EncodedCharSet charsetAt: encoding))
+				ifTrue: [ self registerBreakableIndex ].
+			nextDestX := destX + (font widthOf: (sourceString at: lastIndex)).
+			nextDestX > rightX
+				ifTrue: [ 
+					firstDestX ~= destX
+						ifTrue: [ ^ stops crossedX ] ].
+			destX := nextDestX + kernDelta.
+			lastIndex := lastIndex + 1 ].
 	lastIndex := stopIndex.
 	^ stops endOfRun
 ]
 
 { #category : #scanning }
 MultiCharacterScanner >> scanMultiCharactersFrom: startIndex to: stopIndex in: sourceString rightX: rightX stopConditions: stops kern: kernDelta [
-
 	| ascii encoding f nextDestX maxAscii startEncoding floatDestX widthAndKernedWidth nextChar atEndOfRun |
 	lastIndex := startIndex.
-	lastIndex > stopIndex ifTrue: [lastIndex := stopIndex. ^ stops endOfRun].
+	lastIndex > stopIndex
+		ifTrue: [ 
+			lastIndex := stopIndex.
+			^ stops endOfRun ].
 	startEncoding := (sourceString at: startIndex) leadingChar.
-	font ifNil: [font := (TextSharedInformation at: #DefaultMultiStyle) fontArray at: 1].
-	font isFontSet ifTrue: [
-		f := [font fontArray at: startEncoding + 1]
-			on: Exception do: [:ex | nil].
-		f ifNil: [ f := font fontArray at: 1].
-		maxAscii := f maxAscii.
-		spaceWidth := f widthOf: Space.
-	] ifFalse: [
-		maxAscii := font maxAscii.
-	].
+	font ifNil: [ font := (TextSharedInformation at: #DefaultMultiStyle) fontArray at: 1 ].
+	font isFontSet
+		ifTrue: [ 
+			f := [ font fontArray at: startEncoding + 1 ]
+				on: Exception
+				do: [ :ex | nil ].
+			f ifNil: [ f := font fontArray at: 1 ].
+			maxAscii := f maxAscii.
+			spaceWidth := f widthOf: Space ]
+		ifFalse: [ maxAscii := font maxAscii ].
 	floatDestX := destX.
 	widthAndKernedWidth := Array new: 2.
 	atEndOfRun := false.
-	[lastIndex <= stopIndex] whileTrue: [
-		encoding := (sourceString at: lastIndex) leadingChar.
-		encoding ~= startEncoding ifTrue: [lastIndex := lastIndex - 1. ^ stops endOfRun].
-		ascii := (sourceString at: lastIndex) charCode.
-		ascii > maxAscii ifTrue: [ascii := maxAscii].
-		(encoding = 0 and: [ascii < stops size and: [(stops at: ascii + 1) ~~ nil]]) ifTrue: [^ stops at: ascii + 1].
-		(self isBreakableAt: lastIndex in: sourceString in: Latin1Environment) ifTrue: [
-			self registerBreakableIndex.
-		].
-		nextChar := (lastIndex + 1 <= stopIndex) 
-			ifTrue:[sourceString at: lastIndex + 1]
-			ifFalse:[
-				atEndOfRun := true.
-				"if there is a next char in sourceString, then get the kern 
+	[ lastIndex <= stopIndex ]
+		whileTrue: [ 
+			encoding := (sourceString at: lastIndex) leadingChar.
+			encoding ~= startEncoding
+				ifTrue: [ 
+					lastIndex := lastIndex - 1.
+					^ stops endOfRun ].
+			ascii := (sourceString at: lastIndex) charCode.
+			ascii := ascii min: maxAscii.
+			(encoding = 0 and: [ ascii < stops size and: [ (stops at: ascii + 1) notNil ] ])
+				ifTrue: [ ^ stops at: ascii + 1 ].
+			(self isBreakableAt: lastIndex in: sourceString in: Latin1Environment)
+				ifTrue: [ self registerBreakableIndex ].
+			nextChar := lastIndex + 1 <= stopIndex
+				ifTrue: [ sourceString at: lastIndex + 1 ]
+				ifFalse: [ 
+					atEndOfRun := true.	"if there is a next char in sourceString, then get the kern 
 				and store it in pendingKernX"
-				lastIndex + 1 <= sourceString size
-					ifTrue:[sourceString at: lastIndex + 1]
-					ifFalse:[	nil]].
-		font 
-			widthAndKernedWidthOfLeft: (sourceString at: lastIndex) 
-			right: nextChar
-			into: widthAndKernedWidth.
-		nextDestX := floatDestX + (widthAndKernedWidth at: 1).
-		nextDestX > rightX ifTrue: [destX ~= firstDestX ifTrue: [^stops crossedX]].
-		floatDestX := floatDestX + kernDelta + (widthAndKernedWidth at: 2).
-		atEndOfRun 
-			ifTrue:[
-				pendingKernX := (widthAndKernedWidth at: 2) - (widthAndKernedWidth at: 1).
-				floatDestX := floatDestX - pendingKernX].
-		destX := floatDestX .
-		lastIndex := lastIndex + 1.
-	].
+					lastIndex + 1 <= sourceString size
+						ifTrue: [ sourceString at: lastIndex + 1 ]
+						ifFalse: [ nil ] ].
+			font widthAndKernedWidthOfLeft: (sourceString at: lastIndex) right: nextChar into: widthAndKernedWidth.
+			nextDestX := floatDestX + (widthAndKernedWidth at: 1).
+			nextDestX > rightX
+				ifTrue: [ 
+					destX ~= firstDestX
+						ifTrue: [ ^ stops crossedX ] ].
+			floatDestX := floatDestX + kernDelta + (widthAndKernedWidth at: 2).
+			atEndOfRun
+				ifTrue: [ 
+					pendingKernX := (widthAndKernedWidth at: 2) - (widthAndKernedWidth at: 1).
+					floatDestX := floatDestX - pendingKernX ].
+			destX := floatDestX.
+			lastIndex := lastIndex + 1 ].
 	lastIndex := stopIndex.
 	^ stops endOfRun
 ]
@@ -461,23 +429,4 @@ MultiCharacterScanner >> text: t textStyle: ts [
 { #category : #private }
 MultiCharacterScanner >> textColor: ignored [
 	"Overridden in DisplayScanner"
-]
-
-{ #category : #initialize }
-MultiCharacterScanner >> wantsColumnBreaks: aBoolean [
-
-	wantsColumnBreaks := aBoolean
-]
-
-{ #category : #'multilingual scanning' }
-MultiCharacterScanner >> widthOf: char inFont: aFont [
-
-	(char isMemberOf: CombinedChar) ifTrue: [
-		^ aFont widthOf: char base.
-	] ifFalse: [
-		^ aFont widthOf: char.
-	].
-
-
-
 ]

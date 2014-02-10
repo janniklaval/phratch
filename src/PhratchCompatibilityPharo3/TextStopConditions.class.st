@@ -112,11 +112,6 @@ TextStopConditions >> postCopy [
 	stops := stops copy
 ]
 
-{ #category : #'initialize-release' }
-TextStopConditions >> setStops: stopArray [
-	stops := stopArray
-]
-
 { #category : #accessing }
 TextStopConditions >> size [
 	"Return the highest code to which an action can be mapped.
