@@ -1,14 +1,14 @@
-Extension { #name : #MultiDisplayScanner }
+Extension { #name : #BitBltDisplayScanner }
 
 { #category : #'*Phratch-Extensions' }
-MultiDisplayScanner classSide >> quickPrintOn: aForm box: aRectangle font: aStrikeFont [
+BitBltDisplayScanner class >> quickPrintOn: aForm box: aRectangle font: aStrikeFont [
 	"Create an instance to print on the given form in the given rectangle."
 
 	^(self new) quickPrintOn: aForm box: aRectangle font: aStrikeFont color: Color black
 ]
 
 { #category : #'*Phratch-Extensions' }
-MultiDisplayScanner >> quickPrintOn: aForm box: aRectangle font: aStrikeFont color: textColor [
+BitBltDisplayScanner >> quickPrintOn: aForm box: aRectangle font: aStrikeFont color: textColor [
 	"Initialize myself."
 	bitBlt := BitBlt toForm: aForm.
 	backgroundColor := Color transparent.
@@ -26,14 +26,7 @@ MultiDisplayScanner >> quickPrintOn: aForm box: aRectangle font: aStrikeFont col
 ]
 
 { #category : #'*Phratch-Extensions' }
-MultiDisplayScanner classSide >> quickPrintOn: aForm box: aRectangle font: aStrikeFont color: textColor [
-	"Create an instance to print on the given form in the given rectangle."
-
-	^ (self new) quickPrintOn: aForm box: aRectangle font: aStrikeFont color: textColor
-]
-
-{ #category : #'*Phratch-Extensions' }
-MultiDisplayScanner >> stringExtent: aString [
+BitBltDisplayScanner >> stringExtent: aString [
 	"Answer the extent of the given string using my font."
 	"(1 to: 10) collect: [:i |
 		(DisplayScanner quickPrintOn: Display) stringExtent: (String new: i withAll: $A)]"

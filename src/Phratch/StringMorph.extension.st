@@ -48,14 +48,7 @@ StringMorph >> stringExtent: aString [
 	| s scanner |
 	s := aString.
 	font notNil and: [font isOSFont].
-	
-	"self flag:'need to be removed after Pharo2.0 version'.
-	SystemVersion current major >= 3 ifTrue:[
-		scanner := (Smalltalk at: #BitBltDisplayScanner) quickPrintOn: Display box: Display boundingBox font: self font.
-	] ifFalse: [ "
-		scanner := (Smalltalk at: #MultiDisplayScanner) quickPrintOn: Display box: Display boundingBox font: self font.
-	"]."
-	
+	scanner := (Smalltalk at: #BitBltDisplayScanner) quickPrintOn: Display box: Display boundingBox font: self font.
 	
 	^ scanner stringExtent: s
 ]
