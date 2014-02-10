@@ -887,10 +887,12 @@ PhratchProcess >> doUntil: terminatingBoolean [
 PhratchProcess >> doWaitUntil [
 	"Evaluates the the wait condition until it evaluates to true."
 
-	| block args |
+	| block args hasBoolean|
 	block := stackFrame expression.
 	args := stackFrame arguments.
+	hasBoolean := block submorphs second submorphs size > 0.
 
+	hasBoolean ifFalse: [^ self popStackFrame].
 	"evaluate the termination expression if we haven't yet."
 	args size < 1 ifTrue: [^ self evaluateNextArgument].
 
