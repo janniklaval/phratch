@@ -610,6 +610,18 @@ PhratchFrameMorph >> addSpriteMorph [
 
 ]
 
+{ #category : #'menu/button actions' }
+PhratchFrameMorph >> addonMenu: aMenuTitleMorph [
+	| menu |
+	menu := MenuMorph new defaultTarget: self.
+	
+	MetaRepoSearcher listOfProjects do:[:e |
+		menu add: e key target: MetaRepoSearcher selector: #loadProject: argument: e value.
+	].
+	
+	menu popUpAt: aMenuTitleMorph bottomLeft + (0 @ 10) inWorld: World
+]
+
 { #category : #'falta adaptar' }
 PhratchFrameMorph >> allProjectMedia [
 	"Answer a collection of all media items in the current project."
@@ -974,7 +986,7 @@ PhratchFrameMorph >> createMenuPanel [
 		"name			selector"
 		(File			fileMenu:)
 		(Edit			editMenu:)
-		"(Share			shareMenu:)"
+		(AddOns		addonMenu:)
 		(Help			helpMenu:)
 	).
 
@@ -1536,7 +1548,7 @@ PhratchFrameMorph >> fileMenu: aMenuTitleMorph [
 	menu := MenuMorph new defaultTarget: self.
 	menu add: 'New' localized action: #newPhratchProject.
 	menu add: 'Open' localized action: #openPhratchProject.
-	menu add: 'Open Scratch' translated action: #openScratchProject.
+	menu add: 'Open Scratch' localized action: #openScratchProject.
 	menu add: 'Save' localized action: #savePhratchProjectNoDialog.
 	menu add: 'Save As' localized action: #savePhratchProject.
 	menu addLine.
