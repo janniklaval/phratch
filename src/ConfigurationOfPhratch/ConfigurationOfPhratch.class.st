@@ -32,7 +32,7 @@ ConfigurationOfPhratch class >> catalogChangeLog [
 [[[
 	ConfigurationOfPhratch project version: ''1.0'' ) load					
 ]]]
-- 2.0 - 2014 - not yet released but have a lot of new things to create your own addons
+- 2.0 - 2014 - not yet released but have a lot of new things to create your own addons (not available in Pharo2.0).
 [[[
 	ConfigurationOfPhratch project version: ''2.0'' ) load					
 ]]]'
