@@ -1551,6 +1551,7 @@ PhratchFrameMorph >> fileMenu: aMenuTitleMorph [
 	menu add: 'Open Scratch' localized action: #openScratchProject.
 	menu add: 'Save' localized action: #savePhratchProjectNoDialog.
 	menu add: 'Save As' localized action: #savePhratchProject.
+	menu add: 'Save State' localized action: #saveState.
 	menu addLine.
 	menu add: 'Import Project' localized action: #importPhratchProject.
 	menu add: 'Export Sprite' localized action: #exportSprite.
@@ -2952,6 +2953,14 @@ PhratchFrameMorph >> savePhratchProjectNoDialog [
 	self updateLastHistoryEntryIfNeeded.
 	self updateHistoryProjectName: projectName op: 'save'.
 	self writePhratchProject.
+
+]
+
+{ #category : #'menu/button actions' }
+PhratchFrameMorph >> saveState [
+	"Quit from Phratch. Ask the user if they want to save, first."
+
+	Smalltalk snapshot: true andQuit: false.
 
 ]
 
