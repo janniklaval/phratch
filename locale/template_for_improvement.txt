@@ -1,0 +1,416 @@
+msgid "files" 
+msgstr ""
+
+msgid "colors" 
+msgstr ""
+
+msgid "Arrow key move with speed $Number$" 
+msgstr ""
+
+msgid "go in between x: $Number$ y: $Number$ and x: $Number$ y: $Number$" 
+msgstr ""
+
+msgid "go $Number$ of the way to x: $Number$ y: $Number$" 
+msgstr ""
+
+msgid "if $Boolean$ bounce" 
+msgstr ""
+
+msgid "if touching $Sprite$ bounce" 
+msgstr ""
+
+msgid "point at x:$Number$ y:$Number$" 
+msgstr ""
+
+msgid "point at random coordinate" 
+msgstr ""
+
+msgid "rotation style" 
+msgstr ""
+
+msgid "set rotation style to $Rotation$" 
+msgstr ""
+
+msgid "draggable?" 
+msgstr ""
+
+msgid "make undraggable" 
+msgstr ""
+
+msgid "make draggable" 
+msgstr ""
+
+msgid "when $Sprite$ created" 
+msgstr ""
+
+msgid "$Event$ received?" 
+msgstr ""
+
+msgid "if $Boolean$ then $Boolean$ else $Boolean$" 
+msgstr ""
+
+msgid "repeat $Number$ times" 
+msgstr ""
+
+msgid "save project" 
+msgstr ""
+
+msgid "quit Phratch" 
+msgstr ""
+
+msgid "clone me" 
+msgstr ""
+
+msgid "Am I a clone?" 
+msgstr ""
+
+msgid "delete me if I am a clone" 
+msgstr ""
+
+msgid "stop all scripts for $Event$" 
+msgstr ""
+
+msgid "press green flag" 
+msgstr ""
+
+msgid "pause" 
+msgstr ""
+
+msgid "replace costume $Number$ with $NewCostume$" 
+msgstr ""
+
+msgid "add $NewCostume$ to costumes" 
+msgstr ""
+
+msgid "delete costume $Number$" 
+msgstr ""
+
+msgid "$Effects$ effect" 
+msgstr ""
+
+msgid "width" 
+msgstr ""
+
+msgid "perimeter" 
+msgstr ""
+
+msgid "height" 
+msgstr ""
+
+msgid "area" 
+msgstr ""
+
+msgid "set horizontal stretch to $Number$%" 
+msgstr ""
+
+msgid "vertical flip" 
+msgstr ""
+
+msgid "vertical stretch" 
+msgstr ""
+
+msgid "change horizontal stretch by $Number$%" 
+msgstr ""
+
+msgid "horizontal stretch" 
+msgstr ""
+
+msgid "set vertical stretch to $Number$%" 
+msgstr ""
+
+msgid "horizontal flip" 
+msgstr ""
+
+msgid "change vertical stretch by $Number$%" 
+msgstr ""
+
+msgid "camera is open?" 
+msgstr ""
+
+msgid "close camera" 
+msgstr ""
+
+msgid "do with camera open" 
+msgstr ""
+
+msgid "open camera" 
+msgstr ""
+
+msgid "show dialog $String$ with text $String$" 
+msgstr ""
+
+msgid "ask $String$ in dialog" 
+msgstr ""
+
+msgid "set sprite name to $String$" 
+msgstr ""
+
+msgid "warn $String$" 
+msgstr ""
+
+msgid "key pressed" 
+msgstr ""
+
+msgid "get $Attributes$ of $Sprite$" 
+msgstr ""
+
+msgid "attribute $Attributes$" 
+msgstr ""
+
+msgid "date/time: $TimeDates$" 
+msgstr ""
+
+msgid "index of $String$ starting at $Number$ in $String$" 
+msgstr ""
+
+msgid "letters $Number$ - $Number$ of $String$" 
+msgstr ""
+
+msgid "join $String$ and $String$" 
+msgstr ""
+
+msgid "factorial of $Number$" 
+msgstr ""
+
+msgid "$Number$ mod $Number$" 
+msgstr ""
+
+msgid "$Number$ is a Fibonacci number?" 
+msgstr ""
+
+msgid "$Number$ is prime?" 
+msgstr ""
+
+msgid "$Number$ is an integer?" 
+msgstr ""
+
+msgid "is $String$ nil?" 
+msgstr ""
+
+msgid "$String$ as boolean" 
+msgstr ""
+
+msgid "set $Attributes$ to $String$" 
+msgstr ""
+
+msgid "delete $Sprite$" 
+msgstr ""
+
+msgid "clear pen trails" 
+msgstr ""
+
+msgid "pen color" 
+msgstr ""
+
+msgid "pen size" 
+msgstr ""
+
+msgid "pen hue" 
+msgstr ""
+
+msgid "pen shade" 
+msgstr ""
+
+msgid "make $String$" 
+msgstr ""
+
+msgid "delete $OSReporter$" 
+msgstr ""
+
+msgid "variable named $String$" 
+msgstr ""
+
+msgid "move $Variable$ to x: $Number$ y: $Number$" 
+msgstr ""
+
+msgid "set layout of $Variable$ to $LayoutStyles$" 
+msgstr ""
+
+msgid "make list $String$" 
+msgstr ""
+
+msgid "delete list $String$" 
+msgstr ""
+
+msgid "hide list $List$" 
+msgstr ""
+
+msgid "show list $List$" 
+msgstr ""
+
+msgid "first index of $String$ in $List$" 
+msgstr ""
+
+msgid "a List" 
+msgstr ""
+
+msgid "times $String$ appears in $List$" 
+msgstr ""
+
+msgid "sort items of $List$ by numerical value" 
+msgstr ""
+
+msgid "sort items of $List$ by string value" 
+msgstr ""
+
+msgid "contents of file $String$" 
+msgstr ""
+
+msgid "number of lines of file at URL $String$" 
+msgstr ""
+
+msgid "number of lines of file $String$" 
+msgstr ""
+
+msgid "create file $String$" 
+msgstr ""
+
+msgid "line $Number$ of file $String$" 
+msgstr ""
+
+msgid "delete file $String$" 
+msgstr ""
+
+msgid "line $Number$ of file at URL $String$" 
+msgstr ""
+
+msgid "write $String$ to file $String$" 
+msgstr ""
+
+msgid "contents of file at URL $String$" 
+msgstr ""
+
+msgid "clear file $String$" 
+msgstr ""
+
+msgid "make a color" 
+msgstr ""
+
+msgid "set $ColorVar$ to $Color$" 
+msgstr ""
+
+msgid "hide color $ColorVar$" 
+msgstr ""
+
+msgid "show color $ColorVar$" 
+msgstr ""
+
+msgid "delete color $String$" 
+msgstr ""
+
+msgid "make color $String$" 
+msgstr ""
+
+msgid "a color" 
+msgstr ""
+
+msgid "color of pixel x: $Number$ y: $Number$" 
+msgstr ""
+
+msgid "$Color$ blue" 
+msgstr ""
+
+msgid "color r: $Number$ g: $Number$ b: $Number$" 
+msgstr ""
+
+msgid "$Color$ green" 
+msgstr ""
+
+msgid "$Color$ red" 
+msgstr ""
+
+msgid "$Color$ saturation" 
+msgstr ""
+
+msgid "$Color$ brightness" 
+msgstr ""
+
+msgid "$Color$ hue" 
+msgstr ""
+
+msgid "color h: $Number$ s: $Number$ b: $Number$" 
+msgstr ""
+
+msgid "mix $Color$ with $Color$" 
+msgstr ""
+
+msgid "mix $Color$ $Number$ : $Number$ with $Color$" 
+msgstr ""
+
+msgid "color named $NamedColors$" 
+msgstr ""
+
+msgid "$String$ as color" 
+msgstr ""
+
+msgid "$Color$ as string" 
+msgstr ""
+
+msgid "Allow Sprites offstage" 
+msgstr ""
+
+msgid "Thread safe scripts" 
+msgstr ""
+
+msgid "Clear all Variables" 
+msgstr ""
+
+msgid "Settings" 
+msgstr ""
+
+msgid "Phratch Website" 
+msgstr ""
+
+msgid "Scratch Help Page" 
+msgstr ""
+
+msgid "Help Screens" 
+msgstr ""
+
+msgid "BYOB Reference Manual" 
+msgstr ""
+
+msgid "Panther Tutorials" 
+msgstr ""
+
+msgid "About Phratch" 
+msgstr ""
+
+msgid "time" 
+msgstr ""
+
+msgid "hour" 
+msgstr ""
+
+msgid "minute" 
+msgstr ""
+
+msgid "second" 
+msgstr ""
+
+msgid "date" 
+msgstr ""
+
+msgid "day of month" 
+msgstr ""
+
+msgid "day of year" 
+msgstr ""
+
+msgid "weekday-name" 
+msgstr ""
+
+msgid "weekday-#" 
+msgstr ""
+
+msgid "month-name" 
+msgstr ""
+
+msgid "month-#" 
+msgstr ""
+
+msgid "year" 
+msgstr ""
+
+msgid "self" 
+msgstr ""
