@@ -224,7 +224,7 @@ PhratchInstaller class >> phratchSettingsOn: aBuilder [
 				].
 			(aBuilder launcher: #updatePhratchView)
 				target: PhratchFrameMorph "; targetSelector: #closeAndOpen";
-				script: #closeAndOpen;
+				script: #rebuildUI;
 				label: 'Update the view of Phratch' translated.
 		].
 ]

@@ -551,7 +551,7 @@ DialogBoxMorph >> no [
 
 { #category : #accessing }
 DialogBoxMorph >> shortcutButtonLabel: labelString action: actionSelector icon: aSymbol [
-	"Answer a new shortcut button with the given label and selector. A shortcut button has a folder icon on it. The button target will be me and it will use my button forms. Icon can be: #folderIcon, #folderCatIcon, #folderHouseIcon #folderPicIcon, #folderSoundIcon"
+	"Answer a new shortcut button with the given label and selector. A shortcut button has a folder icon on it. The button target will be me and it will use my button forms. Icon can be: #folderIcon, #folderCatIcon, #folderHouseIcon, #folderSoundIcon"
 	"(DialogBoxMorph new shortcutButtonLabel: 'Yes' action: #beep isCat: true) openInWorld"
 
 	| onForm offForm overForm button |

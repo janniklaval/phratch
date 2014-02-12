@@ -310,6 +310,13 @@ PhratchFrameMorph class >> readSkinFrom: aDirectory [
 	^ PhratchSkin
 ]
 
+{ #category : #'initialize-release' }
+PhratchFrameMorph class >> rebuildUI [
+	"Close Phratch window but don't quit Pharo"
+
+	PhratchFrameMorph allInstancesDo: [ :i | i rebuildUIForNewLanguage]
+]
+
 { #category : #utilities }
 PhratchFrameMorph class >> scaledFormForPaintEditor: aForm [
 	"Answer either the given form or a copy of it scaled down to fit into the paint editor."

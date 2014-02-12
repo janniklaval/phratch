@@ -27,5 +27,5 @@ MetaRepoSearcher class >> loadProject: aConfigurationString [
 		load.
 	(Smalltalk at: (aConfigurationString asSymbol)) loadBleedingEdge.
 
-
+	PhratchFrameMorph rebuildUI.
 ]
