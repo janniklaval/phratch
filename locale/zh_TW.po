@@ -2289,3 +2289,42 @@ msgstr "Panther教程"
 
 msgid "About Phratch"
 msgstr "關於Phratch"
+
+msgid "time"
+msgstr "時間"
+
+msgid "hour"
+msgstr "時"
+
+msgid "minute"
+msgstr "分"
+
+msgid "second"
+msgstr "秒"
+
+msgid "date"
+msgstr "日期"
+
+msgid "day of month"
+msgstr "一個月中的一天"
+
+msgid "day of year"
+msgstr "一年中的一天"
+
+msgid "weekday-name"
+msgstr "工作日-名字"
+
+msgid "weekday-#"
+msgstr "工作日-#"
+
+msgid "month-name"
+msgstr "月份-名字"
+
+msgid "month-#"
+msgstr "月份-#"
+
+msgid "year"
+msgstr "年"
+
+msgid "self"
+msgstr "自己
