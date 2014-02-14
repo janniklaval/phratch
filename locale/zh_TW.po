@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Phratch\n"
 "Report-Msgid-Bugs-To: Jannik LAVAL <jannik.laval@gmail.com>\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-01-17 11:27-0400\n"
-"Last-Translator: smith yang <ccg.ysm@gmail.com>\n"
+"PO-Revision-Date: 2014-02-14 11:27-0400\n"
+"Last-Translator: Zhi Yan <yanstek@gmail.com>\n"
 "Language-Team: \n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
@@ -1912,3 +1912,380 @@ msgstr "木魚"
 msgid "Xylophone"
 msgstr "木琴"
 
+msgid "files"
+msgstr "文件"
+
+msgid "colors"
+msgstr "顏色"
+
+msgid "Arrow key move with speed $Number$"
+msgstr "以$Number$級速度移動箭頭鍵"
+
+msgid "go in between x: $Number$ y: $Number$ and x: $Number$ y: $Number$"
+msgstr "進入x: $Number$ y: $Number$ 和x: $Number$ y: $Number$ 之間"
+
+msgid "go $Number$ of the way to x: $Number$ y: $Number$"
+msgstr "通過x: $Number$ y: $Number$ 前往$Number$ "
+
+msgid "if $Boolean$ bounce"
+msgstr "如果值為$Boolean$，跳轉"
+
+msgid "if touching $Sprite$ bounce"
+msgstr "如果觸摸$Sprite$，跳轉"
+
+msgid "point at x:$Number$ y:$Number$"
+msgstr "在坐標x:$Number$ y:$Number$ 上的點"
+
+msgid "point at random coordinate"
+msgstr "隨機坐標點"
+
+msgid "rotation style"
+msgstr "旋轉方式"
+
+msgid "set rotation style to $Rotation$"
+msgstr "設置旋轉方式為$Rotation$"
+
+msgid "draggable?"
+msgstr "可拖動？"
+
+msgid "make undraggable"
+msgstr "設置為不可拖動"
+
+msgid "make draggable"
+msgstr "設置為可拖動"
+
+msgid "when $Sprite$ created"
+msgstr "當$Sprite$被創建"
+
+msgid "$Event$ received?"
+msgstr "收到$Event$了嗎?"
+
+msgid "if $Boolean$ then $Boolean$ else $Boolean$"
+msgstr "如果$Boolean$， 則$Boolean$， 否則$Boolean$"
+
+msgid "repeat $Number$ times"
+msgstr "重複$Number$次"
+
+msgid "save project"
+msgstr "保存項目"
+
+msgid "quit Phratch"
+msgstr "關閉Phatch"
+
+msgid "clone me"
+msgstr "複製我"
+
+msgid "Am I a clone?"
+msgstr "我是一個複製品嗎？"
+
+msgid "delete me if I am a clone"
+msgstr "如果我是一個複製品，請刪除我。"
+
+msgid "stop all scripts for $Event$"
+msgstr "停止所有關於$Event$的腳本"
+
+msgid "press green flag"
+msgstr "請按綠色的旗幟標誌"
+
+msgid "pause"
+msgstr "暫停"
+
+msgid "replace costume $Number$ with $NewCostume$"
+msgstr "用新的衣服$NewCostume$替換$Number$號衣服"
+
+msgid "add $NewCostume$ to costumes"
+msgstr "添加一個新的衣服$NewCostume$"
+
+msgid "delete costume $Number$"
+msgstr "刪除$Number$號衣服"
+
+msgid "$Effects$ effect"
+msgstr "$Effects$效果"
+
+msgid "width"
+msgstr "寬度"
+
+msgid "perimeter"
+msgstr "周長"
+
+msgid "height"
+msgstr "高度"
+
+msgid "area"
+msgstr "面積"
+
+msgid "set horizontal stretch to $Number$%"
+msgstr "設置橫向拉伸為$Number$%"
+
+msgid "vertical flip"
+msgstr "垂直翻轉"
+
+msgid "vertical stretch"
+msgstr "縱向拉伸"
+
+msgid "change horizontal stretch by $Number$%"
+msgstr "修改橫向拉伸為$Number$%"
+
+msgid "horizontal stretch"
+msgstr "橫向拉伸"
+
+msgid "set vertical stretch to $Number$%"
+msgstr "設置縱向拉伸為$Number$%"
+
+msgid "horizontal flip"
+msgstr "水平翻轉"
+
+msgid "change vertical stretch by $Number$%"
+msgstr "修改縱向拉伸為$Number$%"
+
+msgid "camera is open?"
+msgstr "攝像頭打開了嗎？"
+
+msgid "close camera"
+msgstr "關閉攝像頭"
+
+msgid "do with camera open"
+msgstr "保持攝像頭開啟"
+
+msgid "open camera"
+msgstr "打開攝像頭"
+
+msgid "show dialog $String$ with text $String$"
+msgstr "顯示對話框$String$，文本$String$"
+
+msgid "ask $String$ in dialog"
+msgstr "在對話框中詢問$String$"
+
+msgid "set sprite name to $String$"
+msgstr "將人物的名字設置為$String$"
+
+msgid "warn $String$"
+msgstr "警告 $String$"
+
+msgid "key pressed"
+msgstr "鍵被按下"
+
+msgid "get $Attributes$ of $Sprite$"
+msgstr "獲得人物$Sprite$的屬性$Attributes$"
+
+msgid "attribute $Attributes$"
+msgstr "屬性 $Attributes$"
+
+msgid "date/time: $TimeDates$"
+msgstr "日期/時間：$TimeDates$"
+
+msgid "index of $String$ starting at $Number$ in $String$"
+msgstr "在$String$裡，$String$的索引號從$Number$開始"
+
+msgid "letters $Number$ - $Number$ of $String$"
+msgstr "$String$的字母$Number$ - $Number$"
+
+msgid "join $String$ and $String$"
+msgstr "合併$String$和$String$"
+
+msgid "factorial of $Number$"
+msgstr "$Number$的階乘"
+
+msgid "$Number$ mod $Number$"
+msgstr "$Number$除$Number$的模數"
+
+msgid "$Number$ is a Fibonacci number?"
+msgstr "$Number$是一個斐波那契數嗎？"
+
+msgid "$Number$ is prime?"
+msgstr "$Number$是素數嗎？"
+
+msgid "$Number$ is an integer?"
+msgstr "$Number$是整數嗎？"
+
+msgid "is $String$ nil?"
+msgstr "$String$是空值嗎？"
+
+msgid "$String$ as boolean"
+msgstr "$String$為布爾值"
+
+msgid "set $Attributes$ to $String$"
+msgstr "設置屬性$Attributes$為$String$"
+
+msgid "delete $Sprite$"
+msgstr "刪除精靈$Sprite$"
+
+msgid "clear pen trails"
+msgstr "清除筆跡"
+
+msgid "pen color"
+msgstr "筆跡顏色"
+
+msgid "pen size"
+msgstr "筆跡大小"
+
+msgid "pen hue"
+msgstr "筆的色調"
+
+msgid "pen shade"
+msgstr "筆的陰影"
+
+msgid "make $String$"
+msgstr "生成$String$"
+
+msgid "delete $OSReporter$"
+msgstr "刪除$OSReporter$"
+
+msgid "variable named $String$"
+msgstr "變量名稱為$String$"
+
+msgid "move $Variable$ to x: $Number$ y: $Number$"
+msgstr "將變量$Variable$ 移動到x: $Number$ y: $Number$的位置"
+
+msgid "set layout of $Variable$ to $LayoutStyles$"
+msgstr "將變量$Variable$的佈局樣式設置為$LayoutStyles$"
+
+msgid "make list $String$"
+msgstr "生成列表$String$"
+
+msgid "delete list $String$"
+msgstr "刪除列表$String$"
+
+msgid "hide list $List$"
+msgstr "隱藏列表$String$"
+
+msgid "show list $List$"
+msgstr "顯示列表$String$"
+
+msgid "first index of $String$ in $List$"
+msgstr "在列表$List$中$String$的第一個索引號"
+
+msgid "a List"
+msgstr "一個列表"
+
+msgid "times $String$ appears in $List$"
+msgstr "在列表$List$中$String$出現的次數"
+
+msgid "sort items of $List$ by numerical value"
+msgstr "將列表$List$的項目按數值排序"
+
+msgid "sort items of $List$ by string value"
+msgstr "將列表$List$的項目按字符排序"
+
+msgid "contents of file $String$"
+msgstr "文件$String$的內容"
+
+msgid "number of lines of file at URL $String$"
+msgstr "在網址$String$中文件的行數"
+
+msgid "number of lines of file $String$"
+msgstr "文件$String$的行數"
+
+msgid "create file $String$"
+msgstr "創建文件$String$"
+
+msgid "line $Number$ of file $String$"
+msgstr "文件$String$，行$Number$"
+
+msgid "delete file $String$"
+msgstr "刪除文件$String$"
+
+msgid "line $Number$ of file at URL $String$"
+msgstr "網址$String$中的文件，行$Number$"
+
+msgid "write $String$ to file $String$"
+msgstr "將$String$寫入文件$String$"
+
+msgid "contents of file at URL $String$"
+msgstr "網址$String$中文件的內容"
+
+msgid "clear file $String$"
+msgstr "清除文件$String$"
+
+msgid "make a color"
+msgstr "生成一個顏色"
+
+msgid "set $ColorVar$ to $Color$"
+msgstr "將$ColorVar$設置為$Color$"
+
+msgid "hide color $ColorVar$"
+msgstr "隱藏顏色$ColorVar$"
+
+msgid "show color $ColorVar$"
+msgstr "顯示顏色$ColorVar$"
+
+msgid "delete color $String$"
+msgstr "刪除顏色$String$"
+
+msgid "make color $String$"
+msgstr "生成顏色$String$"
+
+msgid "a color"
+msgstr "一個顏色"
+
+msgid "color of pixel x: $Number$ y: $Number$"
+msgstr "像素x: $Number$ y: $Number$的顏色"
+
+msgid "$Color$ blue"
+msgstr "$Color$藍色"
+
+msgid "color r: $Number$ g: $Number$ b: $Number$"
+msgstr "顏色r: $Number$ g: $Number$ b: $Number$"
+
+msgid "$Color$ green"
+msgstr "$Color$綠色"
+
+msgid "$Color$ red"
+msgstr "$Color$紅色"
+
+msgid "$Color$ saturation"
+msgstr "$Color$飽和度"
+
+msgid "$Color$ brightness"
+msgstr "$Color$亮度"
+
+msgid "$Color$ hue"
+msgstr "$Color$色調"
+
+msgid "color h: $Number$ s: $Number$ b: $Number$"
+msgstr "顏色h: $Number$ s: $Number$ b: $Number$"
+
+msgid "mix $Color$ with $Color$"
+msgstr "將$Color$和$Color$混合"
+
+msgid "mix $Color$ $Number$ : $Number$ with $Color$"
+msgstr "將$Color$ $Number$ : $Number$和$Color$混合"
+
+msgid "color named $NamedColors$"
+msgstr "顏色名為$NamedColors$"
+
+msgid "$String$ as color"
+msgstr "$String$為顏色"
+
+msgid "$Color$ as string"
+msgstr "$Color$為字符串"
+
+msgid "Allow Sprites offstage"
+msgstr "允許精靈離開前台"
+
+msgid "Thread safe scripts"
+msgstr "線程安全腳本"
+
+msgid "Clear all Variables"
+msgstr "清除所有變量"
+
+msgid "Settings"
+msgstr "設置"
+
+msgid "Phratch Website"
+msgstr "Phratch官方網站"
+
+msgid "Scratch Help Page"
+msgstr "Scratch幫助"
+
+msgid "Help Screens"
+msgstr "幫助屏幕"
+
+msgid "BYOB Reference Manual"
+msgstr "BYOB參考手冊"
+
+msgid "Panther Tutorials"
+msgstr "Panther教程"
+
+msgid "About Phratch"
+msgstr "關於Phratch"
