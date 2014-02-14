@@ -49,7 +49,7 @@ StringMorph >> stringExtent: aString [
 	s := aString.
 	font notNil and: [font isOSFont].
 	scanner := (Smalltalk at: #BitBltDisplayScanner) quickPrintOn: Display box: Display boundingBox font: self font.
-	
+	scanner setStopConditions.
 	^ scanner stringExtent: s
 ]
 
