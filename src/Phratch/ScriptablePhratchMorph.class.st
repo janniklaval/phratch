@@ -152,12 +152,17 @@ ScriptablePhratchMorph class >> closeCamera [
 
 { #category : #'byob legacy support' }
 ScriptablePhratchMorph class >> currentEncoding [
-		^ObjEncoding ifNil: [^#byob ]
+		^ObjEncoding ifNil: [^#phratch ]
 ]
 
 { #category : #'byob legacy support' }
 ScriptablePhratchMorph class >> decodeAsByob [
 		ObjEncoding := #byob 
+]
+
+{ #category : #'byob legacy support' }
+ScriptablePhratchMorph class >> decodeAsPhratch [
+		ObjEncoding := #phratch 
 ]
 
 { #category : #'byob legacy support' }
@@ -1398,7 +1403,7 @@ ScriptablePhratchMorph >> blockFromTuple: tuple receiver: scriptOwner [
 	"Answer a new block for the given tuple."
 
 	| k rcvr spec blockColor block argCount arg argBlock userSpec csp def |
-	#byob = tuple first
+	(#byob = tuple first or:[#phratch = tuple first]) 
 		ifFalse: [ ^ self blockFromOldFormTuple: tuple receiver: scriptOwner ].
 	'Stage' = tuple second
 		ifTrue: [ rcvr := self ownerOrYourselfThatIsA: PhratchStageMorph ]
@@ -1793,7 +1798,7 @@ ScriptablePhratchMorph >> blockVariableBlockFromTuple: tuple receiver: scriptOwn
 	"Answer a new block for the given variable reference tuple."
 
 	| varName rcvr selector block arg argBlock |
-	#byob = tuple first
+	(#byob = tuple first or:[#phratch = tuple first])
 		ifFalse: [ ^ self blockVariableBlockFromTupleOldForm: tuple receiver: scriptOwner ].
 	varName := tuple at: 4.
 	rcvr := scriptOwner.
@@ -4275,7 +4280,7 @@ ScriptablePhratchMorph >> hatBlockFromTuple: tuple receiver: scriptOwner [
 
 	| blockClass block eventName |
 
-	#byob = tuple first ifFalse: [
+	(#byob = tuple first or:[#phratch = tuple first]) ifFalse: [
 		^self hatBlockFromTupleOldForm: tuple receiver: scriptOwner ].
 
 	blockClass := Smalltalk at: tuple third.
@@ -6761,7 +6766,7 @@ ScriptablePhratchMorph >> setVar: varName to: newValue [
 	<phratchItem: 'set $Variable$ to $String$' kind: #- category: 'variables' defaultValues: #('' '0') subCategory: #a4 special: #()>
 	| vName stage sf w |
 
-	"BYOB OOP interface:"
+	"OOP interface:"
 	(varName isKindOf: CommandScriptBlockMorph) ifTrue: [
 		^ self set: varName to: newValue].
 
@@ -7572,7 +7577,7 @@ ScriptablePhratchMorph >> variableBlockFromTuple: tuple receiver: scriptOwner [
 
 	| varName rcvr bg selector block arg argBlock |
 
-	#byob = tuple first ifFalse: [
+	(#byob = tuple first or:[#phratch = tuple first]) ifFalse: [
 		^self variableBlockFromTupleOldForm: tuple receiver: scriptOwner ].
 
 	varName := tuple at: 4.

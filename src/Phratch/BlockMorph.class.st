@@ -1223,7 +1223,7 @@ BlockMorph >> justDroppedInto: newOwner event: evt [
 	targetP := targetAssoc key.
 	targetBlock := targetAssoc value.
 
-	self allMorphsDo: [:m | m == targetBlock ifTrue: [^self ]].	"avoid infinite recursion, kludge for BYOB"
+	self allMorphsDo: [:m | m == targetBlock ifTrue: [^self ]].	"avoid infinite recursion, kludge"
 
 	targetP y = targetBlock top
 		ifTrue: [

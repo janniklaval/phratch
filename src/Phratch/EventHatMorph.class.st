@@ -39,7 +39,7 @@ EventHatMorph class >> threadSafeMode: bool [
 EventHatMorph >> asBlockTuple [
 	"Answer a tuple (Array) describing this block and its event name."
 
-	^ Array with: #byob with: '' with: self class name with: self eventName
+	^ Array with: #phratch with: '' with: self class name with: self eventName
 
 ]
 

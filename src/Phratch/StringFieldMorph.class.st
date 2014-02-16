@@ -554,7 +554,7 @@ StringFieldMorph >> keyboardFocusChange: amGettingFocus [
 
 	(isKeyboardFocus and: [amGettingFocus not]) ifTrue: [
 		lastContents := nil.
-		isNumeric ifTrue: [ | str |			"suppress auto-filling with zero for BYOB (jens)"
+		isNumeric ifTrue: [ | str |			"suppress auto-filling with zero (jens)"
 			str := stringMorph contents.
 			str isEmpty | (str = ' ')
 				ifTrue: [self contents: ' ']

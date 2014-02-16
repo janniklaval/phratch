@@ -121,7 +121,7 @@ SpecialArgMorph >> type [
 { #category : #accessing }
 SpecialArgMorph >> type: aSymbol [
 
-	"currently BYOB supports the following first class types:
+	"currently supports the following first class types:
 
     #none		- a puzzle shaped command block
     #any		- a non-typed round reporter block (can be anything)

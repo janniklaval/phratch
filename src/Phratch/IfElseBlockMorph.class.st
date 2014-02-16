@@ -42,7 +42,7 @@ IfElseBlockMorph >> asBlockTuple [
 	| blockTuple arg argList |
 	blockTuple := Array new: argMorphs size + 5.
 	blockTuple
-		at: 1 put: #byob;
+		at: 1 put: #phratch;
 		at: 2 put: self rcvr;
 		at: 3 put: selector.
 

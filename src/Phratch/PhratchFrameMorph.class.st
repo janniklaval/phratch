@@ -727,7 +727,7 @@ PhratchFrameMorph >> canonicalizeSoundsBits: bitsPerSample saveOriginal: saveFla
 
 { #category : #byob }
 PhratchFrameMorph >> checkBoxLabelled: aString marked: aBool width: anInt [
-	"answer a form consisting of a checkbox and a label - used for the EDIT menu in BYOB"
+	"answer a form consisting of a checkbox and a label - used for the EDIT menu"
 
 	| box label pic line cnts |
 	pic := aBool
@@ -1459,7 +1459,7 @@ PhratchFrameMorph >> extractInfoFrom: aByteArray [
 PhratchFrameMorph >> extractPhratchProjectFrom: aByteArray [
 	"Answer a Phratch project (i.e. a PhratchStageMorph possibly containing sprites) from the given ByteArray. Answer nil if the project cannot be unpacked.
 
-Note: this is a compatibility force method for BYOB - jens"
+Note: this is a compatibility force method"
 
 	| s version proj |
 
@@ -2285,7 +2285,7 @@ PhratchFrameMorph >> newPhratchProject [
 	self installNewProject: newProject.
 	sprite installGlobalBlocks.
 
-	ScriptablePhratchMorph decodeAsByob. 
+	ScriptablePhratchMorph decodeAsPhratch. 
 
 	self initializeWatcherPositions.
 	blockEditors := Set new.
@@ -3187,7 +3187,7 @@ PhratchFrameMorph >> startup [
 	fileName := startupFileNames
 		detect: [:fn |
 			(fn asLowercase endsWith: '.sb') or: [(fn asLowercase endsWith: '.scratch') or: [(fn asLowercase endsWith: '.ypr') or:[fn asLowercase endsWith: '.phr']]]]
-		ifNone: [presentationMode ifTrue: [self randomProjectName]]. "this is BYOB's screensaver feature -jens"
+		ifNone: [presentationMode ifTrue: [self randomProjectName]]. "this is screensaver feature -jens"
 	fileName ifNotNil: [
 		presentationMode ifTrue: [Display fillColor: Color black].
 		self openPhratchProjectNamed: fileName.
@@ -3764,7 +3764,7 @@ PhratchFrameMorph >> writePhratchProject [
 			ifNil: [saveError := 'Folder may be locked or read-only']
 			ifNotNil: [
 				out binary.
-				out nextPutAll: 'PhratchV01' asByteArray. "changed the internal version marker for the byob-prototype -Jens"
+				out nextPutAll: 'PhratchV01' asByteArray. "changed the internal version marker for the prototype -Jens"
 				self storeProjectInfoOn: out.
 				FuelObjStream new storeObj: workPane on: out.
 				out close].
@@ -3786,7 +3786,7 @@ PhratchFrameMorph >> writePhratchProject [
 	scriptsPane tabPane currentTab: oldTab.
 	viewerPane currentCategory: oldViewerCategory.
 	self updatePenPositions.
-	ScriptablePhratchMorph decodeAsByob. "remember that we save this project in BYOB format"
+	ScriptablePhratchMorph decodeAsPhratch.
 
 	saveError
 		ifNil: [

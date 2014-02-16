@@ -51,7 +51,7 @@ LambdaBlockMorph >> body [
 
 { #category : #byob }
 LambdaBlockMorph >> checkBoxLabelled: aString marked: aBool width: anInt [
-	"answer a form consisting of a checkbox and a label - used for the EDIT menu in BYOB"
+	"answer a form consisting of a checkbox and a label - used for the EDIT menu"
 
 	| box label pic line cnts |
 	pic := aBool
@@ -408,7 +408,7 @@ LambdaBlockMorph >> toggleAtomicity [
 
 { #category : #accessing }
 LambdaBlockMorph >> type [
-	"currently BYOB supports the following first class types:
+	"currently supports the following first class types:
 
     #none		- a puzzle shaped command block
     #any		- a non-typed round reporter block (can be anything)
@@ -427,7 +427,7 @@ LambdaBlockMorph >> type [
 { #category : #accessing }
 LambdaBlockMorph >> type: aSymbol [
 
-	"currently BYOB supports the following first class types:
+	"currently supports the following first class types:
 
     #none		- a puzzle shaped command block
     #any		- a non-typed round reporter block (can be anything)

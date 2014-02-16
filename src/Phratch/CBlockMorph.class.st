@@ -44,7 +44,7 @@ CBlockMorph >> asBlockTuple [
 	| blockTuple arg argList val eval |
 	blockTuple := Array new: argMorphs size + 4.
 	blockTuple
-		at: 1 put: #byob;
+		at: 1 put: #phratch;
 		at: 2 put: self rcvr;
 		at: 3 put: selector.
 	argList := argMorphs.

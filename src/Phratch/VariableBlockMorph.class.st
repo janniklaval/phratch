@@ -68,7 +68,7 @@ VariableBlockMorph >> alias: aString [
 VariableBlockMorph >> asBlockTuple [
 	"Answer a tuple (Array) describing this block and its arguments.
 
-	variable accessor blocks in BYOB come in two flavors: Those onces statically accessing sprite or stage variables, and those ones dynamically bound to other environments. The latter ones are marked as special forms.  To stay compatible with Scratch (which doesn't have temporaries or block vars) the isSpecialForm flag is not put into the file format, instead the distinction is made via an explanatory symbol:
+	variable accessor blocks come in two flavors: Those onces statically accessing sprite or stage variables, and those ones dynamically bound to other environments. The latter ones are marked as special forms.  To stay compatible with Scratch (which doesn't have temporaries or block vars) the isSpecialForm flag is not put into the file format, instead the distinction is made via an explanatory symbol:
 
 	isSpecialForm 	 	=	#readBlockVariable
 	isSpecialForm not	=	#readVariable
@@ -83,7 +83,7 @@ VariableBlockMorph >> asBlockTuple [
 				ifFalse: [ receiver ifNotNil: [rcvr := receiver userSpec ]].
 			blockTuple := Array new: 5.
 			blockTuple
-				at: 1 put: #byob;
+				at: 1 put: #phratch;
 				at: 2 put: self rcvr;			"not really needed for this block. JM"
 				at: 3 put: #readBlockVariable;
 				at: 4 put: commandSpec;
@@ -94,7 +94,7 @@ VariableBlockMorph >> asBlockTuple [
 
 			blockTuple := Array new: 4.
 			blockTuple
-				at: 1 put: #byob;
+				at: 1 put: #phratch;
 				at: 2 put: self rcvr;			"not really needed for this block. JM"
 				at: 3 put: #readVariable;
 				at: 4 put: commandSpec ].
@@ -191,7 +191,7 @@ VariableBlockMorph >> editName [
 VariableBlockMorph >> evaluateWithArgs: args [
 	"Overridden to read my variable value."
 
-	alias ifNotNil: [ ^ receiver getVar: alias]. "special case for externalized local variables in BYOB"
+	alias ifNotNil: [ ^ receiver getVar: alias]. "special case for externalized local variables"
 	receiver ifNotNil: [ ^ receiver getVar: commandSpec block: self ].
 	^ 0
 

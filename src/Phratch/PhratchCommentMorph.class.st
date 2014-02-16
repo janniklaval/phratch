@@ -518,7 +518,7 @@ PhratchCommentMorph >> tupleSequence [
 		ifTrue: [
 			^ Array with:
 				(Array
-					with: #byob
+					with: #phratch
 					with: ''
 					with: #phratchComment
 					with: commentMorph contents
@@ -527,7 +527,7 @@ PhratchCommentMorph >> tupleSequence [
 		ifFalse: [
 			^ Array with:
 				((Array
-					with: #byob
+					with: #phratch
 					with: ''), 
 					(Array with: #phratchComment
 						with: commentMorph contents

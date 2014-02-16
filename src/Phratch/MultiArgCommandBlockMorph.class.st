@@ -112,7 +112,7 @@ MultiArgCommandBlockMorph >> adjustInternals [
 MultiArgCommandBlockMorph >> argumentAt: index [
 	"Returns the argument morph at the given index."
 
-	^argMorphs at: index.	"BYOB custom blocks don't need argPermutations"
+	^argMorphs at: index.	"custom blocks don't need argPermutations"
 
 
 ]
@@ -124,7 +124,7 @@ MultiArgCommandBlockMorph >> asBlockTuple [
 	| blockTuple arg val eval |
 	blockTuple := Array new: argMorphs size + 3.
 	blockTuple
-		at: 1 put: #byob;
+		at: 1 put: #phratch;
 		at: 2 put: self rcvr;
 		at: 3 put: selector.
 	1 to: argMorphs size do: [ :i | 

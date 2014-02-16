@@ -109,7 +109,7 @@ CustomBlockDefinition >> category [
 
 	"categories can be:
 
-		#none	- a gray block in the variables palette (BYOB legacy)
+		#none	- a gray block in the variables palette (legacy)
 		#motion
 		#looks
 		#sound
@@ -128,7 +128,7 @@ CustomBlockDefinition >> category: aSymbol [
 
 	"categories can be:
 
-		#none	- a gray block in the variables palette (BYOB legacy)
+		#none	- a gray block in the variables palette (legacy)
 		#motion
 		#looks
 		#sound
@@ -176,7 +176,7 @@ CustomBlockDefinition >> declarations: aDictionary [
 
 { #category : #private }
 CustomBlockDefinition >> deduceType [
-	"private - set my return type from the BYOB deprecated legacy attributes #isReporter and #isBoolean.
+	"private - set my return type from the deprecated legacy attributes #isReporter and #isBoolean.
 	use this when reading an old block from file"
 
 	self isReporter ifFalse: [ ^ type := #none ].
@@ -255,14 +255,14 @@ CustomBlockDefinition >> isAtomic: aBoolean [
 
 { #category : #deprecated }
 CustomBlockDefinition >> isBoolean [
-	"deprecated, kept for BYOB legacy support (jens)"
+	"deprecated, kept for legacy support (jens)"
 
 	^isBoolean
 ]
 
 { #category : #deprecated }
 CustomBlockDefinition >> isBoolean: aBoolean [
-	"deprecated, kept for BYOB legacy support"
+	"deprecated, kept for legacy support"
 
 	isBoolean := aBoolean
 ]
@@ -279,7 +279,7 @@ CustomBlockDefinition >> isGlobal: bool [
 
 { #category : #deprecated }
 CustomBlockDefinition >> isReporter [
-	"deprecated, kept for BYOB legacy support"
+	"deprecated, kept for legacy support"
 
 	^false
 ]
@@ -414,7 +414,7 @@ CustomBlockDefinition >> toggleAtomicity [
 
 { #category : #accessing }
 CustomBlockDefinition >> type [
-	"currently BYOB supports the following first class types:
+	"currently supports the following first class types:
 
     #none		- a puzzle shaped command block
     #any		- a non-typed round reporter block (can be anything)
@@ -434,7 +434,7 @@ CustomBlockDefinition >> type [
 { #category : #accessing }
 CustomBlockDefinition >> type: aSymbol [
 
-	"currently BYOB supports the following first class types:
+	"currently  supports the following first class types:
 
     #none		- a puzzle shaped command block
     #any		- a non-typed round reporter block (can be anything)

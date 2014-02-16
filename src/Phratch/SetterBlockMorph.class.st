@@ -14,7 +14,7 @@ Class {
 { #category : #private }
 SetterBlockMorph >> asBlockTuple [
 	"Answer a tuple (Array) describing this block and its arguments.
-	variable accessor blocks in BYOB come in two flavors: Those onces statically accessing sprite or stage variables, and those ones dynamically bound to other environments. The latter ones are marked as special forms.  To stay compatible with Scratch (which doesn't have temporaries or block vars) the isSpecialForm flag is not put into the file format, instead the distinction is made via an explanatory symbol:
+	variable accessor blocks come in two flavors: Those onces statically accessing sprite or stage variables, and those ones dynamically bound to other environments. The latter ones are marked as special forms.  To stay compatible with Scratch (which doesn't have temporaries or block vars) the isSpecialForm flag is not put into the file format, instead the distinction is made via an explanatory symbol:
 
 	isSpecialForm 	 	=	#changeBlockVariable
 	isSpecialForm not	=	#changeVariable
@@ -31,7 +31,7 @@ this symbol is *not* the selector!. Instead the selector goes into slot 5. The i
 				ifFalse: [ nil ].
 			blockTuple := Array new: 7.
 			blockTuple
-				at: 1 put: #byob;
+				at: 1 put: #phratch;
 				at: 2 put: self rcvr;
 				at: 3 put: #changeBlockVariable;
 				at: 4 put: self variable;
@@ -61,7 +61,7 @@ this symbol is *not* the selector!. Instead the selector goes into slot 5. The i
 				ifTrue: [ var := var asBlockTuple ].
 			blockTuple := Array new: 6.
 			blockTuple
-				at: 1 put: #byob;
+				at: 1 put: #phratch;
 				at: 2 put: self rcvr;
 				at: 3 put: #changeVariable;
 				at: 4 put: var;

@@ -142,7 +142,7 @@ LabelFragmentBlockMorph >> parseCommandSpecPreservingBlanks: aCommandSpec [
 				j > i ifTrue: [result addLast: (spec copyFrom: i to: j - 1)].
 				j < len
 					ifTrue: [k := j + 1.
-						((spec at: k) isLetter | (spec at: k) isDigit) 	"digits added for BYOB  -Jens"
+						((spec at: k) isLetter | (spec at: k) isDigit) 	"digits added  -Jens"
 							ifTrue: [[(k+1 <= len) and: [(spec at: k+1) ~= $$]] whileTrue:[
 								k := k + 1].
 								(k >= len)

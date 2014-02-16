@@ -979,8 +979,6 @@ PhratchProcess >> errorFlag: aBoolean [
 	stackFrame expression showError.
 	stackFrame expression topBlock showErrorFeedback.
 
-	"BYOB:"
-
 	"find all custom blocks containing this error"
 
 	customBlocks := (stackFrame expression receiver customBlocksContaining: stackFrame expression).
@@ -1286,8 +1284,7 @@ PhratchProcess >> popStackFrame [
 
 	frame expression.
 
-	"this effectively disables Scratch's so called single stepping mechanism
-	for BYOB, a sacrifice that let's us catch up with Scratch speed again,
+	"this effectively disables Scratch's so called single stepping mechanism, a sacrifice that let's us catch up with Scratch speed again,
 	-jens"
 	^self.
 

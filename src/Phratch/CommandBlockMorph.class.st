@@ -130,7 +130,7 @@ CommandBlockMorph class >> parseCommandSpec: aCommandSpec [
 
 { #category : #byob }
 CommandBlockMorph >> addArg: argMorph [
-	"private - only for graphical representation in BYOB"
+	"private"
 
 		argMorphs add: argMorph.
 		self addMorphBack: argMorph.
@@ -281,7 +281,7 @@ CommandBlockMorph >> args [
 CommandBlockMorph >> argumentAt: index [
 	"Returns the argument morph at the given index."
 
-	argPermutation ifNil: [^argMorphs at: index].	"BYOB custom blocks don't need argPermutations"
+	argPermutation ifNil: [^argMorphs at: index].	"custom blocks don't need argPermutations"
 	^ argMorphs at: (argPermutation at: index).
 
 ]
@@ -307,7 +307,7 @@ CommandBlockMorph >> asBlockTuple [
 	| blockTuple argList arg val eval |
 	blockTuple := Array new: argMorphs size + 3.
 	blockTuple
-		at: 1 put: #byob;
+		at: 1 put: #phratch;
 		at: 2 put: self rcvr;
 		at: 3 put: selector.
 	argList := argMorphs.
@@ -1074,7 +1074,7 @@ CommandBlockMorph >> oldUncoloredArgMorphFor: specString [
 
 	$B  = code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #blockId; choice: '';
 		yourself].
-	"special args for BYOB"
+	"special args"
 	$o  = code ifTrue: [ ^ CSlotMorph new "SpecialArgMorph new type: #command"].
 	$E  = code ifTrue: [ ^ CSlotMorph new "SpecialArgMorph new type: #command"].
 	$O  = code ifTrue: [ ^ MultiArgMorph type: #command].

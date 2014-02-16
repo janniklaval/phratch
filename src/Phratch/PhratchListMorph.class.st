@@ -68,9 +68,9 @@ PhratchListMorph class >> deepCopyFrom: anArray from: start to: stop [
 ]
 
 { #category : #'instance creation' }
-PhratchListMorph class >> on: aBYOBList [
+PhratchListMorph class >> on: aList [
 
-	^ self new list: aBYOBList
+	^ self new list: aList
 ]
 
 { #category : #'instance creation' }
@@ -793,9 +793,9 @@ PhratchListMorph >> list [
 ]
 
 { #category : #'dropping/grabbing' }
-PhratchListMorph >> list: aBYOBList [
+PhratchListMorph >> list: aList [
 
-	list := aBYOBList.
+	list := aList.
 	self update
 
 ]

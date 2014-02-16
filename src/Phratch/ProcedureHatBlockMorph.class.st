@@ -40,7 +40,7 @@ ProcedureHatBlockMorph >> asBlockTuple [
 		ifTrue: [argMorph evaluate]
 		ifFalse: [argMorph asBlockTuple].
 
-	^ Array with: #byob with: '' with: self class name with: argTuple
+	^ Array with: #phratch with: '' with: self class name with: argTuple
 
 ]
 
