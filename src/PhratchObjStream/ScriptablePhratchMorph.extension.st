@@ -13,7 +13,7 @@ ScriptablePhratchMorph >> initFieldsFrom: anObjStream version: classVersion [
 		media
 		costume
 	).
-	self class currentEncoding = #byob
+	(self class currentEncoding = #byob or: [self class currentEncoding = #phratch])
 		ifTrue: [
 	fields := #(
 		objName

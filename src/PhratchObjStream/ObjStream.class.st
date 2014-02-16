@@ -120,11 +120,14 @@ ObjStream class >> initialize [
 ObjStream class >> phratchFileVersionFrom: aString [
 	"Answer the Phratch file version number from the given string. If the string is of the form: 'ScratchVxx', were xx is a two-digit integer, answer the value of xx. Otherwise, answer 0."
 
-	"changed for the BYOB-prototype -Jens"
+	"changed for the prototype -Jens"
 
-	((aString beginsWith: 'BloxExpV') | (aString beginsWith: 'PhratchV')) 
+	(aString beginsWith: 'BloxExpV') 
 		ifTrue: [ScriptablePhratchMorph decodeAsByob]
 		ifFalse: [ScriptablePhratchMorph decodeAsScratch].
+		
+	(aString beginsWith: 'PhratchV') 
+		ifTrue: [ScriptablePhratchMorph decodeAsPhratch].
 
 	((aString beginsWith: 'BloxExpV') 
 		or: [(aString beginsWith: 'ScratchV') or: [aString beginsWith: 'PhratchV']]) ifFalse: [^ 0].
