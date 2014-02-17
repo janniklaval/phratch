@@ -19,31 +19,3 @@ Object >> inform: informationString withDetails: detailsString [
 
 	DialogBoxMorph inform: informationString withDetails: detailsString.
 ]
-
-{ #category : #'*Phratch-Extensions' }
-Object >> initFieldsNamed: varList from: anObjStream [
-	"Initialize my instance variables in the given list from the given object stream."
-
-	| allVars |
-	allVars := self class allInstVarNames.
-	varList do: [:varName |
-		(allVars includes: varName) 
-			ifFalse: [self initObsoleteFieldNamed: varName from: anObjStream]
-			ifTrue: [self instVarAt: (allVars indexOf: varName) put: anObjStream nextField]].
-
-]
-
-{ #category : #'*Phratch-Extensions' }
-Object >> storeFieldsNamed: varList on: anObjStream [
-	"Store the instance variables in the given list on the given object stream."
-
-	| allVars |
-	allVars := self class allInstVarNames.
-	varList do: [:varName |
-		
-		(allVars includes: varName) ifFalse: [anObjStream putField: nil]
-			ifTrue: [
-		
-		anObjStream putField: (self instVarAt: (allVars indexOf: varName))]].
-
-]
