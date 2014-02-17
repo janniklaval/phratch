@@ -2555,8 +2555,10 @@ image in end-user (fillScreen) mode?') ifFalse: [^ self].
 	Display newDepth: 32.
 	self fillScreenOn.
 	World doOneCycleNow.
+	self newPhratchProject.
 	ImageCleaner cleanUpForProduction.
 
+	
 ]
 
 { #category : #'falta adaptar' }
