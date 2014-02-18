@@ -221,10 +221,6 @@ ConfigurationOfPhratch >> baseline20: spec [
 				package: 'Phratch' with: [ 
 					spec requires: #('Sound' 'OSProcess')
 			].
-			spec
-				package: 'PhratchObjStream' with: [ 
-					spec requires: #('Phratch')
-			]
 	].
 	spec for: #'pharo3.x' do: [
 			spec repository: 'http://smalltalkhub.com/mc/JLaval/Phratch/main'.
@@ -232,10 +228,6 @@ ConfigurationOfPhratch >> baseline20: spec [
 				package: 'Phratch' with: [ 
 					spec requires: #('Sound' 'OSProcess')
 			].
-			spec
-				package: 'PhratchObjStream' with: [ 
-					spec requires: #('Phratch')
-			]
 	]
 ]
 
@@ -290,8 +282,7 @@ ConfigurationOfPhratch >> version20: spec [
 	spec for: #common do: [
 			spec repository: 'http://smalltalkhub.com/mc/JLaval/Phratch/main'.
 			spec
-				package: 'Phratch';
-				package: 'PhratchObjStream'.
+				package: 'Phratch'.
 			spec
 				project: 'Sound' with: #stable;
 				project: 'OSProcess' with: #stable.
