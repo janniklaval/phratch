@@ -112,6 +112,7 @@ PhratchFrameMorph >> extractScratchProjectFrom: aByteArray [
 PhratchFrameMorph >> openScratchProject [
 	"Allow the user to select a project to open, then open that project."
 
+	<phratchMenu: 'Open Scratch' category: 'file' position: 3 sub:1 shift: false>
 	| response newProj |
 	self closeMediaEditorsAndDialogs
 		ifFalse: [ ^ self ].
