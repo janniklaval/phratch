@@ -751,6 +751,7 @@ PhratchFrameMorph >> checkBoxLabelled: aString marked: aBool width: anInt [
 { #category : #byob }
 PhratchFrameMorph >> clearAllVariables [
 
+	<phratchMenu: 'Clear all Variables' category: 'edit' position: 6 sub:2 shift: false>
 	workPane clearAllVariables
 ]
 
@@ -853,7 +854,7 @@ PhratchFrameMorph >> closeMediaEditorsAndDialogs [
 
 { #category : #'falta adaptar' }
 PhratchFrameMorph >> compressImages [
-
+	<phratchMenu: 'Compress Images' category: 'edit' position: 4 sub:2 shift: false>
 	| s q count |
 	s := StringDialog askWithCancel: 'JPEG Quality (10-100)?' initialAnswer: '70'.
 	s size = 0 ifTrue: [^ self].
@@ -871,6 +872,7 @@ PhratchFrameMorph >> compressImages [
 
 { #category : #'menu/button actions' }
 PhratchFrameMorph >> compressSounds [
+	<phratchMenu: 'Compress Sounds' category: 'edit' position: 3 sub:2 shift: false>
 	| menu bitsPerSample count |
 	menu := MenuMorph new
 		title: 'Sound quality:' translated;
@@ -1261,14 +1263,24 @@ PhratchFrameMorph >> editBlockDefinition: aCustomBlockDefinition for: aScriptabl
 { #category : #accessing }
 PhratchFrameMorph >> editMenu: aMenuTitleMorph [
 
-	| menu |
+	| menu previousSC |
 
 	menu := MenuMorph new defaultTarget: self.
-	menu add: 'Undelete' localized action: #undoTool.
-	menu add: 'Undo last drop' localized action: #undoLastDrop.
+	previousSC := nil.
+	(self menuPragmasFor: 'edit') do:[:e |
+		(previousSC notNil and: [previousSC ~~( e arguments at: 4)]) ifTrue:[menu addLine ].
+		(e arguments at: 5) ifFalse:[
+			menu add: (e arguments at: 1) localized action: e method selector
+		]
+		ifTrue: [ 
+			Sensor shiftPressed ifTrue: [
+				menu add: (e arguments at: 1) localized action: e method selector.
+			] 
+		].
+		previousSC := e arguments at: 4.
+	].
 
 	menu addLine.
-
 	menu add: self isTurbo checkBoxString, 'Turbo' localized
 			action: #toggleTurboMode.
 
@@ -1277,13 +1289,6 @@ PhratchFrameMorph >> editMenu: aMenuTitleMorph [
 
 	menu add: EventHatMorph threadSafeMode checkBoxString, 'Thread safe scripts' localized
 			action: #toggleThreadSafeMode.
-	menu addLine.
-	menu add: 'Compress Sounds' localized action: #compressSounds.
-	menu add: 'Compress Images' localized action: #compressImages.
-	menu add: 'Unload unused blocks' localized action: #unloadAllUnusedCustomBlocks.
-	menu add: 'Clear all Variables' localized action: #clearAllVariables.
-
-	menu add: 'Settings' localized action: #showSettingBrowser.
 	
 	Sensor shiftPressed ifTrue: [	self isDevelopmentMode ifTrue: [
 			menu addLine.
@@ -1297,11 +1302,6 @@ PhratchFrameMorph >> editMenu: aMenuTitleMorph [
 		]].
  
 	menu localize.
-"
-	#(3 4 7 8) do: [:n |
-		menu labels at: n put:
-			((menu labels at: n) copyFrom: 1 to: (menu labels at: n) size - 1), PhratchTranslator ellipsesSuffix].
-"
 	menu invokeModalAt: aMenuTitleMorph bottomLeft + (0@10).
 ]
 
@@ -1555,14 +1555,11 @@ PhratchFrameMorph >> fileMenu: aMenuTitleMorph [
 	| menu previousSC|
 	
 	menu := MenuMorph new defaultTarget: self.
-	self flag: 'to fix with addLine'.
 	previousSC := nil.
 	(self menuPragmasFor: 'file') do:[:e |
 		(previousSC notNil and: [previousSC ~~( e arguments at: 4)]) ifTrue:[menu addLine ].
-		
 		(e arguments at: 5) ifFalse:[
 			menu add: (e arguments at: 1) localized action: e method selector
-
 		]
 		ifTrue: [ 
 			Sensor shiftPressed ifTrue: [
@@ -1571,42 +1568,8 @@ PhratchFrameMorph >> fileMenu: aMenuTitleMorph [
 		].
 		previousSC := e arguments at: 4.
 	].
-	
-	"menu add: 'New' localized action: #newPhratchProject.
-	menu add: 'Open' localized action: #openPhratchProject.
-	menu add: 'Open Scratch' localized action: #openScratchProject.
-	menu add: 'Save' localized action: #savePhratchProjectNoDialog.
-	menu add: 'Save As' localized action: #savePhratchProject.
-	menu add: 'Save State' localized action: #saveState."
-	"menu addLine.
-	menu add: 'Import Project' localized action: #importPhratchProject.
-	menu add: 'Export Sprite' localized action: #exportSprite."
-"	menu addLine.
-	menu add: 'Project Notes' localized action: #editNotes."
-	"Sensor shiftPressed
-		ifTrue: [ "
-			"developer menu"
-			"menu addLine."
-			"menu add: 'Write Project Summary' localized action: #writeSummaryFile."
-			"menu add: 'Write Multiple Project Summaries' localized action: #writeMultipleSummaries."
-			"menu addLine."
-	"fillScreenFlag
-		ifTrue: [ menu add: 'Exit User Mode' localized action: #fillScreenOff ]
-	ifFalse: [ 
-		menu add: 'Enter User Mode' localized action: #fillScreenOn.
-		menu add: 'Save Image in User Mode' localized action: #saveImageForEndUser ] ]."
-	
-	
-	"menu addLine.
-	menu add: 'Close' localized action: #close.
-	menu add: 'Quit' localized action: #quitPhratch.
+
 	menu localize.
-	#(2 4 5 6 7)
-		do: [ :n | 
-			menu labels
-				at: n
-				put:
-					((menu labels at: n) contents copyFrom: 1 to: (menu labels at: n) contents size - 1) , PhratchTranslator ellipsesSuffix ]."
 	menu popUpAt: aMenuTitleMorph bottomLeft + (0 @ 10) inWorld: World
 ]
 
@@ -1815,8 +1778,24 @@ PhratchFrameMorph >> handlesMouseDown: evt [
 
 { #category : #'menu/button actions' }
 PhratchFrameMorph >> helpMenu: aMenuTitleMorph [
-	| menu |
+	| menu previousSC |
 	menu := MenuMorph new defaultTarget: self.
+	
+		previousSC := nil.
+	(self menuPragmasFor: 'help') do:[:e |
+		(previousSC notNil and: [previousSC ~~( e arguments at: 4)]) ifTrue:[menu addLine ].
+		(e arguments at: 5) ifFalse:[
+			menu add: (e arguments at: 1) localized action: e method selector
+		]
+		ifTrue: [ 
+			Sensor shiftPressed ifTrue: [
+				menu add: (e arguments at: 1) localized action: e method selector.
+			] 
+		].
+		previousSC := e arguments at: 4.
+	].
+
+	
 	menu add: 'Phratch Website' translated action: #launchWebsite.
 	menu addLine.
 	menu add: 'Scratch Help Page' translated action: #launchHelpPage.
@@ -1827,12 +1806,6 @@ PhratchFrameMorph >> helpMenu: aMenuTitleMorph [
 	menu addLine.
 	menu add: 'About Phratch' translated action: #aboutPhratch.
 	menu localize.
-	#(1 2 3 4 5 6)
-		do: [ :n | 
-			menu labels
-				at: n
-				put:
-					((menu labels at: n) contents copyFrom: 1 to: (menu labels at: n) contents size - 1) , PhratchTranslator ellipsesSuffix ].
 	menu popUpAt: aMenuTitleMorph bottomLeft + (0 @ 10) inWorld: World
 ]
 
@@ -2247,7 +2220,7 @@ PhratchFrameMorph >> menuPragmasFor: stringMenuCat [
 	| allPragmas |
 	
 	allPragmas := Pragma allNamed: #phratchMenu:category:position:sub:shift: in:  PhratchFrameMorph  sortedByArgument: 3.
-	^allPragmas select:[:pragma | (pragma arguments at: 2) = stringMenuCat]
+	^(allPragmas select:[:pragma | (pragma arguments at: 2) = stringMenuCat])
 ]
 
 { #category : #'event handling' }
@@ -3135,6 +3108,7 @@ PhratchFrameMorph >> showPlay [
 { #category : #'menu/button actions' }
 PhratchFrameMorph >> showSettingBrowser [
 
+	<phratchMenu: 'Settings' category: 'edit' position: 7 sub:3 shift: false>
 	SettingBrowser new changePackageSet: {PackageOrganizer default mostSpecificPackageOfClass: PhratchInstaller}; open
 ]
 
@@ -3353,6 +3327,7 @@ PhratchFrameMorph >> toggleErrorCatcher [
 
 { #category : #byob }
 PhratchFrameMorph >> toggleKeepSpritesOnStage [
+
 	ScriptablePhratchMorph keepOnStage: ScriptablePhratchMorph keepOnStage not.
 	
 ]
@@ -3384,6 +3359,7 @@ PhratchFrameMorph >> toggleTurboMode [
 { #category : #byob }
 PhratchFrameMorph >> undoLastDrop [
 
+	<phratchMenu: 'Undo last drop' category: 'edit' position: 2 sub:1 shift: false>
 	scriptsPane currentCategory: 'Scripts'.
 	scriptsPane target blocksBin undoLastDrop
 ]
@@ -3391,6 +3367,7 @@ PhratchFrameMorph >> undoLastDrop [
 { #category : #'tools (no longer used)' }
 PhratchFrameMorph >> undoTool [
 
+	<phratchMenu: 'Undelete' category: 'edit' position: 1 sub:1 shift: false>
 	| m newOwner oldName |
 	self paintingInProgress ifTrue: [^ Beeper beep].
 	Clipboard ifNil: [^ Beeper beep].
@@ -3443,7 +3420,7 @@ PhratchFrameMorph >> uniqueSummaryFileName [
 
 { #category : #byob }
 PhratchFrameMorph >> unloadAllUnusedCustomBlocks [
-
+	<phratchMenu: 'Unload unused blocks' category: 'edit' position: 5 sub:2 shift: false>
 	workPane unloadAllUnusedCustomBlocks
 ]
 
