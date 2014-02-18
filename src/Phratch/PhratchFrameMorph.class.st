@@ -770,7 +770,7 @@ PhratchFrameMorph >> clearStage [
 
 { #category : #'as yet unclassified' }
 PhratchFrameMorph >> close [
-
+	<phratchMenu: 'Close' category: 'file' position: 15 sub:6 shift: true>
 	| response |
 	self closeMediaEditorsAndDialogs ifFalse: [^ self].
 	self stopAll.
@@ -1307,7 +1307,7 @@ PhratchFrameMorph >> editMenu: aMenuTitleMorph [
 
 { #category : #'falta adaptar' }
 PhratchFrameMorph >> editNotes [
-
+	<phratchMenu: 'Project notes' category: 'file' position: 9 sub:3 shift: false>
 	(PhratchNotesDialog editNotesFor: self) getUserResponse.
 
 ]
@@ -1426,6 +1426,7 @@ PhratchFrameMorph >> exitPresentationMode [
 { #category : #'menu/button actions' }
 PhratchFrameMorph >> exportSprite [
 
+	<phratchMenu: 'Export project' category: 'file' position: 8 sub:2 shift: false>
 	scriptsPane target exportObject.
 
 ]
@@ -1551,32 +1552,52 @@ PhratchFrameMorph >> extractProjectFrom: aByteArray [
 
 { #category : #'menu/button actions' }
 PhratchFrameMorph >> fileMenu: aMenuTitleMorph [
-	| menu |
+	| menu previousSC|
+	
 	menu := MenuMorph new defaultTarget: self.
-	menu add: 'New' localized action: #newPhratchProject.
+	self flag: 'to fix with addLine'.
+	previousSC := nil.
+	(self menuPragmasFor: 'file') do:[:e |
+		(previousSC notNil and: [previousSC ~~( e arguments at: 4)]) ifTrue:[menu addLine ].
+		
+		(e arguments at: 5) ifFalse:[
+			menu add: (e arguments at: 1) localized action: e method selector
+
+		]
+		ifTrue: [ 
+			Sensor shiftPressed ifTrue: [
+				menu add: (e arguments at: 1) localized action: e method selector.
+			] 
+		].
+		previousSC := e arguments at: 4.
+	].
+	
+	"menu add: 'New' localized action: #newPhratchProject.
 	menu add: 'Open' localized action: #openPhratchProject.
 	menu add: 'Open Scratch' localized action: #openScratchProject.
 	menu add: 'Save' localized action: #savePhratchProjectNoDialog.
 	menu add: 'Save As' localized action: #savePhratchProject.
-	menu add: 'Save State' localized action: #saveState.
-	menu addLine.
+	menu add: 'Save State' localized action: #saveState."
+	"menu addLine.
 	menu add: 'Import Project' localized action: #importPhratchProject.
-	menu add: 'Export Sprite' localized action: #exportSprite.
-	menu addLine.
-	menu add: 'Project Notes' localized action: #editNotes.
-	Sensor shiftPressed
-		ifTrue: [ 
+	menu add: 'Export Sprite' localized action: #exportSprite."
+"	menu addLine.
+	menu add: 'Project Notes' localized action: #editNotes."
+	"Sensor shiftPressed
+		ifTrue: [ "
 			"developer menu"
-			menu addLine.
-			menu add: 'Write Project Summary' localized action: #writeSummaryFile.
-			menu add: 'Write Multiple Project Summaries' localized action: #writeMultipleSummaries.
-			menu addLine.
-			fillScreenFlag
-				ifTrue: [ menu add: 'Exit User Mode' localized action: #fillScreenOff ]
-				ifFalse: [ 
-					menu add: 'Enter User Mode' localized action: #fillScreenOn.
-					menu add: 'Save Image in User Mode' localized action: #saveImageForEndUser ] ].
-	menu addLine.
+			"menu addLine."
+			"menu add: 'Write Project Summary' localized action: #writeSummaryFile."
+			"menu add: 'Write Multiple Project Summaries' localized action: #writeMultipleSummaries."
+			"menu addLine."
+	"fillScreenFlag
+		ifTrue: [ menu add: 'Exit User Mode' localized action: #fillScreenOff ]
+	ifFalse: [ 
+		menu add: 'Enter User Mode' localized action: #fillScreenOn.
+		menu add: 'Save Image in User Mode' localized action: #saveImageForEndUser ] ]."
+	
+	
+	"menu addLine.
 	menu add: 'Close' localized action: #close.
 	menu add: 'Quit' localized action: #quitPhratch.
 	menu localize.
@@ -1585,7 +1606,7 @@ PhratchFrameMorph >> fileMenu: aMenuTitleMorph [
 			menu labels
 				at: n
 				put:
-					((menu labels at: n) contents copyFrom: 1 to: (menu labels at: n) contents size - 1) , PhratchTranslator ellipsesSuffix ].
+					((menu labels at: n) contents copyFrom: 1 to: (menu labels at: n) contents size - 1) , PhratchTranslator ellipsesSuffix ]."
 	menu popUpAt: aMenuTitleMorph bottomLeft + (0 @ 10) inWorld: World
 ]
 
@@ -1593,7 +1614,7 @@ PhratchFrameMorph >> fileMenu: aMenuTitleMorph [
 PhratchFrameMorph >> fillScreenOff [
 	"Stop filling the entire screen. Useful during development."
 
-
+	<phratchMenu: 'Exit user mode' category: 'file' position: 12 sub:5 shift: true>
 	Display fullScreenMode: false.
 	World restoreDisplay.
 
@@ -1612,6 +1633,7 @@ PhratchFrameMorph >> fillScreenOff [
 PhratchFrameMorph >> fillScreenOn [
 	"Start filling the entire screen and being sticky. Also configure a few other things for the end user such as turning off halos and the control menu (noviceMode) and making sure that error catching is enabled."
 
+	<phratchMenu: 'Enter user mode' category: 'file' position: 13 sub:5 shift: true>
 	PhratchFrameMorph takeOverScreen ifTrue: [
 		Display fullScreenMode: true.
 		World restoreDisplay].
@@ -1818,7 +1840,7 @@ PhratchFrameMorph >> helpMenu: aMenuTitleMorph [
 PhratchFrameMorph >> importPhratchProject [
 	"Allow the user to select a project to open, then merge that project's sprites with the
 current project."
-
+	<phratchMenu: 'Import project' category: 'file' position: 7 sub:2 shift: false>
 	| response |
 	self closeMediaEditorsAndDialogs ifFalse: [^ self].
 	self stopAll.
@@ -2217,6 +2239,17 @@ PhratchFrameMorph >> makeXYReadout [
 	^ panel
 ]
 
+{ #category : #'menu/button actions' }
+PhratchFrameMorph >> menuPragmasFor: stringMenuCat [
+	"To obtain all the items of the menu, execute:
+	SystemNavigation default allCallsOn: #phratchItem:kind:category:defaultValues:subCategory:special:
+	"
+	| allPragmas |
+	
+	allPragmas := Pragma allNamed: #phratchMenu:category:position:sub:shift: in:  PhratchFrameMorph  sortedByArgument: 3.
+	^allPragmas select:[:pragma | (pragma arguments at: 2) = stringMenuCat]
+]
+
 { #category : #'event handling' }
 PhratchFrameMorph >> mouseDown: evt [
 	"Revert to normal cursor."
@@ -2263,6 +2296,7 @@ PhratchFrameMorph >> nameFromFileName: fileName [
 PhratchFrameMorph >> newPhratchProject [
 	"Make a new, blank Phratch project."
 
+	<phratchMenu: 'New' category: 'file' position: 1 sub:1 shift: false>
 	| response newProject sprite |
 	self closeMediaEditorsAndDialogs ifFalse: [^ self].
 	self stopAll.
@@ -2388,6 +2422,7 @@ PhratchFrameMorph >> openPantherTutorials [
 PhratchFrameMorph >> openPhratchProject [
 	"Allow the user to select a project to open, then open that project."
 
+	<phratchMenu: 'Open' category: 'file' position: 2 sub:1 shift: false>
 	| response newProj |
 	self closeMediaEditorsAndDialogs
 		ifFalse: [ ^ self ].
@@ -2773,6 +2808,7 @@ PhratchFrameMorph >> purgeBlockEditors [
 PhratchFrameMorph >> quitPhratch [
 	"Quit from Phratch. Ask the user if they want to save, first."
 
+	<phratchMenu: 'Quit' category: 'file' position: 16 sub:6 shift: false>
 	| response |
 	self closeMediaEditorsAndDialogs ifFalse: [^ self].
 	self stopAll.
@@ -2874,6 +2910,7 @@ PhratchFrameMorph >> renderingMenu [
 { #category : #'menu/button actions' }
 PhratchFrameMorph >> saveImageForEndUser [
 
+	<phratchMenu: 'Save image in user mode' category: 'file' position: 14 sub:5 shift: true>
 	(self confirm: '
 Close non-Phratch windows and save this
 image in end-user (fillScreen) mode?') ifFalse: [^ self].
@@ -2918,6 +2955,7 @@ image in end-user (fillScreen) mode?') ifFalse: [^ self].
 { #category : #'file read/write' }
 PhratchFrameMorph >> savePhratchProject [
 
+	<phratchMenu: 'Save as' category: 'file' position: 5 sub:1 shift: false>
 	| fName result |
 	self closeMediaEditorsAndDialogs ifFalse: [^ self].
 	self stopAll.
@@ -2947,6 +2985,7 @@ PhratchFrameMorph >> savePhratchProject [
 { #category : #'file read/write' }
 PhratchFrameMorph >> savePhratchProjectNoDialog [
 
+	<phratchMenu: 'Save' category: 'file' position: 4 sub:1 shift: false>
 	|  dir |
 	self closeMediaEditorsAndDialogs ifFalse: [^ self].
 
@@ -2968,7 +3007,7 @@ PhratchFrameMorph >> savePhratchProjectNoDialog [
 { #category : #'menu/button actions' }
 PhratchFrameMorph >> saveState [
 	"Quit from Phratch. Ask the user if they want to save, first."
-
+	<phratchMenu: 'Save state' category: 'file' position: 6 sub:1 shift: false>
 	Smalltalk snapshot: true andQuit: false.
 
 ]
@@ -3704,6 +3743,7 @@ PhratchFrameMorph >> workPane [
 PhratchFrameMorph >> writeMultipleSummaries [
 	"Write the summary for all Phratch projects in a given folder."
 
+	<phratchMenu: 'Write multiple project summaries' category: 'file' position: 11 sub:4 shift: true>
 	| dir |
 	dir := PhratchFileChooserDialog chooseFolder: (FileSystem workingDirectory fullName).
 	dir = #cancelled ifTrue: [^ self].
@@ -3808,6 +3848,7 @@ PhratchFrameMorph >> writePhratchProject [
 PhratchFrameMorph >> writeSummaryFile [
 	"Write a summary of this project to a file."
 
+	<phratchMenu: 'Write project summary' category: 'file' position: 10 sub:4 shift: true>
 	self writeSummaryFile: self projectDirectory.
 
 ]
