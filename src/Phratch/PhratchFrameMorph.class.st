@@ -245,7 +245,7 @@ PhratchFrameMorph class >> menuCommandOn: aBuilder [
 PhratchFrameMorph class >> open [
 "	InputEventSensor startUp."
 	"SoundPlayer initialize; shutDown; startUp. "
-		
+	
 	^ self new startup openInWorld
 ]
 
@@ -466,7 +466,7 @@ PhratchFrameMorph >> aboutPhratch [
 		yourself.
 	dialogBox
 		message:
-			'Phratch 1.0
+			'Phratch 2.0
 Copyright (c) 2013 Jannik Laval.
 All rights reserved.
 

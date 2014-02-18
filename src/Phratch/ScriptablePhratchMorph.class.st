@@ -557,25 +557,6 @@ ScriptablePhratchMorph >> addEventNamesTo: aSet [
 
 ]
 
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> addGenericColorBlocksTo: page x: x y: startY [
-	"Add the generic variable blocks to the given page starting at the given y offset. Answer the new y."
-
-	| y |
-	y := startY.
-
-	(self blocksFor: 'colors') do: [:blockOrSym |
-		({#- . #~} includes: blockOrSym)
-			ifTrue: [
-				(blockOrSym = #-) ifTrue: [y := y + 15].	"insert a full space"
-				(blockOrSym = #~) ifTrue: [y := y + 5]]	"insert a half space"
-			ifFalse: [
-				y := self createBlock: blockOrSym atPosition: x@y onPage: page.
-				page submorphs last color: (ScriptablePhratchMorph blockColorFor: 'colors')]].
-
-	^ y
-]
-
 { #category : #blocks }
 ScriptablePhratchMorph >> addGenericListBlocksTo: page y: startY [
 	"Add the generic list blocks to the given page starting at the given y offset."
@@ -3005,8 +2986,7 @@ ScriptablePhratchMorph >> deleteColor [
 	self = stage ifFalse: [
 		stage colorNames isEmpty ifFalse: [menu addLine].
 		self colorNames do: [:v | menu add: v value: (Array with: v with: #local)]].
-	choice := menu invokeModal; selectedValue;
-		yourself.
+	choice := menu invokeModal; selectedValue.
 	choice ifNil: [^ self].
 
 	choice second = #global
@@ -4341,8 +4321,7 @@ ScriptablePhratchMorph >> hideColor [
 	self = stage ifFalse: [
 		stage colorNames isEmpty ifFalse: [menu addLine].
 		self colorNames do: [:v | menu add: v value:  (Array with: v with: #local)]].
-	choice := menu invokeModal; selectedValue;
-		yourself.
+	choice := menu invokeModal; selectedValue.
 	choice ifNil: [^ self].
 
 	choice second = #global
@@ -6829,8 +6808,7 @@ ScriptablePhratchMorph >> showColor [
 	self = stage ifFalse: [
 		stage colorNames isEmpty ifFalse: [menu addLine].
 		self colorNames do: [:v | menu add: v value: (Array with: v with: #local)]].
-	choice := menu invokeModal; selectedValue;
-		yourself.
+	choice := menu invokeModal; selectedValue.
 	choice ifNil: [^ self].
 
 	choice second = #global

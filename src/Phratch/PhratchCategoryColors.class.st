@@ -68,7 +68,20 @@ PhratchCategoryColors class >> viewerPageFor: aScriptablePhratchMorph [
 						position: x @ y;
 		yourself).
 			y := hideButton bottom + 10 ].
-	aScriptablePhratchMorph addGenericColorBlocksTo: page x: x y: y.
+	
+	(aScriptablePhratchMorph blocksFor: self label) do: [:blockOrSym |
+		({#- . #~ } includes: blockOrSym)
+			ifTrue: [
+				(blockOrSym = #-) ifTrue: [y := y + 15].  "insert a full space"
+				(blockOrSym = #~) ifTrue: [y := y + 5].  "insert a half space"
+			]  "insert a line"
+			ifFalse: [
+				y := aScriptablePhratchMorph createBlock: blockOrSym atPosition: x@y onPage: page.
+				page submorphs last color: (ScriptablePhratchMorph blockColorFor: self label)
+			]].
+	
+	
+	
 	maxX := page submorphs inject: 0 into: [ :t :m | t max: m right ].
 	page extent: (maxX + 10) @ y.
 	^ page
