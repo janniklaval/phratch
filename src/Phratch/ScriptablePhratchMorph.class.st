@@ -6856,7 +6856,7 @@ ScriptablePhratchMorph >> showOrHideColor: varName show: showFlag [
 		(w := self ownerThatIsA: OffscreenWorldMorph) ifNil: [^ self].
 		frame := w frame].
 
-	b := (self blockFromSpec: #('$ColorVar$' g reportColor: '')  color: (self class blockColorFor: 'colors')) defaultArgs: {varName}.
+	b := (self blockFromSpec: #('$ColorVar$' ColorBlockMorph reportColor: '')  color: (self class blockColorFor: 'colors')) defaultArgs: {varName}.
 	w := frame watcherForBlock: b.
 	showFlag
 		ifTrue: [w ifNil: [frame showWatcher: b createWatcher]]
