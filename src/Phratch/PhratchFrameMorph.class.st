@@ -623,7 +623,7 @@ PhratchFrameMorph >> addonMenu: aMenuTitleMorph [
 	menu := MenuMorph new defaultTarget: self.
 	
 	MetaRepoSearcher listOfProjects do:[:e |
-		menu add: e key target: MetaRepoSearcher selector: #loadProject: argument: e value.
+		menu add: (self isLoaded: e value) checkBoxString, e key target: MetaRepoSearcher selector: #loadProject: argument: e value.
 	].
 	
 	menu popUpAt: aMenuTitleMorph bottomLeft + (0 @ 10) inWorld: World
@@ -2026,6 +2026,13 @@ PhratchFrameMorph >> isDevelopmentMode [
 { #category : #classification }
 PhratchFrameMorph >> isHandMorph [
 	^fillScreenFlag
+]
+
+{ #category : #'menu/button actions' }
+PhratchFrameMorph >> isLoaded: value [
+
+	Smalltalk at: value asSymbol ifAbsent:[^false].
+	^true
 ]
 
 { #category : #byob }

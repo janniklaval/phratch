@@ -20,5 +20,6 @@ LookLike class >> handlesQuery: sel [
 { #category : #protocol }
 LookLike >> defaultArguments [
 
+	self model costumeNames ifEmpty: [ ^'' ].
 	^ Array with: self model costumeNames last
 ]

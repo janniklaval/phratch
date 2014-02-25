@@ -225,6 +225,44 @@ ScriptablePhratchMorph class >> fromUser [
 
 ]
 
+{ #category : #'block specs' }
+ScriptablePhratchMorph class >> htmlDoc [
+
+	| allPragmas dir imgDir html|
+	
+	dir := (FileSystem workingDirectory  / 'htmlDoc') ensureCreateDirectory.
+	imgDir := (dir / 'img') ensureCreateDirectory.
+	
+	allPragmas := (Pragma allNamed: #phratchItem:kind:category:defaultValues:subCategory:special: in: ScriptablePhratchMorph) asOrderedCollection.
+	
+	ScriptablePhratchMorph allSubclasses do:[:aSC |
+		allPragmas addAll: (Pragma allNamed: #phratchItem:kind:category:defaultValues:subCategory:special: in: aSC).
+	].
+	
+	html := FileStream forceNewFileNamed: (dir / ('index.html'))fullName.
+
+	PhratchCategory allSubclassesDo: [ :c |		
+		html nextPutAll: '<h1>', c label, '</h1><ul>'.
+		allPragmas select:[:pragma | (pragma arguments at: 3) = c label] 
+			thenDo:[:aP |
+				|prov pngName comment|
+				prov := { aP arguments at: 1 . aP arguments at: 2 . aP method selector . aP arguments at: 6},  (aP arguments at: 4).
+				pngName := (prov at: 1)asLegalSelector asString, (prov at: 3)asLegalSelector asString.
+				
+				[(imgDir / (pngName, '.png')) exists] whileTrue:[
+					pngName := pngName, '0'.
+				].
+				comment := aP method comment.
+				comment ifNil: [ comment := '' ].
+				
+				PNGReadWriter putForm: ((aP methodClass new blockFromSpec: prov color: (aP methodClass blockColorFor: (aP arguments at: 3))) imageForm) onFileNamed: (imgDir / (pngName, '.png'))fullName.
+				
+				html nextPutAll: '<li><img src="./img/', pngName ,'.png"/>', comment , '</li>'.
+			].
+		html nextPutAll: '</ul>'.
+	].
+]
+
 { #category : #'class initialization' }
 ScriptablePhratchMorph class >> initialize [
 	"self initialize"
@@ -6598,6 +6636,12 @@ ScriptablePhratchMorph >> saveSound: aSampledSound name: baseName [
 ScriptablePhratchMorph >> sayNothing [
 	"Default behavior does nothing. Overridden in PhratchSpriteMorph."
 
+]
+
+{ #category : #'as yet unclassified' }
+ScriptablePhratchMorph >> scalePoint [
+
+	^0@0
 ]
 
 { #category : #'looks ops' }
