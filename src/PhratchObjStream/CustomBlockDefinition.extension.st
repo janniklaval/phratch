@@ -13,9 +13,9 @@ CustomBlockDefinition >> initFieldsFrom: anObjStream version: classVersion [
 	self initFieldsNamed: #(
 		userSpec
 		blockVars
+		body
 		isAtomic
 		isBoolean
-		body
 		answer
 	) from: anObjStream.
 
@@ -24,21 +24,20 @@ CustomBlockDefinition >> initFieldsFrom: anObjStream version: classVersion [
 
 	"fields added in version 2:"
 	self initFieldsNamed: #(
-		type
 		category
+		type
 		declarations
 	) from: anObjStream.
 
 	"fields added in version 3:"
 	self initFieldsNamed: #(
-		defaults
-	) from: anObjStream.
-
+			defaults
+		) from: anObjStream.
+		
 	"fields added in version 4:"
 	self initFieldsNamed: #(
-		isGlobal
-	) from: anObjStream.
-
+			isGlobal
+		) from: anObjStream.
 ]
 
 { #category : #'*PhratchObjStream' }
