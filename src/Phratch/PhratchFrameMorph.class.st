@@ -3085,6 +3085,8 @@ PhratchFrameMorph >> shoutGo [
 
 	self stopAll.
 	workPane broadcastEventNamed: 'Phratch-StartClicked' with: 0.
+	self flag: 'The following line allows the retrocompatibility with Scratch'.
+	workPane broadcastEventNamed: 'Scratch-StartClicked' with: 0.
 	flagButton on.
 	self showPause.
 	World displayWorldSafely.  "force button flash"

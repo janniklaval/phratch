@@ -167,6 +167,11 @@ PhratchInstaller class >> gotPhratchPlugins [
 	^ (self pluginsPath /  'CameraPlugin') exists
 		& (self pluginsPath /  'mpeg3Plugin') exists
 		& (self pluginsPath / 'ScratchPlugin') exists
+		
+	or: [ (self pluginsPath /  'CameraPlugin.dll') exists
+		& (self pluginsPath /  'mpeg3Plugin.dll') exists
+		& (self pluginsPath / 'ScratchPlugin.dll') exists ]
+
 ]
 
 { #category : #installation }
