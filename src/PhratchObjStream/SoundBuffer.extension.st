@@ -17,3 +17,19 @@ SoundBuffer >> storeBigEndianOn: aBinaryStream stereo: stereo [
 			1 to: self monoSampleCount do: [:i | aBinaryStream int16: (self at: i)].
 			reverseBytes & stereo ifTrue: [self swapStereoChannels]].
 ]
+
+{ #category : #'*PhratchObjStream' }
+SoundBuffer >> swapStereoChannels [
+	"Swap my left and right stereo channels."
+
+	| hack blt |
+	hack := Form new hackBits: self.
+	blt := (BitBlt toForm: hack) sourceForm: hack.
+	blt combinationRule: Form reverse.  "XOR"
+	blt sourceY: 0; destY: 0; height: self size; width: 2.
+
+	blt sourceX: 0; destX: 2; copyBits.  "swap 16-bit words using XOR"
+	blt sourceX: 2; destX: 0; copyBits.
+	blt sourceX: 0; destX: 2; copyBits.
+
+]
