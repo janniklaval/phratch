@@ -1809,6 +1809,78 @@ PhratchFrameMorph >> helpMenu: aMenuTitleMorph [
 	menu popUpAt: aMenuTitleMorph bottomLeft + (0 @ 10) inWorld: World
 ]
 
+{ #category : #'as yet unclassified' }
+PhratchFrameMorph >> htmlDoc [
+
+	<phratchMenu: 'Generate HTML documentation' category: 'file' position: 12 sub:5 shift: true>
+	| allPragmas dir imgDir html|
+	
+	dir := (FileSystem workingDirectory  / 'htmlDoc') ensureCreateDirectory.
+	imgDir := (dir / 'doc-img') ensureCreateDirectory.
+	
+	allPragmas := (Pragma allNamed: #phratchItem:kind:category:defaultValues:subCategory:special: in: ScriptablePhratchMorph) asOrderedCollection.
+	
+	ScriptablePhratchMorph allSubclasses do:[:aSC |
+		allPragmas addAll: (Pragma allNamed: #phratchItem:kind:category:defaultValues:subCategory:special: in: aSC).
+	].
+	
+	html := FileStream forceNewFileNamed: (dir / ('index.html'))fullName.
+
+	html nextPutAll: '<h2>Categories</h2><ul style="list-style-type: none;">'.
+	PhratchCategory allSubclassesDo: [ :c |	
+		(c label = 'none' or:[c label = 'other' or:[c label = 'custom']]) ifFalse:[
+			|label offForm b|
+			label := (PhratchTranslator translationFor: c label) capitalized.
+			c label = 'list' ifTrue:[
+				offForm := PhratchFrameMorph skinAt: 'variables'.
+			] ifFalse: [
+				offForm := PhratchFrameMorph skinAt: c label.
+			].
+			b := ResizableToggleButton new offForm: offForm onForm: offForm overForm: offForm.
+			b
+				label: label font: (PhratchFrameMorph getFont: #Category);
+				setLabelColor: Color white;
+				target: self;
+				actionSelector: #currentCategory:;
+				arguments: (Array with: c label);
+				toggleButtonMode: true;
+				toggleMode: false.
+			b leftJustifyInset: 10.
+			
+			PNGReadWriter putForm: (b imageForm) onFileNamed: (imgDir / (c label, '.png'))fullName.
+			
+			html nextPutAll: '<li  style="display: inline; padding-right: 10px;"><a href="#', c label, '"><img src="http://www.phratch.com/wp-content/uploads/doc-img/', c label ,'.png"/></a></li>'.
+		].
+	].
+	html nextPutAll: '</ul>'.
+			
+	PhratchCategory allSubclassesDo: [ :c |	
+		(c label = 'none' or:[c label = 'other' or:[c label = 'custom']]) ifFalse:[	
+			html nextPutAll: '<h2 id="', c label, '">', c label, '</h2><table border="0">'.
+			allPragmas select:[:pragma | (pragma arguments at: 3) = c label] 
+				thenDo:[:aP |
+					|prov pngName comment|
+					prov := { aP arguments at: 1 . aP arguments at: 2 . aP method selector . aP arguments at: 6},  (aP arguments at: 4).
+					pngName := (prov at: 1)asLegalSelector asString, (prov at: 3)asLegalSelector asString.
+				
+					[(imgDir / (pngName, '.png')) exists] whileTrue:[
+						pngName := pngName, '0'.
+					].
+					comment := aP method comment.
+					comment ifNil: [ comment := '' ]
+						ifNotNil:[
+							comment := comment copyFrom: 2 to: (comment size -1)
+						].
+					
+					PNGReadWriter putForm: ((aP methodClass new blockFromSpec: prov color: (aP methodClass blockColorFor: (aP arguments at: 3))) imageForm) onFileNamed: (imgDir / (pngName, '.png'))fullName.
+				
+					html nextPutAll: '<tr><td WIDTH=300><img src="http://www.phratch.com/wp-content/uploads/doc-img/', pngName ,'.png"/></td><td>', comment , '</td></tr>'.
+				].
+			html nextPutAll: '</table>'.
+		].
+	].
+]
+
 { #category : #'file read/write' }
 PhratchFrameMorph >> importPhratchProject [
 	"Allow the user to select a project to open, then merge that project's sprites with the

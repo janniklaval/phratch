@@ -41,6 +41,7 @@ PhratchStageMorph >> acceptDroppingMorph: aMorph event: evt [
 
 { #category : #'panther actions' }
 PhratchStageMorph >> addBackgroundTyped: aString [
+	"Add a new background"
 	<phratchItem: 'add $NewCostume$ to backgrounds' kind: #- category: 'looks' defaultValues: #() subCategory: #a2 special: #()>
 	self addCostumeTyped: aString.
 ]
@@ -128,7 +129,7 @@ PhratchStageMorph >> attributeNames [
 
 { #category : #'looks ops' }
 PhratchStageMorph >> backgroundIndex [
-	"Answer the index of my current costume."
+	"Answer the index of my current background."
 	<phratchItem: 'background #' kind: #ReporterBlockMorph category: 'looks' defaultValues: #() subCategory: #a2 special: #()>
 	^ self costumeIndex
 
@@ -276,6 +277,7 @@ PhratchStageMorph >> deleteAllClones [
 
 { #category : #'byob OOP' }
 PhratchStageMorph >> deleteBackgroundAt: aNumber [
+	"Remove the given background"
 	<phratchItem: 'delete background $Number$' kind: #- category: 'looks' defaultValues: #(1) subCategory: #a2 special: #()>
 	self deleteCostumeAt: aNumber.
 ]
@@ -916,6 +918,7 @@ PhratchStageMorph >> removeTerminatedProcesses [
 
 { #category : #'panther actions' }
 PhratchStageMorph >> replaceBackground: name with: sel [
+	"Replace the given background"
 	<phratchItem: 'replace background $Number$ with $NewCostume$' kind: #- category: 'looks' defaultValues: #(1) subCategory: #a2 special: #()>
 	self replaceCostume: name with: sel.
 ]

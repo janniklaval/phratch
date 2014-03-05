@@ -225,44 +225,6 @@ ScriptablePhratchMorph class >> fromUser [
 
 ]
 
-{ #category : #'block specs' }
-ScriptablePhratchMorph class >> htmlDoc [
-
-	| allPragmas dir imgDir html|
-	
-	dir := (FileSystem workingDirectory  / 'htmlDoc') ensureCreateDirectory.
-	imgDir := (dir / 'img') ensureCreateDirectory.
-	
-	allPragmas := (Pragma allNamed: #phratchItem:kind:category:defaultValues:subCategory:special: in: ScriptablePhratchMorph) asOrderedCollection.
-	
-	ScriptablePhratchMorph allSubclasses do:[:aSC |
-		allPragmas addAll: (Pragma allNamed: #phratchItem:kind:category:defaultValues:subCategory:special: in: aSC).
-	].
-	
-	html := FileStream forceNewFileNamed: (dir / ('index.html'))fullName.
-
-	PhratchCategory allSubclassesDo: [ :c |		
-		html nextPutAll: '<h1>', c label, '</h1><ul>'.
-		allPragmas select:[:pragma | (pragma arguments at: 3) = c label] 
-			thenDo:[:aP |
-				|prov pngName comment|
-				prov := { aP arguments at: 1 . aP arguments at: 2 . aP method selector . aP arguments at: 6},  (aP arguments at: 4).
-				pngName := (prov at: 1)asLegalSelector asString, (prov at: 3)asLegalSelector asString.
-				
-				[(imgDir / (pngName, '.png')) exists] whileTrue:[
-					pngName := pngName, '0'.
-				].
-				comment := aP method comment.
-				comment ifNil: [ comment := '' ].
-				
-				PNGReadWriter putForm: ((aP methodClass new blockFromSpec: prov color: (aP methodClass blockColorFor: (aP arguments at: 3))) imageForm) onFileNamed: (imgDir / (pngName, '.png'))fullName.
-				
-				html nextPutAll: '<li><img src="./img/', pngName ,'.png"/>', comment , '</li>'.
-			].
-		html nextPutAll: '</ul>'.
-	].
-]
-
 { #category : #'class initialization' }
 ScriptablePhratchMorph class >> initialize [
 	"self initialize"
@@ -379,54 +341,63 @@ ScriptablePhratchMorph class >> stopSoundRecorder [
 
 { #category : #byob }
 ScriptablePhratchMorph >> & aBoolean [
+	"boolean operator '&'. It combines two booleans and returns a boolean"
 	<phratchItem: '$Boolean$ and $Boolean$' kind: #BooleanBlockMorph category: 'operators' defaultValues: #() subCategory: #a4 special: #()>
 
 ]
 
 { #category : #byob }
 ScriptablePhratchMorph >> * aNumber [
+	"Multiplication operator. It returns the multiplication of two numbers"
 	<phratchItem: '$Number$ * $Number$' kind: #ReporterBlockMorph category: 'operators' defaultValues: #(- -) subCategory: #a1 special: #()>
 
 ]
 
 { #category : #byob }
 ScriptablePhratchMorph >> + aNumber [
+	"Addition operator. It returns the addition of two numbers"
 	<phratchItem: '$Number$ + $Number$' kind: #ReporterBlockMorph category: 'operators' defaultValues: #(- -) subCategory: #a1 special: #()>
 
 ]
 
 { #category : #byob }
 ScriptablePhratchMorph >> - aNumber [
+	"Substraction operator. It returns the substraction of two numbers"
 	<phratchItem: '$Number$ - $Number$' kind: #ReporterBlockMorph category: 'operators' defaultValues: #(- -) subCategory: #a1 special: #()>
 
 ]
 
 { #category : #byob }
 ScriptablePhratchMorph >> /\/ aNumber [
+	"Divider operator. It combines two numbers and returns a number"
 	<phratchItem: '$Number$ / $Number$' kind: #ReporterBlockMorph category: 'operators' defaultValues: #(- -) subCategory: #a1 special: #()>
 
 ]
 
 { #category : #byob }
 ScriptablePhratchMorph >> < aString [
+	"Comparator. It returns true if the first element is smaller than the second"
 	<phratchItem: '$String$ < $String$' kind: #BooleanBlockMorph category: 'operators' defaultValues: #('' '') subCategory: #a3 special: #()>
 
 ]
 
 { #category : #byob }
 ScriptablePhratchMorph >> = anObject [ 
+	"Comparator. It returns true if the first element is equals to the second"
 	<phratchItem: '$String$ = $String$' kind: #BooleanBlockMorph category: 'operators' defaultValues: #('' '') subCategory: #a3 special: #()>
 	^super = anObject
 ]
 
 { #category : #byob }
 ScriptablePhratchMorph >> > aString [
+	"Comparator. It returns true if the first element is greater than the second"
 	<phratchItem: '$String$ > $String$' kind: #BooleanBlockMorph category: 'operators' defaultValues: #('' '') subCategory: #a3 special: #()>
 
 ]
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> \\ aNumber [
+	"Modulo operator. It returns the modulo of two numbers"
 	<phratchItem: '$Number$ mod $Number$' kind: #ReporterBlockMorph category: 'operators' defaultValues: #(- -) subCategory: #a8 special: #()>
 
 ]
@@ -453,7 +424,7 @@ ScriptablePhratchMorph >> addColor [
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> addColor: colorName [
-	"Add a new user variable with the given name to this object. Do nothing if the variable already exists or is built in."
+	"Add a new random color with the given name to this object."
 	<phratchItem: 'make color $String$' kind: #- category: 'colors' defaultValues: #('a color') subCategory: #a3 special: #()>
 	| sFrame stage isGlobal |
 	(sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNil: [^ Beeper beep].
@@ -1028,6 +999,7 @@ ScriptablePhratchMorph >> allVarNames [
 
 { #category : #'sensing ops' }
 ScriptablePhratchMorph >> answer [
+	"Return the latest answer given by the user. An answer should be given when one of the blocks 'ask...' is executed."
 	<phratchItem: 'answer' kind: #ReporterBlockMorph category: 'sensing' defaultValues: #() subCategory: #a1 special: #()>
 	^ PhratchPrompterMorph lastAnswer
 
@@ -1035,6 +1007,7 @@ ScriptablePhratchMorph >> answer [
 
 { #category : #'list ops' }
 ScriptablePhratchMorph >> append: anObject toList: listName [
+	"Add a new value to the selected list."
 	<phratchItem: 'add $String$ to $List$' kind: #- category: 'list' defaultValues: #('thing') subCategory: #a4 special: #()>
 	| list |
 	list := (listName isKindOf: PhratchListMorph)
@@ -1074,6 +1047,7 @@ ScriptablePhratchMorph >> asReferenceTuple [
 
 { #category : #byob }
 ScriptablePhratchMorph >> asciiCodeOf: aString [
+	"It gives the ascii code of a character"
 	<phratchItem: 'ascii code of $String$' kind: #ReporterBlockMorph category: 'operators' defaultValues: #('a') subCategory: #a7 special: #()>
 	| str |
 	str := aString.
@@ -1108,6 +1082,7 @@ ScriptablePhratchMorph >> asciiFor: keyName [
 
 { #category : #byob }
 ScriptablePhratchMorph >> asciiLetter: anInteger [
+	"Convert an ascii number into a letter"
 	<phratchItem: 'ascii $Number$ as letter' kind: #ReporterBlockMorph category: 'operators' defaultValues: #('65') subCategory: #a7 special: #()>
 	| code |
 	code := anInteger asNumberNoError.
@@ -2006,6 +1981,7 @@ ScriptablePhratchMorph >> broadcast: name withArgument: arg [
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> cameraIsOpen [
+	"return true if the camera is open"
 	<phratchItem: 'camera is open?' kind: #BooleanBlockMorph category: 'looks' defaultValues: #() subCategory: #a9 special: #()>
 	^ CameraPlugin cameraIsOpen: 1.
 ]
@@ -2028,6 +2004,7 @@ ScriptablePhratchMorph >> changeGraphicEffect: effect by: aNumber [
 
 { #category : #'sound ops' }
 ScriptablePhratchMorph >> changeTempoBy: aNumber [
+	"Change the tempo by the given value."
 	<phratchItem: 'change tempo by $Number$' kind: #- category: 'sound' defaultValues: #(20) subCategory: #a5 special: #()>
 	self setTempoTo: self tempo + aNumber.
 
@@ -2064,6 +2041,7 @@ ScriptablePhratchMorph >> changeVar: varName by: increment [
 
 { #category : #'sound ops' }
 ScriptablePhratchMorph >> changeVolumeBy: aNumber [
+	"Change the volume by the given value."
 	<phratchItem: 'change volume by $Number$' kind: #- category: 'sound' defaultValues: #(-10) subCategory: #a4 special: #()>
 	self setVolumeTo: volume + aNumber.
 
@@ -2078,6 +2056,7 @@ ScriptablePhratchMorph >> changed [
 
 { #category : #'block API' }
 ScriptablePhratchMorph >> checkNil: str [
+	"Verify if the given value is nil"
 	<phratchItem: 'is $String$ nil?' kind: #BooleanBlockMorph category: 'operators' defaultValues: #() subCategory: #b1 special: #()>
 	^ str isNil
 ]
@@ -2149,6 +2128,7 @@ ScriptablePhratchMorph >> closeCamera [
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> closeDefinitivelyCamera [
+	"Close the camera. Do nothing if the camera is already close."
 	<phratchItem: 'close camera' kind: #- category: 'looks' defaultValues: #() subCategory: #a9 special: #()>
 	self cameraIsOpen
 		ifFalse: [ ^ self ].
@@ -2179,12 +2159,14 @@ ScriptablePhratchMorph >> coerceSpriteArg: anObject [
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> colorAsString: aColor [
+	"Give the RGB string representation of the given color"
 	<phratchItem: '$Color$ as string' kind: #ReporterBlockMorph category: 'colors' defaultValues: #() subCategory: #a7 special: #()>
 	^ aColor asHTMLColor
 ]
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> colorAtX: x y: y [
+	"select the color of the given pixel"
 	<phratchItem: 'color of pixel x: $Number$ y: $Number$' kind: #ColorBlockMorph category: 'colors' defaultValues: #(0 0) subCategory:
 		#a3 special: #()>
 	| frame w newX newY p |
@@ -2213,6 +2195,7 @@ ScriptablePhratchMorph >> colorAtX: x y: y [
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> colorB: aColor [
+	"give the value of the blue in the RGB representation of the color"
 	<phratchItem: '$Color$ blue' kind: #ReporterBlockMorph category: 'colors' defaultValues: #() subCategory: #a4 special: #()>
 	^ aColor blue.
 ]
@@ -2239,18 +2222,21 @@ ScriptablePhratchMorph >> colorEffect: aNumber [
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> colorG: aColor [
+	"give the value of the green in the RGB representation of the color"
 	<phratchItem: '$Color$ green' kind: #ReporterBlockMorph category: 'colors' defaultValues: #() subCategory: #a4 special: #()>
 	^ aColor green.
 ]
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> colorH: aColor [
+	"give the value of the hue of the given color"
 	<phratchItem: '$Color$ hue' kind: #ReporterBlockMorph category: 'colors' defaultValues: #() subCategory: #a5 special: #()>
 	^ aColor hue.
 ]
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> colorH: h s: s v: v [
+	"Answer the given HSB color."
 	<phratchItem: 'color h: $Number$ s: $Number$ b: $Number$' kind: #ColorBlockMorph category: 'colors' defaultValues: #(0 0 0) subCategory: #a5 special: #()>
 	^ (Color h: h s: s v: v).
 ]
@@ -2263,13 +2249,14 @@ ScriptablePhratchMorph >> colorNames [
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> colorR: aColor [
+	"give the value of the red in the RGB representation of the color"
 	<phratchItem: '$Color$ red' kind: #ReporterBlockMorph category: 'colors' defaultValues: #() subCategory: #a4 special: #()>
 	^ aColor red.
 ]
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> colorR: r g: g b: b [
-	"Answer the given color."
+	"Answer the given RGB color."
 
 	<phratchItem: 'color r: $Number$ g: $Number$ b: $Number$' kind: #ColorBlockMorph category: 'colors' defaultValues: #(0 0 0) subCategory: #a4 special: #()>
 	^ (Color r: r g: g b: b).
@@ -2277,12 +2264,14 @@ ScriptablePhratchMorph >> colorR: r g: g b: b [
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> colorS: aColor [
+	"give the value of the saturation of the given color"
 	<phratchItem: '$Color$ saturation' kind: #ReporterBlockMorph category: 'colors' defaultValues: #() subCategory: #a5 special: #()>
 	^ aColor saturation.
 ]
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> colorV: aColor [
+	"give the value of the brightness of the given color"
 	<phratchItem: '$Color$ brightness' kind: #ReporterBlockMorph category: 'colors' defaultValues: #() subCategory: #a5 special: #()>
 	^ aColor brightness.
 ]
@@ -2356,6 +2345,7 @@ ScriptablePhratchMorph >> constantNames [
 
 { #category : #'list ops' }
 ScriptablePhratchMorph >> contentsOfList: listName [
+	"Give the contents of the given list"
 	<phratchItem: '$List$' kind: #ReporterBlockMorph category: 'list' defaultValues: #('a list') subCategory: #a1 special: #()>
 	| list |
 	list := self listNamed: listName ifNone: [^ ''].
@@ -2606,6 +2596,7 @@ ScriptablePhratchMorph >> copyListsFor: aSprite [
 
 { #category : #byob }
 ScriptablePhratchMorph >> copyOfList: aList [
+	"Return a copy of the given list"
 	<phratchItem: 'copy of $SAList$' kind: #ReporterBlockMorph category: 'list' defaultValues: #() subCategory: #a7 special: #()>
 	aList ifNil: [^ PhratchListMorph on: #()].
 	^ PhratchListMorph on: aList asArray
@@ -2845,7 +2836,7 @@ ScriptablePhratchMorph >> createBlock: block atPosition: pos onPage: page [
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> createFile: aFileNameString [
-	"Create the given file."
+	"Create the given file name."
 	<phratchItem: 'create file $String$' kind: #- category: 'files' defaultValues: #() subCategory: #a special: #()>
 	| f |
 	(self askForFileIO = true) ifFalse: [^ self].
@@ -3085,7 +3076,7 @@ ScriptablePhratchMorph >> deleteDefinitionId: id [
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> deleteFile: aFileNameString [
-	"Create the given file."
+	"Delete the given file."
 	<phratchItem: 'delete file $String$' kind: #- category: 'files' defaultValues: #() subCategory: #a special: #()>
 	(self askForFileIO = true) ifFalse: [^ self].
 	aFileNameString asFileReference delete.
@@ -3093,6 +3084,7 @@ ScriptablePhratchMorph >> deleteFile: aFileNameString [
 
 { #category : #'list ops' }
 ScriptablePhratchMorph >> deleteLine: lineNum ofList: listName [
+	"Remove the given entry of the given list"
 	<phratchItem: 'delete $ListDelete$ of $List$' kind: #- category: 'list' defaultValues: #(1) subCategory: #a4 special: #()>
 	| list |
 	list := self listNamed: listName ifNone: [^ self].
@@ -3196,6 +3188,7 @@ ScriptablePhratchMorph >> deleteMedia: itemToDelete [
 
 { #category : #'BYOB object interface' }
 ScriptablePhratchMorph >> deleteObject: anObject [
+	"Delete the given object"
 	<phratchItem: 'delete $OSReporter$' kind: #- category: 'variables' defaultValues: #() subCategory: #a2 special: #()>
 	| oi obj att block sel rcv |
 	(anObject isKindOf: PhratchSpriteMorph)
@@ -3265,6 +3258,7 @@ ScriptablePhratchMorph >> deleteSprite: aSprite [
 
 { #category : #'BYOB object interface' }
 ScriptablePhratchMorph >> deleteSpriteObj: anObject [
+	"Delete the given sprite"
 	<phratchItem: 'delete $Sprite$' kind: #- category: 'operators' defaultValues: #() subCategory: #b3 special: #()>
 	self deleteObject: anObject
 ]
@@ -3370,120 +3364,127 @@ ScriptablePhratchMorph >> desparatelyGetVar: varName from: aVarBlockMorph [
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> doAnswer [
-"Answer the first string if the given condition is true, otherwise answer the second."
+	"Answer the given string."
 	<phratchItem: 'report $String$' kind: #SpecialBlockMorph category: 'control' defaultValues: #() subCategory: #process special: #()>
 
 ]
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> doAsk [
+	"Ask for the given question, and wait for an answer"
 	<phratchItem: 'ask $String$ and wait' kind: #SpecialBlockMorph category: 'sensing' defaultValues: #('What''s your name?') subCategory: #a1 special: #()>
 	
 ]
 
 { #category : #byob }
 ScriptablePhratchMorph >> doBroadcastAndWait [
+	"send a broadcast message ans wait for all receivers finish their work."
 	<phratchItem: 'broadcast $Event$ and wait' kind: #SpecialBlockMorph category: 'control' defaultValues: #() subCategory: #broadcast special: #()>
 ]
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> doCallBlockWithArgList [
-"Answer the first string if the given condition is true, otherwise answer the second."
+	"Call the given block with a list of args."
 	<phratchItem: 'call $OSReporter$ $Input$ $SAList$' kind: #MultiArgReporterBlockMorph category: 'control' defaultValues: #() subCategory: #process special: #()>
 
 ]
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> doCallBlockWithArgs [
-"Answer the first string if the given condition is true, otherwise answer the second."
+	"Call the given block with the given args."
 	<phratchItem: 'call $OSReporter$ $Input$ $String$' kind: #MultiArgReporterBlockMorph category: 'control' defaultValues: #() subCategory: #process special: #()>
 
 ]
 
 { #category : #byob }
 ScriptablePhratchMorph >> doForever [
+	"Forever loop"
 	<phratchItem: 'forever' kind: #CBlockMorph category: 'control' defaultValues: #() subCategory: #loop special: #()>
 ]
 
 { #category : #byob }
 ScriptablePhratchMorph >> doForeverIf [
+	"Forever loop if the given condition is true"
 	<phratchItem: 'forever if $Boolean$' kind: #CBlockMorph category: 'control' defaultValues: #() subCategory: #loop special: #()>
 ]
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> doFork [
-"Answer the first string if the given condition is true, otherwise answer the second."
+	"Launch the given block in another thread."
 	<phratchItem: 'launch $CSlot$' kind: #MultiArgCommandBlockMorph category: 'control' defaultValues: #() subCategory: #process special: #()>
 
 ]
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> doForkBlockWithArgList [
-"Answer the first string if the given condition is true, otherwise answer the second."
+	"Launch the given block in another thread with the given list of args."
 	<phratchItem: 'launch $CSlot$ $Input$ $SAList$' kind: #MultiArgCommandBlockMorph category: 'control' defaultValues: #() subCategory: #process special: #()>
 
 ]
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> doForkBlockWithArgs [
-"Answer the first string if the given condition is true, otherwise answer the second."
+	"Launch the given block in another thread with the given args."
 	<phratchItem: 'launch $CSlot$ $Input$ $String$' kind: #MultiArgCommandBlockMorph category: 'control' defaultValues: #() subCategory: #process special: #()>
 
 ]
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> doIf [
-"Answer the first string if the given condition is true, otherwise answer the second."
+	"If the given arg is true, execute the following blocks"
 	<phratchItem: 'if $Boolean$' kind: #CBlockMorph category: 'control' defaultValues: #() subCategory: #if special: #()>
 
 ]
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> doIfElse [
-"Answer the first string if the given condition is true, otherwise answer the second."
+	"If the given arg is true, execute the first list of blocks, else the second"
 	<phratchItem: 'if $Boolean$' kind: #IfElseBlockMorph category: 'control' defaultValues: #() subCategory: #if special: #()>
 
 ]
 
 { #category : #'sound ops' }
 ScriptablePhratchMorph >> doPlaySoundAndWait [
+	"Play the given sound and wait it finishes"
 	<phratchItem: 'play sound $SoundNames$ until done' kind: #SpecialBlockMorph category: 'sound' defaultValues: #() subCategory: #a1 special: #()>
 ]
 
 { #category : #byob }
 ScriptablePhratchMorph >> doRepeat [
+	"Repeat the given number times the included blocks"
 	<phratchItem: 'repeat $Number$ times' kind: #CBlockMorph category: 'control' defaultValues: #(10) subCategory: #loop special: #()>
 ]
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> doReport [
-"Answer the first string if the given condition is true, otherwise answer the second."
+	"Call the given block"
 	<phratchItem: 'call $OSReporter$' kind: #MultiArgReporterBlockMorph category: 'control' defaultValues: #() subCategory: #process special: #()>
 
 ]
 
 { #category : #byob }
 ScriptablePhratchMorph >> doReturn [
+	"Wait for the return value of the given block"
 	<phratchItem: 'stop script' kind: #SpecialBlockMorph category: 'control' defaultValues: #() subCategory: #loop special: #()>
 ]
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> doRun [
-"Answer the first string if the given condition is true, otherwise answer the second."
+	"Run the given block"
 	<phratchItem: 'run $CSlot$' kind: #MultiArgCommandBlockMorph category: 'control' defaultValues: #() subCategory: #process special: #()>
 
 ]
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> doRunBlockWithArgList [
-"Answer the first string if the given condition is true, otherwise answer the second."
+	"Run the given block with the given list of args."
 	<phratchItem: 'run $CSlot$ $Input$ $SAList$' kind: #MultiArgCommandBlockMorph category: 'control' defaultValues: #() subCategory: #process special: #()>
 
 ]
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> doRunBlockWithArgs [
-"Answer the first string if the given condition is true, otherwise answer the second."
+	"Run the given block with the given args."
 	<phratchItem: 'run $CSlot$ $Input$ $String$' kind: #MultiArgCommandBlockMorph category: 'control' defaultValues: #() subCategory: #process special: #()>
 
 ]
@@ -3497,12 +3498,13 @@ ScriptablePhratchMorph >> doStopBlock [
 
 { #category : #byob }
 ScriptablePhratchMorph >> doUntil [
+	"Repeat until the given condition"
 	<phratchItem: 'repeat until $Boolean$' kind: #CBlockMorph category: 'control' defaultValues: #(10) subCategory: #loop special: #()>
 ]
 
 { #category : #'other ops' }
 ScriptablePhratchMorph >> doWaitUntil [
-	"Do nothing; just wait for the time interval to elapse."
+	"Do nothing; just wait until the given condition."
 	<phratchItem: 'wait until $Boolean$' kind: #SpecialBlockMorph category: 'control' defaultValues: #() subCategory: #time special: #()>
 	^ nil
 
@@ -3510,6 +3512,7 @@ ScriptablePhratchMorph >> doWaitUntil [
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> doWithCamOpen [
+	"Do the included block while opening the camera"
 	<phratchItem: 'do with camera open' kind: #CBlockMorph category: 'looks' defaultValues: #() subCategory: #a9 special: #()>
 	
 ]
@@ -3549,6 +3552,7 @@ ScriptablePhratchMorph >> drawNewCostume [
 
 { #category : #'sound ops' }
 ScriptablePhratchMorph >> drum: midiKey duration: beats elapsed: elapsedMSecs from: aNotePlayer [
+	"play drum with the given parameters"
 	<phratchItem: 'play drum $Drums$ for $Number$ beats' kind: #TimeBlockMorph category: 'sound' defaultValues: #(48 0.2) subCategory: #a2 special: #()>
 	| stage player |
 	aNotePlayer ifNil: [  "first call, start playing the drum"
@@ -3947,6 +3951,7 @@ ScriptablePhratchMorph >> existsBlockId: id global: bool [
 
 { #category : #'block API' }
 ScriptablePhratchMorph >> exitPhratch [
+	"WARNING: this block closes Phratch !"
 	<phratchItem: 'quit Phratch' kind: #- category: 'control' defaultValues: #() subCategory: #project special: #()>
     Smalltalk snapshot: false andQuit: true
 ]
@@ -3992,6 +3997,7 @@ ScriptablePhratchMorph >> exportObject [
 
 { #category : #'block API' }
 ScriptablePhratchMorph >> factorial: t1 [ 
+	"Compute the factorial of the given number"
 	<phratchItem: 'factorial of $Number$' kind: #ReporterBlockMorph category: 'operators' defaultValues: #() subCategory: #a9 special: #()>
     | answer t1store |
     t1 isInf ifTrue:[^0].
@@ -4011,6 +4017,7 @@ ScriptablePhratchMorph >> factorial: t1 [
 
 { #category : #'looks ops' }
 ScriptablePhratchMorph >> filterReset [
+	"Reset all the graphics filters applied to the sprite"
 	<phratchItem: 'clear graphic effects' kind: #- category: 'looks' defaultValues: #() subCategory: #a3 special: #()>
 	filterPack := nil.
 	self transparency: 0.
@@ -4084,6 +4091,7 @@ ScriptablePhratchMorph >> form: aForm [
 
 { #category : #'BYOB object interface' }
 ScriptablePhratchMorph >> get: anObject [
+	"Return the value of the given attribute"
 	<phratchItem: 'attribute $Attributes$' kind: #ReporterBlockMorph category: 'sensing' defaultValues: #() subCategory: #a3 special: #()>
 	| oi sel obj att block |
 
@@ -4132,12 +4140,14 @@ ScriptablePhratchMorph >> getColor: colorName [
 
 { #category : #byob }
 ScriptablePhratchMorph >> getFalse [
+	"Return the boolean False"
 	<phratchItem: 'false' kind: #BooleanBlockMorph category: 'operators' defaultValues: #() subCategory: #a5 special: #()>
 	^false
 ]
 
 { #category : #'list ops' }
 ScriptablePhratchMorph >> getLine: lineNum ofList: listName [
+	"Return the value of given item number in the given list"
 	<phratchItem: 'item $ListIndex$ of $List$' kind: #ReporterBlockMorph category: 'list' defaultValues: #(1) subCategory: #a5 special: #()>
 	| list |
 	list := (listName isKindOf: PhratchListMorph)
@@ -4148,12 +4158,14 @@ ScriptablePhratchMorph >> getLine: lineNum ofList: listName [
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> getNamedColor: aColorName [
+	"Return the color with the given name"
 	<phratchItem: 'color named $NamedColors$' kind: #ColorBlockMorph category: 'colors' defaultValues: #() subCategory: #a7 special: #()>
 	^ Color fromString: aColorName.
 ]
 
 { #category : #'byob OOP' }
 ScriptablePhratchMorph >> getObject: anObject [
+	"Return the given sprite"
 	<phratchItem: 'object $Sprite$' kind: #ReporterBlockMorph category: 'sensing' defaultValues: #() subCategory: #a3 special: #()>
 	^ anObject
 ]
@@ -4165,6 +4177,7 @@ ScriptablePhratchMorph >> getSpawnOf: anObject [
 
 { #category : #byob }
 ScriptablePhratchMorph >> getTrue [
+	"Return the boolean True"
 	<phratchItem: 'true' kind: #BooleanBlockMorph category: 'operators' defaultValues: #() subCategory: #a5 special: #()>
 	^true
 ]
@@ -4202,6 +4215,7 @@ ScriptablePhratchMorph >> getVar: varName block: aVariableBlockMorph [
 
 { #category : #'BYOB OOP message passing' }
 ScriptablePhratchMorph >> getVarOrListNamed: varName [
+	"Get the variable or list with the given name"
 	<phratchItem: 'variable named $String$' kind: #ReporterBlockMorph category: 'variables' defaultValues: #() subCategory: #a3 special: #()>
 	| value |
 	"first let's try to find a variable"
@@ -4371,7 +4385,7 @@ ScriptablePhratchMorph >> hideColor [
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> hideColor: varName [
-	"Hide the watcher(s) for the given variable. If the receiver is a sprite and both it and and the stage have the given variable, hide both. Do nothing if the variable does not exist or is already hidden."
+	"Hide the watcher(s) for the given color. If the receiver is a sprite and both it and and the stage have the given color, hide both. Do nothing if the color does not exist or is already hidden."
 	<phratchItem: 'hide color $ColorVar$' kind: #- category: 'colors' defaultValues: #('') subCategory: #a2 special: #()>
 	| stage |
 	self showOrHideColor: varName show: false.
@@ -4382,7 +4396,7 @@ ScriptablePhratchMorph >> hideColor: varName [
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> hideList: aList [
-	"Show the given list"
+	"Hide the watcher(s) for the given list. If the receiver is a sprite and both it and and the stage have the given list, hide both. Do nothing if the list does not exist or is already hidden."
 	<phratchItem: 'hide list $List$' kind: #- category: 'list' defaultValues: #() subCategory: #a3 special: #()>
 	self showOrHideList: aList show: false
 ]
@@ -4541,6 +4555,7 @@ ScriptablePhratchMorph >> inPresentationMode [
 
 { #category : #'block API' }
 ScriptablePhratchMorph >> indexOf: t1 List: t2 [ 
+	"Return the index of the given value in the given list"
 	<phratchItem: 'first index of $String$ in $List$' kind: #ReporterBlockMorph category: 'list' defaultValues: #('' 'list') subCategory: #a5 special: #()>  
   | t3 |
     t3 := 1.
@@ -4554,6 +4569,7 @@ ScriptablePhratchMorph >> indexOf: t1 List: t2 [
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> indexOf: subString startingAt: aNumber in: aString [
+	"Return the index of the given value in the given list starting at a given index"
 	<phratchItem: 'index of $String$ starting at $Number$ in $String$' kind: #ReporterBlockMorph category: 'operators' defaultValues: #('o' 6 'hello world') subCategory: #a6 special: #()>
     ^ aString asString findString: subString startingAt: aNumber
 ]
@@ -4645,6 +4661,7 @@ ScriptablePhratchMorph >> initializeVarsAndLists [
 
 { #category : #'list ops' }
 ScriptablePhratchMorph >> insert: anObject at: lineNum ofList: listName [
+	"Insert a value at the given index of the given list"
 	<phratchItem: 'insert $String$ at $ListIndex$ of $List$' kind: #- category: 'list' defaultValues: #('thing' 1) subCategory: #a4 special: #()>
 	| list i |
 	list := self listNamed: listName ifNone: [^ self].
@@ -4815,6 +4832,7 @@ ScriptablePhratchMorph >> isClone: aBoolean [
 
 { #category : #testing }
 ScriptablePhratchMorph >> isFibonacci: t1 [ 
+	"Return true if the given number is in the Fibonacci sequence"
 	<phratchItem: '$Number$ is a Fibonacci number?' kind: #BooleanBlockMorph category: 'operators' defaultValues: #() subCategory: #a9 special: #()>
     | fib1 fib2 oldfib2 fib3 oldfib3 |
                 t1 isInf ifTrue:[^false].
@@ -4855,12 +4873,14 @@ ScriptablePhratchMorph >> isHidden [
 
 { #category : #testing }
 ScriptablePhratchMorph >> isInteger: t1 [
+	"Return true if the given value is an integer"
 	<phratchItem: '$Number$ is an integer?' kind: #BooleanBlockMorph category: 'operators' defaultValues: #() subCategory: #a9 special: #()>
     ^ t1 = t1 rounded
 ]
 
 { #category : #'sensing ops' }
 ScriptablePhratchMorph >> isLoud [
+	"Return true if the sound is playing"
 	<phratchItem: 'loud?' kind: #BooleanBlockMorph category: 'sensing' defaultValues: #() subCategory: #a4 special: #()>
 	^ self class soundRecorder meterLevel > 30
 
@@ -4868,6 +4888,7 @@ ScriptablePhratchMorph >> isLoud [
 
 { #category : #byob }
 ScriptablePhratchMorph >> isObject: object type: type [
+	"Return true if the given object is a kind of given type"
 	<phratchItem: 'is $String$ a $Type$ ?' kind: #BooleanBlockMorph category: 'operators' defaultValues: #() subCategory: #b1 special: #()>
 	'object' "localized" = type ifTrue: [
 		^ object isKindOf: ScriptablePhratchMorph].
@@ -4917,6 +4938,7 @@ ScriptablePhratchMorph >> isObject: object type: type [
 
 { #category : #testing }
 ScriptablePhratchMorph >> isPrime: t1 [ 
+	"Return true if the given integer is prime"
 	<phratchItem: '$Number$ is prime?' kind: #BooleanBlockMorph category: 'operators' defaultValues: #() subCategory: #a9 special: #()>
     | divisor factor |
     t1 isInf ifTrue: [^ false].
@@ -4995,6 +5017,7 @@ ScriptablePhratchMorph >> keyPressed [
 
 { #category : #'sensing ops' }
 ScriptablePhratchMorph >> keyPressed: keyName [
+	"Return true if the currently pressed key is the given argument."
 	<phratchItem: 'key $Keys$ pressed?' kind: #BooleanBlockMorph category: 'sensing' defaultValues: #('space') subCategory: #a2 special: #()>
 	| ch |
 	ch := self asciiFor: keyName.
@@ -5111,13 +5134,14 @@ ScriptablePhratchMorph >> letterNum: letterNum of: aString [
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> letters: start through: end of: aString [
-	"Returns the letters in a string from the start index through the end index."
+	"Return the letters in a string from the start index through the end index."
 	<phratchItem: 'letters $Number$ - $Number$ of $String$' kind: #ReporterBlockMorph category: 'operators' defaultValues: #(1 5 'hello world') subCategory: #a6 special: #()>
 	^ aString asString copyFrom: (start max: 1) to: (end min: aString size).
 ]
 
 { #category : #'list ops' }
 ScriptablePhratchMorph >> lineCountOfList: listName [
+	"Give the number of items in the given list"
 	<phratchItem: 'length of $List$' kind: #ReporterBlockMorph category: 'list' defaultValues: #() subCategory: #a5 special: #()>
 	| list |
 	list := self listNamed: listName ifNone: [^ 0].
@@ -5145,6 +5169,7 @@ ScriptablePhratchMorph >> lineNum: lineNum forList: list [
 
 { #category : #'list ops' }
 ScriptablePhratchMorph >> list: listName contains: anObject [
+	"Verify if the list contains the given object."
 	<phratchItem: '$List$ contains $String$' kind: #BooleanBlockMorph category: 'list' defaultValues: #('list' 'thing') subCategory: #a5 special: #()>
 	| list |
 	list := self listNamed: listName ifNone: [^ false].
@@ -5404,7 +5429,7 @@ ScriptablePhratchMorph >> midiDrumMenu [
 
 { #category : #'sound ops' }
 ScriptablePhratchMorph >> midiInstrument: aNumber [
-	"Old 'set instrument to :=' block. Set the MIDI instrument used for note sounds."
+	"Set the MIDI instrument used for note sounds."
 	<phratchItem: 'set instrument to $Instruments$' kind: #- category: 'sound' defaultValues: #(1) subCategory: #a3 special: #()>
 	| stage player |
 	(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNil: [^ self].
@@ -5579,12 +5604,14 @@ ScriptablePhratchMorph >> midiNoteMenu [
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> mixColor: color1 ratioA: a toB: b with: color2 [
+	"Mix the two colors with the given ratios"
 	<phratchItem: 'mix $Color$ $Number$ : $Number$ with $Color$' kind: #ColorBlockMorph category: 'colors' defaultValues: #() subCategory: #a6 special: #()>
 	^ color1 mixed: (a / (a + b)) with: color2.
 ]
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> mixColor: color1 with: color2 [
+	"Mix the two colors"
 	<phratchItem: 'mix $Color$ with $Color$' kind: #ColorBlockMorph category: 'colors' defaultValues: #() subCategory: #a6 special: #()>
 	^ color1 mixed: 0.5 with: color2.
 ]
@@ -5627,6 +5654,7 @@ ScriptablePhratchMorph >> mouseDown: evt [
 
 { #category : #'sensing ops' }
 ScriptablePhratchMorph >> mousePressed [
+	"Return true if the mouse is pressed"
 	<phratchItem: 'mouse down?' kind: #BooleanBlockMorph category: 'sensing' defaultValues: #() subCategory: #a2 special: #()>
 	^ Sensor redButtonPressed
 
@@ -5634,6 +5662,7 @@ ScriptablePhratchMorph >> mousePressed [
 
 { #category : #'sensing ops' }
 ScriptablePhratchMorph >> mouseX [
+	"Give the x position of the mouse"
 	<phratchItem: 'mouse x' kind: #ReporterBlockMorph category: 'sensing' defaultValues: #() subCategory: #a21 special: #()>
 	| s centerX |
 	DoubleSize ifTrue: [^ (Sensor lastMousePosition x - PhratchOrigin x) // 2].
@@ -5650,6 +5679,7 @@ ScriptablePhratchMorph >> mouseX [
 
 { #category : #'sensing ops' }
 ScriptablePhratchMorph >> mouseY [
+	"Give the y position of the mouse"	
 	<phratchItem: 'mouse y' kind: #ReporterBlockMorph category: 'sensing' defaultValues: #() subCategory: #a21 special: #()>
 	| s centerY |
 	DoubleSize ifTrue: [^ (Sensor lastMousePosition y - PhratchOrigin y) negated // 2].
@@ -5666,6 +5696,7 @@ ScriptablePhratchMorph >> mouseY [
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> moveVar: aVarName toX: x y: y [
+	"Move the watcher of the given variable at the position x,y. Do nothing if the watcher is hidden"
 	<phratchItem: 'move $Variable$ to x: $Number$ y: $Number$' kind: #- category: 'variables' defaultValues: #('' 0 0) subCategory: #a5 special: #()>
 	| stage |
 	self positionVar: aVarName atX: x y: y.
@@ -5684,6 +5715,7 @@ ScriptablePhratchMorph >> mwait: duration elapsed: elapsed from: ignored [
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> n: aNumber toPower: aPower [
+	"Return the power n of the given number."
 	<phratchItem: '$Number$ ^ $Number$' kind: #ReporterBlockMorph category: 'operators' defaultValues: #(- -) subCategory: #a8 special: #()>
 	^ aNumber raisedTo: aPower
 ]
@@ -5723,6 +5755,7 @@ ScriptablePhratchMorph >> newCustomBlockFor: aDefinition [
 
 { #category : #byob }
 ScriptablePhratchMorph >> newList: aPhratchListMorph [
+	"Return a list of the given arguments. This list is not stored in the environment"
 	<phratchItem: 'list $MAAny$' kind: #ReporterBlockMorph category: 'list' defaultValues: #() subCategory: #a1 special: #()>
 	^aPhratchListMorph
 ]
@@ -5756,6 +5789,7 @@ ScriptablePhratchMorph >> nextInstanceName [
 
 { #category : #byob }
 ScriptablePhratchMorph >> not [
+	"Not operator. It is applied on a boolean"
 	<phratchItem: 'not $Boolean$' kind: #BooleanBlockMorph category: 'operators' defaultValues: #() subCategory: #a4 special: #()>
 
 ]
@@ -5770,6 +5804,7 @@ ScriptablePhratchMorph >> notEditingBlock [
 
 { #category : #'sound ops' }
 ScriptablePhratchMorph >> noteOn: midiKey duration: beats elapsed: elapsedMSecs from: aNotePlayer [
+	"Play the given note"
 	<phratchItem: 'play note $Notes$ for $Number$ beats' kind: #TimeBlockMorph category: 'sound' defaultValues: #(60 0.5) subCategory: #a3 special: #()>
 	| stage player |
 	aNotePlayer ifNil: [  "first call, start playing the note"
@@ -5797,7 +5832,7 @@ ScriptablePhratchMorph >> noteSelector [
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> numFileLines: aFileNameString [
-	"Answer the contents of the given file."
+	"Answer the number of lines in the given file."
 	<phratchItem: 'number of lines of file $String$' kind: #ReporterBlockMorph category: 'files' defaultValues: #() subCategory: #a special: #()>
 	| f data |
 	(self askForFileIO = true) ifFalse: [^ self].
@@ -5814,6 +5849,7 @@ ScriptablePhratchMorph >> numFileLines: aFileNameString [
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> numUrlFileLines: aURLString [
+	"Answer the number of lines in the given URL file."
 	<phratchItem: 'number of lines of file at URL $String$' kind: #ReporterBlockMorph category: 'files' defaultValues: #('http://') subCategory: #a special: #()>
 	^ (ZnHTTPSocketFacade httpGet: aURLString) contents lines size.
 ]
@@ -5827,6 +5863,7 @@ ScriptablePhratchMorph >> numberInParens: aNumber [
 
 { #category : #'block API' }
 ScriptablePhratchMorph >> numberSort: t1 [ 
+	"Sort the given list numerically"
 	<phratchItem: 'sort items of $List$ by numerical value' kind: #- category: 'list' defaultValues: #('list') subCategory: #a6 special: #()>
     | t2 t3 t4 t5 t6 |
     t2 := #() asOrderedCollection.
@@ -5858,6 +5895,7 @@ ScriptablePhratchMorph >> numberSort: t1 [
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> numericConstant: t1 [ 
+	"Return the value of the given constant"
 	<phratchItem: '$Constants$' kind: #ReporterBlockMorph category: 'operators' defaultValues: #('pi') subCategory: #a2 special: #()>
 	'pi' = t1 ifTrue: [^ Float pi].
 	'e' = t1 ifTrue: [^ Float e].
@@ -5867,6 +5905,7 @@ ScriptablePhratchMorph >> numericConstant: t1 [
 
 { #category : #accessing }
 ScriptablePhratchMorph >> objName [
+	"Return myself"
 	<phratchItem: 'self' kind: #ReporterBlockMorph category: 'control' defaultValues: #() subCategory: #self special: #()>
 	^ objName
 
@@ -5946,6 +5985,7 @@ ScriptablePhratchMorph >> onlyCostume: aForm [
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> openCamera [
+	"Open the camera if close. If it is already open, the block does nothing"
 	<phratchItem: 'open camera' kind: #- category: 'looks' defaultValues: #() subCategory: #a9 special: #()>
 	self cameraIsOpen ifFalse: [
 			(CameraPlugin openCamera: 1 width: 480 height: 360) ifNotNil: [
@@ -6047,6 +6087,7 @@ ScriptablePhratchMorph >> passiveWhirlEffect: aNumber [
 
 { #category : #menu }
 ScriptablePhratchMorph >> pause [
+	"Pause the main process and wait the user click on the OK button"
 	<phratchItem: 'pause' kind: #- category: 'control' defaultValues: #() subCategory: #startstop special: #()>
     DialogBoxMorph warn: 'Paused: Click OK to continue'.
 	self updateAfterPopUp.
@@ -6094,6 +6135,7 @@ ScriptablePhratchMorph >> pixelateEffect: aNumber [
 
 { #category : #'sound ops' }
 ScriptablePhratchMorph >> playSound: soundName [
+	"Play the given sound"
 	<phratchItem: 'play sound $SoundNames$' kind: #- category: 'sound' defaultValues: #() subCategory: #a1 special: #()>
 	| snd |
 	snd := self soundNamed: soundName ifAbsent: [^ self].
@@ -6155,6 +6197,7 @@ ScriptablePhratchMorph >> prepareForExport [
 
 { #category : #'block API' }
 ScriptablePhratchMorph >> pressGreenFlag [
+	"Make like if the user presses the Green flag."
 	<phratchItem: 'press green flag' kind: #- category: 'control' defaultValues: #() subCategory: #startstop special: #()>
 	| sFrame |
 	sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
@@ -6344,6 +6387,7 @@ ScriptablePhratchMorph >> purgeVarsAndLists [
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> quietCreateListNamed: listName [
+	"Create the given list silently"
 	<phratchItem: 'make list $String$' kind: #- category: 'list' defaultValues: #('a list') subCategory: #a2 special: #()>
 	| list stage n |
 	(self variableNameInUse: listName) ifTrue: [^ self].
@@ -6387,19 +6431,21 @@ ScriptablePhratchMorph >> readFile: aFileNameString [
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> readFromUrl: aURLString [
+	"Answer the contents of the given URL."
 	<phratchItem: 'contents of file at URL $String$' kind: #ReporterBlockMorph category: 'files' defaultValues: #('http://') subCategory: #a special: #()>
 	^ (ZnHTTPSocketFacade httpGet: aURLString) contents.
 ]
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> readLine: t1 FromUrl: t2 [ 
+	"Answer the contents of the given line of the given URL."
 	<phratchItem: 'line $Number$ of file at URL $String$' kind: #ReporterBlockMorph category: 'files' defaultValues: #(1 'http://') subCategory: #a special: #()>
 	^ (ZnHTTPSocketFacade httpGet: t2) contents lines at: t1 ifAbsent: [''].
 ]
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> readLine: lineNum ofFile: aFileNameString [
-	"Answer the contents of the given file."
+	"Answer the contents of the given line of the given file."
 	<phratchItem: 'line $Number$ of file $String$' kind: #ReporterBlockMorph category: 'files' defaultValues: #() subCategory: #a special: #()>
 	| f data |
 	(self askForFileIO = true) ifFalse: [^ self].
@@ -6521,6 +6567,7 @@ ScriptablePhratchMorph >> rest: duration elapsed: elapsed from: ignored [
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> returnW: aTypeString [
+	"Return the date and time current value"
 	<phratchItem: 'date/time: $TimeDates$' kind: #ReporterBlockMorph category: 'operators' defaultValues: #() subCategory: #a2 special: #()>
 	| time date |
 	time := Time now.
@@ -6589,6 +6636,7 @@ ScriptablePhratchMorph >> rotationCenter: aPoint [
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> rounded [
+	"Return the rounded value of the given argument"
 	<phratchItem: 'round $Number$' kind: #ReporterBlockMorph category: 'operators' defaultValues: #(-) subCategory: #a8 special: #()>
 
 ]
@@ -6610,6 +6658,7 @@ ScriptablePhratchMorph >> savePhoto: aForm [
 
 { #category : #'block API' }
 ScriptablePhratchMorph >> saveProj [
+	"Save the current project"
 	<phratchItem: 'save project' kind: #- category: 'control' defaultValues: #() subCategory: #project special: #()>
 | t1 |
 t1 := self ownerThatIsA: PhratchFrameMorph.
@@ -6662,6 +6711,7 @@ ScriptablePhratchMorph >> scripts [
 
 { #category : #'BYOB object interface' }
 ScriptablePhratchMorph >> set: anObject to: aValue [
+	"Set the given attribute to the given value"
 	<phratchItem: 'set $Attributes$ to $String$' kind: #- category: 'operators' defaultValues: #() subCategory: #b3 special: #()>
 	| oi sel obj att block arg |
 	oi := self objectInterface.
@@ -6697,6 +6747,7 @@ ScriptablePhratchMorph >> set: anObject to: aValue [
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> setColor: colorName to: newValue [
+	"Set the given color attribute to the given value"
 	<phratchItem: 'set $ColorVar$ to $Color$' kind: #- category: 'colors' defaultValues: #('') subCategory: #a1 special: #()>
 	| cName stage |
 	cName := colorName asString. "convert Symbol to String if needed"
@@ -6740,6 +6791,7 @@ ScriptablePhratchMorph >> setLayerTo: aNumber [
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> setLayoutOfVar: varName to: aString [
+	"Set the given layout of the variable to the given style"
 	<phratchItem: 'set layout of $Variable$ to $LayoutStyles$' kind: #- category: 'variables' defaultValues: #('' '') subCategory: #a5 special: #()>
 	| symbol b w frame stage |
 	symbol := aString asSymbol.
@@ -6759,6 +6811,7 @@ ScriptablePhratchMorph >> setLayoutOfVar: varName to: aString [
 
 { #category : #'list ops' }
 ScriptablePhratchMorph >> setLine: lineNum ofList: listName to: anObject [
+	"Replace the given item of the list by the given value"
 	<phratchItem: 'replace item $ListIndex$ of $List$ with $String$' kind: #- category: 'list' defaultValues: #(1 'list' 'thing') subCategory: #a4 special: #()>
 	| list |
 	list := self listNamed: listName ifNone: [^ ''].
@@ -6776,6 +6829,7 @@ ScriptablePhratchMorph >> setMedia: mediaCollection [
 
 { #category : #'sound ops' }
 ScriptablePhratchMorph >> setTempoTo: aNumber [
+	"Set the tempo"
 	<phratchItem: 'set tempo to $Number$ bpm' kind: #- category: 'sound' defaultValues: #(60) subCategory: #a5 special: #()>
 	| stage |
 	(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNil: [^ self].
@@ -6819,6 +6873,7 @@ ScriptablePhratchMorph >> setVar: varName to: newValue [
 
 { #category : #'sound ops' }
 ScriptablePhratchMorph >> setVolumeTo: aNumber [
+	"Set the volume to the given value"
 	<phratchItem: 'set volume to $Number$%' kind: #- category: 'sound' defaultValues: #(100) subCategory: #a4 special: #()>
 	self undeleteAttribute: #volume.
 	self passiveSetVolumeTo: aNumber
@@ -6827,6 +6882,7 @@ ScriptablePhratchMorph >> setVolumeTo: aNumber [
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> showAskDialogWithText: text [ 
+	"Show a popup with the given question. Wait for the answer."
 	<phratchItem: 'ask $String$ in dialog' kind: #- category: 'sensing' defaultValues: #('What''s your name?') subCategory: #a1 special: #()>
 	"Show an information dialog with the given title and text."
 	PhratchPrompterMorph lastAnswer: (StringDialog ask: text).
@@ -6864,7 +6920,7 @@ ScriptablePhratchMorph >> showColor [
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> showColor: varName [
-	"Show the watcher for the given variable. If the receiver is a sprite and both it and and the stage have the given variable, hide both. Do nothing if the variable does not exist or is already hidden."
+	"Show the watcher for the given color. If the receiver is a sprite and both it and and the stage have the given color, hide both. Do nothing if the color does not exist or is already hidden."
 	<phratchItem: 'show color $ColorVar$' kind: #- category: 'colors' defaultValues: #('') subCategory: #a2 special: #()>
 	| stage |
 	self showOrHideColor: varName show: true.
@@ -6875,6 +6931,7 @@ ScriptablePhratchMorph >> showColor: varName [
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> showInformDialog: title withText: text [ 
+	"Show a popup with the given information. Wait for the user to click on the OK button"
 	<phratchItem: 'show dialog $String$ with text $String$' kind: #- category: 'sensing' defaultValues: #('info' '') subCategory: #a1 special: #()>
 	"Show an information dialog with the given title and text."
 	DialogBoxMorph inform: text title: title.
@@ -6884,7 +6941,7 @@ ScriptablePhratchMorph >> showInformDialog: title withText: text [
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> showList: aList [
-	"Show the given list"
+	"Show the watcher(s) for the given list. If the receiver is a sprite and both it and and the stage have the given list, show both. Do nothing if the list does not exist or is already showing."
 	<phratchItem: 'show list $List$' kind: #- category: 'list' defaultValues: #() subCategory: #a3 special: #()>
 	self showOrHideList: aList show: true
 ]
@@ -6990,6 +7047,7 @@ ScriptablePhratchMorph >> soundFromIndex: aNumber [
 
 { #category : #'sensing ops' }
 ScriptablePhratchMorph >> soundLevel [
+	"Return the level of sound"
 	<phratchItem: 'loudness' kind: #ReporterBlockMorph category: 'sensing' defaultValues: #() subCategory: #a4 special: #()>
 	^ self class soundRecorder meterLevel
 
@@ -7178,6 +7236,7 @@ ScriptablePhratchMorph >> stopAll [
 
 { #category : #byob }
 ScriptablePhratchMorph >> stopAllScriptsFor: eventName [
+	"Stop all the scripts for the given object"
 	<phratchItem: 'stop all scripts for $Event$' kind: #- category: 'control' defaultValues: #() subCategory: #startstop special: #()>
 	| stage |
 	(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNotNil: [
@@ -7221,12 +7280,14 @@ ScriptablePhratchMorph >> stopScriptsFor: eventName [
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> stringAsColor: aString [
+	"Convert the given string into a color"
 	<phratchItem: '$String$ as color' kind: #ColorBlockMorph category: 'colors' defaultValues: #('#FFFFFF') subCategory: #a7 special: #()>
 	^ Color fromString: (aString asString).
 ]
 
 { #category : #'string ops' }
 ScriptablePhratchMorph >> stringLength: anObject [
+	"Return the number of characters of the given string"
 	<phratchItem: 'length of $String$' kind: #ReporterBlockMorph category: 'operators' defaultValues: #('world') subCategory: #a6 special: #()>
 	^ anObject asString size
 
@@ -7234,6 +7295,7 @@ ScriptablePhratchMorph >> stringLength: anObject [
 
 { #category : #'block API' }
 ScriptablePhratchMorph >> stringSort: t1 [
+	"Sort the list using the character order"
 	<phratchItem: 'sort items of $List$ by string value' kind: #- category: 'list' defaultValues: #('list') subCategory: #a6 special: #()> 
     | t2 t3 |
     (self lineCountOfList: t1)
@@ -7273,6 +7335,7 @@ ScriptablePhratchMorph >> takePhoto [
 
 { #category : #'sound ops' }
 ScriptablePhratchMorph >> tempo [
+	"Return the tempo"
 	<phratchItem: 'tempo' kind: #ReporterBlockMorph category: 'sound' defaultValues: #() subCategory: #a5 special: #()>
 	| stage |
 	(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNil: [^ 60].
@@ -7293,6 +7356,7 @@ ScriptablePhratchMorph >> timeDates [
 
 { #category : #'sensing ops' }
 ScriptablePhratchMorph >> timer [
+	"Return the timer"
 	<phratchItem: 'timer' kind: #ReporterBlockMorph category: 'sensing' defaultValues: #() subCategory: #timer special: #()>
 	| now |
 	now := Time millisecondClockValue.
@@ -7303,6 +7367,7 @@ ScriptablePhratchMorph >> timer [
 
 { #category : #'sensing ops' }
 ScriptablePhratchMorph >> timerReset [
+	"Reset the timer"
 	<phratchItem: 'reset timer' kind: #- category: 'sensing' defaultValues: #() subCategory: #timer special: #()>
 	TimerStartMSecs := Time millisecondClockValue.
 
@@ -7310,6 +7375,7 @@ ScriptablePhratchMorph >> timerReset [
 
 { #category : #'block API' }
 ScriptablePhratchMorph >> times: t1 List: t2 [ 
+	"Return the number times that the given value appears in the given list"
 <phratchItem: 'times $String$ appears in $List$' kind: #ReporterBlockMorph category: 'list' defaultValues: #('' 'list') subCategory: #a5 special: #()>
     | t3 t4 |
     t3 := 1.
@@ -7793,6 +7859,7 @@ ScriptablePhratchMorph >> visibility: aNumber [
 
 { #category : #'sound ops' }
 ScriptablePhratchMorph >> volume [
+	"Return the volume"
 	<phratchItem: 'volume' kind: #ReporterBlockMorph category: 'sound' defaultValues: #() subCategory: #a4 special: #()>
 	| att |
 	att := #volume.
@@ -7814,21 +7881,25 @@ ScriptablePhratchMorph >> wait: duration elapsed: elapsed from: ignored [
 
 { #category : #'other ops' }
 ScriptablePhratchMorph >> whenEventReceived [
+	"Wait for the given event"
 	<phratchItem: 'when I receive $Event$' kind: #EventHatMorph category: 'control' defaultValues: #() subCategory: #ahat special: #()>
 ]
 
 { #category : #'other ops' }
 ScriptablePhratchMorph >> whenFlagClicked [
+	"Wait for the green flag is pressed"
 	<phratchItem: 'when $Sprite$ clicked' kind: #StartEventHatMorph category: 'control' defaultValues: #() subCategory: #ahat special: #()>
 ]
 
 { #category : #'other ops' }
 ScriptablePhratchMorph >> whenKeyPressed [
+	"Wait for the given key is pressed"
 	<phratchItem: 'when $Keys$ key pressed' kind: #KeyEventHatMorph category: 'control' defaultValues: #() subCategory: #ahat special: #()>
 ]
 
 { #category : #'other ops' }
 ScriptablePhratchMorph >> whenSpriteClicked [
+	"Wait for the given srite is clicked"
 	<phratchItem: 'when $Sprite$ clicked' kind: #MouseClickEventHatMorph category: 'control' defaultValues: #() subCategory: #ahat special: #()>
 ]
 
@@ -7865,7 +7936,7 @@ ScriptablePhratchMorph >> wholeBlockSpecForSelector: aSymbol [
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> writeText: aString toFile: aFileNameString [
-	"Answer the contents of the given file."
+	"Write the given text in the given file."
 	<phratchItem: 'write $String$ to file $String$' kind: #- category: 'files' defaultValues: #() subCategory: #a special: #()>
 	| f |
 	(self askForFileIO = true) ifFalse: [^ self].
@@ -7902,6 +7973,7 @@ ScriptablePhratchMorph >> zoomRectFrom: startRect to: finalRect [
 
 { #category : #byob }
 ScriptablePhratchMorph >> | aBoolean [
+	"Boolean operator 'OR'"
 	<phratchItem: '$Boolean$ or $Boolean$' kind: #BooleanBlockMorph category: 'operators' defaultValues: #() subCategory: #a4 special: #()>
 
 ]
