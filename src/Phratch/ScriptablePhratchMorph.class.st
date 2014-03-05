@@ -1338,7 +1338,7 @@ ScriptablePhratchMorph >> blockFromOldFormTuple: tuple receiver: scriptOwner [
 		ifTrue: [ 
 			argCount := block argumentCount min: tuple size - 1.
 			1 to: argCount do: [ :i | 
-				tuple at: i + 1.
+				arg := tuple at: i + 1.
 				(arg isKindOf: Array)
 					ifTrue: [ 
 						"argument is a block"
@@ -1725,7 +1725,7 @@ ScriptablePhratchMorph >> blockFromTuple: tuple receiver: scriptOwner [
 									ifFalse: [ (block argumentAt: i) stringExpression: arg asString ] ] ].
 					^ block ].
 			1 to: argCount do: [ :i | 
-				tuple at: i + 3.
+				arg := tuple at: i + 3.
 				(arg isKindOf: Array)
 					ifTrue: [ 
 						"argument is a block"
