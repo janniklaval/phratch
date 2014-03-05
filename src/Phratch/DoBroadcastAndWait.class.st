@@ -7,7 +7,7 @@ Then, I am overriding #defaultArguments to provide my specific default values.
 "
 Class {
 	#name : #DoBroadcastAndWait,
-	#superclass : #Query,
+	#superclass : #PhratchCommandHandler,
 	#category : #'Phratch-DefaultArguments'
 }
 

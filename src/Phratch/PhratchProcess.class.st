@@ -616,7 +616,6 @@ PhratchProcess >> doIf [
 	"Evaluate the current expression (which must be an if)."
 
 	| block arguments argExp |
-
 	block := stackFrame expression.
 	arguments := stackFrame arguments.
 

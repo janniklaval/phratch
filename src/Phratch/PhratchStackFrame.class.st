@@ -175,7 +175,7 @@ PhratchStackFrame >> stopTalkThinkAsk [
 	
 	| query |
 	
-	query := Query from: expression asArgumentWrapper on: self.
+	query := PhratchCommandHandler from: expression asArgumentWrapper on: self.
 	
 	^ query stopTalkThinkAsk
 ]
