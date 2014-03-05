@@ -50,19 +50,3 @@ SoundBuffer >> reverseEndiannessStereo: stereoFlag [
 			blt sourceX: 2; destX: 3; copyBits].
 
 ]
-
-{ #category : #'*Phratch-Extensions' }
-SoundBuffer >> swapStereoChannels [
-	"Swap my left and right stereo channels."
-
-	| hack blt |
-	hack := Form new hackBits: self.
-	blt := (BitBlt toForm: hack) sourceForm: hack.
-	blt combinationRule: Form reverse.  "XOR"
-	blt sourceY: 0; destY: 0; height: self size; width: 2.
-
-	blt sourceX: 0; destX: 2; copyBits.  "swap 16-bit words using XOR"
-	blt sourceX: 2; destX: 0; copyBits.
-	blt sourceX: 0; destX: 2; copyBits.
-
-]
