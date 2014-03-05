@@ -409,16 +409,6 @@ ResizableToggleButton >> rightButtonMenu [
 		invokeModal
 ]
 
-{ #category : #layout }
-ResizableToggleButton >> rightJustifyInset: anInteger [
-	"Right-justify the label with the given inset from the right edge."
-
-	justification := #right.
-	hOffset := anInteger.
-	self updateLayout.
-
-]
-
 { #category : #private }
 ResizableToggleButton >> setCurrent: aMorph [
 	"Make the given morph be the one currently displayed."

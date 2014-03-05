@@ -73,11 +73,6 @@ LambdaBlockMorph >> checkBoxLabelled: aString marked: aBool width: anInt [
 ]
 
 { #category : #accessing }
-LambdaBlockMorph >> declarations [
-	^declarations
-]
-
-{ #category : #accessing }
 LambdaBlockMorph >> declarations: aDictionary [
 	declarations := aDictionary
 ]

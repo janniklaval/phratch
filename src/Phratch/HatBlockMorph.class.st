@@ -210,13 +210,6 @@ HatBlockMorph >> receiver: anObject [
 ]
 
 { #category : #accessing }
-HatBlockMorph >> scriptOwner [
-
-	^ scriptOwner
-
-]
-
-{ #category : #accessing }
 HatBlockMorph >> scriptOwner: anObject [
 
 	scriptOwner := anObject.

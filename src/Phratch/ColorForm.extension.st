@@ -15,19 +15,3 @@ ColorForm >> hibernateForPhratch [
 	self clearColormapCache.
 
 ]
-
-{ #category : #'*Phratch-Extensions' }
-ColorForm >> privateColors [
-
-	^ colors
-
-]
-
-{ #category : #'*Phratch-Extensions' }
-ColorForm >> privateColors: anObject [
-
-	colors := anObject.
-	cachedDepth := nil.
-	cachedColormap := nil.
-
-]

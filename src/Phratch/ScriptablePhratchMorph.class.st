@@ -151,11 +151,6 @@ ScriptablePhratchMorph class >> closeCamera [
 ]
 
 { #category : #'byob legacy support' }
-ScriptablePhratchMorph class >> currentEncoding [
-		^ObjEncoding ifNil: [^#phratch ]
-]
-
-{ #category : #'byob legacy support' }
 ScriptablePhratchMorph class >> decodeAsByob [
 		ObjEncoding := #byob 
 ]
@@ -6358,21 +6353,6 @@ ScriptablePhratchMorph >> prototype [
 	(self isKindOf: PhratchSpriteMorph)
 		ifTrue: [^ self prototype]
 		ifFalse: [^ nil]
-]
-
-{ #category : #byob }
-ScriptablePhratchMorph >> purgeVarsAndLists [
-
-	vars keysDo: [:each |
-		((vars at: each) isKindOf: BlockMorph)
-			ifTrue: [vars at: each put: '']].
-
-"
-	vars keysDo: [:each |
-		(((vars at: each) isKindOf: PhratchListMorph) or: [(vars at: each) isKindOf: BlockMorph ])
-			ifTrue: [vars at: each put: '']].
-
-"
 ]
 
 { #category : #'panther actions' }

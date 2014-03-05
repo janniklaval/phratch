@@ -165,23 +165,8 @@ CustomBlockDefinition >> commandSpecFrom: aUserSpec [
 ]
 
 { #category : #accessing }
-CustomBlockDefinition >> declarations [
-	^declarations
-]
-
-{ #category : #accessing }
 CustomBlockDefinition >> declarations: aDictionary [
 	declarations := aDictionary
-]
-
-{ #category : #private }
-CustomBlockDefinition >> deduceType [
-	"private - set my return type from the deprecated legacy attributes #isReporter and #isBoolean.
-	use this when reading an old block from file"
-
-	self isReporter ifFalse: [ ^ type := #none ].
-	isBoolean ifTrue: [ ^ type := #boolean ].
-	^ type := #any
 ]
 
 { #category : #accessing }

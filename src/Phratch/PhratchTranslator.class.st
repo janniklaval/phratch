@@ -147,13 +147,6 @@ PhratchTranslator class >> extractQuotedStringFrom: aString [
 
 ]
 
-{ #category : #'Unicode rendering' }
-PhratchTranslator class >> fixAmbigousRTLPunctuation [
-	"In a right-to-left language such as Arabic, punctuation characters such as period can be treated as either right-to-left or left-to-right characters. When they appear at the beginning of a string, the directionality is ambiguous. We assume that translation strings that start with punctuation characters are intended to start in left-to-right mode. This method prefixes punctuation characters with the Unicode LTR mark character, U+200E."
-	"Note: Embedded colons are prefixed with the LTR mark everwhere that they appear since block translation strings are broken into component parts that can start with a colon."
-
-]
-
 { #category : #'rendering menu' }
 PhratchTranslator class >> fontScaleMenu [
 	"Present a menu of font scales."

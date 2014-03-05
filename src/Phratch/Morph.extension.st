@@ -91,12 +91,6 @@ Morph >> isPartsBin [
 ]
 
 { #category : #'*Phratch-Extensions' }
-Morph >> isPartsDonor: aBoolean [
-
-	^false
-]
-
-{ #category : #'*Phratch-Extensions' }
 Morph >> isSticky: aBoolean [
 
 	^ self sticky: aBoolean
