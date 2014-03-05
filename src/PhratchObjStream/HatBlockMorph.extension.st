@@ -26,6 +26,13 @@ HatBlockMorph >> initFieldsFrom: anObjStream version: classVersion [
 ]
 
 { #category : #'*PhratchObjStream' }
+HatBlockMorph >> scriptOwner [
+
+	^ scriptOwner
+
+]
+
+{ #category : #'*PhratchObjStream' }
 HatBlockMorph >> storeFieldsOn: anObjStream [
 
 	super storeFieldsOn: anObjStream.

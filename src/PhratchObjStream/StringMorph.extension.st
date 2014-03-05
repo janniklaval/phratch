@@ -1,6 +1,16 @@
 Extension { #name : #StringMorph }
 
 { #category : #'*PhratchObjStream' }
+StringMorph >> closeEditor [
+	"Be sure that any StringMorphEditors on me have been removed."
+
+	self doneWithEdits.
+	submorphs size = 0 ifTrue: [^ self].
+	submorphs copy do: [:m |
+		(m isKindOf: StringMorphEditor) ifTrue: [m delete]].
+]
+
+{ #category : #'*PhratchObjStream' }
 StringMorph >> fieldsVersion [
 
 	^ 1

@@ -41,6 +41,12 @@ Morph >> initObsoleteFieldNamed: varName from: anObjStream [
 ]
 
 { #category : #'*PhratchObjStream' }
+Morph >> isPartsDonor: aBoolean [
+
+	^false
+]
+
+{ #category : #'*PhratchObjStream' }
 Morph >> storeFieldsOn: anObjStream [
 	| flags |
 	self storeFieldsNamed: #(#bounds #owner #submorphs #color) on: anObjStream.

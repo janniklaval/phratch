@@ -1,6 +1,21 @@
 Extension { #name : #CustomBlockDefinition }
 
 { #category : #'*PhratchObjStream' }
+CustomBlockDefinition >> declarations [
+	^declarations
+]
+
+{ #category : #'*PhratchObjStream' }
+CustomBlockDefinition >> deduceType [
+	"private - set my return type from the deprecated legacy attributes #isReporter and #isBoolean.
+	use this when reading an old block from file"
+
+	self isReporter ifFalse: [ ^ type := #none ].
+	isBoolean ifTrue: [ ^ type := #boolean ].
+	^ type := #any
+]
+
+{ #category : #'*PhratchObjStream' }
 CustomBlockDefinition >> fieldsVersion [
 
 	^ 4

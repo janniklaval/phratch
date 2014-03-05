@@ -1,6 +1,11 @@
 Extension { #name : #ScriptablePhratchMorph }
 
 { #category : #'*PhratchObjStream' }
+ScriptablePhratchMorph class >> currentEncoding [
+		^ObjEncoding ifNil: [^#phratch ]
+]
+
+{ #category : #'*PhratchObjStream' }
 ScriptablePhratchMorph >> initFieldsFrom: anObjStream version: classVersion [
 
 	| fields |
@@ -28,6 +33,21 @@ ScriptablePhratchMorph >> initFieldsFrom: anObjStream version: classVersion [
 	super initFieldsFrom: anObjStream version: classVersion.
 	self initFieldsNamed: fields from: anObjStream.
 
+]
+
+{ #category : #'*PhratchObjStream' }
+ScriptablePhratchMorph >> purgeVarsAndLists [
+
+	vars keysDo: [:each |
+		((vars at: each) isKindOf: BlockMorph)
+			ifTrue: [vars at: each put: '']].
+
+"
+	vars keysDo: [:each |
+		(((vars at: each) isKindOf: PhratchListMorph) or: [(vars at: each) isKindOf: BlockMorph ])
+			ifTrue: [vars at: each put: '']].
+
+"
 ]
 
 { #category : #'*PhratchObjStream' }

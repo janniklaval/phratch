@@ -1,6 +1,17 @@
 Extension { #name : #PhratchListMorph }
 
 { #category : #'*PhratchObjStream' }
+PhratchListMorph >> complexContents: anArray [
+
+	| obj |
+	1 to: anArray size do: [:i |
+		obj := anArray at: i.
+		obj isNil ifFalse: [
+			self setLineAt: i to: obj]].
+	anArray isEmpty ifFalse: [ self noteChangeAtIndex: 1 ]
+]
+
+{ #category : #'*PhratchObjStream' }
 PhratchListMorph >> fieldsVersion [
 
 	^ 3
