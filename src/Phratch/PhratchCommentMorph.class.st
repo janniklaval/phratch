@@ -241,7 +241,7 @@ PhratchCommentMorph >> initialize [
 		growWithText: true;
 		borderWidth: 0;
 		font: (PhratchFrameMorph getFont: #CommentBlock);
-		contents: 'add comment here' localized, PhratchTranslator ellipsesSuffix;
+		contents: 'add comment here' localized, '...';
 		width: self defaultWidth - resizeMorph width;
 		yourself.
 	bottomBar addMorphBack: commentMorph.
@@ -297,7 +297,7 @@ PhratchCommentMorph >> labelWhenClosed [
 	maxW := self width - 22.
 	firstLine := commentMorph lines at: 1.
 	(labelMorph stringWidth: firstLine) < maxW ifTrue: [^ firstLine].
-	ellipses := PhratchTranslator ellipsesSuffix.
+	ellipses := '...'.
 
 	1 to: firstLine size do: [:i |
 		s := firstLine copyFrom: 1 to: i.
@@ -366,15 +366,9 @@ PhratchCommentMorph >> refreshConnector [
 		connector goBehind].
 
 	y := self top + 7.
-	PhratchTranslator isRTL
-		ifTrue: [
-			connector
-				from: (anchor left + 1) @ y
-				to: self right @ y]
-		ifFalse: [
-			connector
-				from: (anchor right - 1) @ y
-				to: self left @ y].
+	connector
+		from: (anchor right - 1) @ y
+		to: self left @ y
 
 
 ]
@@ -563,12 +557,8 @@ PhratchCommentMorph >> updateAnchorOffset [
 	touching := rects detect: [ :r | r intersects: self bounds ] ifNone: [ nil ].
 	touching isNil ]
 		whileFalse: [ 
-			PhratchTranslator isRTL
-				ifTrue: [ self right: (self right min: touching left - extraSpace) ]
-				ifFalse: [ self left: (self left max: touching right + extraSpace) ] ].
-	anchorOffset := PhratchTranslator isRTL
-		ifTrue: [ anchor left - self right ]
-		ifFalse: [ self left - anchor right ].
+			 self left: (self left max: touching right + extraSpace) ].
+	anchorOffset :=  self left - anchor right.
 	self updatePosition
 ]
 
@@ -579,9 +569,7 @@ PhratchCommentMorph >> updatePosition [
 	anchor ifNil: [^ self].
 
 	vOffset := (anchor isKindOf: HatBlockMorph) ifTrue: [19] ifFalse: [3].
-	PhratchTranslator isRTL
-		ifTrue: [self position: (anchor left - self width - anchorOffset) @ (anchor top + vOffset)]
-		ifFalse: [self position: (anchor right + anchorOffset) @ (anchor top + vOffset)].
+	self position: (anchor right + anchorOffset) @ (anchor top + vOffset).
 
 	self refreshConnector.
 	oldAnchorPos := anchor position.

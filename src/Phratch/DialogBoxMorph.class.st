@@ -117,7 +117,7 @@ DialogBoxMorph class >> inform: informationString withDetails: detailsString [
 	dialogBox := self new
 		withButtonsForYes: false no: false okay: true cancel: false.
 	dialogBox
-		message: (informationString localized, PhratchTranslator colonSuffix)
+		message: (informationString localized, ':')
 		details: detailsString
 		font: (PhratchFrameMorph getFont: #DialogBoxMessage).
 PhratchFrameMorph allInstancesDo: [ :d | d updatePanes ].
@@ -435,9 +435,7 @@ DialogBoxMorph >> initialize [
 		height: 32;
 		yourself.
 
-	PhratchTranslator isRTL
-		ifTrue: [fileInfoColumn centering: #bottomRight]
-		ifFalse: [fileInfoColumn centering: #topLeft].
+	fileInfoColumn centering: #topLeft.
 
 	self
 		addMorph: mainColumn;

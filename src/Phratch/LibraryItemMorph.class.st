@@ -459,7 +459,7 @@ LibraryItemMorph >> truncatedLabel [
 
 	nameMorph contents = target objName ifFalse: [
 		n := target objName.
-		ellipses := PhratchTranslator ellipsesSuffix.
+		ellipses := '...'.
 		1 to: n size do: [:i |
 			s := n copyFrom: 1 to: i.
 			w := nameMorph stringWidth: (s, ellipses).
@@ -475,7 +475,7 @@ LibraryItemMorph >> updateNameAndInfo [
 
 	| txt |
 
-	txt := ((target objName, ' (', 'Scripts' localized, PhratchTranslator colonSuffix, ' ', target scripts size printString,')')).
+	txt := ((target objName, ' (', 'Scripts' localized, ': ', target scripts size printString,')')).
 
 	target prototype ifNotNil: [
 		txt := (txt, ' kind of: ', target prototype objName)].

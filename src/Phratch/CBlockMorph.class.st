@@ -104,22 +104,16 @@ CBlockMorph >> blockAttachPoints: aSet [
 	result := #().
 	(self isKindOf: HatBlockMorph)
 		ifFalse: [ 
-			result := PhratchTranslator isRTL
-				ifTrue: [ result copyWith: self topRight -> self ]
-				ifFalse: [ result copyWith: self topLeft -> self ] ].
+			result :=  result copyWith: self topLeft -> self ].
 	nestedBlock
 		ifNil: [ 
-			result := PhratchTranslator isRTL
-				ifTrue: [ result copyWith: self topRight + (-12 @ (self topBarHeight + 7)) -> self ]
-				ifFalse: [ result copyWith: self topLeft + (12 @ (self topBarHeight + 7)) -> self ] ]
+			result :=  result copyWith: self topLeft + (12 @ (self topBarHeight + 7)) -> self  ]
 		ifNotNil: [ nestedBlock blockAttachPoints: aSet ].
 	nextBlock
 		ifNil: [ 
 			self isStopOrForever
 				ifFalse: [ 
-					result := PhratchTranslator isRTL
-						ifTrue: [ result copyWith: self bottomRight -> self ]
-						ifFalse: [ result copyWith: self bottomLeft -> self ] ] ]
+					result :=  result copyWith: self bottomLeft -> self  ] ]
 		ifNotNil: [ nextBlock blockAttachPoints: aSet ].
 	aSet addAll: result
 ]
@@ -356,33 +350,20 @@ CBlockMorph >> fixBlockLayout [
 			stretchHeight := 0.
 			nestedBlock fixBlockLayout.
 			newH := newH + nestedBlock fullBounds height - 1.
-			PhratchTranslator isRTL
-				ifTrue: [nestedBlock position: self topRight - ((CBlockBracketThickness + nestedBlock width)@0)
-					+ (0@(self topBarHeight + 3))]
-				ifFalse: [nestedBlock position: self position + (CBlockBracketThickness@(self topBarHeight + 3))].
+			nestedBlock position: self position + (CBlockBracketThickness@(self topBarHeight + 3)).
 			nestedBlock blockSequence last isStopOrForever ifTrue: [newH := newH + 4]].
 	self extent: newW@newH + (0@stretchHeight).
-	PhratchTranslator isRTL ifTrue: [
-		self left: self left + (oldExtent x - newW)].
 
 	"position loop morph"
 	loopMorph ifNotNil: [
 		f := PhratchFrameMorph skinAt: #loopIcon.
-		PhratchTranslator isRTL
-			ifTrue: [loopMorph form: (f flipBy: #horizontal centerAt: f center)]
-			ifFalse: [loopMorph form: f].
+		loopMorph form: f.
 		self isForever
-			ifTrue: [PhratchTranslator isRTL
-				ifTrue: [loopMorph position: self bottomLeft + (4@0) - (0@(loopMorph height + 2))]
-				ifFalse: [loopMorph position: self bottomRight - loopMorph extent - (4@2)]]
-			ifFalse: [PhratchTranslator isRTL
-				ifTrue: [loopMorph position: self bottomLeft + (4@0) - (0@(loopMorph height + 6))]
-				ifFalse: [loopMorph position: self bottomRight - loopMorph extent - (4@6)]]].
+			ifTrue: [loopMorph position: self bottomRight - loopMorph extent - (4@2)]
+			ifFalse: [loopMorph position: self bottomRight - loopMorph extent - (4@6)]].
 
 	nextBlock ifNotNil: [
-		PhratchTranslator isRTL
-			ifTrue: [nextBlock position: (self right - nextBlock width)@(self bottom - 4)]
-			ifFalse: [nextBlock position: self left@(self bottom - 4)]].
+		nextBlock position: self left@(self bottom - 4)].
 
 ]
 

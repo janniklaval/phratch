@@ -114,9 +114,7 @@ ExpressionArgMorph >> fixArgLayout [
 			isText
 				ifTrue: [self width: (self width max: 25)]].
 
-	PhratchTranslator isRTL
-		ifTrue: [labelMorph position: (self right - (xInset + labelMorph width)) @ top]
-		ifFalse: [labelMorph position: (self left + xInset) @ top].
+	labelMorph position: (self left + xInset) @ top.
 
 ]
 

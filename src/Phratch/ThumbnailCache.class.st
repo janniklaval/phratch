@@ -91,7 +91,7 @@ ThumbnailCache >> updateThumbnails [
 	fList size > 0
 		ifFalse: [ ^ self ].
 	n := 0.
-	'Updating thumbnails' localized , PhratchTranslator ellipsesSuffix
+	'Updating thumbnails' localized , '...'
 		displayProgressAt: Display center
 		from: 0
 		to: fList size

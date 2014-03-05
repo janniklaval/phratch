@@ -90,26 +90,18 @@ IfElseBlockMorph >> blockAttachPoints: aSet [
 		ifTrue: [ result := result copyWith: self topLeft -> self ].
 	(self isKindOf: HatBlockMorph)
 		ifFalse: [ 
-			result := PhratchTranslator isRTL
-				ifTrue: [ result copyWith: self topRight -> self ]
-				ifFalse: [ result copyWith: self topLeft -> self ] ].
+			result :=  result copyWith: self topLeft -> self  ].
 	trueBlock
 		ifNil: [ 
-			result := PhratchTranslator isRTL
-				ifTrue: [ result copyWith: (self right - 12) @ (self top + self topBarHeight + 7) -> self ]
-				ifFalse: [ result copyWith: self topLeft + (12 @ (self topBarHeight + 7)) -> self ] ]
+			result :=  result copyWith: self topLeft + (12 @ (self topBarHeight + 7)) -> self  ]
 		ifNotNil: [ trueBlock blockAttachPoints: aSet ].
 	falseBlock
 		ifNil: [ 
-			result := PhratchTranslator isRTL
-				ifTrue: [ result copyWith: (self right - 12) @ (self top + elseBarY + self elseBarHeight + 9) -> self ]
-				ifFalse: [ result copyWith: self topLeft + (12 @ (elseBarY + self elseBarHeight + 9)) -> self ] ]
+			result :=  result copyWith: self topLeft + (12 @ (elseBarY + self elseBarHeight + 9)) -> self  ]
 		ifNotNil: [ falseBlock blockAttachPoints: aSet ].
 	nextBlock
 		ifNil: [ 
-			result := PhratchTranslator isRTL
-				ifTrue: [ result copyWith: self bottomRight -> self ]
-				ifFalse: [ result copyWith: self bottomLeft -> self ] ]
+			result :=  result copyWith: self bottomLeft -> self  ]
 		ifNotNil: [ nextBlock blockAttachPoints: aSet ].
 	aSet addAll: result
 ]
@@ -334,9 +326,7 @@ IfElseBlockMorph >> fixBlockLayout [
 		ifNil: [newH := newH + 15]
 		ifNotNil: [
 			trueBlock fixBlockLayout.
-			PhratchTranslator isRTL
-				ifTrue: [trueBlock position: (self right - trueBlock width - CBlockBracketThickness)@(self top + newH)]
-				ifFalse: [trueBlock position: self position + (CBlockBracketThickness@newH)].
+			trueBlock position: self position + (CBlockBracketThickness@newH).
 			newH := newH + trueBlock fullBounds height.
 			trueBlock blockSequence last isStopOrForever ifTrue: [newH := newH + 4]].
 
@@ -347,23 +337,16 @@ IfElseBlockMorph >> fixBlockLayout [
 		ifNil: [newH := newH + 15]
 		ifNotNil: [
 			falseBlock fixBlockLayout.
-			PhratchTranslator isRTL
-				ifTrue: [falseBlock position: (self right - falseBlock width - CBlockBracketThickness)@(self top + newH)]
-				ifFalse: [falseBlock position: self position + (CBlockBracketThickness@newH)].
+			falseBlock position: self position + (CBlockBracketThickness@newH).
 			newH := newH + falseBlock fullBounds height.
 			falseBlock blockSequence last isStopOrForever ifTrue: [newH := newH + 4]].
 
 	newH := newH + CBlockBracketThickness.
 	self height: newH.
-	nextBlock ifNotNil: [PhratchTranslator isRTL
-		ifTrue: [nextBlock position: (self right - nextBlock width)@(self bottom - 4)]
-		ifFalse: [nextBlock position: self left@(self bottom - 4)]].
+	nextBlock ifNotNil: [nextBlock position: self left@(self bottom - 4)].
 
-	PhratchTranslator isRTL
-		ifTrue: [elseMorph position: (self right - elseMorph width - 6)@(self top + elseBarY
-			+ ((PhratchTranslator centerOffsetForButtonWithFont: (PhratchFrameMorph getFont: #Label)) // 4))]
-		ifFalse: [elseMorph position: (self left + 6)@(self top + elseBarY
-			+ ((PhratchTranslator centerOffsetForButtonWithFont: (PhratchFrameMorph getFont: #Label)) // 4))].
+	elseMorph position: (self left + 6)@(self top + elseBarY
+			+ ((PhratchTranslator centerOffsetForButtonWithFont: (PhratchFrameMorph getFont: #Label)) // 4)).
 
 ]
 

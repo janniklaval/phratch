@@ -312,8 +312,6 @@ CommandBlockMorph >> asBlockTuple [
 		at: 3 put: selector.
 	argList := argMorphs.
 	argList := self organizeArgs: argList.
-	((#(#+ #- #/ #* #=) includes: selector) and: [ PhratchTranslator isRTLMath ])
-		ifTrue: [ argList := argList reversed ].	"RTLMath operators are RTL"
 	1 to: argList size do: [ :i | 
 		arg := argList at: i.
 		(arg isKindOf: ArgMorph) | (arg isKindOf: EventTitleMorph)
@@ -630,10 +628,7 @@ CommandBlockMorph >> evaluateInfixWithArgs: rawArgs [
 					(args first isKindOf: PhratchListMorph)
 						ifTrue: [ ^ args first equals: args second ].
 					(args second isKindOf: PhratchListMorph)
-						ifTrue: [ ^ args second equals: args first ] ] ]
-		ifFalse: [ 
-			(PhratchTranslator isRTLMath and: [ selector ~= #\\ ])
-				ifTrue: [ args := args reversed ] ].	"RTLMath operators are RTL"
+						ifTrue: [ ^ args second equals: args first ] ] ].
 	(#(#& #|) includes: selector)
 		ifTrue: [ ^ args first perform: selector with: args second ].
 	((args first isKindOf: ScriptablePhratchMorph) or: [ args second isKindOf: ScriptablePhratchMorph ])
@@ -724,15 +719,11 @@ CommandBlockMorph >> fixBlockLayoutNoWrap [
 	((self isKindOf: CBlockMorph) or: [ self isKindOf: IfElseBlockMorph ])
 		ifTrue: [ w := w max: 71 ].
 	self extent: w @ h.
-	PhratchTranslator isRTL
-		ifTrue: [ self left: oldPos x + (oldExtent x - self width) ].
 	(nextB := self nextBlock)
 		ifNotNil: [ 
 			(self isKindOf: CBlockMorph)
 				ifFalse: [ 
-					PhratchTranslator isRTL
-						ifTrue: [ nextB position: (self right - nextB width) @ (self bottom - 4) ]
-						ifFalse: [ nextB position: self left @ (self bottom - 4) ] ].
+					 nextB position: self left @ (self bottom - 4)].
 			nextB fixBlockLayout ]
 ]
 

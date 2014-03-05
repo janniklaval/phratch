@@ -350,15 +350,9 @@ MultilineStringMorph >> drawCursor: charIndex line: lineIndex on: aCanvas [
 	pair := line size = 0
 		ifTrue: [ #(0 0) ]
 		ifFalse: [ (renderer xRangesFor: line) at: (charIndex within: 1 and: line size) ].
-	x := PhratchTranslator isRTL
-		ifTrue: [ 
-			charIndex > line size
-				ifTrue: [ pair min ]
-				ifFalse: [ pair max ] ]
-		ifFalse: [ 
-			charIndex > line size
-				ifTrue: [ pair max ]
-				ifFalse: [ pair min ] ].
+	x := charIndex > line size
+			ifTrue: [ pair max ]
+			ifFalse: [ pair min ].
 	p := self offsetForLine: lineIndex.
 	aCanvas fillRectangle: (p + (x @ 0) extent: 2 @ lineHeight) color: selectionColor
 ]
@@ -459,9 +453,7 @@ MultilineStringMorph >> drawTextOn: aCanvas [
 	centerText ifNil: [ centerText := false ].
 	lines
 		do: [ :s | 
-			x := PhratchTranslator isRTL
-				ifTrue: [ self width - hInset - (renderer stringWidth: s) ]
-				ifFalse: [ hInset ].
+			x :=  hInset .
 			centerText
 				ifTrue: [ x := (self width - hInset - (renderer stringWidth: s)) // 2 ].
 			self drawString: s at: x @ y on: aCanvas.
@@ -901,9 +893,7 @@ MultilineStringMorph >> offsetForLine: lineIndex [
 
 	| top |
 	top := self insetY + (lineHeight * (lineIndex - 1)).
-	PhratchTranslator isRTL
-		ifTrue: [^ (self width - (self insetX + (renderer stringWidth: (lines at: lineIndex)))) @ top]
-		ifFalse: [^ self insetX @ top].
+	^ self insetX @ top
 
 ]
 

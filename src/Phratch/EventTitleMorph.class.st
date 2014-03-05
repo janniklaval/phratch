@@ -142,7 +142,7 @@ EventTitleMorph >> presentMenu [
 		argument: n asString ].
 	menu addLine.
 	menu
-		add: 'new' localized , PhratchTranslator ellipsesSuffix
+		add: 'new' localized , '...'
 		target: self
 		selector: #newEvent.
 

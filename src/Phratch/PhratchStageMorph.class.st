@@ -1027,8 +1027,8 @@ PhratchStageMorph >> sceneNames [
 
 	^ setOfNames asArray sort, (Array
 		with: '-'
-		with: 'record' localized, PhratchTranslator ellipsesSuffix
-		with: 're-record' localized, PhratchTranslator ellipsesSuffix)
+		with: 'record' localized, '...'
+		with: 're-record' localized, '...')
 
 ]
 

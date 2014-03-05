@@ -116,9 +116,7 @@ ScrollFrameMorph >> extent: aPoint [
 	h := hScrollbar owner = self
 		ifTrue: [ h - hbarInset ]
 		ifFalse: [ h - scrollBarEndInset ].
-	PhratchTranslator isRTL
-		ifTrue: [ vScrollbar position: (inner left + 9) @ (inner top + scrollBarStartInset) ]
-		ifFalse: [ vScrollbar position: (inner right - vbarInset) @ (inner top + scrollBarStartInset) ].
+	vScrollbar position: (inner right - vbarInset) @ (inner top + scrollBarStartInset) .
 	vScrollbar height: h.
 	vScrollbar extent: vbarInset @ h.
 	cornerMorph position: inner bottomRight - (vbarInset @ hbarInset).

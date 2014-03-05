@@ -126,12 +126,6 @@ SliderRangeDialog >> initialize [
 				color: Color transparent;
 		yourself).
 	radioButtons addMorphBack: maxMorph.
-	PhratchTranslator isRTL
-		ifTrue: [ 
-			radioButtons submorphs reversed
-				do: [ :m | 
-					m delete.
-					radioButtons addMorphBack: m ] ].
 	mainColumn
 		submorphsDo: [ :m | 
 			m = messageLineMorphs

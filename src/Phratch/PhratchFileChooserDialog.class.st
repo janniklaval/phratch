@@ -390,12 +390,7 @@ PhratchFileChooserDialog >> createFileChooserLayout: allowNewFile [
 		yourself);
 				addMorphBack: newFileName;
 				addMorphBack: (AlignmentMorph newSpacer: Color transparent).
-			PhratchTranslator isRTL
-				ifTrue: [ 
-					newTitleBin submorphs reversed
-						do: [ :m | 
-							m delete.
-							newTitleBin addMorphBack: m ] ] ].
+	].
 	mainColumn
 		addMorphBack: newTitleBin;
 		addMorphBack: buttonRow.
@@ -446,12 +441,7 @@ PhratchFileChooserDialog >> createPhratchFileChooserFor: aPhratchFrameMorph savi
 		yourself);
 				addMorphBack: newFileName;
 				addMorphBack: (AlignmentMorph newSpacer: Color transparent).
-			PhratchTranslator isRTL
-				ifTrue: [ 
-					newTitleBin submorphs reversed
-						do: [ :m | 
-							m delete.
-							newTitleBin addMorphBack: m ] ] ].
+	].
 	mainColumn
 		addMorphBack:
 				(Morph new

@@ -35,11 +35,7 @@ PhratchScriptsMorph >> cleanUp [
 		owner hScrollPixels: 0.
 		owner vScrollPixels: 0].
 	sortedBlocks do: [:s |
-		PhratchTranslator isRTL
-			ifTrue: [(owner isKindOf: ScrollFrameMorph)
-				ifTrue: [s position: (owner left + owner visibleExtent x - s width - 29)@(self top + y)]
-				ifFalse: [s position: (self right - s width - 20)@(self top + y)]]
-			ifFalse: [s position: self position + (20@y)].
+		s position: self position + (20@y).
 
 		bTop := s top.
 		bBottom := s fullBounds bottom.
@@ -367,11 +363,8 @@ PhratchScriptsMorph >> step [
 	feedbackMorph borderColor: feedbackColor; color: feedbackColor.
 
 	"subtract the attachment point x from the width so that the feedback in CBlock won't stick out"
-	PhratchTranslator isRTL
-		ifTrue: [feedbackMorph extent: (targetP x - targetBlock left)@5.
-			self addMorphFront: (feedbackMorph position: targetP - (feedbackMorph width@0))]
-		ifFalse: [feedbackMorph extent: (targetBlock right - targetP x)@5.
-			self addMorphFront: (feedbackMorph position: targetP)].
+	feedbackMorph extent: (targetBlock right - targetP x)@5.
+	self addMorphFront: (feedbackMorph position: targetP).
 
 ]
 

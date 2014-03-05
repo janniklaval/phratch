@@ -63,7 +63,7 @@ PhratchScriptEditorMorph >> addNameBox [
 
 	nameMorph := UpdatingStringFieldMorph new
 		font: (PhratchFrameMorph getFont: #UpdatingStringField);
-		rightJustify: PhratchTranslator isRTL;
+		rightJustify: false;
 		acceptWhenFocusLost: true;
 		position: thumbnailMorph topRight + (17@(thumbnailMorph height * 0.12));
 		yourself.
@@ -83,9 +83,7 @@ PhratchScriptEditorMorph >> addReadouts [
 	y := nameMorph bottom + 5.
 	#(#('x' #xpos) #('y' #ypos) #('direction' #heading))
 		do: [ :spec | 
-			s := (PhratchTranslator isRTL and: [ ({'x' . 'y'} includes: (spec at: 1))])
-				ifTrue: [ ':' , spec first ]
-				ifFalse: [ spec first localized , PhratchTranslator colonSuffix ].
+			s :=  spec first localized , ':'.
 			label := StringMorph new
 				contents: s;
 				font: (PhratchFrameMorph getFont: #XYReadout);
@@ -100,8 +98,6 @@ PhratchScriptEditorMorph >> addReadouts [
 				stepTime: 100;
 				position: (label right + 4) @ y;
 		yourself.	"this sets the readout size"
-			PhratchTranslator isRTL
-				ifTrue: [ readout rightJustify: true ].
 			self
 				addMorph: label;
 				addMorph: readout.
@@ -110,12 +106,6 @@ PhratchScriptEditorMorph >> addReadouts [
 				add: readout.
 			readout startStepping.
 			x := readout right + 2 ].
-	PhratchTranslator isRTL
-		ifTrue: [ 
-			readoutMorphs reversed
-				do: [ :m | 
-					readoutMorphs remove: m.
-					readoutMorphs add: m ] ].
 	penReadout := Morph new extent: 15 @ 5.
 	penReadout
 		position: (lockButton right + 4) @ (nameMorph top + ((nameMorph height - penReadout height) / 2));
@@ -530,7 +520,7 @@ PhratchScriptEditorMorph >> showOrHideReadouts [
 	nameMorph
 		font: nameMorph font;
 		width: nameMorph height * 4;
-		rightJustify: PhratchTranslator isRTL.
+		rightJustify: false.
 	(self target isKindOf: PhratchSpriteMorph)
 		ifFalse: [ ^ self ].
 	self

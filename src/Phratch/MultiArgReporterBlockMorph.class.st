@@ -369,8 +369,6 @@ MultiArgReporterBlockMorph >> showValue [
 		left: self right;
 		bottom: self top; 
 		yourself.
-	PhratchTranslator isRTL
-		ifTrue: [ tooltip right: self left ].
 	gotError
 		ifTrue: [ tooltip messageColor: Color red darker ].
 	w := self world.

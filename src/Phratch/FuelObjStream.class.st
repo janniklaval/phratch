@@ -71,7 +71,7 @@ FuelObjStream >> readSpriteFrom: aStream showProgress: showProgress [
 	showProgress
 		ifTrue: [
 			tenPercent := objCount // 10.
-			('Reading...' localized, PhratchTranslator ellipsesSuffix)
+			('Reading...' localized, '...')
 				displayProgressAt: Display center - (32@5)  "Sensor cursorPoint"
 				from: 0 to: objCount + tenPercent
 				during: [:progressBar |

@@ -80,7 +80,7 @@ StringMorph >> stringWithEllipses: aString limitedToWidth: aNumber [
 	"Answer the given string limited in width. If the string is too wide to fit, truncate it and append ellipses."
 
 	| ellipses maxW s w |
-	ellipses := PhratchTranslator ellipsesSuffix "asUTF32".
+	ellipses := '...' "asUTF32".
 	maxW := (aNumber - (self stringWidth: ellipses)) max: 10.
 	s := aString "asUTF32".
 	(self stringWidth: s) < maxW ifTrue: [^ aString].

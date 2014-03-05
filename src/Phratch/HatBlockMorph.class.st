@@ -27,9 +27,7 @@ HatBlockMorph >> blockAttachPoints: aSet [
 	| nextB |
 	nextB := self nextBlock.
 	nextB
-		ifNil: [PhratchTranslator isRTL
-			ifTrue: [aSet add: (self bottomRight -> self)]
-			ifFalse: [aSet add: (self bottomLeft -> self)]]
+		ifNil: [aSet add: (self bottomLeft -> self)]
 		ifNotNil: [nextB blockAttachPoints: aSet].
 
 ]
@@ -113,39 +111,24 @@ HatBlockMorph >> fixBlockLayout [
 	super fixBlockLayout.
 	oldExtent := self extent.
 	oldPos := self position.
-	x := PhratchTranslator isRTL
-		ifTrue: [ self right - 8 ]
-		ifFalse: [ self left + 8 ].
+	x :=  self left + 8 .
 	centerY := self top + 25.
 	self nonControlFlowSubmorphs
 		do: [ :m | 
 			(m isKindOf: ArgMorph)
 				ifTrue: [ m fixArgLayout ].
-			PhratchTranslator isRTL
-				ifTrue: [ 
-					m position: (x - m width) @ (centerY - (m height // 2)).
-					x := x - m width - 5 ]
-				ifFalse: [ 
-					m position: x @ (centerY - (m height // 2)).
-					x := x + m width + 5 ] ].
-	PhratchTranslator isRTL
-		ifTrue: [ 
-			x := x - 4.
-			self width: (self right - x max: self hatTopForm width) ]
-		ifFalse: [ 
-			x + x + 4.
-			self width: (x - self left max: self hatTopForm width) ].
-	PhratchTranslator isRTL
-		ifTrue: [ self left: oldPos x + (oldExtent x - self width) ].
+			 m position: x @ (centerY - (m height // 2)).
+			x := x + m width + 5  ].
+	 
+	x + x + 4.
+	self width: (x - self left max: self hatTopForm width) .
 	nonBlockSubmorphs := self submorphs select: [ :m | (m isKindOf: BlockMorph) not or: [ m isKindOf: ArgMorph ] ].
 	self
 		height:
 			self hatTopForm height + (nonBlockSubmorphs inject: CBlockBracketThickness into: [ :h :m | h max: m height + 8 ]).
 	(nextB := self nextBlock)
 		ifNotNil: [ 
-			PhratchTranslator isRTL
-				ifTrue: [ nextB right: self right ]
-				ifFalse: [ nextB left: self left ].
+			 nextB left: self left.
 			nextB top: self bottom - 4.
 			nextB fixBlockLayout ]
 ]

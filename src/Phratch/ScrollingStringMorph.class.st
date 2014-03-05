@@ -358,15 +358,9 @@ ScrollingStringMorph >> drawCursor: charIndex line: lineIndex on: aCanvas [
 	pair := line size = 0
 		ifTrue: [ #(0 0) ]
 		ifFalse: [ (renderer xRangesFor: line) at: (charIndex within: 1 and: line size) ].
-	x := PhratchTranslator isRTL
-		ifTrue: [ 
-			charIndex > line size
-				ifTrue: [ pair min ]
-				ifFalse: [ pair max ] ]
-		ifFalse: [ 
-			charIndex > line size
-				ifTrue: [ pair max ]
-				ifFalse: [ pair min ] ].
+	x := charIndex > line size
+			ifTrue: [ pair max ]
+			ifFalse: [ pair min ] .
 	p := self offsetForLine: lineIndex.
 	aCanvas fillRectangle: (p + (x @ 0) extent: 2 @ lineHeight) color: selectionColor
 ]
@@ -919,13 +913,9 @@ ScrollingStringMorph >> moveCursorPageUpAndSelect: selectFlag [
 ScrollingStringMorph >> offsetForLine: lineIndex [
 	"Answer the offset from my origin to the start of the line with the given index, taking RTL into account."
 
-	| top w |
+	| top  |
 	top := self textInset y + (lineHeight * (lineIndex - firstVisibleLine)).
-	PhratchTranslator isRTL
-		ifTrue: [
-			w := renderer stringWidth: (lines at: lineIndex).
-			^ (self width - (self textInset x + w + scrollbar width)) @ top]
-		ifFalse: [^ self textInset x @ top].
+	^ self textInset x @ top.
 
 ]
 

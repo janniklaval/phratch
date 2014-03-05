@@ -421,12 +421,8 @@ PhratchListMorph >> createCell: anObject [
 		contents: txt font: font;
 		yourself.
 	readout height: (PhratchTranslator stringExtent: 'A' font: font) y + 6.
-	numberRight := PhratchTranslator isRTL
-		ifTrue: [ self right - 5 ]
-		ifFalse: [ self left + self largestIndexWidth + 6 ].
-	PhratchTranslator isRTL
-		ifTrue: [ readout width: self right - self left - self largestIndexWidth - 33 ]
-		ifFalse: [ readout width: self right - numberRight - 25 ].
+	numberRight :=  self left + self largestIndexWidth + 6 .
+	 readout width: self right - numberRight - 25.
 	cell := WatcherReadoutFrameMorph new
 		color: ScriptablePhratchMorph listBlockColor;
 		extent: readout extent + 3;
@@ -979,7 +975,7 @@ PhratchListMorph >> rightButtonMenu [
 	menu labels
 		at: 2
 		put:
-			((menu labels at: 2) contents copyFrom: 1 to: (menu labels at: 2) contents size - 1) , PhratchTranslator ellipsesSuffix.
+			((menu labels at: 2) contents copyFrom: 1 to: (menu labels at: 2) contents size - 1) , '...'.
 	menu invokeModal
 ]
 
@@ -1145,12 +1141,8 @@ PhratchListMorph >> updateContents [
 	emptyMorph delete.
 	page := scrollPane contents.
 	page changed.
-	numberRight := PhratchTranslator isRTL
-		ifTrue: [ self right - 5 ]
-		ifFalse: [ self left + self largestIndexWidth + 6 ].	"word-wrap cell contents and fix cell extents, if needed"
-	cellWidth := PhratchTranslator isRTL
-		ifTrue: [ self right - self left - self largestIndexWidth - 33 ]
-		ifFalse: [ self right - numberRight - 25 ].
+	numberRight :=  self left + self largestIndexWidth + 6 .	"word-wrap cell contents and fix cell extents, if needed"
+	cellWidth :=  self right - numberRight - 25 .
 	inset := 3.
 	cellMorphs
 		do: [ :cell | 
@@ -1167,9 +1159,7 @@ PhratchListMorph >> updateContents [
 						ifTrue: [ 
 							cell firstSubmorph width: cellWidth - inset.
 							cell extent: cell firstSubmorph extent + inset ] ] ].	"position cells"
-	x := PhratchTranslator isRTL
-		ifTrue: [ self left + 26 ]
-		ifFalse: [ numberRight + 4 ].
+	x :=  numberRight + 4 .
 	y := page top + 3.
 	cellMorphs
 		do: [ :cell | 
@@ -1202,12 +1192,8 @@ PhratchListMorph >> updateContentsForReading [
 	emptyMorph delete.
 	page := scrollPane contents.
 	page changed.
-	numberRight := PhratchTranslator isRTL
-		ifTrue: [ self right - 5 ]
-		ifFalse: [ self left + self largestIndexWidth + 6 ].	"word-wrap cell contents and fix cell extents, if needed"
-	cellWidth := PhratchTranslator isRTL
-		ifTrue: [ self right - self left - self largestIndexWidth - 33 ]
-		ifFalse: [ self right - numberRight - 25 ].
+	numberRight :=  self left + self largestIndexWidth + 6 .	"word-wrap cell contents and fix cell extents, if needed"
+	cellWidth :=  self right - numberRight - 25 .
 	inset := 3.
 	cellMorphs
 		do: [ :cell | 
@@ -1221,9 +1207,7 @@ PhratchListMorph >> updateContentsForReading [
 						ifTrue: [ 
 							cell firstSubmorph width: cellWidth - inset.
 							cell extent: cell firstSubmorph extent + inset ] ] ].	"position cells"
-	x := PhratchTranslator isRTL
-		ifTrue: [ self left + 26 ]
-		ifFalse: [ numberRight + 4 ].
+	x := numberRight + 4 .
 	y := page top + 3.
 	cellMorphs
 		do: [ :cell | 
@@ -1254,12 +1238,8 @@ PhratchListMorph >> updateContentsRecursive [
 	emptyMorph delete.
 	page := scrollPane contents.
 	page changed.
-	numberRight := PhratchTranslator isRTL
-		ifTrue: [ self right - 5 ]
-		ifFalse: [ self left + self largestIndexWidth + 6 ].	"word-wrap cell contents and fix cell extents, if needed"
-	cellWidth := PhratchTranslator isRTL
-		ifTrue: [ self right - self left - self largestIndexWidth - 33 ]
-		ifFalse: [ self right - numberRight - 25 ].
+	numberRight :=  self left + self largestIndexWidth + 6 .	"word-wrap cell contents and fix cell extents, if needed"
+	cellWidth :=  self right - numberRight - 25 .
 	inset := 3.
 	cellMorphs
 		do: [ :cell | 
@@ -1275,9 +1255,7 @@ PhratchListMorph >> updateContentsRecursive [
 						ifTrue: [ 
 							cell firstSubmorph width: cellWidth - inset.
 							cell extent: cell firstSubmorph extent + inset ] ] ].	"position cells"
-	x := PhratchTranslator isRTL
-		ifTrue: [ self left + 26 ]
-		ifFalse: [ numberRight + 4 ].
+	x :=  numberRight + 4 .
 	y := page top + 3.
 	cellMorphs
 		do: [ :cell | 
@@ -1301,7 +1279,7 @@ PhratchListMorph >> updateContentsRecursive [
 { #category : #stepping }
 PhratchListMorph >> updateCountMorph [
 
-	countMorph contents: 'length' localized, PhratchTranslator colonSuffix, ' ', self lineCount printString.
+	countMorph contents: 'length' localized, ': ', self lineCount printString.
 	countMorph left: ((self left + ((self width - countMorph width) // 2) + 3) max: (addSublistMorph right + 1))
 
 ]

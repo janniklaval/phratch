@@ -415,7 +415,7 @@ StringFieldMorph >> initialize [
 	selectionColor := (Color r: 0.353 g: 0.607 b: 0.788).
 	selectionStart := selectionEnd := 0.
 	self recordUndoState.
-	self rightJustify: PhratchTranslator isRTL.
+	self rightJustify: false.
 
 	self borderInset; useNoFrame.
 	self width: 100.

@@ -59,15 +59,15 @@ ChoiceArgMorph >> choice: aSymbol [
 	| frame palette block doLocalization label |
 	frame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
 	((#soundNames = getOptionsSelector) and:
-	 [aSymbol = ('record' localized, PhratchTranslator ellipsesSuffix)]) ifTrue: [
+	 [aSymbol = ('record' localized, '...')]) ifTrue: [
 		frame ifNotNil: [^ frame newSound]].
 
 	((#sceneNames = getOptionsSelector) and:
-	 [aSymbol = ('record' localized, PhratchTranslator ellipsesSuffix)]) ifTrue: [
+	 [aSymbol = ('record' localized, '...')]) ifTrue: [
 		frame ifNotNil: [^ frame workPane newScene]].
 
 	((#sceneNames = getOptionsSelector) and:
-	 [aSymbol = ('re-record' localized, PhratchTranslator ellipsesSuffix)]) ifTrue: [
+	 [aSymbol = ('re-record' localized, '...')]) ifTrue: [
 		frame ifNotNil: [^ frame workPane rerecordScene]].
 
 	choice := label := aSymbol.
@@ -250,15 +250,15 @@ ChoiceArgMorph >> privateSetChoice: aSymbol [
 	| frame palette block doLocalization label |
 	frame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
 	((#soundNames = getOptionsSelector) and:
-	 [aSymbol = ('record' localized, PhratchTranslator ellipsesSuffix)]) ifTrue: [
+	 [aSymbol = ('record' localized, '...')]) ifTrue: [
 		frame ifNotNil: [^ frame newSound]].
 
 	((#sceneNames = getOptionsSelector) and:
-	 [aSymbol = ('record' localized, PhratchTranslator ellipsesSuffix)]) ifTrue: [
+	 [aSymbol = ('record' localized, '...')]) ifTrue: [
 		frame ifNotNil: [^ frame workPane newScene]].
 
 	((#sceneNames = getOptionsSelector) and:
-	 [aSymbol = ('re-record' localized, PhratchTranslator ellipsesSuffix)]) ifTrue: [
+	 [aSymbol = ('re-record' localized, '...')]) ifTrue: [
 		frame ifNotNil: [^ frame workPane rerecordScene]].
 
 	choice := label := aSymbol.

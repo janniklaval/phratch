@@ -2246,15 +2246,9 @@ PhratchFrameMorph >> makeXYReadout [
 				size: normalFont pointSize / PhratchTranslator renderScale asFloat.
 			boldFont := StrikeFont osFontName: boldFont name size: boldFont pointSize / PhratchTranslator renderScale asFloat ].
 	panel := Morph new color: (Color r: 0.753 g: 0.764 b: 0.776).
-	labelX := PhratchTranslator isRTL
-		ifTrue: [ 
-			StringMorph new
+	labelX := StringMorph new
 				font: normalFont;
-				contents: ':x' ]
-		ifFalse: [ 
-			StringMorph new
-				font: normalFont;
-				contents: 'x:' ].
+				contents: 'x:' .
 	readoutX := UpdatingStringMorph new
 		target: self;
 		getSelector: #mouseX;
@@ -2264,30 +2258,16 @@ PhratchFrameMorph >> makeXYReadout [
 		growable: false;
 		yourself.
 	readoutX width: (readoutX stringWidth: '-1000').
-	labelY := PhratchTranslator isRTL
-		ifTrue: [ labelX fullCopy contents: ':y' ]
-		ifFalse: [ labelX fullCopy contents: 'y:' ].
+	labelY :=  labelX fullCopy contents: 'y:' .
 	readoutY := readoutX fullCopy getSelector: #mouseY.
 	spaceWidth := ((readoutX stringWidth: ' ') * 0.8) asInteger.
-	PhratchTranslator isRTL
-		ifTrue: [ 
-			readoutY rightJustify: true.
-			panel addMorph: (readoutY position: 0 @ 0).
-			panel addMorph: (labelY position: readoutY topRight + (spaceWidth @ 0)) ]
-		ifFalse: [ 
-			panel addMorph: (labelX position: 0 @ 0).
-			panel addMorph: (readoutX position: labelX topRight + (spaceWidth @ 0)) ].
-	PhratchTranslator isRTL
-		ifTrue: [ 
-			readoutX rightJustify: true.
-			panel addMorph: (readoutX position: labelY right @ labelY top + (spaceWidth @ 0)).
-			panel addMorph: (labelX position: readoutX topRight + (spaceWidth @ 0)) ]
-		ifFalse: [ 
-			panel addMorph: (labelY position: (labelX right + readoutX width + 8) @ labelX top).
-			panel addMorph: (readoutY position: labelY topRight + (spaceWidth @ 0)) ].
-	PhratchTranslator isRTL
-		ifTrue: [ panel extent: (labelX right max: labelY right) @ labelY bottom ]
-		ifFalse: [ panel extent: (readoutX right max: readoutY right) @ labelY bottom ].
+	 
+	panel addMorph: (labelX position: 0 @ 0).
+	panel addMorph: (readoutX position: labelX topRight + (spaceWidth @ 0)) .
+	 
+	panel addMorph: (labelY position: (labelX right + readoutX width + 8) @ labelX top).
+	panel addMorph: (readoutY position: labelY topRight + (spaceWidth @ 0)) .
+	 panel extent: (readoutX right max: readoutY right) @ labelY bottom.
 	^ panel
 ]
 

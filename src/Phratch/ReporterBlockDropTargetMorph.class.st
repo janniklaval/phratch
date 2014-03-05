@@ -191,11 +191,8 @@ ReporterBlockDropTargetMorph >> step [
 	feedbackMorph borderColor: feedbackColor; color: feedbackColor.
 
 	"subtract the attachment point x from the width so that the feedback in CBlock won't stick out"
-	PhratchTranslator isRTL
-		ifTrue: [feedbackMorph extent: (targetP x - targetBlock left)@5.
-			h addMorphFront: (feedbackMorph position: targetP - (feedbackMorph width@0))]
-		ifFalse: [feedbackMorph extent: (targetBlock right - targetP x)@5.
-			h addMorphFront: (feedbackMorph position: targetP)].
+	feedbackMorph extent: (targetBlock right - targetP x)@5.
+	h addMorphFront: (feedbackMorph position: targetP).
 ]
 
 { #category : #testing }

@@ -81,14 +81,6 @@ PhratchTranslator class >> centerOffsetForButtonWithFont: aStrikeFont [
 
 ]
 
-{ #category : #'language translation' }
-PhratchTranslator class >> colonSuffix [
-	"Answer a colon suffix. If the current language is RTL, then include the Unicode RTL mark after the colon."
-
-	^ self isRTL ifTrue: [ColonSuffix] ifFalse: [':']
-
-]
-
 { #category : #'Unicode rendering' }
 PhratchTranslator class >> convertToMacRoman [
 	"Convert my translations from UTF8 to MacRoman."
@@ -105,14 +97,6 @@ PhratchTranslator class >> currentLanguage [
 
 	Language ifNil: [Language := 'en'].
 	^ Language
-
-]
-
-{ #category : #'language translation' }
-PhratchTranslator class >> ellipsesSuffix [
-	"Answer an ellipses suffix (three periods). If the current language is RTL, then include the Unicode RTL mark after the colon."
-
-	^ self isRTL ifTrue: [EllipsesSuffix] ifFalse: ['...']
 
 ]
 
@@ -274,22 +258,6 @@ PhratchTranslator class >> initialize [
 PhratchTranslator class >> insertISOCode: code forLanguage: lang [
 
 	ISODict at: code put: lang.
-
-]
-
-{ #category : #'import/export' }
-PhratchTranslator class >> isRTL [
-	"Returns true if the header 'Language-Direction' is set to 'RTL'"
-
-	^ IsRTL
-
-]
-
-{ #category : #'language translation' }
-PhratchTranslator class >> isRTLMath [
-	"Returns true if the header 'Language-Direction' is set to 'RTL-math'"
-
-	^ IsRTLMath
 
 ]
 
@@ -497,7 +465,6 @@ PhratchTranslator class >> setLanguage: aString [
 		dict removeKey: '' ifAbsent: [].
 		self setRenderingHints.
 		RenderWithSqueak ifTrue: [self convertToMacRoman].
-		self isRTL ifTrue: [self fixAmbigousRTLPunctuation].
 		self addSensorTranslations].
 
 ]

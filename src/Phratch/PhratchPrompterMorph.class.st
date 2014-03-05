@@ -88,18 +88,12 @@ PhratchPrompterMorph >> fixLayout [
 	typeinMorph
 		width: self width - 36;
 		bottom: self bottom - 6.
-	PhratchTranslator isRTL
-		ifTrue:[typeinMorph right: self right - 8]
-		ifFalse:[typeinMorph left: self left + 8].
+	typeinMorph left: self left + 8.
 
 	questionMorph ifNotNil: [
-		PhratchTranslator isRTL
-			ifTrue: [questionMorph position: self topRight - ((questionMorph width + 8)@0) + (0@5)]
-			ifFalse: [questionMorph position: self position + (8@5)]].
+		questionMorph position: self position + (8@5)].
 
-	PhratchTranslator isRTL
-		ifTrue:[okButton position: typeinMorph topLeft - ((okButton width + 2)@0)]
-		ifFalse:[okButton position: typeinMorph topRight + (2@0)].
+	okButton position: typeinMorph topRight + (2@0).
 
 ]
 
@@ -135,11 +129,8 @@ PhratchPrompterMorph >> initialize [
 		toggleMode: false;
 		setBalloonText: 'Close and continue' localized.
 
-	PhratchTranslator isRTL
-		ifTrue: [self addMorph: okButton.
-			self addMorph: typeinMorph]
-		ifFalse: [self addMorph: typeinMorph.
-			self addMorph: okButton].
+	self addMorph: typeinMorph.
+	self addMorph: okButton.
 
 	self extent: 450@37.
 

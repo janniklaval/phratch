@@ -117,13 +117,7 @@ PhratchViewerMorph >> rebuildCategorySelectors [
 			offForm := PhratchFrameMorph skinAt: cat.
 			onForm := PhratchFrameMorph skinAt: cat , 'Pressed'.
 			overForm := PhratchFrameMorph skinAt: cat , 'Over'.
-			b := PhratchTranslator isRTL
-				ifTrue: [ 
-					ResizableToggleButton new
-						offForm: (offForm flipBy: #horizontal centerAt: offForm center)
-						onForm: (onForm flipBy: #horizontal centerAt: onForm center)
-						overForm: (overForm flipBy: #horizontal centerAt: overForm center) ]
-				ifFalse: [ ResizableToggleButton new offForm: offForm onForm: onForm overForm: overForm ].
+			b :=  ResizableToggleButton new offForm: offForm onForm: onForm overForm: overForm .
 			b
 				label: label font: (PhratchFrameMorph getFont: #Category);
 				setLabelColor: Color white;
@@ -132,9 +126,7 @@ PhratchViewerMorph >> rebuildCategorySelectors [
 				arguments: (Array with: cat);
 				toggleButtonMode: true;
 				toggleMode: false.
-			PhratchTranslator isRTL
-				ifTrue: [ b rightJustifyInset: 10 ]
-				ifFalse: [ b leftJustifyInset: 10 ].
+			b leftJustifyInset: 10 .
 			maxExtent := maxExtent max: b extent + (3 @ -6).
 			b ].	"calculate catButtonsExtent"
 	pad := 15.	"padding on left, right, and betwen the button columns"
@@ -205,7 +197,5 @@ PhratchViewerMorph >> updateContents [
 	pageViewer contents: p.
 	self isInWorld ifTrue: [self world startSteppingSubmorphsOf: p].
 	p fixLayout.
-	PhratchTranslator isRTL
-		ifTrue: [pageViewer hScrollPixels: (p right)].
 
 ]

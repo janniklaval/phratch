@@ -93,7 +93,7 @@ MediaItemMorph >> buildRightSideMorph [
 	nameMorph := UpdatingStringFieldMorph new
 		acceptWhenFocusLost: true;
 		font: (PhratchFrameMorph getFont: #UpdatingStringField);
-		rightJustify: PhratchTranslator isRTL;
+		rightJustify: false;
 		getSelector: #mediaName;
 		putSelector: #mediaName:;
 		position: (0@0);

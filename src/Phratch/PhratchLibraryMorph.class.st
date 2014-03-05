@@ -181,18 +181,14 @@ PhratchLibraryMorph >> fixLayout [
 	scrollPane position: scrollPane left @ (self top + topSectionHeight + 3).
 	stagePane position: stagePane left @ (self top + topSectionHeight + 3).
 	libPane := scrollPane contents.
-	x := PhratchTranslator isRTL
-		ifTrue: [ libPane left + 30 ]
-		ifFalse: [ libPane left + 8 ].
+	x := libPane left + 8.
 	y := libPane top + 7.
 	rMargin := x + scrollPane width - 5.
 	libPane submorphs
 		do: [ :m | 
 			x + m width > rMargin
 				ifTrue: [ 
-					x := PhratchTranslator isRTL
-						ifTrue: [ libPane left + 30 ]
-						ifFalse: [ libPane left + 8 ].
+					x := libPane left + 8 .
 					y := y + m height ].
 			m position: x @ y.
 			x := x + m width ].

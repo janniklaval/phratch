@@ -81,12 +81,6 @@ NewVariableDialog >> initialize [
 				color: Color transparent; 
 		yourself).
 	radioButtons addMorphBack: label2.
-	PhratchTranslator isRTL
-		ifTrue: [ 
-			radioButtons submorphs reversed
-				do: [ :m | 
-					m delete.
-					radioButtons addMorphBack: m ] ].
 	mainColumn
 		submorphsDo: [ :m | 
 			m = messageLineMorphs

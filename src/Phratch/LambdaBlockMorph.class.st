@@ -387,7 +387,6 @@ LambdaBlockMorph >> showValue [
 		left: self right;
 		bottom: self top;
 		yourself.
-	PhratchTranslator isRTL ifTrue: [tooltip right: self left].
 
 	w := self world.
 	w addMorphFront: tooltip.

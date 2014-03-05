@@ -1338,9 +1338,7 @@ ScriptablePhratchMorph >> blockFromOldFormTuple: tuple receiver: scriptOwner [
 		ifTrue: [ 
 			argCount := block argumentCount min: tuple size - 1.
 			1 to: argCount do: [ :i | 
-				arg := ((#(#+ #- #/ #* #=) includes: block selector) and: [ PhratchTranslator isRTLMath ])
-					ifTrue: [ tuple at: argCount + 1 - (i - 1) ]
-					ifFalse: [ tuple at: i + 1 ].	"RTLMath operators are RTL"
+				tuple at: i + 1.
 				(arg isKindOf: Array)
 					ifTrue: [ 
 						"argument is a block"
@@ -1727,9 +1725,7 @@ ScriptablePhratchMorph >> blockFromTuple: tuple receiver: scriptOwner [
 									ifFalse: [ (block argumentAt: i) stringExpression: arg asString ] ] ].
 					^ block ].
 			1 to: argCount do: [ :i | 
-				arg := ((#(#+ #- #/ #* #=) includes: block selector) and: [ PhratchTranslator isRTLMath ])
-					ifTrue: [ tuple at: argCount + 3 - (i - 1) ]
-					ifFalse: [ tuple at: i + 3 ].	"RTLMath operators are RTL"
+				tuple at: i + 3.
 				(arg isKindOf: Array)
 					ifTrue: [ 
 						"argument is a block"
@@ -2759,17 +2755,11 @@ ScriptablePhratchMorph >> costumesPage: xOffset [
 	photoBut target: self.
 	bin addMorph: photoBut.
 	maxHeight := m height max: (impBut height max: (recBut height max: photoBut height)).
-	PhratchTranslator isRTL
-		ifTrue: [ 
-			photoBut position: xMargin @ (yMargin + ((maxHeight - photoBut height) / 2)).
-			impBut position: (photoBut right + 4) @ (yMargin + ((maxHeight - impBut height) / 2)).
-			recBut position: (impBut right + 4) @ (yMargin + ((maxHeight - recBut height) / 2)).
-			m position: (recBut right + 4) @ (yMargin + ((maxHeight - m height) / 2)) ]
-		ifFalse: [ 
-			m position: xMargin @ (yMargin + ((maxHeight - m height) / 2)).
-			recBut position: (m right + 4) @ (yMargin + ((maxHeight - recBut height) / 2)).
-			impBut position: (recBut right + 4) @ (yMargin + ((maxHeight - impBut height) / 2)).
-			photoBut position: (impBut right + 4) @ (yMargin + ((maxHeight - impBut height) / 2)) ].
+	 
+	m position: xMargin @ (yMargin + ((maxHeight - m height) / 2)).
+	recBut position: (m right + 4) @ (yMargin + ((maxHeight - recBut height) / 2)).
+	impBut position: (recBut right + 4) @ (yMargin + ((maxHeight - impBut height) / 2)).
+	photoBut position: (impBut right + 4) @ (yMargin + ((maxHeight - impBut height) / 2)) .
 	separator := TiledImageMorph new tileForm: (PhratchFrameMorph skinAt: #costumeSeparatorTile).
 	bin addMorph: (separator position: (xOffset + 17) @ (yMargin + maxHeight + 5)).
 	y := yMargin + maxHeight + 9.
@@ -7092,7 +7082,7 @@ ScriptablePhratchMorph >> soundNames [
 			(result anySatisfy: [:s | s caseInsensitiveEqual: nm])
 				ifFalse: [result add: nm]]].
 	result addLast: '-'.
-	result addLast: 'record' localized, PhratchTranslator ellipsesSuffix.
+	result addLast: 'record' localized, '...'.
 	^ result asArray
 
 ]
@@ -7131,13 +7121,9 @@ ScriptablePhratchMorph >> soundsPage: xOffset [
 	bin addMorph: impBut.
 
 	maxHeight := (m height max: (impBut height max: recBut height)).
-	PhratchTranslator isRTL
-		ifTrue: [impBut position: xMargin@(yMargin + ((maxHeight - impBut height) / 2)).
-			recBut position: (impBut right + 4)@(yMargin + ((maxHeight - recBut height) / 2)).
-			m position: (recBut right + 4)@(yMargin + ((maxHeight - m height) / 2))]
-		ifFalse: [m position: xMargin@(yMargin + ((maxHeight - m height) / 2)).
-			recBut position: (m right + 4)@(yMargin + ((maxHeight - recBut height) / 2)).
-			impBut position: (recBut right + 4)@(yMargin + ((maxHeight - impBut height) / 2))].
+	m position: xMargin@(yMargin + ((maxHeight - m height) / 2)).
+	recBut position: (m right + 4)@(yMargin + ((maxHeight - recBut height) / 2)).
+	impBut position: (recBut right + 4)@(yMargin + ((maxHeight - impBut height) / 2)).
 
 	separator := TiledImageMorph new tileForm: (PhratchFrameMorph skinAt: #costumeSeparatorTile).
 	bin addMorph: (separator position: (xOffset + 17)@(yMargin + maxHeight + 5)).

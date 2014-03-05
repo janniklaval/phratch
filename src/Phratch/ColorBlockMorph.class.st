@@ -79,7 +79,6 @@ ColorBlockMorph >> showValue [
 		left: self right;
 		bottom: self top;
 		yourself.
-	PhratchTranslator isRTL ifTrue: [tooltip right: self left].
 	gotError
 		ifTrue: [tooltip messageColor: Color red darker]
 		ifFalse: [tooltip addMorphFront: (BorderedMorph new color: self evaluate; position: (tooltip position + (6@2)); extent: 12@12; borderWidth: 1;

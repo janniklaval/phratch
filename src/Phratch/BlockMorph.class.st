@@ -150,17 +150,13 @@ BlockMorph >> blockAttachPoints: aSet [
 	result := #().
 	(self isKindOf: HatBlockMorph)
 		ifFalse: [ 
-			result := PhratchTranslator isRTL
-				ifTrue: [ result copyWith: self topRight -> self ]
-				ifFalse: [ result copyWith: self topLeft -> self ] ].
+			result :=  result copyWith: self topLeft -> self ].
 	nextB := self nextBlock.
 	nextB
 		ifNil: [ 
 			self isStopOrForever
 				ifFalse: [ 
-					result := PhratchTranslator isRTL
-						ifTrue: [ result copyWith: self bottomRight -> self ]
-						ifFalse: [ result copyWith: self bottomLeft -> self ] ] ].
+					result :=  result copyWith: self bottomLeft -> self ] ].
 	nextB ifNotNil: [ nextB blockAttachPoints: aSet ].
 	aSet addAll: result
 ]
@@ -275,17 +271,13 @@ BlockMorph >> closestAttachTargetIn: newOwner [
 	attachPoints
 		do: [ :assoc | 
 			targetP := assoc key.
-			ref := PhratchTranslator isRTL
-				ifTrue: [ self right ]
-				ifFalse: [ self left ].
+			ref :=  self left .
 			(ref - targetP x) abs < xThresh
 				ifTrue: [ 
 					((self top - targetP y) abs < yThresh or: [ self nextBlock isNil and: [ (self bottom - targetP y) abs < yThresh ] ])
 						ifTrue: [ 
 							"targetP is within sticking range"
-							dist := PhratchTranslator isRTL
-								ifTrue: [ (self topRight - targetP) r ]
-								ifFalse: [ (self position - targetP) r ].
+							dist :=(self position - targetP) r .
 							dist < bestDist
 								ifTrue: [ 
 									(self top - targetP y) abs < yThresh
@@ -538,12 +530,7 @@ BlockMorph >> drawBottomEdgeOn: aCanvas [
 { #category : #drawing }
 BlockMorph >> drawFinalOn: aCanvas fromCanvas: c [
 
-	| flipped |
-	
-	PhratchTranslator isRTL 
-		ifTrue: [flipped := c form flipBy: #horizontal centerAt: c form center.
-			aCanvas paintImage: flipped at: self topLeft]
-		ifFalse:[aCanvas paintImage: c form at: self topLeft].
+	aCanvas paintImage: c form at: self topLeft.
 
 ]
 
@@ -1237,35 +1224,23 @@ BlockMorph >> justDroppedInto: newOwner event: evt [
 				self attachBlockNested: targetBlock. ^ self].
 			"for all other non-c-shaped blocks"
 			(bottomBlockUsed or:[((targetBlock owner isKindOf: BlockMorph) not) and: [(self isKindOf: CBlockMorph) not]]) ifTrue:[
-				PhratchTranslator isRTL
-					ifTrue: [self bottomBlock position: (targetP x - self bottomBlock width) @ (targetP y - (self bottomBlock height - 4))]
-					ifFalse: [self bottomBlock position: targetP x @ (targetP y - (self bottomBlock height - 4))].
+				self bottomBlock position: targetP x @ (targetP y - (self bottomBlock height - 4)).
 				upperBlock := self bottomBlock owner.
 				[upperBlock isKindOf: BlockMorph] whileTrue: [
 					upperBlock nextBlock ifNotNil:[
-						PhratchTranslator isRTL
-							ifTrue: [upperBlock position: (targetP x - upperBlock width) @ (upperBlock nextBlock position y - (upperBlock height - 4))]
-							ifFalse: [upperBlock position: targetP x @ (upperBlock nextBlock position y - (upperBlock height - 4))].
+						upperBlock position: targetP x @ (upperBlock nextBlock position y - (upperBlock height - 4)).
 						upperBlock := upperBlock owner]]].
 			((bottomBlockUsed not) and: [targetBlock owner isKindOf: BlockMorph]) ifTrue:[
-				PhratchTranslator isRTL
-					ifTrue: [self position: (targetP x - self width) @ (targetP y - (self height - 4))]
-					ifFalse: [self position: targetP x @ (targetP y - (self height - 4))]].
+				self position: targetP x @ (targetP y - (self height - 4))].
 			(targetBlock owner isKindOf: BlockMorph) ifTrue:[
-				PhratchTranslator isRTL
-					ifTrue: [self topBlock position: (targetP x - self topBlock width) @ targetP y]
-					ifFalse: [self topBlock position: targetP x @ targetP y].
+				self topBlock position: targetP x @ targetP y.
 				targetBlock owner attachBlock: self topBlock].
-			PhratchTranslator isRTL
-				ifTrue: [targetBlock position: (targetP x - targetBlock width) @ (self bottomBlock position y + self bottomBlock height + 4)]
-				ifFalse: [targetBlock position: targetP x @ (self bottomBlock position y + self bottomBlock height + 4)].
+			targetBlock position: targetP x @ (self bottomBlock position y + self bottomBlock height + 4).
 			((bottomBlockUsed not) and: [((targetBlock owner isKindOf: BlockMorph) not) and: [(self isKindOf: CBlockMorph)]]) ifFalse:[
 				self bottomBlock attachBlock: targetBlock]]
 		ifFalse: [
 			self assert: [(self isKindOf: HatBlockMorph) not].  "I am not a HatBlockMorph"
-			PhratchTranslator isRTL
-				ifTrue: [self position: (targetP - (self width @0))]
-				ifFalse: [self position: targetP].
+			self position: targetP.
 
 			targetBlock attachBlock: self].
 
@@ -1728,14 +1703,10 @@ BlockMorph >> updateCachedFeedbackForm [
 BlockMorph >> updateCachedForm [
 	"Create a cached Form of this stack's appearance."
 
-	| c offset |
+	| c  |
 	oldColor ifNotNil: [color := oldColor].
 	c := FormCanvas extent: self fullBounds extent depth: 32.
-	PhratchTranslator isRTL
-		ifTrue: [
-			offset := phratchProc ifNil: [0@0] ifNotNil: [3@3].
-			c := c copyOffset: (self fullBounds topLeft + offset) negated]
-		ifFalse: [c := c copyOffset: self topLeft negated].
+	c := c copyOffset: self topLeft negated.
 	self drawOn: c.
 	self drawSubmorphsOn: c.
 	cachedForm := c form.

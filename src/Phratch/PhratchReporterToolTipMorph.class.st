@@ -21,9 +21,7 @@ PhratchReporterToolTipMorph class >> string: str for: morph [
 PhratchReporterToolTipMorph >> message: aString [
 	| verts |
 	super message: aString.
-	verts := PhratchTranslator isRTL
-		ifFalse: [ Array with: self bottomLeft + (2 @ 6) with: self bottomLeft + (5 @ 0) with: self bottomLeft + (10 @ 0) ]
-		ifTrue: [ Array with: self bottomRight - (2 @ 0) + (0 @ 6) with: self bottomRight - (5 @ 0) with: self bottomRight - (10 @ 0) ].
+	verts :=  Array with: self bottomRight - (2 @ 0) + (0 @ 6) with: self bottomRight - (5 @ 0) with: self bottomRight - (10 @ 0) .
 	self
 		addMorph:
 			(PolygonMorph

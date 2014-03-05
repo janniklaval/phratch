@@ -289,17 +289,7 @@ WatcherMorph >> languageChanged [
 WatcherMorph >> layoutForViewer [
 
 	watcher removeAllMorphs.
-	PhratchTranslator isRTL
-		ifTrue: [watcher
-			addMorphBack: (Morph new color: color; extent: 2@0;
-		yourself);
-			addMorphBack: readoutFrame;
-			addMorphBack: (AlignmentMorph new color: color; width: 4; hResizing: #rigid;
-		yourself);
-			addMorphBack: titleMorph;
-			addMorphBack: (Morph new color: color; extent: 3@0;
-		yourself)]
-		ifFalse: [watcher
+	watcher
 			addMorphBack: (Morph new color: color; extent: 3@0;
 		yourself);
 			addMorphBack: titleMorph;
@@ -307,7 +297,7 @@ WatcherMorph >> layoutForViewer [
 		yourself);
 			addMorphBack: readoutFrame;
 			addMorphBack: (Morph new color: color; extent: 2@0;
-		yourself)].
+		yourself).
 
 ]
 
