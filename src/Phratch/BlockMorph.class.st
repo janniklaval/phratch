@@ -211,8 +211,10 @@ BlockMorph >> canBecomeWatcher [
 { #category : #'drawing-optimization' }
 BlockMorph >> changed [
 	"Don't flush my cachedForm when I do 'self changed'."
-
-	owner ifNotNil: [owner invalidRect: (self fullBounds expandBy: 3)].
+"
+	owner ifNotNil: [owner invalidRect: (self fullBounds expandBy: 3)]."
+	
+	^super changed.
 ]
 
 { #category : #processes }
