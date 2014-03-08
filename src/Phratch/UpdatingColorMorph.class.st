@@ -1,6 +1,6 @@
 Class {
 	#name : #UpdatingColorMorph,
-	#superclass : #BorderedMorph,
+	#superclass : #PhratchBorderedMorph,
 	#instVars : [
 		'selector',
 		'target',

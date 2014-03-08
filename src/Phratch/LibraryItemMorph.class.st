@@ -4,7 +4,7 @@ I represent a scriptable morph in the library pane. I display a thumbnail of the
 "
 Class {
 	#name : #LibraryItemMorph,
-	#superclass : #Morph,
+	#superclass : #PhratchMorph,
 	#instVars : [
 		'target',
 		'thumbnailMorph',

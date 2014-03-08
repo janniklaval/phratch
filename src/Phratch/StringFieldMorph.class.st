@@ -17,7 +17,7 @@ Either the control or command key can be used to type the editing keys. That is,
 "
 Class {
 	#name : #StringFieldMorph,
-	#superclass : #BorderedMorph,
+	#superclass : #PhratchBorderedMorph,
 	#instVars : [
 		'stringMorph',
 		'frame',

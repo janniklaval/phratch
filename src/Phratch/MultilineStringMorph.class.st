@@ -14,7 +14,7 @@ Possible improvements:
 "
 Class {
 	#name : #MultilineStringMorph,
-	#superclass : #BorderedMorph,
+	#superclass : #PhratchBorderedMorph,
 	#instVars : [
 		'font',
 		'textColor',

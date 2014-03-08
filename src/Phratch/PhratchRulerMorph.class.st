@@ -1,6 +1,6 @@
 Class {
 	#name : #PhratchRulerMorph,
-	#superclass : #BorderedMorph,
+	#superclass : #PhratchBorderedMorph,
 	#instVars : [
 		'max',
 		'min',

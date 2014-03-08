@@ -1,6 +1,6 @@
 Class {
 	#name : #ArgumentPlaceHolderMorph,
-	#superclass : #BorderedMorph,
+	#superclass : #PhratchBorderedMorph,
 	#instVars : [
 		'labelFragment',
 		'isRaised'

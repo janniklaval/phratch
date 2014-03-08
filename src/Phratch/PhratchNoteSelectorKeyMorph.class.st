@@ -1,6 +1,6 @@
 Class {
 	#name : #PhratchNoteSelectorKeyMorph,
-	#superclass : #BorderedMorph,
+	#superclass : #PhratchBorderedMorph,
 	#instVars : [
 		'midiKey'
 	],

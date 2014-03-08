@@ -4,7 +4,7 @@ I represent an image in a Scratch object's media closet.
 "
 Class {
 	#name : #MediaItemMorph,
-	#superclass : #Morph,
+	#superclass : #PhratchMorph,
 	#instVars : [
 		'media',
 		'thumbnailMorph',
