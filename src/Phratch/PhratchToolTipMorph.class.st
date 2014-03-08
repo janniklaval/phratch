@@ -1,6 +1,6 @@
 Class {
 	#name : #PhratchToolTipMorph,
-	#superclass : #BorderedMorph,
+	#superclass : #PhratchBorderedMorph,
 	#instVars : [
 		'target',
 		'message',

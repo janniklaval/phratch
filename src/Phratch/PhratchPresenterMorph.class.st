@@ -4,7 +4,7 @@ I present the Scratch stage all by itself on the screen in presentation mode.
 "
 Class {
 	#name : #PhratchPresenterMorph,
-	#superclass : #Morph,
+	#superclass : #PhratchMorph,
 	#instVars : [
 		'frame',
 		'stage',

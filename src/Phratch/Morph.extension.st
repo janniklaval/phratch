@@ -125,20 +125,6 @@ Morph >> orientation: aSymbol [
 ]
 
 { #category : #'*Phratch-Extensions' }
-Morph >> ownerOrYourselfThatIsA: aClass [
-	"Answer this the first morph in the owner chain of the given class, or nil if there isn't one."
-
-	| current |
-	current := self.
-	[ current isNil ]
-		whileFalse: [ 
-			(current isKindOf: aClass)
-				ifTrue: [ ^ current ].
-			current := current owner ].
-	^ current
-]
-
-{ #category : #'*Phratch-Extensions' }
 Morph >> patchAt: patchRect without: stopMorph andNothingAbove: stopThere [
 	"Return a complete rendering of this patch of the display screen without drawing stopMorph and, if stopThere is true, without drawing any morph above it."
 

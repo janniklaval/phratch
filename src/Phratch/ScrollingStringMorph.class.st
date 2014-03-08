@@ -12,7 +12,7 @@ Possible improvements:
 "
 Class {
 	#name : #ScrollingStringMorph,
-	#superclass : #BorderedMorph,
+	#superclass : #PhratchBorderedMorph,
 	#instVars : [
 		'scrollbar',
 		'firstVisibleLine',

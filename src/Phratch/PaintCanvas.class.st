@@ -26,7 +26,7 @@ My instance variables are:
 "
 Class {
 	#name : #PaintCanvas,
-	#superclass : #Morph,
+	#superclass : #PhratchMorph,
 	#instVars : [
 		'palette',
 		'canvasForm',

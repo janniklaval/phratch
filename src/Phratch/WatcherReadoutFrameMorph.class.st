@@ -4,7 +4,7 @@ Frame to hold the readout of a WatcherMoroph.
 "
 Class {
 	#name : #WatcherReadoutFrameMorph,
-	#superclass : #BorderedMorph,
+	#superclass : #PhratchBorderedMorph,
 	#instVars : [
 		'complexObject',
 		'previousContent'

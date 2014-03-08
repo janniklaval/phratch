@@ -4,7 +4,7 @@ I am draw a rectangular frame using Forms. I have Forms for my four corners and 
 "
 Class {
 	#name : #ImageFrameMorph,
-	#superclass : #Morph,
+	#superclass : #PhratchMorph,
 	#instVars : [
 		'frameInFront',
 		'topLeftForm',

@@ -4,7 +4,7 @@ Displays one line representing a file or folder within a ScratchFilePicker.
 "
 Class {
 	#name : #PhratchFilePickerEntry,
-	#superclass : #BorderedMorph,
+	#superclass : #PhratchBorderedMorph,
 	#instVars : [
 		'nameMorph',
 		'highlit',

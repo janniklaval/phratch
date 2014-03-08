@@ -19,7 +19,7 @@ Each cell consists of a frame containing a line-wrapping string morph.
 "
 Class {
 	#name : #PhratchListMorph,
-	#superclass : #BorderedMorph,
+	#superclass : #PhratchBorderedMorph,
 	#instVars : [
 		'titleMorph',
 		'addItemMorph',

@@ -3,7 +3,7 @@ I am an interactive sprite handle, sort of like a halo button in Scratch. I am m
 "
 Class {
 	#name : #SpriteHandleMorph,
-	#superclass : #Morph,
+	#superclass : #PhratchMorph,
 	#instVars : [
 		'type',
 		'offset',
