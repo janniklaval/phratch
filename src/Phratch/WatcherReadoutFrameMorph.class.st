@@ -4,9 +4,10 @@ Frame to hold the readout of a WatcherMoroph.
 "
 Class {
 	#name : #WatcherReadoutFrameMorph,
-	#superclass : #PhratchBorderedMorph,
+	#superclass : #BorderedMorph,
 	#instVars : [
-		'complexObject'
+		'complexObject',
+		'previousContent'
 	],
 	#category : #'Phratch-UI-Watchers'
 }
@@ -67,6 +68,7 @@ WatcherReadoutFrameMorph >> drawOn: aCanvas [
 	"fill inside"
 
 	| form |
+
 	aCanvas
 		fillRectangle: (Rectangle origin: self topLeft + (2 @ 1) corner: self bottomRight - (2 @ 1)) color: color;
 		fillRectangle: (Rectangle origin: self topLeft + (1 @ 2) corner: self bottomRight - (1 @ 2)) color: color.	"white border"
@@ -95,6 +97,9 @@ WatcherReadoutFrameMorph >> fixLayout [
 	"((submorphs size = 1) and: [submorphs first isKindOf: StringMorph]) ifFalse: [^ self]."
 	watcher := self ownerOrYourselfThatIsA: WatcherMorph.
 	readout := submorphs first.
+	
+	previousContent = readout contents ifTrue:[^self].
+	
 	isLarge := watcher ifNil: [ false ] ifNotNil: [ watcher isLarge ].
 	(watcher ifNotNil: [ watcher isColor ])
 		ifTrue: [ 
@@ -110,6 +115,7 @@ WatcherReadoutFrameMorph >> fixLayout [
 			self layoutChanged.
 			^ self ].
 	s := readout contents.
+	previousContent:= s.
 	isLarge
 		ifTrue: [ self width: 50 ]
 		ifFalse: [ self width: 40 ].

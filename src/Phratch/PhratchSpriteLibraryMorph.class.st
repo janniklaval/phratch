@@ -1,6 +1,6 @@
 Class {
 	#name : #PhratchSpriteLibraryMorph,
-	#superclass : #PhratchBorderedMorph,
+	#superclass : #BorderedMorph,
 	#category : #'Phratch-UI-Support'
 }
 

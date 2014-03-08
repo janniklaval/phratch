@@ -1,6 +1,6 @@
 Class {
 	#name : #PhratchScrollBar,
-	#superclass : #PhratchMorph,
+	#superclass : #Morph,
 	#instVars : [
 		'target',
 		'selector',

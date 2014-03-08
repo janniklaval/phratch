@@ -1,6 +1,6 @@
 Class {
 	#name : #PhratchNoteSelector,
-	#superclass : #PhratchBorderedMorph,
+	#superclass : #BorderedMorph,
 	#instVars : [
 		'selectedVal',
 		'labelMorph',

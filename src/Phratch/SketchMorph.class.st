@@ -14,7 +14,7 @@ rotationStyle has several possible values:
 "
 Class {
 	#name : #SketchMorph,
-	#superclass : #PhratchMorph,
+	#superclass : #Morph,
 	#instVars : [
 		'originalForm',
 		'rotationCenter',

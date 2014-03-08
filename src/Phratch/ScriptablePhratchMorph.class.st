@@ -11,7 +11,7 @@ Scriptable morphs:
 "
 Class {
 	#name : #ScriptablePhratchMorph,
-	#superclass : #PhratchMorph,
+	#superclass : #Morph,
 	#instVars : [
 		'objName',
 		'vars',

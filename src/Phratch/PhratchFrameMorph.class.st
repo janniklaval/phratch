@@ -6,7 +6,7 @@ I keep a list of Scratch processes (threads) and run each one to the its next st
 "
 Class {
 	#name : #PhratchFrameMorph,
-	#superclass : #PhratchMorph,
+	#superclass : #Morph,
 	#instVars : [
 		'pauseButton',
 		'blockEditors',
@@ -38,8 +38,7 @@ Class {
 		'lastViewMode',
 		'viewModeButtonsPanel',
 		'toolbarPanel',
-		'quitFlag',
-		'workPane2'
+		'quitFlag'
 	],
 	#classVars : [
 		'AllowSharing',
@@ -946,7 +945,6 @@ PhratchFrameMorph >> createBasicPanes [
 	stageFrame := ImageFrameMorph new initFromForm: (PhratchFrameMorph skinAt: 'stagePane').
 	titlePane := ImageFrameMorph new initFromForm: (PhratchFrameMorph skinAt: 'titlePane').
 	workPane := PhratchStageMorph new extent: WorkpaneExtent.
-	
 	libraryPane := PhratchLibraryMorph new.
 
 	"make panes sticky so clicking on them doesn't pick up entire frame"

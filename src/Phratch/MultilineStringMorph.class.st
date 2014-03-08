@@ -14,7 +14,7 @@ Possible improvements:
 "
 Class {
 	#name : #MultilineStringMorph,
-	#superclass : #PhratchBorderedMorph,
+	#superclass : #BorderedMorph,
 	#instVars : [
 		'font',
 		'textColor',
@@ -508,8 +508,8 @@ MultilineStringMorph >> fitContents [
 	| w |
 	w := 10.
 	lines do: [:s | w := w max: (self widthWithContents: s)].
-	w := w + 10.
-	super extent: (w@(lines size * lineHeight)) + (9@7).
+	w := w + 25.
+	super extent: (w@(lines size * lineHeight)) + (5@7).
 
 ]
 

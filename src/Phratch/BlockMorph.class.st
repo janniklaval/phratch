@@ -4,7 +4,7 @@ I and my subclasses represent statements in a block-based graphical programming 
 "
 Class {
 	#name : #BlockMorph,
-	#superclass : #PhratchMorph,
+	#superclass : #Morph,
 	#instVars : [
 		'isSpecialForm',
 		'oldColor',
@@ -206,15 +206,6 @@ BlockMorph >> canBecomeWatcher [
 
 	^ false
 
-]
-
-{ #category : #'drawing-optimization' }
-BlockMorph >> changed [
-	"Don't flush my cachedForm when I do 'self changed'."
-"
-	owner ifNotNil: [owner invalidRect: (self fullBounds expandBy: 3)]."
-	
-	^super changed.
 ]
 
 { #category : #processes }

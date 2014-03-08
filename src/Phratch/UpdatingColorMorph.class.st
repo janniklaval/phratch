@@ -1,6 +1,6 @@
 Class {
 	#name : #UpdatingColorMorph,
-	#superclass : #PhratchBorderedMorph,
+	#superclass : #BorderedMorph,
 	#instVars : [
 		'selector',
 		'target',
@@ -10,6 +10,12 @@ Class {
 	],
 	#category : #'Phratch-UI-Watchers'
 }
+
+{ #category : #'target access' }
+UpdatingColorMorph >> contents [
+	
+	^ self valueFromTargetOrNil
+]
 
 { #category : #accessing }
 UpdatingColorMorph >> getSelector [

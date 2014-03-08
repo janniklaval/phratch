@@ -395,18 +395,21 @@ xxx"
 PhratchStageMorph >> drawSubmorphsOn: aCanvas [
 	"Clip submorph drawing to my bounds."
 
-	| clipCanvas |
+	| clipCanvas bubleToDraw|
+	bubleToDraw := OrderedCollection new.
 	clipCanvas := aCanvas copyClipRect: bounds.
-	submorphs reverseDo:[:m |
+	submorphs do:[:m |
+		((m isKindOf: PhratchSpriteMorph) and:
+		 [m isHidden not and:
+		 [clipCanvas isVisible: m fullBounds]]) ifTrue: [ 
+			bubleToDraw add: m.
+		].
 		(clipCanvas isVisible: m fullBounds) ifTrue: [
 			m fullDrawOn: clipCanvas]].
 
 	"draw sprite talk bubbles in front of all morphs:"
-	submorphs reverseDo:[:m |
-		((m isKindOf: PhratchSpriteMorph) and:
-		 [m isHidden not and:
-		 [clipCanvas isVisible: m fullBounds]]) ifTrue: [
-			m drawTalkBubbleOn: clipCanvas]].
+	bubleToDraw do:[:m |
+		m drawTalkBubbleOn: clipCanvas].
 
 
 ]

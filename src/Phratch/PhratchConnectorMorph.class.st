@@ -1,6 +1,6 @@
 Class {
 	#name : #PhratchConnectorMorph,
-	#superclass : #PhratchMorph,
+	#superclass : #Morph,
 	#instVars : [
 		'point2',
 		'point1'

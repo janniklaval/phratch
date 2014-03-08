@@ -1,6 +1,6 @@
 Class {
 	#name : #TiledImageMorph,
-	#superclass : #PhratchMorph,
+	#superclass : #Morph,
 	#instVars : [
 		'tileForm'
 	],
