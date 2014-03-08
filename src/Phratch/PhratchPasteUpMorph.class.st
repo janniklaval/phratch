@@ -1,11 +1,11 @@
 Class {
-	#name : #PhratchMorph,
-	#superclass : #Morph,
+	#name : #PhratchPasteUpMorph,
+	#superclass : #PasteUpMorph,
 	#category : #'Phratch-Morphs'
 }
 
 { #category : #'as yet unclassified' }
-PhratchMorph >> ownerOrYourselfThatIsA: aClass [
+PhratchPasteUpMorph >> ownerOrYourselfThatIsA: aClass [
 	"Answer this the first morph in the owner chain of the given class, or nil if there isn't one."
 
 	| current |
