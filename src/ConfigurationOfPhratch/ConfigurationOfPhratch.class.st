@@ -282,6 +282,19 @@ ConfigurationOfPhratch >> version20: spec [
 	spec for: #common do: [
 			spec repository: 'http://smalltalkhub.com/mc/JLaval/Phratch/main'.
 			spec
+				package: 'Phratch' with: 'Phratch-janniklaval.277'.
+			spec
+				project: 'Sound' with: #stable;
+				project: 'OSProcess' with: #stable.
+	].
+]
+
+{ #category : #'as yet unclassified' }
+ConfigurationOfPhratch >> version30: spec [
+	<version:'3.0' imports: #('2.0-baseline' )>
+	spec for: #common do: [
+			spec repository: 'http://smalltalkhub.com/mc/JLaval/Phratch/main'.
+			spec
 				package: 'Phratch'.
 			spec
 				project: 'Sound' with: #stable;
