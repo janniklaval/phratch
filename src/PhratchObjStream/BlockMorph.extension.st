@@ -1,6 +1,12 @@
 Extension { #name : #BlockMorph }
 
 { #category : #'*PhratchObjStream' }
+BlockMorph >> asBlockTuple [
+
+	self subclassResponsibility 
+]
+
+{ #category : #'*PhratchObjStream' }
 BlockMorph >> fieldsVersion [
 
 	^ 1
@@ -16,6 +22,13 @@ BlockMorph >> initFieldsFrom: anObjStream version: classVersion [
 		oldColor
 	) from: anObjStream.
 
+]
+
+{ #category : #'*PhratchObjStream' }
+BlockMorph >> showTuples [
+
+	(StringHolder new contents: self tupleSequence printString)
+		openLabel: 'Tuple'
 ]
 
 { #category : #'*PhratchObjStream' }
