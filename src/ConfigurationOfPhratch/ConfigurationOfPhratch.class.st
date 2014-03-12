@@ -32,9 +32,13 @@ ConfigurationOfPhratch class >> catalogChangeLog [
 [[[
 	ConfigurationOfPhratch project version: ''1.0'' ) load					
 ]]]
-- 2.0 - 2014 - not yet released but have a lot of new things to create your own addons (not available in Pharo2.0).
+- 2.0 - March 2014 - have a lot of new things to create your own addons (not available in Pharo2.0).
 [[[
 	ConfigurationOfPhratch project version: ''2.0'' ) load					
+]]]
+- 3.0 - 2014 - not yet released but have a lot of new optimizations and cleanings (not available in Pharo2.0).
+[[[
+	ConfigurationOfPhratch project version: ''3.0'' ) load					
 ]]]'
 ]
 
@@ -49,7 +53,9 @@ ConfigurationOfPhratch class >> catalogDescription [
 	"Returns a paragraph describing the project"
 	^ 'Phratch is a visual programming language that makes it easy to create your own software. It is a port of Scratch (http://scratch.mit.edu/) on recent platforms (Phrao 2.0 and Pharo 3.0).
 	
-	It is more that a port of Scratch: it allows one to create and to extend it easily with small knowledge of programming languages. Phratch can be plugged on top of any API available in Pharo. One example is the JetStorm software that allows one to control Lego Mindstorms robots with Phratch.'
+	It is more that a port of Scratch: it allows one to create and to extend it easily with small knowledge of programming languages. Phratch can be plugged on top of any API available in Pharo. One example is the JetStorm software that allows one to control Lego Mindstorms robots with Phratch.
+	
+	More information on Phratch.com'
 ]
 
 { #category : #catalog }
