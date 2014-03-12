@@ -173,12 +173,11 @@ PhratchFileTests >> testSaveAllBlocks [
 	"Use codeString to compare blocks, to check that they are equivalent"
 	blocksSprite := self firstSprite blocksBin submorphs.
 	self assert: commandBlocksSprite size = blocksSprite size.
-	blocksSprite paddedWith: commandBlocksSprite do: [:a :b | self assert:(a codeString = b codeString) ].
+	blocksSprite do: [:a | self assert:(commandBlocksSprite anySatisfy: [:b | a codeString = b codeString] ) ].
 	
 	blocksStage := self stage blocksBin submorphs.
 	self assert: commandBlocksStage size = blocksStage size.
-	blocksStage paddedWith: commandBlocksStage do: [:a :b | self assert:( a codeString = b codeString) ].
-
+	blocksStage do: [:a | self assert:(commandBlocksStage anySatisfy: [:b | a codeString = b codeString] ) ].
 ]
 
 { #category : #tests }
@@ -206,7 +205,7 @@ PhratchFileTests >> testSaveAllBlocksSprite [
 	"Use codeString to compare blocks, to check that they are equivalent"
 	blocksSprite := self firstSprite blocksBin submorphs.
 	self assert: commandBlocksSprite size = blocksSprite size.
-	blocksSprite paddedWith: commandBlocksSprite do: [:a :b | self assert:(a codeString = b codeString) ].
+	blocksSprite do: [:a | self assert:(commandBlocksSprite anySatisfy: [:b | a codeString = b codeString] ) ].
 	
 ]
 
@@ -235,7 +234,7 @@ PhratchFileTests >> testSaveAllBlocksStage [
 	
 	blocksStage := self stage blocksBin submorphs.
 	self assert: commandBlocksStage size = blocksStage size.
-	blocksStage paddedWith: commandBlocksStage do: [:a :b | self assert:( a codeString = b codeString) ].
+	blocksStage do: [:a | self assert:(commandBlocksStage anySatisfy: [:b | a codeString = b codeString] ) ].
 
 ]
 
@@ -255,8 +254,8 @@ PhratchFileTests >> testSaveBlocks [
 	
 	"Use codeString to compare blocks, to check that they are equivalent"
 	blocks := self firstSprite blocksBin submorphs.
-	self assert: blocks first codeString = commandBlock1 codeString.
-	self assert: blocks second codeString = commandBlock2 codeString.
+	self assert: (blocks anySatisfy:[:e | e codeString = commandBlock1 codeString]).
+	self assert: (blocks anySatisfy:[:e | e codeString = commandBlock2 codeString]).
 	
 ]
 
@@ -296,12 +295,12 @@ PhratchFileTests >> testSaveTenBlocks [
 	blocksSprite := self firstSprite blocksBin submorphs.
 	self assert: commandBlocksSprite size = blocksSprite size.
 	
-	blocksSprite paddedWith: commandBlocksSprite do: [:a :b | self assert:(a codeString = b codeString) ].
+	blocksSprite do: [:a | self assert:(commandBlocksSprite anySatisfy: [:b | a codeString = b codeString] ) ].
 	
 	blocksStage := self stage blocksBin submorphs.
 	self assert: commandBlocksStage size = blocksStage size.
 	
-	blocksStage paddedWith: commandBlocksSprite do: [:a :b | self assert:( a codeString = b codeString) ].
+	blocksStage do: [:a | self assert:(commandBlocksStage anySatisfy: [:b | a codeString = b codeString] ) ].
 
 ]
 
@@ -327,8 +326,8 @@ PhratchFileTests >> testSaveWithBroadcast [
 	
 	"Use codeString to compare blocks, to check that they are equivalent"
 	blocks := self firstSprite blocksBin submorphs.
-	self assert: blocks first codeString = commandBlock1 codeString.
-	self assert: blocks second codeString = commandBlock2 codeString.
+	self assert: blocks second codeString = commandBlock1 codeString.
+	self assert: blocks first codeString = commandBlock2 codeString.
 
 ]
 

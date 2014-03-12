@@ -36,37 +36,6 @@ IfElseBlockMorph >> addLabel [
 ]
 
 { #category : #private }
-IfElseBlockMorph >> asBlockTuple [
-	"Answer a tuple (Array) describing this block and its arguments."
-
-	| blockTuple arg argList |
-	blockTuple := Array new: argMorphs size + 5.
-	blockTuple
-		at: 1 put: #phratch;
-		at: 2 put: self rcvr;
-		at: 3 put: selector.
-
-	argList := argMorphs.
-	argList := self organizeArgs: argList.
-	1 to: argList size do: [:i |
-		arg := argList at: i.
-		(arg isKindOf: ArgMorph)
-			ifTrue: [blockTuple at: i + 3 put: arg evaluate]
-			ifFalse: [blockTuple at: i + 3 put: arg asBlockTuple]].
-
-	trueBlock
-		ifNil: [blockTuple at: blockTuple size - 1 put: nil]
-		ifNotNil: [blockTuple at: blockTuple size - 1 put: trueBlock tupleSequence].
-
-	falseBlock
-		ifNil: [blockTuple at: blockTuple size put: nil]
-		ifNotNil: [blockTuple at: blockTuple size put: falseBlock tupleSequence].
-
-	^ blockTuple
-
-]
-
-{ #category : #private }
 IfElseBlockMorph >> attachBlock: aBlockMorph [
 	"Attach the given block to me. Assume the block has been positioned correctly."
 

@@ -128,12 +128,6 @@ BlockMorph >> addPoint: aPoint color: c to: coll [
 				with: c)
 ]
 
-{ #category : #converting }
-BlockMorph >> asBlockTuple [
-
-	self subclassResponsibility 
-]
-
 { #category : #private }
 BlockMorph >> attachBlock: aBlockMorph [
 	"Attach the given block to me. Assume the block has been positioned correctly."
@@ -1511,9 +1505,9 @@ BlockMorph >> rightButtonMenu [
 		(self owner isKindOf: BlockMorph) ifFalse: [  "we can't yet delete a blocks inside a script"
 			menu add: 'delete' value: #delete]].
 
-	DebugMenu ifTrue: [
+	"DebugMenu ifTrue: [
 		menu addLine.
-		menu add: 'show tuples' value: #showTuples].
+		menu add: 'show tuples' value: #showTuples]."
 	
 	menu localize; invokeModal.
 	choice := menu selectedValue ifNil: [^ self].
@@ -1553,13 +1547,6 @@ BlockMorph >> showErrorFeedback [
 	cachedFeedbackForm := nil.
 	self changed.
 
-]
-
-{ #category : #'event handling' }
-BlockMorph >> showTuples [
-
-	(StringHolder new contents: self tupleSequence printString)
-		openLabel: 'Tuple'
 ]
 
 { #category : #'dropping/grabbing' }

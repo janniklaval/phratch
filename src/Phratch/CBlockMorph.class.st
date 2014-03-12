@@ -38,40 +38,6 @@ CBlockMorph >> addCommandIcons [
 ]
 
 { #category : #private }
-CBlockMorph >> asBlockTuple [
-	"Answer a tuple (Array) describing this block and its arguments."
-
-	| blockTuple arg argList val eval |
-	blockTuple := Array new: argMorphs size + 4.
-	blockTuple
-		at: 1 put: #phratch;
-		at: 2 put: self rcvr;
-		at: 3 put: selector.
-	argList := argMorphs.
-	argList := self organizeArgs: argList.
-	1 to: argList size do: [ :i | 
-		arg := argList at: i.
-		(arg isKindOf: ArgMorph)
-			ifTrue: [ 
-				(arg isKindOf: ExpressionArgMorph)
-					ifTrue: [ 
-						val := arg getExpression.
-						eval := arg isNumberExpression
-							ifTrue: [ 
-								val = ' '
-									ifTrue: [ val ]
-									ifFalse: [ val asNumberNoError ] ]
-							ifFalse: [ arg evaluate ] ]
-					ifFalse: [ eval := arg evaluate ].
-				blockTuple at: i + 3 put: eval ]
-			ifFalse: [ blockTuple at: i + 3 put: arg asBlockTuple ] ].
-	nestedBlock
-		ifNil: [ blockTuple at: blockTuple size put: nil ]
-		ifNotNil: [ blockTuple at: blockTuple size put: nestedBlock tupleSequence ].
-	^ blockTuple
-]
-
-{ #category : #private }
 CBlockMorph >> attachBlock: aBlockMorph [
 	"Attach the given block to me. Assume the block has been positioned correctly."
 

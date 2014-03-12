@@ -470,7 +470,6 @@ PhratchSpriteMorph >> copyForExport [
 				objToExport
 					updateCustomBlockDefinitionId: eachDef id with: eachDef;
 					updateLocalId: eachDef id withSpec: eachDef userSpec]]].
-	objToExport convertStacksToTuples.
 	objToExport addMorph: super copyForExport.
 	^ objToExport
 

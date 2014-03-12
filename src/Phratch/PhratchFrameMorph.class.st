@@ -1492,17 +1492,7 @@ Note: this is a compatibility force method"
 		displayProgressAt: self center - (32@5)  "Sensor cursorPoint"
 		from: 0 to: ((proj allMorphs) select: [:m| m isKindOf: ScriptablePhratchMorph]) size * 2
 		during: [:bar | | i | i := 0.
-
-	proj allMorphsDo: [:m |
-		(m isKindOf: ScriptablePhratchMorph) ifTrue: [
-			 i := i + 1. bar value: i.
-			m convertTuplesToDefinitions]].
-
-	proj allMorphsDo: [:m |
-		(m isKindOf: ScriptablePhratchMorph) ifTrue: [  "convert to new blocks" 
-			i := i + 1. bar value: i.
-			m convertStacksToTuples.
-			m convertTuplesToStacks]]].
+].
 
 	^ proj
 
@@ -1538,17 +1528,7 @@ PhratchFrameMorph >> extractProjectFrom: aByteArray [
 		displayProgressAt: self center - (32@5)  "Sensor cursorPoint"
 		from: 0 to: ((proj allMorphs) select: [:m| m isKindOf: ScriptablePhratchMorph]) size * 2
 		during: [:bar | | i | i := 0.
-
-	proj allMorphsDo: [:m |
-		(m isKindOf: ScriptablePhratchMorph) ifTrue: [
-			 i := i + 1. bar value: i.
-			m convertTuplesToDefinitions]].
-
-	proj allMorphsDo: [:m |
-		(m isKindOf: ScriptablePhratchMorph) ifTrue: [  "convert to new blocks" 
-			i := i + 1. bar value: i.
-			m convertStacksToTuples.
-			m convertTuplesToStacks]]].
+].
 
 	^ proj
 
@@ -1702,16 +1682,9 @@ PhratchFrameMorph >> fixLayout [
 { #category : #private }
 PhratchFrameMorph >> fixNestedBlocks [
 	"Not the best solution, I'm sure, but working"
-	
-	(workPane submorphs copyWith: workPane) do: [:m |
-		(m isKindOf: ScriptablePhratchMorph) ifTrue: [
-			m convertStacksToTuples]].
 
 	viewerPane rebuildCategorySelectors.
 
-	(workPane submorphs copyWith: workPane) do: [:m |
-		(m isKindOf: ScriptablePhratchMorph) ifTrue: [
-			m convertTuplesToStacks]].
 	self updatePanes.
 ]
 
@@ -2916,20 +2889,6 @@ PhratchFrameMorph >> refreshBlocks [
 		from: 0 to: ((workPane allMorphs) select: [:m| m isKindOf: ScriptablePhratchMorph]) size * 3
 		during: [:bar | | i | i := 0.
 
-	(workPane submorphs copyWith: workPane) do: [:m |
-	(m isKindOf: ScriptablePhratchMorph) ifTrue: [
-		i := i + 1. bar value: i.
-		m convertStacksToTuples]].
-
-	workPane allMorphsDo: [:m |
-		(m isKindOf: ScriptablePhratchMorph) ifTrue: [
-			i := i + 1. bar value: i.
-			m convertTuplesToDefinitions]].
-
-	(workPane submorphs copyWith: workPane) do: [:m |
-		(m isKindOf: ScriptablePhratchMorph) ifTrue: [
-			i := i + 1. bar value: i.
-			m convertTuplesToStacks]].
 	self updatePanes.
 	self
 		view: scriptsPane target
@@ -3116,18 +3075,10 @@ PhratchFrameMorph >> setLanguage: aString [
 		during: [:bar | | i | i := 0.
 
 	tempJustSaved := justSaved.
-	(workPane submorphs copyWith: workPane) do: [:m |
-		(m isKindOf: ScriptablePhratchMorph) ifTrue: [
-			i := i + 1. bar value: i.
-			m convertStacksToTuples]].
 
 	PhratchTranslator setLanguage: (PhratchTranslator isoCodeForName: aString).
 	viewerPane rebuildCategorySelectors.
 
-	(workPane submorphs copyWith: workPane) do: [:m |
-		(m isKindOf: ScriptablePhratchMorph) ifTrue: [
-			i := i + 1. bar value: i.
-			m convertTuplesToStacks]].
 	self updatePanes.
 	self
 		view: scriptsPane target
@@ -3841,7 +3792,7 @@ PhratchFrameMorph >> writePhratchProject [
 				ifTrue: [m cacheRefPos].
 			(m blocksBin isKindOf: PhratchSpriteMorph) ifTrue: [  m blocksBin allMorphsDo: [:b |
 				(b isKindOf: BlockMorph) ifTrue: [b stop]]].
-			m convertStacksToTuples]].
+			]].
 
 	saveError := nil.
 	[ 
@@ -3860,11 +3811,7 @@ PhratchFrameMorph >> writePhratchProject [
 				projectDirectory deleteFileNamed: out localName.
 			] ifError: []]. 
 		saveError := err].
-
-	workPane allMorphsDo: [:m |
-		(m isKindOf: ScriptablePhratchMorph) ifTrue: [
-			i := i + 1. bar value: i.
-			m convertTuplesToStacks]]].
+].
 
 	self addMorph: (workPane position: oldPosition).
 	oldScriptsTarget ifNil: [oldScriptsTarget := workPane].

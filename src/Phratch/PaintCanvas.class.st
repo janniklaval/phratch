@@ -716,10 +716,6 @@ PaintCanvas >> extractProjectFrom: aByteArray [
 		^ nil].
 
 	ScriptablePhratchMorph buildBlockSpecDictionary.
-	proj allMorphsDo: [:m |
-		(m isKindOf: ScriptablePhratchMorph) ifTrue: [  "covert to new blocks"
-			m convertStacksToTuples.
-			m convertTuplesToStacks]].
 
 	^ proj
 

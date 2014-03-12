@@ -11,16 +11,6 @@ Class {
 }
 
 { #category : #other }
-CommentBlockMorph >> asBlockTuple [
-
-	^ Array
-		with: #comment:
-		with: commentMorph contents
-		with: isShowing
-
-]
-
-{ #category : #other }
 CommentBlockMorph >> comment: aStringOrUTF8 [
 	"Set the contents of this comment to the given string."
 

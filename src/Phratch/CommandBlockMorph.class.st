@@ -300,49 +300,6 @@ CommandBlockMorph >> asArgumentWrapper [
 	^ ExpressionWrapper with: self
 ]
 
-{ #category : #'stack/tuple conversion' }
-CommandBlockMorph >> asBlockTuple [
-	"Answer a tuple (Array) describing this block and its arguments."
-
-	| blockTuple argList arg val eval |
-	blockTuple := Array new: argMorphs size + 3.
-	blockTuple
-		at: 1 put: #phratch;
-		at: 2 put: self rcvr;
-		at: 3 put: selector.
-	argList := argMorphs.
-	argList := self organizeArgs: argList.
-	1 to: argList size do: [ :i | 
-		arg := argList at: i.
-		(arg isKindOf: ArgMorph) | (arg isKindOf: EventTitleMorph)
-			ifTrue: [ 
-				(arg isKindOf: MultiArgMorph)
-					ifTrue: [ blockTuple at: i + 3 put: arg listValue convertStacksToTuples ]
-					ifFalse: [ 
-						((arg isKindOf: CSlotMorph) or: [ arg isKindOf: OSlotMorph ])
-							ifTrue: [ blockTuple at: i + 3 put: arg asBlockTuple ]
-							ifFalse: [ 
-								(arg isKindOf: ExpressionArgMorph)
-									ifTrue: [ 
-										val := arg getExpression.
-										eval := arg isNumberExpression
-											ifTrue: [ 
-												val = ' '
-													ifTrue: [ val ]
-													ifFalse: [ 
-														(arg evaluate isKindOf: Symbol)
-															ifTrue: [ arg evaluate ]
-															ifFalse: [ val asNumberNoError ]	" special case for special values in list blocks (first, last, any)" ] ]
-											ifFalse: [ arg evaluate ] ]
-									ifFalse: [ 
-										eval := (arg isKindOf: SpriteArgMorph)
-											ifTrue: [ arg getChoice ]
-											ifFalse: [ arg evaluate ] ].
-								blockTuple at: i + 3 put: eval ] ]	"a list" ]
-			ifFalse: [ blockTuple at: i + 3 put: arg asBlockTuple ] ].
-	^ blockTuple
-]
-
 { #category : #byob }
 CommandBlockMorph >> asLambda [
 
@@ -1254,15 +1211,9 @@ CommandBlockMorph >> rightButtonMenu [
 		menu add: 'edit block for developer' value: #editElements.
 	].
 
-	DebugMenu ifTrue: [
-		menu addLine.
-		menu add: 'show tuples' value: #showTuples].
 	
 	(choice := (menu localize; invokeModal"popUpAt: World activeHand position  inWorld:   World"; yourself)selectedValue) ifNil: [^ self].
 	(#(presentHelpScreen duplicate fastDuplicate rename delete showElements editElements inheritAttribute disinheritAttribute) includes: choice) ifTrue: [^ self perform: choice].
-	"choice = #enableRemoteSensors ifTrue: [ ^ self]."
-	"choice = #exitPhratchSession ifTrue: [ ^ self]."
-	choice = #showTuples ifTrue: [^ self showTuples].
 
 	"change operator"
 	spec := '$Number$ ', choice, ' $Number$'.
