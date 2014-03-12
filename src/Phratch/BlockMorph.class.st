@@ -238,8 +238,8 @@ BlockMorph >> closestAttachTargetIn: newOwner [
 	topUsed := false.
 	bottomUsed := false.
 	attachPoints := OrderedCollection new: 100.
-	(newOwner allMorphs reject: [ :m | m == newOwner ])
-		do: [ :m | 
+	newOwner allMorphs reject: [ :m | m == newOwner ]
+		thenDo: [ :m | 
 			(m ~~ self
 				and: [ 
 					m ~~ self bottomBlock

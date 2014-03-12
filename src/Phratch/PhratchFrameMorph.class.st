@@ -627,7 +627,8 @@ PhratchFrameMorph >> addonMenu: aMenuTitleMorph [
 		menu add: (self isLoaded: e value) checkBoxString, e key target: MetaRepoSearcher selector: #loadProject: argument: e value.
 	].
 	
-	menu popUpAt: aMenuTitleMorph bottomLeft + (0 @ 10) inWorld: World
+	"menu popUpAt: aMenuTitleMorph bottomLeft + (0 @ 10) inWorld: World"
+	menu popUpInWorld 
 ]
 
 { #category : #'falta adaptar' }
@@ -1304,7 +1305,8 @@ PhratchFrameMorph >> editMenu: aMenuTitleMorph [
 		]].
  
 	menu localize.
-	menu invokeModalAt: aMenuTitleMorph bottomLeft + (0@10).
+	"menu invokeModalAt: aMenuTitleMorph bottomLeft + (0@10)."
+	menu popUpInWorld 
 ]
 
 { #category : #'falta adaptar' }
@@ -1572,7 +1574,8 @@ PhratchFrameMorph >> fileMenu: aMenuTitleMorph [
 	].
 
 	menu localize.
-	menu popUpAt: aMenuTitleMorph bottomLeft + (0 @ 10) inWorld: World
+	"menu popUpAt: aMenuTitleMorph bottomLeft + (0 @ 10) inWorld: World"
+	menu popUpInWorld 
 ]
 
 { #category : #'menu/button actions' }
@@ -1808,7 +1811,8 @@ PhratchFrameMorph >> helpMenu: aMenuTitleMorph [
 	menu addLine.
 	menu add: 'About Phratch' translated action: #aboutPhratch.
 	menu localize.
-	menu popUpAt: aMenuTitleMorph bottomLeft + (0 @ 10) inWorld: World
+	"menu popUpAt: aMenuTitleMorph bottomLeft + (0 @ 10) inWorld: World"
+	menu popUpInWorld 
 ]
 
 { #category : #'as yet unclassified' }
