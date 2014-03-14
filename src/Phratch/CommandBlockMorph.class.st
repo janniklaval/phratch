@@ -90,6 +90,12 @@ CommandBlockMorph class >> isArgSpec: aString [
 ]
 
 { #category : #utilities }
+CommandBlockMorph class >> maxSize [
+
+	^ 1000
+]
+
+{ #category : #utilities }
 CommandBlockMorph class >> parseCommandSpec: aCommandSpec [
 	"Answer an array of token strings containing my keywords and argument specs."
 	"CommandBlockMorph parseCommandSpec: '$blah$ to $blah$'"
@@ -721,7 +727,7 @@ CommandBlockMorph >> fixBlockLayoutWrap [
 					maxX := maxX max: left + m width.
 					x := left ]
 				ifFalse: [ 
-					x - left > 400
+					x - left > self class maxSize
 						ifTrue: [ 
 							lines add: line.
 							line := OrderedCollection new.
@@ -734,7 +740,7 @@ CommandBlockMorph >> fixBlockLayoutWrap [
 						ifTrue: [ m color: self labelColor ]
 						ifFalse: [ x := x max: minXForArgs ].
 					m left: x.
-					(m fullBounds right - left > 400 and: [ line isEmpty not ])
+					(m fullBounds right - left > self class maxSize and: [ line isEmpty not ])
 						ifTrue: [ 
 							lines add: line.
 							line := OrderedCollection new.
