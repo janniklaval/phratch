@@ -838,29 +838,6 @@ PhratchStageMorph >> processesToRun [
 	^ result
 ]
 
-{ #category : #byob }
-PhratchStageMorph >> referenceToList: aPhratchList [
-
-	"answer an Array describing the variable which holds an anonymous list, nil
-	if there isn't any.
-
-	format:
-
-		1 - target obj name
-		2 - var name"
-
-	self varNames do: [:key |
-		aPhratchList == (vars at: key)
-			ifTrue: [^ Array with: 'Stage' with: key ]].
-
-	sprites do: [:sprite |
-		sprite varNames do: [:vname |
-			aPhratchList == (sprite getVar: vname)
-				ifTrue: [^ Array with: sprite objName with: vname ]]].
-
-	^ nil
-]
-
 { #category : #'scratch processes/events' }
 PhratchStageMorph >> rejectDropEvent: evt [
 	"we should only reject drops if they're not sprites, variables, etc. Should check it out better" 

@@ -3407,29 +3407,6 @@ ScriptablePhratchMorph >> handlesMouseDown: evt [
 
 ]
 
-{ #category : #blocks }
-ScriptablePhratchMorph >> hatBlockFromTupleOldForm: tuple receiver: scriptOwner [
-	"Answer a new block for the given variable reference tuple."
-
-	| blockClass block eventName |
-	blockClass := Smalltalk at: tuple first.
-	block := blockClass new scriptOwner: scriptOwner.
-
-	blockClass = StartEventHatMorph ifTrue: [
-		eventName := tuple at: 2.
-		block forStartEvent; scriptOwner: scriptOwner].
-	
-	blockClass = EventHatMorph ifTrue: [
-		eventName := tuple at: 2.
-		block eventName: eventName].
-
-	blockClass = KeyEventHatMorph ifTrue: [
-		block choice: (tuple at: 2)].
-
-	^ block
-
-]
-
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> hideColor [
 	"Ask the user which user variable to hide, then hide it."

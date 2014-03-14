@@ -155,20 +155,6 @@ BlockMorph >> blockAttachPoints: aSet [
 	aSet addAll: result
 ]
 
-{ #category : #accessing }
-BlockMorph >> blockID [
-	"answer a temporary (!) id for the receiver
-	which can be used for tuple conversion of
-	sticky comments"
-
-	| sm |
-	sm := self ownerOrYourselfThatIsA: PhratchScriptsMorph.
-	sm ifNil: [^ nil].
-	^ (sm allMorphs select: [:m |
-		m isKindOf: BlockMorph]) indexOf: self
-
-]
-
 { #category : #'block enumerating' }
 BlockMorph >> blockSequence [
 	"Answer the sequence of blocks starting with myself. Each block is a submorph of the previous block."
