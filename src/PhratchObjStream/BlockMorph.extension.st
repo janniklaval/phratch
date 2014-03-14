@@ -7,6 +7,20 @@ BlockMorph >> asBlockTuple [
 ]
 
 { #category : #'*PhratchObjStream' }
+BlockMorph >> blockID [
+	"answer a temporary (!) id for the receiver
+	which can be used for tuple conversion of
+	sticky comments"
+
+	| sm |
+	sm := self ownerOrYourselfThatIsA: PhratchScriptsMorph.
+	sm ifNil: [^ nil].
+	^ (sm allMorphs select: [:m |
+		m isKindOf: BlockMorph]) indexOf: self
+
+]
+
+{ #category : #'*PhratchObjStream' }
 BlockMorph >> fieldsVersion [
 
 	^ 1

@@ -83,6 +83,29 @@ PhratchStageMorph >> listNamed: listName targetName: targetName [
 ]
 
 { #category : #'*PhratchObjStream' }
+PhratchStageMorph >> referenceToList: aPhratchList [
+
+	"answer an Array describing the variable which holds an anonymous list, nil
+	if there isn't any.
+
+	format:
+
+		1 - target obj name
+		2 - var name"
+
+	self varNames do: [:key |
+		aPhratchList == (vars at: key)
+			ifTrue: [^ Array with: 'Stage' with: key ]].
+
+	sprites do: [:sprite |
+		sprite varNames do: [:vname |
+			aPhratchList == (sprite getVar: vname)
+				ifTrue: [^ Array with: sprite objName with: vname ]]].
+
+	^ nil
+]
+
+{ #category : #'*PhratchObjStream' }
 PhratchStageMorph >> storeFieldsOn: anObjStream [
 
 	super storeFieldsOn: anObjStream.
