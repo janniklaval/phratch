@@ -429,7 +429,7 @@ PhratchSpriteMorph >> color: sensitiveColor sees: soughtColor [
 
 ]
 
-{ #category : #'BYOB attributes' }
+{ #category : #'as yet unclassified' }
 PhratchSpriteMorph >> comeToFront [
 	"Put me on front of the display"
 	<phratchItem: 'go to front' kind: #- category: 'looks' defaultValues: #() subCategory: #a7 special: #()>
@@ -796,6 +796,13 @@ PhratchSpriteMorph >> goBackByLayers: aNumber [
 	"Decrease my layer by (i.e., move me towards the back by) the given number of layers."
 	<phratchItem: 'go back $Number$ layers' kind: #- category: 'looks' defaultValues: #(1) subCategory: #a7 special: #()>
 	self setLayerTo: self layer + aNumber truncated
+]
+
+{ #category : #'looks ops' }
+PhratchSpriteMorph >> goUpByLayers: aNumber [
+	"Decrease my layer by (i.e., move me towards the back by) the given number of layers."
+	<phratchItem: 'come up $Number$ layers' kind: #- category: 'looks' defaultValues: #(1) subCategory: #a7 special: #()>
+	self setLayerTo: self layer - aNumber truncated
 ]
 
 { #category : #'motion ops' }

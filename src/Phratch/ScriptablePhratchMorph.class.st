@@ -6532,13 +6532,20 @@ ScriptablePhratchMorph >> unusedMediaNameFromBaseName: baseName forMedia: aMedia
 	[ i > 1 and: [ (nm at: i) = Character space ] ] whileTrue: [ i := i - 1 ].
 	nm := nm copyFrom: 1 to: i.
 	greatestNum := 0.
+
 	existingNames
 		do: [ :n | 
 			i := n size.
 			[ i > 1 and: [ (n at: i) isDigit ] ] whileTrue: [ i := i - 1 ].
 			(n copyFrom: 1 to: i) = nm
-				ifTrue: [ greatestNum := (n copyFrom: i + 1 to: n size) asNumber max: greatestNum ] ].
-	^ nm , (greatestNum + 1) printString
+				ifTrue: [ |num|
+					i := nm indexOf: $..
+					i > 1
+						ifTrue: [ num := nm copyFrom: i=1 to: nm size ].
+					
+					num ifNil:[greatestNum := 0]
+						ifNotNil:[greatestNum :=  num asNumber max: greatestNum] ] ].
+	^ nm , '.', (greatestNum + 1) printString
 ]
 
 { #category : #'debug and other' }

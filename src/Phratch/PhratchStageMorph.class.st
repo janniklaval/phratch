@@ -388,7 +388,7 @@ PhratchStageMorph >> drawSubmorphsOn: aCanvas [
 	| clipCanvas bubleToDraw|
 	bubleToDraw := OrderedCollection new.
 	clipCanvas := aCanvas copyClipRect: bounds.
-	submorphs do:[:m |
+	submorphs reverseDo:[:m |
 		((m isKindOf: PhratchSpriteMorph) and:
 		 [m isHidden not and:
 		 [clipCanvas isVisible: m fullBounds]]) ifTrue: [ 
