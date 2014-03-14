@@ -3121,7 +3121,7 @@ PhratchFrameMorph >> showPlay [
 PhratchFrameMorph >> showSettingBrowser [
 
 	<phratchMenu: 'Settings' category: 'edit' position: 7 sub:3 shift: false>
-	SettingBrowser new changePackageSet: {PackageOrganizer default mostSpecificPackageOfClass: PhratchInstaller}; open
+	SettingBrowser new changePackageSet: {RPackageOrganizer default packageNamed: 'Phratch'}; open
 ]
 
 { #category : #watchers }
