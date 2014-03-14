@@ -1,6 +1,18 @@
 Extension { #name : #PhratchSpriteMorph }
 
 { #category : #'*PhratchObjStream' }
+PhratchSpriteMorph >> asReferenceTuple [
+
+	" answer an array describing the receiver in an abstract way
+	format conventions:"
+
+	^ Array 
+		with: #sprite
+		with: self objName
+
+]
+
+{ #category : #'*PhratchObjStream' }
 PhratchSpriteMorph >> fieldsVersion [
 
 	^ 5

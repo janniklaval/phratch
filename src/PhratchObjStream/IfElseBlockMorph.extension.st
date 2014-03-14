@@ -32,6 +32,16 @@ IfElseBlockMorph >> asBlockTuple [
 ]
 
 { #category : #'*PhratchObjStream' }
+IfElseBlockMorph >> falseBlock: aBlockMorph [
+	"Add the given block as my false nested block sequence. Delete the old nested blocks, if any."
+
+	falseBlock ifNotNil: [falseBlock delete].
+	falseBlock := aBlockMorph.
+	aBlockMorph ifNotNil: [self addMorph: aBlockMorph].
+
+]
+
+{ #category : #'*PhratchObjStream' }
 IfElseBlockMorph >> fieldsVersion [
 
 	^ 1
@@ -59,5 +69,15 @@ IfElseBlockMorph >> storeFieldsOn: anObjStream [
 		falseBlock
 		nextBlock
 	) on: anObjStream.
+
+]
+
+{ #category : #'*PhratchObjStream' }
+IfElseBlockMorph >> trueBlock: aBlockMorph [
+	"Add the given block as my true nested block sequence. Delete the old nested blocks, if any."
+
+	trueBlock ifNotNil: [trueBlock delete].
+	trueBlock := aBlockMorph.
+	aBlockMorph ifNotNil: [self addMorph: aBlockMorph].
 
 ]

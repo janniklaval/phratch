@@ -56,6 +56,13 @@ CustomBlockDefinition >> initFieldsFrom: anObjStream version: classVersion [
 ]
 
 { #category : #'*PhratchObjStream' }
+CustomBlockDefinition >> isBoolean [
+	"deprecated, kept for legacy support (jens)"
+
+	^isBoolean
+]
+
+{ #category : #'*PhratchObjStream' }
 CustomBlockDefinition >> storeFieldsOn: anObjStream [
 
 	self storeFieldsNamed: #(

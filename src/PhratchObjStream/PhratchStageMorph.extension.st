@@ -1,6 +1,16 @@
 Extension { #name : #PhratchStageMorph }
 
 { #category : #'*PhratchObjStream' }
+PhratchStageMorph >> asReferenceTuple [
+
+	" answer an array describing the receiver in an abstract way
+	format conventions:"
+
+	^ Array with: #stage
+
+]
+
+{ #category : #'*PhratchObjStream' }
 PhratchStageMorph >> fieldsVersion [
 
 	^ 5
@@ -44,6 +54,32 @@ PhratchStageMorph >> initFieldsFrom: anObjStream version: classVersion [
 	) from: anObjStream.
 	lists ifNil: [lists := Dictionary new].  "work around"
 
+]
+
+{ #category : #'*PhratchObjStream' }
+PhratchStageMorph >> listInVarNamed: varName targetName: targetName [
+
+	targetName = 'Stage' ifTrue: [
+		^self getVar: varName].
+
+	sprites do: [:sprite |
+		(sprite varNames includes: varName)
+			ifTrue: [^sprite getVar: varName]].
+
+	^ nil
+]
+
+{ #category : #'*PhratchObjStream' }
+PhratchStageMorph >> listNamed: listName targetName: targetName [
+
+	targetName = 'Stage' ifTrue: [
+		^self listNamed: listName ].
+
+	sprites do: [:sprite |
+		(sprite listVarNames includes: listName)
+			ifTrue: [^sprite listNamed: listName ]].
+
+	^ nil
 ]
 
 { #category : #'*PhratchObjStream' }

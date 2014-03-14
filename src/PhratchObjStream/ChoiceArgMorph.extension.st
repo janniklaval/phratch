@@ -25,6 +25,52 @@ ChoiceArgMorph >> initFieldsFrom: anObjStream version: classVersion [
 ]
 
 { #category : #'*PhratchObjStream' }
+ChoiceArgMorph >> privateSetChoice: aSymbol [
+	"Update the toggle button when an argument is changed within a block."
+
+	| frame palette block doLocalization label |
+	frame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
+	((#soundNames = getOptionsSelector) and:
+	 [aSymbol = ('record' localized, '...')]) ifTrue: [
+		frame ifNotNil: [^ frame newSound]].
+
+	((#sceneNames = getOptionsSelector) and:
+	 [aSymbol = ('record' localized, '...')]) ifTrue: [
+		frame ifNotNil: [^ frame workPane newScene]].
+
+	((#sceneNames = getOptionsSelector) and:
+	 [aSymbol = ('re-record' localized, '...')]) ifTrue: [
+		frame ifNotNil: [^ frame workPane rerecordScene]].
+
+	choice := label := aSymbol.
+	label := label asString.
+	doLocalization := (#(costumeNames soundNames varNamesMenu listVarMenu) includes: getOptionsSelector) not.
+	doLocalization
+		ifTrue:[labelMorph contents: label localized]
+		ifFalse:[labelMorph contents: label].
+	labelMorph position: self position + borderWidth + (3 @ -1).
+	self extent: (labelMorph extent + (16@2) + borderWidth).
+
+	menuIconMorph position: (self right - borderWidth - 10)@(self top + borderWidth + 4).
+
+	(block := self ownerOrYourselfThatIsA: HatBlockMorph) ifNotNil: [
+		block fixBlockLayout].
+
+	(owner isKindOf: SetterBlockMorph) ifTrue: [ owner determineIfSpecialForm ].
+
+"
+	options = #('with inputs' 'with input list') ifTrue: [
+		(owner respondsTo: #adjustInputParadigm:) ifTrue: [
+			owner adjustInputParadigm: choice ]].
+"
+	(palette := self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph) ifNil: [^ self].
+	(block := self ownerOrYourselfThatIsA: BlockMorph) ifNil: [^ self].
+
+	block isReporter ifTrue: [palette updateWatcherButtonsForFrame: frame].
+
+]
+
+{ #category : #'*PhratchObjStream' }
 ChoiceArgMorph >> storeFieldsOn: anObjStream [
 
 	super storeFieldsOn: anObjStream.

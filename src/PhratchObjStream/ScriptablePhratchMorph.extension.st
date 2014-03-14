@@ -1,6 +1,12 @@
 Extension { #name : #ScriptablePhratchMorph }
 
 { #category : #'*PhratchObjStream' }
+ScriptablePhratchMorph >> asReferenceTuple [
+
+	self subclassResponsibility 
+]
+
+{ #category : #'*PhratchObjStream' }
 ScriptablePhratchMorph >> blockFromOldFormTuple: tuple receiver: scriptOwner [
 	"Answer a new block for the given tuple."
 
@@ -670,6 +676,20 @@ ScriptablePhratchMorph >> blockVariableBlockFromTupleOldForm: tuple receiver: sc
 ]
 
 { #category : #'*PhratchObjStream' }
+ScriptablePhratchMorph >> blockWithID: id [
+
+	| topBlockList blockList|
+
+	topBlockList := (blocksBin submorphs select: [:m | (m isKindOf: BlockMorph) ]) reversed.
+	blockList := OrderedCollection new.
+	topBlockList do: [:top | (top allMorphs select: [:b| b isKindOf: BlockMorph ]) do: [:m |
+		blockList add: m ]].
+
+	^ blockList at: id ifAbsent: [nil].
+
+]
+
+{ #category : #'*PhratchObjStream' }
 ScriptablePhratchMorph >> convertListVarReferencesToTuples [
 	"format conventions:
 
@@ -867,6 +887,33 @@ ScriptablePhratchMorph >> convertVarTuplesToListReferences [
 { #category : #'*PhratchObjStream' }
 ScriptablePhratchMorph class >> currentEncoding [
 		^ObjEncoding ifNil: [^#phratch ]
+]
+
+{ #category : #'*PhratchObjStream' }
+ScriptablePhratchMorph >> hatBlockFromTuple: tuple receiver: scriptOwner [
+	"Answer a new block for the given variable reference tuple."
+
+	| blockClass block eventName |
+
+	(#byob = tuple first or:[#phratch = tuple first]) ifFalse: [
+		^self hatBlockFromTupleOldForm: tuple receiver: scriptOwner ].
+
+	blockClass := Smalltalk at: tuple third.
+	block := blockClass new scriptOwner: scriptOwner.
+
+	blockClass = StartEventHatMorph ifTrue: [
+		eventName := tuple at: 4.
+		block forStartEvent; scriptOwner: scriptOwner].
+		
+	blockClass = EventHatMorph ifTrue: [
+		eventName := tuple at: 4.
+		block eventName: eventName].
+
+	blockClass = KeyEventHatMorph ifTrue: [
+		block choice: (tuple at: 4)].
+
+	^ block
+
 ]
 
 { #category : #'*PhratchObjStream' }

@@ -69,6 +69,20 @@ CommandBlockMorph >> initFieldsFrom: anObjStream version: classVersion [
 ]
 
 { #category : #'*PhratchObjStream' }
+CommandBlockMorph >> rcvr [
+	"answer a String description of my receiver which can be used in a tuple"
+
+	| rcvr |
+	rcvr := (receiver isKindOf: ScriptablePhratchMorph)
+		ifTrue: [ 
+			(receiver isKindOf: PhratchStageMorph)
+				ifTrue: [ 'Stage' ]
+				ifFalse: [ receiver objName ] ]
+		ifFalse: [ '' ].
+	^ rcvr
+]
+
+{ #category : #'*PhratchObjStream' }
 CommandBlockMorph >> storeFieldsOn: anObjStream [
 
 	super storeFieldsOn: anObjStream.
