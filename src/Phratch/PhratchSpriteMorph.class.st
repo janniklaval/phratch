@@ -122,18 +122,6 @@ self gotoX: (i1+self xpos) y: self ypos.
 ]
 
 { #category : #'byob OOP' }
-PhratchSpriteMorph >> asReferenceTuple [
-
-	" answer an array describing the receiver in an abstract way
-	format conventions:"
-
-	^ Array 
-		with: #sprite
-		with: self objName
-
-]
-
-{ #category : #'byob OOP' }
 PhratchSpriteMorph >> attribute: attr [
 	"Answer the value of my variable or built-in attribute with the given name. Answer zero if I have no attribute or variable with the given name."
 

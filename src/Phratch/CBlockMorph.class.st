@@ -283,16 +283,6 @@ CBlockMorph >> firstBlockList [
 
 ]
 
-{ #category : #private }
-CBlockMorph >> firstBlockList: aBlockMorph [
-	"Add the given block as my first nested block sequence. Delete the old nested blocks, if any."
-
-	nestedBlock ifNotNil: [nestedBlock delete].
-	nestedBlock := aBlockMorph.
-	aBlockMorph ifNotNil: [self addMorph: aBlockMorph].
-
-]
-
 { #category : #drawing }
 CBlockMorph >> fixBlockLayout [
 	"Update the positions of my submorphs."

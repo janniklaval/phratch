@@ -117,17 +117,6 @@ SpriteArgMorph >> fixGetAttribueBlock [
 
 ]
 
-{ #category : #BYOB }
-SpriteArgMorph >> getChoice [
-	morph = #null 
-		ifTrue: [^ #null].
-	morph = #myself 
-		ifTrue: [^ #myself].
-	morph = #allSprites 
-		ifTrue: [^ #allSprites].
-	^ self evaluate
-]
-
 { #category : #'event handling' }
 SpriteArgMorph >> handlesMouseDown: evt [
 

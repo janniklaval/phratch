@@ -239,13 +239,6 @@ CustomBlockDefinition >> isAtomic: aBoolean [
 ]
 
 { #category : #deprecated }
-CustomBlockDefinition >> isBoolean [
-	"deprecated, kept for legacy support (jens)"
-
-	^isBoolean
-]
-
-{ #category : #deprecated }
 CustomBlockDefinition >> isBoolean: aBoolean [
 	"deprecated, kept for legacy support"
 

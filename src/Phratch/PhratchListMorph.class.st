@@ -164,41 +164,6 @@ PhratchListMorph >> asArray [
 	^ result
 ]
 
-{ #category : #'byob lambdas' }
-PhratchListMorph >> asReferenceTuple [
-	" answer an array describing the receiver in an abstract way
-	format conventions:
-
-		named list reference:
-
-					1 - #namedList
-					2 - target obj name
-					3 - list name
-
-		variable-bound anonymous list reference:
-
-					1 - #variableList
-					2 - target obj name
-					3 - var name
-
-		anonymous list (either within a list or bound to a variable):
-
-					converted to tuples in place"
-
-	| stage rcvr ref |
-	target isNil
-		ifTrue: [ 
-			stage := PhratchFrameMorph someInstance workPane.
-			ref := stage referenceToList: self.
-			ref ifNil: [ ^ nil ].
-			^ (Array with: #variableList) , ref ].
-	stage := target ownerOrYourselfThatIsA: PhratchStageMorph.
-	rcvr := target == stage
-		ifTrue: [ 'Stage' ]
-		ifFalse: [ target objName ].
-	^ Array with: #namedList with: rcvr with: listName
-]
-
 { #category : #'list ops' }
 PhratchListMorph >> clear [
 

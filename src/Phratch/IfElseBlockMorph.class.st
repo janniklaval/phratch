@@ -256,16 +256,6 @@ IfElseBlockMorph >> elseBarHeight [
 ]
 
 { #category : #private }
-IfElseBlockMorph >> falseBlock: aBlockMorph [
-	"Add the given block as my false nested block sequence. Delete the old nested blocks, if any."
-
-	falseBlock ifNotNil: [falseBlock delete].
-	falseBlock := aBlockMorph.
-	aBlockMorph ifNotNil: [self addMorph: aBlockMorph].
-
-]
-
-{ #category : #private }
 IfElseBlockMorph >> falseBlockList [
 	"Answer an array containing the block sequence false-case nested stack."
 
@@ -460,16 +450,6 @@ IfElseBlockMorph >> topBarHeight [
 		(m isKindOf: BlockMorph) not or: [argMorphs includes: m]].
 	^ nonBlockSubmorphs inject: CBlockBracketThickness into: [:h :m | h max: (m height + 4)].
 
-
-]
-
-{ #category : #private }
-IfElseBlockMorph >> trueBlock: aBlockMorph [
-	"Add the given block as my true nested block sequence. Delete the old nested blocks, if any."
-
-	trueBlock ifNotNil: [trueBlock delete].
-	trueBlock := aBlockMorph.
-	aBlockMorph ifNotNil: [self addMorph: aBlockMorph].
 
 ]
 

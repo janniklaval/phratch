@@ -90,16 +90,6 @@ PhratchStageMorph >> allEventNames [
 ]
 
 { #category : #'byob OOP' }
-PhratchStageMorph >> asReferenceTuple [
-
-	" answer an array describing the receiver in an abstract way
-	format conventions:"
-
-	^ Array with: #stage
-
-]
-
-{ #category : #'byob OOP' }
 PhratchStageMorph >> attribute: attr [
 	"Answer the value of my variable or built-in attribute with the given name. Answer zero if I have no attribute or variable with the given name."
 
@@ -595,32 +585,6 @@ PhratchStageMorph >> isQuarterSize: aBoolean [
 
 	isQuarterSize := aBoolean.
 
-]
-
-{ #category : #byob }
-PhratchStageMorph >> listInVarNamed: varName targetName: targetName [
-
-	targetName = 'Stage' ifTrue: [
-		^self getVar: varName].
-
-	sprites do: [:sprite |
-		(sprite varNames includes: varName)
-			ifTrue: [^sprite getVar: varName]].
-
-	^ nil
-]
-
-{ #category : #byob }
-PhratchStageMorph >> listNamed: listName targetName: targetName [
-
-	targetName = 'Stage' ifTrue: [
-		^self listNamed: listName ].
-
-	sprites do: [:sprite |
-		(sprite listVarNames includes: listName)
-			ifTrue: [^sprite listNamed: listName ]].
-
-	^ nil
 ]
 
 { #category : #'looks ops' }

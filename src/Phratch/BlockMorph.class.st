@@ -1654,14 +1654,6 @@ BlockMorph >> topBlock [
 
 ]
 
-{ #category : #'block enumerating' }
-BlockMorph >> tupleSequence [
-	"Answer a sequence of tuples (Array) describing this stack of blocks."
-
-	^ self blockSequence collect: [:b | b asBlockTuple]
-
-]
-
 { #category : #'drawing-optimization' }
 BlockMorph >> updateCachedFeedbackForm [
 	"Create a cached feedback Form to show this stack's running (or error) status."
