@@ -4777,6 +4777,13 @@ ScriptablePhratchMorph >> namedColors [
 	^ self colorNames.
 ]
 
+{ #category : #byob }
+ScriptablePhratchMorph >> neg: aNumber [
+	"Substraction operator. It returns the substraction of two numbers"
+	<phratchItem: 'neg $Number$' kind: #ReporterBlockMorph category: 'operators' defaultValues: #(- -) subCategory: #a11 special: #()>
+^ -1 * aNumber
+]
+
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> newCostumeTypes [
 
