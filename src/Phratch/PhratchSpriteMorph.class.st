@@ -492,7 +492,7 @@ PhratchSpriteMorph >> directionMenu [
 			add: '(', pair second printString, ') ', pair first localized
 			value: pair second].
 	menu invokeModal.
-	^ menu selectedValue
+	^ menu
 ]
 
 { #category : #'blocks API' }
