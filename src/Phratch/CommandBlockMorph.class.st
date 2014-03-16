@@ -1190,6 +1190,14 @@ CommandBlockMorph >> rightButtonMenu [
 		(self owner isKindOf: BlockMorph) ifFalse: [  "can't yet delete a blocks inside a script"
 			menu add: 'delete' value: #delete]].
 
+	(self isKindOf: VariableBlockMorph)
+		ifTrue: [ menu add: 'delete' value: #deleteVariable: target: (self receiver) arguments: {self variable}.
+		].
+	
+	(self isKindOf: ListContentsBlockMorph)
+		ifTrue: [ menu add: 'delete' value: #deleteList: target: (self receiver) arguments: {self selectorAndArg second}.
+		].
+		
 	menu addLine.
 
 	self isInheritableAttribute ifTrue: [
