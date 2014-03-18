@@ -973,21 +973,20 @@ PhratchProcess >> errorFlag: aBoolean [
 	"Set the error flag for this process."
 
 	| customBlocks |
+	stackFrame expression isArray ifFalse:[ 
+		errorFlag := aBoolean.
+		stackFrame expression showError.
+		stackFrame expression topBlock showErrorFeedback.
 
-	errorFlag := aBoolean.
-	stackFrame expression showError.
-	stackFrame expression topBlock showErrorFeedback.
+		customBlocks := (stackFrame expression receiver customBlocksContaining: stackFrame expression).
+		customBlocks isEmpty ifTrue: [^self ].
 
-	"find all custom blocks containing this error"
-
-	customBlocks := (stackFrame expression receiver customBlocksContaining: stackFrame expression).
-	customBlocks isEmpty ifTrue: [^self ].
-
-	topBlock allMorphs do: [:m|
-		(customBlocks includes: m) ifTrue: [
-			m showError ]].
-
-	topBlock showErrorFeedback
+		topBlock allMorphs do: [:m|
+			(customBlocks includes: m) ifTrue: [
+				m showError ]].
+		topBlock showErrorFeedback
+	].
+	
 
 
 ]
