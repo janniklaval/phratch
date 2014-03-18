@@ -1712,7 +1712,7 @@ PhratchFrameMorph >> fullDrawOn: aCanvas [
 	"Draw my full Morphic structure on the given Canvas."
 	"Optimization: if damage is entirely contained in a given pane, draw only that pane."
 
-	| damageR stageR |
+"	| damageR stageR |
 	damageR := aCanvas clipRect.
 
 	stageR := workPane bounds.
@@ -1736,7 +1736,7 @@ PhratchFrameMorph >> fullDrawOn: aCanvas [
 
 	(libraryPane bounds containsRect: damageR) ifTrue: [
 		libraryPane fullDrawOn: aCanvas.
-		^ self].
+		^ self]."
 
 	super fullDrawOn: aCanvas.
 
@@ -2095,19 +2095,20 @@ PhratchFrameMorph >> keepSpritesOnStage: anInt [
 
 { #category : #'event handling' }
 PhratchFrameMorph >> keyStroke: evt [
-	|ch|
-	ch := evt keyValue.
-			evt commandKeyPressed ifTrue: [ch := ch \\ 32].	"map cmd/alt keys to control keys"
-			({3 . 13} includes: ch) ifTrue: [^ self pressGreenFlagButton].
+	"|ch|
+	ch := evt keyValue."
+			"evt commandKeyPressed ifTrue: [ch := ch \\ 32]."	"map cmd/alt keys to control keys"
+			"({3 . 13} includes: ch) ifTrue: [^ self pressGreenFlagButton]."
+			"ch = 14 ifTrue: [^ self newPhratchProject].
 			ch = 15 ifTrue: [^ self openPhratchProject].
 			ch = 17 ifTrue: [^ self quitPhratch].
-			ch = 19 ifTrue: [^ self savePhratchProjectNoDialog].       
-			ch = 27 ifTrue: [
+			ch = 19 ifTrue: [^ self savePhratchProjectNoDialog]."
+			"ch = 27 ifTrue: [
 				PhratchFrameMorph takeOverScreen ifTrue: [
 					Display fullScreenMode: false.
 					Display fullScreenMode: true.
 					World restoreDisplay].
-				^ self].
+				^ self]."
 			workPane broadcastEventNamed: 'Phratch-KeyPressedEvent' with: evt.
 ]
 
@@ -3252,19 +3253,17 @@ PhratchFrameMorph >> step [
 			justSaved := oldJustSaved.
 			^ self]]." "simplify at the moment"
 
-	workPane ifNotNil: [
+	"workPane ifNotNil: [
 		ScriptablePhratchMorph phratchOrigin: workPane center.
 		viewerPane target isNil 
 			ifTrue: [workPane viewBlocksAndScripts]
-			ifFalse: [viewerPane target isInWorld ifFalse: [workPane viewBlocksAndScriptsQuickly]]].
+			ifFalse: [viewerPane target isInWorld ifFalse: [workPane viewBlocksAndScriptsQuickly]]]."
 
 	paintingInProgress ifTrue: [^ self].
 
-"	self checkForWeDo." "simplify at the moment"
-	self updateToolButtons.
-	self processKeyboardEvents. 
+	"self updateToolButtons."
+	"self processKeyboardEvents. "
 	workPane stepProcesses.
-"	self processDroppedFiles." "simplify at the moment"
 	workPane processesToRun size > 0
 		ifTrue: [flagButton on]
 		ifFalse: [flagButton off. self showPause]

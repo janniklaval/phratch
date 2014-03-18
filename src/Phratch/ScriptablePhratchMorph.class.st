@@ -642,7 +642,7 @@ ScriptablePhratchMorph >> addGenericVariableBlocksTo: page x: x y: startY [
 			(b isKindOf: BlockMorph)
 				ifTrue: [ b defaultArgs: (Array with: vName) ].
 			varBlocks add: b ].
-	block := VariableDeclarationBlockMorph new
+	"block := VariableDeclarationBlockMorph new
 		minArgs: 1;
 		commandSpec: 'script variables' localized;
 		receiver: self blockReceiver;
@@ -650,7 +650,7 @@ ScriptablePhratchMorph >> addGenericVariableBlocksTo: page x: x y: startY [
 		isSpecialForm: true;
 		selector: #doDeclareVariables;
 		yourself.
-	varBlocks add: block afterIndex: 5.
+	varBlocks add: block afterIndex: 5."
 	varBlocks
 		do: [ :blockOrSym | 
 			({#- . #~ . #=} includes: blockOrSym)
@@ -6513,6 +6513,8 @@ ScriptablePhratchMorph >> unusedMediaNameFromBaseName: baseName forMedia: aMedia
 	"Answer an unused name for a new media item with the given base name. Strip off the file extension, if any.  med is the sound or costume media which is currently being renamed."
 
 	| nm i existingNames greatestNum |
+	
+	
 	nm := baseName.
 	i := nm indexOf: $..
 	i > 1
@@ -6530,10 +6532,11 @@ ScriptablePhratchMorph >> unusedMediaNameFromBaseName: baseName forMedia: aMedia
 		do: [ :m | 
 			m = aMedia
 				ifFalse: [ existingNames add: (String withAll: m mediaName) ] ].
+	
 	(nm size > 0 and: [ nm last isDigit ])
 		ifFalse: [ 
-			(existingNames includes: (String withAll: nm))
-				ifFalse: [ ^ nm ] ].	"remove trailing digits, if any"
+			(existingNames includes: (nm))
+				ifFalse: [ ^ nm ] ].
 	i := nm size.
 	[ i > 1 and: [ (nm at: i) isDigit ] ] whileTrue: [ i := i - 1 ].
 	[ i > 1 and: [ (nm at: i) = Character space ] ] whileTrue: [ i := i - 1 ].
@@ -6544,11 +6547,11 @@ ScriptablePhratchMorph >> unusedMediaNameFromBaseName: baseName forMedia: aMedia
 		do: [ :n | 
 			i := n size.
 			[ i > 1 and: [ (n at: i) isDigit ] ] whileTrue: [ i := i - 1 ].
-			(n copyFrom: 1 to: i) = nm
+			(n copyFrom: 1 to: i-1) = nm
 				ifTrue: [ |num|
-					i := nm indexOf: $..
+					i := n indexOf: $..
 					i > 1
-						ifTrue: [ num := nm copyFrom: i=1 to: nm size ].
+						ifTrue: [ num := n copyFrom: i+1 to: n size ].
 					
 					num ifNil:[greatestNum := 0]
 						ifNotNil:[greatestNum :=  num asNumber max: greatestNum] ] ].

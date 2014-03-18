@@ -319,7 +319,7 @@ PhratchPresenterMorph >> step [
 
 	ScriptablePhratchMorph phratchOrigin: stage center.
 
-	self processKeyboardEvents.
+	"self processKeyboardEvents."
 	stage stepProcesses.
 	stage step.
 	self stepSubmorphs.

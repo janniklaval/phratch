@@ -762,7 +762,6 @@ BlockMorph >> fullDrawOn: aCanvas [
 	(owner isKindOf: BlockMorph) ifTrue: [^ super fullDrawOn: aCanvas].  "only cache at top level"
 
 	cachedForm ifNil: [self updateCachedForm].
-	cachedForm ifNil: [^ super fullDrawOn: aCanvas].  "should not happen"
 
 	offset := 0@0.
 	phratchProc ifNotNil: [
