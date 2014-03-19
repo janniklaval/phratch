@@ -21,11 +21,11 @@ MetaRepoSearcher class >> listOfProjects [
 { #category : #'as yet unclassified' }
 MetaRepoSearcher class >> loadProject: aConfigurationString [
 
-	Gofer it
+	[Gofer it
 		url:'http://smalltalkhub.com/mc/JLaval/PhratchMetaRepo/main';
 		package: aConfigurationString;
 		load.
-	(Smalltalk at: (aConfigurationString asSymbol)) loadBleedingEdge.
+	(Smalltalk at: (aConfigurationString asSymbol)) loadBleedingEdge.] on: Error do: [ PhratchError errorWithDialog: 'You need an Internet connection to load AddOns.'].
 
 	PhratchFrameMorph rebuildUI.
 ]

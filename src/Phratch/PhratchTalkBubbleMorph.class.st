@@ -59,8 +59,8 @@ PhratchTalkBubbleMorph >> initialize [
 	self beThoughtBubble: false.
 	pointLeft := false.
 
-	contentsMorph := MultilineStringMorph new
-		centerText: true;
+	contentsMorph := "Multiline"StringMorph new
+		"centerText: true;"
 		font: (PhratchFrameMorph getFont: #TalkBubble);
 		yourself.
 	contentsMorph
@@ -87,7 +87,7 @@ PhratchTalkBubbleMorph >> message [
 
 { #category : #accessing }
 PhratchTalkBubbleMorph >> message: aString [
-	"(PhratchTalkBubbleMorph new message: 'Hello!') openInWorld"
+	"(PhratchTalkBubbleMorph new message: 'Hccfdsdsjkefbv  berv ssello!') openInWorld"
 
 	| maxWidth xOffset |
 	
@@ -96,16 +96,16 @@ PhratchTalkBubbleMorph >> message: aString [
 		ifTrue: [
 			contentsMorph
 				width: maxWidth;
-				contents: aString trimBoth;
+				contents: aString;
 				fitContents ]
 		ifFalse: [
 			contentsMorph := aString.
 			self addMorphFront: contentsMorph ].
 
 
-	self extent: contentsMorph extent + (30@28).
+	self extent: contentsMorph extent + (15@23).
 	xOffset := contentsMorph width >= maxWidth
-		ifTrue: [3]
+		ifTrue: [10]
 		ifFalse: [((self width - contentsMorph width) // 2) ].
 	contentsMorph position: self position + (xOffset @ 5).
 

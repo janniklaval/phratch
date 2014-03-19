@@ -467,8 +467,8 @@ PhratchFrameMorph >> aboutPhratch [
 		yourself.
 	dialogBox
 		message:
-			'Phratch 2.0
-Copyright (c) 2013 Jannik Laval.
+			'Phratch 3.0
+Copyright (c) 2014 Jannik Laval.
 All rights reserved.
 
 Phratch Logo and Phratch Robot images
@@ -623,11 +623,10 @@ PhratchFrameMorph >> addonMenu: aMenuTitleMorph [
 	| menu |
 	menu := MenuMorph new defaultTarget: self.
 	
-	MetaRepoSearcher listOfProjects do:[:e |
+	[MetaRepoSearcher listOfProjects do:[:e |
 		menu add: (self isLoaded: e value) checkBoxString, e key target: MetaRepoSearcher selector: #loadProject: argument: e value.
-	].
-	
-	"menu popUpAt: aMenuTitleMorph bottomLeft + (0 @ 10) inWorld: World"
+	] ]on: Error do: [ PhratchError errorWithDialog: 'You need an Internet connection to load AddOns.'].
+
 	menu popUpInWorld 
 ]
 
@@ -1777,6 +1776,7 @@ PhratchFrameMorph >> helpMenu: aMenuTitleMorph [
 	menu add: 'Phratch Website' translated action: #launchWebsite.
 	menu addLine.
 	menu add: 'Scratch Help Page' translated action: #launchHelpPage.
+	menu add: 'Generated Block Doc' translated action: #launchBlockDoc.
 	menu add: 'Help Screens' translated action: #launchAllHelpScreens.
 	menu addLine.
 	menu add: 'BYOB Reference Manual' translated action: #openBYOBManual.
@@ -1790,6 +1790,75 @@ PhratchFrameMorph >> helpMenu: aMenuTitleMorph [
 
 { #category : #'as yet unclassified' }
 PhratchFrameMorph >> htmlDoc [
+	<phratchMenu: 'Generate HTML documentation' category: 'file' position: 12 sub: 5 shift: true>
+	| allPragmas dir imgDir html |
+	
+	(FileSystem workingDirectory / 'htmlDoc') exists ifTrue:[(FileSystem workingDirectory / 'htmlDoc') deleteAll].
+	
+	dir := (FileSystem workingDirectory / 'htmlDoc') ensureCreateDirectory.
+	imgDir := (dir / 'doc-img') ensureCreateDirectory.
+	allPragmas := (Pragma
+		allNamed: #phratchItem:kind:category:defaultValues:subCategory:special:
+		in: ScriptablePhratchMorph) asOrderedCollection.
+	ScriptablePhratchMorph allSubclasses
+		do: [ :aSC | allPragmas addAll: (Pragma allNamed: #phratchItem:kind:category:defaultValues:subCategory:special: in: aSC) ].
+	html := FileStream forceNewFileNamed: (dir / 'index.html') fullName.
+	html nextPutAll: '<h2>Categories</h2><ul style="list-style-type: none;">'.
+	PhratchCategory
+		allSubclassesDo: [ :c | 
+			(c label = 'none' or: [ c label = 'other' or: [ c label = 'custom' ] ])
+				ifFalse: [ 
+					| label offForm b |
+					label := (PhratchTranslator translationFor: c label) capitalized.
+					offForm := c label = 'list'
+						ifTrue: [ PhratchFrameMorph skinAt: 'variables' ]
+						ifFalse: [ PhratchFrameMorph skinAt: c label ].
+					b := ResizableToggleButton new offForm: offForm onForm: offForm overForm: offForm.
+					b
+						label: label font: (PhratchFrameMorph getFont: #Category);
+						setLabelColor: Color white;
+						target: self;
+						actionSelector: #currentCategory:;
+						arguments: (Array with: c label);
+						toggleButtonMode: true;
+						toggleMode: false.
+					b leftJustifyInset: 10.
+					PNGReadWriter putForm: b imageForm onFileNamed: (imgDir / (c label , '.png')) fullName.
+					html
+						nextPutAll:
+							'<li  style="display: inline; padding-right: 10px;"><a href="#' , c label
+								, '"><img src="./doc-img/' , c label , '.png"/></a></li>' ] ].
+	html nextPutAll: '</ul>'.
+	PhratchCategory
+		allSubclassesDo: [ :c | 
+			(c label = 'none' or: [ c label = 'other' or: [ c label = 'custom' ] ])
+				ifFalse: [ 
+					html nextPutAll: '<h2 id="' , c label , '">' , c label , '</h2><table border="0">'.
+					allPragmas
+						select: [ :pragma | (pragma arguments at: 3) = c label ]
+						thenDo: [ :aP | 
+							| prov pngName comment |
+							prov := {(aP arguments at: 1).
+							(aP arguments at: 2).
+							(aP method selector).
+							(aP arguments at: 6)} , (aP arguments at: 4).
+							pngName := (prov at: 1) asLegalSelector asString , (prov at: 3) asLegalSelector asString.
+							[ (imgDir / (pngName , '.png')) exists ] whileTrue: [ pngName := pngName , '0' ].
+							comment := aP method comment.
+							comment ifNil: [ comment := '' ] ifNotNil: [ comment := comment copyFrom: 2 to: comment size - 1 ].
+							PNGReadWriter
+								putForm:
+									(aP methodClass new blockFromSpec: prov color: (aP methodClass blockColorFor: (aP arguments at: 3))) imageForm
+								onFileNamed: (imgDir / (pngName , '.png')) fullName.
+							html
+								nextPutAll:
+									'<tr><td WIDTH=300><img src="./doc-img/' , pngName , '.png"/></td><td>'
+										, comment , '</td></tr>' ].
+					html nextPutAll: '</table>' ] ]
+]
+
+{ #category : #'as yet unclassified' }
+PhratchFrameMorph >> htmlDocForWebsite [
 	<phratchMenu: 'Generate HTML documentation' category: 'file' position: 12 sub: 5 shift: true>
 	| allPragmas dir imgDir html |
 	dir := (FileSystem workingDirectory / 'htmlDoc') ensureCreateDirectory.
@@ -2145,6 +2214,31 @@ PhratchFrameMorph >> launchAllHelpScreens [
 ]
 
 { #category : #'menu/button actions' }
+PhratchFrameMorph >> launchBlockDoc [
+
+	[self htmlDoc] on: Error do: [ PhratchError error: 'files already exist'].
+	self launchDocFile: 'index.html'.
+
+]
+
+{ #category : #'menu/button actions' }
+PhratchFrameMorph >> launchDocFile: aFilename [
+
+	| helpDir  |
+	
+	helpDir := FileSystem workingDirectory / 'htmlDoc'.
+	helpDir exists ifFalse: [^ Beeper beep].  "no help folder"
+	self stopAll.
+	
+	(helpDir / aFilename) exists
+		ifTrue: [ 
+			self open: (((helpDir / aFilename) fullName))]
+		ifFalse: [
+			DialogBoxMorph inform: 'Doc file not found.' localized].
+
+]
+
+{ #category : #'menu/button actions' }
 PhratchFrameMorph >> launchHelpFile: aFilename [
 
 	| helpDir subDir |
@@ -2179,7 +2273,7 @@ PhratchFrameMorph >> launchHelpPage [
 PhratchFrameMorph >> launchWebsite [
 
 	self world displayWorldSafely.
-	Cursor wait showWhile: [PhratchPlugin primOpenURL: 'https://code.google.com/p/phratch/'].
+	Cursor wait showWhile: [PhratchPlugin primOpenURL: 'http://www.phratch.com/'].
 
 ]
 
