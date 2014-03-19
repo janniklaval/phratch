@@ -2332,7 +2332,7 @@ msgid "rotation style"
 msgstr "Rotationsart"
 
 msgid "set rotation style to $Rotation$" 
-msgstr "Ändere Rorationsart auf $Rotation$"
+msgstr "Ändere Rotationsart auf $Rotation$"
 
 msgid "draggable?" 
 msgstr "Kann gezogen werden?"
