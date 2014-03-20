@@ -2659,7 +2659,7 @@ ScriptablePhratchMorph >> drum: midiKey duration: beats elapsed: elapsedMSecs fr
 	aNotePlayer ifNil: [  "first call, start playing the drum"
 		(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNil: [^ PhratchNotePlayer new].
 		(player := stage notePlayerFor: self) ifNil: [^ PhratchNotePlayer new].
-		^ player copy drumOn: midiKey].
+		^ [player copy drumOn: midiKey] on: Error do:[stage stopAllSounds. player copy drumOn: midiKey ]].
 
 	elapsedMSecs >= ((60000 * beats) // self tempo) ifTrue: [aNotePlayer drumOff].
 
@@ -4485,7 +4485,7 @@ ScriptablePhratchMorph >> midiInstrument: aNumber [
 	| stage player |
 	(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNil: [^ self].
 	(player := stage notePlayerFor: self) ifNotNil: [
-		player instrument: aNumber].
+		[player instrument: aNumber] on: Error do:[stage stopAllSounds. player instrument: aNumber ]  ].
 
 ]
 
@@ -4779,7 +4779,7 @@ ScriptablePhratchMorph >> namedColors [
 
 { #category : #byob }
 ScriptablePhratchMorph >> neg: aNumber [
-	"Substraction operator. It returns the substraction of two numbers"
+	"Returns the negation of a number"
 	<phratchItem: 'neg $Number$' kind: #ReporterBlockMorph category: 'operators' defaultValues: #(- -) subCategory: #a11 special: #()>
 ^ -1 * aNumber
 ]
@@ -4868,7 +4868,7 @@ ScriptablePhratchMorph >> noteOn: midiKey duration: beats elapsed: elapsedMSecs 
 	aNotePlayer ifNil: [  "first call, start playing the note"
 		(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNil: [^ PhratchNotePlayer new].
 		(player := stage notePlayerFor: self) ifNil: [^ PhratchNotePlayer new].
-		^ player copy noteOn: midiKey].
+		^ [player noteOn: midiKey] on: Error do:[stage stopAllSounds. player noteOn: midiKey ] ].
 
 	elapsedMSecs >= ((60000 * beats) // self tempo) ifTrue: [aNotePlayer noteOff].
 

@@ -1209,6 +1209,7 @@ PhratchStageMorph >> stopAll [
 	self deleteAllClones.
 	self midiAllNotesOff.
 	self stopPlaying.
+	self stopAllSounds.
 	self allMorphsDo: [:m |
 		(m isKindOf: ScriptablePhratchMorph) ifTrue: [m stopPlaying]].
 
