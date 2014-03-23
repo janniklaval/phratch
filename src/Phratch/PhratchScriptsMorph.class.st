@@ -351,11 +351,11 @@ PhratchScriptsMorph >> step [
 	"non-reporter (i.e. command block or hat block)"
 	targetAssoc := b closestAttachTargetIn: self.
 	targetAssoc ifNil: [
-		(b bottomBlock isKindOf: CBlockMorph) ifFalse: [
+		"(b bottomBlock isKindOf: CBlockMorph) ifFalse: ["
 			targetAssoc := b bottomBlock closestAttachTargetIn: self.
 			targetAssoc ifNotNil:[
 				(targetAssoc value owner isKindOf: BlockMorph) ifTrue:[
-					targetAssoc := nil]]]].
+					targetAssoc := nil]]]"]".
 	targetAssoc ifNil: [^ self].
 
 	targetP := targetAssoc key.

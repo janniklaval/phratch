@@ -58,9 +58,7 @@ IfElseBlockMorph >> blockAttachPoints: aSet [
 	result := #().
 	self = self topBlock
 		ifTrue: [ result := result copyWith: self topLeft -> self ].
-	(self isKindOf: HatBlockMorph)
-		ifFalse: [ 
-			result :=  result copyWith: self topLeft -> self  ].
+	result :=  result copyWith: self topLeft -> self .
 	trueBlock
 		ifNil: [ 
 			result :=  result copyWith: self topLeft + (12 @ (self topBarHeight + 7)) -> self  ]

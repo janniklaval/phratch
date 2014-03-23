@@ -67,9 +67,7 @@ CBlockMorph >> blockAttachPoints: aSet [
 
 	| result |
 	result := #().
-	(self isKindOf: HatBlockMorph)
-		ifFalse: [ 
-			result :=  result copyWith: self topLeft -> self ].
+	result :=  result copyWith: self topLeft -> self.
 	nestedBlock
 		ifNil: [ 
 			result :=  result copyWith: self topLeft + (12 @ (self topBarHeight + 7)) -> self  ]

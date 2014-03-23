@@ -264,6 +264,14 @@ BlockMorph >> closestAttachTargetIn: newOwner [
 									best := assoc.
 									bestDist := dist ] ] ] ].	"special case for the auto-wrapping of c-shaped/if-else blocks"
 	
+	
+	
+	(self isKindOf: CBlockMorph)
+		ifTrue: [ 
+			self stretchHeight:  0.
+		].
+	
+	
 	^ best
 ]
 
