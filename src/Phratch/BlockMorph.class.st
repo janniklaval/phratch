@@ -263,50 +263,7 @@ BlockMorph >> closestAttachTargetIn: newOwner [
 											bottomUsed := true ].
 									best := assoc.
 									bestDist := dist ] ] ] ].	"special case for the auto-wrapping of c-shaped/if-else blocks"
-	(self isKindOf: CBlockMorph)
-		ifTrue: [ 
-			best
-				ifNotNil: [ 
-					bottomUsed
-						ifTrue: [ 
-							(best value owner isKindOf: BlockMorph)
-								ifTrue: [ 
-									self stretchHeight: 0.
-									^ nil ] ].
-					(self isStopOrForever or: [ self bottomBlock isStopOrForever ])
-						ifTrue: [ 
-							bottomUsed
-								ifTrue: [ 
-									self stretchHeight: 0.
-									^ nil ] ].
-					(best key y = best value top
-						and: [ (self isForever or: [ self bottomBlock isForever ]) and: [ (self nestedBlockAt: best key y) isNil not ] ])
-						ifTrue: [ 
-							self stretchHeight: 0.
-							^ nil ].
-					(self nestedBlockAt: best key y)
-						ifNil: [ 
-							bottomUsed
-								ifTrue: [ 
-									self stretchHeight: 0.
-									best key y = best value bottom
-										ifTrue: [ ^ nil ].
-									(best key y = best value top and: [ best value owner isKindOf: BlockMorph ])
-										ifTrue: [ ^ nil ].
-									(best key y = best value bottom and: [ (best value owner isKindOf: BlockMorph) not ])
-										ifTrue: [ ^ nil ] ].
-							topUsed
-								ifTrue: [ 
-									(best key y = best value bottom and: [ best value nextBlock isNil not ])
-										ifTrue: [ 
-											self stretchHeight: 0.
-											^ nil ].	"((best key y = best value top) and: [(best value owner isKindOf: BlockMorph)]) ifTrue: [self stretchHeight: 0. ^ best := nil]."
-									best key y = best value top
-										ifTrue: [ 
-											self stretchHeight: best value fullBounds height - 17.
-											^ best ] ].
-							self stretchHeight: 0 ] ].
-			best ifNil: [ self stretchHeight: 0 ] ].
+	
 	^ best
 ]
 
@@ -845,7 +802,8 @@ BlockMorph >> handleTool: toolName hand: hand [
 				ifNotNil: [ 
 					(myOwner isKindOf: CBlockMorph)
 						ifTrue: [ 
-							"	copiedStack := myStack shallowCopy.
+							"|copiedStack|
+								copiedStack := myStack shallowCopy.
 						self topBlock owner addMorph: copiedStack.
 						[myStack top > myOwner bottom] whileTrue: [
 							myStack position: (myStack left)@(myStack top - 1).
@@ -1168,12 +1126,12 @@ BlockMorph >> justDroppedInto: newOwner event: evt [
 
 	targetAssoc := self closestAttachTargetIn: newOwner.
 	targetAssoc ifNil: [
-		(self bottomBlock isKindOf: CBlockMorph) ifFalse: [
+		"(self bottomBlock isKindOf: CBlockMorph) ifFalse: ["
 			targetAssoc := self bottomBlock closestAttachTargetIn: newOwner.
 			targetAssoc ifNotNil:[
 				bottomBlockUsed := true.
 				(targetAssoc value owner isKindOf: BlockMorph) ifTrue:[
-					targetAssoc := nil]]]].
+					targetAssoc := nil]]"]"].
 	targetAssoc ifNil: [^ self].
 
 	"make sure no processes are running"
@@ -1187,13 +1145,22 @@ BlockMorph >> justDroppedInto: newOwner event: evt [
 	targetP y = targetBlock top
 		ifTrue: [
 			"c-shaped block should nest the target block"
-			((bottomBlockUsed not) and: [(self isKindOf: CBlockMorph)]) ifTrue:[
+			"((bottomBlockUsed not) and: [(self isKindOf: CBlockMorph)]) ifTrue:[
 				(targetBlock owner isKindOf: BlockMorph)
 					ifTrue: [(targetBlock owner) attachBlock: self]
 					ifFalse: [self position: (targetP x - self bracketThickness)@(targetP y - self topBarHeight - 3)].
 				(newOwner respondsTo: #recordNestedStack:) ifTrue: [
 					newOwner recordNestedStack: targetBlock ].
-				self attachBlockNested: targetBlock. ^ self].
+				self attachBlockNested: targetBlock. ^ self]."
+			
+			((bottomBlockUsed not) and: [(self isKindOf: CBlockMorph)]) ifTrue:[
+				self bottomBlock position: targetP x @ (targetP y - (self bottomBlock height) -4 ).
+				upperBlock := self bottomBlock owner.
+				[upperBlock isKindOf: BlockMorph] whileTrue: [
+					upperBlock nextBlock ifNotNil:[
+						upperBlock position: targetP x @ (upperBlock nextBlock position y - (upperBlock height) -4 ).
+						upperBlock := upperBlock owner]].
+				self bottomBlock attachBlock: targetBlock. ^self].
 			"for all other non-c-shaped blocks"
 			(bottomBlockUsed or:[((targetBlock owner isKindOf: BlockMorph) not) and: [(self isKindOf: CBlockMorph) not]]) ifTrue:[
 				self bottomBlock position: targetP x @ (targetP y - (self bottomBlock height - 4)).

@@ -40,18 +40,17 @@ CBlockMorph >> addCommandIcons [
 { #category : #private }
 CBlockMorph >> attachBlock: aBlockMorph [
 	"Attach the given block to me. Assume the block has been positioned correctly."
-
 	self addMorph: aBlockMorph.
 	aBlockMorph top >= (self bottom - CBlockBracketThickness)
 		ifTrue: [nextBlock := aBlockMorph]
 		ifFalse: [nestedBlock := aBlockMorph].
-
+	
 ]
 
 { #category : #private }
 CBlockMorph >> attachBlockNested: aBlockMorph [
 	"Attach the given block to me. Assume the block has been positioned correctly."
-
+	
 	(stretchHeight = 0)
 			ifTrue: [self position: (aBlockMorph left)@(aBlockMorph top - self height + 4)].
 	self addMorph: aBlockMorph.
