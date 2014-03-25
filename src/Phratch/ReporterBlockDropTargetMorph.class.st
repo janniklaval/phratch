@@ -14,7 +14,7 @@ ReporterBlockDropTargetMorph class >> booleanLabelled: aString argument: aMorphO
 	 | m |
 	m := self new isBoolean: true; label: aString; color: Color  lightGray twiceLighter twiceLighter;
 		yourself.
-	(aMorphOrNumber isKindOf: ReporterBlockMorph) ifTrue: [m argument: aMorphOrNumber ].
+	(aMorphOrNumber isReporterBlockMorph) ifTrue: [m argument: aMorphOrNumber ].
 	^m
 ]
 
@@ -33,14 +33,14 @@ ReporterBlockDropTargetMorph class >> labelled: aString argument: aMorphOrNumber
 ReporterBlockDropTargetMorph >> argument [
 	| am |
 	am := argMorphs first.
-	(am isKindOf: ReporterBlockMorph) ifTrue: [ ^am ].
+	(am isReporterBlockMorph) ifTrue: [ ^am ].
 	(am isKindOf: BooleanArgMorph) ifTrue: [^nil ].
 	^am labelMorph contents
 ]
 
 { #category : #accessing }
 ReporterBlockDropTargetMorph >> argument: aMorphOrNumber [
-	(aMorphOrNumber isKindOf: ReporterBlockMorph)
+	(aMorphOrNumber isReporterBlockMorph)
 		ifTrue: [^self replaceArgMorph: argMorphs first by: aMorphOrNumber ].
 	argMorphs first stringExpression: aMorphOrNumber
 ]
@@ -138,7 +138,7 @@ ReporterBlockDropTargetMorph >> step [
 
 	b := h firstSubmorph.
 	(b isBlockMorph) ifFalse: [ ^ self].
-	(b isKindOf: HatBlockMorph) ifTrue: [ ^ self ].
+	(b isHatBlockMorph) ifTrue: [ ^ self ].
 
 	b isReporter ifTrue: [ "reporter block"
 
@@ -226,11 +226,11 @@ ReporterBlockDropTargetMorph >> topArgMorphAt: aRectangle exclude: aMorph [
 
 	stack allMorphsDo: [:b |
 		((b isCommandBlockMorph) and:
-		 [(b isKindOf: HatBlockMorph) not]) ifTrue: [
+		 [(b isHatBlockMorph) not]) ifTrue: [
 			1 to: b argumentCount do: [:i |
 				argM := b argumentAt: i.
 
-				(argM isKindOf: MultiArgMorph) ifTrue: [
+				(argM isMultiArgMorph) ifTrue: [
 					argM elements do: [:elmt |
 						((area value: elmt) intersects: aRectangle) ifTrue: [
 							^elmt]]].
@@ -239,7 +239,7 @@ ReporterBlockDropTargetMorph >> topArgMorphAt: aRectangle exclude: aMorph [
 				 [argM acceptsDroppedReporters])
 					ifTrue: [^ argM]]]].
 
-	(stack isKindOf: ReporterBlockMorph "ReporterScriptBlockMorph")
+	(stack isReporterBlockMorph "ReporterScriptBlockMorph")
 		ifTrue: [^ stack]
 		ifFalse: [^ nil].
 

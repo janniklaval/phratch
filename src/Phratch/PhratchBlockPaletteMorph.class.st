@@ -82,7 +82,7 @@ PhratchBlockPaletteMorph >> updateWatcherButtonsForFrame: frame [
 
 	submorphs do: [:b |
 		((b isKindOf: ToggleButton) and:
-		 [b target isKindOf: ReporterBlockMorph]) ifTrue: [
+		 [b target isReporterBlockMorph]) ifTrue: [
 			reporter := b target.
 			sprite := reporter getAssociatedSprite.
 			selAndArg := reporter selectorAndArg.

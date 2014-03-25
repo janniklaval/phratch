@@ -24,7 +24,7 @@ PhratchLibraryMorph >> addThumbnailFor: aMorph [
 	newThumbnail := LibraryItemMorph new. 
 	newThumbnail extent: itemExtent thumbWidth: 50.
 	newThumbnail  target: aMorph.
-	(newThumbnail target isKindOf: PhratchStageMorph)
+	(newThumbnail target isPhratchStageMorph)
 		ifTrue: [stagePane addMorph: newThumbnail]
 		ifFalse: [scrollPane contents addMorphBack: newThumbnail].
 	newThumbnail step.

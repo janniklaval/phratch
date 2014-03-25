@@ -557,7 +557,7 @@ PhratchListMorph >> isMaxNestedAt: int [
 { #category : #'dropping/grabbing' }
 PhratchListMorph >> justDroppedInto: aMorph event: evt [
 
-	(aMorph isKindOf: PhratchStageMorph) ifTrue: [
+	(aMorph isPhratchStageMorph) ifTrue: [
 		super justDroppedInto: aMorph event: evt.
 		self world ifNotNil: [self world startSteppingSubmorphsOf: self].
 		^ self].

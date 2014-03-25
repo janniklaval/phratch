@@ -51,7 +51,7 @@ PhratchTabPaneMorph >> currentTab: aString [
 	currentTab := aString.
 	self targetPane ifNil: [^ self].
 
-	(targetPane target isKindOf: PhratchStageMorph)
+	(targetPane target isPhratchStageMorph)
 		ifTrue: [self setLabelForTab: 'Costumes' to: 'Backgrounds' localized]
 		ifFalse: [self setLabelForTab: 'Costumes' to: 'Costumes' localized].
 

@@ -136,17 +136,17 @@ MultiArgCommandBlockMorph >> fixBlockLayoutWrap [
 	space := 4.
 	parts
 		do: [ :m | 
-			((m isKindOf: CArgSlotMorph)
-				or: [ (m isKindOf: CReporterSlotMorph) or: [ (m isKindOf: MultiArgMorph) and: [ m isWrapping ] ] ])
+			((m isCArgSlotMorph)
+				or: [ (m isCReporterSlotMorph) or: [ (m isMultiArgMorph) and: [ m isWrapping ] ] ])
 				ifTrue: [ 
 					line isEmpty
 						ifFalse: [ lines add: line ].
 					m left: left.	"self"
 					lines add: (OrderedCollection with: m).
-					(m isKindOf: MultiArgMorph)
+					(m isMultiArgMorph)
 						ifTrue: [ m fixArgLayout ]
 						ifFalse: [ m fixBlockLayout ].
-					((m isKindOf: CArgSlotMorph) or: [ m isKindOf: CReporterSlotMorph ])
+					((m isCArgSlotMorph) or: [ m isCReporterSlotMorph ])
 						ifTrue: [ m width: 40 ].
 					line := OrderedCollection new.
 					maxX := maxX max: left + m width.
@@ -185,28 +185,28 @@ MultiArgCommandBlockMorph >> fixBlockLayoutWrap [
 			maxHeight := 14.
 			eachLine
 				do: [ :m | 
-					mh := ((m isKindOf: ReporterBlockMorph)
-						and: [ m isBlockTemplate or: [ ((m isKindOf: CArgSlotMorph) or: [ m isOSlotMorph ]) and: [ m isEmptySlot not ] ] ])
+					mh := ((m isReporterBlockMorph)
+						and: [ m isBlockTemplate or: [ ((m isCArgSlotMorph) or: [ m isOSlotMorph ]) and: [ m isEmptySlot not ] ] ])
 						ifTrue: [ m height + 5 ]
 						ifFalse: [ m height ].
 					maxHeight := mh max: maxHeight.
-					(m isKindOf: CArgSlotMorph)
+					(m isCArgSlotMorph)
 						ifTrue: [ maxHeight := m height - 4 ] ].
 			eachLine do: [ :m | m top: y + ((maxHeight - m height) // 2) + 1 ].
 			y := y + maxHeight + space ].	"adjust CArgSlots"
 	parts
 		do: [ :m | 
-			((m isKindOf: CArgSlotMorph) or: [ m isKindOf: CReporterSlotMorph ])
+			((m isCArgSlotMorph) or: [ m isCReporterSlotMorph ])
 				ifTrue: [ m width: w - 5 ] ].
 	h := self isStop
 		ifTrue: [ y - self top + space ]
 		ifFalse: [ y - self top + space + 4 ].
-	(parts last isKindOf: CArgSlotMorph)
+	(parts last isCArgSlotMorph)
 		ifTrue: [ h := h + space + 5 ].
 	self extent: w @ h.	"adjust Multi-CArgSlots"
 	parts
 		do: [ :m | 
-			(m isKindOf: MultiArgMorph)
+			(m isMultiArgMorph)
 				ifTrue: [ m loopsWidth: w - 5 ] ].
 	(nextB := self nextBlock)
 		ifNotNil: [ 

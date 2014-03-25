@@ -208,7 +208,7 @@ LibraryItemMorph >> justDroppedInto: aMorph event: evt [
 	| targets |
 
 	((self target isKindOf: PhratchSpriteMorph) and: [
-	(aMorph isKindOf: PhratchStageMorph)]) ifTrue: [
+	(aMorph isPhratchStageMorph)]) ifTrue: [
 		targets := aMorph sprites select: [:each| 
 			each containsPoint: aMorph adjustedCursorPoint ].
 		targets size > 0
@@ -224,7 +224,7 @@ LibraryItemMorph >> justDroppedInto: aMorph event: evt [
 		^ self target undoableDeleteSprite]."
 
 	"blocks cannot be dropped onto the stage"
-	"(owner isKindOf: PhratchStageMorph) ifTrue: [
+	"(owner isPhratchStageMorph) ifTrue: [
 		^ evt hand rejectDropMorph: self event: evt]."
 
 ]
@@ -238,14 +238,14 @@ LibraryItemMorph >> mouseDown: evt [
 	(evt hand toolType = 'CutTool') & (evt rightButtonPressed not) ifTrue: [
 		evt shiftPressed ifFalse: [evt hand toolType: nil].
 		(target notNil and:
-		 [(target isKindOf: PhratchStageMorph) not]) ifTrue: [
+		 [(target isPhratchStageMorph) not]) ifTrue: [
 			self target undoableDeleteSprite].
 		^ self].
 	
 	(evt hand toolType = 'CopyTool') & (evt rightButtonPressed not) ifTrue: [
 		evt shiftPressed ifFalse: [evt hand toolType: nil].
 		(target notNil and:
-		 [(target isKindOf: PhratchStageMorph) not]) ifTrue: [
+		 [(target isPhratchStageMorph) not]) ifTrue: [
 			duplicate := self target duplicate.
 			self world activeHand
 				attachMorph: duplicate].
@@ -256,7 +256,7 @@ LibraryItemMorph >> mouseDown: evt [
 		evt rightButtonPressed
 			ifTrue: [
 				Sensor waitNoButton. 
-				(target isKindOf: PhratchStageMorph) 
+				(target isPhratchStageMorph) 
 					ifTrue: [^ self stageMenu]
 					ifFalse: [^ self rightButtonMenu]]
 			ifFalse:	[
@@ -399,7 +399,7 @@ LibraryItemMorph >> stageMenu [
 { #category : #'event handling' }
 LibraryItemMorph >> startDrag: evt [
 
-	(self target isKindOf: PhratchStageMorph) ifTrue: [^ self]. "cannot drag stage thumbnail"
+	(self target isPhratchStageMorph) ifTrue: [^ self]. "cannot drag stage thumbnail"
 
 	(self ownerOrYourselfThatIsA: PhratchLibraryMorph)
 		ifNil: [evt hand grabMorph: self]
@@ -445,7 +445,7 @@ LibraryItemMorph >> target: aMorph [
 { #category : #private }
 LibraryItemMorph >> toggleRotationRule [
 
-	(self target isKindOf: PhratchStageMorph)
+	(self target isPhratchStageMorph)
 		ifTrue: [^ self].
 	self target toggleRotationRule.
 	self updateRotationToggleMorph
@@ -500,7 +500,7 @@ LibraryItemMorph >> updateRotationToggleMorph [
 	rotationToggleMorph ifNil: [
 		self buildRotationToggleMorph ].
 	(self target isNil
-		or: [(self target isKindOf: PhratchStageMorph)
+		or: [(self target isPhratchStageMorph)
 		or: [self target ownerSprite isNil]])
 		ifTrue: [
 			rotationToggleMorph isHidden: true.

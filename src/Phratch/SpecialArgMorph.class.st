@@ -52,7 +52,7 @@ SpecialArgMorph >> acceptsTypeOf: aBlockMorph [
 { #category : #drawing }
 SpecialArgMorph >> drawOn: aCanvas [
 
-	(owner isKindOf: CReporterSlotMorph)
+	(owner isCReporterSlotMorph)
 		ifTrue: [^ self].
 
 	skin ifNil: [

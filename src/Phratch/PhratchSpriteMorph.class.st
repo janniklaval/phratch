@@ -1035,7 +1035,7 @@ PhratchSpriteMorph >> justDroppedInto: newOwner event: evt [
 	
 	self releaseSubsprites.
 	super justDroppedInto: newOwner event: evt.
-	(newOwner isKindOf: PhratchStageMorph) ifTrue: [self positionTalkBubble].
+	(newOwner isPhratchStageMorph) ifTrue: [self positionTalkBubble].
 
 	self xpos: self xpos.
 	self ypos: self ypos 
@@ -1053,7 +1053,7 @@ PhratchSpriteMorph >> keepOnScreen [
 
 	ownerSprite ifNotNil: [^self].
 	owner ifNil: [^ self].
-	(owner isKindOf: PhratchStageMorph) ifFalse: [^ self].
+	(owner isPhratchStageMorph) ifFalse: [^ self].
 	
 	allBounds := self allBounds.
 	(owner bounds containsRect: allBounds) ifTrue: [^ self].  "entirely on screen"
@@ -1654,7 +1654,7 @@ PhratchSpriteMorph >> referencePosition [
 
 	"adjust when in Hand in quartersize mode:"
 	((owner isKindOf: HandMorph) and:
-	 [((s := owner formerOwner) isKindOf: PhratchStageMorph) and:
+	 [((s := owner formerOwner) isPhratchStageMorph) and:
 	 [s isQuarterSize]]) ifTrue: [
 		"Note: this is not quite right when rotation center is offset"
 		p := (p * 2) + (240@180)].

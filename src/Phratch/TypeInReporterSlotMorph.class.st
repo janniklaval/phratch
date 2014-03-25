@@ -11,7 +11,7 @@ TypeInReporterSlotMorph >> evaluate [
 
 	| rcv answerBlock reportBlock |
 
-	(submorphs first isKindOf: ExpressionArgMorph)
+	(submorphs first isExpressionArgMorph)
 		ifFalse: [^ super evaluate].
 
 	rcv := self receiver.
@@ -49,7 +49,7 @@ TypeInReporterSlotMorph >> initialize [
 { #category : #'argument slot behavior' }
 TypeInReporterSlotMorph >> isEmptySlot [
 
-	(argMorphs first isKindOf: ExpressionArgMorph) ifTrue: [
+	(argMorphs first isExpressionArgMorph) ifTrue: [
 		^ argMorphs first isEmptySlot].
 
 	^ super isEmptySlot

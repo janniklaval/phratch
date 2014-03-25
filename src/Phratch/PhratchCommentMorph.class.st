@@ -88,7 +88,7 @@ PhratchCommentMorph >> attachTargetIn: newOwner [
 
 	| candidates target overlap ratio |
 
-	(newOwner isKindOf: PhratchScriptsMorph) ifFalse: [^ nil].
+	(newOwner isPhratchScriptsMorph) ifFalse: [^ nil].
 
 	candidates := newOwner allMorphs select: [:each |
 		(each isBlockMorph) and:
@@ -275,13 +275,13 @@ PhratchCommentMorph >> justDroppedInto: newOwner event: evt [
 		^ self].
 
 	"comments cannot be dropped onto the stage"
-	(owner isKindOf: PhratchStageMorph) ifTrue: [
+	(owner isPhratchStageMorph) ifTrue: [
 		^ evt hand rejectDropMorph: self event: evt].
 
 	"okay to drop comments into the world during development"
 	((owner == World) and: [ScriptablePhratchMorph noviceMode not]) ifTrue: [^ self].
 
-	(owner isKindOf: PhratchScriptsMorph) ifFalse: [
+	(owner isPhratchScriptsMorph) ifFalse: [
 		^ evt hand rejectDropMorph: self event: evt].
 
 	target := self attachTargetIn: newOwner.
@@ -541,7 +541,7 @@ PhratchCommentMorph >> updatePosition [
 	| vOffset |
 	anchor ifNil: [^ self].
 
-	vOffset := (anchor isKindOf: HatBlockMorph) ifTrue: [19] ifFalse: [3].
+	vOffset := (anchor isHatBlockMorph) ifTrue: [19] ifFalse: [3].
 	self position: (anchor right + anchorOffset) @ (anchor top + vOffset).
 
 	self refreshConnector.

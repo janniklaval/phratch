@@ -252,7 +252,7 @@ CommandBlockMorph >> argMorphToReplace: aMorph [
 		v := defaults at: (argPermutation indexOf: i).
 		(v isString)
 			ifTrue: [
-				(argM isKindOf: ExpressionArgMorph)
+				(argM isExpressionArgMorph)
 					ifTrue: [argM defaultValueFromSpec: v localized]
 					ifFalse: [argM defaultValue: v localized]]
 			ifFalse: [argM defaultValue: v]].
@@ -432,7 +432,7 @@ CommandBlockMorph >> defaultArgs: defaultValues [
 	1 to: (defaultValues size min: argMorphs size) do: [:i |
 		argM := argMorphs at: (argPermutation at: i).
 		defaultValue := defaultValues at: i.
-		(argM  isKindOf: ExpressionArgMorph)
+		(argM  isExpressionArgMorph)
 			ifTrue: [argM defaultValueFromSpec: defaultValue]
 			ifFalse: [argM defaultValue: defaultValue]].
 
@@ -449,14 +449,14 @@ CommandBlockMorph >> drawBodyOn: aCanvas [
 	rightEdge := Array with: ((self right - 1)@(self top + 3) corner: self right@(self bottom - 7)).
 
 	cArgs := self nonControlFlowSubmorphs select: [:s | 
-		(s isKindOf: CArgSlotMorph) 
-		or: [(s isKindOf: CReporterSlotMorph)
-		or: [(s isKindOf: MultiArgMorph) 
+		(s isCArgSlotMorph) 
+		or: [(s isCReporterSlotMorph)
+		or: [(s isMultiArgMorph) 
 			and: [#(loop reporterSlot) includes: s type]]]].
 
 	cArgs do: [:c |
 		relevant := c bounds.
-		(c isKindOf: MultiArgMorph) ifTrue: [
+		(c isMultiArgMorph) ifTrue: [
 			relevant := c transparentRect].
 
 		l := OrderedCollection new.
@@ -497,7 +497,7 @@ CommandBlockMorph >> drawInlinePaletteOn: aCanvas [
 
 	| templates |
 	templates := submorphs select: [:m |
-		(m isKindOf: ReporterBlockMorph)
+		(m isReporterBlockMorph)
 		and: [m isBlockTemplate ]].
 
 
@@ -508,7 +508,7 @@ CommandBlockMorph >> drawInlinePaletteOn: aCanvas [
 "
 	argMorphs do: [:m |
 		(#booleanslot = (self typeOfArg: m)
-		and: [m isKindOf: ReporterBlockMorph]) ifTrue: [
+		and: [m isReporterBlockMorph]) ifTrue: [
 			aCanvas paintImage: (m imageForm outlineHalfEmbeddedAdjustedColor: color) 
 					at: m position - 1]]
 
@@ -711,17 +711,17 @@ CommandBlockMorph >> fixBlockLayoutWrap [
 	space := 4.
 	parts
 		do: [ :m | 
-			((m isKindOf: CArgSlotMorph)
-				or: [ (m isKindOf: CReporterSlotMorph) or: [ (m isKindOf: MultiArgMorph) and: [ m isWrapping ] ] ])
+			((m isCArgSlotMorph)
+				or: [ (m isCReporterSlotMorph) or: [ (m isMultiArgMorph) and: [ m isWrapping ] ] ])
 				ifTrue: [ 
 					line isEmpty
 						ifFalse: [ lines add: line ].
 					m left: left.	"self"
 					lines add: (OrderedCollection with: m).
-					(m isKindOf: MultiArgMorph)
+					(m isMultiArgMorph)
 						ifTrue: [ m fixArgLayout ]
 						ifFalse: [ m fixBlockLayout ].
-					((m isKindOf: CArgSlotMorph) or: [ m isKindOf: CReporterSlotMorph ])
+					((m isCArgSlotMorph) or: [ m isCReporterSlotMorph ])
 						ifTrue: [ m width: 40 ].
 					line := OrderedCollection new.
 					maxX := maxX max: left + m width.
@@ -760,36 +760,36 @@ CommandBlockMorph >> fixBlockLayoutWrap [
 			maxHeight := 14.
 			eachLine
 				do: [ :m | 
-					mh := ((m isKindOf: ReporterBlockMorph)
-						and: [ m isBlockTemplate or: [ ((m isKindOf: CArgSlotMorph) or: [ m isOSlotMorph ]) and: [ m isEmptySlot not ] ] ])
+					mh := ((m isReporterBlockMorph)
+						and: [ m isBlockTemplate or: [ ((m isCArgSlotMorph) or: [ m isOSlotMorph ]) and: [ m isEmptySlot not ] ] ])
 						ifTrue: [ 
 							m == eachLine first
 								ifTrue: [ m height + 10 ]
 								ifFalse: [ m height + 5 ] ]
 						ifFalse: [ 
-							((m isKindOf: CArgSlotMorph) or: [ m isOSlotMorph ])
+							((m isCArgSlotMorph) or: [ m isOSlotMorph ])
 								ifTrue: [ m height + 5 ]
 								ifFalse: [ m height ] ].
 					maxHeight := mh max: maxHeight.
-					((m isKindOf: CArgSlotMorph) or: [ m isKindOf: CReporterSlotMorph ])
+					((m isCArgSlotMorph) or: [ m isCReporterSlotMorph ])
 						ifTrue: [ maxHeight := m height - 4 ] ].
 			eachLine do: [ :m | m top: y + ((maxHeight - m height) // 2) + 1 ].
 			y := y + maxHeight + space ].	"adjust CArgSlots"
 	parts
 		do: [ :m | 
-			((m isKindOf: CArgSlotMorph) or: [ m isKindOf: CReporterSlotMorph ])
+			((m isCArgSlotMorph) or: [ m isCReporterSlotMorph ])
 				ifTrue: [ m width: w - 5 ] ].
 	h := self isStop
 		ifTrue: [ y - self top + space ]
 		ifFalse: [ y - self top + space + 4 ].
 	parts size > 0
 		ifTrue: [ 
-			((parts last isKindOf: CArgSlotMorph) or: [ parts last isKindOf: CReporterSlotMorph ])
+			((parts last isCArgSlotMorph) or: [ parts last isCReporterSlotMorph ])
 				ifTrue: [ h := h + space + 5 ] ].
 	self extent: w @ h.	"adjust Multi-CArgSlots"
 	parts
 		do: [ :m | 
-			(m isKindOf: MultiArgMorph)
+			(m isMultiArgMorph)
 				ifTrue: [ m loopsWidth: w - 5 ] ].
 	(nextB := self nextBlock)
 		ifNotNil: [ 
@@ -839,7 +839,7 @@ CommandBlockMorph >> initialize [
 CommandBlockMorph >> isCShape [
 
 	^ argMorphs anySatisfy: [:am | 
-		am isKindOf: CArgSlotMorph]
+		am isCArgSlotMorph]
 ]
 
 { #category : #'as yet unclassified' }
@@ -926,7 +926,7 @@ CommandBlockMorph >> mapReceiver: oldObj to: newObj [
 CommandBlockMorph >> nests: aCommandBlock [
 
 	| cslots |
-	cslots := argMorphs select: [:am | am isKindOf: CArgSlotMorph].
+	cslots := argMorphs select: [:am | am isCArgSlotMorph].
 	cslots do: [:cs |
 		cs nestedBlock ifNotNil: [
 			(cs nestedBlock blockSequence includes: aCommandBlock)
@@ -965,7 +965,7 @@ CommandBlockMorph >> numberArgFlags [
 	argSpecs := self organizeArgs: argSpecs.
 	numberArgFlags := argSpecs collect: [:spec |
 		argM := self uncoloredArgMorphFor: spec.
-		(argM isKindOf: ExpressionArgMorph)
+		(argM isExpressionArgMorph)
 			ifTrue: [
 				(argM isKindOf: ExpressionArgMorphWithMenu)
 					ifTrue: [
@@ -1189,7 +1189,7 @@ CommandBlockMorph >> rightButtonMenu [
 
 		menu addLine.
 		menu add: 'duplicate' value: #duplicate.
-		(self isKindOf: ReporterBlockMorph) ifFalse: [
+		(self isReporterBlockMorph) ifFalse: [
 			menu add: '- this block' value: #fastDuplicate].
 		(self isKindOf: VariableBlockMorph) ifTrue: [
 			menu add: 'relabel' value: #rename].
@@ -1335,7 +1335,7 @@ CommandBlockMorph >> tabToNextField: evt [
 	"Move the keyboard focus to the next submorph that responds to keyboard events."
 
 	| fields current |
-	fields := self topBlock tabFields "allMorphs select: [:m | m isKindOf: ExpressionArgMorph]".
+	fields := self topBlock tabFields "allMorphs select: [:m | m isExpressionArgMorph]".
 
 	current := (1 to: fields size) detect: [:i | (fields at: i) labelMorph == evt hand keyboardFocus] ifNone: [fields size].
 	evt hand newKeyboardFocus: (fields at: (current \\ fields size) + 1) labelMorph.
@@ -1347,7 +1347,7 @@ CommandBlockMorph >> tabToPreviousField: evt [
 	"Move the keyboard focus to the previous submorph that responds to keyboard events."
 
 	| fields current |
-	fields := self topBlock tabFields  " allMorphs select: [:m | m isKindOf: ExpressionArgMorph]".
+	fields := self topBlock tabFields  " allMorphs select: [:m | m isExpressionArgMorph]".
 
 	current := (1 to: fields size) detect: [:i | (fields at: i) labelMorph == evt hand keyboardFocus] ifNone: [fields size].
 	evt hand newKeyboardFocus: (fields at: ((current - 1 \\ fields size) max: 1)) labelMorph.

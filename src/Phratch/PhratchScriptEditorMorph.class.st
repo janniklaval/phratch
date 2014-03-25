@@ -23,7 +23,7 @@ Class {
 PhratchScriptEditorMorph >> addComment: anEvent [
 
 	| c scriptsMorph |
-	scriptsMorph := (pageViewerMorph allMorphs select: [: m | m isKindOf: PhratchScriptsMorph]) first.
+	scriptsMorph := (pageViewerMorph allMorphs select: [: m | m isPhratchScriptsMorph]) first.
 	scriptsMorph addMorph: (c := PhratchCommentMorph new position: anEvent position).
 	World activeHand newKeyboardFocus: c commentMorph.
 
@@ -207,7 +207,7 @@ PhratchScriptEditorMorph >> cleanUp [
 	"Align all scripts vertically in alphabetical order"
 
 	| scriptsMorph |
-	scriptsMorph := (pageViewerMorph allMorphs select: [:c | c isKindOf: PhratchScriptsMorph]) first.
+	scriptsMorph := (pageViewerMorph allMorphs select: [:c | c isPhratchScriptsMorph]) first.
 	scriptsMorph cleanUp.
 	pageViewerMorph
 		updateContentsExtent;
@@ -582,7 +582,7 @@ PhratchScriptEditorMorph >> target: aPhratchObjectOrNil [
 
 	thumbnailMorph target: aPhratchObjectOrNil.
 
-	nameSel := (aPhratchObjectOrNil isKindOf: PhratchStageMorph)
+	nameSel := (aPhratchObjectOrNil isPhratchStageMorph)
 		ifTrue: [nil]
 		ifFalse: [#objName:].
 	nameMorph
@@ -608,7 +608,7 @@ PhratchScriptEditorMorph >> toggleSpriteDraggable [
 PhratchScriptEditorMorph >> undoDrop [
 
 	| scriptsMorph |
-	scriptsMorph := (pageViewerMorph allMorphs select: [: m | m isKindOf: PhratchScriptsMorph]) first.
+	scriptsMorph := (pageViewerMorph allMorphs select: [: m | m isPhratchScriptsMorph]) first.
 	scriptsMorph undoLastDrop
 
 ]

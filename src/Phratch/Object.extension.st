@@ -39,7 +39,19 @@ Object >> isBoolean [
 ]
 
 { #category : #'*Phratch-Extensions' }
+Object >> isCArgSlotMorph [
+
+	^false
+]
+
+{ #category : #'*Phratch-Extensions' }
 Object >> isCBlockMorph [
+
+	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
+Object >> isCReporterSlotMorph [
 
 	^ false
 ]
@@ -63,7 +75,44 @@ Object >> isCommandScriptBlockMorph [
 ]
 
 { #category : #'*Phratch-Extensions' }
+Object >> isExpressionArgMorph [
+
+	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
+Object >> isHatBlockMorph [
+
+	^ false
+
+]
+
+{ #category : #'*Phratch-Extensions' }
+Object >> isMultiArgMorph [
+
+	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
 Object >> isOSlotMorph [
+	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
+Object >> isPhratchScriptsMorph [
+
+	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
+Object >> isPhratchStageMorph [
+
+	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
+Object >> isReporterBlockMorph [
+
 	^ false
 ]
 

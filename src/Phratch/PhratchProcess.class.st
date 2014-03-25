@@ -364,11 +364,11 @@ PhratchProcess >> doApplyEval [
 						slot := emptySlots at: i.
 	
 						""empty variadic inputs absorb all ensuing values""
-						(slot isKindOf: MultiArgMorph) 
+						(slot isMultiArgMorph) 
 							ifTrue: [ obj := PhratchListMorph on: argsList from: i to: argsList size]
 							ifFalse: [
 								obj := argsList at: i.
-								(obj isKindOf: ReporterBlockMorph)
+								(obj isReporterBlockMorph)
 									ifTrue: [ obj := obj evaluate ]
 									ifFalse: [ obj = '' asUTF8 
 										ifTrue: [ obj := slot defaultValue]]].
@@ -379,7 +379,7 @@ PhratchProcess >> doApplyEval [
 
 ------------------------------------------------------------------------------------------------------------------------------------------"
 
-						 (emptySlots size = argsList size or: [argsList size > emptySlots size and: [emptySlots size > 0 and: [emptySlots last isKindOf: MultiArgMorph]]])
+						 (emptySlots size = argsList size or: [argsList size > emptySlots size and: [emptySlots size > 0 and: [emptySlots last isMultiArgMorph]]])
 					ifTrue: [
 						"fill every empty (not default) slot with the corresponding actual argument"
 	
@@ -388,11 +388,11 @@ PhratchProcess >> doApplyEval [
 							slot := emptySlots at: i.
 		
 							"empty variadic inputs absorb all ensuing values"
-							(slot isKindOf: MultiArgMorph) 
+							(slot isMultiArgMorph) 
 								ifTrue: [ obj := PhratchListMorph on: argsList from: i to: argsList size]
 								ifFalse: [
 									obj := argsList at: i.
-									(obj isKindOf: ReporterBlockMorph)
+									(obj isReporterBlockMorph)
 										ifTrue: [ obj := obj evaluate ]].
 							slot implicitValue: obj ]]
 	
@@ -402,10 +402,10 @@ PhratchProcess >> doApplyEval [
 
 						| prm |
 						prm := argsList first.
-						(prm isKindOf: ReporterBlockMorph)
+						(prm isReporterBlockMorph)
 							ifTrue: [prm := prm evaluate ].
 						emptySlots do: [:slot|
-							(slot isKindOf: MultiArgMorph)
+							(slot isMultiArgMorph)
 								ifTrue: [slot implicitValue: (PhratchListMorph with: prm)]
 								ifFalse: [slot implicitValue: prm]]]]]"]"].
 
@@ -1064,7 +1064,7 @@ PhratchProcess >> evaluateNextArgument [
 	argumentExpression := stackFrame expression argumentAt: stackFrame arguments size + 1. 
 
 	stackFrame expression selector = #doCustomBlock ifTrue: [
-		((argumentExpression isKindOf: ReporterBlockMorph) and: [
+		((argumentExpression isReporterBlockMorph) and: [
 			#(unevaluated unevaluatedBoolean) includes: argumentExpression declaredType]) ifTrue: [
 				argumentExpression := argumentExpression asLambda ]].
 
@@ -1344,7 +1344,7 @@ PhratchProcess >> returnValueToParentFrame: anObject [
 
 	f ifNotNil: [f addArgument: obj].
 
-	((blockToDebug isBlockMorph) and: [self currentBlock isKindOf: ReporterBlockMorph]) ifTrue: [
+	((blockToDebug isBlockMorph) and: [self currentBlock isReporterBlockMorph]) ifTrue: [
 			((PhratchFrameMorph someInstance viewMode = #presentation) | doneWithDebugging) ifFalse: [
 				self pause. 
 				DebuggerFrameMorph new on: self returnValue: obj]].

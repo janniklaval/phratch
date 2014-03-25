@@ -20,7 +20,7 @@ SetSizeTo class >> handlesQuery: sel [
 { #category : #protocol }
 SetSizeTo >> defaultArguments [
 	| currentSize defaultArgs scalePoint |
-	(self model isKindOf: PhratchStageMorph)
+	(self model isPhratchStageMorph)
 		ifTrue: [ 
 			"no size ops for stage -jens"
 			^ Array with: 100 ].

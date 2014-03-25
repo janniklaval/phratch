@@ -213,7 +213,7 @@ CArgSlotMorph >> fixBlockLayout [
 	self height: newH.
 
 
-	(owner isKindOf: ReporterBlockMorph) 
+	(owner isReporterBlockMorph) 
 		ifTrue: [nestedBlock ifNotNil: [
 			self width: nestedBlock fullBounds width + CBlockBracketThickness]]
 
@@ -225,4 +225,10 @@ CArgSlotMorph >> initialize [
 	super initialize.
 	isSpecialForm := true.
 	selector := #loopLambda
+]
+
+{ #category : #'as yet unclassified' }
+CArgSlotMorph >> isCArgSlotMorph [
+
+	^true
 ]

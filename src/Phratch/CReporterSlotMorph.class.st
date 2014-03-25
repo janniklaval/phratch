@@ -162,7 +162,7 @@ CReporterSlotMorph >> fixBlockLayout [
 	self height: newH.
 
 
-	(owner isKindOf: ReporterBlockMorph) 
+	(owner isReporterBlockMorph) 
 		ifTrue: [self nestedBlock ifNotNil: [
 			self width: self nestedBlock fullBounds width + CBlockBracketThickness]]
 
@@ -180,6 +180,12 @@ CReporterSlotMorph >> initialize [
 	removeElementMorph ifNotNil: [
 		removeElementMorph delete]
 
+]
+
+{ #category : #'as yet unclassified' }
+CReporterSlotMorph >> isCReporterSlotMorph [
+
+	^ true
 ]
 
 { #category : #'argument slot behavior' }

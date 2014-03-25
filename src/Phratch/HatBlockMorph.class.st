@@ -159,7 +159,7 @@ HatBlockMorph >> initialize [
 ]
 
 { #category : #accessing }
-HatBlockMorph >> isHatBlock [
+HatBlockMorph >> isHatBlockMorph [
 
 	^ true
 

@@ -156,7 +156,7 @@ ProcedureHatBlockMorph >> replaceArgMorph: oldMorph by: newMorph [
 { #category : #other }
 ProcedureHatBlockMorph >> rootForGrabOf: aMorph [
 
-	(owner isKindOf: PhratchScriptsMorph) ifTrue: [^nil].
+	(owner isPhratchScriptsMorph) ifTrue: [^nil].
 
 	^ super rootForGrabOf: aMorph
 ]

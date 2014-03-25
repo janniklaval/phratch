@@ -419,7 +419,7 @@ CBlockMorph >> tabFields [
 
 	fields := OrderedCollection new.
 	self nonControlFlowSubmorphs do: [:m |
-		(m isKindOf: ExpressionArgMorph)
+		(m isExpressionArgMorph)
 			ifTrue: [fields add: m ]
 			ifFalse: [(m respondsTo: #tabFields)
 				ifTrue: [fields addAll: m tabFields ]]]. 

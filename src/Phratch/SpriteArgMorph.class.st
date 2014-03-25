@@ -35,7 +35,7 @@ SpriteArgMorph >> checkForDeletedMorph [
 	(morph isMorph) ifFalse: [^ self].
 	morph owner ifNotNil: [^ self].
 
-	(morph isKindOf: PhratchStageMorph) ifTrue: [^ self].
+	(morph isPhratchStageMorph) ifTrue: [^ self].
 
 	morph := nil.  "nil out reference to deleted sprite"
 
@@ -107,7 +107,7 @@ SpriteArgMorph >> fixGetAttribueBlock [
 	| attributeArg possibleAttributes |
 	morph = #null ifTrue: [^ self].
 	morph ifNil: [^ self].
-	((owner isKindOf: ReporterBlockMorph) and: [owner selector = #getAttribute:of:]) ifFalse: [^ self].
+	((owner isReporterBlockMorph) and: [owner selector = #getAttribute:of:]) ifFalse: [^ self].
 
 	attributeArg := owner submorphs detect: [:m | m isKindOf: AttributeArgMorph] ifNone: [^ self].
 

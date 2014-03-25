@@ -24,7 +24,7 @@ CommandScriptBlockMorph >> acceptsTypeOf: aBlockMorph [
 	"Answer true if I can accept a dropped reporter of the given type. Answer false by default."
 
 	((aBlockMorph isCommandBlockMorph) and: [
-		(aBlockMorph isKindOf: HatBlockMorph) not ])
+		(aBlockMorph isHatBlockMorph) not ])
 			or: [ super acceptsTypeOf: aBlockMorph]
 ]
 
@@ -400,7 +400,7 @@ CommandScriptBlockMorph >> isBooleanFunction [
 	reporter := self allMorphs anySatisfy: [:m|
 		(m isCommandBlockMorph) and: [
 			m selector = #doAnswer ]].
-	^ (reporter argMorphs first isKindOf: ReporterBlockMorph) and: [
+	^ (reporter argMorphs first isReporterBlockMorph) and: [
 			reporter argMorphs first isBooleanReporter]
 
 ]

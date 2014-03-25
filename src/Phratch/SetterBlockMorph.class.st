@@ -43,7 +43,7 @@ SetterBlockMorph >> determineIfSpecialForm [
 SetterBlockMorph >> expressionArg [
 
 	submorphs do: [:m |
-		(m isKindOf: ExpressionArgMorph) ifTrue: [^ m]].
+		(m isExpressionArgMorph) ifTrue: [^ m]].
 
 	^ nil
 ]

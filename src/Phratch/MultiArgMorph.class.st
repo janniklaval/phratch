@@ -90,12 +90,12 @@ MultiArgMorph >> defaultValue: aPhratchListMorph [
 		ifFalse: [^ self].
 	1 to: aPhratchListMorph lineCount do: [:i |
 		element := aPhratchListMorph lineAt: i.
-		((element isKindOf: ReporterBlockMorph)
+		((element isReporterBlockMorph)
 		and: [(element isArgMorph) not])
 			ifTrue: [self addArg: element]
 			ifFalse: [
 				self addArgSlot.
-				(element isKindOf: ReporterBlockMorph)
+				(element isReporterBlockMorph)
 					ifTrue: [((element respondsTo: #body) and: [element body notNil])
 						ifTrue: [
 							self replaceSubmorph: self elements last by: element 
@@ -149,13 +149,13 @@ MultiArgMorph >> fixArgLayout [
 	parts := submorphs select: [ :sm | sm isVisible and: [ (sm isStringMorph) not ] ].
 	parts
 		do: [ :m | 
-			(m isKindOf: ReporterBlockMorph) & isMultiC
+			(m isReporterBlockMorph) & isMultiC
 				ifTrue: [ 
 					"in this case just break up into lines, don't distribute yet"
 					m left: self left.
 					lines add: (OrderedCollection with: m).
 					m fixBlockLayout.
-					((m isKindOf: CArgSlotMorph) or: [ m isKindOf: CReporterSlotMorph ])
+					((m isCArgSlotMorph) or: [ m isCReporterSlotMorph ])
 						ifTrue: [ m width: self width ].
 					maxX := maxX max: left + m width.
 					x := left ]
@@ -195,7 +195,7 @@ MultiArgMorph >> fixArgLayout [
 			maxHeight := 10.
 			eachLine
 				do: [ :m | 
-					mh := ((m isKindOf: ReporterBlockMorph) and: [ m isBlockTemplate and: [ m isEmptySlot not ] ])
+					mh := ((m isReporterBlockMorph) and: [ m isBlockTemplate and: [ m isEmptySlot not ] ])
 						ifTrue: [ m height + 7 ]
 						ifFalse: [ m height ].
 					maxHeight := mh max: maxHeight ].
@@ -243,6 +243,12 @@ MultiArgMorph >> isLambdaForm [
 	^false
 ]
 
+{ #category : #'as yet unclassified' }
+MultiArgMorph >> isMultiArgMorph [
+
+	^ true
+]
+
 { #category : #accessing }
 MultiArgMorph >> isWrapping [
 	^isWrapping
@@ -266,7 +272,7 @@ MultiArgMorph >> listValue [
 	list listName: '' target: nil.
 	self elements
 		do: [ :each | 
-			item := (each isKindOf: ReporterBlockMorph)
+			item := (each isReporterBlockMorph)
 				ifTrue: [ each ]
 				ifFalse: [ 
 					each isEmptySlot
@@ -284,7 +290,7 @@ MultiArgMorph >> loopsWidth: anInteger [
 
 	type = #loop ifFalse: [^ self].
 	self width: (anInteger max: 50).
-	parts := submorphs select: [:sm | (sm isKindOf: CArgSlotMorph) or: [sm isKindOf: CReporterSlotMorph]].
+	parts := submorphs select: [:sm | (sm isCArgSlotMorph) or: [sm isCReporterSlotMorph]].
 	parts do: [:m |
 		m width: self width ]
 
@@ -387,9 +393,9 @@ MultiArgMorph >> tabFields [
 	| fields |
 	fields := OrderedCollection new.
 	submorphs do: [:m |
-		(m isKindOf: ReporterBlockMorph)
+		(m isReporterBlockMorph)
 			ifTrue: [fields addAll: m tabFields ]
-			ifFalse: [(m isKindOf: ExpressionArgMorph)
+			ifFalse: [(m isExpressionArgMorph)
 				ifTrue: [fields add: m]]].
 	^ fields
 ]

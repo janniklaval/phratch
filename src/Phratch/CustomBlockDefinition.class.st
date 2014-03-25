@@ -76,7 +76,7 @@ CustomBlockDefinition >> answerBlock [
 		isSpecialForm: true;
 		selector: #doAnswer;
 		yourself.
-	(answer isKindOf: ReporterBlockMorph)
+	(answer isReporterBlockMorph)
 		ifTrue: [ ^ block replaceArgMorph: (block argumentAt: 1) by: answer ].
 	#boolean = type
 		ifTrue: [ ^ block ].
@@ -196,7 +196,7 @@ CustomBlockDefinition >> fixBlockVarReporters [
 			((m isKindOf: VariableBlockMorph) | (m isKindOf: SetterBlockMorph) 
 				and: [m isSpecialForm]) ifTrue: [
 					m receiver: self ]]].
-	answer ifNotNil: [ (answer isKindOf: ReporterBlockMorph)
+	answer ifNotNil: [ (answer isReporterBlockMorph)
 		ifTrue: [answer allMorphs do: [:m|
 			((m isKindOf: VariableBlockMorph) | (m isKindOf: SetterBlockMorph) 
 				and: [m isSpecialForm]) ifTrue: [

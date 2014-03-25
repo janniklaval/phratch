@@ -160,17 +160,17 @@ MultiArgReporterBlockMorph >> fixBlockLayoutWrap [
 	space := 4.
 	parts
 		do: [ :m | 
-			((m isKindOf: CArgSlotMorph)
-				or: [ (m isKindOf: CReporterSlotMorph) or: [ (m isKindOf: MultiArgMorph) and: [ m isWrapping ] ] ])
+			((m isCArgSlotMorph)
+				or: [ (m isCReporterSlotMorph) or: [ (m isMultiArgMorph) and: [ m isWrapping ] ] ])
 				ifTrue: [ 
 					line isEmpty
 						ifFalse: [ lines add: line ].
 					m left: self left - 5.
 					lines add: (OrderedCollection with: m).
-					(m isKindOf: MultiArgMorph)
+					(m isMultiArgMorph)
 						ifTrue: [ m fixArgLayout ]
 						ifFalse: [ m fixBlockLayout ].
-					((m isKindOf: CArgSlotMorph) or: [ m isKindOf: CReporterSlotMorph ])
+					((m isCArgSlotMorph) or: [ m isCReporterSlotMorph ])
 						ifTrue: [ m width: 40 ].
 					line := OrderedCollection new.
 					maxX := maxX max: left + m width.
@@ -209,8 +209,8 @@ MultiArgReporterBlockMorph >> fixBlockLayoutWrap [
 			maxHeight := 14.
 			eachLine
 				do: [ :m | 
-					mh := ((m isKindOf: ReporterBlockMorph)
-						and: [ m isBlockTemplate or: [ ((m isKindOf: CArgSlotMorph) or: [ m isOSlotMorph ]) and: [ m isEmptySlot not ] ] ])
+					mh := ((m isReporterBlockMorph)
+						and: [ m isBlockTemplate or: [ ((m isCArgSlotMorph) or: [ m isOSlotMorph ]) and: [ m isEmptySlot not ] ] ])
 						ifTrue: [ m height + 10 ]
 						ifFalse: [ m height + 2 ].
 					maxHeight := mh max: maxHeight ].
@@ -227,9 +227,9 @@ MultiArgReporterBlockMorph >> fixBlockLayoutWrap [
 	w := w + (extraSpace * 2).	"adjust CArgSlots"
 	parts
 		do: [ :m | 
-			(m isKindOf: CArgSlotMorph)
+			(m isCArgSlotMorph)
 				ifTrue: [ m width: w - (extraSpace * 2) + 6 ] ].
-	(parts last isKindOf: CArgSlotMorph)
+	(parts last isCArgSlotMorph)
 		ifTrue: [ h := h + space + 5 ].	"stack nested Reporters more efficiently:"
 	lines size > 1
 		ifTrue: [ 
@@ -256,7 +256,7 @@ MultiArgReporterBlockMorph >> fixBlockLayoutWrap [
 				ifFalse: [ self bodyRight: maxX ].	"adjust Multi-CArgSlots"
 			parts
 				do: [ :m | 
-					(m isKindOf: MultiArgMorph)
+					(m isMultiArgMorph)
 						ifTrue: [ m loopsWidth: self bodyRight - self bodyLeft ] ] ]
 		ifFalse: [ self extent: w @ h ].
 	(self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph)

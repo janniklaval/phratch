@@ -467,7 +467,7 @@ ScriptablePhratchMorph >> addCostumeTyped: aString [
 		^ self updateAfterPopUp
 	].
 	aString = 'import' ifTrue: [
-		(self isKindOf: PhratchStageMorph)
+		(self isPhratchStageMorph)
 			ifTrue: [type := #background. title := 'Import Background']
 			ifFalse: [type := #costume. title := 'Import Costume'].
 		result := PhratchFileChooserDialog
@@ -569,7 +569,7 @@ ScriptablePhratchMorph >> addGenericListBlocksTo: page y: startY [
 	addButton := PhratchFrameMorph
 		buttonLabel: 'Make a list' localized
 		selector: #addList.
-	(self isKindOf: PhratchStageMorph) ifTrue: [addButton actionSelector: #addGlobalList].
+	(self isPhratchStageMorph) ifTrue: [addButton actionSelector: #addGlobalList].
 
 	deleteButton := PhratchFrameMorph
 		buttonLabel: 'Delete a list' localized
@@ -950,7 +950,7 @@ ScriptablePhratchMorph >> addWatcherForNewVariable: varName withScope: spriteOrS
 { #category : #byob }
 ScriptablePhratchMorph >> allInstancesOf: aCustomBlockId [
 	| objects stage all |
-	stage := (self isKindOf: PhratchStageMorph)
+	stage := (self isPhratchStageMorph)
 		ifTrue: [ self ]
 		ifFalse: [ self owner ].
 	objects := {stage} , stage sprites.
@@ -1720,7 +1720,7 @@ ScriptablePhratchMorph >> copyRecordingIn: dict [
 	newCopy renewFilterPack.
 	newBlocksBin := blocksBin fullCopy.
 	newBlocksBin allMorphsDo: [:m |
-		(m isKindOf: HatBlockMorph) ifTrue: [m scriptOwner: newCopy].
+		(m isHatBlockMorph) ifTrue: [m scriptOwner: newCopy].
 		(m isCommandBlockMorph) ifTrue: [m mapReceiver: self to: newCopy]].
 	newCopy vars: vars copy lists: (self copyListsFor: newCopy) blocksBin: newBlocksBin.
 	newCopy blockDefinition: (self copyBlockDefinitionsFor: newCopy).
@@ -1850,7 +1850,7 @@ ScriptablePhratchMorph >> costumesPage: xOffset [
 	xMargin := 15.
 	yMargin := 15.
 	bin := PhratchBlockPaletteMorph new color: PhratchFrameMorph scriptsPaneColor.
-	label := (self isKindOf: PhratchStageMorph)
+	label := (self isPhratchStageMorph)
 		ifTrue: [ 'New background:' localized ]
 		ifFalse: [ 'New costume:' localized ].
 	m := StringMorph contents: label font: (PhratchFrameMorph getFont: #CostumesPage).
@@ -3375,12 +3375,12 @@ ScriptablePhratchMorph >> handleTool: toolName hand: hand [
 	| scaleFactor |
 	toolName = 'CopyTool' ifTrue: [
 		Sensor shiftPressed ifFalse: [hand toolType: nil].
-		(self isKindOf: PhratchStageMorph) ifFalse: [
+		(self isPhratchStageMorph) ifFalse: [
 			^ self duplicate]].
 
 	toolName = 'CutTool' ifTrue: [
 		Sensor shiftPressed ifFalse: [hand toolType: nil].
-		(self isKindOf: PhratchStageMorph) ifFalse: [
+		(self isPhratchStageMorph) ifFalse: [
 			^ self undoableDeleteSprite]].
 
 	"exit now if I am not scalable"
@@ -3496,7 +3496,7 @@ ScriptablePhratchMorph >> importImage [
 	"Import a new image from a file and add it to my media (concatenating the name if it is greater than 16 characters long). If the file is an animated gif, import all frames of the gif as separate costumes."
 
 	| title result el fList isFirst newName type |
-	(self isKindOf: PhratchStageMorph)
+	(self isPhratchStageMorph)
 		ifTrue: [type := #background. title := 'Import Background']
 		ifFalse: [type := #costume. title := 'Import Costume'].
 	result := PhratchFileChooserDialog
@@ -4696,7 +4696,7 @@ ScriptablePhratchMorph >> mouseDown: evt [
 		self handleTool: evt hand toolType hand: evt hand.
 		^ self].
 
-	(owner isKindOf: PhratchStageMorph) ifFalse: [^ super mouseDown: evt].
+	(owner isPhratchStageMorph) ifFalse: [^ super mouseDown: evt].
 
 	evt rightButtonPressed
 		ifTrue: [Sensor waitNoButton. ^ self rightButtonMenu]
@@ -5311,12 +5311,12 @@ ScriptablePhratchMorph >> printSummaryOn: aStream [
 		nextPutAll: stacks size printString;
 		nextPutAll: '):';
 		crlf.
-	hats := stacks select: [ :m | m isKindOf: HatBlockMorph ].
-	otherStacks := stacks reject: [ :m | m isKindOf: HatBlockMorph ].
+	hats := stacks select: [ :m | m isHatBlockMorph ].
+	otherStacks := stacks reject: [ :m | m isHatBlockMorph ].
 	hats , otherStacks
 		do: [ :item | 
 			item printCodeOn: aStream indent: 1.
-			(item isKindOf: ReporterBlockMorph)
+			(item isReporterBlockMorph)
 				ifTrue: [ aStream crlf ].
 			aStream crlf ]
 ]
@@ -5357,7 +5357,7 @@ ScriptablePhratchMorph >> promptForInput: questionString [
 	| s prompter |
 	(s := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNil: [^ self].
 	prompter := PhratchPrompterMorph new.
-	((self isKindOf: PhratchStageMorph) | (self isHidden))
+	((self isPhratchStageMorph) | (self isHidden))
 		ifTrue: [
 			prompter question: questionString]
 		ifFalse: [
@@ -5518,7 +5518,7 @@ ScriptablePhratchMorph >> recordSound [
 ScriptablePhratchMorph >> rejectDropEvent: evt [
 	"Reject being dropped by the given event."
 
-	(self owner isKindOf: PhratchStageMorph)
+	(self owner isPhratchStageMorph)
 		ifFalse: [ ^ evt hand rejectDropMorph: self event: evt ]
 		ifTrue: [ ^ false ]
 ]
@@ -5552,7 +5552,7 @@ ScriptablePhratchMorph >> replaceCostume: aNumber with: aString [
 		^ self updateAfterPopUp.
 		].
 	aString = 'import' ifTrue: [
-		(self isKindOf: PhratchStageMorph)
+		(self isPhratchStageMorph)
 			ifTrue: [type := #background. title := 'Import Background']
 			ifFalse: [type := #costume. title := 'Import Costume'].
 		result := PhratchFileChooserDialog
@@ -5747,7 +5747,7 @@ ScriptablePhratchMorph >> scripts [
 	"Answer my scripts, a collection of HatBlockMorphs."
 
 	(blocksBin isMorph) ifFalse: [^ blocksBin].
-	^ blocksBin submorphs select: [:m | m isKindOf: HatBlockMorph]
+	^ blocksBin submorphs select: [:m | m isHatBlockMorph]
 
 ]
 

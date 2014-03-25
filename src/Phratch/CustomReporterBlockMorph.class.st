@@ -109,10 +109,10 @@ CustomReporterBlockMorph >> addLabelToNonTemplate [
 			(a isBlockMorph)
 				ifTrue: [ argValues add: a ]
 				ifFalse: [ 
-					(a isKindOf: MultiArgMorph)
+					(a isMultiArgMorph)
 						ifTrue: [ argValues add: a listValue ]
 						ifFalse: [ 
-							(a isKindOf: ExpressionArgMorph)
+							(a isExpressionArgMorph)
 								ifTrue: [ 
 									a isNumberExpression
 										ifTrue: [ 
@@ -206,7 +206,7 @@ CustomReporterBlockMorph >> addLabelToNonTemplate [
 								((eachArg isKindOf: VariableBlockMorph) and: [ eachValue isKindOf: VariableBlockMorph ])
 									ifTrue: [ eachArg commandSpec: eachValue commandSpec ] ] ]
 					ifFalse: [ 
-						((eachArg isKindOf: ExpressionArgMorph) and: [ eachArg isNumberExpression ])
+						((eachArg isExpressionArgMorph) and: [ eachArg isNumberExpression ])
 							ifTrue: [ eachArg defaultValue: eachValue	"asNumberNoError" ]
 							ifFalse: [ 
 								(eachValue isKindOf: PhratchListMorph)
@@ -462,7 +462,7 @@ CustomReporterBlockMorph >> rename [
 CustomReporterBlockMorph >> replaceArgMorph: argMorph by: newMorph [
 	| def typ pname i val |
 	super replaceArgMorph: argMorph by: newMorph.
-	(newMorph isKindOf: ExpressionArgMorph)
+	(newMorph isExpressionArgMorph)
 		ifFalse: [ ^ self ].
 	def := self definition.
 	i := argMorphs indexOf: newMorph.
@@ -540,7 +540,7 @@ CustomReporterBlockMorph >> setDefaultArgs [
 	1 to: argMorphs size do: [:i |
 		a := argMorphs at: i.
 		(a isArgMorph) ifTrue: [
-			(a isKindOf: MultiArgMorph)
+			(a isMultiArgMorph)
 				ifTrue: [a addArgSlot]
 				ifFalse: [
 					typ := def typeOf: (parms at: i).

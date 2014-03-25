@@ -116,7 +116,7 @@ WatcherMorph >> delete [
 WatcherMorph >> doubleClick: evt [
 	"Toggle slider/large readout view if I'm in the work pane."
 
-	(self owner isKindOf: PhratchStageMorph) ifFalse: [^ self].  "ignore if not on stage"
+	(self owner isPhratchStageMorph) ifFalse: [^ self].  "ignore if not on stage"
 
 	phratchSlider ifNotNil: [^ self showLargeReadout]. "slider -> large readout"
 	isLarge ifTrue: [^ self showSmallReadout].  "large readout -> small readout"
@@ -258,7 +258,7 @@ WatcherMorph >> isVariableWatcher [
 { #category : #'dropping/grabbing' }
 WatcherMorph >> justDroppedInto: aMorph event: evt [
 
-	(aMorph isKindOf: PhratchStageMorph) ifTrue: [
+	(aMorph isPhratchStageMorph) ifTrue: [
 		super justDroppedInto: aMorph event: evt.
 		self world ifNotNil: [self world startSteppingSubmorphsOf: self].
 		^ self].

@@ -572,6 +572,12 @@ PhratchStageMorph >> isPaused [
 
 ]
 
+{ #category : #'as yet unclassified' }
+PhratchStageMorph >> isPhratchStageMorph [
+
+	^ true
+]
+
 { #category : #accessing }
 PhratchStageMorph >> isQuarterSize [
 
@@ -1085,7 +1091,7 @@ PhratchStageMorph >> startProcessFor: topBlock [
 
 	| sequence proc |
 	sequence := topBlock blockSequence.
-	sequence first isHatBlock ifTrue: [
+	sequence first isHatBlockMorph ifTrue: [
 		sequence := sequence allButFirst].  "skip hat block"
 
 	topBlock phratchProc ifNotNil: [topBlock stop].
@@ -1109,7 +1115,7 @@ PhratchStageMorph >> startProcessForSequence: anArray [
 	| sequence proc topBlock |
 	sequence := anArray last.
 	topBlock := sequence first.
-	sequence first isHatBlock ifTrue: [
+	sequence first isHatBlockMorph ifTrue: [
 		sequence := sequence allButFirst].  "skip hat block"
 
 	topBlock phratchProc ifNotNil: [topBlock stop].
@@ -1441,6 +1447,5 @@ PhratchStageMorph >> userSelectSpriteDefault: defaultSprite butNotAnyOf: exclude
 	^ menu
 		defaultTarget: #null;
 		popUpInWorld;
-		selectedValue;
-		yourself
+		selectedValue
 ]

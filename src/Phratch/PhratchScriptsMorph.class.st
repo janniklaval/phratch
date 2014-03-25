@@ -86,6 +86,12 @@ PhratchScriptsMorph >> initialize [
 
 ]
 
+{ #category : #'as yet unclassified' }
+PhratchScriptsMorph >> isPhratchScriptsMorph [
+
+	^ true
+]
+
 { #category : #screenshot }
 PhratchScriptsMorph >> isScreenshooting [
 
@@ -284,7 +290,7 @@ PhratchScriptsMorph >> showDeleteFeedback [
 	r := cutBlock bounds.
 	((cutBlock isCBlockMorph) and: [cutBlock firstBlockList size > 0])
 		ifTrue: [r := r merge: cutBlock firstBlockList first fullBounds].
-	(cutBlock isKindOf: HatBlockMorph)
+	(cutBlock isHatBlockMorph)
 		ifTrue: [r := cutBlock fullBounds].
 	feedbackMorph
 		bounds: (r expandBy: 3);
@@ -406,11 +412,11 @@ PhratchScriptsMorph >> topArgMorphAt: aRectangle exclude: aMorph [
 
 	stack allMorphsDo: [:b |
 		((b isCommandBlockMorph) and:
-		 [(b isKindOf: HatBlockMorph) not]) ifTrue: [
+		 [(b isHatBlockMorph) not]) ifTrue: [
 			1 to: b argumentCount do: [:i |
 				argM := b argumentAt: i.
 	
-				(argM isKindOf: MultiArgMorph) ifTrue: [
+				(argM isMultiArgMorph) ifTrue: [
 					argM elements do: [:elmt |
 						((area value: elmt) intersects: aRectangle) ifTrue: [
 							^elmt]]].
@@ -448,7 +454,7 @@ PhratchScriptsMorph >> undoLastDrop [
 
 	| arg next |
 	droppedBlock ifNil: [^self ].
-	(droppedBlock isKindOf: ReporterBlockMorph) ifTrue: [
+	(droppedBlock isReporterBlockMorph) ifTrue: [
 		kickedOutReporter notNil 
 			ifTrue: [ droppedBlock owner replaceArgMorph: droppedBlock by: kickedOutReporter]
 			ifFalse: [(droppedBlock owner isBlockMorph)

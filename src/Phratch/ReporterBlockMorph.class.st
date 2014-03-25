@@ -125,14 +125,14 @@ ReporterBlockMorph >> drawBooleanOn: aCanvas [
 		topY := topY - 1].
 
 	cArgs := self nonControlFlowSubmorphs select: [:s | 
-		(s isKindOf: CArgSlotMorph) 
-		or: [(s isKindOf: CReporterSlotMorph)
-		or: [(s isKindOf: MultiArgMorph) 
+		(s isCArgSlotMorph) 
+		or: [(s isCReporterSlotMorph)
+		or: [(s isMultiArgMorph) 
 			and: [#(loop reporterSlot) includes: s type]]]].
 
 			cArgs do: [:ca |
 				relevant := ca bounds.
-				(ca isKindOf: MultiArgMorph) ifTrue: [
+				(ca isMultiArgMorph) ifTrue: [
 					relevant := ca transparentRect].
 				t := OrderedCollection new.
 				l do: [:pair |
@@ -176,14 +176,14 @@ ReporterBlockMorph >> drawNumericOn: aCanvas [
 		topY := topY - 1].
 	
 	cArgs := self nonControlFlowSubmorphs select: [:s | 
-		(s isKindOf: CArgSlotMorph) 
-		or: [(s isKindOf: CReporterSlotMorph)
-		or: [(s isKindOf: MultiArgMorph) 
+		(s isCArgSlotMorph) 
+		or: [(s isCReporterSlotMorph)
+		or: [(s isMultiArgMorph) 
 			and: [#(loop reporterSlot) includes: s type]]]].
 
 			cArgs do: [:ca |
 				relevant := ca bounds.
-				(ca isKindOf: MultiArgMorph) ifTrue: [
+				(ca isMultiArgMorph) ifTrue: [
 					relevant := ca transparentRect].
 				t := OrderedCollection new.
 				l do: [:pair |
@@ -320,17 +320,17 @@ ReporterBlockMorph >> fixBlockLayoutWrap [
 	space := 4.
 	parts
 		do: [ :m | 
-			((m isKindOf: CArgSlotMorph)
-				or: [ (m isKindOf: CReporterSlotMorph) or: [ (m isKindOf: MultiArgMorph) and: [ m isWrapping ] ] ])
+			((m isCArgSlotMorph)
+				or: [ (m isCReporterSlotMorph) or: [ (m isMultiArgMorph) and: [ m isWrapping ] ] ])
 				ifTrue: [ 
 					line isEmpty
 						ifFalse: [ lines add: line ].
 					m left: self left - 5.
 					lines add: (OrderedCollection with: m).
-					(m isKindOf: MultiArgMorph)
+					(m isMultiArgMorph)
 						ifTrue: [ m fixArgLayout ]
 						ifFalse: [ m fixBlockLayout ].
-					((m isKindOf: CArgSlotMorph) or: [ m isKindOf: CReporterSlotMorph ])
+					((m isCArgSlotMorph) or: [ m isCReporterSlotMorph ])
 						ifTrue: [ m width: 40 ].
 					line := OrderedCollection new.
 					maxX := maxX max: left + m width.
@@ -369,15 +369,15 @@ ReporterBlockMorph >> fixBlockLayoutWrap [
 			maxHeight := 14.
 			eachLine
 				do: [ :m | 
-					mh := ((m isKindOf: ReporterBlockMorph)
+					mh := ((m isReporterBlockMorph)
 						and: [ 
 							m isBlockTemplate
 								or: [ 
-									((m isKindOf: CArgSlotMorph) or: [ m isOSlotMorph ])
-										and: [ (m isKindOf: CReporterSlotMorph) not and: [ m isEmptySlot not ] ] ] ])
+									((m isCArgSlotMorph) or: [ m isOSlotMorph ])
+										and: [ (m isCReporterSlotMorph) not and: [ m isEmptySlot not ] ] ] ])
 						ifTrue: [ m height + 10 ]
 						ifFalse: [ 
-							((m isKindOf: CArgSlotMorph) or: [ (m isOSlotMorph) and: [ (m isKindOf: CReporterSlotMorph) not ] ])
+							((m isCArgSlotMorph) or: [ (m isOSlotMorph) and: [ (m isCReporterSlotMorph) not ] ])
 								ifTrue: [ m height + 4 ]
 								ifFalse: [ m height + 2 ] ].
 					maxHeight := mh max: maxHeight ].
@@ -394,9 +394,9 @@ ReporterBlockMorph >> fixBlockLayoutWrap [
 	w := w + (extraSpace * 2).	"adjust CArgSlots"
 	parts
 		do: [ :m | 
-			((m isKindOf: CArgSlotMorph) or: [ m isKindOf: CReporterSlotMorph ])
+			((m isCArgSlotMorph) or: [ m isCReporterSlotMorph ])
 				ifTrue: [ m width: w - (extraSpace * 2) + 6 ] ].
-	((parts last isKindOf: CArgSlotMorph) or: [ parts last isKindOf: CReporterSlotMorph ])
+	((parts last isCArgSlotMorph) or: [ parts last isCReporterSlotMorph ])
 		ifTrue: [ h := h + space + 5 ].	"stack nested Reporters more efficiently:"
 	lines size > 1
 		ifTrue: [ 
@@ -423,7 +423,7 @@ ReporterBlockMorph >> fixBlockLayoutWrap [
 				ifFalse: [ self bodyRight: maxX ].	"adjust Multi-CArgSlots"
 			parts
 				do: [ :m | 
-					(m isKindOf: MultiArgMorph)
+					(m isMultiArgMorph)
 						ifTrue: [ m loopsWidth: self bodyRight - self bodyLeft ] ] ]
 		ifFalse: [ self extent: w @ h ].
 	(self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph)
@@ -475,6 +475,12 @@ ReporterBlockMorph >> isReporter [
 
 	^ true
 
+]
+
+{ #category : #'as yet unclassified' }
+ReporterBlockMorph >> isReporterBlockMorph [
+
+	^ true
 ]
 
 { #category : #'byob lambdas' }
@@ -572,7 +578,7 @@ ReporterBlockMorph >> showValue [
 	| gotError msg tooltip w worldBounds |
 	(#(#doReport #doMakeNewList #doCallWithArgs #doPauseThreadReporter) includes: selector)
 		ifTrue: [ ^ self showLambdaValue ].	"
-	(self allMorphs detect: [:m | (m isKindOf: ReporterBlockMorph) and: [m isSpecialForm]] ifNone: [nil])
+	(self allMorphs detect: [:m | (m isReporterBlockMorph) and: [m isSpecialForm]] ifNone: [nil])
 		isNil ifFalse: [ receiver ifNotNil: [^ self showLambdaValue]].
 "
 	gotError := false.
@@ -622,9 +628,9 @@ ReporterBlockMorph >> tabFields [
 	| fields |
 	fields := OrderedCollection new.
 	submorphs do: [:m |
-		((m isKindOf: ReporterBlockMorph) or: [m isKindOf: MultiArgMorph]) 
+		((m isReporterBlockMorph) or: [m isMultiArgMorph]) 
 			ifTrue: [fields addAll: m tabFields ]
-			ifFalse: [(m isKindOf: ExpressionArgMorph)
+			ifFalse: [(m isExpressionArgMorph)
 				ifTrue: [fields add: m]]].
 	^ fields
 ]
@@ -665,7 +671,7 @@ ReporterBlockMorph >> updateIsBoolean [
 	argMorphs size < 1 ifTrue: [^ self ].
 	arg := argMorphs first.
 
-	(arg isKindOf: ReporterBlockMorph) ifFalse: [
+	(arg isReporterBlockMorph) ifFalse: [
 		isBoolean := false. ^self].
 
 	arg isBooleanReporter ifTrue: [isBoolean := true. ^self ].

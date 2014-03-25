@@ -278,7 +278,7 @@ MediaItemMorph >> exportMedia [
 
 	| result title type |
 	media isMovie ifTrue: [^ self].
-	(self phratchObj isKindOf: PhratchStageMorph) ifTrue: 
+	(self phratchObj isPhratchStageMorph) ifTrue: 
 		[type := #background. title := 'Export Background'].
 	(self phratchObj isKindOf: PhratchSpriteMorph) ifTrue: 
 		[type := #costume. title := 'Export Costume'].
@@ -313,7 +313,7 @@ MediaItemMorph >> getDeleteButton [
 		actionSelector: #deleteMedia;
 		toggleMode: false.
 
-	media isImage ifTrue: [(phratchObj isKindOf: PhratchStageMorph)
+	media isImage ifTrue: [(phratchObj isPhratchStageMorph)
 		ifTrue: [b setBalloonText: 'Delete this background' localized]
 		ifFalse: [b setBalloonText: 'Delete this costume' localized]].
 	media isSound ifTrue: [b setBalloonText: 'Delete this sound' localized].

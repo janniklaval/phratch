@@ -77,7 +77,7 @@ BlockMorph >> aboutToBeGrabbedBy: aHandMorph [
 	"if I was being used as argument, replace myself with a generic argument morph"
 
 	| m |
-	(owner isCommandBlockMorph) | (owner isKindOf: MultiArgMorph)
+	(owner isCommandBlockMorph) | (owner isMultiArgMorph)
 		ifFalse: [ ^ self ].
 	m := owner argMorphToReplace: self.
 	m ifNotNil: [ owner replaceArgMorph: self by: m ]
@@ -142,7 +142,7 @@ BlockMorph >> blockAttachPoints: aSet [
 
 	| nextB result |
 	result := #().
-	(self isKindOf: HatBlockMorph)
+	(self isHatBlockMorph)
 		ifFalse: [ 
 			result :=  result copyWith: self topLeft -> self ].
 	nextB := self nextBlock.
@@ -227,7 +227,7 @@ BlockMorph >> closestAttachTargetIn: newOwner [
 							m ~~ self topBlock
 								and: [ m ~~ self owner and: [ (m isBlockMorph) and: [ m isReporter not | (m isCommandScriptBlockMorph) ] ] ] ] ])
 				ifTrue: [ m blockAttachPoints: attachPoints ] ].
-	((self isKindOf: HatBlockMorph) or: [ (self ownerOrYourselfThatIsA: HatBlockMorph) notNil ])
+	((self isHatBlockMorph) or: [ (self ownerOrYourselfThatIsA: HatBlockMorph) notNil ])
 		ifTrue: [ 
 			"if I am a HatBlock or the bottom block of a HatBlock stack, I can only attach to the top block of a stack"
 			attachPoints := attachPoints select: [ :assoc | assoc value owner = newOwner and: [ assoc key y = assoc value top ] ] ].
@@ -345,7 +345,7 @@ BlockMorph >> contrastColor [
 				ifNil: [ 
 					self isReporter
 						ifTrue: [ 
-							ob := (owner isKindOf: MultiArgMorph)
+							ob := (owner isMultiArgMorph)
 								ifTrue: [ owner owner ]
 								ifFalse: [ owner ] ]
 						ifFalse: [ 
@@ -367,7 +367,7 @@ BlockMorph >> contrastColor [
 			(m isStringMorph)
 				ifTrue: [ m color: self labelColor ]
 				ifFalse: [ 
-					(m isKindOf: MultiArgMorph)
+					(m isMultiArgMorph)
 						ifTrue: [ m contrastColor ] ] ]
 ]
 
@@ -802,7 +802,7 @@ BlockMorph >> handleTool: toolName hand: hand [
 		ifFalse: [ ^ self ].
 	Sensor shiftPressed
 		ifFalse: [ hand toolType: nil ].
-	(self topBlock owner isKindOf: PhratchScriptsMorph)
+	(self topBlock owner isPhratchScriptsMorph)
 		ifTrue: [ 
 			myStack := self nextBlock.
 			myOwner := self owner.
@@ -819,7 +819,7 @@ BlockMorph >> handleTool: toolName hand: hand [
 						copiedStack delete."
 							myOwner attachBlock: myStack ]
 						ifFalse: [ 
-							(myOwner isKindOf: PhratchScriptsMorph)
+							(myOwner isPhratchScriptsMorph)
 								ifTrue: [ myOwner addMorph: myStack ]
 								ifFalse: [ 
 									"	copiedStack := myStack shallowCopy.
@@ -842,7 +842,7 @@ BlockMorph >> handleTool: toolName hand: hand [
 					self aboutToBeGrabbedBy: hand ].
 			PhratchFrameMorph putInClipboard: self.
 			self delete.
-			(myOwner isKindOf: PhratchScriptsMorph)
+			(myOwner isPhratchScriptsMorph)
 				ifTrue: [ myOwner step ].
 			^ self ]
 		ifFalse: [ 
@@ -1021,13 +1021,6 @@ BlockMorph >> isForever [
 
 ]
 
-{ #category : #accessing }
-BlockMorph >> isHatBlock [
-
-	^ false
-
-]
-
 { #category : #byob }
 BlockMorph >> isInheritableAttribute [
 	"indicate if my context menu lets me delete my attribute"
@@ -1117,19 +1110,19 @@ BlockMorph >> justDroppedInto: newOwner event: evt [
 		^ self].
 
 	"blocks cannot be dropped onto the stage"
-	(owner isKindOf: PhratchStageMorph) ifTrue: [
+	(owner isPhratchStageMorph) ifTrue: [
 		^ evt hand rejectDropMorph: self event: evt].
 
 	"okay to drop blocks into the world during development"
 	((owner == World) and: [ScriptablePhratchMorph noviceMode not]) ifTrue: [^ self].
 
-	((owner isKindOf: PhratchScriptsMorph) or:
+	((owner isPhratchScriptsMorph) or:
 	 [(owner isBlockMorph) or:
-	 [(owner isKindOf: PhratchStageMorph) and: [self isReporter]]]) ifFalse: [
+	 [(owner isPhratchStageMorph) and: [self isReporter]]]) ifFalse: [
 		^ evt hand rejectDropMorph: self event: evt].
 
 	self isReporter ifTrue: [^ self handleReporterDrop].
-	(newOwner isKindOf: PhratchScriptsMorph) ifTrue: [
+	(newOwner isPhratchScriptsMorph) ifTrue: [
 		newOwner recordDroppedBlock: self bottom: self bottomBlock kickedOut: nil].
 
 	targetAssoc := self closestAttachTargetIn: newOwner.
@@ -1186,7 +1179,7 @@ BlockMorph >> justDroppedInto: newOwner event: evt [
 			((bottomBlockUsed not) and: [((targetBlock owner isBlockMorph) not) and: [(self isCBlockMorph)]]) ifFalse:[
 				self bottomBlock attachBlock: targetBlock]]
 		ifFalse: [
-			self assert: [(self isKindOf: HatBlockMorph) not].  "I am not a HatBlockMorph"
+			self assert: [(self isHatBlockMorph) not].  "I am not a HatBlockMorph"
 			self position: targetP.
 
 			targetBlock attachBlock: self].
@@ -1257,7 +1250,7 @@ BlockMorph >> newScriptOwner: newOwner [
 			rcvr := newOwner.
 			(((m isKindOf: VariableBlockMorph) | (m isKindOf: SetterBlockMorph)) and: 
 			[m isSpecialForm not]) ifTrue: [
-				(m receiver isKindOf: PhratchStageMorph) ifTrue: [rcvr := m receiver].
+				(m receiver isPhratchStageMorph) ifTrue: [rcvr := m receiver].
 				newOwner ensureVariableExists: m variable.  "ensure that variable exists"
 				m color: rcvr variableBlockColor].
 			(((m isKindOf: VariableBlockMorph) | (m isKindOf: SetterBlockMorph)) and: 
@@ -1271,7 +1264,7 @@ BlockMorph >> newScriptOwner: newOwner [
 					arg choice ifNotNil: [newOwner ensureListExists: arg choice]]]].
 		(m isKindOf: ListContentsBlockMorph) ifTrue: [
 			newOwner ensureListExists: m commandSpec].
-		(m isKindOf: HatBlockMorph) ifTrue: [m scriptOwner: newOwner]].
+		(m isHatBlockMorph) ifTrue: [m scriptOwner: newOwner]].
 
 ]
 
@@ -1295,7 +1288,7 @@ for use in ScriptablePhratchMorph ->> #definitionFor:
 			rcvr := newOwner.
 			(((m isKindOf: VariableBlockMorph) | (m isKindOf: SetterBlockMorph)) and: 
 			[m isSpecialForm not]) ifTrue: [
-				(m receiver isKindOf: PhratchStageMorph) ifTrue: [rcvr := m receiver].
+				(m receiver isPhratchStageMorph) ifTrue: [rcvr := m receiver].
 				newOwner ensureVariableExists: m variable.  "ensure that variable exists"
 				m color: rcvr variableBlockColor].
 			(((m isKindOf: VariableBlockMorph) | (m isKindOf: SetterBlockMorph)) and: 
@@ -1309,7 +1302,7 @@ for use in ScriptablePhratchMorph ->> #definitionFor:
 					arg choice ifNotNil: [newOwner ensureListExists: arg choice]]]].
 		(m isKindOf: ListContentsBlockMorph) ifTrue: [
 			newOwner ensureListExists: m commandSpec].
-		(m isKindOf: HatBlockMorph) ifTrue: [m scriptOwner: newOwner]].
+		(m isHatBlockMorph) ifTrue: [m scriptOwner: newOwner]].
 
 ]
 
@@ -1580,7 +1573,7 @@ BlockMorph >> tabFields [
 	| fields nxt nxtFields |
 	fields := OrderedCollection new.
 	self nonControlFlowSubmorphs do: [:m |
-		(m isKindOf: ExpressionArgMorph)
+		(m isExpressionArgMorph)
 			ifTrue: [fields add: m ]
 			ifFalse: [(m respondsTo: #tabFields)
 				ifTrue: [fields addAll: m tabFields ]]]. 

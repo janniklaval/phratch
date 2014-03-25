@@ -504,7 +504,7 @@ PaintFrame >> newFormTextBoxAndRegPoint [
 		fitContents.
 	textBox contents isEmpty ifTrue: [textBox := nil].
 
-	(originalObject isKindOf: PhratchStageMorph)
+	(originalObject isPhratchStageMorph)
 		ifTrue: [
 			r := 0@0 extent: PhratchFrameMorph workpaneExtent.
 			newForm := Form extent: r extent depth: 32.
@@ -617,11 +617,11 @@ PaintFrame >> withStartingObject: anObject [
 				editForm: costume form
 				regPoint: costume rotationCenter
 				textBox: costume textBox
-				isStage: (anObject isKindOf: PhratchStageMorph)]
+				isStage: (anObject isPhratchStageMorph)]
 		ifFalse: [  "editing a non-Phratch object"
 			canvasMorph editForm: anObject form].
 
-	(anObject isKindOf: PhratchStageMorph)
+	(anObject isPhratchStageMorph)
 		ifTrue: [self scaleCanvas: 1]
 		ifFalse: [self scaleCanvas: 2].
 	World activeHand newKeyboardFocus: canvasMorph.

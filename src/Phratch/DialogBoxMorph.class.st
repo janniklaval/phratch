@@ -631,7 +631,7 @@ DialogBoxMorph >> title: aString [
 { #category : #interaction }
 DialogBoxMorph >> wantsToBeDroppedInto: aMorph [
 "I don't wanna be dropped into a Stage"
-	^ (aMorph isKindOf: PhratchStageMorph) not
+	^ (aMorph isPhratchStageMorph) not
 ]
 
 { #category : #initialization }

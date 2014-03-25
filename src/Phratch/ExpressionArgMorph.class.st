@@ -156,6 +156,12 @@ ExpressionArgMorph >> isEmptySlot [
 
 ]
 
+{ #category : #'as yet unclassified' }
+ExpressionArgMorph >> isExpressionArgMorph [
+
+	^ true
+]
+
 { #category : #drawing }
 ExpressionArgMorph >> isNumberExpression [
 

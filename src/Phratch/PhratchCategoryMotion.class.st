@@ -25,7 +25,7 @@ PhratchCategoryMotion class >> viewerPageFor: aScriptablePhratchMorph [
 		| bin isStage font x y m |
 	bin := PhratchBlockPaletteMorph new.
 
-	(aScriptablePhratchMorph isKindOf: PhratchStageMorph)
+	(aScriptablePhratchMorph isPhratchStageMorph)
 		ifTrue: [
 			isStage := true.
 			]

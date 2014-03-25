@@ -792,7 +792,7 @@ PaintCanvas >> import [
 	| fName f spriteOrStage type |
 	palette showRotationCenter: false.
 	spriteOrStage := self owner originalObject.
-	type := (spriteOrStage isKindOf: PhratchStageMorph)
+	type := (spriteOrStage isPhratchStageMorph)
 		ifTrue: [ #background ]
 		ifFalse: [ #costume ].
 	fName := PhratchFileChooserDialog chooseImageFileType: type title: 'Import Image'.

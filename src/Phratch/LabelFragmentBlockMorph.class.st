@@ -99,7 +99,7 @@ LabelFragmentBlockMorph >> drawOn: aCanvas [
 		bottomY := bottomY + 1.
 		topY := topY - 1].
 
-	cArgs := self nonControlFlowSubmorphs select: [:s | (s isKindOf: CArgSlotMorph) or: [s isKindOf: CReporterSlotMorph]].
+	cArgs := self nonControlFlowSubmorphs select: [:s | (s isCArgSlotMorph) or: [s isCReporterSlotMorph]].
 	
 			cArgs do: [:ca |
 				t := OrderedCollection new.
@@ -120,7 +120,7 @@ LabelFragmentBlockMorph >> drawOn: aCanvas [
 { #category : #other }
 LabelFragmentBlockMorph >> fixBlockLayout [
 	self fixBlockLayoutNoWrap.
-	(self submorphs select: [:m | (m isKindOf: CArgSlotMorph) or: [m isKindOf: CReporterSlotMorph]]) do: [:m |
+	(self submorphs select: [:m | (m isCArgSlotMorph) or: [m isCReporterSlotMorph]]) do: [:m |
 		m width: 50]
 ]
 

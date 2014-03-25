@@ -43,7 +43,7 @@ OSlotMorph >> drawSlotOn: aCanvas [
 
 	dark := Color gray " (color mixed: 0.45 with: Color darkGray)". 
 
-	(argMorphs first isKindOf: ReporterBlockMorph) ifTrue: [
+	(argMorphs first isReporterBlockMorph) ifTrue: [
 		argMorphs first isBooleanReporter
 			ifTrue: [
 				aCanvas paintImage: ((argMorphs first imageForm withOutlineColor: dark width: 4) 
