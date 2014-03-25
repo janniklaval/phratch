@@ -18,7 +18,7 @@ ReporterScriptBlockMorph >> addItem [
 	| varBlock pos pname |
 	super addItem.
 	pos := (argMorphs reject: [:m | m == self nextBlock]) size.
-	(self isKindOf: CommandScriptBlockMorph)
+	(self isCommandScriptBlockMorph)
 		ifFalse: [pos := pos - 1 ].
 	pname := ('#', pos printString).
 	varBlock := VariableBlockMorph new.
@@ -27,7 +27,7 @@ ReporterScriptBlockMorph >> addItem [
 		receiver: initialFrame;	
 		selector: #getVar:;
 		commandSpec: pname.
-	(self isKindOf: CommandScriptBlockMorph)
+	(self isCommandScriptBlockMorph)
 		ifTrue: [ self replaceArgMorph: (self argumentAt: pos) by: varBlock ]
 		ifFalse: [ self replaceArgMorph: (self argumentAt: pos + 1) by: varBlock].
 	parameters add: pname.
@@ -68,7 +68,7 @@ ReporterScriptBlockMorph >> args [
 
 { #category : #accessing }
 ReporterScriptBlockMorph >> body [
-	(argMorphs first isKindOf: BlockMorph)
+	(argMorphs first isBlockMorph)
 		ifTrue: [^ argMorphs first fullCopy].
 	^ nil
 ]
@@ -142,7 +142,7 @@ ReporterScriptBlockMorph >> optimized [
 	newBlock := rcv
 		blockFromSpec: (rcv wholeBlockSpecForSelector: sel)
 		color: (ScriptablePhratchMorph blockColorFor: 'operators').
-	newBlock isAtomic: (isAtomic or: [ self isKindOf: OSlotMorph ]).
+	newBlock isAtomic: (isAtomic or: [ self isOSlotMorph ]).
 	reportBlock := rcv
 		blockFromSpec: (rcv wholeBlockSpecForSelector: #doAnswer)
 		color: (ScriptablePhratchMorph blockColorFor: 'control').
@@ -162,7 +162,7 @@ ReporterScriptBlockMorph >> optimized [
 { #category : #private }
 ReporterScriptBlockMorph >> privateBody [
 	"no copy"
-	(argMorphs first isKindOf: BlockMorph)
+	(argMorphs first isBlockMorph)
 		ifTrue: [^ argMorphs first].
 	^ nil
 ]

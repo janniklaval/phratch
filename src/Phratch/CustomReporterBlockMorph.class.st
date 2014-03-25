@@ -38,7 +38,7 @@ CustomReporterBlockMorph >> addLabel [
 		argMorphs remove: m.
 
 		"if the argument we're throwing out is anything complicated, we'd like to keep it around in the world."
-		(m isKindOf: BlockMorph) ifTrue: [m openInWorld]].
+		(m isBlockMorph) ifTrue: [m openInWorld]].
 
 	"create new arg morphs."
 	[argMorphs size < args size] whileTrue: [
@@ -106,7 +106,7 @@ CustomReporterBlockMorph >> addLabelToNonTemplate [
 	argValues := OrderedCollection new.
 	argMorphs
 		do: [ :a | 
-			(a isKindOf: BlockMorph)
+			(a isBlockMorph)
 				ifTrue: [ argValues add: a ]
 				ifFalse: [ 
 					(a isKindOf: MultiArgMorph)
@@ -184,7 +184,7 @@ CustomReporterBlockMorph >> addLabelToNonTemplate [
 		eachValue := argValues at: i ifAbsent: [ nil ].
 		eachValue
 			ifNotNil: [ 
-				(eachValue isKindOf: BlockMorph)
+				(eachValue isBlockMorph)
 					ifTrue: [ 
 						(eachArg acceptsTypeOf: eachValue)
 							ifTrue: [ 
@@ -489,7 +489,7 @@ CustomReporterBlockMorph >> rightButtonMenu [
 		menu add: 'relabel' value: #rename.
 		menu addLine.
 		menu add: 'duplicate' value: #duplicate.
-		(self owner isKindOf: BlockMorph) ifFalse: [  "can't yet delete a blocks inside a script"
+		(self owner isBlockMorph) ifFalse: [  "can't yet delete a blocks inside a script"
 			menu add: 'delete' value: #delete]].
 
 	(owner isKindOf: PhratchBlockPaletteMorph) ifTrue: [
@@ -539,7 +539,7 @@ CustomReporterBlockMorph >> setDefaultArgs [
 	parms := def parameterNames.
 	1 to: argMorphs size do: [:i |
 		a := argMorphs at: i.
-		(a isKindOf: ArgMorph) ifTrue: [
+		(a isArgMorph) ifTrue: [
 			(a isKindOf: MultiArgMorph)
 				ifTrue: [a addArgSlot]
 				ifFalse: [
@@ -594,13 +594,13 @@ CustomReporterBlockMorph >> showValue [
 		ifError: [ 
 			gotError := true.
 			msg := 'Error!'. PhratchError error ].
-	msg := (msg isKindOf: Morph)
+	msg := (msg isMorph)
 		ifTrue: [ 
 			(msg respondsTo: #displayForm)
 				ifTrue: [ msg displayForm ]
 				ifFalse: [ msg imageForm ] ]
 		ifFalse: [ msg asString ].
-	((self isBooleanReporter or: [ msg = 'Error!' ]) and: [ msg isKindOf: String ])
+	((self isBooleanReporter or: [ msg = 'Error!' ]) and: [ msg isString ])
 		ifTrue: [ msg := msg localized ].
 	tooltip := (PhratchReporterToolTipMorph string: msg for: self)
 		left: self right;

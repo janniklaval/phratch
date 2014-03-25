@@ -56,7 +56,7 @@ SpecialArgMorph >> drawOn: aCanvas [
 		ifTrue: [^ self].
 
 	skin ifNil: [
-		(owner isKindOf: BlockMorph) ifTrue: [
+		(owner isBlockMorph) ifTrue: [
 			#reporterslot = type
 				ifTrue: [^ aCanvas fillOval: self bounds color: Color lightGray " (owner color mixed: 0.6 with: Color darkGray)" ]
 				ifFalse: [

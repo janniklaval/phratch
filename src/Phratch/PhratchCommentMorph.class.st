@@ -91,7 +91,7 @@ PhratchCommentMorph >> attachTargetIn: newOwner [
 	(newOwner isKindOf: PhratchScriptsMorph) ifFalse: [^ nil].
 
 	candidates := newOwner allMorphs select: [:each |
-		(each isKindOf: BlockMorph) and:
+		(each isBlockMorph) and:
 "		[each isReporter not and:"
 		[each hasComment not and:
 		[self bounds intersects: each bounds]]]"]".
@@ -417,7 +417,7 @@ PhratchCommentMorph >> slideBackToFormerSituation: evt [
 	| wasEmbedded o pane oldP slideForm startPoint s |
 	wasEmbedded := false.
 	(o := evt hand formerOwner) ifNil: [^ self].
-	(o isKindOf: BlockMorph) ifTrue: [
+	(o isBlockMorph) ifTrue: [
 		wasEmbedded := true.
 		(pane := o ownerOrYourselfThatIsA: PhratchScriptsMorph) ifNotNil: [
 			o := pane]].
@@ -514,7 +514,7 @@ PhratchCommentMorph >> updateAnchorOffset [
 	isShowing
 		ifFalse: [ ^ self ].
 	extraSpace := 5.
-	blocksInStack := anchor topBlock allMorphs reversed select: [ :m | (m isKindOf: BlockMorph) and: [ m isReporter not ] ].
+	blocksInStack := anchor topBlock allMorphs reversed select: [ :m | (m isBlockMorph) and: [ m isReporter not ] ].
 	before := self commentsBeforeMe: blocksInStack.
 	after := self commentsAfterMe: blocksInStack.
 	collapsed := after reject: [ :c | c isShowing ].
@@ -523,7 +523,7 @@ PhratchCommentMorph >> updateAnchorOffset [
 	allObstacles := blocksInStack , before , collapsed.
 	rects := allObstacles
 		collect: [ :m | 
-			(m isKindOf: BlockMorph)
+			(m isBlockMorph)
 				ifTrue: [ m bounds origin extent: m bounds extent - (0 @ 4) ]
 				ifFalse: [ m bounds ] ].
 	[ 

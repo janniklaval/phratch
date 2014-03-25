@@ -83,7 +83,7 @@ ChoiceArgMorph >> choice: aSymbol [
 
 	menuIconMorph position: (self right - borderWidth - 10)@(self top + borderWidth + 4).
 
-	(owner isKindOf: BlockMorph) ifTrue: [
+	(owner isBlockMorph) ifTrue: [
 		((owner respondsTo: #addLabel) and: [owner isCustomBlock not])
 			ifTrue: [owner addLabel]
 			ifFalse: [owner fixBlockLayout]].

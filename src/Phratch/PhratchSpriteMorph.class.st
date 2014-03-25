@@ -127,7 +127,7 @@ PhratchSpriteMorph >> attribute: attr [
 
 	| a |
 	
-	(attr isKindOf: CommandBlockMorph)
+	(attr isCommandBlockMorph)
 		ifTrue: [^ attr fullCopy newScriptOwner: self; yourself] 		"self blockLike: attr body]".
 
 	a := attr asString.
@@ -233,12 +233,12 @@ PhratchSpriteMorph >> bubble: obj thinkFlag: thinkFlag promptFlag: promptFlag [
 				ifTrue: [ objToShow printString ]
 				ifFalse: [ (objToShow asFloat roundTo: 0.01) printString ] ]
 		ifFalse: [ 
-			(objToShow isKindOf: Boolean)
+			(objToShow isBoolean)
 				ifTrue: [ s := objToShow asString localized ]
 				ifFalse: [ 
-					(objToShow isKindOf: Morph)
+					(objToShow isMorph)
 						ifFalse: [ s := objToShow asString ] ] ].
-	(s isKindOf: String)
+	(s isString)
 		ifTrue: [ 
 			(s skipDelimiters: ' 	' startingAt: 1) > s size
 				ifTrue: [ ^ self ].
@@ -1186,7 +1186,7 @@ PhratchSpriteMorph >> passivePenColor: aColor [
 PhratchSpriteMorph >> passivePenDown: aBoolean [
 
 	| m |
-	(aBoolean isKindOf: Boolean)
+	(aBoolean isBoolean)
 		ifFalse: [^ self error: 'expecting a boolean'].
 	penDown := aBoolean.
 	penColor ifNil: [penColor := Color black].  "initialize if necessary"
@@ -2041,7 +2041,7 @@ PhratchSpriteMorph >> spawn [
 	stage ifNil: [^ self].
 	child := self fullCopy.
 	child blocksBin allMorphsDo: [:m |
-		(m isKindOf: BlockMorph) ifTrue: [m stop]].
+		(m isBlockMorph) ifTrue: [m stop]].
 	child unhinge; unhingeAll; initializeNodes.
 	child prototype: self.
 	child initializeVarsAndLists.

@@ -80,7 +80,7 @@ WatcherReadoutFrameMorph >> drawOn: aCanvas [
 		line: self topLeft + (2 @ 2) to: self bottomLeft - (-2 @ 2) color: self color darker;
 		line: self bottomLeft - (-2 @ 2) to: self bottomRight - (3 @ 2) color: self color darker;
 		line: self topRight - (2 @ -2) to: self bottomRight - (2 @ 3) color: self color darker.
-	(complexObject isKindOf: Morph)
+	(complexObject isMorph)
 		ifFalse: [ ^ self ].
 	form := (complexObject respondsTo: #displayForm)
 		ifTrue: [ complexObject displayForm ]
@@ -94,7 +94,7 @@ WatcherReadoutFrameMorph >> drawOn: aCanvas [
 { #category : #encapsulatedScripts }
 WatcherReadoutFrameMorph >> fixLayout [
 	| watcher readout isLarge s e readoutWidth yOffset w inset blist |
-	"((submorphs size = 1) and: [submorphs first isKindOf: StringMorph]) ifFalse: [^ self]."
+	"((submorphs size = 1) and: [submorphs first isStringMorph]) ifFalse: [^ self]."
 	watcher := self ownerOrYourselfThatIsA: WatcherMorph.
 	readout := submorphs first.
 	

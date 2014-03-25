@@ -33,7 +33,7 @@ ExpressionArgMorph >> acceptsTypeOf: aBlockMorph [
 ExpressionArgMorph >> defaultValue: anObject [
 
 	(isNumber or: [anObject isNumber]) ifTrue: [^self numExpression: anObject].
-	(anObject isKindOf: String) ifTrue: [self stringExpression: anObject].
+	(anObject isString) ifTrue: [self stringExpression: anObject].
 
 ]
 

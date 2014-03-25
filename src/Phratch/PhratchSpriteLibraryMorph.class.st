@@ -68,7 +68,7 @@ PhratchSpriteLibraryMorph >> rootForGrabOf: aMorph [
 
 	| root |
 	root := aMorph.
-	(root isKindOf: BlockMorph) ifFalse: [^ nil].
+	(root isBlockMorph) ifFalse: [^ nil].
 	[root = self] whileFalse: [
 		root owner == self ifTrue: [^ root fullCopy].
 		root := root owner].

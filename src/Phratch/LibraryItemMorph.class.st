@@ -29,7 +29,7 @@ LibraryItemMorph >> acceptDroppingMorph: aMorph event: evt [
 		ifTrue: [ 
 			target addMediaItem: aMorph media copy.
 			evt hand rejectDropMorph: aMorph event: evt ].
-	(aMorph isKindOf: BlockMorph)
+	(aMorph isBlockMorph)
 		ifTrue: [ 
 			evt hand rejectDropMorph: aMorph event: evt.
 			target addStack: aMorph fullCopy ].
@@ -171,7 +171,7 @@ LibraryItemMorph >> handlesMouseOverDragging: evt [
 	| m |
 	evt hand submorphs size = 1 ifFalse: [^ false].
 	m := evt hand firstSubmorph.
-	^ ((m isKindOf: BlockMorph) or: [(m isKindOf: MediaItemMorph) or: [m isKindOf: PhratchCommentMorph]])
+	^ ((m isBlockMorph) or: [(m isKindOf: MediaItemMorph) or: [m isKindOf: PhratchCommentMorph]])
 
 ]
 
@@ -566,7 +566,7 @@ LibraryItemMorph >> updateThumbnail [
 LibraryItemMorph >> wantsDroppedMorph: aMorph event: evt [
 	"Answer true if the given morph is a script, costume, sound or comment."
 
-	^ (aMorph isKindOf: BlockMorph) or: [
+	^ (aMorph isBlockMorph) or: [
 		(aMorph isKindOf: MediaItemMorph) or: [
 			aMorph isKindOf: PhratchCommentMorph]]
 

@@ -13,6 +13,11 @@ StringMorph >> forceUnicodeRendering: ignored [
 ]
 
 { #category : #'*Phratch-Extensions' }
+StringMorph >> isStringMorph [
+	^ true
+]
+
+{ #category : #'*Phratch-Extensions' }
 StringMorph >> justificationOffsetFor: aString [
 
 	^ 0

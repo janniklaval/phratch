@@ -170,6 +170,6 @@ ColorArgMorph >> showPalette: aBoolean [
 { #category : #'event handling' }
 ColorArgMorph >> updateOwnerBlock [
 
-	((self outermostMorphThat: [:m | m isKindOf: BlockMorph]) ifNil: [^ self]) 
+	((self outermostMorphThat: [:m | m isBlockMorph]) ifNil: [^ self]) 
 		updateCachedForm; changed.
 ]

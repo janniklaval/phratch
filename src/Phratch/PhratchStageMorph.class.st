@@ -95,7 +95,7 @@ PhratchStageMorph >> attribute: attr [
 
 	| a |
 	
-	(attr isKindOf: CommandBlockMorph)
+	(attr isCommandBlockMorph)
 		ifTrue: [^ attr fullCopy newScriptOwner: self; yourself] 		"self blockLike: attr body]".
 
 	a := attr asString.
@@ -564,9 +564,9 @@ PhratchStageMorph >> isPaused [
 	allObjs := submorphs select: [:m | m isKindOf: ScriptablePhratchMorph].
 	allObjs := allObjs copyWith: self.
 	allObjs do: [:obj |
-		(obj blocksBin isKindOf: Morph) ifTrue: [
+		(obj blocksBin isMorph) ifTrue: [
 			obj blocksBin submorphs do: [:b |
-				(b isKindOf: BlockMorph) ifTrue: [(b phratchProc notNil and: [b phratchProc isPaused not]) ifTrue: [^ false]]]]].
+				(b isBlockMorph) ifTrue: [(b phratchProc notNil and: [b phratchProc isPaused not]) ifTrue: [^ false]]]]].
 	^ true
 
 
@@ -781,9 +781,9 @@ PhratchStageMorph >> pauseAllProcesses [
 	allObjs := submorphs select: [:m | m isKindOf: ScriptablePhratchMorph].
 	allObjs := allObjs copyWith: self.
 	allObjs do: [:obj |
-		(obj blocksBin isKindOf: Morph) ifTrue: [
+		(obj blocksBin isMorph) ifTrue: [
 			obj blocksBin submorphs do: [:b |
-				(b isKindOf: BlockMorph) ifTrue: [b pauseProcess]]]].
+				(b isBlockMorph) ifTrue: [b pauseProcess]]]].
 "
 
 	runningBlocks do: [:each |
@@ -1234,9 +1234,9 @@ PhratchStageMorph >> stopAllProcesses [
 	allObjs := submorphs select: [:m | m isKindOf: ScriptablePhratchMorph].
 	allObjs := allObjs copyWith: self.
 	allObjs do: [:obj |
-		(obj blocksBin isKindOf: Morph) ifTrue: [
+		(obj blocksBin isMorph) ifTrue: [
 			obj blocksBin submorphs do: [:b |
-				(b isKindOf: BlockMorph) ifTrue: [b clearProcess]]]].
+				(b isBlockMorph) ifTrue: [b clearProcess]]]].
 
 	runningBlocks := OrderedCollection new.
 	inProcessStep := false.

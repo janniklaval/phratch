@@ -32,7 +32,7 @@ SpriteArgMorph >> acceptsTypeOf: aBlockMorph [
 SpriteArgMorph >> checkForDeletedMorph [
 	"If I refer to a Sprite that has been deleted, nil out my morph field. Do nothing if my morph is a PhratchStageMorph"
 
-	(morph isKindOf: Morph) ifFalse: [^ self].
+	(morph isMorph) ifFalse: [^ self].
 	morph owner ifNotNil: [^ self].
 
 	(morph isKindOf: PhratchStageMorph) ifTrue: [^ self].
@@ -46,7 +46,7 @@ SpriteArgMorph >> checkForDeletedMorph [
 SpriteArgMorph >> clearMorphReference [
 	"Clear my morph reference."
 
-	(morph isKindOf: Morph) ifFalse: [^ self].
+	(morph isMorph) ifFalse: [^ self].
 	morph := nil.
 	self updateLabel.
 
@@ -180,7 +180,7 @@ SpriteArgMorph >> presentMenu [
 		be ifNil: [^self].
 		(frame := be phratchFrame) ifNil: [^ self]].
 
-	(owner isKindOf: CommandBlockMorph) ifTrue: [sel := owner selector].
+	(owner isCommandBlockMorph) ifTrue: [sel := owner selector].
 
 	objList := frame phratchObjects.
 	objList sort: [:obj1 :obj2 | obj1 objName asLowercase < obj2 objName asLowercase].
@@ -291,7 +291,7 @@ SpriteArgMorph >> updateLabel [
 	s := ' '.
 	(morph isKindOf: ScriptablePhratchMorph)
 		ifTrue: [ s := morph objName ].
-	(morph isKindOf: String)
+	(morph isString)
 		ifTrue: [ 
 			s := morph localized.
 			morph = #mouse
@@ -304,7 +304,7 @@ SpriteArgMorph >> updateLabel [
 	labelMorph position: self position + borderWidth + (3 @ -1).
 	self extent: labelMorph extent + (16 @ 2) + borderWidth.
 	menuIconMorph position: (self right - borderWidth - 10) @ (self top + borderWidth + 4).
-	(self owner isKindOf: BlockMorph)
+	(self owner isBlockMorph)
 		ifTrue: [ self owner addLabel ].
 	(self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph)
 		ifNotNil: [ (self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph) fixLayout ]

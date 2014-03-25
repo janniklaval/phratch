@@ -1859,7 +1859,6 @@ PhratchFrameMorph >> htmlDoc [
 
 { #category : #'as yet unclassified' }
 PhratchFrameMorph >> htmlDocForWebsite [
-	<phratchMenu: 'Generate HTML documentation' category: 'file' position: 12 sub: 5 shift: true>
 	| allPragmas dir imgDir html |
 	dir := (FileSystem workingDirectory / 'htmlDoc') ensureCreateDirectory.
 	imgDir := (dir / 'doc-img') ensureCreateDirectory.
@@ -1961,7 +1960,7 @@ PhratchFrameMorph >> importSpriteOrProject: fileNameOrData [
 		(m isKindOf: WatcherMorph) ifTrue: [m mapReceiver: importedStage to: workPane].
 		(m isKindOf: ScriptablePhratchMorph) ifTrue: [
 			m blocksBin submorphs do: [:stack |
-				(stack isKindOf: BlockMorph) ifTrue: [
+				(stack isBlockMorph) ifTrue: [
 					stack blockSequence do: [:b | b mapReceiver: importedStage to: workPane]]]]].
 
 	"add global variables from importated stage to my stage"
@@ -1971,7 +1970,7 @@ PhratchFrameMorph >> importSpriteOrProject: fileNameOrData [
 
 	"add imported stage scripts"
 	importedStage blocksBin submorphs do: [:stack |
-		(stack isKindOf: BlockMorph) ifTrue: [workPane addStack: stack fullCopy]].
+		(stack isBlockMorph) ifTrue: [workPane addStack: stack fullCopy]].
 
 	"add imported background costumes and scripts to my stage, filtering out default items"
 	defaultForm := workPane defaultImageMedia form hibernateForPhratch.
@@ -2750,7 +2749,7 @@ PhratchFrameMorph >> printTupleElement: el on: s [
 
 	(el isKindOf: Array) ifTrue: [self printTupleList: el on: s. ^ self].
 	(el isKindOf: Symbol) ifTrue: [s nextPutAll: el. ^ self].
-	(el isKindOf: String) ifTrue: [s nextPut: $". s nextPutAll: el. s nextPut: $". ^ self].
+	(el isString) ifTrue: [s nextPut: $". s nextPutAll: el. s nextPut: $". ^ self].
 	(el isKindOf: ScriptablePhratchMorph) ifTrue: [s nextPutAll: el objName. ^ self].
 	s nextPutAll: el printString.
 
@@ -3478,11 +3477,11 @@ PhratchFrameMorph >> undoTool [
 	Clipboard ifNil: [^ Beeper beep].
 	self activeHand toolType: nil.
 	m := Clipboard copy.
-	((m isKindOf: BlockMorph) and: [m isCustomBlock and: [m definition isNil]])
+	((m isBlockMorph) and: [m isCustomBlock and: [m definition isNil]])
 		ifTrue: [^ Beeper beep].
 	"Reset clipboard to empty since an undo just happened"
 	
-	(m isKindOf: BlockMorph) ifTrue: [
+	(m isBlockMorph) ifTrue: [
 		newOwner := viewerPane target.
 		newOwner ifNotNil: [m newScriptOwner: newOwner].
 		(viewerPane currentCategory = 'variables') ifTrue: [
@@ -3776,7 +3775,7 @@ PhratchFrameMorph >> viewerPane [
 { #category : #'falta adaptar' }
 PhratchFrameMorph >> wantsDroppedMorph: aMorph event: evt [
 
-	^ (aMorph isKindOf: BlockMorph) or: [
+	^ (aMorph isBlockMorph) or: [
 	  	(aMorph isKindOf: ScriptablePhratchMorph) or: [
 			(aMorph isKindOf: PhratchCommentMorph)]].
 
@@ -3878,7 +3877,7 @@ PhratchFrameMorph >> writePhratchProject [
 			(m isKindOf: PhratchSpriteMorph)
 				ifTrue: [m cacheRefPos].
 			(m blocksBin isKindOf: PhratchSpriteMorph) ifTrue: [  m blocksBin allMorphsDo: [:b |
-				(b isKindOf: BlockMorph) ifTrue: [b stop]]].
+				(b isBlockMorph) ifTrue: [b stop]]].
 			]].
 
 	saveError := nil.

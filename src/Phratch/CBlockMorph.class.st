@@ -329,6 +329,12 @@ CBlockMorph >> initialize [
 
 ]
 
+{ #category : #accessing }
+CBlockMorph >> isCBlockMorph [
+
+	^ true
+]
+
 { #category : #private }
 CBlockMorph >> isCShape [
 
@@ -350,7 +356,7 @@ CBlockMorph >> nestedBlockAt: aPoint [
 { #category : #private }
 CBlockMorph >> nests: aCommandBlock [
 
-	^ (nestedBlock isKindOf: BlockMorph) and: [  nestedBlock blockSequence includes: aCommandBlock]
+	^ (nestedBlock isBlockMorph) and: [  nestedBlock blockSequence includes: aCommandBlock]
 ]
 
 { #category : #private }
@@ -440,7 +446,7 @@ CBlockMorph >> topBarHeight [
 
 	| nonBlockSubmorphs |
 	nonBlockSubmorphs := self submorphs select: [:m |
-		(m isKindOf: BlockMorph) not or: [argMorphs includes: m]].
+		(m isBlockMorph) not or: [argMorphs includes: m]].
 	^ nonBlockSubmorphs inject: CBlockBracketThickness into: [:h :m | h max: (m height + 4)].
 
 

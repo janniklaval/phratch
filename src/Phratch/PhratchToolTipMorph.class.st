@@ -47,7 +47,7 @@ PhratchToolTipMorph >> message: aString [
 		ifTrue: [message := ImageMorph new colorform: aString ]
 		ifFalse: [
 			str := aString.
-			(aString isKindOf: String) ifFalse: [
+			(aString isString) ifFalse: [
 				str := aString printString].
 			message := StringMorph
 				contents: str

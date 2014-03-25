@@ -622,7 +622,7 @@ WatcherMorph >> translatedName [
 	result := PhratchTranslator translationFor: spec.
 	param := readout parameter.
 	param ifNil: [ param := '' ].
-	result := (param isKindOf: String)
+	result := (param isString)
 		ifTrue: [ self replaceArgIn: result with: param ]
 		ifFalse: [ self replaceArgIn: result with: '[]' ].
 	^ result

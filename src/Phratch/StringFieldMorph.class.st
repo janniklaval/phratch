@@ -91,7 +91,7 @@ StringFieldMorph >> borderWidth: aNumber [
 StringFieldMorph >> changed [
 
 	super changed.
-	((self outermostMorphThat: [:m | m isKindOf: BlockMorph]) ifNil: [^ self]) flushCachedForm
+	((self outermostMorphThat: [:m | m isBlockMorph]) ifNil: [^ self]) flushCachedForm
 ]
 
 { #category : #private }
@@ -479,6 +479,12 @@ StringFieldMorph >> isNumeric: aBoolean [
 
 	isNumeric := aBoolean.
 
+]
+
+{ #category : #accessing }
+StringFieldMorph >> isStringFieldMorph [
+
+	^ true
 ]
 
 { #category : #'event handling' }

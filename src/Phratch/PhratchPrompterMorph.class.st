@@ -145,7 +145,7 @@ PhratchPrompterMorph >> isDone [
 
 { #category : #accessing }
 PhratchPrompterMorph >> question: aString [
-	(aString isKindOf: Morph)
+	(aString isMorph)
 		ifTrue: [ 
 			| frm |
 			frm := (aString respondsTo: #displayForm)

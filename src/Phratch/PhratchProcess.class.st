@@ -143,7 +143,7 @@ PhratchProcess >> bindStopBlocksIn: blockSequence to: aStackFrame [
 
 	blockSequence do: [:block |
 		block allMorphsDo: [:m |
-			((m isKindOf: CommandBlockMorph) and: [(#(doStopBlock doAnswer) includes: m selector )]) ifTrue: [
+			((m isCommandBlockMorph) and: [(#(doStopBlock doAnswer) includes: m selector )]) ifTrue: [
 				m stopFrame: aStackFrame]]]
 ]
 
@@ -196,7 +196,7 @@ PhratchProcess >> closeCustomBlock [
 { #category : #'BYOB-pause/resume' }
 PhratchProcess >> currentBlock [
 	stackFrame ifNil: [^nil].
-	(stackFrame expression isKindOf: BlockMorph)
+	(stackFrame expression isBlockMorph)
 		ifFalse: [^nil].
 	^ stackFrame expression
 ]
@@ -320,7 +320,7 @@ PhratchProcess >> doApplyEval [
 			nestedLambdas := OrderedCollection new.
 			script do: [:eachBlock |
 				eachBlock allMorphs do: [:m |
-					(m isKindOf: ArgMorph) 
+					(m isArgMorph) 
 						ifTrue: [
 							m isEmptySlot ifTrue: [
 								emptySlots add: m.
@@ -1162,7 +1162,7 @@ PhratchProcess >> includesDeletedReceiver [
 
 	self stackAsArray do: [:b |
 
-		(b isKindOf: CommandBlockMorph) ifTrue:[
+		(b isCommandBlockMorph) ifTrue:[
 			b receiver isNil
 				ifTrue: [^ true ]
 				ifFalse: [(b receiver isKindOf: VariableFrame)
@@ -1291,7 +1291,7 @@ PhratchProcess >> popStackFrame [
 	"self isAtomic ifTrue: [^self ].
 
 	BlockHighlightMSecs > 0 ifTrue: [
-		(frame shouldUnlight not and: [command isKindOf: BlockMorph]) ifTrue: [
+		(frame shouldUnlight not and: [command isBlockMorph]) ifTrue: [
 			""We push a new frame for unlighting this command.""
 			unlightFrame := PhratchStackFrame new
 				expression: command;
@@ -1344,7 +1344,7 @@ PhratchProcess >> returnValueToParentFrame: anObject [
 
 	f ifNotNil: [f addArgument: obj].
 
-	((blockToDebug isKindOf: BlockMorph) and: [self currentBlock isKindOf: ReporterBlockMorph]) ifTrue: [
+	((blockToDebug isBlockMorph) and: [self currentBlock isKindOf: ReporterBlockMorph]) ifTrue: [
 			((PhratchFrameMorph someInstance viewMode = #presentation) | doneWithDebugging) ifFalse: [
 				self pause. 
 				DebuggerFrameMorph new on: self returnValue: obj]].
@@ -1360,7 +1360,7 @@ PhratchProcess >> runStepFor: aStageMorph [
 	"evaluate blocks until we're ready to yield"
 
 	isTimed := stackFrame notNil and: [
-		(stackFrame expression isKindOf: BlockMorph) and: [
+		(stackFrame expression isBlockMorph) and: [
 			stackFrame expression isTimed]].
 
 	(self isPaused and: [isTimed not]) ifTrue: [ ^ self].
@@ -1373,7 +1373,7 @@ PhratchProcess >> runStepFor: aStageMorph [
 		"pop all stack frames, unlighting enclosing blocks:"
 		[stackFrame isNil] whileFalse: [
 			expr := stackFrame expression.
-			(expr isKindOf: BlockMorph) ifTrue: [expr litUp: false].
+			(expr isBlockMorph) ifTrue: [expr litUp: false].
 			self popStackFrame]].
 
 

@@ -59,7 +59,7 @@ ArgMorph >> defaultValue [
 	(owner respondsTo: #definition)
 		ifFalse: [^ nil].
 	def := owner definition.
-	pos := (owner submorphs select: [:sm | sm isKindOf: ArgMorph]) indexOf: self.
+	pos := (owner submorphs select: [:sm | sm isArgMorph]) indexOf: self.
 	pname := def parameterNames at: pos.
 	val := def defaultOf: pname.
 	val = '' ifTrue: [^ nil].
@@ -99,20 +99,10 @@ ArgMorph >> implicitValue: anObject [
 	implicitValue := anObject
 ]
 
-{ #category : #testing }
+{ #category : #accessing }
 ArgMorph >> isArgMorph [
-	"True only for ArgMorphs."
 
-	^ true
-
-]
-
-{ #category : #other }
-ArgMorph >> isBlockMorph [
-	"True only for BlockMorphs."
-
-	^ false
-
+	^true
 ]
 
 { #category : #testing }

@@ -20,7 +20,7 @@ UnevaluatedExpressionArgMorph >> evaluate [
 	reportBlock := rcv
 		blockFromSpec: (rcv wholeBlockSpecForSelector: #doAnswer)
 		color: (ScriptablePhratchMorph blockColorFor: 'control').
-	(xpr isKindOf: Boolean)
+	(xpr isBoolean)
 		ifTrue: [ 
 			bool := xpr
 				ifTrue: [ rcv blockFromSpec: (rcv wholeBlockSpecForSelector: #getTrue) color: (ScriptablePhratchMorph blockColorFor: 'operators') ]

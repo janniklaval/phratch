@@ -130,7 +130,7 @@ SetterBlockMorph >> variable [
 { #category : #accessing }
 SetterBlockMorph >> variable: aVar [
 
-	(aVar isKindOf: CommandBlockMorph) ifTrue: [
+	(aVar isCommandBlockMorph) ifTrue: [
 		^ self replaceArgMorph: self argMorphs first by: aVar].
 	submorphs do: [:m |
 		(m isKindOf: ChoiceArgMorph) ifTrue: [^ m choice: aVar]].

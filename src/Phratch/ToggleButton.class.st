@@ -170,7 +170,7 @@ ToggleButton >> isOn [
 { #category : #accessing }
 ToggleButton >> label [
 
-	self allMorphsDo: [:m | (m isKindOf: StringMorph) ifTrue: [^ m]].
+	self allMorphsDo: [:m | (m isStringMorph) ifTrue: [^ m]].
 	
 ]
 

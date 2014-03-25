@@ -58,10 +58,10 @@ BlockEditorFrameMorph >> allBlocks [
 	all := OrderedCollection new.
 	hat nextBlock ifNotNil: [
 		all addAll: (hat nextBlock allMorphs select: [:m |
-			m isKindOf: BlockMorph])].
+			m isBlockMorph])].
 	answerField ifNotNil: [
 		ans := answerField allMorphs select: [:m |
-			m isKindOf: BlockMorph].
+			m isBlockMorph].
 		ans size > 0 ifTrue: [
 			all addAll: ans]].
 	^ all
@@ -86,7 +86,7 @@ BlockEditorFrameMorph >> buildAnswerField [
 	#none = definition type
 		ifTrue: [^ self].
 	ans := definition answer.
-	(ans isKindOf: BlockMorph)
+	(ans isBlockMorph)
 		ifTrue: [ans refreshAttributeArgs].
 	#boolean = definition type
 		ifTrue: [answerField := ReporterBlockDropTargetMorph booleanLabelled: 'report' localized argument: ans]
@@ -321,7 +321,7 @@ BlockEditorFrameMorph >> instancesOf: aCustomBlockId [
 				m id = aCustomBlockId]].
 	#none = definition type 
 		ifTrue: [^binInstances ].
-	(answerField argument isKindOf: BlockMorph) ifFalse: [
+	(answerField argument isBlockMorph) ifFalse: [
 		^ binInstances].
 	ansInstances := answerField argument allMorphs select: [:m|
 		(m isKindOf: CustomReporterBlockMorph) and: [
@@ -486,8 +486,8 @@ BlockEditorFrameMorph >> yes [
 
 	self rememberUserDimensions.
 	self allMorphs do: [:each| 
-		(each isKindOf: BlockMorph) ifTrue: [ each litUp: false].
-		(each isKindOf: StringFieldMorph) ifTrue: [each keyboardFocusChange: false]].
+		(each isBlockMorph) ifTrue: [ each litUp: false].
+		(each isStringFieldMorph) ifTrue: [each keyboardFocusChange: false]].
 	definition body: hat nextBlock.
 	#none = definition type ifFalse: [
 		definition answer: answerField argument ].

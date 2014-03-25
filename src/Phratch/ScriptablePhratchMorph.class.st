@@ -126,7 +126,7 @@ ScriptablePhratchMorph class >> buildBlockSpecDictionary [
 	self withAllSubclassesDo: [:cl |
 		blockColor := Color blue.
 		cl blockSpecs do: [:spec |
-			((spec isKindOf: String) and: [spec size > 1]) ifTrue: [
+			((spec isString) and: [spec size > 1]) ifTrue: [
 				"set color  for this category"
 				blockColor := self blockColorFor: spec].
 			(spec isMemberOf: Array) ifTrue: [
@@ -548,7 +548,7 @@ ScriptablePhratchMorph >> addEventNamesTo: aSet [
 	"Add the names of all events implemented by this morph, excluding keyboard events. Suppress duplicates (ignoring case differences)."
 
 	| allCustomBlockMorphs |
-	(blocksBin isKindOf: Morph) ifFalse: [^ self].
+	(blocksBin isMorph) ifFalse: [^ self].
 
 	allCustomBlockMorphs := OrderedCollection new.
 	customBlocks ifNotNil: [customBlocks do: [:cb | cb allBlocks do: [:ab |
@@ -639,7 +639,7 @@ ScriptablePhratchMorph >> addGenericVariableBlocksTo: page x: x y: startY [
 	varBlocks add: block.
 	(self blocksFor: 'variables')
 		do: [ :b | 
-			(b isKindOf: BlockMorph)
+			(b isBlockMorph)
 				ifTrue: [ b defaultArgs: (Array with: vName) ].
 			varBlocks add: b ].
 	"block := VariableDeclarationBlockMorph new
@@ -1016,16 +1016,16 @@ ScriptablePhratchMorph >> asListElement: anObject [
 	"Answer the given object converted to an object suitable for storing in a list."
 
 	(anObject isKindOf: ScriptablePhratchMorph) ifTrue: [^ anObject].
-	(anObject isKindOf: BlockMorph) ifTrue: [^ anObject].
+	(anObject isBlockMorph) ifTrue: [^ anObject].
 	(anObject isKindOf: PhratchListMorph) ifTrue: [^ anObject].
-	(anObject isKindOf: String) ifTrue: [^ anObject].
-	(anObject isKindOf: Character) ifTrue: [^ anObject asString].
+	(anObject isString) ifTrue: [^ anObject].
+	(anObject isCharacter) ifTrue: [^ anObject asString].
 
-	(anObject isKindOf: Boolean) ifTrue: [
+	(anObject isBoolean) ifTrue: [
 		^ anObject].
 
 "
-	(anObject isKindOf: Boolean) ifTrue: [
+	(anObject isBoolean) ifTrue: [
 		^ anObject ifTrue: ['1'] ifFalse: ['0']].
 "
 
@@ -1121,7 +1121,7 @@ ScriptablePhratchMorph >> blockCategories [
 	"Answer a list of block categories."
 
 	^ (self class blockSpecs select: [:el |
-		(el isKindOf: String) and: [el ~= '-' and: [el ~= '~']]]) asArray
+		(el isString) and: [el ~= '-' and: [el ~= '~']]]) asArray
 
 ]
 
@@ -1138,7 +1138,7 @@ ScriptablePhratchMorph >> blockForSelector: aSymbol [
 	| cat |
 
 	self class blockSpecs do: [:spec |
-		((spec isKindOf: Symbol) not and: [spec isKindOf: String])
+		((spec isKindOf: Symbol) not and: [spec isString])
 			ifTrue: [cat := spec].
 
 		((spec isKindOf: Array) and: [(spec at: 3) = aSymbol])
@@ -1214,7 +1214,7 @@ ScriptablePhratchMorph >> blocksFor: aCategory [
 	blocksList := OrderedCollection new.
 	category := nil.
 	self class blockSpecs do: [:spec |
-		((spec isKindOf: String) and: [spec ~= #- and: [spec ~= #~ and: [spec ~= #=]]])
+		((spec isString) and: [spec ~= #- and: [spec ~= #~ and: [spec ~= #=]]])
 			ifTrue: [category := spec]
 			ifFalse: [
 				category = aCategory ifTrue: [
@@ -1665,7 +1665,7 @@ ScriptablePhratchMorph >> copyBlockDefinitionsFor: aSprite [
 	result do: [:def|
 	 def body ifNotNil: [
 			def body allMorphs do: [:m|
-				((m isKindOf: BlockMorph) and: [
+				((m isBlockMorph) and: [
 				m receiver = self]) ifTrue: [m receiver: aSprite]]]].
 	^ result
 
@@ -1721,7 +1721,7 @@ ScriptablePhratchMorph >> copyRecordingIn: dict [
 	newBlocksBin := blocksBin fullCopy.
 	newBlocksBin allMorphsDo: [:m |
 		(m isKindOf: HatBlockMorph) ifTrue: [m scriptOwner: newCopy].
-		(m isKindOf: CommandBlockMorph) ifTrue: [m mapReceiver: self to: newCopy]].
+		(m isCommandBlockMorph) ifTrue: [m mapReceiver: self to: newCopy]].
 	newCopy vars: vars copy lists: (self copyListsFor: newCopy) blocksBin: newBlocksBin.
 	newCopy blockDefinition: (self copyBlockDefinitionsFor: newCopy).
 	newCopy objName: self nextInstanceName.
@@ -2044,7 +2044,7 @@ ScriptablePhratchMorph >> definitionFor: anId [
 	def := all reversed detect: [:eachDef|
 		eachDef id = anId]
 		ifNone: [^nil].
-	(def body isKindOf: BlockMorph) ifTrue: [
+	(def body isBlockMorph) ifTrue: [
 		def body newScriptOwnerPrivate: self].
 	^ def
 ]
@@ -2294,7 +2294,7 @@ ScriptablePhratchMorph >> deleteObject: anObject [
 	| oi obj att block sel rcv |
 	(anObject isKindOf: PhratchSpriteMorph)
 		ifTrue: [ ^ self deleteSprite: anObject ].
-	(anObject isKindOf: CommandScriptBlockMorph)
+	(anObject isCommandScriptBlockMorph)
 		ifTrue: [ 
 			oi := self objectInterface.
 			obj := anObject receiver.
@@ -2973,7 +2973,7 @@ ScriptablePhratchMorph >> ensureVariableExists: varName [
 	| stage vn |
 	(varName isKindOf: Array)
 		ifTrue: [^ self].
-	(varName isKindOf: CommandBlockMorph)
+	(varName isCommandBlockMorph)
 		ifTrue: [^ self].
 
 	vn := varName asString.	
@@ -3207,7 +3207,7 @@ ScriptablePhratchMorph >> get: anObject [
 			^ self error: 'cannot read this attribute'].
 		^ self perform: sel second ].
 		
-	(anObject isKindOf: CommandScriptBlockMorph) ifTrue: [
+	(anObject isCommandScriptBlockMorph) ifTrue: [
 		obj := anObject receiver.
 		(obj isKindOf: ScriptablePhratchMorph) ifFalse: [
 			^ self error: 'cannot get attributes of non-Sprites/Stage'].
@@ -3820,7 +3820,7 @@ ScriptablePhratchMorph >> interpretStringAsNumberIfPossible: anObject [
 	"If the argument is a string that can be interpreted as a number, such as '123', then return it's value as a number. Otherwise, return the original object."
 
 	| s digits hasDigit |
-	(anObject isKindOf: String)
+	(anObject isString)
 		ifFalse: [ ^ anObject ].
 	anObject size = 0
 		ifTrue: [ ^ anObject ].
@@ -3860,7 +3860,7 @@ ScriptablePhratchMorph >> invisibleInstancesOf: aCustomBlockId [
 				m id = aCustomBlockId ]])].
 
 		eachDef answer ifNotNil: [
-			(eachDef answer isKindOf: BlockMorph) ifTrue: [
+			(eachDef answer isBlockMorph) ifTrue: [
 				ans addAll: (eachDef answer allMorphs select: [:m|
 					((m isKindOf: CustomReporterBlockMorph) or: [
 						m isKindOf: CustomReporterBlockMorph]) and: [
@@ -3946,8 +3946,8 @@ ScriptablePhratchMorph >> isObject: object type: type [
 
 	'number' "localized" = type ifTrue: [
 		object isNumber ifTrue: [^true].
-		(object isKindOf: Morph) ifTrue: [^ false].
-		(object isKindOf: Boolean) ifTrue: [^ false].
+		(object isMorph) ifTrue: [^ false].
+		(object isBoolean) ifTrue: [^ false].
 		object isEmpty ifTrue: [^ false].
 		object do: [:c | 
 			c isDigit ifFalse: [('0.-' includes: c) ifFalse: [^ false]]].
@@ -3955,15 +3955,15 @@ ScriptablePhratchMorph >> isObject: object type: type [
 
 	'text' "localized" = type ifTrue: [
 		object isNumber ifTrue: [^ false].
-		(object isKindOf: Morph) ifTrue: [^ false].
-		(object isKindOf: Boolean) ifTrue: [^ false].
+		(object isMorph) ifTrue: [^ false].
+		(object isBoolean) ifTrue: [^ false].
 		object isEmpty ifTrue: [^ true].
 		object do: [:c | 
 			c isDigit ifFalse: [('0.-' includes: c) ifFalse: [^ true]]].
 		^ false].
 
 	'boolean' "localized" = type ifTrue: [
-		^ object isKindOf: Boolean].
+		^ object isBoolean].
 
 	'list' "localized" = type ifTrue: [
 		^ object isKindOf: PhratchListMorph]. 
@@ -4172,7 +4172,7 @@ ScriptablePhratchMorph >> letterNum: letterNum of: aString [
 	letterNum isNumber ifTrue: [^ letterNum asInteger].
 
 	s := letterNum.
-	(s isKindOf: String) ifTrue: [
+	(s isString) ifTrue: [
 		#first = s ifTrue: [^ 1].
 		#last = s ifTrue: [^ aString size].
 		#any = s ifTrue: [
@@ -4207,7 +4207,7 @@ ScriptablePhratchMorph >> lineNum: lineNum forList: list [
 	lineNum isNumber ifTrue: [^ lineNum asInteger].
 
 	s := lineNum.
-	(s isKindOf: String) ifTrue: [
+	(s isString) ifTrue: [
 		#first = s ifTrue: [^ 1].
 		#last = s ifTrue: [^ list lineCount].
 		#any = s ifTrue: [
@@ -4333,7 +4333,7 @@ ScriptablePhratchMorph >> lookLike: costumeNameOrIndex [
 	costume suspendPlaying.
 
 	newCostume := nil.
-	(costumeNameOrIndex isKindOf: String) ifTrue: [
+	(costumeNameOrIndex isString) ifTrue: [
 		"try interpreting the argument as a costume name"
 		newCostume := self costumeFromName: costumeNameOrIndex.
 
@@ -5097,7 +5097,7 @@ ScriptablePhratchMorph >> passivePixelateEffect: aNumber [
 { #category : #'BYOB attributes' }
 ScriptablePhratchMorph >> passiveSetHideFlagTo: aBool [
 
-	(aBool isKindOf: Boolean) 
+	(aBool isBoolean) 
 		ifFalse: [^ self error: 'expecting a Boolean'].
 	self isHidden: aBool.
 	self spread.
@@ -5233,7 +5233,7 @@ ScriptablePhratchMorph >> positionVar: varName atX: x y: y [
 { #category : #scripts }
 ScriptablePhratchMorph >> prepareForExport [
 	self blocksBin allMorphsDo: [:m |
-		(m isKindOf: BlockMorph) ifTrue: [m stop].
+		(m isBlockMorph) ifTrue: [m stop].
 		(m isKindOf: SpriteArgMorph) ifTrue: [m clearMorphReference]].
 
 	customBlocks ifNotNil: [
@@ -5241,7 +5241,7 @@ ScriptablePhratchMorph >> prepareForExport [
 			eachDef body ifNotNil: [
 				eachDef body allMorphsDo: [:m |
 					(m isKindOf: SpriteArgMorph) ifTrue: [m clearMorphReference]]].
-			(eachDef answer isKindOf: Morph) ifTrue: [
+			(eachDef answer isMorph) ifTrue: [
 				eachDef answer allMorphsDo: [:m |
 					(m isKindOf: SpriteArgMorph) ifTrue: [m clearMorphReference]]]]].
 
@@ -5298,7 +5298,7 @@ ScriptablePhratchMorph >> printSummaryOn: aStream [
 				nextPutAll: item infoString;
 				nextPutAll: ')';
 				crlf ].
-	stacks := blocksBin submorphs select: [ :m | m isKindOf: BlockMorph ].
+	stacks := blocksBin submorphs select: [ :m | m isBlockMorph ].
 	stacks size = 0
 		ifTrue: [ 
 			aStream
@@ -5746,7 +5746,7 @@ ScriptablePhratchMorph >> sceneNames [
 ScriptablePhratchMorph >> scripts [
 	"Answer my scripts, a collection of HatBlockMorphs."
 
-	(blocksBin isKindOf: Morph) ifFalse: [^ blocksBin].
+	(blocksBin isMorph) ifFalse: [^ blocksBin].
 	^ blocksBin submorphs select: [:m | m isKindOf: HatBlockMorph]
 
 ]
@@ -5757,15 +5757,15 @@ ScriptablePhratchMorph >> set: anObject to: aValue [
 	<phratchItem: 'set $Attributes$ to $String$' kind: #- category: 'operators' defaultValues: #() subCategory: #b3 special: #()>
 	| oi sel obj att block arg |
 	oi := self objectInterface.
-	(anObject isKindOf: Symbol)
+	(anObject isSymbol)
 		ifTrue: [ 
 			sel := oi at: anObject ifAbsent: [ ^ self error: 'unknown attribute: ' , anObject asString ].
 			sel third = #-
 				ifTrue: [ ^ self error: 'cannot set r/o attribute' ].
 			^ self perform: sel third with: aValue ].
-	(anObject isKindOf: String)
+	(anObject isString)
 		ifTrue: [ ^ self setVar: anObject to: aValue ].
-	(anObject isKindOf: CommandScriptBlockMorph)
+	(anObject isCommandScriptBlockMorph)
 		ifTrue: [ 
 			obj := anObject receiver.
 			(obj isKindOf: ScriptablePhratchMorph)
@@ -5886,7 +5886,7 @@ ScriptablePhratchMorph >> setVar: varName to: newValue [
 	| vName stage sf w |
 
 	"OOP interface:"
-	(varName isKindOf: CommandScriptBlockMorph) ifTrue: [
+	(varName isCommandScriptBlockMorph) ifTrue: [
 		^ self set: varName to: newValue].
 
 	vName := varName asString. "convert Symbol to String if needed"
@@ -6101,7 +6101,7 @@ ScriptablePhratchMorph >> soundNamed: soundNameOrIndex ifAbsent: absentBlock [
 
 	| snd i |
 	snd := nil.
-	(soundNameOrIndex isKindOf: String) ifTrue: [ "first, try using the argument as a sound name"
+	(soundNameOrIndex isString) ifTrue: [ "first, try using the argument as a sound name"
 		snd := media
 			detect: [:el | el isSound and: [el mediaName caseInsensitiveEqual: soundNameOrIndex]]
 			ifNone: [nil].

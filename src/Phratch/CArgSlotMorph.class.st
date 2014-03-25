@@ -26,7 +26,7 @@ CArgSlotMorph >> blockWidth [
 
 	| bw |
 	bw := 0.
-	(owner isKindOf: BlockMorph) ifTrue: [
+	(owner isBlockMorph) ifTrue: [
 		bw := owner width].
 	^ 50 max: bw
 ]

@@ -266,6 +266,18 @@ CSlotMorph >> initialize [
 ]
 
 { #category : #'argument slot behavior' }
+CSlotMorph >> isArgMorph [
+
+	^true
+]
+
+{ #category : #'argument slot behavior' }
+CSlotMorph >> isCSlotMorph [
+
+	^ true
+]
+
+{ #category : #'argument slot behavior' }
 CSlotMorph >> isEmptySlot [
 	^ nestedBlock isNil
 ]
@@ -288,7 +300,7 @@ CSlotMorph >> printArgOn: aStream [
 
 	| v |
 	v := self evaluate.
-	(v isKindOf: String)
+	(v isString)
 		ifTrue: [ 
 			aStream
 				nextPutAll: '"';
@@ -303,7 +315,7 @@ CSlotMorph >> topBarHeight [
 
 	| nonBlockSubmorphs |
 	nonBlockSubmorphs := self submorphs select: [:m |
-		(m isKindOf: BlockMorph) not or: [argMorphs includes: m]].
+		(m isBlockMorph) not or: [argMorphs includes: m]].
 	^ nonBlockSubmorphs inject: 3 into: [:h :m | h max: (m height + 3)].
 
 

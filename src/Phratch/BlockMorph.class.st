@@ -77,7 +77,7 @@ BlockMorph >> aboutToBeGrabbedBy: aHandMorph [
 	"if I was being used as argument, replace myself with a generic argument morph"
 
 	| m |
-	(owner isKindOf: CommandBlockMorph) | (owner isKindOf: MultiArgMorph)
+	(owner isCommandBlockMorph) | (owner isKindOf: MultiArgMorph)
 		ifFalse: [ ^ self ].
 	m := owner argMorphToReplace: self.
 	m ifNotNil: [ owner replaceArgMorph: self by: m ]
@@ -175,7 +175,7 @@ BlockMorph >> bottomBlock [
 
 	| m |
 	m := self.
-	[m nextBlock isKindOf: BlockMorph] whileTrue: [m := m nextBlock].
+	[m nextBlock isBlockMorph] whileTrue: [m := m nextBlock].
 	^ m
 
 ]
@@ -225,7 +225,7 @@ BlockMorph >> closestAttachTargetIn: newOwner [
 					m ~~ self bottomBlock
 						and: [ 
 							m ~~ self topBlock
-								and: [ m ~~ self owner and: [ (m isKindOf: BlockMorph) and: [ m isReporter not | (m isKindOf: CommandScriptBlockMorph) ] ] ] ] ])
+								and: [ m ~~ self owner and: [ (m isBlockMorph) and: [ m isReporter not | (m isCommandScriptBlockMorph) ] ] ] ] ])
 				ifTrue: [ m blockAttachPoints: attachPoints ] ].
 	((self isKindOf: HatBlockMorph) or: [ (self ownerOrYourselfThatIsA: HatBlockMorph) notNil ])
 		ifTrue: [ 
@@ -266,7 +266,7 @@ BlockMorph >> closestAttachTargetIn: newOwner [
 	
 	
 	
-	(self isKindOf: CBlockMorph)
+	(self isCBlockMorph)
 		ifTrue: [ 
 			self stretchHeight:  0.
 		].
@@ -364,7 +364,7 @@ BlockMorph >> contrastColor [
 					color := color twiceLighter	" lighter slightlyLighter " ] ].
 	submorphs
 		do: [ :m | 
-			(m isKindOf: StringMorph)
+			(m isStringMorph)
 				ifTrue: [ m color: self labelColor ]
 				ifFalse: [ 
 					(m isKindOf: MultiArgMorph)
@@ -724,7 +724,7 @@ BlockMorph >> fullDrawOn: aCanvas [
 	| offset |
 	self isHidden ifTrue: [^ self].
 	(self hasProperty: #errorOnDraw) ifTrue:[^ self drawErrorOn: aCanvas].
-	(owner isKindOf: BlockMorph) ifTrue: [^ super fullDrawOn: aCanvas].  "only cache at top level"
+	(owner isBlockMorph) ifTrue: [^ super fullDrawOn: aCanvas].  "only cache at top level"
 
 	cachedForm ifNil: [self updateCachedForm].
 
@@ -764,12 +764,12 @@ BlockMorph >> handleReporterDrop [
 
 	"tp := argM owner typeOfArg: argM."
 
-	(argM isKindOf: BlockMorph)
+	(argM isBlockMorph)
 		ifTrue: [
 			argOwner := argM owner.
 			argOwner replaceArgMorph: argM by: self.
-			((argM isKindOf: CSlotMorph) or: [
-			argM isKindOf: OSlotMorph]) ifTrue: [
+			((argM isCSlotMorph) or: [
+			argM isOSlotMorph]) ifTrue: [
 				argM := argM body ].
 			trgt ifNotNil: [ argM ifNotNil: [
 				trgt addMorph: argM.
@@ -808,7 +808,7 @@ BlockMorph >> handleTool: toolName hand: hand [
 			myOwner := self owner.
 			myStack
 				ifNotNil: [ 
-					(myOwner isKindOf: CBlockMorph)
+					(myOwner isCBlockMorph)
 						ifTrue: [ 
 							"|copiedStack|
 								copiedStack := myStack shallowCopy.
@@ -1124,7 +1124,7 @@ BlockMorph >> justDroppedInto: newOwner event: evt [
 	((owner == World) and: [ScriptablePhratchMorph noviceMode not]) ifTrue: [^ self].
 
 	((owner isKindOf: PhratchScriptsMorph) or:
-	 [(owner isKindOf: BlockMorph) or:
+	 [(owner isBlockMorph) or:
 	 [(owner isKindOf: PhratchStageMorph) and: [self isReporter]]]) ifFalse: [
 		^ evt hand rejectDropMorph: self event: evt].
 
@@ -1134,11 +1134,11 @@ BlockMorph >> justDroppedInto: newOwner event: evt [
 
 	targetAssoc := self closestAttachTargetIn: newOwner.
 	targetAssoc ifNil: [
-		"(self bottomBlock isKindOf: CBlockMorph) ifFalse: ["
+		"(self bottomBlock isCBlockMorph) ifFalse: ["
 			targetAssoc := self bottomBlock closestAttachTargetIn: newOwner.
 			targetAssoc ifNotNil:[
 				bottomBlockUsed := true.
-				(targetAssoc value owner isKindOf: BlockMorph) ifTrue:[
+				(targetAssoc value owner isBlockMorph) ifTrue:[
 					targetAssoc := nil]]"]"].
 	targetAssoc ifNil: [^ self].
 
@@ -1153,37 +1153,37 @@ BlockMorph >> justDroppedInto: newOwner event: evt [
 	targetP y = targetBlock top
 		ifTrue: [
 			"c-shaped block should nest the target block"
-			"((bottomBlockUsed not) and: [(self isKindOf: CBlockMorph)]) ifTrue:[
-				(targetBlock owner isKindOf: BlockMorph)
+			"((bottomBlockUsed not) and: [(self isCBlockMorph)]) ifTrue:[
+				(targetBlock owner isBlockMorph)
 					ifTrue: [(targetBlock owner) attachBlock: self]
 					ifFalse: [self position: (targetP x - self bracketThickness)@(targetP y - self topBarHeight - 3)].
 				(newOwner respondsTo: #recordNestedStack:) ifTrue: [
 					newOwner recordNestedStack: targetBlock ].
 				self attachBlockNested: targetBlock. ^ self]."
 			
-			((bottomBlockUsed not) and: [(self isKindOf: CBlockMorph)]) ifTrue:[
+			((bottomBlockUsed not) and: [(self isCBlockMorph)]) ifTrue:[
 				self bottomBlock position: targetP x @ (targetP y - (self bottomBlock height) -4 ).
 				upperBlock := self bottomBlock owner.
-				[upperBlock isKindOf: BlockMorph] whileTrue: [
+				[upperBlock isBlockMorph] whileTrue: [
 					upperBlock nextBlock ifNotNil:[
 						upperBlock position: targetP x @ (upperBlock nextBlock position y - (upperBlock height) -4 ).
 						upperBlock := upperBlock owner]].
 				self bottomBlock attachBlock: targetBlock. ^self].
 			"for all other non-c-shaped blocks"
-			(bottomBlockUsed or:[((targetBlock owner isKindOf: BlockMorph) not) and: [(self isKindOf: CBlockMorph) not]]) ifTrue:[
+			(bottomBlockUsed or:[((targetBlock owner isBlockMorph) not) and: [(self isCBlockMorph) not]]) ifTrue:[
 				self bottomBlock position: targetP x @ (targetP y - (self bottomBlock height - 4)).
 				upperBlock := self bottomBlock owner.
-				[upperBlock isKindOf: BlockMorph] whileTrue: [
+				[upperBlock isBlockMorph] whileTrue: [
 					upperBlock nextBlock ifNotNil:[
 						upperBlock position: targetP x @ (upperBlock nextBlock position y - (upperBlock height - 4)).
 						upperBlock := upperBlock owner]]].
-			((bottomBlockUsed not) and: [targetBlock owner isKindOf: BlockMorph]) ifTrue:[
+			((bottomBlockUsed not) and: [targetBlock owner isBlockMorph]) ifTrue:[
 				self position: targetP x @ (targetP y - (self height - 4))].
-			(targetBlock owner isKindOf: BlockMorph) ifTrue:[
+			(targetBlock owner isBlockMorph) ifTrue:[
 				self topBlock position: targetP x @ targetP y.
 				targetBlock owner attachBlock: self topBlock].
 			targetBlock position: targetP x @ (self bottomBlock position y + self bottomBlock height + 4).
-			((bottomBlockUsed not) and: [((targetBlock owner isKindOf: BlockMorph) not) and: [(self isKindOf: CBlockMorph)]]) ifFalse:[
+			((bottomBlockUsed not) and: [((targetBlock owner isBlockMorph) not) and: [(self isCBlockMorph)]]) ifFalse:[
 				self bottomBlock attachBlock: targetBlock]]
 		ifFalse: [
 			self assert: [(self isKindOf: HatBlockMorph) not].  "I am not a HatBlockMorph"
@@ -1253,7 +1253,7 @@ BlockMorph >> newScriptOwner: newOwner [
 		((m isKindOf: CustomCommandBlockMorph) or: [
 		m isKindOf: CustomReporterBlockMorph]) ifTrue: [
 			newOwner ensureCustomBlockExists: m definition ].
-		(m isKindOf: BlockMorph) ifTrue: [
+		(m isBlockMorph) ifTrue: [
 			rcvr := newOwner.
 			(((m isKindOf: VariableBlockMorph) | (m isKindOf: SetterBlockMorph)) and: 
 			[m isSpecialForm not]) ifTrue: [
@@ -1263,7 +1263,7 @@ BlockMorph >> newScriptOwner: newOwner [
 			(((m isKindOf: VariableBlockMorph) | (m isKindOf: SetterBlockMorph)) and: 
 			[m isSpecialForm]) ifFalse: [ 
 				m receiver: rcvr ]].
-		((m isKindOf: CommandBlockMorph) and: [
+		((m isCommandBlockMorph) and: [
 		m isSpecialForm not]) ifTrue: [
 			m argMorphs do: [:arg |
 				((arg isKindOf: ChoiceArgMorph) and:
@@ -1291,7 +1291,7 @@ for use in ScriptablePhratchMorph ->> #definitionFor:
 		m isKindOf: CustomReporterBlockMorph]) ifTrue: [
 			newOwner ensureCustomBlockExists: m definition ].
 "
-		(m isKindOf: BlockMorph) ifTrue: [
+		(m isBlockMorph) ifTrue: [
 			rcvr := newOwner.
 			(((m isKindOf: VariableBlockMorph) | (m isKindOf: SetterBlockMorph)) and: 
 			[m isSpecialForm not]) ifTrue: [
@@ -1301,7 +1301,7 @@ for use in ScriptablePhratchMorph ->> #definitionFor:
 			(((m isKindOf: VariableBlockMorph) | (m isKindOf: SetterBlockMorph)) and: 
 			[m isSpecialForm]) ifFalse: [ 
 				m receiver: rcvr ]].
-		((m isKindOf: CommandBlockMorph) and: [
+		((m isCommandBlockMorph) and: [
 		m isSpecialForm not]) ifTrue: [
 			m argMorphs do: [:arg |
 				((arg isKindOf: ChoiceArgMorph) and:
@@ -1317,7 +1317,7 @@ for use in ScriptablePhratchMorph ->> #definitionFor:
 BlockMorph >> nextBlock [
 	"Answer the block myself in the block sequence or nil if I am the last block in the sequence. Each block is a submorph of the previous block."
 
-	^ self submorphs detect: [:m | m isKindOf: BlockMorph] ifNone: [nil]
+	^ self submorphs detect: [:m | m isBlockMorph] ifNone: [nil]
 
 ]
 
@@ -1341,7 +1341,7 @@ BlockMorph >> nonControlFlowSubmorphs [
 BlockMorph >> outerLoop [
 
 	| all |
-	all := self allOwners select: [:o | (o isKindOf: BlockMorph) and: [o notNil and: [o isCShape]]].
+	all := self allOwners select: [:o | (o isBlockMorph) and: [o notNil and: [o isCShape]]].
 	all size < 1 ifTrue: [^ nil].
 	^ all detect: [:o | o nests: self] ifNone: [nil]
 ]
@@ -1396,15 +1396,15 @@ BlockMorph >> printCodeOn: aStream indent: indent [
 
 { #category : #private }
 BlockMorph >> printCodeSubmorph: aMorph on: aStream [
-	(aMorph isKindOf: ArgMorph)
+	(aMorph isArgMorph)
 		ifTrue: [ aMorph printArgOn: aStream ].
-	(aMorph isKindOf: BlockMorph)
+	(aMorph isBlockMorph)
 		ifTrue: [ 
 			aStream nextPut: $(.
 			aMorph printCodeOn: aStream indent: 0.
 			aStream skip: -1.	"remove carriage return"
 			aStream nextPut: $) ].
-	(aMorph isKindOf: StringMorph)
+	(aMorph isStringMorph)
 		ifFalse: [ ^ self ].
 	({'?' . '%'} includes: aMorph contents)
 		ifTrue: [ aStream skip: -1 ].	"remove space before ? or %"
@@ -1462,7 +1462,7 @@ BlockMorph >> rightButtonMenu [
 	(owner isKindOf: PhratchBlockPaletteMorph) ifFalse: [
 		menu addLine.
 		menu add: 'duplicate' value: #duplicate.	
-		(self owner isKindOf: BlockMorph) ifFalse: [  "we can't yet delete a blocks inside a script"
+		(self owner isBlockMorph) ifFalse: [  "we can't yet delete a blocks inside a script"
 			menu add: 'delete' value: #delete]].
 
 	"DebugMenu ifTrue: [
@@ -1515,7 +1515,7 @@ BlockMorph >> slideBackToFormerSituation: evt [
 	| wasEmbedded o pane oldP slideForm startPoint s |
 	wasEmbedded := false.
 	(o := evt hand formerOwner) ifNil: [^ self].
-	(o isKindOf: BlockMorph) ifTrue: [
+	(o isBlockMorph) ifTrue: [
 		wasEmbedded := true.
 		(pane := o ownerOrYourselfThatIsA: PhratchScriptsMorph) ifNotNil: [
 			o := pane]].
@@ -1609,7 +1609,7 @@ BlockMorph >> topBlock [
 
 	| m |
 	m := self.
-	[(m owner isKindOf: BlockMorph) and: [(m owner isKindOf: ReporterBlockDropTargetMorph) not]] whileTrue: [m := m owner].
+	[(m owner isBlockMorph) and: [(m owner isKindOf: ReporterBlockDropTargetMorph) not]] whileTrue: [m := m owner].
 	^ m
 
 ]

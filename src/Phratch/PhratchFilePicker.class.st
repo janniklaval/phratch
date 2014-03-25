@@ -159,7 +159,7 @@ PhratchFilePicker >> currentDirectory: aDirectoryOrString [
 
 	| s truncated w eWidth |
 
-	currentDir := (aDirectoryOrString isKindOf: String)
+	currentDir := (aDirectoryOrString isString)
 		ifTrue: [ aDirectoryOrString asFileReference ]
 		ifFalse: [ aDirectoryOrString ].
 	s := currentDir fullName isEmpty

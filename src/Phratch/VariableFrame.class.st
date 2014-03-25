@@ -97,7 +97,7 @@ VariableFrame >> interpretStringAsNumberIfPossible: anObject [
 	"If the argument is a string that can be interpreted as a number, such as '123', then return it's value as a number. Otherwise, return the original object."
 
 	| s digits hasDigit |
-	(anObject isKindOf: String)
+	(anObject isString)
 		ifFalse: [ ^ anObject ].
 	anObject size = 0
 		ifTrue: [ ^ anObject ].
@@ -141,7 +141,7 @@ VariableFrame >> isReferencing: aVarFrame [
 	
 	vars keysDo: [:key |
 		obj := vars at: key. 
-		(obj isKindOf: BlockMorph) ifTrue: [
+		(obj isBlockMorph) ifTrue: [
 			(obj allMorphs anySatisfy: [ :m |
 				(m isKindOf: SetterBlockMorph) | (m isKindOf: VariableBlockMorph) and: [
 					m receiver == aVarFrame or: [

@@ -25,7 +25,7 @@ LabelFragmentBlockMorph >> addLabel [
 		whileTrue: [ 
 			m := argMorphs last.
 			argMorphs remove: m.	"if the argument we're throwing out is anything complicated, we'd like to keep it around in the world."
-			(m isKindOf: BlockMorph)
+			(m isBlockMorph)
 				ifTrue: [ m openInWorld ] ].	"create new arg morphs."
 	[ argMorphs size < args size ] whileTrue: [ argMorphs addLast: (self argMorphFor: (args at: argMorphs size + 1)) ].
 	nextArgIndex := 1.

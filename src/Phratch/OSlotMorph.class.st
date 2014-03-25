@@ -109,6 +109,12 @@ OSlotMorph >> initialize [
 ]
 
 { #category : #'argument slot behavior' }
+OSlotMorph >> isArgMorph [
+
+	^true
+]
+
+{ #category : #'argument slot behavior' }
 OSlotMorph >> isEmptySlot [
 	^ self body isNil
 ]
@@ -124,13 +130,18 @@ OSlotMorph >> isLambdaForm [
 	^ false
 ]
 
+{ #category : #'argument slot behavior' }
+OSlotMorph >> isOSlotMorph [
+	^ true
+]
+
 { #category : #other }
 OSlotMorph >> printArgOn: aStream [
 	"Print this argument morph on the given stream."
 
 	| v |
 	v := self evaluate.
-	(v isKindOf: String)
+	(v isString)
 		ifTrue: [ 
 			aStream
 				nextPutAll: '"';

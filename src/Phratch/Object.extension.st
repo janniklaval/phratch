@@ -19,3 +19,61 @@ Object >> inform: informationString withDetails: detailsString [
 
 	DialogBoxMorph inform: informationString withDetails: detailsString.
 ]
+
+{ #category : #'*Phratch-Extensions' }
+Object >> isArgMorph [
+
+	^false
+]
+
+{ #category : #'*Phratch-Extensions' }
+Object >> isBlockMorph [
+
+	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
+Object >> isBoolean [
+
+	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
+Object >> isCBlockMorph [
+
+	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
+Object >> isCSlotMorph [
+
+	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
+Object >> isCommandBlockMorph [
+
+	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
+Object >> isCommandScriptBlockMorph [
+
+	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
+Object >> isOSlotMorph [
+	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
+Object >> isStringFieldMorph [
+
+	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
+Object >> isStringMorph [
+	^ false
+]

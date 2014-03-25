@@ -21,7 +21,7 @@ MultiArgMorph class >> type: aSymbol [
 { #category : #adding }
 MultiArgMorph >> addArg: aBlockOrValue [
 	| newMorph newSubs |
-	newMorph := ((aBlockOrValue isKindOf: CommandBlockMorph) or: [ aBlockOrValue isKindOf: ArgMorph ])
+	newMorph := ((aBlockOrValue isCommandBlockMorph) or: [ aBlockOrValue isArgMorph ])
 		ifTrue: [ aBlockOrValue ]
 		ifFalse: [ self newSlot ].
 	newMorph owner ifNotNil: [ newMorph owner privateRemoveMorph: newMorph ].
@@ -40,7 +40,7 @@ MultiArgMorph >> addArg: aBlockOrValue [
 { #category : #adding }
 MultiArgMorph >> addArgSlot [
 
-	(owner isKindOf: BlockMorph) ifTrue: [
+	(owner isBlockMorph) ifTrue: [
 		owner stop].
 
 	self addArg: self newSlot;
@@ -76,7 +76,7 @@ MultiArgMorph >> color [
 
 { #category : #byob }
 MultiArgMorph >> contrastColor [
-	submorphs do: [:m |	(m isKindOf: BlockMorph)
+	submorphs do: [:m |	(m isBlockMorph)
 		ifTrue: [ m contrastColor ]]
 ]
 
@@ -91,7 +91,7 @@ MultiArgMorph >> defaultValue: aPhratchListMorph [
 	1 to: aPhratchListMorph lineCount do: [:i |
 		element := aPhratchListMorph lineAt: i.
 		((element isKindOf: ReporterBlockMorph)
-		and: [(element isKindOf: ArgMorph) not])
+		and: [(element isArgMorph) not])
 			ifTrue: [self addArg: element]
 			ifFalse: [
 				self addArgSlot.
@@ -111,7 +111,7 @@ MultiArgMorph >> defaultValue: aPhratchListMorph [
 MultiArgMorph >> elements [
 	^ submorphs reject: [:sm |
 		(sm isKindOf: ImageMorph)
-		or: [sm isKindOf: StringMorph]]
+		or: [sm isStringMorph]]
 ]
 
 { #category : #evaluation }
@@ -146,7 +146,7 @@ MultiArgMorph >> fixArgLayout [
 	space := 4.
 	isMultiC
 		ifTrue: [ self width: 50 ].
-	parts := submorphs select: [ :sm | sm isVisible and: [ (sm isKindOf: StringMorph) not ] ].
+	parts := submorphs select: [ :sm | sm isVisible and: [ (sm isStringMorph) not ] ].
 	parts
 		do: [ :m | 
 			(m isKindOf: ReporterBlockMorph) & isMultiC
@@ -165,9 +165,9 @@ MultiArgMorph >> fixArgLayout [
 							lines add: line.
 							line := OrderedCollection new.
 							x := left ].
-					(m isKindOf: BlockMorph)
+					(m isBlockMorph)
 						ifTrue: [ m fixBlockLayout ].
-					(m isKindOf: ArgMorph)
+					(m isArgMorph)
 						ifTrue: [ m fixArgLayout ].
 					m left: x.
 					(m right - left > 300 and: [ line isEmpty not and: [ m ~~ submorphs last ] ])
@@ -344,7 +344,7 @@ MultiArgMorph >> newSlot [
 MultiArgMorph >> receiver [
 
 	"needed for error handling"
-	(owner isKindOf: BlockMorph) ifTrue: [
+	(owner isBlockMorph) ifTrue: [
 		^owner receiver].
 	^nil
 
@@ -356,11 +356,11 @@ MultiArgMorph >> removeArgSlot [
 
 	| oldArg  |
 
-	(owner isKindOf: BlockMorph) ifTrue: [
+	(owner isBlockMorph) ifTrue: [
 		owner stop].
 
 	oldArg := submorphs at: submorphs size - 2.
-	((oldArg isKindOf: BlockMorph) and: [(oldArg isKindOf: ArgMorph) not])
+	((oldArg isBlockMorph) and: [(oldArg isArgMorph) not])
 		ifTrue: [World addMorph: oldArg]
 		ifFalse: [oldArg delete].
 	self fixArgLayout
@@ -377,7 +377,7 @@ MultiArgMorph >> replaceArgMorph: oldArg by: newArg [
 MultiArgMorph >> showError [
 	"Make this block to show an error."
 
-	(owner isKindOf: BlockMorph) ifTrue: [
+	(owner isBlockMorph) ifTrue: [
 		owner showError]
 ]
 
@@ -407,7 +407,7 @@ MultiArgMorph >> text: aString [
 { #category : #'block enumerating' }
 MultiArgMorph >> topBlock [
 
-	(owner isKindOf: BlockMorph) ifTrue: [
+	(owner isBlockMorph) ifTrue: [
 		^owner topBlock].
 	^nil
 

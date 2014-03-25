@@ -23,7 +23,7 @@ CommandScriptBlockMorph class >> blockTypeOn: aScriptablePhratchMorph spec: spec
 CommandScriptBlockMorph >> acceptsTypeOf: aBlockMorph [
 	"Answer true if I can accept a dropped reporter of the given type. Answer false by default."
 
-	((aBlockMorph isKindOf: CommandBlockMorph) and: [
+	((aBlockMorph isCommandBlockMorph) and: [
 		(aBlockMorph isKindOf: HatBlockMorph) not ])
 			or: [ super acceptsTypeOf: aBlockMorph]
 ]
@@ -398,17 +398,29 @@ CommandScriptBlockMorph >> isBooleanFunction [
 
 	| reporter |
 	reporter := self allMorphs anySatisfy: [:m|
-		(m isKindOf: CommandBlockMorph) and: [
+		(m isCommandBlockMorph) and: [
 			m selector = #doAnswer ]].
 	^ (reporter argMorphs first isKindOf: ReporterBlockMorph) and: [
 			reporter argMorphs first isBooleanReporter]
 
 ]
 
+{ #category : #'class membership' }
+CommandScriptBlockMorph >> isCBlockMorph [
+
+	^true
+]
+
+{ #category : #'class membership' }
+CommandScriptBlockMorph >> isCommandScriptBlockMorph [
+
+	^ true
+]
+
 { #category : #testing }
 CommandScriptBlockMorph >> isFunction [
 	self allMorphsDo: [:m|
-		((m isKindOf: CommandBlockMorph) and: [
+		((m isCommandBlockMorph) and: [
 			m selector = #doAnswer ]) ifTrue: [^ true]].
 	^ false
 ]
@@ -496,7 +508,7 @@ CommandScriptBlockMorph >> topBarHeight [
 
 	| nonBlockSubmorphs |
 	nonBlockSubmorphs := self submorphs select: [:m |
-		(m isKindOf: BlockMorph) not or: [argMorphs includes: m]].
+		(m isBlockMorph) not or: [argMorphs includes: m]].
 	^ nonBlockSubmorphs inject: CBlockBracketThickness into: [:h :m | h max: (m height + 4)].
 
 

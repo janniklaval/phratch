@@ -197,7 +197,7 @@ PhratchListMorph >> concatenatedLines [
 PhratchListMorph >> contains: anObject [
 	| s isComplex |
 	isComplex := (anObject isKindOf: ScriptablePhratchMorph) | (anObject isKindOf: PhratchListMorph)
-		| (anObject isKindOf: CommandBlockMorph).
+		| (anObject isCommandBlockMorph).
 	isComplex
 		ifTrue: [ 
 			cellMorphs
@@ -235,7 +235,7 @@ PhratchListMorph >> containsRecursive: anObject [
 PhratchListMorph >> createCell: anObject [
 	| readout cell font numberRight txt |
 	txt := anObject.
-	(anObject isKindOf: String)
+	(anObject isString)
 		ifFalse: [ txt := anObject printString ].
 	font := PhratchFrameMorph getFont: #Watcher.
 	readout := ListMultilineStringMorph new
@@ -253,7 +253,7 @@ PhratchListMorph >> createCell: anObject [
 		extent: readout extent + 3;
 		addMorphBack: readout;
 		yourself.
-	(anObject isKindOf: String)
+	(anObject isString)
 		ifFalse: [ cell complexObject: anObject ].
 	cell position: scrollPane contents bottomLeft.	"avoid recursive lists"
 	anObject = self
@@ -408,7 +408,7 @@ PhratchListMorph >> focusIndex: anInteger [
 
 	cellMorphs size > 0 ifTrue: [
 		cell := cellMorphs at: focusIndex.
-		(cell complexObject isKindOf: Morph) ifFalse: [
+		(cell complexObject isMorph) ifFalse: [
 			World activeHand newKeyboardFocus: cell firstSubmorph.
 			scrollPane scrollSubmorphIntoView: cell]].
 	lastUpdated := list lastChanged.
@@ -830,14 +830,14 @@ PhratchListMorph >> setLineAt: aNumber to: newContents [
 		ifFalse: [ 
 			lastActivityError := true.
 			^ self ].
-	obj := (newContents isKindOf: self class) | (newContents isKindOf: Morph) | (newContents isKindOf: Array)
-		| (newContents isKindOf: Boolean)
+	obj := (newContents isKindOf: self class) | (newContents isMorph) | (newContents isArray)
+		| (newContents isBoolean)
 		ifTrue: [ newContents ]
 		ifFalse: [ newContents asString ].
 	cell := cellMorphs at: index.
 	(cell complexObject respondsTo: #delete)
 		ifTrue: [ cell complexObject delete ].
-	(obj isKindOf: String)
+	(obj isString)
 		ifTrue: [ 
 			cell complexObject: nil.
 			cell firstSubmorph contents: obj ]
@@ -971,7 +971,7 @@ PhratchListMorph >> updateContents [
 	inset := 3.
 	cellMorphs
 		do: [ :cell | 
-			(cell complexObject isKindOf: Morph)
+			(cell complexObject isMorph)
 				ifTrue: [ 
 					(cell complexObject respondsTo: #displayForm)
 						ifTrue: [ cell extent: cell complexObject displayForm extent + (10 @ 10) ]
@@ -1022,7 +1022,7 @@ PhratchListMorph >> updateContentsForReading [
 	inset := 3.
 	cellMorphs
 		do: [ :cell | 
-			(cell complexObject isKindOf: Morph)
+			(cell complexObject isMorph)
 				ifTrue: [ 
 					(cell complexObject respondsTo: #displayForm)
 						ifTrue: [ cell extent: cell complexObject displayForm extent + (10 @ 10) ]
@@ -1068,7 +1068,7 @@ PhratchListMorph >> updateContentsRecursive [
 	inset := 3.
 	cellMorphs
 		do: [ :cell | 
-			(cell complexObject isKindOf: Morph)
+			(cell complexObject isMorph)
 				ifTrue: [ 
 					(cell complexObject respondsTo: #displayForm)
 						ifTrue: [ cell extent: cell complexObject displayForm extent + (10 @ 10) ]

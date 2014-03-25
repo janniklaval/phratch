@@ -137,12 +137,12 @@ ReporterBlockDropTargetMorph >> step [
 	(self uncoveredAt: h cursorPoint) ifFalse: [^ self].
 
 	b := h firstSubmorph.
-	(b isKindOf: BlockMorph) ifFalse: [ ^ self].
+	(b isBlockMorph) ifFalse: [ ^ self].
 	(b isKindOf: HatBlockMorph) ifTrue: [ ^ self ].
 
 	b isReporter ifTrue: [ "reporter block"
 
-		targetArg := (self allMorphs) detect: [:m | (m isKindOf: ArgMorph) and: [m bounds containsPoint: h position]] ifNone: [nil].
+		targetArg := (self allMorphs) detect: [:m | (m isArgMorph) and: [m bounds containsPoint: h position]] ifNone: [nil].
 		targetArg ifNil: [
 
 			(targetArg := self topArgMorphAt: b bounds exclude: nil) ifNil: [^ self]].
@@ -154,7 +154,7 @@ ReporterBlockDropTargetMorph >> step [
 			borderColor: feedbackColor;
 			useRoundedCorners.
 
-		(targetArg isKindOf: OSlotMorph) ifTrue: [
+		(targetArg isOSlotMorph) ifTrue: [
 			feedbackMorph
 				bounds: (targetArg bounds expandBy: 8)].
 
@@ -179,10 +179,10 @@ ReporterBlockDropTargetMorph >> step [
 	"non-reporter (i.e. command block)"
 	targetAssoc := b closestAttachTargetIn: self.
 	targetAssoc ifNil: [
-		"(b bottomBlock isKindOf: CBlockMorph) ifFalse: ["
+		"(b bottomBlock isCBlockMorph) ifFalse: ["
 			targetAssoc := b bottomBlock closestAttachTargetIn: self.
 			targetAssoc ifNotNil:[
-				(targetAssoc value owner isKindOf: BlockMorph) ifTrue:[
+				(targetAssoc value owner isBlockMorph) ifTrue:[
 					targetAssoc := nil]]]"]".
 	targetAssoc ifNil: [^ self].
 
@@ -221,11 +221,11 @@ ReporterBlockDropTargetMorph >> topArgMorphAt: aRectangle exclude: aMorph [
 			space].
 
 	stack := submorphs
-		detect: [:m | (m ~~ aMorph) and: [(m isKindOf: BlockMorph) and: [m fullBounds intersects: aRectangle]]]
+		detect: [:m | (m ~~ aMorph) and: [(m isBlockMorph) and: [m fullBounds intersects: aRectangle]]]
 		ifNone: [ ^ self argumentAt: 1].
 
 	stack allMorphsDo: [:b |
-		((b isKindOf: CommandBlockMorph) and:
+		((b isCommandBlockMorph) and:
 		 [(b isKindOf: HatBlockMorph) not]) ifTrue: [
 			1 to: b argumentCount do: [:i |
 				argM := b argumentAt: i.
@@ -262,7 +262,7 @@ ReporterBlockDropTargetMorph >> uncoveredAt: aPoint [
 ReporterBlockDropTargetMorph >> wantsDroppedMorph: aMorph event: evt [
 	| topArg |
 
-	(aMorph isKindOf: CommandBlockMorph) ifFalse: [^false ].
+	(aMorph isCommandBlockMorph) ifFalse: [^false ].
 	topArg := self topArgMorphAt: aMorph bounds exclude: nil.
 	topArg ifNil: [^ false].
 	^ topArg acceptsTypeOf: aMorph 

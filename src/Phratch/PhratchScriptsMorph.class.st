@@ -24,7 +24,7 @@ PhratchScriptsMorph >> cleanUp [
 	| sortedBlocks y collectedBlocks bTop bBottom cm bHeight |
 	collectedBlocks := OrderedCollection new.
 	submorphs do: [:m | 
-		((m isKindOf: BlockMorph) 
+		((m isBlockMorph) 
 		or: [(m isKindOf: PhratchCommentMorph) and: [m anchor isNil]]) 
 			ifTrue:[collectedBlocks add: m]].
 
@@ -256,7 +256,7 @@ PhratchScriptsMorph >> showCommentDropFeedback [
 
 	r := target bounds.
 
-	((target isKindOf: CBlockMorph) and: [target firstBlockList size > 0])
+	((target isCBlockMorph) and: [target firstBlockList size > 0])
 		ifTrue: [r := r merge: target firstBlockList first fullBounds].
 	(target isKindOf: IfElseBlockMorph)
 		ifTrue: [
@@ -279,10 +279,10 @@ PhratchScriptsMorph >> showDeleteFeedback [
 	| h cutBlock r |
 	h := World activeHand.
 	(cutBlock := self topBlockMorphAt: h cursorPoint exclude: nil) ifNil: [^ self].
-	((cutBlock isKindOf: CSlotMorph) or: [cutBlock isKindOf: OSlotMorph])
+	((cutBlock isCSlotMorph) or: [cutBlock isOSlotMorph])
 		ifTrue: [cutBlock := cutBlock owner].
 	r := cutBlock bounds.
-	((cutBlock isKindOf: CBlockMorph) and: [cutBlock firstBlockList size > 0])
+	((cutBlock isCBlockMorph) and: [cutBlock firstBlockList size > 0])
 		ifTrue: [r := r merge: cutBlock firstBlockList first fullBounds].
 	(cutBlock isKindOf: HatBlockMorph)
 		ifTrue: [r := cutBlock fullBounds].
@@ -317,7 +317,7 @@ PhratchScriptsMorph >> step [
 	h submorphCount = 1 ifFalse: [^ self].
 	b := h firstSubmorph.
 	(b isKindOf: PhratchCommentMorph) ifTrue: [^ self showCommentDropFeedback].
-	(b isKindOf: BlockMorph) ifFalse: [^ self].
+	(b isBlockMorph) ifFalse: [^ self].
 
 	b isReporter ifTrue: [ "reporter block"
 		(targetArg := self topArgMorphAt: b bounds exclude: nil) ifNil: [^ self].
@@ -328,7 +328,7 @@ PhratchScriptsMorph >> step [
 			borderColor: feedbackColor;
 			useRoundedCorners.
 
-		(targetArg isKindOf: OSlotMorph) ifTrue: [
+		(targetArg isOSlotMorph) ifTrue: [
 			feedbackMorph
 				bounds: (targetArg bounds expandBy: 8)].
 
@@ -351,10 +351,10 @@ PhratchScriptsMorph >> step [
 	"non-reporter (i.e. command block or hat block)"
 	targetAssoc := b closestAttachTargetIn: self.
 	targetAssoc ifNil: [
-		"(b bottomBlock isKindOf: CBlockMorph) ifFalse: ["
+		"(b bottomBlock isCBlockMorph) ifFalse: ["
 			targetAssoc := b bottomBlock closestAttachTargetIn: self.
 			targetAssoc ifNotNil:[
-				(targetAssoc value owner isKindOf: BlockMorph) ifTrue:[
+				(targetAssoc value owner isBlockMorph) ifTrue:[
 					targetAssoc := nil]]]"]".
 	targetAssoc ifNil: [^ self].
 
@@ -393,11 +393,11 @@ PhratchScriptsMorph >> topArgMorphAt: aRectangle exclude: aMorph [
 			space].
 
 	stack := submorphs
-		detect: [:m | (m ~~ aMorph) and: [(m isKindOf: BlockMorph) and: [m fullBounds intersects: aRectangle]]]
+		detect: [:m | (m ~~ aMorph) and: [(m isBlockMorph) and: [m fullBounds intersects: aRectangle]]]
 		ifNone: [^ nil].
 
 
-	targetArg := (stack allMorphs) detect: [:m | (m isKindOf: ArgMorph) 
+	targetArg := (stack allMorphs) detect: [:m | (m isArgMorph) 
 									and: [(m bounds containsPoint: World activeHand position)
 									and: [m acceptsDroppedReporters]]] 
 										ifNone: [nil].
@@ -405,7 +405,7 @@ PhratchScriptsMorph >> topArgMorphAt: aRectangle exclude: aMorph [
 	targetArg ifNotNil: [^ targetArg].
 
 	stack allMorphsDo: [:b |
-		((b isKindOf: CommandBlockMorph) and:
+		((b isCommandBlockMorph) and:
 		 [(b isKindOf: HatBlockMorph) not]) ifTrue: [
 			1 to: b argumentCount do: [:i |
 				argM := b argumentAt: i.
@@ -429,11 +429,11 @@ PhratchScriptsMorph >> topBlockMorphAt: aPoint exclude: aMorph [
 
 	| stack answer blocksUnderHand |
 	stack := submorphs
-		detect: [:m | (m isKindOf: BlockMorph) and: [m fullBounds containsPoint: aPoint]]
+		detect: [:m | (m isBlockMorph) and: [m fullBounds containsPoint: aPoint]]
 		ifNone: [^ nil].
 
 	blocksUnderHand := OrderedCollection new.
-	stack allMorphsDo: [:s | ((s isKindOf: BlockMorph) and: [s bounds containsPoint: aPoint]) 
+	stack allMorphsDo: [:s | ((s isBlockMorph) and: [s bounds containsPoint: aPoint]) 
 		ifTrue: 	[blocksUnderHand addLast: s]
 	].
 	
@@ -451,7 +451,7 @@ PhratchScriptsMorph >> undoLastDrop [
 	(droppedBlock isKindOf: ReporterBlockMorph) ifTrue: [
 		kickedOutReporter notNil 
 			ifTrue: [ droppedBlock owner replaceArgMorph: droppedBlock by: kickedOutReporter]
-			ifFalse: [(droppedBlock owner isKindOf: BlockMorph)
+			ifFalse: [(droppedBlock owner isBlockMorph)
 				ifTrue: [
 					arg := droppedBlock owner argMorphToReplace: droppedBlock.
 					arg ifNotNil: [droppedBlock owner replaceArgMorph: droppedBlock by: arg]]].
@@ -460,7 +460,7 @@ PhratchScriptsMorph >> undoLastDrop [
 	next := droppedBottom nextBlock.
 	nestedStack ifNotNil: [next := nestedStack ].
 	next ifNotNil: [droppedBlock owner addMorph: next ].
-	(droppedBlock owner isKindOf: BlockMorph) ifTrue: [
+	(droppedBlock owner isBlockMorph) ifTrue: [
 		next ifNotNil: 
 			[ droppedBlock owner attachBlock: next]].
 

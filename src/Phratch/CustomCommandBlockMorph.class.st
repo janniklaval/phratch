@@ -121,7 +121,7 @@ CustomCommandBlockMorph >> addLabelToNonTemplate [
 	argValues := OrderedCollection new.
 	argMorphs
 		do: [ :a | 
-			(a isKindOf: BlockMorph)
+			(a isBlockMorph)
 				ifTrue: [ argValues add: a ]
 				ifFalse: [ 
 					(a isKindOf: MultiArgMorph)
@@ -199,7 +199,7 @@ CustomCommandBlockMorph >> addLabelToNonTemplate [
 		eachValue := argValues at: i ifAbsent: [ nil ].
 		eachValue
 			ifNotNil: [ 
-				(eachValue isKindOf: BlockMorph)
+				(eachValue isBlockMorph)
 					ifTrue: [ 
 						(eachArg acceptsTypeOf: eachValue)
 							ifTrue: [ 
@@ -501,7 +501,7 @@ CustomCommandBlockMorph >> rightButtonMenu [
 		menu addLine.
 		menu add: 'duplicate' value: #duplicate.
 
-		(self owner isKindOf: BlockMorph) ifFalse: [  "can't yet delete a blocks inside a script"
+		(self owner isBlockMorph) ifFalse: [  "can't yet delete a blocks inside a script"
 			menu add: 'delete' value: #delete]].
 
 	(owner isKindOf: PhratchBlockPaletteMorph) ifTrue: [
@@ -553,7 +553,7 @@ CustomCommandBlockMorph >> setDefaultArgs [
 	parms := def parameterNames.
 	1 to: argMorphs size do: [:i |
 		a := argMorphs at: i.
-		(a isKindOf: ArgMorph) ifTrue: [
+		(a isArgMorph) ifTrue: [
 			(a isKindOf: MultiArgMorph)
 				ifTrue: [a addArgSlot]
 				ifFalse: [

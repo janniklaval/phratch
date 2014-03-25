@@ -16,8 +16,8 @@ ProcedureHatBlockMorph class >> on: aBlockMorph [
 ProcedureHatBlockMorph >> argMorph [
 
 	self nonControlFlowSubmorphs do: [:m |
-		(m isKindOf: ArgMorph) ifTrue: [^ m].
-		((m isKindOf: BlockMorph) and: [m isCustomBlock]) ifTrue: [^ m]].
+		(m isArgMorph) ifTrue: [^ m].
+		((m isBlockMorph) and: [m isCustomBlock]) ifTrue: [^ m]].
 	^ nil
 
 ]
@@ -42,7 +42,7 @@ ProcedureHatBlockMorph >> fixBlockLayout [
 	cachedForm := nil.
 	cachedFeedbackForm := nil.
 
-	((argMorph isKindOf: ArgMorph) and: [argMorph owner = self])
+	((argMorph isArgMorph) and: [argMorph owner = self])
 		ifTrue: [argMorph fixArgLayout].
 	self height: 26 + argMorph height.
 
@@ -63,14 +63,14 @@ ProcedureHatBlockMorph >> fixBlockLayout [
 { #category : #widgets }
 ProcedureHatBlockMorph >> handlesMouseOver: evt [
 
-	^ self argMorph isKindOf: BlockMorph
+	^ self argMorph isBlockMorph
 
 ]
 
 { #category : #'event handling' }
 ProcedureHatBlockMorph >> handlesMouseOverDragging: evt [
 
-	^  self argMorph isKindOf: BlockMorph
+	^  self argMorph isBlockMorph
 
 ]
 
@@ -128,7 +128,7 @@ ProcedureHatBlockMorph >> nextBlock [
 	"Answer the block following myself in the block sequence or nil if I am the last block in the sequence. Each block is a submorph of the previous block."
 
 	^ self submorphs
-		detect: [:m | (m isKindOf: BlockMorph) and: [m ~= argMorph]]
+		detect: [:m | (m isBlockMorph) and: [m ~= argMorph]]
 		ifNone: [nil]
 
 ]

@@ -410,7 +410,7 @@ PhratchScriptEditorMorph >> handlesMouseOverDragging: evt [
 	evt hand submorphs size = 1 ifFalse: [^ false].
 	m := evt hand firstSubmorph.
 
-	^ m isKindOf: BlockMorph.
+	^ m isBlockMorph.
 
 ]
 

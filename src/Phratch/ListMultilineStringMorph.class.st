@@ -12,7 +12,7 @@ ListMultilineStringMorph >> drawTextOn: aCanvas [
 
 	|rf|
 	rf := self ownerOrYourselfThatIsA: WatcherReadoutFrameMorph.
-	rf ifNotNil: [((rf complexObject isKindOf: Morph) or: [rf complexObject isKindOf: PhratchList])
+	rf ifNotNil: [((rf complexObject isMorph) or: [rf complexObject isKindOf: PhratchList])
 		ifTrue: [^ self ]].
 
 	super drawTextOn: aCanvas

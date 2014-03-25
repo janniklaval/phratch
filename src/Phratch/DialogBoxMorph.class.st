@@ -349,7 +349,7 @@ DialogBoxMorph >> fixLayoutForExtent: aPoint [
 	fileInfoColumn submorphsDo: [: m |
 		fileColumnWidth := m width max: fileColumnWidth].
 	fileInfoColumn submorphsDo: [: m |
-		(m isKindOf: StringMorph)
+		(m isStringMorph)
 			ifFalse: [m width: fileColumnWidth]].
 
 	"position and size title"

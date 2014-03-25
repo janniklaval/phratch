@@ -157,11 +157,11 @@ MultiArgCommandBlockMorph >> fixBlockLayoutWrap [
 							lines add: line.
 							line := OrderedCollection new.
 							x := left ].
-					(m isKindOf: BlockMorph)
+					(m isBlockMorph)
 						ifTrue: [ m fixBlockLayout ].
-					(m isKindOf: ArgMorph)
+					(m isArgMorph)
 						ifTrue: [ m fixArgLayout ].
-					(m isKindOf: StringMorph)
+					(m isStringMorph)
 						ifTrue: [ m color: self labelColor ]
 						ifFalse: [ x := x max: minXForArgs ].
 					m left: x.
@@ -186,7 +186,7 @@ MultiArgCommandBlockMorph >> fixBlockLayoutWrap [
 			eachLine
 				do: [ :m | 
 					mh := ((m isKindOf: ReporterBlockMorph)
-						and: [ m isBlockTemplate or: [ ((m isKindOf: CArgSlotMorph) or: [ m isKindOf: OSlotMorph ]) and: [ m isEmptySlot not ] ] ])
+						and: [ m isBlockTemplate or: [ ((m isKindOf: CArgSlotMorph) or: [ m isOSlotMorph ]) and: [ m isEmptySlot not ] ] ])
 						ifTrue: [ m height + 5 ]
 						ifFalse: [ m height ].
 					maxHeight := mh max: maxHeight.

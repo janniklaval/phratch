@@ -47,7 +47,7 @@ AttributeArgMorph >> choice: aSymbol [
 
 	menuIconMorph position: (self right - borderWidth - 10)@(self top + borderWidth + 4).
 
-	(owner isKindOf: BlockMorph) ifTrue: [
+	(owner isBlockMorph) ifTrue: [
 		(owner respondsTo: #addLabel)
 			ifTrue: [owner addLabel]
 			ifFalse: [owner fixBlockLayout]].
@@ -77,7 +77,7 @@ AttributeArgMorph >> drawOn: aCanvas [
 
 { #category : #byob }
 AttributeArgMorph >> isBYOBattributeArg [
-	^ (owner isKindOf: CommandBlockMorph) and:
+	^ (owner isCommandBlockMorph) and:
 	 [#(attribute:of: get: set:to:) includes: owner selector]
 
 ]
@@ -87,7 +87,7 @@ AttributeArgMorph >> options [
 	"Answer my set of attributes."
 
 	| target list blockIds |
-	((owner isKindOf: CommandBlockMorph) and: [ owner selector = #getAttribute:of: ])
+	((owner isCommandBlockMorph) and: [ owner selector = #getAttribute:of: ])
 		ifFalse: [ ^ #() ].
 	((owner argumentAt: 2) isKindOf: SpriteArgMorph)
 		ifFalse: [ ^ #() ].
@@ -244,7 +244,7 @@ AttributeArgMorph >> universalAttributeChoice: aSymbol [
 	labelMorph position: self position + borderWidth + (3 @ -1).
 	self extent: labelMorph extent + (16 @ 2) + borderWidth.
 	menuIconMorph position: (self right - borderWidth - 10) @ (self top + borderWidth + 4).
-	(owner isKindOf: BlockMorph)
+	(owner isBlockMorph)
 		ifTrue: [ 
 			(owner respondsTo: #addLabel)
 				ifTrue: [ owner addLabel ]

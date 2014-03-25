@@ -88,7 +88,7 @@ ReporterBlockMorph >> createWatcher [
 { #category : #'byob lambdas' }
 ReporterBlockMorph >> declaredType [
 
-	(owner isKindOf: CommandBlockMorph) ifTrue: [
+	(owner isCommandBlockMorph) ifTrue: [
 		^ owner typeOfArg: self ].
 	^ nil
 ]
@@ -221,16 +221,16 @@ ReporterBlockMorph >> fixBlockLayout [
 	mList := self nonControlFlowSubmorphs.
 	maxH := 0.
 	mList do: [:m |
-		(m isKindOf: ArgMorph) ifTrue: [m fixArgLayout].
-		(m isKindOf: BlockMorph) ifTrue: [m fixBlockLayout].
+		(m isArgMorph) ifTrue: [m fixArgLayout].
+		(m isBlockMorph) ifTrue: [m fixBlockLayout].
 		maxH := maxH max: m height].
 	h := (maxH + 4) max: 17.
 
 	x := isBoolean ifTrue: [8] ifFalse: [4].
-	(mList size > 0 and: [mList first isKindOf: StringMorph]) ifTrue: [x := x + 2].
+	(mList size > 0 and: [mList first isStringMorph]) ifTrue: [x := x + 2].
 
 	mList do: [:m |
-		(m isKindOf: StringMorph) ifTrue: [m color: self labelColor].
+		(m isStringMorph) ifTrue: [m color: self labelColor].
 		y := (h - m height) // 2.
 		m position: self position + (x@y).
 		x := x + m width + 3].
@@ -259,10 +259,10 @@ ReporterBlockMorph >> fixBlockLayoutNoWrap [
 	maxH := 0.
 	mList do: [:m |
 		argH := nil.
-		(m isKindOf: ArgMorph) ifTrue: [
+		(m isArgMorph) ifTrue: [
 			m fixArgLayout.
 			argH := m height].
-		(m isKindOf: BlockMorph) ifTrue: [
+		(m isBlockMorph) ifTrue: [
 			m fixBlockLayout.
 			argH := m height.
 			m isBlockTemplate ifTrue: [
@@ -273,10 +273,10 @@ ReporterBlockMorph >> fixBlockLayoutNoWrap [
 	h := (maxH + 4) max: 17.
 
 	x := isBoolean ifTrue: [8] ifFalse: [4].
-	(mList size > 0 and: [mList first isKindOf: StringMorph]) ifTrue: [x := x + 2].
+	(mList size > 0 and: [mList first isStringMorph]) ifTrue: [x := x + 2].
 
 	mList do: [:m |
-		(m isKindOf: StringMorph) 
+		(m isStringMorph) 
 			ifTrue: [(m isKindOf: BlockLabelFragmentMorph) 
 				ifFalse: [m color: self labelColor]].
 
@@ -341,11 +341,11 @@ ReporterBlockMorph >> fixBlockLayoutWrap [
 							lines add: line.
 							line := OrderedCollection new.
 							x := left ].
-					(m isKindOf: BlockMorph)
+					(m isBlockMorph)
 						ifTrue: [ m fixBlockLayout ].
-					(m isKindOf: ArgMorph)
+					(m isArgMorph)
 						ifTrue: [ m fixArgLayout ].
-					(m isKindOf: StringMorph)
+					(m isStringMorph)
 						ifTrue: [ m color: self labelColor ]
 						ifFalse: [ x := x max: minXForArgs ].
 					m left: x.
@@ -373,11 +373,11 @@ ReporterBlockMorph >> fixBlockLayoutWrap [
 						and: [ 
 							m isBlockTemplate
 								or: [ 
-									((m isKindOf: CArgSlotMorph) or: [ m isKindOf: OSlotMorph ])
+									((m isKindOf: CArgSlotMorph) or: [ m isOSlotMorph ])
 										and: [ (m isKindOf: CReporterSlotMorph) not and: [ m isEmptySlot not ] ] ] ])
 						ifTrue: [ m height + 10 ]
 						ifFalse: [ 
-							((m isKindOf: CArgSlotMorph) or: [ (m isKindOf: OSlotMorph) and: [ (m isKindOf: CReporterSlotMorph) not ] ])
+							((m isKindOf: CArgSlotMorph) or: [ (m isOSlotMorph) and: [ (m isKindOf: CReporterSlotMorph) not ] ])
 								ifTrue: [ m height + 4 ]
 								ifFalse: [ m height + 2 ] ].
 					maxHeight := mh max: maxHeight ].
@@ -506,7 +506,7 @@ ReporterBlockMorph >> lambdafied [
 		commandSpec: 'the $String$ block';
 		yourself).
 
-	(owner isKindOf: BlockMorph) ifTrue: [
+	(owner isBlockMorph) ifTrue: [
 		owner replaceArgMorph: self by: lambda.
 		lambda replaceArgMorph: lambda argMorphs first by: self.
 		^lambda].
@@ -544,7 +544,7 @@ ReporterBlockMorph >> showLambdaValue [
 		ifError: [ 
 			gotError := true.
 			msg := 'Error!' ].
-	msg := (msg isKindOf: Morph)
+	msg := (msg isMorph)
 		ifTrue: [ 
 			(msg respondsTo: #displayForm)
 				ifTrue: [ msg displayForm ]
@@ -580,7 +580,7 @@ ReporterBlockMorph >> showValue [
 		ifError: [ 
 			gotError := true.
 			msg := 'Error!'. PhratchError error ].
-	msg := (msg isKindOf: Morph)
+	msg := (msg isMorph)
 		ifTrue: [ 
 			(msg respondsTo: #thumbnailImageForm)
 				ifTrue: [ msg thumbnailImageForm ]

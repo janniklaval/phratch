@@ -17,7 +17,7 @@ Class {
 ExpressionArgMorphWithMenu >> defaultValue: anObject [
 
 	((#(listIndexMenu listIndexForDeleteMenu) includes: getMenuSelector) and:
-	 [anObject isKindOf: String])
+	 [anObject isString])
 		ifTrue: [self specialValue: anObject]
 		ifFalse: [super defaultValue: anObject].
 
@@ -77,7 +77,7 @@ ExpressionArgMorphWithMenu >> fixArgLayout [
 	menuMorph ifNil: [^ self].
 	self width: self width + dx.
 	menuMorph position: (self right - dx - 2)@(self top + (self height // 3)).
-	(thisContext sender receiver isKindOf: StringFieldMorph) ifTrue: [
+	(thisContext sender receiver isStringFieldMorph) ifTrue: [
 		"clear only when user edit my label, but not on other arg layout changes"
 		specialValue := nil].
 
@@ -359,7 +359,7 @@ ExpressionArgMorphWithMenu >> mouseDown: evt [
 	(evt cursorPoint x < (menuMorph left - 1)) ifTrue: [^ super mouseDown: evt].
 
 	(getMenuSelector notNil and:
-	 [(owner isKindOf: BlockMorph) and: 
+	 [(owner isBlockMorph) and: 
 	 [(rcvr := owner receiver) notNil]]) ifFalse: [^ Beeper beep].
 	menu := rcvr perform: getMenuSelector.
 	(menu isKindOf: PhratchNoteSelector) ifTrue: [

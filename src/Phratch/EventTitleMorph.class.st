@@ -18,7 +18,7 @@ Class {
 EventTitleMorph >> acceptsDroppedReporters [
 	"Accept reporter blocks in broadcast blocks but not in 'when I receive' hat block."
 
-	^ owner isKindOf: CommandBlockMorph
+	^ owner isCommandBlockMorph
 
 ]
 
@@ -62,7 +62,7 @@ EventTitleMorph >> eventName: aString [
 	self extent: (labelMorph extent + (16@2) + borderWidth).
 	menuIconMorph position: (self right - borderWidth - 10)@(self top + borderWidth + 4).
 
-	(owner isKindOf: BlockMorph) ifTrue: [
+	(owner isBlockMorph) ifTrue: [
 		(owner respondsTo: #addLabel)
 			ifTrue: [owner addLabel]
 			ifFalse: [owner fixBlockLayout]]

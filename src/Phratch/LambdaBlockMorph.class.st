@@ -88,9 +88,9 @@ LambdaBlockMorph >> displayBlock [
 	parameters isEmpty ifTrue: [ 
 		self optimized sequence first selector = #doAnswer ifTrue: [
 			ans := self optimized sequence first argMorphs first fullCopy.
-			(ans isKindOf: ArgMorph) ifTrue: [^self].
-			(ans isKindOf: CommandScriptBlockMorph) ifFalse: [
-				ans allMorphs do: [:m | (m isKindOf: BlockMorph) ifTrue: [
+			(ans isArgMorph) ifTrue: [^self].
+			(ans isCommandScriptBlockMorph) ifFalse: [
+				ans allMorphs do: [:m | (m isBlockMorph) ifTrue: [
 						m isContrasted: false; addLabel]].
 					^ ans]].
 			^b].
@@ -107,7 +107,7 @@ LambdaBlockMorph >> displayForm [
 
 	block := self displayBlock.
 	block allMorphs do: [:m |
-		(m isKindOf: BlockMorph) ifTrue: [m fixBlockLayout ]].
+		(m isBlockMorph) ifTrue: [m fixBlockLayout ]].
 	^ block imageForm withOutlineColor: PhratchFrameMorph scriptsPaneColor width: 4
 ]
 
@@ -304,7 +304,7 @@ LambdaBlockMorph >> rightButtonMenu [
 	menu add: 'help' value: #presentHelpScreen.
 	menu addLine.
 	menu add: 'duplicate' value: #duplicate.
-	(self owner isKindOf: BlockMorph)
+	(self owner isBlockMorph)
 		ifFalse: [ 
 			"can't yet delete a blocks inside a script"
 			menu add: 'delete' value: #delete ].

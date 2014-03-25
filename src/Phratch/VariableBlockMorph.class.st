@@ -82,7 +82,7 @@ VariableBlockMorph >> click: evt [
 	(owner isKindOf: PhratchBlockPaletteMorph)
 		ifTrue: [^ super click: evt].
 
-	((owner isKindOf: BlockMorph) and: [owner isCustomBlock and: [owner isTemplate]])
+	((owner isBlockMorph) and: [owner isCustomBlock and: [owner isTemplate]])
 		ifFalse: [^self editName].
 	owner hideArgumentPlaceHolders.
 
@@ -163,7 +163,7 @@ VariableBlockMorph >> evaluateWithArgs: args [
 { #category : #'byob lambdas' }
 VariableBlockMorph >> handlesMouseOver: evt [
 
-	^ (owner isKindOf: BlockMorph) and: [
+	^ (owner isBlockMorph) and: [
 		owner isCustomBlock and: [
 			owner isTemplate]]
 
@@ -173,7 +173,7 @@ VariableBlockMorph >> handlesMouseOver: evt [
 VariableBlockMorph >> handlesMouseOverDragging: evt [
 	"Return true if this morph wants to receive mouseDown events (i.e., mouseDown:, mouseMove:, mouseUp:). The default response is false; subclasses that implement mouse messages should override this to return true." 
 
-	^ (owner isKindOf: BlockMorph) and: [
+	^ (owner isBlockMorph) and: [
 		owner isCustomBlock and: [
 			owner isTemplate]]
 
@@ -209,7 +209,7 @@ VariableBlockMorph >> isBlockTemplate [
 
 	| def |
 
-	((owner isKindOf: BlockMorph) and: [
+	((owner isBlockMorph) and: [
 		owner isCustomBlock]) ifTrue: [
 			def := owner definition.
 			def ifNotNil: [
@@ -224,7 +224,7 @@ VariableBlockMorph >> isBlockTemplate [
 { #category : #'byob lambdas' }
 VariableBlockMorph >> isPrototypeTemplate [
 
-	^(owner isKindOf: CommandBlockMorph)
+	^(owner isCommandBlockMorph)
 		and:[(owner isCustomBlock and: [owner isTemplate])].
 
 ]
@@ -355,7 +355,7 @@ VariableBlockMorph >> rightButtonMenu [
 
 	| menu choice |
 
-	((owner isKindOf: BlockMorph) and: [owner isCustomBlock and: [owner isTemplate]])
+	((owner isBlockMorph) and: [owner isCustomBlock and: [owner isTemplate]])
 		ifTrue: [^ self click: nil].
 
 	(((owner isKindOf: MultiArgReporterBlockMorph) and: [owner isLambdaForm])
@@ -377,7 +377,7 @@ VariableBlockMorph >> rightButtonMenu [
 { #category : #'byob lambdas' }
 VariableBlockMorph >> rootForGrabOf: aMorph [
 
-	((owner isKindOf: BlockMorph) and: [
+	((owner isBlockMorph) and: [
 		owner isCustomBlock and: [owner isTemplate not and: [owner definition notNil]]]) ifTrue: [
 			(owner definition typeOfParameterIndex: (owner argMorphs indexOf: aMorph)) = #template
 				ifTrue: [^self fullCopy]].

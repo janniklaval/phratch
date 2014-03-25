@@ -345,11 +345,11 @@ IfElseBlockMorph >> nestedBlockAt: aPoint [
 { #category : #byob }
 IfElseBlockMorph >> nests: aBlock [
 
-	(trueBlock isKindOf: BlockMorph) 
+	(trueBlock isBlockMorph) 
 		ifTrue: [ (trueBlock blockSequence includes: aBlock)
 			ifTrue: [^ true]].
 
-	(falseBlock isKindOf: BlockMorph) 
+	(falseBlock isBlockMorph) 
 		ifTrue: [ ^ (falseBlock blockSequence includes: aBlock)].
 
 	^ false
@@ -446,7 +446,7 @@ IfElseBlockMorph >> topBarHeight [
 
 	| nonBlockSubmorphs |
 	nonBlockSubmorphs := self submorphs select: [:m |
-		(m isKindOf: BlockMorph) not or: [argMorphs includes: m]].
+		(m isBlockMorph) not or: [argMorphs includes: m]].
 	^ nonBlockSubmorphs inject: CBlockBracketThickness into: [:h :m | h max: (m height + 4)].
 
 
