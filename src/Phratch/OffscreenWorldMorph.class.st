@@ -76,6 +76,12 @@ OffscreenWorldMorph >> invalidRect: damageRect [
 
 ]
 
+{ #category : #'as yet unclassified' }
+OffscreenWorldMorph >> isOffscreenWorldMorph [
+
+	^ true
+]
+
 { #category : #initialization }
 OffscreenWorldMorph >> on: aMorph [
 

@@ -555,6 +555,7 @@ PhratchSpriteMorph >> drawOn: aCanvas [
 			aCanvas paintImage: f at: bounds origin sourceRect: f boundingBox alpha: alpha].
 		^ self].
 
+	f changed.
 	aCanvas translucentImage: f at: bounds origin.
 
 ]
@@ -1091,7 +1092,6 @@ PhratchSpriteMorph >> layoutChanged [
 	"Update rotatedForm and offsetWhenRotated and compute new bounds."
 
 	| refPoint |
-	self changed.
 	refPoint := bounds origin + offsetWhenRotated.
 	(rotationStyle == #none and: [scalePoint = (1.0@1.0)])
 		ifTrue: [  "zero rotation and scale; use original Form"

@@ -211,6 +211,12 @@ Object >> isOSlotMorph [
 ]
 
 { #category : #'*Phratch-Extensions' }
+Object >> isOffscreenWorldMorph [
+
+	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
 Object >> isPhratchBlockPaletteMorph [
 
 	^ false

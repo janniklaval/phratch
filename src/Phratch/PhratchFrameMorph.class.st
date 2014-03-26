@@ -1711,7 +1711,7 @@ PhratchFrameMorph >> fullDrawOn: aCanvas [
 	"Draw my full Morphic structure on the given Canvas."
 	"Optimization: if damage is entirely contained in a given pane, draw only that pane."
 
-"	| damageR stageR |
+	| damageR stageR |
 	damageR := aCanvas clipRect.
 
 	stageR := workPane bounds.
@@ -1735,7 +1735,7 @@ PhratchFrameMorph >> fullDrawOn: aCanvas [
 
 	(libraryPane bounds containsRect: damageR) ifTrue: [
 		libraryPane fullDrawOn: aCanvas.
-		^ self]."
+		^ self].
 
 	super fullDrawOn: aCanvas.
 

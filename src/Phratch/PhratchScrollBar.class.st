@@ -267,8 +267,8 @@ PhratchScrollBar >> mouseMove: evt [
 	sliderStart := (self linearOffset: evt) + dragOffset.
 	sliderStart := (sliderStart max: 0) min: (self maxSliderStart).
 	self updateTarget.
-	self changed.
-
+	"self changed.
+"
 ]
 
 { #category : #'scroll bar protocol' }
@@ -278,8 +278,8 @@ PhratchScrollBar >> percentVisible: percentVisible [
 	sliderLength := ((percentVisible min: 1.0) * self maxSliderLength) rounded.
 	sliderLength := sliderLength max: self minSliderLength.
 	sliderLength = self maxSliderLength ifTrue: [self scrollFraction: 0].
-	self changed.
-
+	"self changed.
+"
 ]
 
 { #category : #'scroll bar protocol' }
@@ -303,8 +303,8 @@ PhratchScrollBar >> scrollFraction: aNumber [
 	"Set my scroll fraction, a number between 0.0 and 1.0."
 
 	sliderStart := (((aNumber asFloat min: 1.0) max: 0.0) * self maxSliderStart) rounded.
-	self changed.
-
+	"self changed.
+"
 ]
 
 { #category : #accessing }

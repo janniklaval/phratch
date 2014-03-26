@@ -1160,7 +1160,6 @@ PhratchStageMorph >> stepProcesses [
 	"Details: Iterate over a copy of processes to allow processes to stop themselves. During development, the error catcher makes it difficult to track down errors, so it can be disabled."
 
 	| proc |
-
 	PhratchProcess blockHighlightMSecs = 0 ifTrue: [^ self stepProcessesTurbo].
 
 	inProcessStep ifTrue: [^ self].

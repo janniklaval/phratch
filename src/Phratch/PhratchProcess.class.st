@@ -781,7 +781,6 @@ PhratchProcess >> doRepeat [
 
 	"1.  evaluate body of repeat block."
 	self pushStackFrame: (PhratchStackFrame new expression: block firstBlockList).
-
 ]
 
 { #category : #'private-special forms' }
