@@ -48,6 +48,12 @@ VariableDeclarationBlockMorph >> isPartsBin [
 	^true
 ]
 
+{ #category : #'as yet unclassified' }
+VariableDeclarationBlockMorph >> isVariableDeclarationBlockMorph [
+
+	^ true
+]
+
 { #category : #deleting }
 VariableDeclarationBlockMorph >> removeItem [
 	argMorphs size > self minArgs

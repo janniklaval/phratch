@@ -84,12 +84,12 @@ CustomReporterBlockMorph >> addLabel [
 
 	self isReporter ifTrue: [
 		m := submorphs first.
-		((m isKindOf: ChoiceArgMorph) | (m isKindOf: SpriteArgMorph)) ifTrue: [  "add spacer"
+		((m isChoiceArgMorph) | (m isSpriteArgMorph)) ifTrue: [  "add spacer"
 			self addMorphFront: (Morph new color: Color transparent; extent: 2@5;
 		yourself)].
 
 		m := submorphs last.
-		((m isKindOf: ChoiceArgMorph) | (m isKindOf: SpriteArgMorph)) ifTrue: [  "add spacer"
+		((m isChoiceArgMorph) | (m isSpriteArgMorph)) ifTrue: [  "add spacer"
 			self addMorphBack: (Morph new color: Color transparent; extent: 2@5;
 		yourself)]].
 
@@ -160,7 +160,7 @@ CustomReporterBlockMorph >> addLabelToNonTemplate [
 	(self isReporter and: [ submorphs isEmpty not ])
 		ifTrue: [ 
 			m := submorphs first.
-			(m isKindOf: ChoiceArgMorph) | (m isKindOf: SpriteArgMorph)
+			(m isChoiceArgMorph) | (m isSpriteArgMorph)
 				ifTrue: [ 
 					"add spacer"
 					self
@@ -170,7 +170,7 @@ CustomReporterBlockMorph >> addLabelToNonTemplate [
 								extent: 2 @ 5;
 								yourself) ].
 			m := submorphs last.
-			(m isKindOf: ChoiceArgMorph) | (m isKindOf: SpriteArgMorph)
+			(m isChoiceArgMorph) | (m isSpriteArgMorph)
 				ifTrue: [ 
 					"add spacer"
 					self
@@ -203,13 +203,13 @@ CustomReporterBlockMorph >> addLabelToNonTemplate [
 													ifTrue: [ eachArg attachBlock: eachValue nestedBlock ] ]
 											ifFalse: [ self replaceArgMorph: eachArg by: eachValue ] ] ]
 							ifFalse: [ 
-								((eachArg isKindOf: VariableBlockMorph) and: [ eachValue isKindOf: VariableBlockMorph ])
+								((eachArg isVariableBlockMorph) and: [ eachValue isVariableBlockMorph ])
 									ifTrue: [ eachArg commandSpec: eachValue commandSpec ] ] ]
 					ifFalse: [ 
 						((eachArg isExpressionArgMorph) and: [ eachArg isNumberExpression ])
 							ifTrue: [ eachArg defaultValue: eachValue	"asNumberNoError" ]
 							ifFalse: [ 
-								(eachValue isKindOf: PhratchListMorph)
+								(eachValue isPhratchListMorph)
 									ifTrue: [ eachArg defaultValue: eachValue ]
 									ifFalse: [ eachArg defaultValue: eachValue asString ] ] ] ] ]
 ]
@@ -283,7 +283,7 @@ CustomReporterBlockMorph >> editScript [
 
 { #category : #editing }
 CustomReporterBlockMorph >> editSpec [
-	(World allMorphs detect: [:m| m isKindOf: BlockDialog] ifNone: [nil])
+	(World allMorphs detect: [:m| m isBlockDialog] ifNone: [nil])
 		ifNotNil: [^self].
 	receiver editSpecId: self id
 ]
@@ -358,6 +358,11 @@ CustomReporterBlockMorph >> isAtomic [
 
 { #category : #byob }
 CustomReporterBlockMorph >> isCustomBlock [
+	^true
+]
+
+{ #category : #'as yet unclassified' }
+CustomReporterBlockMorph >> isCustomReporterBlockMorph [
 	^true
 ]
 
@@ -484,7 +489,7 @@ CustomReporterBlockMorph >> rightButtonMenu [
 	menu addLine.
 	menu add: 'edit' value: #editScript.
 
-	(owner isKindOf: PhratchBlockPaletteMorph) ifFalse: [
+	(owner isPhratchBlockPaletteMorph) ifFalse: [
 
 		menu add: 'relabel' value: #rename.
 		menu addLine.
@@ -492,7 +497,7 @@ CustomReporterBlockMorph >> rightButtonMenu [
 		(self owner isBlockMorph) ifFalse: [  "can't yet delete a blocks inside a script"
 			menu add: 'delete' value: #delete]].
 
-	(owner isKindOf: PhratchBlockPaletteMorph) ifTrue: [
+	(owner isPhratchBlockPaletteMorph) ifTrue: [
 		menu add: 'delete block definition' value: #deleteDefinition ].
 
 	"^ (menu localize; invokeModal) selectedValue"
@@ -514,7 +519,7 @@ CustomReporterBlockMorph >> rootForGrabOf: aMorph [
 					ifFalse: [^ root fullCopy]].
 			self dragNDropEnabled ifTrue: [^ root]].
 		root := root owner].
-	(isTemplate and: [ owner isKindOf: ProcedureHatBlockMorph]) ifTrue: [^nil].
+	(isTemplate and: [ owner isProcedureHatBlockMorph]) ifTrue: [^nil].
 
 	^ super rootForGrabOf: aMorph
 
@@ -576,7 +581,7 @@ CustomReporterBlockMorph >> showPlaceHoldersNear: aLabelFragment [
 	(submorphs at: idx - 1) appear.
 	(submorphs at: idx + 1) appear.
 
-	(aLabelFragment isKindOf: VariableBlockMorph)
+	(aLabelFragment isVariableBlockMorph)
 		ifFalse: [aLabelFragment color: color twiceDarker]
 
 

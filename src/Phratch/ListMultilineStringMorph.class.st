@@ -12,7 +12,7 @@ ListMultilineStringMorph >> drawTextOn: aCanvas [
 
 	|rf|
 	rf := self ownerOrYourselfThatIsA: WatcherReadoutFrameMorph.
-	rf ifNotNil: [((rf complexObject isMorph) or: [rf complexObject isKindOf: PhratchList])
+	rf ifNotNil: [((rf complexObject isMorph) or: [rf complexObject isPhratchList])
 		ifTrue: [^ self ]].
 
 	super drawTextOn: aCanvas
@@ -32,9 +32,9 @@ ListMultilineStringMorph >> fixLayout [
 	| readout |
 	readout := self ownerOrYourselfThatIsA: WatcherReadoutFrameMorph.
 	readout ifNotNil: [
-		(readout complexObject isKindOf: PhratchList) ifTrue: [^self].
-		(readout complexObject isKindOf: PhratchListMorph) ifTrue: [^self].
-		(readout complexObject isKindOf: ScriptablePhratchMorph) ifTrue: [^self].
+		(readout complexObject isPhratchList) ifTrue: [^self].
+		(readout complexObject isPhratchListMorph) ifTrue: [^self].
+		(readout complexObject isScriptablePhratchMorph) ifTrue: [^self].
 		deleteMorph position: (readout bottomRight) - (deleteMorph extent) - (3@5)]
 ]
 
@@ -58,8 +58,8 @@ ListMultilineStringMorph >> isList [
 
 	|rf|
 	rf := self ownerOrYourselfThatIsA: WatcherReadoutFrameMorph.
-	rf ifNotNil: [^ ((rf complexObject isKindOf: PhratchListMorph) or: [
-		rf complexObject isKindOf: PhratchList])].
+	rf ifNotNil: [^ ((rf complexObject isPhratchListMorph) or: [
+		rf complexObject isPhratchList])].
 	^ false
 
 ]
@@ -121,10 +121,10 @@ ListMultilineStringMorph >> list [
 
 	|rf|
 	rf := self ownerOrYourselfThatIsA: WatcherReadoutFrameMorph.
-	rf ifNotNil: [((rf complexObject isKindOf: PhratchListMorph) or: [
-		rf complexObject isKindOf: PhratchList])
-			ifTrue: [ (rf complexObject isKindOf: PhratchList)
-				ifTrue: [^ rf submorphs detect: [:sm | sm isKindOf: PhratchListMorph] ifNone: [nil]]
+	rf ifNotNil: [((rf complexObject isPhratchListMorph) or: [
+		rf complexObject isPhratchList])
+			ifTrue: [ (rf complexObject isPhratchList)
+				ifTrue: [^ rf submorphs detect: [:sm | sm isPhratchListMorph] ifNone: [nil]]
 				ifFalse: [^ rf complexObject]]].
 	^ nil
 

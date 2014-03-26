@@ -564,7 +564,7 @@ PhratchSpriteMorph >> drawSubmorphsOn: aCanvas [
 	"Display submorphs back to front, but do not draw and talk/think bubble submorphs."
 
 	submorphs reverseDo: [:m |
-		(m isKindOf: PhratchTalkBubbleMorph) ifFalse: [
+		(m isPhratchTalkBubbleMorph) ifFalse: [
 			aCanvas fullDrawMorph: m]].
 
 ]
@@ -575,7 +575,7 @@ PhratchSpriteMorph >> drawTalkBubbleOn: aCanvas [
 
 	submorphs size = 0 ifTrue: [^ self].
 	submorphs reverseDo: [:m |
-		(m isKindOf: PhratchTalkBubbleMorph) ifTrue: [
+		(m isPhratchTalkBubbleMorph) ifTrue: [
 			aCanvas fullDrawMorph: m]].
 
 ]
@@ -810,7 +810,7 @@ PhratchSpriteMorph >> gotoSpriteOrMouse: anObject [
 	"Go to the given sprite or mouse position."
 	<phratchItem: 'go to $Sprite$' kind: #- category: 'motion' defaultValues: #() subCategory: #a3 special: #()>
 	| x y len aSpriteOrSymbol p |
-	(anObject isKindOf: PhratchListMorph) ifTrue: [ "try to go the coordinates specified in a list"
+	(anObject isPhratchListMorph) ifTrue: [ "try to go the coordinates specified in a list"
 		x := self xpos.
 		y := self ypos.
 		len := anObject lineCount.
@@ -1013,6 +1013,12 @@ PhratchSpriteMorph >> isOrContains: aSprite [
 	^ (subsprites collect: [:sub |
 		sub isOrContains: aSprite ])
 			includes: true
+]
+
+{ #category : #accessing }
+PhratchSpriteMorph >> isPhratchSpriteMorph [
+
+	^ true
 ]
 
 { #category : #accessing }
@@ -1318,7 +1324,7 @@ PhratchSpriteMorph >> passiveSetSizeTo: percent [
 { #category : #nesting }
 PhratchSpriteMorph >> passiveStickTo: aSprite [
 
-	(aSprite isKindOf: PhratchSpriteMorph) ifFalse: [
+	(aSprite isPhratchSpriteMorph) ifFalse: [
 		^ self unhinge].
 
 	(self isOrContains: aSprite) ifTrue: [^self].
@@ -1653,7 +1659,7 @@ PhratchSpriteMorph >> referencePosition [
 	p := (bounds origin + offsetWhenRotated) - PhratchOrigin.
 
 	"adjust when in Hand in quartersize mode:"
-	((owner isKindOf: HandMorph) and:
+	((owner isHandMorph) and:
 	 [((s := owner formerOwner) isPhratchStageMorph) and:
 	 [s isQuarterSize]]) ifTrue: [
 		"Note: this is not quite right when rotation center is offset"
@@ -2316,7 +2322,7 @@ PhratchSpriteMorph >> undoableDeleteSprite [
 { #category : #nesting }
 PhratchSpriteMorph >> unhinge [
 
-	(ownerSprite isKindOf: PhratchSpriteMorph)
+	(ownerSprite isPhratchSpriteMorph)
 		ifFalse: [ownerSprite := nil].
 	ownerSprite ifNil: [^self].
 	ownerSprite removeSubsprite: self.

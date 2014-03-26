@@ -152,7 +152,7 @@ PhratchProcess >> bindVarsIn: blockSequence to: aVariableFrame [
 
 	blockSequence do: [:block |
 		block allMorphsDo: [:m | 
-			((m isKindOf: VariableBlockMorph) | (m isKindOf: SetterBlockMorph)
+			((m isVariableBlockMorph) | (m isSetterBlockMorph)
 			and: [m isSpecialForm & (aVariableFrame scope includes: m variable)]) ifTrue: [
 				m receiver: aVariableFrame ]]].
 ]
@@ -170,7 +170,7 @@ PhratchProcess >> changeVar [
 		ifTrue:	[argExp := block argumentAt: 2.
 				^self pushStackFrame: (PhratchStackFrame new expression: argExp)].
 
-	(block receiver isKindOf: VariableFrame) 
+	(block receiver isVariableFrame) 
 		ifTrue: [ environment := block receiver ]
 		ifFalse: [ (blockVarList notNil and: [blockVarList isEmpty not])
 			ifTrue: [ environment := blockVarList last ]].
@@ -229,7 +229,7 @@ PhratchProcess >> doAnswer [
 	zap value.	"get out of a custom C-shape command slot"
 	[ 
 	stackFrame notNil
-		and: [ (stackFrame expression isKindOf: Array) and: [ stackFrame expression first isKindOf: MultiArgCommandBlockMorph ] ] ]
+		and: [ (stackFrame expression isArray) and: [ stackFrame expression first isMultiArgCommandBlockMorph ] ] ]
 		whileTrue: [ 
 			zap value.
 			zap value ].
@@ -334,7 +334,7 @@ PhratchProcess >> doApplyEval [
 ------------------------------------------------------------------------------------------------------------------------------------------"
 
 															]]
-						ifFalse: [ (m isKindOf: LambdaBlockMorph)
+						ifFalse: [ (m isLambdaBlockMorph)
 							ifTrue: [nestedLambdas add: m]]]].
 
 			"remove slots in nested lambdas from list"
@@ -425,7 +425,7 @@ PhratchProcess >> doApplyEval [
 			aliases := Dictionary new.
 			templates keysDo: [:i |
 				aliases at: (argMorphs at: i) variable put: (templates at: i)].
-			argsList do: [:eachArg | (eachArg isKindOf: LambdaBlockMorph) ifTrue: [
+			argsList do: [:eachArg | (eachArg isLambdaBlockMorph) ifTrue: [
 				aliases keysDo: [:vName |
 					eachArg bind: vName to: varsFrame as: (aliases at: vName)]]]]].
 
@@ -1035,7 +1035,7 @@ PhratchProcess >> evaluateFor: aStageMorph [
 	stackFrame shouldYield ifTrue: [^ self yield].
 	expression := stackFrame expression.
 
-	(expression isKindOf: Symbol) ifTrue: [
+	(expression isSymbol) ifTrue: [
 		(#closeCustomBlock = expression) ifTrue: [
 		^self closeCustomBlock]].
 
@@ -1043,7 +1043,7 @@ PhratchProcess >> evaluateFor: aStageMorph [
 		expression litUp: false.
 		^ self popStackFrame].
 
-	(expression isKindOf: ReporterScriptBlockMorph) ifTrue: [
+	(expression isReporterScriptBlockMorph) ifTrue: [
 		self returnValueToParentFrame: expression evaluate.
 		^ self popStackFrame ].
 
@@ -1129,7 +1129,7 @@ PhratchProcess >> getVar [
 
 	| vars block value|
 	block := stackFrame expression.
-	(block receiver isKindOf: VariableFrame)
+	(block receiver isVariableFrame)
 		ifTrue: [value := block evaluate]
 		ifFalse: [
 			value := 0.
@@ -1165,7 +1165,7 @@ PhratchProcess >> includesDeletedReceiver [
 		(b isCommandBlockMorph) ifTrue:[
 			b receiver isNil
 				ifTrue: [^ true ]
-				ifFalse: [(b receiver isKindOf: VariableFrame)
+				ifFalse: [(b receiver isVariableFrame)
 					ifFalse: [b receiver owner isNil ifTrue: [
 						^ true]]]]].
 
@@ -1334,7 +1334,7 @@ PhratchProcess >> returnValueToParentFrame: anObject [
 
 	| f obj |
 	obj := anObject.
-	(anObject isKindOf: LambdaBlockMorph) ifTrue: [
+	(anObject isLambdaBlockMorph) ifTrue: [
 		obj := anObject fullCopy.
 		obj fixInitialFrame].
 	stackFrame ifNil: [^ self].
@@ -1398,7 +1398,7 @@ PhratchProcess >> setVar [
 		ifTrue:	[argExp := block argumentAt: 2.
 				^self pushStackFrame: (PhratchStackFrame new expression: argExp)].
 
-	(block receiver isKindOf: VariableFrame) 
+	(block receiver isVariableFrame) 
 		ifTrue: [ environment := block receiver ]
 		ifFalse: [ (blockVarList notNil and: [blockVarList isEmpty not])
 			ifTrue: [ environment := blockVarList last ]].

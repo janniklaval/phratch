@@ -210,7 +210,7 @@ CommandBlockMorph >> addLabel [
 	self isReporter
 		ifFalse: [ ^ self ].
 	m := submorphs last.
-	(m isKindOf: ChoiceArgMorph) | (m isKindOf: SpriteArgMorph)
+	(m isChoiceArgMorph) | (m isSpriteArgMorph)
 		ifTrue: [ 
 			"add spacer"
 			self
@@ -227,7 +227,7 @@ CommandBlockMorph >> argMorphFor: specString [
 
 	| m |
 	m := self uncoloredArgMorphFor: specString.
-	(m isKindOf: ColorArgMorph)
+	(m isColorArgMorph)
 		ifTrue: [m color: Color random].
 	^ m
 
@@ -584,17 +584,17 @@ CommandBlockMorph >> evaluateInfixWithArgs: rawArgs [
 								ifTrue: [ ^ result = 2 ].
 							#> = selector
 								ifTrue: [ ^ result = 3 ] ].
-					((arg1 isKindOf: Number) and: [ arg2 isKindOf: Number ])
+					((arg1 isNumber) and: [ arg2 isNumber ])
 						ifTrue: [ ^ arg1 perform: selector with: arg2 ].
 					^ false ]
 				ifFalse: [ 
-					(args first isKindOf: PhratchListMorph)
+					(args first isPhratchListMorph)
 						ifTrue: [ ^ args first equals: args second ].
-					(args second isKindOf: PhratchListMorph)
+					(args second isPhratchListMorph)
 						ifTrue: [ ^ args second equals: args first ] ] ].
 	(#(#& #|) includes: selector)
 		ifTrue: [ ^ args first perform: selector with: args second ].
-	((args first isKindOf: ScriptablePhratchMorph) or: [ args second isKindOf: ScriptablePhratchMorph ])
+	((args first isScriptablePhratchMorph) or: [ args second isScriptablePhratchMorph ])
 		ifTrue: [ ^ args first = args second ].
 	^ args first asNumberNoError perform: selector with: args second asNumberNoError
 ]
@@ -656,7 +656,7 @@ CommandBlockMorph >> fixBlockLayoutNoWrap [
 			h := ((m isCommandBlockMorph) and: [ m isBlockTemplate ])
 				ifTrue: [ h max: m height + 2 ]
 				ifFalse: [ h max: m height ] ].
-	minXForArgs := ((self isCBlockMorph) or: [ self isKindOf: IfElseBlockMorph ])
+	minXForArgs := ((self isCBlockMorph) or: [ self isIfElseBlockMorph ])
 		ifTrue: [ self left + PuzzleInset + PuzzleWidth + 8 ]
 		ifFalse: [ self left ].
 	h := h + 10.
@@ -679,7 +679,7 @@ CommandBlockMorph >> fixBlockLayoutNoWrap [
 			m position: x @ (self top + ((h - hAdjust - m height) // 2)).
 			x := x + m width + space ].
 	w := x - self left max: 37.
-	((self isCBlockMorph) or: [ self isKindOf: IfElseBlockMorph ])
+	((self isCBlockMorph) or: [ self isIfElseBlockMorph ])
 		ifTrue: [ w := w max: 71 ].
 	self extent: w @ h.
 	(nextB := self nextBlock)
@@ -859,7 +859,7 @@ CommandBlockMorph >> isForever [
 CommandBlockMorph >> isMaxNestedAt: int [
 	"kludge-alert!"
 
-	^ (receiver isKindOf: VariableFrame) and:[ receiver isMaxNestedAt: int + 1]
+	^ (receiver isVariableFrame) and:[ receiver isMaxNestedAt: int + 1]
 ]
 
 { #category : #accessing }
@@ -1147,7 +1147,7 @@ CommandBlockMorph >> receiver: anObject [
 CommandBlockMorph >> references: obj [
 	"kludge-alert: answer true if any part of me contains a reference to obj"
 
-	^ (receiver isKindOf: VariableFrame) and: [receiver references: obj]
+	^ (receiver isVariableFrame) and: [receiver references: obj]
 ]
 
 { #category : #private }
@@ -1163,8 +1163,8 @@ CommandBlockMorph >> replaceArgMorph: oldMorph by: newMorph [
 
 "
 	(newMorph = argMorphs first and: [ 
-		(newMorph isKindOf: ReporterScriptBlockMorph) or: [
-			oldMorph isKindOf: ReporterScriptBlockMorph]]) ifTrue: [
+		(newMorph isReporterScriptBlockMorph) or: [
+			oldMorph isReporterScriptBlockMorph]]) ifTrue: [
 			self addLabel].
 "
 	self layoutChanged.
@@ -1178,7 +1178,7 @@ CommandBlockMorph >> rightButtonMenu [
 	menu := MenuMorphNG new defaultTarget: self.
 	menu add: 'help' value: #presentHelpScreen.
 
-	(owner isKindOf: PhratchBlockPaletteMorph) ifFalse: [
+	(owner isPhratchBlockPaletteMorph) ifFalse: [
 		menu addLine.
 		(#(+ - * / \\) includes: selector) ifTrue: [
 			#(+ - * / mod) with: #(+ - * / \\) do: [:s :op | menu add: s value: op]].
@@ -1191,16 +1191,16 @@ CommandBlockMorph >> rightButtonMenu [
 		menu add: 'duplicate' value: #duplicate.
 		(self isReporterBlockMorph) ifFalse: [
 			menu add: '- this block' value: #fastDuplicate].
-		(self isKindOf: VariableBlockMorph) ifTrue: [
+		(self isVariableBlockMorph) ifTrue: [
 			menu add: 'relabel' value: #rename].
 		(self owner isBlockMorph) ifFalse: [  "can't yet delete a blocks inside a script"
 			menu add: 'delete' value: #delete]].
 
-	(self isKindOf: VariableBlockMorph)
+	(self isVariableBlockMorph)
 		ifTrue: [ menu add: 'delete' value: #deleteVariable: target: (self receiver) arguments: {self variable}.
 		].
 	
-	(self isKindOf: ListContentsBlockMorph)
+	(self isListContentsBlockMorph)
 		ifTrue: [ menu add: 'delete' value: #deleteList: target: (self receiver) arguments: {self selectorAndArg second}.
 		].
 		
@@ -1243,18 +1243,18 @@ CommandBlockMorph >> scriptVars [
 	[ (o isBlockMorph) or: [o isArgMorph]] whileTrue: [
 		o isLambdaForm ifTrue: [
 			blockVars addAll: o allVarNames ].
-		(o isKindOf: VariableDeclarationBlockMorph) ifTrue: [
+		(o isVariableDeclarationBlockMorph) ifTrue: [
 			blockVars addAll: o variables ].
-		(o isKindOf: ProcedureHatBlockMorph) ifTrue: [
+		(o isProcedureHatBlockMorph) ifTrue: [
 			blockVars addAll: o argMorph allVarNames ].
-		(o isKindOf: ReporterBlockDropTargetMorph)
+		(o isReporterBlockDropTargetMorph)
 			ifTrue: [
 				be := o ownerOrYourselfThatIsA: BlockEditorFrameMorph.
 				blockVars addAll: be template allVarNames.
 				o := be hat bottomBlock.
-				(o isKindOf: VariableDeclarationBlockMorph) ifTrue: [
+				(o isVariableDeclarationBlockMorph) ifTrue: [
 					blockVars addAll: o variables ].
-				(o isKindOf: ProcedureHatBlockMorph) ifTrue: [
+				(o isProcedureHatBlockMorph) ifTrue: [
 					blockVars addAll: o argMorph allVarNames ]].
 		o := o owner].
 	^blockVars
@@ -1310,7 +1310,7 @@ CommandBlockMorph >> start [
 	phratchProc ifNotNil: [^ self].  "this stack is already running"
 
 	rcvr := self receiver.
-	(rcvr isKindOf: ScriptablePhratchMorph)
+	(rcvr isScriptablePhratchMorph)
 		ifTrue: [ (stage := rcvr ownerOrYourselfThatIsA: PhratchStageMorph) ifNil: [^ self]]
 		ifFalse: [stage := (self ownerOrYourselfThatIsA: PhratchFrameMorph) workPane].	
 

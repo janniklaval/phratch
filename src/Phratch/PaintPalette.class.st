@@ -404,7 +404,7 @@ PaintPalette >> shapeFilling: aBoolean [
 
 	shapeFilling := aBoolean.
 	optionsPane firstSubmorph submorphs do: [:m |
-		(m isKindOf: ToggleButton) ifTrue: [
+		(m isToggleButton) ifTrue: [
 			m off.
 			((m arguments at: 1) = aBoolean) ifTrue: [m on]]].
 
@@ -729,7 +729,7 @@ PaintPalette >> updateToolbarButtons [
 
 	toolbarButtons ifNil: [^ self].
 	toolbarButtons allMorphsDo: [:b |
-		(b isKindOf: ToggleButton) ifTrue: [
+		(b isToggleButton) ifTrue: [
 			b arguments first = self mode ifTrue: [b on] ifFalse: [b off]]].
 
 ]

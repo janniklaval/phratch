@@ -61,7 +61,7 @@ ColorArgMorph class >> initialize [
 ColorArgMorph >> acceptsTypeOf: aBlockMorph [
 	"Answer true if I can accept a dropped reporter of the given type. Answer false by default."
 
-	^ (aBlockMorph isKindOf: ColorBlockMorph).
+	^ (aBlockMorph isColorBlockMorph).
 ]
 
 { #category : #other }
@@ -107,6 +107,12 @@ ColorArgMorph >> initialize [
 	self extent: 13@13.
 	showPalette := true.
 
+]
+
+{ #category : #'as yet unclassified' }
+ColorArgMorph >> isColorArgMorph [
+
+	^ true
 ]
 
 { #category : #BYOB }

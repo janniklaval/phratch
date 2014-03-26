@@ -31,7 +31,7 @@ AttributeArgMorph >> choice: aSymbol [
 		label := ''].
 
 	target := self target.
-	((target isKindOf: ScriptablePhratchMorph) and: [target allLocalBlockIds includes: aSymbol])
+	((target isScriptablePhratchMorph) and: [target allLocalBlockIds includes: aSymbol])
 		ifTrue: [
 			labelMorph isHidden: true.
 			self extent: (target lambda: aSymbol) imageForm extent + (14@2)]
@@ -75,6 +75,12 @@ AttributeArgMorph >> drawOn: aCanvas [
 			aCanvas paintImage: (target lambda: choice) imageForm at: self position + (1@1) ]
 ]
 
+{ #category : #'as yet unclassified' }
+AttributeArgMorph >> isAttributeArgMorph [
+
+	^true
+]
+
 { #category : #byob }
 AttributeArgMorph >> isBYOBattributeArg [
 	^ (owner isCommandBlockMorph) and:
@@ -89,10 +95,10 @@ AttributeArgMorph >> options [
 	| target list blockIds |
 	((owner isCommandBlockMorph) and: [ owner selector = #getAttribute:of: ])
 		ifFalse: [ ^ #() ].
-	((owner argumentAt: 2) isKindOf: SpriteArgMorph)
+	((owner argumentAt: 2) isSpriteArgMorph)
 		ifFalse: [ ^ #() ].
 	(target := (owner argumentAt: 2) evaluate) ifNil: [ ^ #() ].
-	(target isKindOf: ScriptablePhratchMorph)
+	(target isScriptablePhratchMorph)
 		ifFalse: [ ^ #() ].
 	list := target varNames size > 0
 		ifTrue: [ target attributeNames , #(#-) , target varNames ]
@@ -220,7 +226,7 @@ AttributeArgMorph >> target [
 		ifTrue: [^ nil].
 
 	owner selector = #getAttribute:of: ifTrue: [
-		((owner argumentAt: 2) isKindOf: SpriteArgMorph) ifFalse: [
+		((owner argumentAt: 2) isSpriteArgMorph) ifFalse: [
 			^ nil]].
 
 	^(owner argumentAt: 2) evaluate.

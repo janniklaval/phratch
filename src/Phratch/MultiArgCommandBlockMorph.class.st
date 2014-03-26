@@ -227,6 +227,12 @@ MultiArgCommandBlockMorph >> helpScreenName [
 
 ]
 
+{ #category : #'as yet unclassified' }
+MultiArgCommandBlockMorph >> isMultiArgCommandBlockMorph [
+
+	^ true
+]
+
 { #category : #accessing }
 MultiArgCommandBlockMorph >> minArgs [
 	^minArgs ifNil: [minArgs := 0]

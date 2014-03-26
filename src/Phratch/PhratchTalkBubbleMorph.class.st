@@ -77,6 +77,12 @@ PhratchTalkBubbleMorph >> insetBottom [
 
 ]
 
+{ #category : #'as yet unclassified' }
+PhratchTalkBubbleMorph >> isPhratchTalkBubbleMorph [
+
+	^ true
+]
+
 { #category : #accessing }
 PhratchTalkBubbleMorph >> message [
 

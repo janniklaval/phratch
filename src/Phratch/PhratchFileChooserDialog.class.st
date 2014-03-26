@@ -544,7 +544,7 @@ PhratchFileChooserDialog >> defaultName: aString [
 PhratchFileChooserDialog >> delete [
 
 	super delete.
-	(list isKindOf: PhratchFilePicker) ifTrue: [list stopPlayingSound].
+	(list isPhratchFilePicker) ifTrue: [list stopPlayingSound].
 
 ]
 

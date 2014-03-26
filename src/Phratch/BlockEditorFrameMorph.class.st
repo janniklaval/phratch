@@ -78,7 +78,7 @@ BlockEditorFrameMorph >> allBlocksFor: id [
 BlockEditorFrameMorph >> buildAnswerField [
 	| spacer ans |
 
-	(answerField isKindOf: ReporterBlockDropTargetMorph) ifTrue: [
+	(answerField isReporterBlockDropTargetMorph) ifTrue: [
 		mainColumn replaceSubmorph: answerField 
 						by: (answerField := Morph new extent: 0@0)].		
 
@@ -176,7 +176,7 @@ BlockEditorFrameMorph >> definition: aCustomBlockDefinition [
 		def body: hat nextBlock.
 		hat delete ].
 
-	(answerField isKindOf: ReporterBlockDropTargetMorph) ifTrue: [
+	(answerField isReporterBlockDropTargetMorph) ifTrue: [
 		def type = #none
 			ifTrue: [def answer: nil]
 			ifFalse: [def answer: answerField argument]].
@@ -316,15 +316,15 @@ BlockEditorFrameMorph >> instancesOf: aCustomBlockId [
 
 	| binInstances ansInstances |
 	binInstances := bin allMorphs select: [:m|
-		((m isKindOf: CustomCommandBlockMorph) or: [
-			m isKindOf: CustomReporterBlockMorph]) and: [
+		((m isCustomCommandBlockMorph) or: [
+			m isCustomReporterBlockMorph]) and: [
 				m id = aCustomBlockId]].
 	#none = definition type 
 		ifTrue: [^binInstances ].
 	(answerField argument isBlockMorph) ifFalse: [
 		^ binInstances].
 	ansInstances := answerField argument allMorphs select: [:m|
-		(m isKindOf: CustomReporterBlockMorph) and: [
+		(m isCustomReporterBlockMorph) and: [
 		m id = aCustomBlockId]].
 
 	^binInstances, ansInstances
@@ -429,7 +429,7 @@ BlockEditorFrameMorph >> snapToUserDimensions [
 
 { #category : #'stepping and presenter' }
 BlockEditorFrameMorph >> step [
-	resizeOffset notNil | (owner isKindOf: HandMorph)
+	resizeOffset notNil | (owner isHandMorph)
 		ifTrue: [^self ].
 	self keepOnScreen 
 
@@ -451,7 +451,7 @@ BlockEditorFrameMorph >> toggleAtomicity [
 BlockEditorFrameMorph >> topArgMorphAt: aRectangle exclude: aMorph [
 	"Give feedback about possible drop targets."
 
-	(answerField isKindOf: ReporterBlockDropTargetMorph) 
+	(answerField isReporterBlockDropTargetMorph) 
 		ifFalse: [^nil].
 	^answerField topArgMorphAt: aRectangle exclude: aMorph
 ]
@@ -474,7 +474,7 @@ BlockEditorFrameMorph >> updateResizeMorph [
 { #category : #'dropping/grabbing' }
 BlockEditorFrameMorph >> wantsDroppedMorph: aMorph event: evt [
 
-	(answerField isKindOf: ReporterBlockDropTargetMorph) 
+	(answerField isReporterBlockDropTargetMorph) 
 		ifFalse: [^false].
 	^answerField wantsDroppedMorph: aMorph event: evt	
 ]

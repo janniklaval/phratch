@@ -190,7 +190,7 @@ BlockDialog >> category: aString [
 	self updateTypeSelection.
 
 	categoryChooser submorphs do: [:m |
-		(m isKindOf: ResizableToggleButton) ifTrue: [
+		(m isResizableToggleButton) ifTrue: [
 			m arguments first = category
 				ifTrue: [m on]
 				ifFalse: [m off]]].
@@ -408,6 +408,12 @@ BlockDialog >> initialize [
 		addMorphBack: buttonRow;
 		addMorphBack: bottomSpacer.
 	self category: category
+]
+
+{ #category : #'as yet unclassified' }
+BlockDialog >> isBlockDialog [
+
+	^ true
 ]
 
 { #category : #private }

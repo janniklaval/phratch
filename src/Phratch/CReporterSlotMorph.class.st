@@ -52,7 +52,7 @@ CReporterSlotMorph >> drawBottomBarOn: aCanvas [
 		fillRectangle: (self left@(barTop + 1) corner: (self right - 1)@barBottom)
 		color: color.
 
-	(owner isKindOf: CustomReporterBlockMorph) ifFalse: [
+	(owner isCustomReporterBlockMorph) ifFalse: [
 		aCanvas
 			fillRectangle: ((self right - 1)@(barTop + 2) corner: self right@barBottom)
 			color: shadowColor]
@@ -119,7 +119,7 @@ CReporterSlotMorph >> drawTopBarOn: aCanvas [
 		y: y + 2
 		color: shadowColor
 		on: aCanvas.	"gapStart"
-	(owner isKindOf: CustomReporterBlockMorph)
+	(owner isCustomReporterBlockMorph)
 		ifTrue: [ ^ self ].
 	self drawPoint: right @ y color: shadowColor on: aCanvas.	"- 1"
 	self drawPoint: (right - 1) @ (y + 1) color: shadowColor on: aCanvas	"2"
@@ -156,7 +156,7 @@ CReporterSlotMorph >> fixBlockLayout [
 		ifNotNil: [ (self nestedBlock respondsTo: #fixBlockLayout)
 			ifTrue: [ self nestedBlock fixBlockLayout].
 			self nestedBlock position: self position + (12@3).
-			(self nestedBlock isKindOf: SpecialArgMorph) ifFalse: [
+			(self nestedBlock isSpecialArgMorph) ifFalse: [
 				newH := self nestedBlock fullBounds height + 6]].
 
 	self height: newH.

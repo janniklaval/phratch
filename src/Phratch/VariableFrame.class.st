@@ -143,20 +143,26 @@ VariableFrame >> isReferencing: aVarFrame [
 		obj := vars at: key. 
 		(obj isBlockMorph) ifTrue: [
 			(obj allMorphs anySatisfy: [ :m |
-				(m isKindOf: SetterBlockMorph) | (m isKindOf: VariableBlockMorph) and: [
+				(m isSetterBlockMorph) | (m isVariableBlockMorph) and: [
 					m receiver == aVarFrame or: [
 						(m receiver isKindOf: self class) and: [
 							m receiver isReferencing: aVarFrame]]]])
 				ifTrue: [^ true]].
-		(obj isKindOf: PhratchListMorph) ifTrue: [
+		(obj isPhratchListMorph) ifTrue: [
 			(obj asArray anySatisfy: [ :item |
-				(item isKindOf: SetterBlockMorph) | (item isKindOf: VariableBlockMorph) and: [
+				(item isSetterBlockMorph) | (item isVariableBlockMorph) and: [
 					item receiver == aVarFrame or: [
 						(item receiver isKindOf: self class) and: [
 							item receiver isReferencing: aVarFrame]]]])]].
 	^ false
 
 
+]
+
+{ #category : #'as yet unclassified' }
+VariableFrame >> isVariableFrame [
+
+	^ true
 ]
 
 { #category : #testing }

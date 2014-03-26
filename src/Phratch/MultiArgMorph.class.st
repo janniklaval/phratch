@@ -86,7 +86,7 @@ MultiArgMorph >> defaultValue: aPhratchListMorph [
 
 	| element |
 
-	(aPhratchListMorph isKindOf: PhratchListMorph)
+	(aPhratchListMorph isPhratchListMorph)
 		ifFalse: [^ self].
 	1 to: aPhratchListMorph lineCount do: [:i |
 		element := aPhratchListMorph lineAt: i.

@@ -196,7 +196,7 @@ PhratchListMorph >> concatenatedLines [
 { #category : #'list ops' }
 PhratchListMorph >> contains: anObject [
 	| s isComplex |
-	isComplex := (anObject isKindOf: ScriptablePhratchMorph) | (anObject isKindOf: PhratchListMorph)
+	isComplex := (anObject isScriptablePhratchMorph) | (anObject isPhratchListMorph)
 		| (anObject isCommandBlockMorph).
 	isComplex
 		ifTrue: [ 
@@ -373,7 +373,7 @@ PhratchListMorph >> fixLayoutForNewLanguage [
 	cellMorphs size = 0 ifTrue: [self fixLayout. ^ self showEmpty].
 	cellContents := cellMorphs first firstSubmorph.
 	oldH := cellContents height.
-	(cellContents isKindOf: PhratchListMorph)
+	(cellContents isPhratchListMorph)
 		ifFalse: [ cellContents font: cellContents font].
 	cellContents height = oldH ifTrue: [self fixLayout. ^ self].  "no size change"
 
@@ -552,6 +552,12 @@ PhratchListMorph >> isMaxNestedAt: int [
 					ifTrue:[^ true]]]].
 	^ false
 
+]
+
+{ #category : #'as yet unclassified' }
+PhratchListMorph >> isPhratchListMorph [
+
+	^ true
 ]
 
 { #category : #'dropping/grabbing' }
@@ -1159,7 +1165,7 @@ PhratchListMorph >> updateTitle [
 
 	| s |
 	listName ifNil: [ ^ self ].
-	s := (target isKindOf: PhratchSpriteMorph)
+	s := (target isPhratchSpriteMorph)
 		ifTrue: [ target objName , ' ' , listName ]
 		ifFalse: [ listName ].
 	titleMorph contents = s

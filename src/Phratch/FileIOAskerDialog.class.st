@@ -56,7 +56,7 @@ harmful or useful.'.
 	buttonRow addMorphBack: spacer fullCopy.
 	buttonRow submorphs
 		do: [ :b | 
-			(b isKindOf: ResizableToggleButton)
+			(b isResizableToggleButton)
 				ifTrue: [ tabFields add: b ] ]
 ]
 

@@ -253,6 +253,12 @@ PhratchCommentMorph >> initialize [
 
 ]
 
+{ #category : #'as yet unclassified' }
+PhratchCommentMorph >> isPhratchCommentMorph [
+
+	^ true
+]
+
 { #category : #accessing }
 PhratchCommentMorph >> isShowing [
 

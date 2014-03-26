@@ -65,6 +65,12 @@ ReporterBlockDropTargetMorph >> isBoolean: aBoolean [
 ]
 
 { #category : #accessing }
+ReporterBlockDropTargetMorph >> isReporterBlockDropTargetMorph [
+
+	^ true
+]
+
+{ #category : #accessing }
 ReporterBlockDropTargetMorph >> label: aString [
 	|dropSpec|
 	dropSpec := ' $String$'.
@@ -158,9 +164,9 @@ ReporterBlockDropTargetMorph >> step [
 			feedbackMorph
 				bounds: (targetArg bounds expandBy: 8)].
 
-		((targetArg isKindOf: SpecialArgMorph) 
+		((targetArg isSpecialArgMorph) 
 		and: [(#(reporterslot booleanslot) includes: targetArg type)
-		and: [(targetArg owner isKindOf: ReporterScriptBlockMorph) not]]) ifTrue: [
+		and: [(targetArg owner isReporterScriptBlockMorph) not]]) ifTrue: [
 			feedbackMorph
 				color: (feedbackColor);
 				bounds: (targetArg bounds insetBy: 3).
@@ -215,7 +221,7 @@ ReporterBlockDropTargetMorph >> topArgMorphAt: aRectangle exclude: aMorph [
 			space := morph bounds.
 			({CSlotMorph. OSlotMorph} includes: morph class)
 				ifTrue: [space := morph bounds expandBy: 5].
-			((morph isKindOf: SpecialArgMorph) and: [
+			((morph isSpecialArgMorph) and: [
 				#(reporterslot booleanslot) includes: morph type])
 					ifTrue: [space := morph bounds insetBy: 8].
 			space].
@@ -255,7 +261,7 @@ ReporterBlockDropTargetMorph >> uncoveredAt: aPoint [
 	morphsAbove size = 0
 		ifTrue: [ ^ true ].
 	be := self ownerOrYourselfThatIsA: DialogBoxMorph.
-	^ morphsAbove noneSatisfy: [ :m | (m isKindOf: DialogBoxMorph) and: [ m ~= be ] ]
+	^ morphsAbove noneSatisfy: [ :m | (m isDialogBoxMorph) and: [ m ~= be ] ]
 ]
 
 { #category : #'dropping/grabbing' }

@@ -233,7 +233,7 @@ ElementsEditorFrameMorph >> snapToUserDimensions [
 
 { #category : #'stepping and presenter' }
 ElementsEditorFrameMorph >> step [
-	resizeOffset notNil | (owner isKindOf: HandMorph)
+	resizeOffset notNil | (owner isHandMorph)
 		ifTrue: [^self ].
 	self keepOnScreen 
 

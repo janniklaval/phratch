@@ -27,6 +27,18 @@ Object >> isArgMorph [
 ]
 
 { #category : #'*Phratch-Extensions' }
+Object >> isAttributeArgMorph [
+
+	^false
+]
+
+{ #category : #'*Phratch-Extensions' }
+Object >> isBlockDialog [
+
+	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
 Object >> isBlockMorph [
 
 	^ false
@@ -63,6 +75,24 @@ Object >> isCSlotMorph [
 ]
 
 { #category : #'*Phratch-Extensions' }
+Object >> isChoiceArgMorph [
+
+	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
+Object >> isColorArgMorph [
+
+	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
+Object >> isColorBlockMorph [
+
+	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
 Object >> isCommandBlockMorph [
 
 	^ false
@@ -75,7 +105,29 @@ Object >> isCommandScriptBlockMorph [
 ]
 
 { #category : #'*Phratch-Extensions' }
+Object >> isCustomCommandBlockMorph [
+	^false
+]
+
+{ #category : #'*Phratch-Extensions' }
+Object >> isCustomReporterBlockMorph [
+	^false
+]
+
+{ #category : #'*Phratch-Extensions' }
+Object >> isDialogBoxMorph [
+
+	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
 Object >> isExpressionArgMorph [
+
+	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
+Object >> isHandMorph [
 
 	^ false
 ]
@@ -85,6 +137,42 @@ Object >> isHatBlockMorph [
 
 	^ false
 
+]
+
+{ #category : #'*Phratch-Extensions' }
+Object >> isIfElseBlockMorph [
+
+	^false
+]
+
+{ #category : #'*Phratch-Extensions' }
+Object >> isLambdaBlockMorph [
+
+	^false
+]
+
+{ #category : #'*Phratch-Extensions' }
+Object >> isLibraryItemMorph [
+
+	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
+Object >> isListContentsBlockMorph [
+
+	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
+Object >> isMediaItemMorph [
+
+	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
+Object >> isMultiArgCommandBlockMorph [
+
+	^ false
 ]
 
 { #category : #'*Phratch-Extensions' }
@@ -99,7 +187,61 @@ Object >> isOSlotMorph [
 ]
 
 { #category : #'*Phratch-Extensions' }
+Object >> isPhratchBlockPaletteMorph [
+
+	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
+Object >> isPhratchCommentMorph [
+
+	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
+Object >> isPhratchFilePicker [
+
+	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
+Object >> isPhratchFilePickerEntry [
+
+	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
+Object >> isPhratchFrameMorph [
+
+	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
+Object >> isPhratchList [
+
+	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
+Object >> isPhratchListMorph [
+
+	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
+Object >> isPhratchPrompterMorph [
+
+	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
 Object >> isPhratchScriptsMorph [
+
+	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
+Object >> isPhratchSpriteMorph [
 
 	^ false
 ]
@@ -111,7 +253,61 @@ Object >> isPhratchStageMorph [
 ]
 
 { #category : #'*Phratch-Extensions' }
+Object >> isPhratchTalkBubbleMorph [
+
+	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
+Object >> isProcedureHatBlockMorph [
+
+	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
+Object >> isReporterBlockDropTargetMorph [
+
+	^false
+]
+
+{ #category : #'*Phratch-Extensions' }
 Object >> isReporterBlockMorph [
+
+	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
+Object >> isReporterScriptBlockMorph [
+
+	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
+Object >> isResizableToggleButton [
+
+	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
+Object >> isScriptablePhratchMorph [
+
+	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
+Object >> isSetterBlockMorph [
+
+	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
+Object >> isSpecialArgMorph [
+
+	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
+Object >> isSpriteArgMorph [
 
 	^ false
 ]
@@ -124,5 +320,35 @@ Object >> isStringFieldMorph [
 
 { #category : #'*Phratch-Extensions' }
 Object >> isStringMorph [
+	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
+Object >> isToggleButton [
+
+	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
+Object >> isVariableBlockMorph [
+
+	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
+Object >> isVariableDeclarationBlockMorph [
+
+	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
+Object >> isVariableFrame [
+
+	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
+Object >> isWatcherMorph [
+
 	^ false
 ]

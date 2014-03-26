@@ -226,7 +226,7 @@ DialogBoxMorph >> buttonLabel: labelString action: actionSelector [
 DialogBoxMorph >> buttons [
 
 	^ buttonRow submorphs select: [:m |
-		m isKindOf: ResizableToggleButton].
+		m isResizableToggleButton].
 
 ]
 
@@ -274,7 +274,7 @@ DialogBoxMorph >> deleteItem [
 DialogBoxMorph >> drawOn: aCanvas [
 
 	| i |
-	i := (owner isKindOf: HandMorph) ifTrue: [2] ifFalse: [1].
+	i := (owner isHandMorph) ifTrue: [2] ifFalse: [1].
 
 	topLeftForm := topLeftForms at: i.
 	bottomLeftForm := bottomLeftForms at: i.
@@ -295,7 +295,7 @@ DialogBoxMorph >> enterKeyPressed: evt [
 	"Respond to the enter key being pressed in one of my input fields or on one of my buttons."
 
 	"if a button has focus, do that button"
-	(evt hand keyboardFocus isKindOf: ResizableToggleButton) ifTrue: [
+	(evt hand keyboardFocus isResizableToggleButton) ifTrue: [
 		evt hand keyboardFocus doButtonAction.
 		^ self].
 
@@ -447,6 +447,12 @@ DialogBoxMorph >> initialize [
 
 	self extent: 50@50.
 
+]
+
+{ #category : #'as yet unclassified' }
+DialogBoxMorph >> isDialogBoxMorph [
+
+	^ true
 ]
 
 { #category : #accessing }
@@ -663,7 +669,7 @@ DialogBoxMorph >> withButtonsForYes: yesFlag no: noFlag okay: okayFlag cancel: c
 		buttonRow addMorphBack: spacer fullCopy].
 
 	buttonRow submorphs do: [:b |
-		(b isKindOf: ResizableToggleButton) ifTrue: [tabFields add: b]].
+		(b isResizableToggleButton) ifTrue: [tabFields add: b]].
 
 ]
 
@@ -700,7 +706,7 @@ DialogBoxMorph >> withButtonsForYes: yesFlag no: noFlag okay: okayFlag delete: d
 		buttonRow addMorphBack: spacer fullCopy].
 
 	buttonRow submorphs do: [:b |
-		(b isKindOf: ResizableToggleButton) ifTrue: [tabFields add: b]].
+		(b isResizableToggleButton) ifTrue: [tabFields add: b]].
 
 ]
 

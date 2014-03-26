@@ -40,7 +40,7 @@ LabelFragmentBlockMorph >> addLabel [
 	self isReporter
 		ifFalse: [ ^ self ].
 	m := submorphs last.
-	(m isKindOf: ChoiceArgMorph) | (m isKindOf: SpriteArgMorph)
+	(m isChoiceArgMorph) | (m isSpriteArgMorph)
 		ifTrue: [ 
 			"add spacer"
 			self

@@ -23,7 +23,7 @@ SpriteArgMorph >> acceptsTypeOf: aBlockMorph [
 	"Answer true if I can accept a dropped reporter of the given type."
 
 	aBlockMorph isReporter ifFalse: [^ false].
-	(aBlockMorph isKindOf: ColorBlockMorph) ifTrue: [^ false].
+	(aBlockMorph isColorBlockMorph) ifTrue: [^ false].
 	^ aBlockMorph isBooleanReporter not
 
 ]
@@ -109,7 +109,7 @@ SpriteArgMorph >> fixGetAttribueBlock [
 	morph ifNil: [^ self].
 	((owner isReporterBlockMorph) and: [owner selector = #getAttribute:of:]) ifFalse: [^ self].
 
-	attributeArg := owner submorphs detect: [:m | m isKindOf: AttributeArgMorph] ifNone: [^ self].
+	attributeArg := owner submorphs detect: [:m | m isAttributeArgMorph] ifNone: [^ self].
 
 	possibleAttributes := morph attributeNames, morph varNames.
 	(possibleAttributes includes: attributeArg choice) ifFalse: [
@@ -160,6 +160,12 @@ SpriteArgMorph >> initialize [
 { #category : #BYOB }
 SpriteArgMorph >> isEmptySlot [
 	^morph = #null
+]
+
+{ #category : #'as yet unclassified' }
+SpriteArgMorph >> isSpriteArgMorph [
+
+	^ true
 ]
 
 { #category : #'event handling' }
@@ -289,7 +295,7 @@ SpriteArgMorph >> updateLabel [
 	| s |
 	self checkForDeletedMorph.
 	s := ' '.
-	(morph isKindOf: ScriptablePhratchMorph)
+	(morph isScriptablePhratchMorph)
 		ifTrue: [ s := morph objName ].
 	(morph isString)
 		ifTrue: [ 

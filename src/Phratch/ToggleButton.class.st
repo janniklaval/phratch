@@ -168,6 +168,12 @@ ToggleButton >> isOn [
 ]
 
 { #category : #accessing }
+ToggleButton >> isToggleButton [
+
+	^ true
+]
+
+{ #category : #accessing }
 ToggleButton >> label [
 
 	self allMorphsDo: [:m | (m isStringMorph) ifTrue: [^ m]].

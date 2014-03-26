@@ -68,7 +68,7 @@ DebuggerFrameMorph >> createButtons [
 	buttonRow addMorphBack: spacer fullCopy.
 
 	buttonRow submorphs do: [:b |
-		(b isKindOf: ResizableToggleButton) ifTrue: [tabFields add: b]].
+		(b isResizableToggleButton) ifTrue: [tabFields add: b]].
 
 	cb := thread currentBlock.
 	cb nextBlock ifNil: [^jump isHidden: true].
@@ -152,7 +152,7 @@ DebuggerFrameMorph >> handlesMouseDown: evt [
 DebuggerFrameMorph >> hasVars [
 	| vars env |
 	returnValue ifNotNil: [ ^ true ].
-	vars := (thread currentBlock receiver isKindOf: VariableFrame)
+	vars := (thread currentBlock receiver isVariableFrame)
 		ifTrue: [ thread currentBlock receiver ]
 		ifFalse: [ thread temporaryVariables ].
 	vars vars keys size > 0
@@ -308,7 +308,7 @@ DebuggerFrameMorph >> snapToUserDimensions [
 
 { #category : #'stepping and presenter' }
 DebuggerFrameMorph >> step [
-	resizeOffset notNil | (owner isKindOf: HandMorph)
+	resizeOffset notNil | (owner isHandMorph)
 		ifTrue: [^self ].
 	self keepOnScreen 
 
@@ -360,7 +360,7 @@ DebuggerFrameMorph >> varMenu [
 		ifNotNil: [ 
 			menu add: 'report value' localized action: nil.
 			menu addLine ].
-	vars := (thread currentBlock receiver isKindOf: VariableFrame)
+	vars := (thread currentBlock receiver isVariableFrame)
 		ifTrue: [ thread currentBlock receiver ]
 		ifFalse: [ thread temporaryVariables ].
 	vars vars keys asSortedCollection do: [ :vname | menu add: vname  action: nil ].

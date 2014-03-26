@@ -25,7 +25,7 @@ FuelObjStreamTests >> formEqualityTest: inForm [
 	 (outForm depth = inForm depth) &
 	 (outForm bits = inForm bits) &
 	 (outForm offset = inForm offset))).
-	(inForm isKindOf: ColorForm) ifTrue: [
+	(inForm isColorForm) ifTrue: [
 		self assert: (inForm colors = outForm colors)
 	].
 

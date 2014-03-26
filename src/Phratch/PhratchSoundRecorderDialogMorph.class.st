@@ -217,7 +217,7 @@ PhratchSoundRecorderDialogMorph >> setMode: aSymbol [
 
 	| modeButtons |
 	currentMode := aSymbol.
-	modeButtons := modeButtonsPane submorphs select: [:m | m isKindOf: ToggleButton].
+	modeButtons := modeButtonsPane submorphs select: [:m | m isToggleButton].
 
 	modeButtons do: [:b |
 		b actionSelector = currentMode
@@ -230,7 +230,7 @@ PhratchSoundRecorderDialogMorph >> setMode: aSymbol [
 PhratchSoundRecorderDialogMorph >> setMode: aSymbol isDisabled: aBoolean [
 
 	| modeButtons |
-	modeButtons := modeButtonsPane submorphs select: [:m | m isKindOf: ToggleButton].
+	modeButtons := modeButtonsPane submorphs select: [:m | m isToggleButton].
 
 	modeButtons do: [:b |
 		b actionSelector = aSymbol ifTrue: [b isDisabled: aBoolean]].

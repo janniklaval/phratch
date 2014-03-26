@@ -12,7 +12,7 @@ CSlotMorph >> acceptsTypeOf: aBlockMorph [
 	"Answer true if I can accept a dropped reporter of the given type. Answer false by default."
 
 	^ aBlockMorph isReporter and: [  
-		(aBlockMorph isKindOf: VariableBlockMorph) or: [
+		(aBlockMorph isVariableBlockMorph) or: [
 			#(autoLambda
 			loopLambda
 			getLine:ofList:

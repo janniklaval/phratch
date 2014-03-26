@@ -575,7 +575,7 @@ PaintFrame >> scaleCanvas: aNumberOrSymbol [
 	(aNumberOrSymbol == #out) ifTrue: [numToScale := (canvasMorph scale//2 max: 1)].
 	
 	zoomBar allMorphsDo: [:b |
-		(b isKindOf: ToggleButton) ifTrue: [
+		(b isToggleButton) ifTrue: [
 			b arguments first = numToScale ifTrue: [b on] ifFalse: [b off]]].
 
 	canvasMorph scale: numToScale.

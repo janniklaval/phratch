@@ -33,7 +33,7 @@ PhratchCategoryVariables class >> viewerPageFor: aScriptablePhratchMorph [
 	addButton := PhratchFrameMorph
 		buttonLabel: 'Make a variable' localized
 		selector: #addGlobalVariable.
-	(aScriptablePhratchMorph isKindOf: PhratchSpriteMorph) ifTrue: [addButton actionSelector: #addVariable].
+	(aScriptablePhratchMorph isPhratchSpriteMorph) ifTrue: [addButton actionSelector: #addVariable].
 
 	deleteButton := PhratchFrameMorph
 		buttonLabel: 'Delete a variable' localized

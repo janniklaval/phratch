@@ -43,7 +43,7 @@ PhratchToolTipMorph >> initialCursorPoint: aPoint [
 PhratchToolTipMorph >> message: aString [
 
 	| str |
-	(aString isKindOf: Form)
+	(aString isForm)
 		ifTrue: [message := ImageMorph new colorform: aString ]
 		ifFalse: [
 			str := aString.

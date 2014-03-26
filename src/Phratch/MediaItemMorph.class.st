@@ -280,7 +280,7 @@ MediaItemMorph >> exportMedia [
 	media isMovie ifTrue: [^ self].
 	(self phratchObj isPhratchStageMorph) ifTrue: 
 		[type := #background. title := 'Export Background'].
-	(self phratchObj isKindOf: PhratchSpriteMorph) ifTrue: 
+	(self phratchObj isPhratchSpriteMorph) ifTrue: 
 		[type := #costume. title := 'Export Costume'].
 	media isSound ifTrue: [type := #sound. title := 'Export Sound'].
 	result := PhratchFileChooserDialog
@@ -380,6 +380,12 @@ MediaItemMorph >> initialize [
 	highlightPadding := 20@5.
 	"this determines the minimum size of the thumbnail. The thumbnail may grow larger with larger font sizes"
 
+]
+
+{ #category : #'as yet unclassified' }
+MediaItemMorph >> isMediaItemMorph [
+
+	^ true
 ]
 
 { #category : #'dropping/grabbing' }

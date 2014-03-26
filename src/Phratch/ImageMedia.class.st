@@ -72,7 +72,7 @@ ImageMedia >> exportFilename: fileName for: stageOrSprite [
 	fName := (fileName asLowercase endsWith: '.bmp')
 		ifTrue: [ fileName ]
 		ifFalse: [ fileName , '.bmp' ].
-	(stageOrSprite isKindOf: PhratchSpriteMorph)
+	(stageOrSprite isPhratchSpriteMorph)
 		ifTrue: [ 
 			f := Form extent: myForm extent depth: 32.
 			f fillColor: Color white.	"BMP cannot handle transparency; use white as BG color"
@@ -152,7 +152,7 @@ ImageMedia >> jpegCompressIfPossibleQuality: quality [
 	jpegBytes ifNotNil: [^ false].
 
 	form unhibernate.
-	(form isKindOf: ColorForm)
+	(form isColorForm)
 		ifTrue: [
 			(form colorsUsed includes: Color transparent) ifTrue: [^ false]]
 		ifFalse: [

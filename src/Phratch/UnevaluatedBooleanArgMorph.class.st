@@ -31,7 +31,7 @@ UnevaluatedBooleanArgMorph >> evaluate [
 	answerBlock ].
 	(self isEmptySlot and: [ implicitValue notNil ])
 		ifTrue: [ 
-			(implicitValue isKindOf: LambdaBlockMorph)
+			(implicitValue isLambdaBlockMorph)
 				ifTrue: [ ^ implicitValue ]
 				ifFalse: [ ^ lambdafy value: implicitValue ] ].
 	^ lambdafy value: false

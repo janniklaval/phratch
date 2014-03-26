@@ -824,7 +824,7 @@ PaintCanvas >> importCostumeFromSprite: fName [
 	[importedStage := self extractProjectFrom: data] ifError: [^ nil].
 
 	importedStage submorphs do: [:m |
-		(m isKindOf: PhratchSpriteMorph) ifTrue: [
+		(m isPhratchSpriteMorph) ifTrue: [
 			^ m costumeForm]].
 
 	^ nil

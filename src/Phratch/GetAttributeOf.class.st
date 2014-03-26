@@ -23,7 +23,7 @@ GetAttributeOf >> defaultArguments [
 	| list defaultArgs |
 	(self model ownerOrYourselfThatIsA: PhratchStageMorph)
 		ifNotNil: [:stage | 
-			list := stage submorphs select: [ :m | m isKindOf: PhratchSpriteMorph ].
+			list := stage submorphs select: [ :m | m isPhratchSpriteMorph ].
 			list sort: [ :stage1 :stage2 | stage1 objName asLowercase < stage2 objName asLowercase ].
 			defaultArgs := list size > 0
 				ifTrue: [ Array with: 'x position' with: list first ]

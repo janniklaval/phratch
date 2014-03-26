@@ -369,7 +369,7 @@ PhratchFilePicker >> highlightEntryAt: aPoint [
 	| secondClick |
 	secondClick := false.
 	contentsPaneMorph contents submorphsDo: [:m |
-		(m isKindOf: PhratchFilePickerEntry) ifTrue: [
+		(m isPhratchFilePickerEntry) ifTrue: [
 			(m containsPoint: aPoint)
 				ifTrue: [secondClick := m isHighlit. m highlight: true]
 				ifFalse: [m highlight: false]]].
@@ -403,6 +403,12 @@ PhratchFilePicker >> initialize [
 PhratchFilePicker >> isFinalSelection [
 
 	^ finalSelection
+]
+
+{ #category : #accessing }
+PhratchFilePicker >> isPhratchFilePicker [
+
+	^ true
 ]
 
 { #category : #'event handling' }

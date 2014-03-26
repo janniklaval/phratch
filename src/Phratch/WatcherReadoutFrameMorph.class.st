@@ -21,7 +21,7 @@ WatcherReadoutFrameMorph >> complexObject [
 WatcherReadoutFrameMorph >> complexObject: anObject [
 	| newListWatcher |
 	complexObject := anObject.
-	(anObject isKindOf: PhratchListMorph)
+	(anObject isPhratchListMorph)
 		ifTrue: [ 
 			submorphs := submorphs copyWithout: anObject.
 			anObject position: self position + 5.
@@ -29,7 +29,7 @@ WatcherReadoutFrameMorph >> complexObject: anObject [
 			anObject fixLayout.
 			anObject startStepping.
 			^ self ].
-	(anObject isKindOf: PhratchList)
+	(anObject isPhratchList)
 		ifFalse: [ ^ self ].
 	newListWatcher := PhratchListMorph new
 		listName: '' target: nil;
@@ -37,7 +37,7 @@ WatcherReadoutFrameMorph >> complexObject: anObject [
 		updateCountMorph;
 		yourself.
 	newListWatcher fixLayout.
-	submorphs := submorphs reject: [ :each | each isKindOf: newListWatcher class ].
+	submorphs := submorphs reject: [ :each | each isPhratchListMorph ].
 	newListWatcher position: self position + 5.
 	self addMorphBack: newListWatcher.
 	newListWatcher fixLayout.
@@ -119,14 +119,14 @@ WatcherReadoutFrameMorph >> fixLayout [
 	isLarge
 		ifTrue: [ self width: 50 ]
 		ifFalse: [ self width: 40 ].
-	(s isKindOf: Form)
+	(s isForm)
 		ifTrue: [ 
 			readout extent: s extent.
 			self extent: readout extent + (10 @ 10).
 			readout position: self position + (5 @ 5).
 			^ self layoutChanged ]
 		ifFalse: [ 
-			blist := submorphs detect: [ :sm | sm isKindOf: PhratchListMorph ] ifNone: [ nil ].
+			blist := submorphs detect: [ :sm | sm isPhratchListMorph ] ifNone: [ nil ].
 			blist
 				ifNotNil: [ 
 					readout extent: blist extent.

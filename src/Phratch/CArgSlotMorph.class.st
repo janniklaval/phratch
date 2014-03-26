@@ -54,7 +54,7 @@ CArgSlotMorph >> drawBottomBarOn: aCanvas [
 		fillRectangle: (self left@(barTop + 1) corner: (self right - 1)@barBottom)
 		color: color.
 
-	(owner isKindOf: CustomReporterBlockMorph) ifFalse: [
+	(owner isCustomReporterBlockMorph) ifFalse: [
 		aCanvas
 			fillRectangle: ((self right - 1)@(barTop + 2) corner: self right@barBottom)
 			color: shadowColor]
@@ -165,7 +165,7 @@ CArgSlotMorph >> drawTopBarOn: aCanvas [
 	self drawPoint: (gapEnd - 1) @ (y + 3) color: shadowColor on: aCanvas.
 	self drawPoint: (gapEnd - 1) @ (y + 4) color: shadowColor on: aCanvas.
 	self drawPoint: (gapEnd - 2) @ (y + 5) color: shadowColor on: aCanvas.
-	(owner isKindOf: CustomReporterBlockMorph)
+	(owner isCustomReporterBlockMorph)
 		ifTrue: [ ^ self ].
 	self drawPoint: right @ y color: shadowColor on: aCanvas.	"- 1"
 	self drawPoint: (right - 1) @ (y + 1) color: shadowColor on: aCanvas	"2"

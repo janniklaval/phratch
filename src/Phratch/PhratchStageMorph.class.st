@@ -67,7 +67,7 @@ PhratchStageMorph >> allClones [
 	"Answer a collection of all sprite clones."
 
 	^ self submorphs select: [:m |
-		(m isKindOf: ScriptablePhratchMorph) and: [m isClone]].
+		(m isScriptablePhratchMorph) and: [m isClone]].
 
 ]
 
@@ -78,7 +78,7 @@ PhratchStageMorph >> allEventNames [
 	| result |
 	result := Set new: 100.
 	self submorphsDo: [:m |
-		(m isKindOf: ScriptablePhratchMorph) ifTrue: [
+		(m isScriptablePhratchMorph) ifTrue: [
 			m addEventNamesTo: result]].
 	self addEventNamesTo: result.
 
@@ -134,7 +134,7 @@ PhratchStageMorph >> broadcastEventNamed: name with: value [
 	newProcs := OrderedCollection new.
 
 	"start scripts"
-	objList := submorphs select: [:m | m isKindOf: ScriptablePhratchMorph].
+	objList := submorphs select: [:m | m isScriptablePhratchMorph].
 	objList do: [:obj |
 		newProcs addAll: (obj eventReceived: event)].
 	newProcs addAll: (self eventReceived: event).
@@ -389,7 +389,7 @@ PhratchStageMorph >> drawSubmorphsOn: aCanvas [
 	bubleToDraw := OrderedCollection new.
 	clipCanvas := aCanvas copyClipRect: bounds.
 	submorphs reverseDo:[:m |
-		((m isKindOf: PhratchSpriteMorph) and:
+		((m isPhratchSpriteMorph) and:
 		 [m isHidden not and:
 		 [clipCanvas isVisible: m fullBounds]]) ifTrue: [ 
 			bubleToDraw add: m.
@@ -454,7 +454,7 @@ PhratchStageMorph >> fullDrawOn: aCanvas [
 	super fullDrawOn: aCanvas.
 
 	"don't draw shadows if owner is not a PhratchFrameMorph"
-	(owner isKindOf: PhratchFrameMorph) ifFalse: [^ self].
+	(owner isPhratchFrameMorph) ifFalse: [^ self].
 
 	"shadow constants"
 	shadowOrigin := self topLeft + aCanvas origin.
@@ -543,9 +543,9 @@ PhratchStageMorph >> invalidRect: damageRect [
 	"Clip damage reports to my bounds, since drawing is clipped to my bounds."
 
 	| r |
-	(owner isKindOf: PhratchFrameMorph) ifTrue: [owner projectModified].
+	(owner isPhratchFrameMorph) ifTrue: [owner projectModified].
 
-	(self isQuarterSize and: [owner isKindOf: PhratchFrameMorph])
+	(self isQuarterSize and: [owner isPhratchFrameMorph])
 		ifTrue: [
 			r := (bounds origin + ((damageRect origin - bounds origin) / 2.0)) extent: (damageRect extent / 2.0).
 			r := r intersect: (bounds origin extent: bounds extent // 2)]
@@ -561,7 +561,7 @@ PhratchStageMorph >> invalidRect: damageRect [
 PhratchStageMorph >> isPaused [
 
 	| allObjs |
-	allObjs := submorphs select: [:m | m isKindOf: ScriptablePhratchMorph].
+	allObjs := submorphs select: [:m | m isScriptablePhratchMorph].
 	allObjs := allObjs copyWith: self.
 	allObjs do: [:obj |
 		(obj blocksBin isMorph) ifTrue: [
@@ -655,7 +655,7 @@ PhratchStageMorph >> newScene [
 
 	sceneStates at: sceneName put: self backgroundIndex.
 	submorphs do: [:m |
-		(m isKindOf: PhratchSpriteMorph) ifTrue: [
+		(m isPhratchSpriteMorph) ifTrue: [
 			m recordScene: sceneName]].
 
 ]
@@ -768,7 +768,7 @@ PhratchStageMorph >> patchAt: patchRect withoutWatchersAnd: stopMorph andNothing
 			ifTrue: [morphsToDraw := morphsToDraw copyFrom: 1 to: i - 1]  "stop at stopMorph"
 			ifFalse: [morphsToDraw removeIndex: i]].  "skip stopMorph"
 	morphsToDraw do: [:m |
-		(m isKindOf: WatcherMorph)
+		(m isWatcherMorph)
 			ifFalse: [m fullDrawOn: c]].
 	^ c form
 
@@ -784,7 +784,7 @@ PhratchStageMorph >> pauseAllProcesses [
 		
 	"clear all processes, including those with error feedback"
 "
-	allObjs := submorphs select: [:m | m isKindOf: ScriptablePhratchMorph].
+	allObjs := submorphs select: [:m | m isScriptablePhratchMorph].
 	allObjs := allObjs copyWith: self.
 	allObjs do: [:obj |
 		(obj blocksBin isMorph) ifTrue: [
@@ -893,7 +893,7 @@ PhratchStageMorph >> rerecordScene [
 PhratchStageMorph >> rerecordScene: sceneName [
 	sceneStates at: sceneName put: self backgroundIndex.
 	submorphs do: [:m |
-		(m isKindOf: PhratchSpriteMorph) ifTrue: [
+		(m isPhratchSpriteMorph) ifTrue: [
 			m recordScene: sceneName]].
 
 ]
@@ -972,7 +972,7 @@ PhratchStageMorph >> sceneNames [
 	| setOfNames |
 	setOfNames := Set new.
 	submorphs do: [:m |
-		(m isKindOf: PhratchSpriteMorph) ifTrue: [
+		(m isPhratchSpriteMorph) ifTrue: [
 			setOfNames addAll: m scenes]].
 
 	^ setOfNames asArray sort, (Array
@@ -1141,7 +1141,7 @@ PhratchStageMorph >> step [
 	cp := self adjustedCursorPoint. 
 	self updateTrailsForm.
 	(self containsPoint: Sensor lastMousePosition) ifFalse: [^self].
-	(World activeHand submorphs isEmpty not and: [World activeHand submorphs first isKindOf: LibraryItemMorph]) ifFalse: [^self].
+	(World activeHand submorphs isEmpty not and: [World activeHand submorphs first isLibraryItemMorph]) ifFalse: [^self].
 	dragged := World activeHand submorphs first target.
 	targets := self sprites select: [:each| 
 		each containsPoint: cp ].
@@ -1217,7 +1217,7 @@ PhratchStageMorph >> stopAll [
 	self stopPlaying.
 	self stopAllSounds.
 	self allMorphsDo: [:m |
-		(m isKindOf: ScriptablePhratchMorph) ifTrue: [m stopPlaying]].
+		(m isScriptablePhratchMorph) ifTrue: [m stopPlaying]].
 
 	DebuggerFrameMorph allInstancesDo: [:df | df delete ].
 
@@ -1237,7 +1237,7 @@ PhratchStageMorph >> stopAllProcesses [
 
 	| allObjs |
 	"clear all processes, including those with error feedback"
-	allObjs := submorphs select: [:m | m isKindOf: ScriptablePhratchMorph].
+	allObjs := submorphs select: [:m | m isScriptablePhratchMorph].
 	allObjs := allObjs copyWith: self.
 	allObjs do: [:obj |
 		(obj blocksBin isMorph) ifTrue: [
@@ -1255,7 +1255,7 @@ PhratchStageMorph >> stopAllScriptsFor: eventName [
 "	remember to implement this in the mesh network later -jens"
 
 	"stop scripts"
-	submorphs do: [:m | (m isKindOf: ScriptablePhratchMorph) ifTrue: [
+	submorphs do: [:m | (m isScriptablePhratchMorph) ifTrue: [
 		m stopScriptsFor: eventName]].
 	self stopScriptsFor: eventName 
 
@@ -1348,7 +1348,7 @@ PhratchStageMorph >> unloadAllUnusedCustomBlocks [
 
 	'updating...' 
 		displayProgressAt: Display center - (32@5)  "Sensor cursorPoint"
-		from: 0 to: ((self allMorphs) select: [:m| m isKindOf: ScriptablePhratchMorph]) size
+		from: 0 to: ((self allMorphs) select: [:m| m isScriptablePhratchMorph]) size
 		during: [:bar | | i | i := 0.
 
 	{self}, self sprites do: [:obj |
@@ -1434,7 +1434,7 @@ PhratchStageMorph >> updateTrailsForm [
 PhratchStageMorph >> userSelectSpriteDefault: defaultSprite butNotAnyOf: excludeArray [
 	| menu current |
 	menu := MenuMorphNG new defaultTarget: self.
-	current := (defaultSprite isKindOf: PhratchSpriteMorph)
+	current := (defaultSprite isPhratchSpriteMorph)
 		ifTrue: [ defaultSprite objName ]
 		ifFalse: [ 'none' ].
 	menu title: 'current parent: ' , current.

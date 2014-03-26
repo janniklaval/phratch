@@ -38,7 +38,7 @@ OSlotMorph >> drawSlotOn: aCanvas [
 
 	| dark |
 
-	(type = #booleanslot and: [argMorphs first isKindOf: SpecialArgMorph])
+	(type = #booleanslot and: [argMorphs first isSpecialArgMorph])
 		ifTrue: [^ self].
 
 	dark := Color gray " (color mixed: 0.45 with: Color darkGray)". 

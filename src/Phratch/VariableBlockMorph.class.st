@@ -79,7 +79,7 @@ VariableBlockMorph >> click: evt [
 	self isBlockTemplate
 		ifFalse: [^ super click: evt]. 
 
-	(owner isKindOf: PhratchBlockPaletteMorph)
+	(owner isPhratchBlockPaletteMorph)
 		ifTrue: [^ super click: evt].
 
 	((owner isBlockMorph) and: [owner isCustomBlock and: [owner isTemplate]])
@@ -239,6 +239,12 @@ VariableBlockMorph >> isSpecialForm: bool [
 
 ]
 
+{ #category : #'as yet unclassified' }
+VariableBlockMorph >> isVariableBlockMorph [
+
+	^ true
+]
+
 { #category : #'byob lambdas' }
 VariableBlockMorph >> labelFragment [
 	^ labelFragment
@@ -359,7 +365,7 @@ VariableBlockMorph >> rightButtonMenu [
 		ifTrue: [^ self click: nil].
 
 	(((owner isKindOf: MultiArgReporterBlockMorph) and: [owner isLambdaForm])
-		or: [owner isKindOf: VariableDeclarationBlockMorph])
+		or: [owner isVariableDeclarationBlockMorph])
 		ifFalse: [ ^super rightButtonMenu ].
 	menu := MenuMorphNG new defaultTarget: self.
 	menu add: 'help' value: #presentHelpScreen.

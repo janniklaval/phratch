@@ -143,6 +143,12 @@ PhratchPrompterMorph >> isDone [
 
 ]
 
+{ #category : #'as yet unclassified' }
+PhratchPrompterMorph >> isPhratchPrompterMorph [
+
+	^ true
+]
+
 { #category : #accessing }
 PhratchPrompterMorph >> question: aString [
 	(aString isMorph)

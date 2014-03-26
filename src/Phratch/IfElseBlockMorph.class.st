@@ -322,6 +322,12 @@ IfElseBlockMorph >> isCShape [
 	^ true
 ]
 
+{ #category : #accessing }
+IfElseBlockMorph >> isIfElseBlockMorph [
+
+	^true
+]
+
 { #category : #private }
 IfElseBlockMorph >> litUp: aBoolean [
 	"Overridden to suppress highlighting of control structures. Do nothing."

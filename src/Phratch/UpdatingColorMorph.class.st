@@ -59,7 +59,7 @@ UpdatingColorMorph >> readFromTarget [
 	(v := self valueFromTargetOrNil) ifNil: [^ nil].
 	lastValue = v ifTrue: [^ nil].
 	lastValue := v.
-	(v isKindOf: Color) ifTrue: [
+	(v isColor) ifTrue: [
 		^ self color: v]
 	ifFalse: [
 		^ nil].

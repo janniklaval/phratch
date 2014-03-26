@@ -93,6 +93,12 @@ ProcedureHatBlockMorph >> initialize [
 
 ]
 
+{ #category : #'as yet unclassified' }
+ProcedureHatBlockMorph >> isProcedureHatBlockMorph [
+
+	^ true
+]
+
 { #category : #'event handling' }
 ProcedureHatBlockMorph >> mouseDown: evt [
 

@@ -107,6 +107,12 @@ SpecialArgMorph >> evaluate [
 
 ]
 
+{ #category : #'as yet unclassified' }
+SpecialArgMorph >> isSpecialArgMorph [
+
+	^ true
+]
+
 { #category : #accessing }
 SpecialArgMorph >> stringExpression: obj [
 

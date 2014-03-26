@@ -37,7 +37,7 @@ HatBlockMorph >> click: evt [
 
 	evt hand toolType = 'CutTool' ifTrue: [
 		evt shiftPressed ifFalse: [evt hand toolType: nil].
-		(owner isKindOf: PhratchBlockPaletteMorph) ifTrue: [^ self].  "ignore if in palette"
+		(owner isPhratchBlockPaletteMorph) ifTrue: [^ self].  "ignore if in palette"
 		PhratchFrameMorph putInClipboard: self.
 		^ self stop; delete;
 		yourself].

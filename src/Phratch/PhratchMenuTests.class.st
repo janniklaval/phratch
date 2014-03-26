@@ -29,7 +29,7 @@ PhratchMenuTests >> testNewPhratchProject [
 	|sprite|
 	window newPhratchProject.	
 	sprite:= window workPane submorphs select:[:e |
-		e  isKindOf: PhratchSpriteMorph].
+		e  isPhratchSpriteMorph].
 
 	self assert: sprite size = 1.	
 	
@@ -42,7 +42,7 @@ PhratchMenuTests >> testOpenProject [
 	| sprite fileName |
 	fileName := '_testNewProject.phr'.
 	sprite := window workPane submorphs detect:[:e |
-		e  isKindOf: PhratchSpriteMorph].
+		e  isPhratchSpriteMorph].
 	
 	"Make a change and save"
 	sprite objName: 'A sprite'.
@@ -52,7 +52,7 @@ PhratchMenuTests >> testOpenProject [
 	"Now create new project and confirm all back to start"
 	window openPhratchProjectNamed:  (window projectDirectory / fileName).
 	sprite := window workPane submorphs detect:[:e |
-		e  isKindOf: PhratchSpriteMorph]..
+		e  isPhratchSpriteMorph]..
 	self assert: sprite objName = 'A sprite'.	
 	
 ]
@@ -63,7 +63,7 @@ PhratchMenuTests >> testSaveProject [
 
 	| sprite |
 	sprite := window workPane submorphs detect:[:e |
-		e  isKindOf: PhratchSpriteMorph].
+		e  isPhratchSpriteMorph].
 	
 	"Make a change and save"
 	sprite objName: 'A sprite'.

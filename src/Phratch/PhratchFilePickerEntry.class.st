@@ -62,6 +62,12 @@ PhratchFilePickerEntry >> isHighlit [
 
 ]
 
+{ #category : #accessing }
+PhratchFilePickerEntry >> isPhratchFilePickerEntry [
+
+	^ true
+]
+
 { #category : #initialization }
 PhratchFilePickerEntry >> name: aString dir: owningDirectory isDirectory: dirFlag [
 	| icon m n |

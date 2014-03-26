@@ -9,7 +9,7 @@ PhratchSpriteLibraryMorph >> acceptDroppingMorph: aMorph event: evt [
 	"This method allows re-ordering of sprites in the sprite library area."
 
 	| insertAfter libraryItems spriteLibrary movedThumbnail mostOverlap mostOverlapIndex sf |
-	((aMorph isKindOf: LibraryItemMorph)
+	((aMorph isLibraryItemMorph)
 		and: [ (spriteLibrary := self ownerOrYourselfThatIsA: PhratchSpriteLibraryMorph) notNil ])
 		ifFalse: [ ^ super acceptDroppingMorph: aMorph event: evt ].	"Set the new position of the morph that just moved"
 	movedThumbnail := self submorphs detect: [ :m | m target == aMorph target ] ifNone: [ ^ self ].
@@ -80,6 +80,6 @@ PhratchSpriteLibraryMorph >> rootForGrabOf: aMorph [
 { #category : #'dropping/grabbing' }
 PhratchSpriteLibraryMorph >> wantsDroppedMorph: aMorph event: evt [
 
-	^ (aMorph isKindOf: LibraryItemMorph)
+	^ (aMorph isLibraryItemMorph)
 
 ]

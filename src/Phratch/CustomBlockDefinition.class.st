@@ -81,7 +81,7 @@ CustomBlockDefinition >> answerBlock [
 	#boolean = type
 		ifTrue: [ ^ block ].
 	answer ifNil: [ answer := '' ].
-	(answer isKindOf: Array)
+	(answer isArray)
 		ifTrue: [ block argMorphs first stringExpression: '' ]
 		ifFalse: [ block argMorphs first stringExpression: answer ].
 	^ block
@@ -193,12 +193,12 @@ CustomBlockDefinition >> fixBlockVarReporters [
 
 	body ifNotNil: [
 		body allMorphs do: [:m|
-			((m isKindOf: VariableBlockMorph) | (m isKindOf: SetterBlockMorph) 
+			((m isVariableBlockMorph) | (m isSetterBlockMorph) 
 				and: [m isSpecialForm]) ifTrue: [
 					m receiver: self ]]].
 	answer ifNotNil: [ (answer isReporterBlockMorph)
 		ifTrue: [answer allMorphs do: [:m|
-			((m isKindOf: VariableBlockMorph) | (m isKindOf: SetterBlockMorph) 
+			((m isVariableBlockMorph) | (m isSetterBlockMorph) 
 				and: [m isSpecialForm]) ifTrue: [
 					m receiver: self ]]]].
 

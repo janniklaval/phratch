@@ -27,7 +27,7 @@ PhratchCategoryColors class >> viewerPageFor: aScriptablePhratchMorph [
 		borderWidth: 0;
 		yourself.
 	addButton := PhratchFrameMorph buttonLabel: 'make a color' localized selector: #addGlobalColor.
-	(aScriptablePhratchMorph isKindOf: PhratchSpriteMorph)
+	(aScriptablePhratchMorph isPhratchSpriteMorph)
 		ifTrue: [ addButton actionSelector: #addColor ].
 	deleteButton := PhratchFrameMorph buttonLabel: 'Delete a color' localized selector: #deleteColor.
 	showButton := PhratchFrameMorph buttonLabel: 'Show a color' localized selector: #showColor.

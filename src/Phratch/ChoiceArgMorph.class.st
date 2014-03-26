@@ -88,7 +88,7 @@ ChoiceArgMorph >> choice: aSymbol [
 			ifTrue: [owner addLabel]
 			ifFalse: [owner fixBlockLayout]].
 
-	(owner isKindOf: SetterBlockMorph) ifTrue: [ owner determineIfSpecialForm ].
+	(owner isSetterBlockMorph) ifTrue: [ owner determineIfSpecialForm ].
 
 	options = {'with inputs' localized. 'with input list' localized} ifTrue: [
 		(owner respondsTo: #adjustInputParadigm:) ifTrue: [
@@ -168,6 +168,12 @@ ChoiceArgMorph >> initialize [
 	options := #(a b c d).
 	self choice: #a.
 
+]
+
+{ #category : #'as yet unclassified' }
+ChoiceArgMorph >> isChoiceArgMorph [
+
+	^ true
 ]
 
 { #category : #byob }

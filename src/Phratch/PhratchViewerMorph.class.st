@@ -87,7 +87,7 @@ PhratchViewerMorph >> initialize [
 PhratchViewerMorph >> lightUpSelectorForCurrentCategory [
 
 	submorphs do: [:m |
-		(m isKindOf: ResizableToggleButton) ifTrue: [
+		(m isResizableToggleButton) ifTrue: [
 			m arguments first = currentCategory
 				ifTrue: [m on]
 				ifFalse: [m off]]].
@@ -108,7 +108,7 @@ PhratchViewerMorph >> rebuildCategorySelectors [
 		collect: [ :c | c label ]) asArray.	"First, delete the old category buttons"
 	submorphs
 		do: [ :m | 
-			(m isKindOf: ResizableToggleButton)
+			(m isResizableToggleButton)
 				ifTrue: [ m delete ] ].	"Create new buttons, keeping track of the maximum extent."
 	maxExtent := 75 @ 0.
 	buttons := catList

@@ -37,7 +37,7 @@ LambdaBlockMorph >> bind: varName to: varFrame as: alias [
 	"for externalized local variables"
 
 	self privateBody allMorphsDo: [:m |
-		(m isKindOf: VariableBlockMorph) ifTrue: [
+		(m isVariableBlockMorph) ifTrue: [
 			m variable = varName ifTrue: [
 				m
 					receiver: varFrame;
@@ -126,7 +126,7 @@ LambdaBlockMorph >> evaluateWithArgs: rawArgs [
 LambdaBlockMorph >> fixInitialFrame [
 	initialFrame := VariableFrame forNames: self allVarNames.
 	self allMorphsDo: [:m |
-		((m isKindOf: VariableBlockMorph) | (m isKindOf: SetterBlockMorph)
+		((m isVariableBlockMorph) | (m isSetterBlockMorph)
 		and: [m isSpecialForm & (initialFrame scope includes: m variable)]) ifTrue: [
 			m receiver: initialFrame ]]
 ]
@@ -160,6 +160,12 @@ LambdaBlockMorph >> isBooleanFunction [
 { #category : #testing }
 LambdaBlockMorph >> isFunction [
 	self subclassResponsibility
+]
+
+{ #category : #'as yet unclassified' }
+LambdaBlockMorph >> isLambdaBlockMorph [
+
+	^ true
 ]
 
 { #category : #byob }
@@ -329,7 +335,7 @@ LambdaBlockMorph >> rightButtonMenu [
 		localize;
 		popUpInWorld;
 		yourself) selectedValue ifNil: [ ^ self ].
-	(choice isKindOf: Array)
+	(choice isArray)
 		ifTrue: [ 
 			block := self newVarBlock: choice first.
 			World activeHand attachMorph: block.

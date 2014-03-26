@@ -32,7 +32,7 @@ PhratchFileTests >> addBlock: blockSpec toSprite: aSprite [
 { #category : #useful }
 PhratchFileTests >> firstSprite [
 	^ window workPane submorphs detect:[:e |
-		e  isKindOf: PhratchSpriteMorph].
+		e  isPhratchSpriteMorph].
 ]
 
 { #category : #useful }

@@ -255,6 +255,12 @@ WatcherMorph >> isVariableWatcher [
 
 ]
 
+{ #category : #'as yet unclassified' }
+WatcherMorph >> isWatcherMorph [
+
+	^ true
+]
+
 { #category : #'dropping/grabbing' }
 WatcherMorph >> justDroppedInto: aMorph event: evt [
 
@@ -278,7 +284,7 @@ WatcherMorph >> languageChanged [
 	self updateTargetName.
 	readout target: readout target.  "forces contents to update"
 	titleMorph extent: (PhratchTranslator stringExtent: titleMorph contents font: titleMorph font).
-	(readout contents isKindOf: Form) ifTrue: [
+	(readout contents isForm) ifTrue: [
 		readout extent: readout contents extent + (10 @ 10).
 		^self ].
 	readout extent: (PhratchTranslator stringExtent: readout contents font: readout font).

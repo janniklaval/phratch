@@ -8,7 +8,7 @@ Class {
 ColorBlockMorph >> acceptsTypeOf: aBlockMorph [
 	"Answer true if I can accept a dropped reporter of the given type. Answer false by default."
 
-	^aBlockMorph isReporter and:[ aBlockMorph isKindOf: ColorBlockMorph]
+	^aBlockMorph isReporter and:[ aBlockMorph isColorBlockMorph]
 ]
 
 { #category : #watcher }
@@ -62,6 +62,12 @@ ColorBlockMorph >> drawOn: aCanvas [
 		bottomY := bottomY + 1.
 		topY := topY - 1].
 		
+]
+
+{ #category : #'as yet unclassified' }
+ColorBlockMorph >> isColorBlockMorph [
+
+	^ true
 ]
 
 { #category : #other }

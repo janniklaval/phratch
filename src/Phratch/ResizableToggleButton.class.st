@@ -131,6 +131,12 @@ ResizableToggleButton >> isOn [
 
 ]
 
+{ #category : #'as yet unclassified' }
+ResizableToggleButton >> isResizableToggleButton [
+
+	^ true
+]
+
 { #category : #'event handling' }
 ResizableToggleButton >> keyStroke: evt [
 	"	ch := evt unicodeChar.
@@ -400,7 +406,7 @@ ResizableToggleButton >> pressed: aMorph [
 { #category : #'event handling' }
 ResizableToggleButton >> rightButtonMenu [
 	| menu |
-	(self owner isKindOf: PhratchBlockPaletteMorph)
+	(self owner isPhratchBlockPaletteMorph)
 		ifFalse: [ ^ self ].
 	menu := MenuMorph new defaultTarget: self.
 	menu add: 'help' translated action: #presentHelpScreen.

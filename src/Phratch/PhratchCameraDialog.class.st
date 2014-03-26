@@ -67,7 +67,7 @@ PhratchCameraDialog >> createButtons [
 	buttonRow addMorphBack: spacer fullCopy.
 
 	buttonRow submorphs do: [:b |
-		(b isKindOf: ResizableToggleButton) ifTrue: [tabFields add: b]].
+		(b isResizableToggleButton) ifTrue: [tabFields add: b]].
 
 ]
 

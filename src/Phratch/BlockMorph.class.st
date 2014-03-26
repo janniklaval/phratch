@@ -311,7 +311,7 @@ BlockMorph >> commentMorph [
 	sm := self ownerOrYourselfThatIsA: PhratchScriptsMorph.
 	sm ifNil: [^ nil].
 	^ sm submorphs detect: [: m |
-		(m isKindOf: PhratchCommentMorph) and: [
+		(m isPhratchCommentMorph) and: [
 			m anchor == self]] ifNone: [nil].
 
 ]
@@ -349,7 +349,7 @@ BlockMorph >> contrastColor [
 								ifTrue: [ owner owner ]
 								ifFalse: [ owner ] ]
 						ifFalse: [ 
-							((owner isKindOf: ProcedureHatBlockMorph) and: [ owner nextBlock ~= self ])
+							((owner isProcedureHatBlockMorph) and: [ owner nextBlock ~= self ])
 								ifTrue: [ ob := owner ] ] ] ].
 	ob ifNil: [ ^ self ].
 	ob color = color
@@ -398,7 +398,7 @@ BlockMorph >> disinheritAttribute [
 	(self respondsTo: #receiver) ifFalse: [
 		^ false].
 	rcv := self receiver.
-	(rcv isKindOf: ScriptablePhratchMorph) 
+	(rcv isScriptablePhratchMorph) 
 		ifFalse: [^ false].
 	oi := rcv objectInterface.
 	oi keysDo: [:att |
@@ -795,7 +795,7 @@ BlockMorph >> handleTool: toolName hand: hand [
 		ifTrue: [ 
 			Sensor shiftPressed
 				ifFalse: [ hand toolType: nil ].
-			(owner isKindOf: PhratchBlockPaletteMorph)
+			(owner isPhratchBlockPaletteMorph)
 				ifTrue: [ ^ self ].	"ignore if in palette"
 			^ self duplicate ].
 	toolName = 'CutTool'
@@ -833,7 +833,7 @@ BlockMorph >> handleTool: toolName hand: hand [
 				ifTrue: [ 
 					owner
 						ifNotNil: [ 
-							(owner isKindOf: CustomCommandBlockMorph)
+							(owner isCustomCommandBlockMorph)
 								ifTrue: [ 
 									owner isTemplate
 										ifTrue: [ 
@@ -848,9 +848,9 @@ BlockMorph >> handleTool: toolName hand: hand [
 		ifFalse: [ 
 			sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
 			sFrame ifNil: [ ^ self ].
-			((owner isKindOf: PhratchBlockPaletteMorph) and: [ sFrame viewerPane currentCategory = #variables ])
+			((owner isPhratchBlockPaletteMorph) and: [ sFrame viewerPane currentCategory = #variables ])
 				ifTrue: [ 
-					(self isKindOf: SetterBlockMorph)
+					(self isSetterBlockMorph)
 						ifTrue: [ 
 							self variable
 								ifNotNil: [ 
@@ -858,7 +858,7 @@ BlockMorph >> handleTool: toolName hand: hand [
 									(self confirm: 'Really delete variable: ' , varToDelete , '?')
 										ifFalse: [ ^ self ].
 									self receiver deleteVariable: varToDelete ] ].
-					(self isKindOf: VariableBlockMorph)
+					(self isVariableBlockMorph)
 						ifTrue: [ 
 							varToDelete := self commandSpec.
 							(self confirm: 'Really delete variable: ' , varToDelete , '?')
@@ -913,7 +913,7 @@ BlockMorph >> inheritAttribute [
 	(self respondsTo: #receiver) ifFalse: [
 		^ false].
 	rcv := self receiver.
-	(rcv isKindOf: ScriptablePhratchMorph) 
+	(rcv isScriptablePhratchMorph) 
 		ifFalse: [^ false].
 	oi := rcv objectInterface.
 	oi keysDo: [:att |
@@ -1001,9 +1001,9 @@ BlockMorph >> isDeletedAttribute [
 	(self respondsTo: #receiver)
 		ifFalse: [ ^ false ].
 	rcv := self receiver.
-	(rcv isKindOf: ScriptablePhratchMorph)
+	(rcv isScriptablePhratchMorph)
 		ifFalse: [ ^ false ].
-	((self isKindOf: VariableBlockMorph) or: [ self isKindOf: ListContentsBlockMorph ])
+	((self isVariableBlockMorph) or: [ self isListContentsBlockMorph ])
 		ifTrue: [ ^ (rcv allVarNames includes: self commandSpec) not ].
 	self isCustomBlock
 		ifTrue: [ ^ rcv inheritedBlockIds includes: self id ].
@@ -1034,7 +1034,7 @@ BlockMorph >> isInheritableAttribute [
 	(self respondsTo: #receiver) ifFalse: [
 		^ false].
 	rcv := self receiver.
-	(rcv isKindOf: ScriptablePhratchMorph) 
+	(rcv isScriptablePhratchMorph) 
 		ifFalse: [^ false].
 	rcv prototype ifNil: [
 		^ false].
@@ -1243,26 +1243,26 @@ BlockMorph >> newScriptOwner: newOwner [
 	| rcvr |
 
 	self allMorphsDo: [:m |
-		((m isKindOf: CustomCommandBlockMorph) or: [
-		m isKindOf: CustomReporterBlockMorph]) ifTrue: [
+		((m isCustomCommandBlockMorph) or: [
+		m isCustomReporterBlockMorph]) ifTrue: [
 			newOwner ensureCustomBlockExists: m definition ].
 		(m isBlockMorph) ifTrue: [
 			rcvr := newOwner.
-			(((m isKindOf: VariableBlockMorph) | (m isKindOf: SetterBlockMorph)) and: 
+			(((m isVariableBlockMorph) | (m isSetterBlockMorph)) and: 
 			[m isSpecialForm not]) ifTrue: [
 				(m receiver isPhratchStageMorph) ifTrue: [rcvr := m receiver].
 				newOwner ensureVariableExists: m variable.  "ensure that variable exists"
 				m color: rcvr variableBlockColor].
-			(((m isKindOf: VariableBlockMorph) | (m isKindOf: SetterBlockMorph)) and: 
+			(((m isVariableBlockMorph) | (m isSetterBlockMorph)) and: 
 			[m isSpecialForm]) ifFalse: [ 
 				m receiver: rcvr ]].
 		((m isCommandBlockMorph) and: [
 		m isSpecialForm not]) ifTrue: [
 			m argMorphs do: [:arg |
-				((arg isKindOf: ChoiceArgMorph) and:
+				((arg isChoiceArgMorph) and:
 				 [arg getOptionsSelector = #listVarMenu]) ifTrue: [
 					arg choice ifNotNil: [newOwner ensureListExists: arg choice]]]].
-		(m isKindOf: ListContentsBlockMorph) ifTrue: [
+		(m isListContentsBlockMorph) ifTrue: [
 			newOwner ensureListExists: m commandSpec].
 		(m isHatBlockMorph) ifTrue: [m scriptOwner: newOwner]].
 
@@ -1280,27 +1280,27 @@ BlockMorph >> newScriptOwnerPrivate: newOwner [
 " commented out from #newScriptOwner: 
 for use in ScriptablePhratchMorph ->> #definitionFor:
 
-		((m isKindOf: CustomCommandBlockMorph) or: [
-		m isKindOf: CustomReporterBlockMorph]) ifTrue: [
+		((m isCustomCommandBlockMorph) or: [
+		m isCustomReporterBlockMorph]) ifTrue: [
 			newOwner ensureCustomBlockExists: m definition ].
 "
 		(m isBlockMorph) ifTrue: [
 			rcvr := newOwner.
-			(((m isKindOf: VariableBlockMorph) | (m isKindOf: SetterBlockMorph)) and: 
+			(((m isVariableBlockMorph) | (m isSetterBlockMorph)) and: 
 			[m isSpecialForm not]) ifTrue: [
 				(m receiver isPhratchStageMorph) ifTrue: [rcvr := m receiver].
 				newOwner ensureVariableExists: m variable.  "ensure that variable exists"
 				m color: rcvr variableBlockColor].
-			(((m isKindOf: VariableBlockMorph) | (m isKindOf: SetterBlockMorph)) and: 
+			(((m isVariableBlockMorph) | (m isSetterBlockMorph)) and: 
 			[m isSpecialForm]) ifFalse: [ 
 				m receiver: rcvr ]].
 		((m isCommandBlockMorph) and: [
 		m isSpecialForm not]) ifTrue: [
 			m argMorphs do: [:arg |
-				((arg isKindOf: ChoiceArgMorph) and:
+				((arg isChoiceArgMorph) and:
 				 [arg getOptionsSelector = #listVarMenu]) ifTrue: [
 					arg choice ifNotNil: [newOwner ensureListExists: arg choice]]]].
-		(m isKindOf: ListContentsBlockMorph) ifTrue: [
+		(m isListContentsBlockMorph) ifTrue: [
 			newOwner ensureListExists: m commandSpec].
 		(m isHatBlockMorph) ifTrue: [m scriptOwner: newOwner]].
 
@@ -1427,7 +1427,7 @@ BlockMorph >> receiver: anObject [
 BlockMorph >> refreshAttributeArgs [
 
 	self allMorphsDo: [:m |
-		(m isKindOf: AttributeArgMorph) ifTrue: [
+		(m isAttributeArgMorph) ifTrue: [
 			m refresh ]]
 ]
 
@@ -1452,7 +1452,7 @@ BlockMorph >> rightButtonMenu [
 	menu := MenuMorphNG new defaultTarget: self.
 	menu add: 'help' value: #presentHelpScreen.
 
-	(owner isKindOf: PhratchBlockPaletteMorph) ifFalse: [
+	(owner isPhratchBlockPaletteMorph) ifFalse: [
 		menu addLine.
 		menu add: 'duplicate' value: #duplicate.	
 		(self owner isBlockMorph) ifFalse: [  "we can't yet delete a blocks inside a script"
@@ -1602,7 +1602,7 @@ BlockMorph >> topBlock [
 
 	| m |
 	m := self.
-	[(m owner isBlockMorph) and: [(m owner isKindOf: ReporterBlockDropTargetMorph) not]] whileTrue: [m := m owner].
+	[(m owner isBlockMorph) and: [(m owner isReporterBlockDropTargetMorph) not]] whileTrue: [m := m owner].
 	^ m
 
 ]

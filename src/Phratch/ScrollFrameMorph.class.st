@@ -311,7 +311,7 @@ ScrollFrameMorph >> minWidth [
 
 { #category : #'event handling' }
 ScrollFrameMorph >> mouseDown: evt [ 
-	(owner isKindOf: PhratchFilePicker) ifTrue: [^owner mouseDown: evt].
+	(owner isPhratchFilePicker) ifTrue: [^owner mouseDown: evt].
 	evt redButtonPressed ifTrue: [ self grabContentsAt: evt cursorPoint ]
 ]
 
@@ -325,13 +325,13 @@ ScrollFrameMorph >> mouseEnterDragging: evt [
 
 { #category : #'event handling' }
 ScrollFrameMorph >> mouseMove: evt [ 
-	(owner isKindOf: PhratchFilePicker) ifTrue: [^owner mouseMove: evt].
+	(owner isPhratchFilePicker) ifTrue: [^owner mouseMove: evt].
 	dragOffset ifNotNil: [self dragContentsTo: evt cursorPoint]
 ]
 
 { #category : #'event handling' }
 ScrollFrameMorph >> mouseUp: evt [
-	(owner isKindOf: PhratchFilePicker) ifTrue: [^owner mouseUp: evt].
+	(owner isPhratchFilePicker) ifTrue: [^owner mouseUp: evt].
 	self dropContents
 ]
 

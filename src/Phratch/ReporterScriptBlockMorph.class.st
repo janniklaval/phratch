@@ -91,7 +91,7 @@ ReporterScriptBlockMorph >> drawOn: aCanvas [
 { #category : #drawing }
 ReporterScriptBlockMorph >> drawSlotBorderOn: aCanvas [
 
-	(argMorphs first isKindOf: SpecialArgMorph)
+	(argMorphs first isSpecialArgMorph)
 		ifFalse: [^ self].
 
 	aCanvas paintImage: (argMorphs first imageForm outlineEmbeddedAdjustedColor: color)
@@ -123,6 +123,12 @@ ReporterScriptBlockMorph >> isBooleanFunction [
 
 { #category : #testing }
 ReporterScriptBlockMorph >> isFunction [
+	^ true
+]
+
+{ #category : #'as yet unclassified' }
+ReporterScriptBlockMorph >> isReporterScriptBlockMorph [
+
 	^ true
 ]
 

@@ -20,8 +20,8 @@ UpdatingStringMorph >> formatValue: v [
 				v isNaN ifTrue: [^ 'Error!'].
 				^ (v asFloat roundTo: floatPrecision) printString]].
 
-	(v isKindOf: Boolean) ifTrue: [^ v printString localized].
-	(v isKindOf: String) ifTrue: [^ v].
+	(v isBoolean) ifTrue: [^ v printString localized].
+	(v isString) ifTrue: [^ v].
 
 	^ v printString
 

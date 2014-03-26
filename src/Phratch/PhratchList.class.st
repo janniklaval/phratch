@@ -58,6 +58,12 @@ PhratchList >> insertLine: anObject at: aNumber [
 	self changed
 ]
 
+{ #category : #'as yet unclassified' }
+PhratchList >> isPhratchList [
+
+	^ true
+]
+
 { #category : #accessing }
 PhratchList >> lastChanged [
 

@@ -25,7 +25,7 @@ PhratchScriptsMorph >> cleanUp [
 	collectedBlocks := OrderedCollection new.
 	submorphs do: [:m | 
 		((m isBlockMorph) 
-		or: [(m isKindOf: PhratchCommentMorph) and: [m anchor isNil]]) 
+		or: [(m isPhratchCommentMorph) and: [m anchor isNil]]) 
 			ifTrue:[collectedBlocks add: m]].
 
 	sortedBlocks := collectedBlocks copy sorted: [:s1 :s2 | s1 top < s2 top].
@@ -264,7 +264,7 @@ PhratchScriptsMorph >> showCommentDropFeedback [
 
 	((target isCBlockMorph) and: [target firstBlockList size > 0])
 		ifTrue: [r := r merge: target firstBlockList first fullBounds].
-	(target isKindOf: IfElseBlockMorph)
+	(target isIfElseBlockMorph)
 		ifTrue: [
 			(target trueBlockList size > 0)
 				ifTrue: [r := r merge: target trueBlockList first fullBounds].
@@ -322,7 +322,7 @@ PhratchScriptsMorph >> step [
 	(self bounds containsPoint: h position) ifFalse: [^ self].
 	h submorphCount = 1 ifFalse: [^ self].
 	b := h firstSubmorph.
-	(b isKindOf: PhratchCommentMorph) ifTrue: [^ self showCommentDropFeedback].
+	(b isPhratchCommentMorph) ifTrue: [^ self showCommentDropFeedback].
 	(b isBlockMorph) ifFalse: [^ self].
 
 	b isReporter ifTrue: [ "reporter block"
@@ -338,7 +338,7 @@ PhratchScriptsMorph >> step [
 			feedbackMorph
 				bounds: (targetArg bounds expandBy: 8)].
 
-		((targetArg isKindOf: SpecialArgMorph) 
+		((targetArg isSpecialArgMorph) 
 		and: [(#(reporterslot booleanslot) includes: targetArg type)
 		and: [targetArg owner notNil 
 		and: [(#(function functionWithArgs) includes: targetArg owner selector) not]]]) ifTrue: [
@@ -393,7 +393,7 @@ PhratchScriptsMorph >> topArgMorphAt: aRectangle exclude: aMorph [
 			space := morph bounds.
 			({CSlotMorph. OSlotMorph} includes: morph class)
 				ifTrue: [space := morph bounds expandBy: 5].
-			((morph isKindOf: SpecialArgMorph) and: [
+			((morph isSpecialArgMorph) and: [
 				#(reporterslot booleanslot) includes: morph type])
 					ifTrue: [space := morph bounds insetBy: 8 ].
 			space].

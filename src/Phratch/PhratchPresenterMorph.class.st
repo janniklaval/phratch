@@ -158,7 +158,7 @@ PhratchPresenterMorph >> initialize [
 { #category : #'event handling' }
 PhratchPresenterMorph >> keyStroke: evt [
 	| prompter ch |
-	prompter := stage submorphs detect: [ :m | m isKindOf: PhratchPrompterMorph ] ifNone: [ nil ].
+	prompter := stage submorphs detect: [ :m | m isPhratchPrompterMorph ] ifNone: [ nil ].
 	ch := evt keyValue.
 	ch = 27
 		ifTrue: [ ^ self exitPresentation ].	"escape"
@@ -191,7 +191,7 @@ PhratchPresenterMorph >> mouseDown: evt [
 			clickWasHandled := true.
 			^ self].
 
-	(rootM isKindOf: PhratchSpriteMorph) ifTrue: [
+	(rootM isPhratchSpriteMorph) ifTrue: [
 		rootM draggable
 			ifTrue: [
 				rootM holdSubsprites.
@@ -236,7 +236,7 @@ PhratchPresenterMorph >> mouseUp: evt [
 	self mouseMove: evt.
 
 	stage allMorphsDo: [:m | 
-		(m isKindOf: PhratchSpriteMorph) ifTrue: [
+		(m isPhratchSpriteMorph) ifTrue: [
 			m releaseSubsprites.
 			m xpos: m xpos.
 			m ypos: m ypos ]].
@@ -257,7 +257,7 @@ PhratchPresenterMorph >> mouseUp: evt [
 PhratchPresenterMorph >> processKeyboardEvents [
 
 	| prompter evt ch |
-	prompter := stage submorphs detect: [:m | m isKindOf: PhratchPrompterMorph] ifNone: [nil].
+	prompter := stage submorphs detect: [:m | m isPhratchPrompterMorph] ifNone: [nil].
 	World hands do: [:h |
 		[(evt := h nextUnclaimedKeystrokeOrNil) notNil] whileTrue: [
 			ch := evt keyValue.

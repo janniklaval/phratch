@@ -14,9 +14,9 @@ ReporterBlockMorph >> acceptsTypeOf: aBlockMorph [
 
 	aBlockMorph isReporter ifFalse: [^ false].
 	self isBlockTemplate ifTrue: [^ false ].
-	(owner isKindOf: CustomCommandBlockMorph) ifTrue: [
+	(owner isCustomCommandBlockMorph) ifTrue: [
 		owner isTemplate ifTrue: [^false]].
-	^ (aBlockMorph isBooleanReporter = self isBooleanReporter  and: [(aBlockMorph isKindOf: ColorBlockMorph) not]) or: [
+	^ (aBlockMorph isBooleanReporter = self isBooleanReporter  and: [(aBlockMorph isColorBlockMorph) not]) or: [
 		aBlockMorph isAbstractFunctionCall ]
 ]
 
@@ -487,9 +487,9 @@ ReporterBlockMorph >> isReporterBlockMorph [
 ReporterBlockMorph >> lambdaMenu [
 	| menu choice |
 	menu := MenuMorph new defaultTarget: self.
-	(owner isKindOf: PhratchBlockPaletteMorph)
+	(owner isPhratchBlockPaletteMorph)
 		ifTrue: [ ^ self ].
-	(owner isKindOf: ReporterScriptBlockMorph)
+	(owner isReporterScriptBlockMorph)
 		ifFalse: [ menu add: 'quote' translated action: #lambdafied ].
 	(choice := menu
 		localize;

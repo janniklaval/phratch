@@ -29,6 +29,12 @@ ListContentsBlockMorph >> evaluateWithArgs: ignored [
 ]
 
 { #category : #all }
+ListContentsBlockMorph >> isListContentsBlockMorph [
+
+	^ true
+]
+
+{ #category : #all }
 ListContentsBlockMorph >> selectorAndArg [
 
 	^ Array with: selector with: commandSpec

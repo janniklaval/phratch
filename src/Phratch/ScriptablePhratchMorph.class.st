@@ -210,7 +210,7 @@ ScriptablePhratchMorph class >> fromUser [
 		[Sensor anyButtonPressed] whileFalse: [World doOneCycleNoInput].
 		p := Sensor cursorPoint.
 		m := (World rootMorphsAt: p) first.
-		(m isKindOf: PhratchFrameMorph) ifTrue: [
+		(m isPhratchFrameMorph) ifTrue: [
 			mList := m workPane rootMorphsAt: p.
 			mList size > 0 ifTrue: [
 				m := (m workPane rootMorphsAt: p) first]].
@@ -240,7 +240,7 @@ ScriptablePhratchMorph class >> isSpriteSpecificTarget: anObject selector: selec
 	| i |
 	
 	self flag: 'This is crappy, it gives another receiver than the one expected. Should be removed, but carefully '.
-	(anObject isKindOf: PhratchSpriteMorph) ifFalse: [^ false].
+	(anObject isPhratchSpriteMorph) ifFalse: [^ false].
 	i := selector asString
 		findAnySubStr: #('answer' 'key' 'Loud' 'mouse' 'soundLevel' 'tempo' 'timer')
 		startingAt: 1.
@@ -667,7 +667,7 @@ ScriptablePhratchMorph >> addGenericVariableBlocksTo: page x: x y: startY [
 				ifFalse: [ 
 					blockOrSym
 						color:
-							((blockOrSym isKindOf: VariableDeclarationBlockMorph)
+							((blockOrSym isVariableDeclarationBlockMorph)
 								ifTrue: [ Color gray ]
 								ifFalse: [ self variableBlockColor ]).
 					page addMorph: (blockOrSym position: x @ y).
@@ -937,9 +937,9 @@ ScriptablePhratchMorph >> addWatcherForNewVariable: varName withScope: spriteOrS
 	| sFrame |
 	(sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNil: [^ self].
 	sFrame viewerPane pageViewer submorphs do: [:s | 
-		(s isKindOf: PhratchBlockPaletteMorph) ifTrue: [
+		(s isPhratchBlockPaletteMorph) ifTrue: [
 			s submorphs do: [:block | 
-				(block isKindOf: VariableBlockMorph) ifTrue: [
+				(block isVariableBlockMorph) ifTrue: [
 					(block receiver = spriteOrStage) &
 					(block commandSpec = varName) ifTrue: [
 						(sFrame watcherForBlock: block) ifNil: [
@@ -1005,7 +1005,7 @@ ScriptablePhratchMorph >> append: anObject toList: listName [
 	"Add a new value to the selected list."
 	<phratchItem: 'add $String$ to $List$' kind: #- category: 'list' defaultValues: #('thing') subCategory: #a4 special: #()>
 	| list |
-	list := (listName isKindOf: PhratchListMorph)
+	list := (listName isPhratchListMorph)
 		ifTrue: [ listName ]
 		ifFalse: [ self listNamed: listName ifNone: [ ^ 0 ] ].
 	list insertLine: (self asListElement: anObject) at: list lineCount + 1
@@ -1015,9 +1015,9 @@ ScriptablePhratchMorph >> append: anObject toList: listName [
 ScriptablePhratchMorph >> asListElement: anObject [
 	"Answer the given object converted to an object suitable for storing in a list."
 
-	(anObject isKindOf: ScriptablePhratchMorph) ifTrue: [^ anObject].
+	(anObject isScriptablePhratchMorph) ifTrue: [^ anObject].
 	(anObject isBlockMorph) ifTrue: [^ anObject].
-	(anObject isKindOf: PhratchListMorph) ifTrue: [^ anObject].
+	(anObject isPhratchListMorph) ifTrue: [^ anObject].
 	(anObject isString) ifTrue: [^ anObject].
 	(anObject isCharacter) ifTrue: [^ anObject asString].
 
@@ -1104,7 +1104,7 @@ ScriptablePhratchMorph >> attribute: attr of: anObject [
 	| aSpriteOrStage |
 	aSpriteOrStage := self coerceSpriteArg: anObject.
 
-	(aSpriteOrStage isKindOf: ScriptablePhratchMorph) ifFalse: [^ 0].
+	(aSpriteOrStage isScriptablePhratchMorph) ifFalse: [^ 0].
 	^ aSpriteOrStage attribute: attr
 
 ]
@@ -1138,10 +1138,10 @@ ScriptablePhratchMorph >> blockForSelector: aSymbol [
 	| cat |
 
 	self class blockSpecs do: [:spec |
-		((spec isKindOf: Symbol) not and: [spec isString])
+		((spec isSymbol) not and: [spec isString])
 			ifTrue: [cat := spec].
 
-		((spec isKindOf: Array) and: [(spec at: 3) = aSymbol])
+		((spec isArray) and: [(spec at: 3) = aSymbol])
 			ifTrue: [^ self blockFromSpec: spec color: (self class blockColorFor: cat)]].
 
 	^ nil
@@ -1191,7 +1191,7 @@ ScriptablePhratchMorph >> blockSpecForSelector: aSymbol [
 	"Answer a block specification string (in English) for the give selector or nil if there is no spec that has the given selector."
 
 	self class blockSpecs do: [:spec |
-		((spec isKindOf: Array) and: [(spec at: 3) = aSymbol])
+		((spec isArray) and: [(spec at: 3) = aSymbol])
 			ifTrue: [^ spec first]].
 
 	^ nil
@@ -1443,14 +1443,14 @@ ScriptablePhratchMorph >> coerceSpriteArg: anObject [
 	"Coerce the given object to a sprite reference if necessary. If it is a Symbol (e.g. #mouse), just return it. If it is a String, try to find a Sprite with that name. If it is a Number, coerce it to a string and look for a Sprite with a matching name."
 
 	| s targetName |
-	(anObject isKindOf: ScriptablePhratchMorph) ifTrue: [^ anObject].
-	(anObject isKindOf: Symbol) ifTrue: [^ anObject].
+	(anObject isScriptablePhratchMorph) ifTrue: [^ anObject].
+	(anObject isSymbol) ifTrue: [^ anObject].
 
 	targetName := anObject isNumber ifTrue: [anObject printString] ifFalse: [anObject].
 
 	(s := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNil: [^ nil].
 	s submorphsDo: [:m |
-		((m isKindOf: ScriptablePhratchMorph) and:
+		((m isScriptablePhratchMorph) and:
 		 [targetName = m objName])
 			ifTrue: [^ m]].
 
@@ -1729,7 +1729,7 @@ ScriptablePhratchMorph >> copyRecordingIn: dict [
 	newCopy lookLike: costume mediaName.
 
 	"for nested sprites:"
-	(self isKindOf: PhratchSpriteMorph) ifTrue: [
+	(self isPhratchSpriteMorph) ifTrue: [
 		newCopy refPos: self referencePosition.
 		newCopy privateSubsprites: (self subsprites collect: [:sub |
 			(sub copyRecordingIn: dict)
@@ -1957,7 +1957,7 @@ ScriptablePhratchMorph >> createListNamed: listName [
 
 	lists at: listName put: (list := PhratchListMorph new listName: listName target: self).
 	(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNotNil: [
-		n := (stage submorphs select: [:m | m isKindOf: PhratchListMorph]) size.
+		n := (stage submorphs select: [:m | m isPhratchListMorph]) size.
 		stage addMorph: (list position: stage topRight - ((list width + 10)@0) + (0@(10+(20*n)))).
 		list startStepping].
 
@@ -2228,7 +2228,7 @@ ScriptablePhratchMorph >> deleteList: listName [
 	lists removeKey: listName asString ifAbsent: [].
 	(self prototype notNil and: [self prototype lists includesKey: listName]) ifFalse: [ 
 	stage submorphs do: [:m |
-		((m isKindOf: PhratchListMorph) and: 
+		((m isPhratchListMorph) and: 
 		[(m listName = listName) and: 
 		[m target = self]])
 			ifTrue: [m delete]]].
@@ -2292,16 +2292,16 @@ ScriptablePhratchMorph >> deleteObject: anObject [
 	"Delete the given object"
 	<phratchItem: 'delete $OSReporter$' kind: #- category: 'variables' defaultValues: #() subCategory: #a2 special: #()>
 	| oi obj att block sel rcv |
-	(anObject isKindOf: PhratchSpriteMorph)
+	(anObject isPhratchSpriteMorph)
 		ifTrue: [ ^ self deleteSprite: anObject ].
 	(anObject isCommandScriptBlockMorph)
 		ifTrue: [ 
 			oi := self objectInterface.
 			obj := anObject receiver.
-			(obj isKindOf: PhratchSpriteMorph)
+			(obj isPhratchSpriteMorph)
 				ifFalse: [ ^ self error: 'cannot delete attributes of non-Sprites' ].
 			block := anObject body argMorphs first.
-			(block isKindOf: VariableBlockMorph)
+			(block isVariableBlockMorph)
 				ifTrue: [ 
 					rcv := block receiver.
 					rcv ifNil: [ ^ self ].
@@ -2747,7 +2747,7 @@ ScriptablePhratchMorph >> editDrawingOldCostumeName: oldCostumeName deleteOnCanc
 		"When an oldCostumeName is supplied, it means I'm making a new drawing. Clear the initial rotation center."
 		paintEditor clearRotationCenter].
 
-	(paintEditor isKindOf: DialogBoxMorph)
+	(paintEditor isDialogBoxMorph)
 		ifTrue: [paintEditor getUserResponse]
 		ifFalse: [
 			World addMorphFront: paintEditor.
@@ -2778,7 +2778,7 @@ ScriptablePhratchMorph >> editDrawingOldCostumeName: oldCostumeName deleteOnCanc
 		"When an oldCostumeName is supplied, it means I'm making a new drawing. Clear the initial rotation center."
 		paintEditor clearRotationCenter].
 
-	(paintEditor isKindOf: DialogBoxMorph)
+	(paintEditor isDialogBoxMorph)
 		ifTrue: [paintEditor getUserResponse]
 		ifFalse: [
 			World addMorphFront: paintEditor.
@@ -2971,7 +2971,7 @@ ScriptablePhratchMorph >> ensureVariableExists: varName [
 	"Make sure that the variable with the given name is visible to this object. Do nothing if the variable already exists."
 
 	| stage vn |
-	(varName isKindOf: Array)
+	(varName isArray)
 		ifTrue: [^ self].
 	(varName isCommandBlockMorph)
 		ifTrue: [^ self].
@@ -3021,7 +3021,7 @@ ScriptablePhratchMorph >> eventReceivedNamed: eventName [
 		((s class == EventHatMorph) or: [s class == StartEventHatMorph]) and: [s eventName caseInsensitiveEqual: eventName]].
 	targetScripts := targetScripts asOrderedCollection.
 	self submorphsDo: [:m |
-		(m isKindOf: ScriptablePhratchMorph) ifTrue: [
+		(m isScriptablePhratchMorph) ifTrue: [
 			(m scripts select: [:s |
 				(s class == EventHatMorph) and:
 				[s eventName caseInsensitiveEqual: eventName]]) do: [:script | targetScripts := targetScripts copyWith: script]]].
@@ -3201,7 +3201,7 @@ ScriptablePhratchMorph >> get: anObject [
 
 	oi := self objectInterface.
 
-	(anObject isKindOf: Symbol) ifTrue: [
+	(anObject isSymbol) ifTrue: [
 		sel := oi at: anObject ifAbsent: [^ self error: 'unknown attribute: ', anObject asString ].
 		sel second = #- ifTrue: [
 			^ self error: 'cannot read this attribute'].
@@ -3209,7 +3209,7 @@ ScriptablePhratchMorph >> get: anObject [
 		
 	(anObject isCommandScriptBlockMorph) ifTrue: [
 		obj := anObject receiver.
-		(obj isKindOf: ScriptablePhratchMorph) ifFalse: [
+		(obj isScriptablePhratchMorph) ifFalse: [
 			^ self error: 'cannot get attributes of non-Sprites/Stage'].
 		block := anObject body argMorphs first.
 		att := oi keys detect: [:key |
@@ -3226,7 +3226,7 @@ ScriptablePhratchMorph >> getAttribute: attr of: anObject [
 	<phratchItem: '$Attributes$ of $Sprite$' kind: #ReporterBlockMorph category: 'sensing' defaultValues: #() subCategory: #a3 special: #()>
 	| aSpriteOrStage |
 	aSpriteOrStage := self coerceSpriteArg: anObject.
-	(aSpriteOrStage isKindOf: ScriptablePhratchMorph) ifFalse: [^ 0].
+	(aSpriteOrStage isScriptablePhratchMorph) ifFalse: [^ 0].
 "	^ aSpriteOrStage getAttribute: attr asString"
 	^ aSpriteOrStage attribute: attr
 
@@ -3251,7 +3251,7 @@ ScriptablePhratchMorph >> getLine: lineNum ofList: listName [
 	"Return the value of given item number in the given list"
 	<phratchItem: 'item $ListIndex$ of $List$' kind: #ReporterBlockMorph category: 'list' defaultValues: #(1) subCategory: #a5 special: #()>
 	| list |
-	list := (listName isKindOf: PhratchListMorph)
+	list := (listName isPhratchListMorph)
 		ifTrue: [ listName ]
 		ifFalse: [ self listNamed: listName ifNone: [ ^ '' ] ].
 	^ list lineAt: (self lineNum: lineNum forList: list)
@@ -3802,8 +3802,8 @@ ScriptablePhratchMorph >> instancesOf: aCustomBlockId [
 	| sf ans visible invisible blx |
 	invisible := self invisibleInstancesOf: aCustomBlockId.
 	visible := blocksBin allMorphs select: [ :m|
-		((m isKindOf: CustomCommandBlockMorph) or:[
-			m isKindOf: CustomReporterBlockMorph]) and: [m id = aCustomBlockId]].
+		((m isCustomCommandBlockMorph) or:[
+			m isCustomReporterBlockMorph]) and: [m id = aCustomBlockId]].
 	sf := self ownerOrYourselfThatIsA: PhratchFrameMorph.
 	sf ifNotNil: [
 		sf blockEditors do: [:be |
@@ -3824,7 +3824,7 @@ ScriptablePhratchMorph >> interpretStringAsNumberIfPossible: anObject [
 		ifFalse: [ ^ anObject ].
 	anObject size = 0
 		ifTrue: [ ^ anObject ].
-	s := (anObject first isKindOf: Character)
+	s := (anObject first isCharacter)
 		ifTrue: [ ReadStream on: anObject asByteArray ]
 		ifFalse: [ ReadStream on: anObject ].	"see if the string can be parsed as a Phratch number:"
 	digits := '0123456789' asByteArray.
@@ -3855,15 +3855,14 @@ ScriptablePhratchMorph >> invisibleInstancesOf: aCustomBlockId [
 	customBlocks do: [:eachDef|
 		eachDef body ifNotNil: [
 			ans addAll: (eachDef body allMorphs select: [:m|
-				((m isKindOf: CustomCommandBlockMorph) or: [
-					m isKindOf: CustomReporterBlockMorph]) and: [
+				((m isCustomCommandBlockMorph) or: [
+					m isCustomReporterBlockMorph]) and: [
 				m id = aCustomBlockId ]])].
 
 		eachDef answer ifNotNil: [
 			(eachDef answer isBlockMorph) ifTrue: [
 				ans addAll: (eachDef answer allMorphs select: [:m|
-					((m isKindOf: CustomReporterBlockMorph) or: [
-						m isKindOf: CustomReporterBlockMorph]) and: [
+					(m isCustomReporterBlockMorph) and: [
 					m id = aCustomBlockId ]])]]].
 
 	^ans asOrderedCollection
@@ -3942,7 +3941,7 @@ ScriptablePhratchMorph >> isObject: object type: type [
 	"Return true if the given object is a kind of given type"
 	<phratchItem: 'is $String$ a $Type$ ?' kind: #BooleanBlockMorph category: 'operators' defaultValues: #() subCategory: #b1 special: #()>
 	'object' "localized" = type ifTrue: [
-		^ object isKindOf: ScriptablePhratchMorph].
+		^ object isScriptablePhratchMorph].
 
 	'number' "localized" = type ifTrue: [
 		object isNumber ifTrue: [^true].
@@ -3966,19 +3965,19 @@ ScriptablePhratchMorph >> isObject: object type: type [
 		^ object isBoolean].
 
 	'list' "localized" = type ifTrue: [
-		^ object isKindOf: PhratchListMorph]. 
+		^ object isPhratchListMorph]. 
 
 	'command' "localized" = type ifTrue: [
-		^ (object isKindOf: LambdaBlockMorph) and:[
+		^ (object isLambdaBlockMorph) and:[
 		object isFunction not]].
 
 	'reporter' "localized" = type ifTrue: [
-		(object isKindOf: LambdaBlockMorph) ifFalse: [^ false].
+		(object isLambdaBlockMorph) ifFalse: [^ false].
 		object isBooleanFunction ifTrue: [^ false].
 		^ object isFunction].
 
 	'predicate' "localized" = type ifTrue: [
-		(object isKindOf: LambdaBlockMorph) ifFalse: [^ false].
+		(object isLambdaBlockMorph) ifFalse: [^ false].
 		^ object isBooleanFunction].
 
 	^ false
@@ -4008,6 +4007,14 @@ ScriptablePhratchMorph >> isPrime: t1 [
 
 { #category : #accessing }
 ScriptablePhratchMorph >> isScriptable [
+	"I am a scriptable Phratch object."
+
+	^ true
+
+]
+
+{ #category : #'as yet unclassified' }
+ScriptablePhratchMorph >> isScriptablePhratchMorph [
 	"I am a scriptable Phratch object."
 
 	^ true
@@ -4263,7 +4270,7 @@ ScriptablePhratchMorph >> listNamed: aString ifNone: aBlock [
 	"Answer a list with the given name. First check the local list variables, otherwise check the global list variables and the prototype. If there is no list variable with the given name, return the result of evaluating the given block."
 
 	| result stage |
-	(aString isKindOf: PhratchListMorph)
+	(aString isPhratchListMorph)
 		ifTrue: [^aString ].
 	(result := lists at: aString ifAbsent: [nil]) ifNotNil: [^ result].
 
@@ -4352,7 +4359,7 @@ ScriptablePhratchMorph >> lookLike: costumeNameOrIndex [
 	newCostume ifNil: [^ self].  "should not happen..."
 
 	costume := newCostume.
-	(self isKindOf: PhratchSpriteMorph) ifTrue: [
+	(self isPhratchSpriteMorph) ifTrue: [
 		self setSizeTo: self scale ].		"adjust the size if it is really huge or tiny.-jens"
 	costume resumePlaying.
 	self costumeChanged.
@@ -4836,7 +4843,7 @@ ScriptablePhratchMorph >> nextInstanceName [
 	lastN := 0.
 	stage sprites ifNotNil: [
 		stage sprites do: [:m |
-			(m isKindOf: PhratchSpriteMorph) ifTrue: [
+			(m isPhratchSpriteMorph) ifTrue: [
 				digits := m objName trailingDigits.
 				((digits size > 0) and: [m objName beginsWith: ('Sprite' localized)])
 					ifTrue: [lastN := lastN max: digits asNumber]]]].
@@ -5234,19 +5241,19 @@ ScriptablePhratchMorph >> positionVar: varName atX: x y: y [
 ScriptablePhratchMorph >> prepareForExport [
 	self blocksBin allMorphsDo: [:m |
 		(m isBlockMorph) ifTrue: [m stop].
-		(m isKindOf: SpriteArgMorph) ifTrue: [m clearMorphReference]].
+		(m isSpriteArgMorph) ifTrue: [m clearMorphReference]].
 
 	customBlocks ifNotNil: [
 		customBlocks do: [:eachDef |
 			eachDef body ifNotNil: [
 				eachDef body allMorphsDo: [:m |
-					(m isKindOf: SpriteArgMorph) ifTrue: [m clearMorphReference]]].
+					(m isSpriteArgMorph) ifTrue: [m clearMorphReference]]].
 			(eachDef answer isMorph) ifTrue: [
 				eachDef answer allMorphsDo: [:m |
-					(m isKindOf: SpriteArgMorph) ifTrue: [m clearMorphReference]]]]].
+					(m isSpriteArgMorph) ifTrue: [m clearMorphReference]]]]].
 
 
-	(self isKindOf: PhratchSpriteMorph) ifTrue: [
+	(self isPhratchSpriteMorph) ifTrue: [
 		self subsprites do: [:sub |
 			sub prepareForExport ]]
 
@@ -5383,7 +5390,7 @@ ScriptablePhratchMorph >> promptInProgress [
 	| s |
 	(s := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNil: [^ false].
 	s submorphsDo: [:m |
-		(m isKindOf: PhratchPrompterMorph) ifTrue: [^ true]].
+		(m isPhratchPrompterMorph) ifTrue: [^ true]].
 	^ false
 
 ]
@@ -5422,7 +5429,7 @@ ScriptablePhratchMorph >> propagateSounds [
 
 { #category : #'byob OOP' }
 ScriptablePhratchMorph >> prototype [
-	(self isKindOf: PhratchSpriteMorph)
+	(self isPhratchSpriteMorph)
 		ifTrue: [^ self prototype]
 		ifFalse: [^ nil]
 ]
@@ -5436,7 +5443,7 @@ ScriptablePhratchMorph >> quietCreateListNamed: listName [
 
 	lists at: listName put: (list := PhratchListMorph new listName: listName target: self).
 	(stage := self ownerThatIsA: PhratchStageMorph) ifNotNil: [
-		n := (stage submorphs select: [:m | m isKindOf: PhratchListMorph]) size.
+		n := (stage submorphs select: [:m | m isPhratchListMorph]) size.
 		stage addMorph: (list position: stage topRight - ((list width + 10)@0) + (0@(10+(20*n)))).
 		list startStepping].
 	self showOrHideList: listName show: false.
@@ -5768,15 +5775,15 @@ ScriptablePhratchMorph >> set: anObject to: aValue [
 	(anObject isCommandScriptBlockMorph)
 		ifTrue: [ 
 			obj := anObject receiver.
-			(obj isKindOf: ScriptablePhratchMorph)
+			(obj isScriptablePhratchMorph)
 				ifFalse: [ ^ self error: 'cannot get attributes of non-Sprites/Stage' ].
 			block := anObject body argMorphs first.
-			(block isKindOf: VariableBlockMorph)
+			(block isVariableBlockMorph)
 				ifTrue: [ ^ obj setVar: block variable to: aValue ].
 			#get: = block selector
 				ifTrue: [ 
 					arg := block argumentAt: 1.
-					att := (arg isKindOf: ChoiceArgMorph)
+					att := (arg isChoiceArgMorph)
 						ifTrue: [ (block argumentAt: 1) choice ]
 						ifFalse: [ (block argumentAt: 1) evaluate ] ]
 				ifFalse: [ 
@@ -6210,7 +6217,7 @@ ScriptablePhratchMorph >> spriteNameInUse: aString [
 	(s := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNotNil: [
 		s submorphs do: [:m |
 			m == self ifFalse: [
-				((m isKindOf: ScriptablePhratchMorph) and:
+				((m isScriptablePhratchMorph) and:
 				 [m objName caseInsensitiveEqual: aString]) ifTrue: [
 					^ true]]]].
 
@@ -6702,7 +6709,7 @@ ScriptablePhratchMorph >> variableNameInUse: varName [
 			^ stage allVarNames includes: varName]
 		ifFalse: [
 			submorphs do: [:m |
-				(m isKindOf: PhratchSpriteMorph) ifTrue: [
+				(m isPhratchSpriteMorph) ifTrue: [
 					(m allVarNames includes: varName) ifTrue: [^ true]]]].
 
 	^ false
@@ -6853,7 +6860,7 @@ ScriptablePhratchMorph >> wholeBlockSpecForSelector: aSymbol [
 	"Answer a block specification string (in English) for the give selector or nil if there is no spec that has the given selector."
 
 	self class blockSpecs do: [:spec |
-		((spec isKindOf: Array) and: [(spec at: 3) = aSymbol])
+		((spec isArray) and: [(spec at: 3) = aSymbol])
 			ifTrue: [^ spec]].
 
 	^ nil

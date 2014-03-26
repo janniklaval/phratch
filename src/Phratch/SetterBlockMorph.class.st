@@ -63,7 +63,7 @@ SetterBlockMorph >> initChangerForVar: varName [
 
 	| var |
 	var := varName.
-	"(var isKindOf: Array) ifTrue: [
+	"(var isArray) ifTrue: [
 		var := receiver blockFromTuple: var receiver: receiver]."
 
 	self commandSpec: (PhratchTranslator translationFor: 'change $Variable$ by $String$').
@@ -78,7 +78,7 @@ SetterBlockMorph >> initSetterForVar: varName [
 
 	| var |
 	var := varName.
-	"(var isKindOf: Array) ifTrue: [
+	"(var isArray) ifTrue: [
 		var := receiver blockFromTuple: var receiver: receiver]."
 	
 	self commandSpec: (PhratchTranslator translationFor: 'set $Variable$ to $String$').
@@ -95,6 +95,12 @@ SetterBlockMorph >> initialize [
 	isSpecialForm := false.
 	isTimed := false.
 
+]
+
+{ #category : #accessing }
+SetterBlockMorph >> isSetterBlockMorph [
+
+	^ true
 ]
 
 { #category : #accessing }
@@ -121,7 +127,7 @@ SetterBlockMorph >> replaceArgMorph: oldMorph by: newMorph [
 SetterBlockMorph >> variable [
 
 	submorphs do: [:m |
-		(m isKindOf: ChoiceArgMorph) ifTrue: [^ m choice]].
+		(m isChoiceArgMorph) ifTrue: [^ m choice]].
 	^ ''
 
 
@@ -133,7 +139,7 @@ SetterBlockMorph >> variable: aVar [
 	(aVar isCommandBlockMorph) ifTrue: [
 		^ self replaceArgMorph: self argMorphs first by: aVar].
 	submorphs do: [:m |
-		(m isKindOf: ChoiceArgMorph) ifTrue: [^ m choice: aVar]].
+		(m isChoiceArgMorph) ifTrue: [^ m choice: aVar]].
 
 
 ]

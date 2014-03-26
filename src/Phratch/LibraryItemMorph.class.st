@@ -25,7 +25,7 @@ Class {
 LibraryItemMorph >> acceptDroppingMorph: aMorph event: evt [
 	"Copy the dropped scripts of another object into its target."
 
-	(aMorph isKindOf: MediaItemMorph)
+	(aMorph isMediaItemMorph)
 		ifTrue: [ 
 			target addMediaItem: aMorph media copy.
 			evt hand rejectDropMorph: aMorph event: evt ].
@@ -33,7 +33,7 @@ LibraryItemMorph >> acceptDroppingMorph: aMorph event: evt [
 		ifTrue: [ 
 			evt hand rejectDropMorph: aMorph event: evt.
 			target addStack: aMorph fullCopy ].
-	(aMorph isKindOf: PhratchCommentMorph)
+	(aMorph isPhratchCommentMorph)
 		ifFalse: [ ^ self ].
 	evt hand rejectDropMorph: aMorph event: evt.
 	target addComment: aMorph fullCopy
@@ -171,7 +171,7 @@ LibraryItemMorph >> handlesMouseOverDragging: evt [
 	| m |
 	evt hand submorphs size = 1 ifFalse: [^ false].
 	m := evt hand firstSubmorph.
-	^ ((m isBlockMorph) or: [(m isKindOf: MediaItemMorph) or: [m isKindOf: PhratchCommentMorph]])
+	^ ((m isBlockMorph) or: [(m isMediaItemMorph) or: [m isPhratchCommentMorph]])
 
 ]
 
@@ -201,13 +201,19 @@ LibraryItemMorph >> highlight: aBoolean [
 
 ]
 
+{ #category : #'as yet unclassified' }
+LibraryItemMorph >> isLibraryItemMorph [
+
+	^ true
+]
+
 { #category : #'dropping/grabbing' }
 LibraryItemMorph >> justDroppedInto: aMorph event: evt [
 	"When I am dropped into the viewer pane or the script editor, then delete the sprite associated with me."
 	
 	| targets |
 
-	((self target isKindOf: PhratchSpriteMorph) and: [
+	((self target isPhratchSpriteMorph) and: [
 	(aMorph isPhratchStageMorph)]) ifTrue: [
 		targets := aMorph sprites select: [:each| 
 			each containsPoint: aMorph adjustedCursorPoint ].
@@ -348,7 +354,7 @@ LibraryItemMorph >> rightButtonMenu [
 	menu addLine.
 	menu add: 'duplicate' translated action: #duplicateNoAttach.
 	menu add: 'delete' translated action: #undoableDeleteSprite.
-	(self target isKindOf: PhratchSpriteMorph)
+	(self target isPhratchSpriteMorph)
 		ifTrue: [ 
 			menu addLine.
 			menu add: 'clone' translated action: #spawn.
@@ -485,7 +491,7 @@ LibraryItemMorph >> updateNameAndInfo [
 		toValue: txt.
 
 	nameMorph ifNotNil:[
-		(target isKindOf: ScriptablePhratchMorph) ifFalse: [
+		(target isScriptablePhratchMorph) ifFalse: [
 			nameMorph contents: '<no object>'.
 			^ self].
 
@@ -526,7 +532,7 @@ LibraryItemMorph >> updateThumbnail [
 			^ self ].
 	self updateRotationToggleMorph.
 	smallSize := (form height // 3) @ (form height // 3).
-	((target isKindOf: PhratchSpriteMorph) and: [ target hasSubsprites ])
+	((target isPhratchSpriteMorph) and: [ target hasSubsprites ])
 		ifTrue: [ 
 			1 to: (target subsprites size min: 3) do: [ :idx | 
 				subs := ((target subsprites at: idx) imageForm asFormOfDepth: 16)
@@ -534,7 +540,7 @@ LibraryItemMorph >> updateThumbnail [
 					borderWidth: 0
 					borderColor: Color transparent.
 				subs displayOn: form at: (form width - (subs width * idx)) @ (form height - subs height) ] ].
-	anchor := (target isKindOf: PhratchSpriteMorph) and: [ target ownerSprite notNil ].
+	anchor := (target isPhratchSpriteMorph) and: [ target ownerSprite notNil ].
 	f := target imageForm asFormOfDepth: 16.
 	f width <= form width & (f height <= form height)
 		ifTrue: [ 
@@ -567,7 +573,7 @@ LibraryItemMorph >> wantsDroppedMorph: aMorph event: evt [
 	"Answer true if the given morph is a script, costume, sound or comment."
 
 	^ (aMorph isBlockMorph) or: [
-		(aMorph isKindOf: MediaItemMorph) or: [
-			aMorph isKindOf: PhratchCommentMorph]]
+		(aMorph isMediaItemMorph) or: [
+			aMorph isPhratchCommentMorph]]
 
 ]

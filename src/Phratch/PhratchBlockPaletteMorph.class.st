@@ -13,11 +13,11 @@ PhratchBlockPaletteMorph >> acceptDroppingMorph: aMorph event: evt [
 	"This method allows re-ordering of media in the costumes and sounds tabs."
 
 	| editor mediaItems insertAfter |
-	((aMorph isKindOf: MediaItemMorph) and: [ (editor := self ownerOrYourselfThatIsA: PhratchScriptEditorMorph) notNil ])
+	((aMorph isMediaItemMorph) and: [ (editor := self ownerOrYourselfThatIsA: PhratchScriptEditorMorph) notNil ])
 		ifFalse: [ ^ super acceptDroppingMorph: aMorph event: evt ].
 	mediaItems := self submorphs
 		select: [ :m | 
-			(m isKindOf: MediaItemMorph)
+			(m isMediaItemMorph)
 				and: [ m ~~ aMorph and: [ m media mediaType = aMorph media mediaType and: [ m bounds intersects: aMorph bounds ] ] ] ].
 	mediaItems := mediaItems sort: [ :m1 :m2 | m1 top < m2 top ].
 	insertAfter := mediaItems isEmpty
@@ -58,6 +58,12 @@ PhratchBlockPaletteMorph >> isPartsBin [
 
 ]
 
+{ #category : #'as yet unclassified' }
+PhratchBlockPaletteMorph >> isPhratchBlockPaletteMorph [
+
+	^ true
+]
+
 { #category : #'dropping/grabbing' }
 PhratchBlockPaletteMorph >> rootForGrabOf: aMorph [
 	"I act like a parts bin; answer a new copy of the morph being extracted."
@@ -81,7 +87,7 @@ PhratchBlockPaletteMorph >> updateWatcherButtonsForFrame: frame [
 	frame ifNil: [^ self].
 
 	submorphs do: [:b |
-		((b isKindOf: ToggleButton) and:
+		((b isToggleButton) and:
 		 [b target isReporterBlockMorph]) ifTrue: [
 			reporter := b target.
 			sprite := reporter getAssociatedSprite.
@@ -97,12 +103,12 @@ PhratchBlockPaletteMorph >> wantsDroppedMorph: aMorph event: evt [
 
 	| f |
 	((aMorph isBlockMorph) or:
-	 [(aMorph isKindOf: MediaItemMorph) or:
-	 [(aMorph isKindOf: LibraryItemMorph) or:
-	 [aMorph isKindOf: PhratchCommentMorph]]])
+	 [(aMorph isMediaItemMorph) or:
+	 [(aMorph isLibraryItemMorph) or:
+	 [aMorph isPhratchCommentMorph]]])
 		ifTrue: [^ true].
 
-	(aMorph isKindOf: PhratchSpriteMorph) ifTrue: [
+	(aMorph isPhratchSpriteMorph) ifTrue: [
 		f := self ownerOrYourselfThatIsA: PhratchFrameMorph.
 		f viewerPane pageViewer contents = self ifTrue: [^ true]].
 

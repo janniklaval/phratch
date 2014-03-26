@@ -521,7 +521,7 @@ PhratchScriptEditorMorph >> showOrHideReadouts [
 		font: nameMorph font;
 		width: nameMorph height * 4;
 		rightJustify: false.
-	(self target isKindOf: PhratchSpriteMorph)
+	(self target isPhratchSpriteMorph)
 		ifFalse: [ ^ self ].
 	self
 		addRotationButtons;
@@ -536,7 +536,7 @@ PhratchScriptEditorMorph >> step [
 	currentCategory = 'Costumes' ifTrue: [self updateCostumeSelection].
 
 	(penReadout isNil or: [penReadout owner ~= self]) ifTrue: [^ self].
-	((self target isKindOf: PhratchSpriteMorph)  and: [self target penDown])
+	((self target isPhratchSpriteMorph)  and: [self target penDown])
 		ifTrue: [penReadout color: self target penColor]
 		ifFalse: [penReadout color: Color transparent].
 
@@ -622,7 +622,7 @@ PhratchScriptEditorMorph >> updateCostumeSelection [
 	currentCostume := self target costume.
 
 	pageViewerMorph contents submorphsDo: [:m |
-		((m isKindOf: MediaItemMorph) and:
+		((m isMediaItemMorph) and:
 		 [m media isImage]) ifTrue: [
 			m highlight: (m media = currentCostume)]].
 
@@ -643,7 +643,7 @@ PhratchScriptEditorMorph >> updateRotationButtonHighlight [
 	"Highlight the appropriate rotation style button. Do nothing if my target is not a sprite."
 
 	| style sym |
-	(self target isKindOf: PhratchSpriteMorph) ifFalse: [^ self].
+	(self target isPhratchSpriteMorph) ifFalse: [^ self].
 
 	style := self target rotationStyle.
 	style = #normal ifTrue: [sym := #Smooth].

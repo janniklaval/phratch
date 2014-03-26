@@ -637,7 +637,7 @@ PhratchFrameMorph >> allProjectMedia [
 	| result |
 	result := OrderedCollection new.
 	(workPane submorphs copyWith: workPane) do: [:m |
-		(m isKindOf: ScriptablePhratchMorph) ifTrue: [
+		(m isScriptablePhratchMorph) ifTrue: [
 			result addAll: m media]].
 	^ result
 
@@ -798,7 +798,7 @@ PhratchFrameMorph >> closeDialogBoxes [
 	"Close all dialog boxes, including PaintEditors and SoundRecorders."
 
 	World submorphs do: [:m |
-		(m isKindOf: DialogBoxMorph) ifTrue: [m cancelled; delete]].
+		(m isDialogBoxMorph) ifTrue: [m cancelled; delete]].
 
 	blockEditors := Set new
 
@@ -1192,7 +1192,7 @@ PhratchFrameMorph >> deleteWatchersForSprite: aSprite [
 	aSprite lists do: [ :m | m delete ].
 	workPane
 		submorphsDo: [ :m | 
-			(m isKindOf: WatcherMorph)
+			(m isWatcherMorph)
 				ifTrue: [ 
 					m target = aSprite
 						ifTrue: [ m delete ] ] ].
@@ -1207,7 +1207,7 @@ PhratchFrameMorph >> deleteWatchersForVar: varName ofSprite: aSprite [
 	"The given variable is being deleted. Delete all watchers associated with it."
 
 	workPane submorphsDo: [:m |
-		(m isKindOf: WatcherMorph) ifTrue: [
+		(m isWatcherMorph) ifTrue: [
 			((m target = aSprite) and:
 			 [(#(getVar: reportColor:) includes: m getSelector) and:
 			 [m parameter = varName]])
@@ -1489,7 +1489,7 @@ Note: this is a compatibility force method"
 
 	'initializing...' 
 		displayProgressAt: self center - (32@5)  "Sensor cursorPoint"
-		from: 0 to: ((proj allMorphs) select: [:m| m isKindOf: ScriptablePhratchMorph]) size * 2
+		from: 0 to: ((proj allMorphs) select: [:m| m isScriptablePhratchMorph]) size * 2
 		during: [:bar | | i | i := 0.
 ].
 
@@ -1525,7 +1525,7 @@ PhratchFrameMorph >> extractProjectFrom: aByteArray [
 
 	'initializing...' 
 		displayProgressAt: self center - (32@5)  "Sensor cursorPoint"
-		from: 0 to: ((proj allMorphs) select: [:m| m isKindOf: ScriptablePhratchMorph]) size * 2
+		from: 0 to: ((proj allMorphs) select: [:m| m isScriptablePhratchMorph]) size * 2
 		during: [:bar | | i | i := 0.
 ].
 
@@ -1957,8 +1957,8 @@ PhratchFrameMorph >> importSpriteOrProject: fileNameOrData [
 
 	"fix references to old stage"
 	importedStage allMorphsDo: [:m |
-		(m isKindOf: WatcherMorph) ifTrue: [m mapReceiver: importedStage to: workPane].
-		(m isKindOf: ScriptablePhratchMorph) ifTrue: [
+		(m isWatcherMorph) ifTrue: [m mapReceiver: importedStage to: workPane].
+		(m isScriptablePhratchMorph) ifTrue: [
 			m blocksBin submorphs do: [:stack |
 				(stack isBlockMorph) ifTrue: [
 					stack blockSequence do: [:b | b mapReceiver: importedStage to: workPane]]]]].
@@ -1999,7 +1999,7 @@ PhratchFrameMorph >> importSpriteOrProject: fileNameOrData [
 	importedStage position: workPane position.
 
 	importedStage submorphs do: [:m | 
-		(m isKindOf: PhratchSpriteMorph) ifTrue: [
+		(m isPhratchSpriteMorph) ifTrue: [
 			"m objName: m  nextInstanceName".
 			workPane addMorphFront: m.
 			m startStepping.
@@ -2083,7 +2083,7 @@ PhratchFrameMorph >> installNewProject: newWorkpane [
 
 	"fix sprite positions (backward compatibility)"
 	workPane submorphs do: [:m |
-		(m isKindOf: WatcherMorph) ifTrue: [m convertFromOldWatcher].
+		(m isWatcherMorph) ifTrue: [m convertFromOldWatcher].
 		(m respondsTo: #costume) ifTrue: [
 			m position: m position + m costume rotationCenter]. "fix up positions"
 		m layoutChanged].
@@ -2102,7 +2102,7 @@ PhratchFrameMorph >> installNewProject: newWorkpane [
 	"populate the sprites list if it is empty (backward compatability)"
 	workPane sprites isEmpty ifTrue: [
 		workPane submorphs do: [:m |
-			(m isKindOf: ScriptablePhratchMorph) ifTrue: [workPane sprites addLast: m]]].
+			(m isScriptablePhratchMorph) ifTrue: [workPane sprites addLast: m]]].
 
 	scriptsPane tabPane currentTab: 'Scripts'.
 	libraryPane clearLibrary.
@@ -2146,6 +2146,12 @@ PhratchFrameMorph >> isLoaded: value [
 
 	Smalltalk at: value asSymbol ifAbsent:[^false].
 	^true
+]
+
+{ #category : #'as yet unclassified' }
+PhratchFrameMorph >> isPhratchFrameMorph [
+
+	^ true
 ]
 
 { #category : #byob }
@@ -2287,7 +2293,7 @@ PhratchFrameMorph >> libraryPane [
 PhratchFrameMorph >> listWatchers [
 	"Answer a collection of all the list watchers in the work pane."
 
-	^ self workPane submorphs select: [:m | m isKindOf: PhratchListMorph]
+	^ self workPane submorphs select: [:m | m isPhratchListMorph]
 
 ]
 
@@ -2652,7 +2658,7 @@ PhratchFrameMorph >> paintingInProgress: aBoolean [
 PhratchFrameMorph >> phratchObjects [
 	"Answer a collection of all the phratch objects in the work pane."
 
-	^ self workPane submorphs select: [:m | m isKindOf: ScriptablePhratchMorph]
+	^ self workPane submorphs select: [:m | m isScriptablePhratchMorph]
 
 ]
 
@@ -2660,7 +2666,7 @@ PhratchFrameMorph >> phratchObjects [
 PhratchFrameMorph >> phratchWatchers [
 	"Answer a collection of all the phratch watchers in the work pane."
 
-	^ self workPane submorphs select: [:m | m isKindOf: WatcherMorph]
+	^ self workPane submorphs select: [:m | m isWatcherMorph]
 
 ]
 
@@ -2747,10 +2753,10 @@ PhratchFrameMorph >> pressGreenFlagButton [
 { #category : #'falta adaptar' }
 PhratchFrameMorph >> printTupleElement: el on: s [
 
-	(el isKindOf: Array) ifTrue: [self printTupleList: el on: s. ^ self].
-	(el isKindOf: Symbol) ifTrue: [s nextPutAll: el. ^ self].
+	(el isArray) ifTrue: [self printTupleList: el on: s. ^ self].
+	(el isSymbol) ifTrue: [s nextPutAll: el. ^ self].
 	(el isString) ifTrue: [s nextPut: $". s nextPutAll: el. s nextPut: $". ^ self].
-	(el isKindOf: ScriptablePhratchMorph) ifTrue: [s nextPutAll: el objName. ^ self].
+	(el isScriptablePhratchMorph) ifTrue: [s nextPutAll: el objName. ^ self].
 	s nextPutAll: el printString.
 
 ]
@@ -2848,7 +2854,7 @@ PhratchFrameMorph >> projectIsEmpty [
 	"at most one sprite in workpane?"
 	workPane submorphs size > 1 ifTrue: [^ false].
 	workPane submorphs size = 1 ifTrue: [
-		(workPane submorphs first isKindOf: PhratchSpriteMorph) ifFalse: [^ false]].
+		(workPane submorphs first isPhratchSpriteMorph) ifFalse: [^ false]].
 
 	allScriptables := workPane submorphs copyWith: workPane.
 	defaultCostumes := Set
@@ -2974,7 +2980,7 @@ PhratchFrameMorph >> refreshBlocks [
 
 	'updating...' 
 		displayProgressAt: self center - (32@5)  "Sensor cursorPoint"
-		from: 0 to: ((workPane allMorphs) select: [:m| m isKindOf: ScriptablePhratchMorph]) size * 3
+		from: 0 to: ((workPane allMorphs) select: [:m| m isScriptablePhratchMorph]) size * 3
 		during: [:bar | | i | i := 0.
 
 	self updatePanes.
@@ -3131,7 +3137,7 @@ PhratchFrameMorph >> setDefaultSprite [
 							updateLocalId: eachDef id withSpec: eachDef userSpec]]].
 "
 			importedProject submorphs do: [:m |
-				(m isKindOf: PhratchSpriteMorph) ifTrue: [DefaultSprite := m].
+				(m isPhratchSpriteMorph) ifTrue: [DefaultSprite := m].
 				^ self]]].
 
 	"if default image exists, use the image and add 'pop' sound"
@@ -3159,7 +3165,7 @@ PhratchFrameMorph >> setLanguage: aString [
 
 	'updating...' 
 		displayProgressAt: self center - (32@5)  "Sensor cursorPoint"
-		from: 0 to: ((workPane allMorphs) select: [:m| m isKindOf: ScriptablePhratchMorph]) size * 2
+		from: 0 to: ((workPane allMorphs) select: [:m| m isScriptablePhratchMorph]) size * 2
 		during: [:bar | | i | i := 0.
 
 	tempJustSaved := justSaved.
@@ -3325,7 +3331,7 @@ PhratchFrameMorph >> startup [
 		ifNone: [^ self].
 
 	"open a .sprite file"
-	workPane submorphs do: [:m | (m isKindOf: PhratchSpriteMorph) ifTrue: [m deleteSprite]].
+	workPane submorphs do: [:m | (m isPhratchSpriteMorph) ifTrue: [m deleteSprite]].
 	self importSpriteOrProject: fileName.
 
 ]
@@ -3488,7 +3494,7 @@ PhratchFrameMorph >> undoTool [
 			"update 'variables' category if it is showing"
 			viewerPane currentCategory: 'variables']].
 
-	(m isKindOf: PhratchSpriteMorph) ifTrue: [  "sprite; add to stage"
+	(m isPhratchSpriteMorph) ifTrue: [  "sprite; add to stage"
 		m filterReset; show.
 		m objName: m objName.
 		Clipboard := nil.
@@ -3713,7 +3719,7 @@ PhratchFrameMorph >> updateToolButtons [
 	Sensor anyButtonPressed ifTrue: [^ self].  "don't update if mouse button pressed"
 
 	toolButtons := toolbarPanel submorphs select: [:m |
-		(m isKindOf: ToggleButton) and: [m actionSelector endsWith: 'Tool']].
+		(m isToggleButton) and: [m actionSelector endsWith: 'Tool']].
 
 	currentTool := (World activeHand toolType ifNil: ['none']) asLowercase.
 	toolButtons do: [:b |
@@ -3776,8 +3782,8 @@ PhratchFrameMorph >> viewerPane [
 PhratchFrameMorph >> wantsDroppedMorph: aMorph event: evt [
 
 	^ (aMorph isBlockMorph) or: [
-	  	(aMorph isKindOf: ScriptablePhratchMorph) or: [
-			(aMorph isKindOf: PhratchCommentMorph)]].
+	  	(aMorph isScriptablePhratchMorph) or: [
+			(aMorph isPhratchCommentMorph)]].
 
 ]
 
@@ -3843,7 +3849,7 @@ PhratchFrameMorph >> writePhratchProject [
 
 	| oldScriptsTarget oldTab oldViewerCategory oldPosition saveError out |
 	workPane submorphsDo: [:m |
-		(m isKindOf: WatcherMorph) ifTrue: [m delete]].
+		(m isWatcherMorph) ifTrue: [m delete]].
 	
 	self stopAll.
 	self world ifNotNil: [self world activeHand newKeyboardFocus: nil].  "terminates active editor"
@@ -3868,15 +3874,15 @@ PhratchFrameMorph >> writePhratchProject [
 
 	'saving...' 
 		displayProgressAt: self center - (32@5)  "Sensor cursorPoint"
-		from: 0 to: ((workPane allMorphs) select: [:m| m isKindOf: ScriptablePhratchMorph]) size * 2
+		from: 0 to: ((workPane allMorphs) select: [:m| m isScriptablePhratchMorph]) size * 2
 		during: [:bar | | i | i := 0.
 
 	workPane allMorphsDo: [:m |
-		(m isKindOf: ScriptablePhratchMorph) ifTrue: [
+		(m isScriptablePhratchMorph) ifTrue: [
 			i := i + 1. bar value: i.
-			(m isKindOf: PhratchSpriteMorph)
+			(m isPhratchSpriteMorph)
 				ifTrue: [m cacheRefPos].
-			(m blocksBin isKindOf: PhratchSpriteMorph) ifTrue: [  m blocksBin allMorphsDo: [:b |
+			(m blocksBin isPhratchSpriteMorph) ifTrue: [  m blocksBin allMorphsDo: [:b |
 				(b isBlockMorph) ifTrue: [b stop]]].
 			]].
 
@@ -3988,7 +3994,7 @@ PhratchFrameMorph >> writeSummaryFile: fullFile [
 		nextPutAll: '--------';
 		crlf.
 	workPane printSummaryOn: s.
-	sprites := workPane submorphs select: [ :m | m isKindOf: PhratchSpriteMorph ].
+	sprites := workPane submorphs select: [ :m | m isPhratchSpriteMorph ].
 	sprites
 		do: [ :m | 
 			s skip: -2.	"remove last crlf"
@@ -4021,7 +4027,7 @@ PhratchFrameMorph >> writeSummaryTotalsOn: aStream [
 	"Write the totals for this project on the given stream."
 
 	| sprites uniqueCostumes uniqueSounds stackCount |
-	sprites := workPane submorphs select: [ :m | m isKindOf: ScriptablePhratchMorph ].
+	sprites := workPane submorphs select: [ :m | m isScriptablePhratchMorph ].
 	sprites := sprites asArray copyWith: workPane.
 	uniqueCostumes := IdentitySet new: 100.
 	uniqueSounds := IdentitySet new: 100.

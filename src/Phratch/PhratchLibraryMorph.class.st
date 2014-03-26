@@ -291,7 +291,7 @@ PhratchLibraryMorph >> step [
 
 	"add thumbnails for any new objects"
 	workPaneObjects := workPane sprites select: [:s |
-		(s isKindOf: ScriptablePhratchMorph) and: [s isScriptable & s isClone not]].
+		(s isScriptablePhratchMorph) and: [s isScriptable & s isClone not]].
 	workPaneObjects do: [:m |
 		(morphsWithThumbnails includes: m) ifFalse: [
 			self addThumbnailFor: m.
