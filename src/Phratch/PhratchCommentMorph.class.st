@@ -131,7 +131,7 @@ PhratchCommentMorph >> commentsAfterMe: blocksInStack [
 	| result allComments |
 	owner ifNil: [^ #()].
 	allComments := owner submorphs select: [:m |
-		m isKindOf: self class].
+		m isPhratchCommentMorph].
 
 	result := OrderedCollection new.
 	blocksInStack reversed do: [:b |
@@ -148,7 +148,7 @@ PhratchCommentMorph >> commentsBeforeMe: blocksInStack [
 
 	| allComments result |
 	owner ifNil: [^ #()].
-	allComments := owner submorphs select: [:m | m isKindOf: self class].
+	allComments := owner submorphs select: [:m | m isPhratchCommentMorph].
 
 	result := OrderedCollection new.
 	blocksInStack do: [:b |

@@ -71,7 +71,7 @@ PhratchNoteSelector >> mouseMove: evt [
 	keyMorph := submorphs
 		detect: [:m |
 			(m containsPoint: evt cursorPoint) and:
-			[m isKindOf: PhratchNoteSelectorKeyMorph]]
+			[m isPhratchNoteSelectorKeyMorph]]
 		ifNone: [nil].
 	keyMorph
 		ifNil: [self turnOffNote]
@@ -159,7 +159,7 @@ PhratchNoteSelector >> step [
 	keyMorph := submorphs
 		detect: [:m |
 			(m containsPoint: Sensor lastMousePosition) and:
-			[m isKindOf: PhratchNoteSelectorKeyMorph]]
+			[m isPhratchNoteSelectorKeyMorph]]
 		ifNone: [^ self].
 
 	self updateNoteDisplay: keyMorph midiKey.
@@ -177,7 +177,7 @@ PhratchNoteSelector >> stepTime [
 { #category : #private }
 PhratchNoteSelector >> turnOffNote [
 
-	submorphs do: [:m | (m isKindOf: PhratchNoteSelectorKeyMorph) ifTrue: [m highlight: false]].
+	submorphs do: [:m | (m isPhratchNoteSelectorKeyMorph) ifTrue: [m highlight: false]].
 	notePlayer ifNotNil: [notePlayer noteOff].
 	selectedVal := nil.
 

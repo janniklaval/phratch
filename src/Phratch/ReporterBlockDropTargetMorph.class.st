@@ -34,7 +34,7 @@ ReporterBlockDropTargetMorph >> argument [
 	| am |
 	am := argMorphs first.
 	(am isReporterBlockMorph) ifTrue: [ ^am ].
-	(am isKindOf: BooleanArgMorph) ifTrue: [^nil ].
+	(am isBooleanArgMorph) ifTrue: [^nil ].
 	^am labelMorph contents
 ]
 

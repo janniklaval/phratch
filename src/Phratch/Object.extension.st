@@ -39,6 +39,12 @@ Object >> isBlockDialog [
 ]
 
 { #category : #'*Phratch-Extensions' }
+Object >> isBlockLabelFragmentMorph [
+
+	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
 Object >> isBlockMorph [
 
 	^ false
@@ -46,6 +52,12 @@ Object >> isBlockMorph [
 
 { #category : #'*Phratch-Extensions' }
 Object >> isBoolean [
+
+	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
+Object >> isBooleanArgMorph [
 
 	^ false
 ]
@@ -146,6 +158,12 @@ Object >> isIfElseBlockMorph [
 ]
 
 { #category : #'*Phratch-Extensions' }
+Object >> isImageFrameMorph [
+
+	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
 Object >> isLambdaBlockMorph [
 
 	^false
@@ -167,6 +185,12 @@ Object >> isListContentsBlockMorph [
 Object >> isMediaItemMorph [
 
 	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
+Object >> isMenuMorph [
+
+	^false
 ]
 
 { #category : #'*Phratch-Extensions' }
@@ -224,6 +248,12 @@ Object >> isPhratchList [
 
 { #category : #'*Phratch-Extensions' }
 Object >> isPhratchListMorph [
+
+	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
+Object >> isPhratchNoteSelectorKeyMorph [
 
 	^ false
 ]
@@ -290,6 +320,12 @@ Object >> isResizableToggleButton [
 
 { #category : #'*Phratch-Extensions' }
 Object >> isScriptablePhratchMorph [
+
+	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
+Object >> isScrollFrameMorph [
 
 	^ false
 ]

@@ -32,6 +32,12 @@ PhratchNoteSelectorKeyMorph >> initialize [
 
 ]
 
+{ #category : #'as yet unclassified' }
+PhratchNoteSelectorKeyMorph >> isPhratchNoteSelectorKeyMorph [
+
+	^ true
+]
+
 { #category : #accessing }
 PhratchNoteSelectorKeyMorph >> midiKey [
 

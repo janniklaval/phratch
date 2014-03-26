@@ -476,7 +476,7 @@ ResizableToggleButton >> updateLayout [
 	(self submorphs size = 2)
 		ifTrue: [label position: self position + (x@y)]
 		ifFalse: [self submorphs reversed do: [:m |
-			(m isKindOf: ImageFrameMorph) ifFalse: [
+			(m isImageFrameMorph) ifFalse: [
 				m left: self left + ((self width - m width) // 2).
 				m top: top.
 				top := m bottom + 6]]].
@@ -491,7 +491,7 @@ ResizableToggleButton >> updateSize [
 	trim := PhratchTranslator verticalTrimForFont: label font.
 	contentsExtent := 0@0.
 	self submorphsDo: [: m |
-		(m isKindOf: ImageFrameMorph) ifFalse: [
+		(m isImageFrameMorph) ifFalse: [
 			contentsExtent := (contentsExtent x max: m width)@(contentsExtent y + m height)]].
 	self extent: contentsExtent + padding - (0@trim).
 	vOffset := PhratchTranslator centerOffsetForButtonWithFont: label font.

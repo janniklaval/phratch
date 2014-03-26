@@ -277,7 +277,7 @@ ReporterBlockMorph >> fixBlockLayoutNoWrap [
 
 	mList do: [:m |
 		(m isStringMorph) 
-			ifTrue: [(m isKindOf: BlockLabelFragmentMorph) 
+			ifTrue: [(m isBlockLabelFragmentMorph) 
 				ifFalse: [m color: self labelColor]].
 
 		y := (h - m height) // 2.

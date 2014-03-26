@@ -80,6 +80,12 @@ BooleanArgMorph >> initialize [
 
 ]
 
+{ #category : #'as yet unclassified' }
+BooleanArgMorph >> isBooleanArgMorph [
+
+	^ true
+]
+
 { #category : #other }
 BooleanArgMorph >> printArgOn: aStream [
 	"Print this argument morph on the given stream."

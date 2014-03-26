@@ -270,6 +270,12 @@ ScrollFrameMorph >> isBeingDragged [
 	^dragOffset notNil
 ]
 
+{ #category : #'as yet unclassified' }
+ScrollFrameMorph >> isScrollFrameMorph [
+
+	^ true
+]
+
 { #category : #'scrolling by dragging' }
 ScrollFrameMorph >> isScrollable [
 	"private - answer true if the receiver is partially hidden and thus can be scrolled"

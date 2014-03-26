@@ -31,7 +31,7 @@ PhratchScriptsMorph >> cleanUp [
 	sortedBlocks := collectedBlocks copy sorted: [:s1 :s2 | s1 top < s2 top].
 
 	y := 20.
-	(owner isKindOf: ScrollFrameMorph) ifTrue: [
+	(owner isScrollFrameMorph) ifTrue: [
 		owner hScrollPixels: 0.
 		owner vScrollPixels: 0].
 	sortedBlocks do: [:s |

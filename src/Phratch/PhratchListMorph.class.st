@@ -55,7 +55,7 @@ PhratchListMorph class >> deepCopyFrom: anArray from: start to: stop [
 	ans listName: '' target: nil.
 	start to: stop do: [:i |
 		element := converter asListElement: (anArray at: i).
-		(element isKindOf: self)
+		(element isPhratchListMorph)
 			ifTrue: [element := self deepCopyFrom: (element asArray) from: 1 to: element lineCount].
 		ans privateInsertLine: element at: (ans lineCount + 1)].
 	ans updateCountMorph.
@@ -222,7 +222,7 @@ PhratchListMorph >> containsRecursive: anObject [
 		m complexObject notNil
 			ifTrue: [
 				m complexObject = anObject ifTrue: [^ true ].
-				(m complexObject isKindOf: self class) ifTrue: [
+				(m complexObject isPhratchListMorph) ifTrue: [
 					(m complexObject containsRecursive: anObject) ifTrue: [^true]]]
 			ifFalse: [
 				s = m firstSubmorph contents ifTrue: [^ true]]].
@@ -512,7 +512,7 @@ PhratchListMorph >> insertLine: aString at: aNumber [
 	| index newCell |
 
 "
-	(aString isKindOf: self class) ifTrue: [
+	(aString isPhratchListMorph) ifTrue: [
 		(aString containsRecursive: self) ifTrue: [
 			self error: 'attempting to create a recursive list']].
 "
@@ -827,7 +827,7 @@ PhratchListMorph >> scrollActiveCellIntoView [
 { #category : #'list ops' }
 PhratchListMorph >> setLineAt: aNumber to: newContents [
 	| index cell obj |
-	(newContents isKindOf: self class)
+	(newContents isPhratchListMorph)
 		ifTrue: [ 
 			(newContents containsRecursive: self)
 				ifTrue: [ self error: 'attempting to create a recursive list' ] ].
@@ -836,7 +836,7 @@ PhratchListMorph >> setLineAt: aNumber to: newContents [
 		ifFalse: [ 
 			lastActivityError := true.
 			^ self ].
-	obj := (newContents isKindOf: self class) | (newContents isMorph) | (newContents isArray)
+	obj := (newContents isPhratchListMorph) | (newContents isMorph) | (newContents isArray)
 		| (newContents isBoolean)
 		ifTrue: [ newContents ]
 		ifFalse: [ newContents asString ].
@@ -1079,7 +1079,7 @@ PhratchListMorph >> updateContentsRecursive [
 					(cell complexObject respondsTo: #displayForm)
 						ifTrue: [ cell extent: cell complexObject displayForm extent + (10 @ 10) ]
 						ifFalse: [ cell extent: cell complexObject fullBounds extent + (10 @ 10) ].
-					(cell complexObject isKindOf: self class)
+					(cell complexObject isPhratchListMorph)
 						ifTrue: [ cell complexObject updateContentsRecursive ] ]
 				ifFalse: [ 
 					(cell width ~= cellWidth or: [ cell extent ~= (cell firstSubmorph extent + inset) ])

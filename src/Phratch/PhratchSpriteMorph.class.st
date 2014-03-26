@@ -522,7 +522,7 @@ PhratchSpriteMorph >> distanceTo: anObject [
 	aSpriteOrSymbol = #mouse ifTrue: [
 		^ ((self mouseX @ self mouseY)  - self referencePosition) r].
 
-	(aSpriteOrSymbol isKindOf: self class) ifFalse: [^ 10000].
+	(aSpriteOrSymbol isPhratchSpriteMorph) ifFalse: [^ 10000].
 	^ (aSpriteOrSymbol referencePosition - self referencePosition) r
 
 ]
@@ -823,7 +823,7 @@ PhratchSpriteMorph >> gotoSpriteOrMouse: anObject [
 	aSpriteOrSymbol := self coerceSpriteArg: anObject.
 
 	aSpriteOrSymbol = #mouse ifTrue: [^ self gotoX: self mouseX y: self mouseY].
-	(aSpriteOrSymbol isKindOf: self class) ifFalse: [^ self].
+	(aSpriteOrSymbol isPhratchSpriteMorph) ifFalse: [^ self].
 	p := aSpriteOrSymbol referencePosition.
 	self gotoX: p x y: p y.
 
@@ -1514,7 +1514,7 @@ PhratchSpriteMorph >> pointTowards: anObject [
 	aSpriteOrSymbol := self coerceSpriteArg: anObject.
 
 	aSpriteOrSymbol = #mouse ifTrue: [^ self pointToX: self mouseX y: self mouseY].
-	(aSpriteOrSymbol isKindOf: self class) ifFalse: [^ self].
+	(aSpriteOrSymbol isPhratchSpriteMorph) ifFalse: [^ self].
 	p := aSpriteOrSymbol referencePosition.
 	self pointToX: p x y: p y.
 
@@ -2193,7 +2193,7 @@ PhratchSpriteMorph >> touching: anObject [
 
 	aSpriteOrSymbol = #edge ifTrue: [^ self isOnEdge].
 
-	(aSpriteOrSymbol isKindOf: self class) ifFalse: [^ false].
+	(aSpriteOrSymbol isPhratchSpriteMorph) ifFalse: [^ false].
 
 	(self isHidden not and: [aSpriteOrSymbol isHidden not]) ifFalse: [
 		((subsprites collect: [:sub | sub touching: anObject ]) includes: true)

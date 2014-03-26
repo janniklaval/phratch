@@ -673,7 +673,7 @@ CommandBlockMorph >> fixBlockLayoutNoWrap [
 		do: [ :m | 
 			(m isStringMorph)
 				ifTrue: [ 
-					(m isKindOf: BlockLabelFragmentMorph)
+					(m isBlockLabelFragmentMorph)
 						ifFalse: [ m color: self labelColor ] ]
 				ifFalse: [ x := x max: minXForArgs ].
 			m position: x @ (self top + ((h - hAdjust - m height) // 2)).

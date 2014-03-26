@@ -15,6 +15,12 @@ MenuMorph >> addIcon: aForm toolTip: helpString action: aSymbol [
 ]
 
 { #category : #'*Phratch' }
+MenuMorph >> isMenuMorph [
+
+	^ true
+]
+
+{ #category : #'*Phratch' }
 MenuMorph >> labels [
 
 	^ self menuItems 

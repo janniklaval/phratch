@@ -247,6 +247,11 @@ ImageFrameMorph >> insetBottom [
 
 ]
 
+{ #category : #'as yet unclassified' }
+ImageFrameMorph >> isImageFrameMorph [
+	^ true
+]
+
 { #category : #accessing }
 ImageFrameMorph >> minExtent [
 	"Answer my minimum extent."

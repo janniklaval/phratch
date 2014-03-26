@@ -101,7 +101,7 @@ VariableFrame >> interpretStringAsNumberIfPossible: anObject [
 		ifFalse: [ ^ anObject ].
 	anObject size = 0
 		ifTrue: [ ^ anObject ].
-	s := (anObject first isKindOf: Character)
+	s := (anObject first isCharacter)
 		ifTrue: [ ReadStream on: anObject asByteArray ]
 		ifFalse: [ ReadStream on: anObject ].	"see if the string can be parsed as a Phratch number:"
 	digits := '0123456789' asByteArray.
