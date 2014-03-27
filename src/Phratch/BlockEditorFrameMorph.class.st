@@ -331,6 +331,12 @@ BlockEditorFrameMorph >> instancesOf: aCustomBlockId [
 
 ]
 
+{ #category : #'as yet unclassified' }
+BlockEditorFrameMorph >> isBlockEditorFrameMorph [
+
+	^ true
+]
+
 { #category : #'dropping/grabbing' }
 BlockEditorFrameMorph >> justDroppedInto: aMorph event: evt [
 	"Never embed myself in a morph (e.g. the Stage)."

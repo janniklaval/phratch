@@ -1018,6 +1018,7 @@ PhratchProcess >> evaluateCommandFor: aStageMorph [
 
 	self applyPrimitive.
 
+self flag: 'maybe should be remove because not necesary'.
 	aStageMorph ifNotNil: [
 		aStageMorph updateTrailsForm.
 		self isAtomic ifTrue: [^self].
@@ -1274,7 +1275,7 @@ PhratchProcess >> pause [
 PhratchProcess >> popStackFrame [
 	"Pops the current stack frame off the top of the stack, so that the next one becomes the current frame."
 
-	|  frame |
+	|  frame   |
 
 	frame := stackFrame.
 	stackFrame := stackFrame parentFrame.
@@ -1293,8 +1294,7 @@ PhratchProcess >> popStackFrame [
 		(frame shouldUnlight not and: [command isBlockMorph]) ifTrue: [
 			""We push a new frame for unlighting this command.""
 			unlightFrame := PhratchStackFrame new
-				expression: command;
-				shouldUnlight: true.
+				expression: command.
 			self pushStackFrame: unlightFrame]]."
 
 ]

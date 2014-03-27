@@ -305,7 +305,7 @@ PhratchScriptsMorph >> showDeleteFeedback [
 PhratchScriptsMorph >> step [
 	"Give feedback about possible drop targets."
 
-	| feedbackColor h b targetArg targetAssoc targetP targetBlock |
+		| feedbackColor h b targetArg targetAssoc targetP targetBlock |
 
 	feedbackMorph
 		ifNil: [feedbackMorph := BorderedMorph new borderWidth: 3]  "create feedback morph if necessary"

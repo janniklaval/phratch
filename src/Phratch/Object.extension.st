@@ -39,6 +39,12 @@ Object >> isBlockDialog [
 ]
 
 { #category : #'*Phratch-Extensions' }
+Object >> isBlockEditorFrameMorph [
+
+	^false
+]
+
+{ #category : #'*Phratch-Extensions' }
 Object >> isBlockLabelFragmentMorph [
 
 	^ false
@@ -290,6 +296,12 @@ Object >> isPhratchStageMorph [
 
 { #category : #'*Phratch-Extensions' }
 Object >> isPhratchTalkBubbleMorph [
+
+	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
+Object >> isPhratchViewerMorph [
 
 	^ false
 ]

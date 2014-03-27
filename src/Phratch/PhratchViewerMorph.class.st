@@ -83,6 +83,12 @@ PhratchViewerMorph >> initialize [
 
 ]
 
+{ #category : #'as yet unclassified' }
+PhratchViewerMorph >> isPhratchViewerMorph [
+
+	^ true
+]
+
 { #category : #private }
 PhratchViewerMorph >> lightUpSelectorForCurrentCategory [
 
