@@ -488,7 +488,7 @@ PaintPalette >> textSizeMenu [
 	sizeList
 		do: [ :n | 
 			menu
-				add: n
+				add: n asString
 				target: self
 				selector: #updateSizeMenu:
 				argument: n ].
@@ -713,7 +713,7 @@ PaintPalette >> updateOptionsPane [
 PaintPalette >> updateSizeMenu: aSize [
 	| choice oldFont newFont font |
 	font := canvasMorph canvasTextBox font.
-	choice := aSize contents asNumber.
+	choice := aSize asNumber.
 	choice ifNil: [ ^ self ].
 	textSizeMorph contents: choice asString.
 	oldFont := canvasMorph canvasTextBox font.

@@ -396,9 +396,9 @@ PaintCanvas >> dragTo: aPoint [
 		ifTrue: [ ^ self dragShapeTo: aPoint ].
 	#eyedropper = mode
 		ifTrue: [ 
-			c := (bounds containsPoint: Sensor cursorPoint)
-				ifTrue: [ canvasForm colorAt: aPoint ]
-				ifFalse: [ Display colorAt: Sensor cursorPoint ].	"if over me, get color from canvasForm"
+			c :=" (bounds containsPoint: Sensor cursorPoint)
+				ifTrue: [ ""canvasForm colorAt: aPoint" Display colorAt: Sensor cursorPoint "]
+				ifFalse: [ Display colorAt: Sensor cursorPoint ]".	"if over me, get color from canvasForm"
 			palette color1: c.
 			^ self ].	"holding shift with the stamp tool does multiple stamps while dragging"
 	#stamp = palette mode & Sensor shiftPressed
@@ -611,7 +611,7 @@ PaintCanvas >> drawTextOnBufferSrcRect: srcRect dstRect: dstRect [
 	#text = palette mode
 		ifTrue: [
 			"draw text handle with color entry 6 (green) from the 4-bit color palette"
-			textForm fill: (textBox topLeft - 5 extent: 8) fillColor: Color green.
+			textForm fill: (textBox topLeft - 5 extent: 8@8) fillColor: Color green.
 
 			bgColor := Color white.
 			frameColor := Color black.
@@ -798,7 +798,7 @@ PaintCanvas >> import [
 	fName := PhratchFileChooserDialog chooseImageFileType: type title: 'Import Image'.
 	(fName isNil or: [ fName = #cancelled ])
 		ifTrue: [ ^ self ].
-	(fName asLowercase endsWith: '.sprite') | (fName asLowercase endsWith: '.ysp')  | (fName asLowercase endsWith: '.phsp')
+	(fName fullName asLowercase endsWith: '.sprite') | (fName fullName asLowercase endsWith: '.ysp')  | (fName fullName asLowercase endsWith: '.phsp')
 		ifTrue: [ f := self importCostumeFromSprite: fName ]
 		ifFalse: [ [ f := Form fromFileNamed: fName ] ifError: [ nil ] ].
 	f ifNil: [ ^ self ].
@@ -1515,7 +1515,7 @@ PaintCanvas >> textHandleContainsPoint: aPoint [
 	"Answer true if the the text handle contains the given point in canvas coordinates."
 
 	^ #text = palette mode and:[
-	 	(textBox topLeft - 5 extent: 9) containsPoint: aPoint] 
+	 	(textBox topLeft - 5 extent: 9@9) containsPoint: aPoint] 
 ]
 
 { #category : #'event handling' }
