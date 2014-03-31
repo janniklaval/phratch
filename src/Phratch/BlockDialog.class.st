@@ -45,9 +45,13 @@ BlockDialog class >> isOpen [
 { #category : #initialization }
 BlockDialog >> buildCategoryChooser [
 	| catList maxExtent buttons label offForm onForm overForm b pad leftColumnX rightColumnX x y catButtonsExtent |
-	catList := #(#motion #control #looks #sensing #sound #operators #pen #variables #other #list).
+	"catList := #(#motion #control #looks #sensing #sound #operators #pen #variables #other #list)."
+	
+	catList := (((PhratchCategory allSubclasses" select: [ :e | e visible ]") sort: [ :e :f | e order < f order ])
+		collect: [ :c | c label asSymbol ]) asArray.
+		
 	categoryChooser := ImageFrameMorph new.
-	categoryChooser initFromForm: (PhratchFrameMorph skinAt: #paintOptionsBackground).	"Create new buttons, keeping track of the maximum extent."
+	categoryChooser initFromForm: (PhratchFrameMorph skinAt: #paintOptionsBackground).	"Create new buttons, keeping End of statement list encounted -> track of the maximum extent."
 	maxExtent := 75 @ 0.
 	buttons := catList
 		collect: [ :cat | 
@@ -214,7 +218,7 @@ BlockDialog >> disableAllButCategory [
 		addMorphBack: categoryChooser;
 		addMorphBack:
 				(Morph new
-						extent: 5 @ 110;
+						extent: 5 @ "110" (categoryChooser height - 20);
 						color: Color transparent;
 		yourself);
 		addMorphBack: buttonRow;
@@ -239,7 +243,7 @@ BlockDialog >> disableAllButCategoryAndShape [
 		addMorphBack: (Morph new extent: (5@7); color: Color transparent;
 		yourself);
 		addMorphBack: categoryChooser;
-		addMorphBack: (Morph new extent: (5@75); color: Color transparent;
+		addMorphBack: (Morph new extent: (5@"175" (categoryChooser height - 20)); color: Color transparent;
 		yourself);
 
 		addMorphBack: radioButtons;
@@ -384,7 +388,7 @@ BlockDialog >> initialize [
 		addMorphBack: categoryChooser;
 		addMorphBack:
 				(Morph new
-						extent: 5 @ 115;
+						extent: 5 @ "115" (categoryChooser height - 20);
 						color: Color transparent;
 		yourself);
 		addMorphBack: radioButtons;
