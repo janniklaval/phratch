@@ -109,7 +109,7 @@ ColorArgMorph >> initialize [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 ColorArgMorph >> isColorArgMorph [
 
 	^ true

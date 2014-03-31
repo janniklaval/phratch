@@ -52,17 +52,6 @@ Class {
 	#category : #'Phratch-Objects'
 }
 
-{ #category : #run }
-ScriptablePhratchMorph class >> DoIt [
-	| menu |
-	menu := MenuMorphNG new defaultTarget: self.
-	#(#('Acoustic Bass Drum' 35 ) #('Bass Drum 1' 36 ) #('Side Stick' 37 ) #('Acoustic Snare' 38 ) #('Hand Clap' 39 ) #('Electric Snare' 40 ) #('Low Floor Tom' 41 ) #('Closed Hi-Hat' 42 ) #('High Floor Tom' 43 ) #('Pedal Hi-Hat' 44 ) #('Low Tom' 45 ) #('Open Hi-Hat' 46 ) #('Low-Mid Tom' 47 ) #('Hi-Mid Tom' 48 ) #('Crash Cymbal 1' 49 ) #('High Tom' 50 ) #('Ride Cymbal 1' 51 ) #('Chinese Cymbal' 52 ) #('Ride Bell' 53 ) #('Tambourine' 54 ) #('Splash Cymbal' 55 ) #('Cowbell' 56 ) #('Crash Cymbal 2' 57 ) #('Vibraslap' 58 ) #('Ride Cymbal 2' 59 ) #('Hi Bongo' 60 ) #('Low Bongo' 61 ) #('Mute Hi Conga' 62 ) #('Open Hi Conga' 63 ) #('Low Conga' 64 ) #('High Timbale' 65 ) #('Low Timbale' 66 ) #('High Agogo' 67 ) #('Low Agogo' 68 ) #('Cabasa' 69 ) #('Maracas' 70 ) #('Short Whistle' 71 ) #('Long Whistle' 72 ) #('Short Guiro' 73 ) #('Long Guiro' 74 ) #('Claves' 75 ) #('Hi Wood Block' 76 ) #('Low Wood Block' 77 ) #('Mute Cuica' 78 ) #('Open Cuica' 79 ) #('Mute Triangle' 80 ) #('Open Triangle' 81 ) )
-		do: [:pair | menu add: (self numberInParens: pair second)
-					, pair first localizedMIDI value: pair second].
-	^ (menu popUpInWorld ; selectedValue;
-		yourself)
-]
-
 { #category : #'block specs' }
 ScriptablePhratchMorph class >> blockColorDict [
 
@@ -1728,13 +1717,6 @@ ScriptablePhratchMorph >> copyRecordingIn: dict [
 	newCopy setMedia: (media collect: [:el | el copy]).
 	newCopy lookLike: costume mediaName.
 
-	"for nested sprites:"
-	(self isPhratchSpriteMorph) ifTrue: [
-		newCopy refPos: self referencePosition.
-		newCopy privateSubsprites: (self subsprites collect: [:sub |
-			(sub copyRecordingIn: dict)
-				privateOwnerSprite: newCopy ])].
-
 	^ newCopy
 
 ]
@@ -1751,16 +1733,6 @@ ScriptablePhratchMorph >> costumeChangeMSecs [
 	"Answer the time of the last costume change. Whenever a costume change (or a filter change) occurs, this value is updated from the current millisecond clock. This value is used to optimize redrawing of thumbnails--if costumeChangeMSecs hasn't changed since the last time the thumbnail was updated we don't need to compute a new thumbnail."
 
 	^ costumeChangeMSecs
-
-]
-
-{ #category : #private }
-ScriptablePhratchMorph >> costumeChanged [
-
-	costumeChangeMSecs := Time millisecondClockValue.
-	filterPack ifNotNil: [filterPack clearFilterCaches].
-	self layoutChanged.
-	self keepOnScreen.
 
 ]
 
@@ -4013,7 +3985,7 @@ ScriptablePhratchMorph >> isScriptable [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 ScriptablePhratchMorph >> isScriptablePhratchMorph [
 	"I am a scriptable Phratch object."
 
@@ -4359,8 +4331,7 @@ ScriptablePhratchMorph >> lookLike: costumeNameOrIndex [
 	newCostume ifNil: [^ self].  "should not happen..."
 
 	costume := newCostume.
-	(self isPhratchSpriteMorph) ifTrue: [
-		self setSizeTo: self scale ].		"adjust the size if it is really huge or tiny.-jens"
+	self setSizeTo: self scale.		"adjust the size if it is really huge or tiny.-jens"
 	costume resumePlaying.
 	self costumeChanged.
 	self referencePosition: p.
@@ -5252,11 +5223,6 @@ ScriptablePhratchMorph >> prepareForExport [
 				eachDef answer allMorphsDo: [:m |
 					(m isSpriteArgMorph) ifTrue: [m clearMorphReference]]]]].
 
-
-	(self isPhratchSpriteMorph) ifTrue: [
-		self subsprites do: [:sub |
-			sub prepareForExport ]]
-
 ]
 
 { #category : #'block API' }
@@ -5737,6 +5703,12 @@ ScriptablePhratchMorph >> sayNothing [
 ]
 
 { #category : #'as yet unclassified' }
+ScriptablePhratchMorph >> scale [
+
+	^0
+]
+
+{ #category : #'as yet unclassified' }
 ScriptablePhratchMorph >> scalePoint [
 
 	^0@0
@@ -5874,6 +5846,12 @@ ScriptablePhratchMorph >> setMedia: mediaCollection [
 
 	media := mediaCollection.
 
+]
+
+{ #category : #'as yet unclassified' }
+ScriptablePhratchMorph >> setSizeTo: percent [
+
+	^ self
 ]
 
 { #category : #'sound ops' }

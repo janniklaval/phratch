@@ -201,7 +201,7 @@ LibraryItemMorph >> highlight: aBoolean [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 LibraryItemMorph >> isLibraryItemMorph [
 
 	^ true

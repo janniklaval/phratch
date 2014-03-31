@@ -382,7 +382,7 @@ MediaItemMorph >> initialize [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 MediaItemMorph >> isMediaItemMorph [
 
 	^ true

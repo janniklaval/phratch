@@ -162,7 +162,7 @@ LambdaBlockMorph >> isFunction [
 	self subclassResponsibility
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 LambdaBlockMorph >> isLambdaBlockMorph [
 
 	^ true

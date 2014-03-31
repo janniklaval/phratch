@@ -331,7 +331,7 @@ BlockEditorFrameMorph >> instancesOf: aCustomBlockId [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 BlockEditorFrameMorph >> isBlockEditorFrameMorph [
 
 	^ true

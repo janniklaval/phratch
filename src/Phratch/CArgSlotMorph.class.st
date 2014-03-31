@@ -227,7 +227,7 @@ CArgSlotMorph >> initialize [
 	selector := #loopLambda
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 CArgSlotMorph >> isCArgSlotMorph [
 
 	^true

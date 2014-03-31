@@ -170,7 +170,7 @@ ChoiceArgMorph >> initialize [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 ChoiceArgMorph >> isChoiceArgMorph [
 
 	^ true

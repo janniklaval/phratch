@@ -239,7 +239,7 @@ VariableBlockMorph >> isSpecialForm: bool [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 VariableBlockMorph >> isVariableBlockMorph [
 
 	^ true

@@ -172,12 +172,9 @@ PhratchStackFrame >> stopMIDI [
 
 { #category : #accessing }
 PhratchStackFrame >> stopTalkThinkAsk [
-	
 	| query |
-	
-	expression isArray ifFalse: [ 
-		query := PhratchCommandHandler from: expression asArgumentWrapper on: self.
-	
-		^ query stopTalkThinkAsk
-	].
+	expression isArray
+		ifTrue: [ ^ self ].
+	query := PhratchCommandHandler from: expression asArgumentWrapper on: self.
+	^ query stopTalkThinkAsk
 ]

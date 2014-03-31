@@ -86,7 +86,7 @@ PhratchScriptsMorph >> initialize [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 PhratchScriptsMorph >> isPhratchScriptsMorph [
 
 	^ true
@@ -175,11 +175,6 @@ PhratchScriptsMorph >> recordDroppedBlock: aBlockMorph bottom: stackBottom kicke
 	droppedBottom := stackBottom.
 	kickedOutReporter := aReporter. 
 	nestedStack := nil
-]
-
-{ #category : #undo }
-PhratchScriptsMorph >> recordNestedStack: aBlockMorph [
-	nestedStack := aBlockMorph
 ]
 
 { #category : #'event handling' }

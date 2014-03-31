@@ -449,7 +449,7 @@ DialogBoxMorph >> initialize [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 DialogBoxMorph >> isDialogBoxMorph [
 
 	^ true

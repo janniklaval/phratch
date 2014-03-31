@@ -1020,7 +1020,7 @@ PaintCanvas >> mouseMove: evt [
 	"Draw and/or give feedback."
 
 	| screenP |
-	((#paint ~= palette mode) & (PhratchFrameMorph isXO not))
+	((#paint ~= palette mode))
 		ifTrue: [self autoScroll: evt cursorPoint].
 
 	palette showRotationCenter ifTrue: [

@@ -463,6 +463,32 @@ PhratchSpriteMorph >> copyForExport [
 
 ]
 
+{ #category : #'as yet unclassified' }
+PhratchSpriteMorph >> copyRecordingIn: dict [
+	"Copy my fields and scripts."
+
+	| newCopy  |
+	newCopy := super copyRecordingIn: dict.
+	
+	newCopy refPos: self referencePosition.
+	newCopy privateSubsprites: (self subsprites collect: [:sub |
+			(sub copyRecordingIn: dict)
+				privateOwnerSprite: newCopy ]).
+
+	^ newCopy
+
+]
+
+{ #category : #private }
+PhratchSpriteMorph >> costumeChanged [
+
+	costumeChangeMSecs := Time millisecondClockValue.
+	filterPack ifNotNil: [filterPack clearFilterCaches].
+	self layoutChanged.
+	self keepOnScreen.
+
+]
+
 { #category : #'blocks API' }
 PhratchSpriteMorph >> deleteCostAt: aNumber [
 	"Delete the given costume"
@@ -1548,6 +1574,15 @@ PhratchSpriteMorph >> positionTalkBubble [
 	y := (self top + yInset + 10 - bubble height) within: stageBounds top and: (stageBounds bottom - bubble height).
 	bubble position: x@y.
 	self layoutChanged.
+
+]
+
+{ #category : #'as yet unclassified' }
+PhratchSpriteMorph >> prepareForExport [
+	super prepareForExport.
+
+	self subsprites do: [:sub |
+			sub prepareForExport ]
 
 ]
 

@@ -572,7 +572,7 @@ PhratchStageMorph >> isPaused [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 PhratchStageMorph >> isPhratchStageMorph [
 
 	^ true

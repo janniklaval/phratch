@@ -38,8 +38,7 @@ Class {
 		'lastViewMode',
 		'viewModeButtonsPanel',
 		'toolbarPanel',
-		'quitFlag',
-		'workPane2'
+		'quitFlag'
 	],
 	#classVars : [
 		'AllowSharing',
@@ -126,9 +125,7 @@ PhratchFrameMorph class >> disableSharing [
 PhratchFrameMorph class >> getFont: aSymbol [
 	"Get a font for a given purpose (specified by aSymbol) based on the current font setting."
 
-	^ self isXO
-		ifTrue: [FontsXO at: aSymbol]
-		ifFalse: [Fonts at: aSymbol].
+	^ Fonts at: aSymbol
 
 ]
 
@@ -225,14 +222,6 @@ PhratchFrameMorph class >> initialize [
 ]
 
 { #category : #'scratch skin' }
-PhratchFrameMorph class >> isXO [
-	"Return true if the current skin is XO."
-
-	^ "IsXO" false
-
-]
-
-{ #category : #'scratch skin' }
 PhratchFrameMorph class >> menuCommandOn: aBuilder [
 
 	<worldMenu>  
@@ -261,7 +250,6 @@ PhratchFrameMorph class >> palettePaneColor [
 
 	| c |
 	c := Color r: 124 g: 128 b: 131 range: 255.
-	self isXO ifTrue: [c := c mixed: 0.75 with: Color white].
 	^ c
 
 ]
@@ -339,7 +327,6 @@ PhratchFrameMorph class >> scriptsPaneColor [
 
 	| c |
 	c := Color r: 124 g: 128 b: 131 range: 255.
-	self isXO ifTrue: [c := c mixed: 0.8 with: Color white].
 	^ c
 
 ]
@@ -385,13 +372,7 @@ PhratchFrameMorph class >> skinAt: aSymbolOrString [
 PhratchFrameMorph class >> skinAt: aSymbolOrString ifAbsent: aBlock [
 	"Answer the skin image with the given name. In XO mode, first check to see if an entry appears in ScratchSkinXO. If so, use it. Otherwise, use the image from the normal skin dictionary."
 
-	| k |
-	k := aSymbolOrString asSymbol.
-	self isXO ifTrue: [
-		k = #scriptsPaneTexture ifTrue: [^ aBlock value].
-		(PhratchSkinXO includesKey: k) ifTrue: [^ PhratchSkinXO at: k]].
-
-	^ self skin at: k ifAbsent: aBlock
+	^ self skin at: aSymbolOrString asSymbol ifAbsent: aBlock
 
 ]
 
@@ -432,7 +413,7 @@ PhratchFrameMorph class >> version [
 { #category : #utilities }
 PhratchFrameMorph class >> version: aString [
 	"self version: '3.1.1 (', (Date today printFormat: #(1 2 3 $- 2 2)), ')'"
-	"self version: '1.0'"
+	"self version: '3.0'"
 
 	Version := aString.
 	VersionDate := Date today printFormat: #(3 2 1 $- 1 1).
@@ -928,10 +909,6 @@ PhratchFrameMorph >> copyTool [
 	cursorForm := PhratchFrameMorph skinAt: #copyCursor.
 	offset := 8@13.
 
-	PhratchFrameMorph isXO ifTrue: [
-		cursorForm := cursorForm magnifyBy: 1.5.
-		offset := (offset * 1.5) rounded].
-
 	hand showTemporaryCursor: cursorForm hotSpotOffset: offset.
 
 ]
@@ -1168,10 +1145,6 @@ PhratchFrameMorph >> cutTool [
 
 	cursorForm := PhratchFrameMorph skinAt: #cutCursor.
 	offset := 8@8.
-
-	PhratchFrameMorph isXO ifTrue: [
-		cursorForm := cursorForm magnifyBy: 1.5.
-		offset := (offset * 1.5) rounded].
 
 	hand showTemporaryCursor: cursorForm hotSpotOffset: offset.
 
@@ -2148,7 +2121,7 @@ PhratchFrameMorph >> isLoaded: value [
 	^true
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 PhratchFrameMorph >> isPhratchFrameMorph [
 
 	^ true
@@ -3221,7 +3194,7 @@ PhratchFrameMorph >> showPlay [
 PhratchFrameMorph >> showSettingBrowser [
 
 	<phratchMenu: 'Settings' category: 'edit' position: 7 sub:3 shift: false>
-	SettingBrowser new changePackageSet: {RPackageOrganizer default packageNamed: 'Phratch'}; open
+	SettingBrowser new changePackageSet: {RPackageOrganizer default packageNamed: 'Phratch' . RPackageOrganizer default packageNamed: 'Settings-Network' }; open
 ]
 
 { #category : #watchers }
@@ -4073,10 +4046,6 @@ PhratchFrameMorph >> zoomInTool [
 	cursorForm := PhratchFrameMorph skinAt: #zoomInCursor.
 	offset := 8@8.
 
-	PhratchFrameMorph isXO ifTrue: [
-		cursorForm := cursorForm magnifyBy: 1.5.
-		offset := (offset * 1.5) rounded].
-
 	hand showTemporaryCursor: cursorForm hotSpotOffset: offset.
 
 ]
@@ -4091,11 +4060,6 @@ PhratchFrameMorph >> zoomOutTool [
 
 	cursorForm := PhratchFrameMorph skinAt: #zoomOutCursor.
 	offset := 8@8.
-
-	PhratchFrameMorph isXO ifTrue: [
-		cursorForm := cursorForm magnifyBy: 1.5.
-		offset := (offset * 1.5) rounded].
-
 	hand showTemporaryCursor: cursorForm hotSpotOffset: offset.
 
 

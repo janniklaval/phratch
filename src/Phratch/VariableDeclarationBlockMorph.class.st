@@ -48,7 +48,7 @@ VariableDeclarationBlockMorph >> isPartsBin [
 	^true
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 VariableDeclarationBlockMorph >> isVariableDeclarationBlockMorph [
 
 	^ true

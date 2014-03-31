@@ -74,8 +74,8 @@ BlockDialog >> buildCategoryChooser [
 			maxExtent := maxExtent max: b extent + (3 @ -6).
 			b ].	"calculate catButtonsExtent"
 	pad := 15.	"padding on left, right, and betwen the button columns"
-	catButtonsExtent := (2 * maxExtent x + (3 * pad)) @ (catList size // 2 * (maxExtent y + 6) + 25).	"place the buttons"
-	leftColumnX := self left + 12 + pad.
+	catButtonsExtent := (2 * maxExtent x + (3 * pad) -10 ) @ (catList size // 2 * (maxExtent y + 6) + 25).	"place the buttons"
+	leftColumnX := self left + 8 + pad.
 	rightColumnX := leftColumnX + maxExtent x + pad.
 	x := leftColumnX.
 	y := categoryChooser top + 17.
@@ -88,7 +88,7 @@ BlockDialog >> buildCategoryChooser [
 				x := leftColumnX.
 				y := y + b height + 6 ]
 			ifFalse: [ x := rightColumnX ] ].
-	categoryChooser width: catButtonsExtent x + 25.
+	categoryChooser width: catButtonsExtent x + 20.
 	categoryChooser height: catButtonsExtent y
 ]
 
@@ -214,7 +214,7 @@ BlockDialog >> disableAllButCategory [
 		addMorphBack: categoryChooser;
 		addMorphBack:
 				(Morph new
-						extent: 5 @ 75;
+						extent: 5 @ 110;
 						color: Color transparent;
 		yourself);
 		addMorphBack: buttonRow;
@@ -410,7 +410,7 @@ BlockDialog >> initialize [
 	self category: category
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 BlockDialog >> isBlockDialog [
 
 	^ true

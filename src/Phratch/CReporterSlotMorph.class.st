@@ -182,7 +182,7 @@ CReporterSlotMorph >> initialize [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 CReporterSlotMorph >> isCReporterSlotMorph [
 
 	^ true

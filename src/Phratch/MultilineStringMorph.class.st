@@ -113,13 +113,6 @@ MultilineStringMorph >> breakLine: lineIndex [
 
 ]
 
-{ #category : #accessing }
-MultilineStringMorph >> centerText: aBoolean [
-
-	centerText := aBoolean.
-
-]
-
 { #category : #private }
 MultilineStringMorph >> charCount [
 

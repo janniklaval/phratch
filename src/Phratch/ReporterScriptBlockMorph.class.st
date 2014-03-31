@@ -126,7 +126,7 @@ ReporterScriptBlockMorph >> isFunction [
 	^ true
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 ReporterScriptBlockMorph >> isReporterScriptBlockMorph [
 
 	^ true

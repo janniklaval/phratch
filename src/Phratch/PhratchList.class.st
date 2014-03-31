@@ -58,7 +58,7 @@ PhratchList >> insertLine: anObject at: aNumber [
 	self changed
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 PhratchList >> isPhratchList [
 
 	^ true

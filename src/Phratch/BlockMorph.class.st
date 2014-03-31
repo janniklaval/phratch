@@ -264,14 +264,6 @@ BlockMorph >> closestAttachTargetIn: newOwner [
 									best := assoc.
 									bestDist := dist ] ] ] ].	"special case for the auto-wrapping of c-shaped/if-else blocks"
 	
-	
-	
-	(self isCBlockMorph)
-		ifTrue: [ 
-			self stretchHeight:  0.
-		].
-	
-	
 	^ best
 ]
 
@@ -810,24 +802,11 @@ BlockMorph >> handleTool: toolName hand: hand [
 				ifNotNil: [ 
 					(myOwner isCBlockMorph)
 						ifTrue: [ 
-							"|copiedStack|
-								copiedStack := myStack shallowCopy.
-						self topBlock owner addMorph: copiedStack.
-						[myStack top > myOwner bottom] whileTrue: [
-							myStack position: (myStack left)@(myStack top - 1).
-							self world displayWorldSafely].
-						copiedStack delete."
 							myOwner attachBlock: myStack ]
 						ifFalse: [ 
 							(myOwner isPhratchScriptsMorph)
 								ifTrue: [ myOwner addMorph: myStack ]
 								ifFalse: [ 
-									"	copiedStack := myStack shallowCopy.
-								(self topBlock owner) addMorph: copiedStack.
-								[myStack top > myOwner bottom] whileTrue: [
-									myStack position: (myStack left)@(myStack top - 1).
-									self world displayWorldSafely].
-								copiedStack delete."
 									myOwner attachBlock: myStack ] ] ].
 			self isReporter
 				ifTrue: [ 

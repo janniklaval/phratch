@@ -156,7 +156,7 @@ ExpressionArgMorph >> isEmptySlot [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 ExpressionArgMorph >> isExpressionArgMorph [
 
 	^ true

@@ -36,7 +36,7 @@ BlockLabelFragmentMorph >> initialize [
 	labelFragment := BlockLabelFragment new
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 BlockLabelFragmentMorph >> isBlockLabelFragmentMorph [
 
 	^ true

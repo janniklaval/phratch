@@ -64,7 +64,7 @@ ColorBlockMorph >> drawOn: aCanvas [
 		
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 ColorBlockMorph >> isColorBlockMorph [
 
 	^ true

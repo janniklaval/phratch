@@ -227,7 +227,7 @@ MultiArgCommandBlockMorph >> helpScreenName [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 MultiArgCommandBlockMorph >> isMultiArgCommandBlockMorph [
 
 	^ true

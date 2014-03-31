@@ -361,7 +361,7 @@ CustomReporterBlockMorph >> isCustomBlock [
 	^true
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 CustomReporterBlockMorph >> isCustomReporterBlockMorph [
 	^true
 ]

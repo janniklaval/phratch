@@ -143,7 +143,7 @@ PhratchPrompterMorph >> isDone [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 PhratchPrompterMorph >> isPhratchPrompterMorph [
 
 	^ true

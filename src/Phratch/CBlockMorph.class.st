@@ -48,20 +48,6 @@ CBlockMorph >> attachBlock: aBlockMorph [
 ]
 
 { #category : #private }
-CBlockMorph >> attachBlockNested: aBlockMorph [
-	"Attach the given block to me. Assume the block has been positioned correctly."
-	
-	(stretchHeight = 0)
-			ifTrue: [self position: (aBlockMorph left)@(aBlockMorph top - self height + 4)].
-	self addMorph: aBlockMorph.
-	(stretchHeight = 0)
-		ifTrue: [self bottomBlock nextBlock: aBlockMorph]
-		ifFalse: [nestedBlock := aBlockMorph].
-
-	PhratchFrameMorph allInstancesDo: [:a | a fixNestedBlocks]
-]
-
-{ #category : #private }
 CBlockMorph >> blockAttachPoints: aSet [
 	"Answer a collection of possible attachment points for me. Each entry is an Association mapping a point to the morph to which a dropping command block could be attached."
 
@@ -95,6 +81,18 @@ CBlockMorph >> bracketThickness [
 
 	^ CBlockBracketThickness
 
+]
+
+{ #category : #'as yet unclassified' }
+CBlockMorph >> closestAttachTargetIn: newOwner [
+	"Answer the closest block attachment point among the blocks and stack submorphs of the given morph. Answer nil if there are no blocks close enough to attach myself to."
+
+	
+	| best |
+	best := super closestAttachTargetIn: newOwner.
+	self stretchHeight:  0.
+	
+	^ best
 ]
 
 { #category : #geometry }

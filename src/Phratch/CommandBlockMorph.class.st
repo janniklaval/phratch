@@ -842,7 +842,7 @@ CommandBlockMorph >> isCShape [
 		am isCArgSlotMorph]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 CommandBlockMorph >> isCommandBlockMorph [
 
 	^ true
@@ -1403,14 +1403,16 @@ CommandBlockMorph >> typeOfArg: aMorph [
 CommandBlockMorph >> uncoloredArgMorphFor: specString [
 	"Answer an argument morph for the given argument specification string."
 
-	| code allPragmas prag|
-	code := specString copyFrom: 2 to: specString size-1.
-	
+	| code allPragmas prag |
+	code := specString copyFrom: 2 to: specString size - 1.
 	allPragmas := Pragma allNamed: #phratchType: in: PhratchType sortedByArgument: 1.
-	prag := allPragmas detect: [:pragma | (pragma arguments at: 1) asString = code asString] ifNone:[nil].
-	prag = nil ifFalse: [^ PhratchType new receiver: self receiver; perform: (prag method selector)].
-	
-	^self oldUncoloredArgMorphFor: specString.
+	prag := allPragmas detect: [ :pragma | (pragma arguments at: 1) asString = code asString ] ifNone: [ nil ].
+	prag isNil
+		ifFalse: [ 
+			^ PhratchType new
+				receiver: self receiver;
+				perform: prag method selector ].
+	^ self oldUncoloredArgMorphFor: specString
 ]
 
 { #category : #private }

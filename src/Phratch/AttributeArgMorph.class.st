@@ -75,7 +75,7 @@ AttributeArgMorph >> drawOn: aCanvas [
 			aCanvas paintImage: (target lambda: choice) imageForm at: self position + (1@1) ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 AttributeArgMorph >> isAttributeArgMorph [
 
 	^true

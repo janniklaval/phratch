@@ -270,7 +270,7 @@ ScrollFrameMorph >> isBeingDragged [
 	^dragOffset notNil
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 ScrollFrameMorph >> isScrollFrameMorph [
 
 	^ true

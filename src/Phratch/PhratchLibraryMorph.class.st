@@ -213,6 +213,12 @@ PhratchLibraryMorph >> initialize [
 
 ]
 
+{ #category : #testing }
+PhratchLibraryMorph >> isPhratchLibraryMorph [
+
+	^ true
+]
+
 { #category : #initialization }
 PhratchLibraryMorph >> makeNewSpriteButtons: aPhratchFrameMorph [
 	"Return a morph containing a set of new sprite buttons."

@@ -243,7 +243,7 @@ MultiArgMorph >> isLambdaForm [
 	^false
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 MultiArgMorph >> isMultiArgMorph [
 
 	^ true

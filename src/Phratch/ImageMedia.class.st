@@ -24,9 +24,6 @@ Class {
 		'compositeForm',
 		'savedForm'
 	],
-	#classVars : [
-		'JPEGPlaceholderForm'
-	],
 	#category : #'Phratch-Objects'
 }
 

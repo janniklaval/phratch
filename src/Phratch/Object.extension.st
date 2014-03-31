@@ -253,6 +253,12 @@ Object >> isPhratchFrameMorph [
 ]
 
 { #category : #'*Phratch-Extensions' }
+Object >> isPhratchLibraryMorph [
+
+	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
 Object >> isPhratchList [
 
 	^ false

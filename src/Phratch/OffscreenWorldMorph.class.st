@@ -76,7 +76,7 @@ OffscreenWorldMorph >> invalidRect: damageRect [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 OffscreenWorldMorph >> isOffscreenWorldMorph [
 
 	^ true

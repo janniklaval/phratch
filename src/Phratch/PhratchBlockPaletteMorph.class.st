@@ -58,7 +58,7 @@ PhratchBlockPaletteMorph >> isPartsBin [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 PhratchBlockPaletteMorph >> isPhratchBlockPaletteMorph [
 
 	^ true

@@ -159,7 +159,7 @@ VariableFrame >> isReferencing: aVarFrame [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 VariableFrame >> isVariableFrame [
 
 	^ true

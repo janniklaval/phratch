@@ -247,7 +247,7 @@ ImageFrameMorph >> insetBottom [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 ImageFrameMorph >> isImageFrameMorph [
 	^ true
 ]

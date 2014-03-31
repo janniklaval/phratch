@@ -77,7 +77,7 @@ PhratchTalkBubbleMorph >> insetBottom [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 PhratchTalkBubbleMorph >> isPhratchTalkBubbleMorph [
 
 	^ true

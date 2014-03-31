@@ -253,7 +253,7 @@ PhratchCommentMorph >> initialize [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 PhratchCommentMorph >> isPhratchCommentMorph [
 
 	^ true

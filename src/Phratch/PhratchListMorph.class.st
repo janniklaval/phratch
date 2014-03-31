@@ -554,7 +554,7 @@ PhratchListMorph >> isMaxNestedAt: int [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 PhratchListMorph >> isPhratchListMorph [
 
 	^ true

@@ -93,7 +93,7 @@ ProcedureHatBlockMorph >> initialize [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 ProcedureHatBlockMorph >> isProcedureHatBlockMorph [
 
 	^ true

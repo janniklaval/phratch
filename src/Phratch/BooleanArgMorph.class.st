@@ -80,7 +80,7 @@ BooleanArgMorph >> initialize [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 BooleanArgMorph >> isBooleanArgMorph [
 
 	^ true

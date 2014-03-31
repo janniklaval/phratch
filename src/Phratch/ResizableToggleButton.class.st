@@ -131,7 +131,7 @@ ResizableToggleButton >> isOn [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 ResizableToggleButton >> isResizableToggleButton [
 
 	^ true

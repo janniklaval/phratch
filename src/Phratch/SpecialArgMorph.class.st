@@ -107,7 +107,7 @@ SpecialArgMorph >> evaluate [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 SpecialArgMorph >> isSpecialArgMorph [
 
 	^ true

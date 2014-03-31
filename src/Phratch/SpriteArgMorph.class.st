@@ -162,7 +162,7 @@ SpriteArgMorph >> isEmptySlot [
 	^morph = #null
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 SpriteArgMorph >> isSpriteArgMorph [
 
 	^ true

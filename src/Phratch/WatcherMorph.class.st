@@ -255,7 +255,7 @@ WatcherMorph >> isVariableWatcher [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 WatcherMorph >> isWatcherMorph [
 
 	^ true

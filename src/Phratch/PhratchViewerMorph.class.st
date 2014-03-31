@@ -83,7 +83,7 @@ PhratchViewerMorph >> initialize [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 PhratchViewerMorph >> isPhratchViewerMorph [
 
 	^ true

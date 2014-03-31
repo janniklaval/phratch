@@ -477,7 +477,7 @@ ReporterBlockMorph >> isReporter [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 ReporterBlockMorph >> isReporterBlockMorph [
 
 	^ true

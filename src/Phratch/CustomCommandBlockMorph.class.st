@@ -364,7 +364,7 @@ CustomCommandBlockMorph >> isCustomBlock [
 	^true
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 CustomCommandBlockMorph >> isCustomCommandBlockMorph [
 	^true
 ]

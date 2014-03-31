@@ -32,7 +32,7 @@ PhratchNoteSelectorKeyMorph >> initialize [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #testing }
 PhratchNoteSelectorKeyMorph >> isPhratchNoteSelectorKeyMorph [
 
 	^ true

@@ -75,17 +75,6 @@ CommandScriptBlockMorph >> attachBlock: aBlockMorph [
 ]
 
 { #category : #private }
-CommandScriptBlockMorph >> attachBlockNested: aBlockMorph [
-	"Attach the given block to me. Assume the block has been positioned correctly."
-
-	(stretchHeight = 0)
-			ifTrue: [self position: (aBlockMorph left)@(aBlockMorph top - self height + 4)].
-	self addMorph: aBlockMorph.
-	nestedBlock := aBlockMorph.
-
-]
-
-{ #category : #private }
 CommandScriptBlockMorph >> blockAttachPoints: aSet [
 	"Answer a collection of possible attachment points for me. Each entry is an Association mapping a point to the morph to which a dropping command block could be attached."
 

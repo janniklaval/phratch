@@ -253,24 +253,6 @@ PhratchPresenterMorph >> mouseUp: evt [
 
 ]
 
-{ #category : #'event handling' }
-PhratchPresenterMorph >> processKeyboardEvents [
-
-	| prompter evt ch |
-	prompter := stage submorphs detect: [:m | m isPhratchPrompterMorph] ifNone: [nil].
-	World hands do: [:h |
-		[(evt := h nextUnclaimedKeystrokeOrNil) notNil] whileTrue: [
-			ch := evt keyValue.
-			ch = 27 ifTrue: [^ self exitPresentation].  "escape"
-			prompter
-				ifNotNil: [
-					prompter dispatchKeyStroke: evt]
-				ifNil: [
-					({3 . 13} includes: ch) ifTrue: [^ self shoutGo].
-					stage broadcastEventNamed: 'Phratch-KeyPressedEvent' with: evt]]].
-
-]
-
 { #category : #'button actions' }
 PhratchPresenterMorph >> shoutGo [
 
