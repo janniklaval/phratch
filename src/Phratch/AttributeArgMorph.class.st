@@ -13,7 +13,7 @@ AttributeArgMorph >> choice: aSymbol [
 	(ScriptablePhratchMorph new objectInterface keys includes: aSymbol)
 		ifTrue: [^ self universalAttributeChoice: aSymbol].
 
-	frame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
+	frame := self ownerOrYourselfThatIsAPhratchFrameMorph.
 	((#soundNames = getOptionsSelector) and:
 	 [aSymbol = ('record' localized, '...')]) ifTrue: [
 		frame ifNotNil: [^ frame newSound]].
@@ -52,8 +52,8 @@ AttributeArgMorph >> choice: aSymbol [
 			ifTrue: [owner addLabel]
 			ifFalse: [owner fixBlockLayout]].
 
-	(palette := self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph) ifNil: [^ self].
-	(block := self ownerOrYourselfThatIsA: BlockMorph) ifNil: [^ self].
+	(palette := self ownerOrYourselfThatIsAPhratchBlockPaletteMorph) ifNil: [^ self].
+	(block := self ownerOrYourselfThatIsABlockMorph) ifNil: [^ self].
 
 	block isReporter ifTrue: [palette updateWatcherButtonsForFrame: frame].
 
@@ -238,7 +238,7 @@ AttributeArgMorph >> universalAttributeChoice: aSymbol [
 	"Update the toggle button when an argument is changed within a block."
 
 	| oi frame palette block label |
-	frame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
+	frame := self ownerOrYourselfThatIsAPhratchFrameMorph.
 	oi := owner receiver objectInterface.
 	choice := aSymbol.
 	label := choice = #null
@@ -255,8 +255,8 @@ AttributeArgMorph >> universalAttributeChoice: aSymbol [
 			(owner respondsTo: #addLabel)
 				ifTrue: [ owner addLabel ]
 				ifFalse: [ owner fixBlockLayout ] ].
-	(palette := self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph) ifNil: [ ^ self ].
-	(block := self ownerOrYourselfThatIsA: BlockMorph) ifNil: [ ^ self ].
+	(palette := self ownerOrYourselfThatIsAPhratchBlockPaletteMorph) ifNil: [ ^ self ].
+	(block := self ownerOrYourselfThatIsABlockMorph) ifNil: [ ^ self ].
 	block isReporter
 		ifTrue: [ palette updateWatcherButtonsForFrame: frame ]
 ]

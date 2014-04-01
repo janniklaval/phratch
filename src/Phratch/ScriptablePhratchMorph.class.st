@@ -390,7 +390,7 @@ ScriptablePhratchMorph >> \\ aNumber [
 ScriptablePhratchMorph >> addColor [
 
 	| sFrame result colorName colorOwner |
-	(sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNil: [^ Beeper beep].
+	(sFrame := self ownerOrYourselfThatIsAPhratchFrameMorph) ifNil: [^ Beeper beep].
 
 	result := NewVariableDialog ask: 'Color name?'.
 	result = #cancelled ifTrue: [^ self].
@@ -411,9 +411,9 @@ ScriptablePhratchMorph >> addColor: colorName [
 	"Add a new random color with the given name to this object."
 	<phratchItem: 'make color $String$' kind: #- category: 'colors' defaultValues: #('a color') subCategory: #a3 special: #()>
 	| sFrame stage isGlobal |
-	(sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNil: [^ Beeper beep].
+	(sFrame := self ownerOrYourselfThatIsAPhratchFrameMorph) ifNil: [^ Beeper beep].
 	isGlobal := false.
-	(stage := self ownerOrYourselfThatIsA: PhratchStageMorph)
+	(stage := self ownerOrYourselfThatIsAPhratchStageMorph)
 		ifNotNil: [isGlobal := stage colorNames includes: colorName asString].
 	((colors includesKey: colorName asString) or: [isGlobal]) ifFalse: [
 		colors at: colorName asString put: (Color black)].
@@ -451,7 +451,7 @@ ScriptablePhratchMorph >> addCostumeTyped: aString [
 			
 			newC := ImageMedia new form: frameForm]
 		ifFalse: [^ self]]."]]]."
-	aString = 'stage' ifTrue: [newC := ImageMedia new form: ((self ownerOrYourselfThatIsA: PhratchStageMorph) stageShotForm"Sized: 480@360")].
+	aString = 'stage' ifTrue: [newC := ImageMedia new form: ((self ownerOrYourselfThatIsAPhratchStageMorph) stageShotForm"Sized: 480@360")].
 	aString = 'paint new' ifTrue: [self drawNewCostume.
 		^ self updateAfterPopUp
 	].
@@ -478,7 +478,7 @@ ScriptablePhratchMorph >> addCostumeTyped: aString [
 { #category : #byob }
 ScriptablePhratchMorph >> addCustomBlock [
 	|ans def sf|
-	(sf := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNil: [^self].
+	(sf := self ownerOrYourselfThatIsAPhratchFrameMorph) ifNil: [^self].
 	BlockDialog isOpen ifTrue: [^ self].
 	ans := BlockDialog ask: 'Make a block' localized.
 	(ans = #cancelled) ifTrue: [^self ].
@@ -571,7 +571,7 @@ ScriptablePhratchMorph >> addGenericListBlocksTo: page y: startY [
 	y := addButton bottom + 3.
 
 	hasLists := self listVarNames size > 0.
-	(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNotNil: [
+	(stage := self ownerOrYourselfThatIsAPhratchStageMorph) ifNotNil: [
 		stage listVarNames size > 0 ifTrue: [hasLists := true]].
 	hasLists ifTrue: [
 
@@ -605,7 +605,7 @@ ScriptablePhratchMorph >> addGenericVariableBlocksTo: page x: x y: startY [
 	| y vName stage block varBlocks |
 	y := startY.	"pick a default variable name"
 	vName := nil.
-	stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
+	stage := self ownerOrYourselfThatIsAPhratchStageMorph.
 	vName := (stage notNil and: [ stage varNames size > 0 ])
 		ifTrue: [ stage varNames first ]
 		ifFalse: [ 
@@ -694,7 +694,7 @@ ScriptablePhratchMorph >> addGlobalColor [
 ScriptablePhratchMorph >> addGlobalList [
 
 	| sFrame listName |
-	(sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNil: [^ Beeper beep].
+	(sFrame := self ownerOrYourselfThatIsAPhratchFrameMorph) ifNil: [^ Beeper beep].
 
 	listName := StringDialog ask: 'List name?'.
 	listName size = 0 ifTrue: [^ self].
@@ -708,7 +708,7 @@ ScriptablePhratchMorph >> addGlobalVariable [
 	"Ask the user for a variable name, then add a background (global) variable of that name."
 
 	| sFrame varName |
-	(sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNil: [^ Beeper beep].
+	(sFrame := self ownerOrYourselfThatIsAPhratchFrameMorph) ifNil: [^ Beeper beep].
 
 	varName := StringDialog ask: 'Variable name?'.
 	varName size = 0 ifTrue: [^ self].
@@ -728,7 +728,7 @@ ScriptablePhratchMorph >> addGlobalVariable [
 ScriptablePhratchMorph >> addList [
 
 	| sFrame result listName |
-	(sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNil: [^ Beeper beep].
+	(sFrame := self ownerOrYourselfThatIsAPhratchFrameMorph) ifNil: [^ Beeper beep].
 
 	result := NewVariableDialog ask: 'List name?'.
 	result = #cancelled ifTrue: [^ self].
@@ -746,7 +746,7 @@ ScriptablePhratchMorph >> addListReportersTo: page x: x y: startY [
 
 	| y stage b watcherButton yOffset line line2 |
 	y := startY.
-	stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
+	stage := self ownerOrYourselfThatIsAPhratchStageMorph.
 	(stage notNil and: [stage ~= self]) ifTrue: [
 		stage listVarNames do: [:listVarName |
 			b := ListContentsBlockMorph new
@@ -823,7 +823,7 @@ ScriptablePhratchMorph >> addVariable [
 	"Ask the user for a variable name, then add a user variable of that name. This version is for sprites and supports the option of making the variable specific to the sprite (i.e. local)."
 
 	| sFrame result varName varOwner w |
-	(sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNil: [^ Beeper beep].
+	(sFrame := self ownerOrYourselfThatIsAPhratchFrameMorph) ifNil: [^ Beeper beep].
 
 	result := NewVariableDialog ask: 'Variable name?'.
 	result = #cancelled ifTrue: [^ self].
@@ -849,7 +849,7 @@ ScriptablePhratchMorph >> addVariable: varName [
 	"Add a new user variable with the given name to this object. Do nothing if the variable already exists or is built in."
 	<phratchItem: 'make $String$' kind: #- category: 'variables' defaultValues: #('a variable') subCategory: #a1 special: #()>
 	| sFrame |
-	(sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNil: [^ Beeper beep].
+	(sFrame := self ownerOrYourselfThatIsAPhratchFrameMorph) ifNil: [^ Beeper beep].
 	(vars includesKey: varName asString) ifFalse: [
 		vars at: varName asString put: 0].
 	self isClone: false.
@@ -874,7 +874,7 @@ ScriptablePhratchMorph >> addVariableReportersTo: page x: x y: startY [
 	| y stage b watcherButton yOffset line line2 |
 	y := startY.
 
-	stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
+	stage := self ownerOrYourselfThatIsAPhratchStageMorph.
 	(stage notNil and: [stage ~= self]) ifTrue: [
 		stage varNames do: [:vName |
 			b := VariableBlockMorph new
@@ -924,7 +924,7 @@ ScriptablePhratchMorph >> addWatcherForNewVariable: varName withScope: spriteOrS
 	"Add a watcher on the stage once a variable has been created."
 
 	| sFrame |
-	(sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNil: [^ self].
+	(sFrame := self ownerOrYourselfThatIsAPhratchFrameMorph) ifNil: [^ self].
 	sFrame viewerPane pageViewer submorphs do: [:s | 
 		(s isPhratchBlockPaletteMorph) ifTrue: [
 			s submorphs do: [:block | 
@@ -964,7 +964,7 @@ ScriptablePhratchMorph >> allLocalBlockIds [
 ScriptablePhratchMorph >> allSprites [
 
 	| stage |
-	stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
+	stage := self ownerOrYourselfThatIsAPhratchStageMorph.
 	stage ifNil: [^ PhratchListMorph new].
 	^ PhratchListMorph on: stage sprites
 ]
@@ -1265,7 +1265,7 @@ ScriptablePhratchMorph >> broadcast: name withArgument: arg [
 	"Broadcast the given event with the given argument."
 
 	| stage |
-	(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNotNil: [
+	(stage := self ownerOrYourselfThatIsAPhratchStageMorph) ifNotNil: [
 		stage broadcastEventNamed: name asString with: arg].
 
 ]
@@ -1308,7 +1308,7 @@ ScriptablePhratchMorph >> changeVar: varName by: increment [
 	| stage n frame w |
 
 	(vars includesKey: varName asString) ifFalse: [
-		stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
+		stage := self ownerOrYourselfThatIsAPhratchStageMorph.
 		(stage notNil and: [stage ~= self]) 
 			ifTrue: [stage changeVar: varName by: increment].
 		(self prototype notNil and: [self prototype varNames includes: varName])
@@ -1406,7 +1406,7 @@ ScriptablePhratchMorph >> click: evt [
 { #category : #byob }
 ScriptablePhratchMorph >> closeBlockEditor [
 	| sf |
-	sf := self ownerOrYourselfThatIsA: PhratchFrameMorph.
+	sf := self ownerOrYourselfThatIsAPhratchFrameMorph.
 	sf ifNil: [^self].
 	^sf closeBlockEditor
 ]
@@ -1437,7 +1437,7 @@ ScriptablePhratchMorph >> coerceSpriteArg: anObject [
 
 	targetName := anObject isNumber ifTrue: [anObject printString] ifFalse: [anObject].
 
-	(s := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNil: [^ nil].
+	(s := self ownerOrYourselfThatIsAPhratchStageMorph) ifNil: [^ nil].
 	s submorphsDo: [:m |
 		((m isScriptablePhratchMorph) and:
 		 [targetName = m objName])
@@ -1897,7 +1897,7 @@ ScriptablePhratchMorph >> createBlock: block atPosition: pos onPage: page [
 	block fixBlockLayout; position: changingX@y.
 	page addMorphBack: block.
 	block canBecomeWatcher ifTrue: [
-		frame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
+		frame := self ownerOrYourselfThatIsAPhratchFrameMorph.
 		page updateWatcherButtonsForFrame: frame].
 
 	((block respondsTo: #selector) and: [block selector = #newList:]) ifTrue: [
@@ -1928,7 +1928,7 @@ ScriptablePhratchMorph >> createListNamed: listName [
 		^ self].
 
 	lists at: listName put: (list := PhratchListMorph new listName: listName target: self).
-	(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNotNil: [
+	(stage := self ownerOrYourselfThatIsAPhratchStageMorph) ifNotNil: [
 		n := (stage submorphs select: [:m | m isPhratchListMorph]) size.
 		stage addMorph: (list position: stage topRight - ((list width + 10)@0) + (0@(10+(20*n)))).
 		list startStepping].
@@ -1999,7 +1999,7 @@ ScriptablePhratchMorph >> defaultListName [
 	| stage |
 	lists size > 0 ifTrue: [^ lists keys asArray sort first].
 
-	(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNotNil: [
+	(stage := self ownerOrYourselfThatIsAPhratchStageMorph) ifNotNil: [
 		stage lists size > 0 ifTrue: [^ stage lists keys asArray sort first]].
 
 	^ ''
@@ -2076,7 +2076,7 @@ ScriptablePhratchMorph >> deleteColor [
 	"Ask the user which user variable to delete, then remove it."
 
 	| sFrame stage menu choice |
-	sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
+	sFrame := self ownerOrYourselfThatIsAPhratchFrameMorph.
 	sFrame ifNil: [^ self].
 
 	stage := sFrame workPane.
@@ -2104,7 +2104,7 @@ ScriptablePhratchMorph >> deleteColor: colorName [
 
 	| frame |
 	colors removeKey: colorName asString ifAbsent: [^ self].
-	(frame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNil: [frame := (self ownerOrYourselfThatIsA: OffscreenWorldMorph) frame].
+	(frame := self ownerOrYourselfThatIsAPhratchFrameMorph) ifNil: [frame := (self ownerOrYourselfThatIsAOffscreenWorldMorph) frame].
 	frame deleteWatchersForVar: colorName ofSprite: self.
 	frame viewerPane categoryChanged: 'colors'.
 ]
@@ -2115,9 +2115,9 @@ ScriptablePhratchMorph >> deleteColorFull: colorName [
 	<phratchItem: 'delete color $String$' kind: #- category: 'colors' defaultValues: #('a color') subCategory: #a3 special: #()>
 	| frame stage |
 	(colors includesKey: colorName) ifTrue: [self deleteColor: colorName].
-	stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
+	stage := self ownerOrYourselfThatIsAPhratchStageMorph.
 	(stage notNil and: [stage colorNames includes: colorName]) ifTrue: [stage deleteColor: colorName].
-	(frame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNil: [^ self].
+	(frame := self ownerOrYourselfThatIsAPhratchFrameMorph) ifNil: [^ self].
 	frame viewerPane categoryChanged: 'colors'.
 ]
 
@@ -2139,7 +2139,7 @@ ScriptablePhratchMorph >> deleteDefinitionId: id [
 	def isGlobal  ifFalse: [
 		^ self deleteLocalDefinitionId: id].
 
-	stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
+	stage := self ownerOrYourselfThatIsAPhratchStageMorph.
 	stage ifNil: [^ self deleteLocalDefinitionId: id].
 
 	stage sprites, {stage} do: [:obj |
@@ -2171,7 +2171,7 @@ ScriptablePhratchMorph >> deleteList [
 	"Ask the user which list variable to delete, then remove it."
 
 	| sFrame stage menu |
-	sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
+	sFrame := self ownerOrYourselfThatIsAPhratchFrameMorph.
 	sFrame ifNil: [^ self].
 
 	stage := sFrame workPane.
@@ -2195,8 +2195,8 @@ ScriptablePhratchMorph >> deleteList: listName [
 	"Delete the list variable with the given name. Do nothing if the variable doesn't exist."
 	<phratchItem: 'delete list $String$' kind: #- category: 'list' defaultValues: #('a list') subCategory: #a2 special: #()>
 	| stage sFrame |
-	(sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNil: [^ Beeper beep].
-	stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
+	(sFrame := self ownerOrYourselfThatIsAPhratchFrameMorph) ifNil: [^ Beeper beep].
+	stage := self ownerOrYourselfThatIsAPhratchStageMorph.
 	lists removeKey: listName asString ifAbsent: [].
 	(self prototype notNil and: [self prototype lists includesKey: listName]) ifFalse: [ 
 	stage submorphs do: [:m |
@@ -2211,7 +2211,7 @@ ScriptablePhratchMorph >> deleteList: listName [
 { #category : #byob }
 ScriptablePhratchMorph >> deleteLocalDefinitionId: id [
 	| affected sf def cat |
-	sf := self ownerOrYourselfThatIsA: PhratchFrameMorph.
+	sf := self ownerOrYourselfThatIsAPhratchFrameMorph.
 	sf ifNil: [^self].
 	sf notEditingBlock ifFalse: [^self].
 	affected := self instancesOf: id.
@@ -2293,7 +2293,7 @@ ScriptablePhratchMorph >> deleteSprite [
 	"Delete the sprite and all watchers that are associated with it."
 
 	| frame sprites i presenter instances |
-	frame := self ownerOrYourselfThatIsA: PhratchFrameMorph. 
+	frame := self ownerOrYourselfThatIsAPhratchFrameMorph. 
 	frame ifNil: [
 		presenter := World findA: PhratchPresenterMorph.
 		presenter ifNil: [^ self delete].
@@ -2341,7 +2341,7 @@ ScriptablePhratchMorph >> deleteSpriteQuickly [
 	"Delete the sprite and all watchers that are associated with it."
 
 	| frame sprites presenter instances |
-	frame := self ownerOrYourselfThatIsA: PhratchFrameMorph. 
+	frame := self ownerOrYourselfThatIsAPhratchFrameMorph. 
 	frame ifNil: [
 		presenter := World findA: PhratchPresenterMorph.
 		presenter ifNil: [^ self delete].
@@ -2378,7 +2378,7 @@ ScriptablePhratchMorph >> deleteVariable [
 	"Ask the user which user variable to delete, then remove it."
 
 	| sFrame stage menu |
-	sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
+	sFrame := self ownerOrYourselfThatIsAPhratchFrameMorph.
 	sFrame ifNil: [^ self].
 
 	stage := sFrame workPane.
@@ -2426,7 +2426,7 @@ ScriptablePhratchMorph >> desparatelyGetVar: varName from: aVarBlockMorph [
 	anotherReceiver := aVarBlockMorph phratchObject.
 	anotherReceiver ifNil: [^ 0].
 	(anotherReceiver varNames includes: varName)	ifFalse: [
-		anotherReceiver := anotherReceiver ownerOrYourselfThatIsA: PhratchStageMorph.
+		anotherReceiver := anotherReceiver ownerOrYourselfThatIsAPhratchStageMorph.
 		anotherReceiver ifNil: [^ 0].
 		(anotherReceiver varNames includes: varName) ifFalse: [
 			^ 0]].
@@ -2629,7 +2629,7 @@ ScriptablePhratchMorph >> drum: midiKey duration: beats elapsed: elapsedMSecs fr
 	<phratchItem: 'play drum $Drums$ for $Number$ beats' kind: #TimeBlockMorph category: 'sound' defaultValues: #(48 0.2) subCategory: #a2 special: #()>
 	| stage player |
 	aNotePlayer ifNil: [  "first call, start playing the drum"
-		(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNil: [^ PhratchNotePlayer new].
+		(stage := self ownerOrYourselfThatIsAPhratchStageMorph) ifNil: [^ PhratchNotePlayer new].
 		(player := stage notePlayerFor: self) ifNil: [^ PhratchNotePlayer new].
 		^ [player copy drumOn: midiKey] on: Error do:[stage stopAllSounds. player copy drumOn: midiKey ]].
 
@@ -2644,7 +2644,7 @@ ScriptablePhratchMorph >> duplicate [
 	newSprite := self duplicateNoAttach.
 	self world activeHand attachMorph: newSprite.
 
-	"((s := self ownerOrYourselfThatIsA: PhratchStageMorph) notNil and:"
+	"((s := self ownerOrYourselfThatIsAPhratchStageMorph) notNil and:"
 	" [s isQuarterSize]) ifTrue: [
 		self world activeHand drawHalfSize: true]."
 
@@ -2681,7 +2681,7 @@ ScriptablePhratchMorph >> duplicateNoAttach [
 	newSprite undeleteAllAttributes.
 	newSprite unhinge; unhingeAll; initializeNodes.
 	newSprite position: (newSprite position + 20).
-	frame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
+	frame := self ownerOrYourselfThatIsAPhratchFrameMorph.
 	frame ifNotNil: [
 		frame workPane addMorphFront: newSprite.
 		frame workPane sprites addLast: newSprite].
@@ -2703,7 +2703,7 @@ ScriptablePhratchMorph >> editDrawingOldCostumeName: oldCostumeName deleteOnCanc
 
 	| sFrame paintEditor |
 	costume isMovie ifTrue: [^ Beeper beep].
-	(sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph)
+	(sFrame := self ownerOrYourselfThatIsAPhratchFrameMorph)
 		ifNotNil: [
 			sFrame paintingInProgress ifTrue: [^ Beeper beep].
 			sFrame stopAll.
@@ -2762,7 +2762,7 @@ ScriptablePhratchMorph >> editDrawingOldCostumeName: oldCostumeName deleteOnCanc
 ScriptablePhratchMorph >> editScriptId: id [
 	|sf def|
 
-	sf := self ownerOrYourselfThatIsA: PhratchFrameMorph.
+	sf := self ownerOrYourselfThatIsAPhratchFrameMorph.
 "	sf ifNil: [^self]."
 	def := self definitionFor: id.
 "	def ifNil: [^self]."
@@ -2774,9 +2774,9 @@ ScriptablePhratchMorph >> editSpecId: id [
 	"let the user change the category (color) of a custom block"
 
 	| stage ans def sf bd oldCat inst newType |
-	sf := self ownerOrYourselfThatIsA: PhratchFrameMorph.
+	sf := self ownerOrYourselfThatIsAPhratchFrameMorph.
 	sf ifNil: [ ^ self ].
-	stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
+	stage := self ownerOrYourselfThatIsAPhratchStageMorph.
 	def := self definitionFor: id.
 	newType := def type.
 	BlockDialog isOpen
@@ -2889,7 +2889,7 @@ ScriptablePhratchMorph >> ensureCustomBlockExists: aBlockDef global: bool [
 
 	| stage |
 
-	stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
+	stage := self ownerOrYourselfThatIsAPhratchStageMorph.
 
 	(bool not or: [stage isNil]) ifTrue: [
 		^ self ensureCustomBlockExists: aBlockDef].
@@ -2908,7 +2908,7 @@ ScriptablePhratchMorph >> ensureListExists: listName [
 	listName = '' ifTrue: [^ self].
 
 	(lists includesKey: listName) ifTrue: [^ self].
-	(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNotNil: [
+	(stage := self ownerOrYourselfThatIsAPhratchStageMorph) ifNotNil: [
 		(stage listVarNames includes: listName) ifTrue: [^ self]].
 	(self prototype notNil and: [self prototype listVarNames includes: listName])
 		ifTrue: [^ self].
@@ -2952,7 +2952,7 @@ ScriptablePhratchMorph >> ensureVariableExists: varName [
 	vn = '' ifTrue: [^ self].
 
 	(vars includesKey: vn) ifTrue: [^ self].
-	(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNotNil: [
+	(stage := self ownerOrYourselfThatIsAPhratchStageMorph) ifNotNil: [
 		(stage varNames includes: vn) ifTrue: [^ self]].
 	(self prototype notNil and: [self prototype varNames includes: vn])
 		ifTrue: [^ self].
@@ -3017,7 +3017,7 @@ ScriptablePhratchMorph >> existsBlockId: id global: bool [
 	| stage |
 	bool
 		ifTrue: [ ^ self existsBlockId: id ].
-	stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
+	stage := self ownerOrYourselfThatIsAPhratchStageMorph.
 	stage ifNil: [ ^ self existsBlockId: id ].
 	^ stage sprites , {stage} anySatisfy: [ :obj | obj existsBlockId: id ]
 ]
@@ -3261,7 +3261,7 @@ ScriptablePhratchMorph >> getVar: varName [
 
 	| stage |
 	(vars includesKey: varName)
-		ifFalse: [ stage := (self ownerOrYourselfThatIsA: PhratchStageMorph).
+		ifFalse: [ stage := (self ownerOrYourselfThatIsAPhratchStageMorph).
 			stage ifNotNil: [	^ stage vars at: varName asString ifAbsent: [
 				(self prototype notNil and: [self prototype varNames includes: varName])
 					ifTrue:[^self prototype getVar: varName]
@@ -3278,7 +3278,7 @@ ScriptablePhratchMorph >> getVar: varName block: aVariableBlockMorph [
 	"Answer the value of the given user variable of this object, or 0 if the variable has been deleted."
 
 	(vars includesKey: varName)
-		ifFalse: [ ^ (self ownerOrYourselfThatIsA: PhratchStageMorph) vars at: varName asString ifAbsent: [
+		ifFalse: [ ^ (self ownerOrYourselfThatIsAPhratchStageMorph) vars at: varName asString ifAbsent: [
 			(self prototype notNil and: [self prototype varNames includes: varName])
 				ifTrue:[self prototype getVar: varName]
 				ifFalse: [^ self desparatelyGetVar: varName from: aVariableBlockMorph]]].
@@ -3294,7 +3294,7 @@ ScriptablePhratchMorph >> getVarOrListNamed: varName [
 	"first let's try to find a variable"
 	value := (vars includesKey: varName)
 		ifFalse: [ 
-			(self ownerOrYourselfThatIsA: PhratchStageMorph) vars
+			(self ownerOrYourselfThatIsAPhratchStageMorph) vars
 				at: varName asString
 				ifAbsent: [ 
 					(self prototype notNil and: [ self prototype varNames includes: varName ])
@@ -3413,7 +3413,7 @@ ScriptablePhratchMorph >> hideColor: varName [
 	| stage |
 	self showOrHideColor: varName show: false.
 
-	stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
+	stage := self ownerOrYourselfThatIsAPhratchStageMorph.
 	stage ~= self ifTrue: [stage showOrHideColor: varName show: false].
 ]
 
@@ -3431,7 +3431,7 @@ ScriptablePhratchMorph >> hideVariable: varName [
 	| stage |
 	self showOrHideVariable: varName show: false.
 
-	stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
+	stage := self ownerOrYourselfThatIsAPhratchStageMorph.
 	stage ~= self ifTrue: [stage showOrHideVariable: varName show: false].
 
 
@@ -3572,7 +3572,7 @@ ScriptablePhratchMorph >> importSound [
 { #category : #accessing }
 ScriptablePhratchMorph >> inPresentationMode [
 
-	^ (self ownerOrYourselfThatIsA: OffscreenWorldMorph) notNil
+	^ (self ownerOrYourselfThatIsAOffscreenWorldMorph) notNil
 
 ]
 
@@ -3735,7 +3735,7 @@ ScriptablePhratchMorph >> installGlobalBlocks [
 
 	| stage |
 
-	stage := self ownerOrYourselfThatIsA: PhratchStageMorph.	
+	stage := self ownerOrYourselfThatIsAPhratchStageMorph.	
 	stage ifNil: [^ self].
 	"add imported global custom block definitions"
 
@@ -3762,7 +3762,7 @@ ScriptablePhratchMorph >> installGlobalBlocks [
 ScriptablePhratchMorph >> instances [
 
 	| stage |
-	stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
+	stage := self ownerOrYourselfThatIsAPhratchStageMorph.
 	stage ifNil: [^ #()].
 	^ stage sprites select: [:each |
 		each prototype = self ]
@@ -3776,7 +3776,7 @@ ScriptablePhratchMorph >> instancesOf: aCustomBlockId [
 	visible := blocksBin allMorphs select: [ :m|
 		((m isCustomCommandBlockMorph) or:[
 			m isCustomReporterBlockMorph]) and: [m id = aCustomBlockId]].
-	sf := self ownerOrYourselfThatIsA: PhratchFrameMorph.
+	sf := self ownerOrYourselfThatIsAPhratchFrameMorph.
 	sf ifNotNil: [
 		sf blockEditors do: [:be |
 			blx := be allBlocksFor: aCustomBlockId.
@@ -4012,7 +4012,7 @@ ScriptablePhratchMorph >> justDroppedInto: newOwner event: evt [
 	"If I'm dropped into any submorph of a PhratchFrameMorph, reject the drop unless it is onto the work pane. For developers, accept drops into other morphs (e.g. the World). Otherwise, reject the drop."
 
 	| sFrame |
-	(sFrame := newOwner ownerOrYourselfThatIsA: PhratchFrameMorph) ifNotNil: [
+	(sFrame := newOwner ownerOrYourselfThatIsAPhratchFrameMorph) ifNotNil: [
 		newOwner = sFrame viewerPane pageViewer contents ifTrue: [
 			self undoableDeleteSprite.
 			sFrame libraryPane step.
@@ -4246,7 +4246,7 @@ ScriptablePhratchMorph >> listNamed: aString ifNone: aBlock [
 		ifTrue: [^aString ].
 	(result := lists at: aString ifAbsent: [nil]) ifNotNil: [^ result].
 
-	(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNotNil: [
+	(stage := self ownerOrYourselfThatIsAPhratchStageMorph) ifNotNil: [
 		(result := stage lists at: aString ifAbsent: [nil]) ifNotNil: [^ result]].
 
 	self prototype ifNotNil: [^ self prototype listNamed: aString ifNone: aBlock].
@@ -4263,7 +4263,7 @@ ScriptablePhratchMorph >> listVarMenu [
 
 	| result stage |
 	result := #().
-	((stage := self ownerOrYourselfThatIsA: PhratchStageMorph) notNil & (stage ~= self)) ifTrue: [
+	((stage := self ownerOrYourselfThatIsAPhratchStageMorph) notNil & (stage ~= self)) ifTrue: [
 		result := stage listVarNames].
 
 	self listVarNames size > 0 ifTrue: [
@@ -4461,7 +4461,7 @@ ScriptablePhratchMorph >> midiInstrument: aNumber [
 	"Set the MIDI instrument used for note sounds."
 	<phratchItem: 'set instrument to $Instruments$' kind: #- category: 'sound' defaultValues: #(1) subCategory: #a3 special: #()>
 	| stage player |
-	(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNil: [^ self].
+	(stage := self ownerOrYourselfThatIsAPhratchStageMorph) ifNil: [^ self].
 	(player := stage notePlayerFor: self) ifNotNil: [
 		[player instrument: aNumber] on: Error do:[stage stopAllSounds. player instrument: aNumber ]  ].
 
@@ -4697,7 +4697,7 @@ ScriptablePhratchMorph >> mouseX [
 	DoubleSize ifTrue: [^ (Sensor lastMousePosition x - PhratchOrigin x) // 2].
 
 	self inPresentationMode ifFalse: [
-		s := self ownerOrYourselfThatIsA: PhratchStageMorph.
+		s := self ownerOrYourselfThatIsAPhratchStageMorph.
 		(s notNil and: [s isQuarterSize]) ifTrue: [
 			centerX := s left + (s width // 4).
 			^ 2 * (Sensor lastMousePosition x - centerX)]].
@@ -4714,7 +4714,7 @@ ScriptablePhratchMorph >> mouseY [
 	DoubleSize ifTrue: [^ (Sensor lastMousePosition y - PhratchOrigin y) negated // 2].
 
 	self inPresentationMode ifFalse: [
-		s := self ownerOrYourselfThatIsA: PhratchStageMorph.
+		s := self ownerOrYourselfThatIsAPhratchStageMorph.
 		(s notNil and: [s isQuarterSize]) ifTrue: [
 			centerY := s top + (s height // 4).
 			^ -2 * (Sensor lastMousePosition y - centerY)]].
@@ -4810,7 +4810,7 @@ ScriptablePhratchMorph >> nextInstanceName [
 	| stage lastN digits |
 	self = PhratchStageMorph ifTrue: [^ 'Stage' localized].
 
-	(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNil: [^ 'Sprite' localized, 1 printString].
+	(stage := self ownerOrYourselfThatIsAPhratchStageMorph) ifNil: [^ 'Sprite' localized, 1 printString].
 	lastN := 0.
 	stage sprites ifNotNil: [
 		stage sprites do: [:m |
@@ -4833,7 +4833,7 @@ ScriptablePhratchMorph >> not [
 { #category : #byob }
 ScriptablePhratchMorph >> notEditingBlock [
 	| sf |
-	sf := self ownerOrYourselfThatIsA: PhratchFrameMorph.
+	sf := self ownerOrYourselfThatIsAPhratchFrameMorph.
 	sf ifNil: [^true].
 	^sf notEditingBlock
 ]
@@ -4844,7 +4844,7 @@ ScriptablePhratchMorph >> noteOn: midiKey duration: beats elapsed: elapsedMSecs 
 	<phratchItem: 'play note $Notes$ for $Number$ beats' kind: #TimeBlockMorph category: 'sound' defaultValues: #(60 0.5) subCategory: #a3 special: #()>
 	| stage player |
 	aNotePlayer ifNil: [  "first call, start playing the note"
-		(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNil: [^ PhratchNotePlayer new].
+		(stage := self ownerOrYourselfThatIsAPhratchStageMorph) ifNil: [^ PhratchNotePlayer new].
 		(player := stage notePlayerFor: self) ifNil: [^ PhratchNotePlayer new].
 		^ [player noteOn: midiKey] on: Error do:[stage stopAllSounds. player noteOn: midiKey ] ].
 
@@ -4857,7 +4857,7 @@ ScriptablePhratchMorph >> noteSelector [
 	"Returns an instance of a PhratchNoteSelector for selecting notes. This object behaves like a CustomMenu."
 
 	| stageMorph notePlayer |
-	stageMorph := (self ownerOrYourselfThatIsA: PhratchStageMorph).
+	stageMorph := (self ownerOrYourselfThatIsAPhratchStageMorph).
 	stageMorph ifNil: [^ self midiNoteMenu].
 	notePlayer := stageMorph notePlayerFor: self.
 	notePlayer ifNil: [^ self midiNoteMenu].
@@ -5095,7 +5095,7 @@ ScriptablePhratchMorph >> passiveSetVolumeTo: aNumber [
 
 	| stage player |
 	volume := aNumber asNumberNoError within: 0 and: 100.
-	(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNotNil: [
+	(stage := self ownerOrYourselfThatIsAPhratchStageMorph) ifNotNil: [
 		(player := stage notePlayerFor: self) ifNotNil: [
 			player volume: volume]].
 
@@ -5141,9 +5141,9 @@ ScriptablePhratchMorph >> penDown [
 ScriptablePhratchMorph >> phratchFrame [
 
 	| frame w |
-	frame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
+	frame := self ownerOrYourselfThatIsAPhratchFrameMorph.
 	frame ifNil: [
-		(w := self ownerOrYourselfThatIsA: OffscreenWorldMorph) ifNil: [^ nil].
+		(w := self ownerOrYourselfThatIsAOffscreenWorldMorph) ifNil: [^ nil].
 		frame := w frame].
 	^ frame
 
@@ -5230,7 +5230,7 @@ ScriptablePhratchMorph >> pressGreenFlag [
 	"Make like if the user presses the Green flag."
 	<phratchItem: 'press green flag' kind: #- category: 'control' defaultValues: #() subCategory: #startstop special: #()>
 	| sFrame |
-	sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
+	sFrame := self ownerOrYourselfThatIsAPhratchFrameMorph.
 	sFrame pressGreenFlagButton
 ]
 
@@ -5319,7 +5319,7 @@ ScriptablePhratchMorph >> projectDirectory [
 	"Answer the directory containing this Phratch project or the default directory."
 
 	| frame |
-	(frame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNil: [^ FileSystem workingDirectory].
+	(frame := self ownerOrYourselfThatIsAPhratchFrameMorph) ifNil: [^ FileSystem workingDirectory].
 	^ frame projectDirectory
 
 ]
@@ -5328,7 +5328,7 @@ ScriptablePhratchMorph >> projectDirectory [
 ScriptablePhratchMorph >> promptForInput: questionString [
 
 	| s prompter |
-	(s := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNil: [^ self].
+	(s := self ownerOrYourselfThatIsAPhratchStageMorph) ifNil: [^ self].
 	prompter := PhratchPrompterMorph new.
 	((self isPhratchStageMorph) | (self isHidden))
 		ifTrue: [
@@ -5354,7 +5354,7 @@ ScriptablePhratchMorph >> promptForInput: questionString [
 ScriptablePhratchMorph >> promptInProgress [
 
 	| s |
-	(s := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNil: [^ false].
+	(s := self ownerOrYourselfThatIsAPhratchStageMorph) ifNil: [^ false].
 	s submorphsDo: [:m |
 		(m isPhratchPrompterMorph) ifTrue: [^ true]].
 	^ false
@@ -5476,7 +5476,7 @@ ScriptablePhratchMorph >> readLine: lineNum ofFile: aFileNameString [
 ScriptablePhratchMorph >> recordSound [
 
 	| frame |
-	frame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
+	frame := self ownerOrYourselfThatIsAPhratchFrameMorph.
 	frame ifNil: [^ Beeper beep].
 	frame stopAll.
 	World submorphs do: [:m |
@@ -5520,7 +5520,7 @@ ScriptablePhratchMorph >> replaceCostume: aNumber with: aString [
 			CameraPlugin getFrameForCamera: 1 into: frameForm bits.
 			newC := ImageMedia new form: frameForm]
 		ifFalse: [^ self]]."]]]."
-	aString = 'stage' ifTrue: [newC := ImageMedia new form: ((self ownerOrYourselfThatIsA: PhratchStageMorph) stageShotForm"Sized: 480@360")].
+	aString = 'stage' ifTrue: [newC := ImageMedia new form: ((self ownerOrYourselfThatIsAPhratchStageMorph) stageShotForm"Sized: 480@360")].
 	aString = 'paint new' ifTrue: [self editDrawingOldCostumeName: name deleteOnCancel: false deleteCostume: false.
 		^ self updateAfterPopUp.
 		].
@@ -5717,7 +5717,7 @@ ScriptablePhratchMorph >> scalePoint [
 { #category : #'looks ops' }
 ScriptablePhratchMorph >> sceneNames [
 
-	^ (self ownerOrYourselfThatIsA: PhratchStageMorph) sceneNames
+	^ (self ownerOrYourselfThatIsAPhratchStageMorph) sceneNames
 
 ]
 
@@ -5859,7 +5859,7 @@ ScriptablePhratchMorph >> setTempoTo: aNumber [
 	"Set the tempo"
 	<phratchItem: 'set tempo to $Number$ bpm' kind: #- category: 'sound' defaultValues: #(60) subCategory: #a5 special: #()>
 	| stage |
-	(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNil: [^ self].
+	(stage := self ownerOrYourselfThatIsAPhratchStageMorph) ifNil: [^ self].
 	stage setTempoTo: aNumber.
 
 ]
@@ -5879,7 +5879,7 @@ ScriptablePhratchMorph >> setVar: varName to: newValue [
 		(self prototype notNil and: [self prototype varNames includes: varName])
 			ifTrue: [
 				vars at: vName put: newValue.
-				sf := self ownerOrYourselfThatIsA: PhratchFrameMorph.
+				sf := self ownerOrYourselfThatIsAPhratchFrameMorph.
 				sf ifNil: [^ self].
 				sf viewerPane categoryChanged: #variables.
 				w := sf watcherForBlock: (VariableBlockMorph new 
@@ -5889,7 +5889,7 @@ ScriptablePhratchMorph >> setVar: varName to: newValue [
 				w ifNotNil: [
 				w setCategoryColor: (ScriptablePhratchMorph blockColorFor: 'variables').
 				^ self]].
-			stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
+			stage := self ownerOrYourselfThatIsAPhratchStageMorph.
 		(stage notNil and: [stage ~= self]) 
 			ifTrue: [stage setVar: varName to: newValue].
 		^ self ].
@@ -5952,7 +5952,7 @@ ScriptablePhratchMorph >> showColor: varName [
 	| stage |
 	self showOrHideColor: varName show: true.
 
-	stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
+	stage := self ownerOrYourselfThatIsAPhratchStageMorph.
 	stage ~= self ifTrue: [stage showOrHideColor: varName show: true].
 ]
 
@@ -6021,9 +6021,9 @@ ScriptablePhratchMorph >> showOrHideVariable: varName show: showFlag [
 
 	| frame w b palette |
 	(self varNames includes: varName) ifFalse: [^ self].
-	frame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
+	frame := self ownerOrYourselfThatIsAPhratchFrameMorph.
 	frame ifNil: [
-		(w := self ownerOrYourselfThatIsA: OffscreenWorldMorph) ifNil: [^ self].
+		(w := self ownerOrYourselfThatIsAOffscreenWorldMorph) ifNil: [^ self].
 		frame := w frame].
 
 	b := VariableBlockMorph new commandSpec: varName; receiver: self blockReceiver;
@@ -6045,7 +6045,7 @@ ScriptablePhratchMorph >> showVariable: varName [
 	| stage |
 	self showOrHideVariable: varName show: true.
 
-	stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
+	stage := self ownerOrYourselfThatIsAPhratchStageMorph.
 	stage ~= self ifTrue: [stage showOrHideVariable: varName show: true].
 
 
@@ -6192,7 +6192,7 @@ ScriptablePhratchMorph >> spread [
 ScriptablePhratchMorph >> spriteNameInUse: aString [
 
 	| s |
-	(s := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNotNil: [
+	(s := self ownerOrYourselfThatIsAPhratchStageMorph) ifNotNil: [
 		s submorphs do: [:m |
 			m == self ifFalse: [
 				((m isScriptablePhratchMorph) and:
@@ -6234,7 +6234,7 @@ ScriptablePhratchMorph >> stopAll [
 	"Stop everything!"
 	<phratchItem: 'stop all' kind: #- category: 'control' defaultValues: #() subCategory: #startstop special: #()>
 	| stage |
-	stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
+	stage := self ownerOrYourselfThatIsAPhratchStageMorph.
 	stage ifNotNil: [stage stopAll].
 
 ]
@@ -6244,7 +6244,7 @@ ScriptablePhratchMorph >> stopAllScriptsFor: eventName [
 	"Stop all the scripts for the given object"
 	<phratchItem: 'stop all scripts for $Event$' kind: #- category: 'control' defaultValues: #() subCategory: #startstop special: #()>
 	| stage |
-	(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNotNil: [
+	(stage := self ownerOrYourselfThatIsAPhratchStageMorph) ifNotNil: [
 		stage stopAllScriptsFor: eventName].
 
 ]
@@ -6254,7 +6254,7 @@ ScriptablePhratchMorph >> stopAllSounds [
 	"Stop all sounds and MIDI notes/drums."
 	<phratchItem: 'stop all sounds' kind: #- category: 'sound' defaultValues: #() subCategory: #a1 special: #()>
 	| stage |
-	stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
+	stage := self ownerOrYourselfThatIsAPhratchStageMorph.
 	stage ifNotNil: [stage stopAllSounds].
 
 ]
@@ -6343,7 +6343,7 @@ ScriptablePhratchMorph >> tempo [
 	"Return the tempo"
 	<phratchItem: 'tempo' kind: #ReporterBlockMorph category: 'sound' defaultValues: #() subCategory: #a5 special: #()>
 	| stage |
-	(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNil: [^ 60].
+	(stage := self ownerOrYourselfThatIsAPhratchStageMorph) ifNil: [^ 60].
 	^ stage tempo
 
 ]
@@ -6570,7 +6570,7 @@ ScriptablePhratchMorph >> updateLocalId: id withSpec: newUserSpec [
 	"a userSpec has been changed by way of drag'n'drop"
 
 	| def affected sf |
-	sf := self ownerOrYourselfThatIsA: PhratchFrameMorph.
+	sf := self ownerOrYourselfThatIsAPhratchFrameMorph.
 	sf ifNil: [^self].
 	affected := self instancesOf: id.
 	def := self definitionFor: id. 
@@ -6603,7 +6603,7 @@ ScriptablePhratchMorph >> updateMediaCategory [
 	"Update the media category in the viewer, if it is showing."
 
 	| sFrame |
-	sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
+	sFrame := self ownerOrYourselfThatIsAPhratchFrameMorph.
 	sFrame ifNotNil: [
 		sFrame projectModified.
 		sFrame updateMediaCategoryFor: self.
@@ -6619,7 +6619,7 @@ ScriptablePhratchMorph >> updateOnlyLocalId: id withSpec: newUserSpec [
 	don't update block editors"
 
 	| def affected sf |
-	sf := self ownerOrYourselfThatIsA: PhratchFrameMorph.
+	sf := self ownerOrYourselfThatIsAPhratchFrameMorph.
 	sf ifNil: [^self].
 	affected := self instancesOf: id.
 	def := self definitionFor: id. 
@@ -6658,7 +6658,7 @@ ScriptablePhratchMorph >> varNamesMenu [
 
 	| varList stage |
 	varList := #().
-	(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNotNil: [varList := stage varNames].
+	(stage := self ownerOrYourselfThatIsAPhratchStageMorph) ifNotNil: [varList := stage varNames].
 	self == stage ifFalse: [
 		varList size > 0 ifTrue: [varList := varList copyWith: #-].
 		varList := varList, self varNames].
@@ -6683,7 +6683,7 @@ ScriptablePhratchMorph >> variableNameInUse: varName [
 
 	self isSprite
 		ifTrue: [
-			(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNil: [^ false].
+			(stage := self ownerOrYourselfThatIsAPhratchStageMorph) ifNil: [^ false].
 			^ stage allVarNames includes: varName]
 		ifFalse: [
 			submorphs do: [:m |
@@ -6715,7 +6715,7 @@ ScriptablePhratchMorph >> viewBlocksAndScripts [
 	| sFrame editor viewer tabs |
 	self isClone ifTrue: [^ self].
 
-	(sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNil: [^ self].
+	(sFrame := self ownerOrYourselfThatIsAPhratchFrameMorph) ifNil: [^ self].
 	editor := sFrame scriptsPane.
 	viewer := sFrame viewerPane.
 	tabs := sFrame scriptsPane tabPane.
@@ -6732,7 +6732,7 @@ ScriptablePhratchMorph >> viewBlocksAndScriptsQuickly [
 	| sFrame viewer tabs |
 	self isClone ifTrue: [^ self].
 
-	(sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNil: [^ self].
+	(sFrame := self ownerOrYourselfThatIsAPhratchFrameMorph) ifNil: [^ self].
 	viewer := sFrame viewerPane.
 	tabs := sFrame scriptsPane tabPane.
 	sFrame view: self tab: tabs currentTab category: viewer currentCategory.

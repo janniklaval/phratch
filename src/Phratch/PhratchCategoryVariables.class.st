@@ -45,7 +45,7 @@ PhratchCategoryVariables class >> viewerPageFor: aScriptablePhratchMorph [
 	y := addButton bottom + 3.
 
 	hasVars := aScriptablePhratchMorph varNames size > 0.
-	(stage := aScriptablePhratchMorph ownerOrYourselfThatIsA: PhratchStageMorph) ifNotNil: [
+	(stage := aScriptablePhratchMorph ownerOrYourselfThatIsAPhratchStageMorph) ifNotNil: [
 		stage varNames size > 0 ifTrue: [hasVars := true]].
 
 	hasVars ifTrue: [
@@ -59,7 +59,7 @@ PhratchCategoryVariables class >> viewerPageFor: aScriptablePhratchMorph [
 	y := aScriptablePhratchMorph addGenericVariableBlocksTo: page x: x y: y.
 
 	y := aScriptablePhratchMorph addGenericListBlocksTo: page y: y.
-	page updateWatcherButtonsForFrame: (aScriptablePhratchMorph ownerOrYourselfThatIsA: PhratchFrameMorph).
+	page updateWatcherButtonsForFrame: (aScriptablePhratchMorph ownerOrYourselfThatIsAPhratchFrameMorph).
 
 	aScriptablePhratchMorph addCustomBlocksTo: page y: y.
 

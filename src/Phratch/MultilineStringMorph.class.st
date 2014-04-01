@@ -700,11 +700,11 @@ MultilineStringMorph >> keyStroke: evt [
 	(ch = 3) & (evt buttons = 0) ifTrue: [ch := 13].	"map enter key to cr"
 
 	ch = 9 ifTrue: [  "tab"
-		(m := self ownerOrYourselfThatIsA: DialogBoxMorph) ifNotNil: [m tabToNextField: evt].
+		(m := self ownerOrYourselfThatIsADialogBoxMorph) ifNotNil: [m tabToNextField: evt].
 		^ self].
 
 	ch = 27 ifTrue: [  "escape key"
-		(m := self ownerOrYourselfThatIsA: DialogBoxMorph) ifNotNil: [m escapeKeyPressed: evt].
+		(m := self ownerOrYourselfThatIsADialogBoxMorph) ifNotNil: [m escapeKeyPressed: evt].
 		^ self].
 
 	evt controlKeyPressed | evt commandKeyPressed ifTrue: [	"ctrl (or alt) is pressed"
@@ -743,7 +743,7 @@ MultilineStringMorph >> keyboardFocusChange: aBoolean [
 
 	self changed.
 
-	listwatcher := self ownerOrYourselfThatIsA: PhratchListMorph.
+	listwatcher := self ownerOrYourselfThatIsAPhratchListMorph.
 	listwatcher ifNotNil: [
 		listwatcher updateList ].
 

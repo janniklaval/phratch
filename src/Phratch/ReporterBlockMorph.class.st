@@ -286,8 +286,8 @@ ReporterBlockMorph >> fixBlockLayoutNoWrap [
 	x := x + (isBoolean ifTrue: [1] ifFalse: [-3]).
 
 	self extent: (x + 4) @ h.
-	(self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph) ifNotNil: [
-		(self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph) fixLayout].
+	(self ownerOrYourselfThatIsAPhratchBlockPaletteMorph) ifNotNil: [
+		(self ownerOrYourselfThatIsAPhratchBlockPaletteMorph) fixLayout].
 
 
 ]
@@ -426,8 +426,8 @@ ReporterBlockMorph >> fixBlockLayoutWrap [
 					(m isMultiArgMorph)
 						ifTrue: [ m loopsWidth: self bodyRight - self bodyLeft ] ] ]
 		ifFalse: [ self extent: w @ h ].
-	(self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph)
-		ifNotNil: [ (self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph) fixLayout ]
+	(self ownerOrYourselfThatIsAPhratchBlockPaletteMorph)
+		ifNotNil: [ (self ownerOrYourselfThatIsAPhratchBlockPaletteMorph) fixLayout ]
 ]
 
 { #category : #watcher }
@@ -545,7 +545,7 @@ ReporterBlockMorph >> showLambdaValue [
 	[ 
 	self start.
 	zombie := phratchProc.
-	phratchProc stepUntilDoneFor: (receiver ownerOrYourselfThatIsA: PhratchStageMorph).
+	phratchProc stepUntilDoneFor: (receiver ownerOrYourselfThatIsAPhratchStageMorph).
 	msg := zombie answer ]
 		ifError: [ 
 			gotError := true.
@@ -654,12 +654,12 @@ ReporterBlockMorph >> toggleWatcher [
 	"Toggle between hiding and showing a watcher for this block."
 
 	| frame w palette |
-	(frame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNil: [^ self].
+	(frame := self ownerOrYourselfThatIsAPhratchFrameMorph) ifNil: [^ self].
 	(w := frame watcherForBlock: self)
 		ifNil: [frame showWatcher: self createWatcher]
 		ifNotNil: [w delete].
 			
-	palette := self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph.
+	palette := self ownerOrYourselfThatIsAPhratchBlockPaletteMorph.
 	palette ifNotNil: [palette updateWatcherButtonsForFrame: frame].
 
 ]

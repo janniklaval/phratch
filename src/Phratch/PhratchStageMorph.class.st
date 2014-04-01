@@ -510,7 +510,7 @@ PhratchStageMorph >> grabSpriteFromScreen [
 	"Create a new sprite, grabbing it's costume from an area of the screen."
 
 	| frame m f |
-	(frame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNil: [^ self].
+	(frame := self ownerOrYourselfThatIsAPhratchFrameMorph) ifNil: [^ self].
 	m := PhratchSpriteMorph new.
 	(f := m grabFormFromScreen) ifNil: [^ self].
 	m onlyCostume: f.
@@ -1220,7 +1220,7 @@ PhratchStageMorph >> stopAll [
 
 	DebuggerFrameMorph allInstancesDo: [:df | df delete ].
 
-	(sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNotNil: [
+	(sFrame := self ownerOrYourselfThatIsAPhratchFrameMorph) ifNotNil: [
 		sFrame scriptsPane allMorphsDo: [:m |
 			(m respondsTo: #stop) ifTrue: [m stop].
 			(m respondsTo: #litUp:) ifTrue: [m litUp: false]].
@@ -1397,7 +1397,7 @@ PhratchStageMorph >> updateSpritesList [
 	"Populate the sprites list, which keeps track of the ordering of the sprite thumbnails"
 
 	| frame |
-	frame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
+	frame := self ownerOrYourselfThatIsAPhratchFrameMorph.
 	frame ifNil: [^ self].
 	sprites := OrderedCollection new.
 	frame libraryPane spriteThumbnails do: [:m | m target ifNotNil: [sprites addLast: m target]].

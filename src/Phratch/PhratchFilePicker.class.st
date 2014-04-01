@@ -421,11 +421,11 @@ PhratchFilePicker >> keyStroke: evt [
 	ch := evt keyValue.
 
 	ch = 9 ifTrue: [  "tab"
-		(m := self ownerOrYourselfThatIsA: DialogBoxMorph) ifNotNil: [m tabToNextField: evt].
+		(m := self ownerOrYourselfThatIsADialogBoxMorph) ifNotNil: [m tabToNextField: evt].
 		^ self].
 
 	ch = 27 ifTrue: [  "escape key"
-		(m := self ownerOrYourselfThatIsA: DialogBoxMorph) ifNotNil: [m escapeKeyPressed: evt].
+		(m := self ownerOrYourselfThatIsADialogBoxMorph) ifNotNil: [m escapeKeyPressed: evt].
 		^ self].
 
 	({1 . 11} includes: ch) ifTrue: [ "home or page up"
@@ -444,7 +444,7 @@ PhratchFilePicker >> keyStroke: evt [
 		(entry entryIsDirectory and:
 		 [(owner isKindOf: PhratchFileChooserDialog)])
 			ifTrue: [self currentDirectory: (currentDir / entry entryName)]
-			ifFalse: [(self ownerOrYourselfThatIsA: PhratchFileChooserDialog) yes].
+			ifFalse: [(self ownerOrYourselfThatIsAPhratchFileChooserDialog) yes].
 		^ self].
 
 	(ch = 28) ifTrue: [^ self changeSelectionIndexBy: -1].	"left"
@@ -563,7 +563,7 @@ PhratchFilePicker >> mouseUp: evt [
 			self startPlayingSound: (currentDir / entry entryName) fullName]].
 
 	finalSelection := isDoubleClick.
-	finalSelection ifTrue: [(self ownerOrYourselfThatIsA: PhratchFileChooserDialog) yes].
+	finalSelection ifTrue: [(self ownerOrYourselfThatIsAPhratchFileChooserDialog) yes].
 ]
 
 { #category : #private }

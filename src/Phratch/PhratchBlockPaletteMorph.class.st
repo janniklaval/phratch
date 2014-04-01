@@ -13,7 +13,7 @@ PhratchBlockPaletteMorph >> acceptDroppingMorph: aMorph event: evt [
 	"This method allows re-ordering of media in the costumes and sounds tabs."
 
 	| editor mediaItems insertAfter |
-	((aMorph isMediaItemMorph) and: [ (editor := self ownerOrYourselfThatIsA: PhratchScriptEditorMorph) notNil ])
+	((aMorph isMediaItemMorph) and: [ (editor := self ownerOrYourselfThatIsAPhratchScriptEditorMorph) notNil ])
 		ifFalse: [ ^ super acceptDroppingMorph: aMorph event: evt ].
 	mediaItems := self submorphs
 		select: [ :m | 
@@ -109,7 +109,7 @@ PhratchBlockPaletteMorph >> wantsDroppedMorph: aMorph event: evt [
 		ifTrue: [^ true].
 
 	(aMorph isPhratchSpriteMorph) ifTrue: [
-		f := self ownerOrYourselfThatIsA: PhratchFrameMorph.
+		f := self ownerOrYourselfThatIsAPhratchFrameMorph.
 		f viewerPane pageViewer contents = self ifTrue: [^ true]].
 
 	^ false

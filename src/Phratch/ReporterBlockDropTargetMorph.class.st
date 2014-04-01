@@ -88,7 +88,7 @@ ReporterBlockDropTargetMorph >> labelColor [
 ReporterBlockDropTargetMorph >> layoutChanged [
 	| be |
 	super layoutChanged.
-	be := self ownerOrYourselfThatIsA: BlockEditorFrameMorph.
+	be := self ownerOrYourselfThatIsABlockEditorFrameMorph.
 	be ifNotNil: [ be adjustExtentToAnswerField ]
 
 ]
@@ -260,7 +260,7 @@ ReporterBlockDropTargetMorph >> uncoveredAt: aPoint [
 	morphsAbove := w morphsAt: aPoint.
 	morphsAbove size = 0
 		ifTrue: [ ^ true ].
-	be := self ownerOrYourselfThatIsA: DialogBoxMorph.
+	be := self ownerOrYourselfThatIsADialogBoxMorph.
 	^ morphsAbove noneSatisfy: [ :m | (m isDialogBoxMorph) and: [ m ~= be ] ]
 ]
 

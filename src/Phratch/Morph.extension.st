@@ -124,7 +124,7 @@ Morph >> orientation: aSymbol [
 		[#horizontal] -> [#leftToRight]})
 ]
 
-{ #category : #'*Phratch-Extensions' }
+{ #category : #'*Phratch-Extensions-OwnerOrYourself' }
 Morph >> ownerOrYourselfThatIsA: aClass [
 	"Answer this the first morph in the owner chain of the given class, or nil if there isn't one."
 
@@ -134,6 +134,314 @@ Morph >> ownerOrYourselfThatIsA: aClass [
 	[ current isNil ]
 		whileFalse: [ 
 			([current perform: meth] on: Error do: [Transcript show: 'Error in ownerOrYourselfThatIsA: ' .Transcript show: aClass asString. Transcript cr .(current isKindOf: aClass)])
+				ifTrue: [ ^ current ].
+			current := current owner ].
+	^ current
+]
+
+{ #category : #'*Phratch-Extensions-OwnerOrYourself' }
+Morph >> ownerOrYourselfThatIsABlockEditorFrameMorph [
+	"Answer this the first morph in the owner chain of the given class, or nil if there isn't one."
+
+	| current  |
+	current := self.
+	[ current isNil ]
+		whileFalse: [ 
+			(current isBlockEditorFrameMorph)
+				ifTrue: [ ^ current ].
+			current := current owner ].
+	^ current
+]
+
+{ #category : #'*Phratch-Extensions-OwnerOrYourself' }
+Morph >> ownerOrYourselfThatIsABlockMorph [
+	"Answer this the first morph in the owner chain of the given class, or nil if there isn't one."
+
+	| current  |
+	current := self.
+	[ current isNil ]
+		whileFalse: [ 
+			(current isBlockMorph)
+				ifTrue: [ ^ current ].
+			current := current owner ].
+	^ current
+]
+
+{ #category : #'*Phratch-Extensions-OwnerOrYourself' }
+Morph >> ownerOrYourselfThatIsACommandBlockMorph [
+	"Answer this the first morph in the owner chain of the given class, or nil if there isn't one."
+
+	| current  |
+	current := self.
+	[ current isNil ]
+		whileFalse: [ 
+			(current isCommandBlockMorph)
+				ifTrue: [ ^ current ].
+			current := current owner ].
+	^ current
+]
+
+{ #category : #'*Phratch-Extensions-OwnerOrYourself' }
+Morph >> ownerOrYourselfThatIsACustomCommandBlockMorph [
+	"Answer this the first morph in the owner chain of the given class, or nil if there isn't one."
+
+	| current  |
+	current := self.
+	[ current isNil ]
+		whileFalse: [ 
+			(current isCustomCommandBlockMorph)
+				ifTrue: [ ^ current ].
+			current := current owner ].
+	^ current
+]
+
+{ #category : #'*Phratch-Extensions-OwnerOrYourself' }
+Morph >> ownerOrYourselfThatIsACustomReporterBlockMorph [
+	"Answer this the first morph in the owner chain of the given class, or nil if there isn't one."
+
+	| current  |
+	current := self.
+	[ current isNil ]
+		whileFalse: [ 
+			(current isCustomReporterBlockMorph)
+				ifTrue: [ ^ current ].
+			current := current owner ].
+	^ current
+]
+
+{ #category : #'*Phratch-Extensions-OwnerOrYourself' }
+Morph >> ownerOrYourselfThatIsADialogBoxMorph [
+	"Answer this the first morph in the owner chain of the given class, or nil if there isn't one."
+
+	| current  |
+	current := self.
+	[ current isNil ]
+		whileFalse: [ 
+			(current isDialogBoxMorph)
+				ifTrue: [ ^ current ].
+			current := current owner ].
+	^ current
+]
+
+{ #category : #'*Phratch-Extensions-OwnerOrYourself' }
+Morph >> ownerOrYourselfThatIsAHandMorph [
+	"Answer this the first morph in the owner chain of the given class, or nil if there isn't one."
+
+	| current  |
+	current := self.
+	[ current isNil ]
+		whileFalse: [ 
+			(current isHandMorph)
+				ifTrue: [ ^ current ].
+			current := current owner ].
+	^ current
+]
+
+{ #category : #'*Phratch-Extensions-OwnerOrYourself' }
+Morph >> ownerOrYourselfThatIsAHatBlockMorph [
+	"Answer this the first morph in the owner chain of the given class, or nil if there isn't one."
+
+	| current  |
+	current := self.
+	[ current isNil ]
+		whileFalse: [ 
+			(current isHatBlockMorph)
+				ifTrue: [ ^ current ].
+			current := current owner ].
+	^ current
+]
+
+{ #category : #'*Phratch-Extensions-OwnerOrYourself' }
+Morph >> ownerOrYourselfThatIsAOffscreenWorldMorph [
+	"Answer this the first morph in the owner chain of the given class, or nil if there isn't one."
+
+	| current  |
+	current := self.
+	[ current isNil ]
+		whileFalse: [ 
+			(current isOffscreenWorldMorph)
+				ifTrue: [ ^ current ].
+			current := current owner ].
+	^ current
+]
+
+{ #category : #'*Phratch-Extensions-OwnerOrYourself' }
+Morph >> ownerOrYourselfThatIsAPhratchBlockPaletteMorph [
+	"Answer this the first morph in the owner chain of the given class, or nil if there isn't one."
+
+	| current  |
+	current := self.
+	[ current isNil ]
+		whileFalse: [ 
+			(current isPhratchBlockPaletteMorph)
+				ifTrue: [ ^ current ].
+			current := current owner ].
+	^ current
+]
+
+{ #category : #'*Phratch-Extensions-OwnerOrYourself' }
+Morph >> ownerOrYourselfThatIsAPhratchFileChooserDialog [
+	"Answer this the first morph in the owner chain of the given class, or nil if there isn't one."
+
+	| current  |
+	current := self.
+	[ current isNil ]
+		whileFalse: [ 
+			(current isPhratchFileChooserDialog)
+				ifTrue: [ ^ current ].
+			current := current owner ].
+	^ current
+]
+
+{ #category : #'*Phratch-Extensions-OwnerOrYourself' }
+Morph >> ownerOrYourselfThatIsAPhratchFrameMorph [
+	"Answer this the first morph in the owner chain of the given class, or nil if there isn't one."
+
+	| current  |
+	current := self.
+	[ current isNil ]
+		whileFalse: [ 
+			(current isPhratchFrameMorph)
+				ifTrue: [ ^ current ].
+			current := current owner ].
+	^ current
+]
+
+{ #category : #'*Phratch-Extensions-OwnerOrYourself' }
+Morph >> ownerOrYourselfThatIsAPhratchLibraryMorph [
+	"Answer this the first morph in the owner chain of the given class, or nil if there isn't one."
+
+	| current  |
+	current := self.
+	[ current isNil ]
+		whileFalse: [ 
+			(current isPhratchLibraryMorph)
+				ifTrue: [ ^ current ].
+			current := current owner ].
+	^ current
+]
+
+{ #category : #'*Phratch-Extensions-OwnerOrYourself' }
+Morph >> ownerOrYourselfThatIsAPhratchListMorph [
+	"Answer this the first morph in the owner chain of the given class, or nil if there isn't one."
+
+	| current  |
+	current := self.
+	[ current isNil ]
+		whileFalse: [ 
+			(current isPhratchListMorph)
+				ifTrue: [ ^ current ].
+			current := current owner ].
+	^ current
+]
+
+{ #category : #'*Phratch-Extensions-OwnerOrYourself' }
+Morph >> ownerOrYourselfThatIsAPhratchPrompterMorph [
+	"Answer this the first morph in the owner chain of the given class, or nil if there isn't one."
+
+	| current  |
+	current := self.
+	[ current isNil ]
+		whileFalse: [ 
+			(current isPhratchPrompterMorph)
+				ifTrue: [ ^ current ].
+			current := current owner ].
+	^ current
+]
+
+{ #category : #'*Phratch-Extensions-OwnerOrYourself' }
+Morph >> ownerOrYourselfThatIsAPhratchScriptEditorMorph [
+	"Answer this the first morph in the owner chain of the given class, or nil if there isn't one."
+
+	| current  |
+	current := self.
+	[ current isNil ]
+		whileFalse: [ 
+			(current isPhratchScriptEditorMorph)
+				ifTrue: [ ^ current ].
+			current := current owner ].
+	^ current
+]
+
+{ #category : #'*Phratch-Extensions-OwnerOrYourself' }
+Morph >> ownerOrYourselfThatIsAPhratchScriptsMorph [
+	"Answer this the first morph in the owner chain of the given class, or nil if there isn't one."
+
+	| current  |
+	current := self.
+	[ current isNil ]
+		whileFalse: [ 
+			(current isPhratchScriptsMorph)
+				ifTrue: [ ^ current ].
+			current := current owner ].
+	^ current
+]
+
+{ #category : #'*Phratch-Extensions-OwnerOrYourself' }
+Morph >> ownerOrYourselfThatIsAPhratchStageMorph [
+	"Answer this the first morph in the owner chain of the given class, or nil if there isn't one."
+
+	| current  |
+	current := self.
+	[ current isNil ]
+		whileFalse: [ 
+			(current isPhratchStageMorph)
+				ifTrue: [ ^ current ].
+			current := current owner ].
+	^ current
+]
+
+{ #category : #'*Phratch-Extensions-OwnerOrYourself' }
+Morph >> ownerOrYourselfThatIsAPhratchViewerMorph [
+	"Answer this the first morph in the owner chain of the given class, or nil if there isn't one."
+
+	| current  |
+	current := self.
+	[ current isNil ]
+		whileFalse: [ 
+			(current isPhratchViewerMorph)
+				ifTrue: [ ^ current ].
+			current := current owner ].
+	^ current
+]
+
+{ #category : #'*Phratch-Extensions-OwnerOrYourself' }
+Morph >> ownerOrYourselfThatIsAScrollFrameMorph [
+	"Answer this the first morph in the owner chain of the given class, or nil if there isn't one."
+
+	| current  |
+	current := self.
+	[ current isNil ]
+		whileFalse: [ 
+			(current isScrollFrameMorph)
+				ifTrue: [ ^ current ].
+			current := current owner ].
+	^ current
+]
+
+{ #category : #'*Phratch-Extensions-OwnerOrYourself' }
+Morph >> ownerOrYourselfThatIsAWatcherMorph [
+	"Answer this the first morph in the owner chain of the given class, or nil if there isn't one."
+
+	| current  |
+	current := self.
+	[ current isNil ]
+		whileFalse: [ 
+			(current isWatcherMorph)
+				ifTrue: [ ^ current ].
+			current := current owner ].
+	^ current
+]
+
+{ #category : #'*Phratch-Extensions-OwnerOrYourself' }
+Morph >> ownerOrYourselfThatIsAWatcherReadoutFrameMorph [
+	"Answer this the first morph in the owner chain of the given class, or nil if there isn't one."
+
+	| current  |
+	current := self.
+	[ current isNil ]
+		whileFalse: [ 
+			(current isWatcherReadoutFrameMorph)
 				ifTrue: [ ^ current ].
 			current := current owner ].
 	^ current

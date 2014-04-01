@@ -654,7 +654,7 @@ PhratchListMorph >> listName: asString target: aScriptableSpriteMorph [
 PhratchListMorph >> listOwner [
 
 	owner ifNil: [^ nil].
-	^ owner ownerOrYourselfThatIsA: self class.
+	^ owner ownerOrYourselfThatIsAPhratchListMorph.
 
 ]
 

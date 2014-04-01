@@ -105,12 +105,12 @@ HatBlockMorph >> drawOn: aCanvas [
 HatBlockMorph >> fixBlockLayout [
 	"Update the positions of my submorphs."
 
-	| x centerY nextB nonBlockSubmorphs oldExtent oldPos |
+	| x centerY nextB nonBlockSubmorphs |
 	blockLayoutNeeded
 		ifFalse: [ ^ self ].
 	super fixBlockLayout.
-	oldExtent := self extent.
-	oldPos := self position.
+	self extent.
+	self position.
 	x :=  self left + 8 .
 	centerY := self top + 25.
 	self nonControlFlowSubmorphs
@@ -224,7 +224,7 @@ HatBlockMorph >> start [
 	self stop.
 	phratchProc ifNil: [
 		scriptOwner ifNil: [^ self].
-		(stage := self receiver ownerOrYourselfThatIsA: PhratchStageMorph) ifNil: [^ self].
+		(stage := self receiver ownerOrYourselfThatIsAPhratchStageMorph) ifNil: [^ self].
 		phratchProc := stage startProcessFor: self.
 		self changed].
 

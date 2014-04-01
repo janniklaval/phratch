@@ -11,7 +11,7 @@ Class {
 ListMultilineStringMorph >> drawTextOn: aCanvas [
 
 	|rf|
-	rf := self ownerOrYourselfThatIsA: WatcherReadoutFrameMorph.
+	rf := self ownerOrYourselfThatIsAWatcherReadoutFrameMorph.
 	rf ifNotNil: [((rf complexObject isMorph) or: [rf complexObject isPhratchList])
 		ifTrue: [^ self ]].
 
@@ -30,7 +30,7 @@ ListMultilineStringMorph >> extent: aPoint [
 ListMultilineStringMorph >> fixLayout [
 
 	| readout |
-	readout := self ownerOrYourselfThatIsA: WatcherReadoutFrameMorph.
+	readout := self ownerOrYourselfThatIsAWatcherReadoutFrameMorph.
 	readout ifNotNil: [
 		(readout complexObject isPhratchList) ifTrue: [^self].
 		(readout complexObject isPhratchListMorph) ifTrue: [^self].
@@ -57,7 +57,7 @@ ListMultilineStringMorph >> initialize [
 ListMultilineStringMorph >> isList [
 
 	|rf|
-	rf := self ownerOrYourselfThatIsA: WatcherReadoutFrameMorph.
+	rf := self ownerOrYourselfThatIsAWatcherReadoutFrameMorph.
 	rf ifNotNil: [^ ((rf complexObject isPhratchListMorph) or: [
 		rf complexObject isPhratchList])].
 	^ false
@@ -69,7 +69,7 @@ ListMultilineStringMorph >> keyStroke: evt [
 
 	| ch ownerList newCell oldH |
 	ch := evt keyValue.
-	ownerList := self ownerOrYourselfThatIsA: PhratchListMorph.
+	ownerList := self ownerOrYourselfThatIsAPhratchListMorph.
 
 	"insert list item with cr"
 	(ch = 3) & (evt buttons = 0) ifTrue: [ch := 13].	"map enter key to cr"
@@ -120,7 +120,7 @@ ListMultilineStringMorph >> keyboardFocusChange: aBoolean [
 ListMultilineStringMorph >> list [
 
 	|rf|
-	rf := self ownerOrYourselfThatIsA: WatcherReadoutFrameMorph.
+	rf := self ownerOrYourselfThatIsAWatcherReadoutFrameMorph.
 	rf ifNotNil: [((rf complexObject isPhratchListMorph) or: [
 		rf complexObject isPhratchList])
 			ifTrue: [ (rf complexObject isPhratchList)
@@ -140,7 +140,7 @@ ListMultilineStringMorph >> mouseDown: evt [
 	super mouseDown: evt.
 	p := evt cursorPoint.
 
-	(list := self ownerOrYourselfThatIsA: PhratchListMorph)
+	(list := self ownerOrYourselfThatIsAPhratchListMorph)
 		ifNotNil: [list focusCell: owner].
 
 	ownerList := self ownerThatIsA: PhratchListMorph.

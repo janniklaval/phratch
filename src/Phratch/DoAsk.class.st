@@ -27,5 +27,5 @@ DoAsk >> defaultArguments [
 DoAsk >> stopTalkThinkAsk [
 	 | s |
 
-	[(s := self model receiver ownerOrYourselfThatIsA: PhratchStageMorph) ifNotNil: [ s stopAsks ] ] on: Error do: [ ]
+	[(s := self model receiver ownerOrYourselfThatIsAPhratchStageMorph) ifNotNil: [ s stopAsks ] ] on: Error do: [ ]
 ]

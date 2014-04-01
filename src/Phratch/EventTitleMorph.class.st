@@ -128,9 +128,9 @@ EventTitleMorph >> presentMenu [
 	| eventNames sFrame menu be |
 	eventNames := #().
 
-	sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
+	sFrame := self ownerOrYourselfThatIsAPhratchFrameMorph.
 	sFrame ifNil: [
-		be := self ownerOrYourselfThatIsA: BlockEditorFrameMorph.
+		be := self ownerOrYourselfThatIsABlockEditorFrameMorph.
 		be ifNotNil: [sFrame := be phratchFrame]].
 
 	sFrame ifNotNil: [eventNames := sFrame workPane allEventNames].

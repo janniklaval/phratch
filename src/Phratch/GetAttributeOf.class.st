@@ -21,7 +21,7 @@ GetAttributeOf class >> handlesQuery: sel [
 GetAttributeOf >> defaultArguments [
 	
 	| list defaultArgs |
-	(self model ownerOrYourselfThatIsA: PhratchStageMorph)
+	(self model ownerOrYourselfThatIsAPhratchStageMorph)
 		ifNotNil: [:stage | 
 			list := stage submorphs select: [ :m | m isPhratchSpriteMorph ].
 			list sort: [ :stage1 :stage2 | stage1 objName asLowercase < stage2 objName asLowercase ].

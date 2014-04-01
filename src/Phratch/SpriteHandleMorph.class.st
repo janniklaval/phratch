@@ -197,7 +197,7 @@ SpriteHandleMorph >> target: aSprite [
 
 	| stage tb x |
 	target := aSprite.
-	stage := target ownerOrYourselfThatIsA: PhratchStageMorph.
+	stage := target ownerOrYourselfThatIsAPhratchStageMorph.
 	tb := self targetBounds.
 
 	"make sure the target sprite is onstage"
@@ -231,7 +231,7 @@ SpriteHandleMorph >> targetBounds [
 	| stage ratio home center |
 
 	ratio := 1.
-	stage := target ownerOrYourselfThatIsA: PhratchStageMorph.
+	stage := target ownerOrYourselfThatIsAPhratchStageMorph.
 	stage notNil & stage isQuarterSize ifTrue: [ratio := 0.5 ].
 	home:= 0 @ 0.
 	stage ifNotNil: [home := stage position ].

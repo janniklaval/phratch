@@ -20,7 +20,7 @@ DoBroadcastAndWait class >> handlesQuery: sel [
 { #category : #protocol }
 DoBroadcastAndWait >> defaultArguments [
 
-	^ (self model ownerOrYourselfThatIsA: PhratchStageMorph) 
+	^ (self model ownerOrYourselfThatIsAPhratchStageMorph) 
 		ifNotNil: [:stage | Array with: stage defaultEventName]
 		ifNil: [ super defaultArguments ]
 ]

@@ -260,7 +260,7 @@ MediaItemMorph >> editMedia [
 MediaItemMorph >> editSound [
 
 	| sFrame workPane editor |
-	sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
+	sFrame := self ownerOrYourselfThatIsAPhratchFrameMorph.
 	sFrame ifNil: [^ self].
 	workPane := sFrame workPane.
 
@@ -391,11 +391,11 @@ MediaItemMorph >> isMediaItemMorph [
 { #category : #'dropping/grabbing' }
 MediaItemMorph >> justDroppedInto: aMorph event: evt [
 	self delete.
-	(aMorph ownerOrYourselfThatIsA: PhratchViewerMorph)
+	(aMorph ownerOrYourselfThatIsAPhratchViewerMorph)
 		ifNotNil: [ 
 			"delete myself when dropped on the blocks palette"
 			^ self deleteMedia ].
-	(aMorph ownerOrYourselfThatIsA: PhratchBlockPaletteMorph)
+	(aMorph ownerOrYourselfThatIsAPhratchBlockPaletteMorph)
 		ifNotNil: [ 
 			"I have been accepted into a media list; exit this method to prevent myself from being put into the Clipboard again"
 			^ self ].
@@ -426,7 +426,7 @@ MediaItemMorph >> mediaName: name [
 	newName := self phratchObj unusedMediaNameFromBaseName: newName forMedia: self media.
 	media mediaName: newName.
 	nameMorph contents: newName.
-	(sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNotNil: [
+	(sFrame := self ownerOrYourselfThatIsAPhratchFrameMorph) ifNotNil: [
 		sFrame viewerPane refresh].
 
 ]
@@ -499,7 +499,7 @@ MediaItemMorph >> setNumber: anInteger [
 { #category : #'event handling' }
 MediaItemMorph >> startDrag: evt [
 
-	(self ownerOrYourselfThatIsA: PhratchScriptEditorMorph)
+	(self ownerOrYourselfThatIsAPhratchScriptEditorMorph)
 		ifNil: [evt hand grabMorph: self]
 		ifNotNil: [evt hand attachMorph: self fullCopy configureForDragging].
 
@@ -550,7 +550,7 @@ MediaItemMorph >> turnIntoNewSprite [
 	"Create a new sprite from this costume and delete the costume from previos sprite."
 
 	| m frame |
-	frame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
+	frame := self ownerOrYourselfThatIsAPhratchFrameMorph.
 	frame ifNil: [^ self].
 	m := PhratchSpriteMorph new soleCostume: self media deepCopy.
 	frame addAndView: m.

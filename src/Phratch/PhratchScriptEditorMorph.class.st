@@ -443,6 +443,12 @@ PhratchScriptEditorMorph >> initialize [
 
 ]
 
+{ #category : #'as yet unclassified' }
+PhratchScriptEditorMorph >> isPhratchScriptEditorMorph [
+
+	^ true
+]
+
 { #category : #'event handling' }
 PhratchScriptEditorMorph >> mouseEnterDragging: evt [
 	"Switch the tabs to script if a block is current being dragged"
@@ -574,7 +580,7 @@ PhratchScriptEditorMorph >> target: aPhratchObjectOrNil [
 		nameMorph target: nil; contents: 'no object '.
 		pageViewerMorph contents: (Morph new color: Color red).
 
-		(sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNotNil: [
+		(sFrame := self ownerOrYourselfThatIsAPhratchFrameMorph) ifNotNil: [
 			sFrame viewerPane target: nil].
 
 		self showOrHideReadouts.

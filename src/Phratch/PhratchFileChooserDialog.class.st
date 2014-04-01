@@ -665,6 +665,12 @@ PhratchFileChooserDialog >> initialize [
 
 ]
 
+{ #category : #'as yet unclassified' }
+PhratchFileChooserDialog >> isPhratchFileChooserDialog [
+
+	^true
+]
+
 { #category : #shortcuts }
 PhratchFileChooserDialog >> labelForHomeFolder [
 	"Answer the name to use for the home folder."

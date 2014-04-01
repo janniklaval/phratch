@@ -571,7 +571,7 @@ PhratchFrameMorph >> addSpecialSprite [
 	m ifNotNil:[
 		newSprite := m new.
 	
-		frame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
+		frame := self ownerOrYourselfThatIsAPhratchFrameMorph.
 		frame ifNotNil: [
 			frame workPane addMorphFront: newSprite.
 			frame workPane sprites addLast: newSprite].
@@ -2954,13 +2954,12 @@ PhratchFrameMorph >> refreshBlocks [
 	'updating...' 
 		displayProgressAt: self center - (32@5)  "Sensor cursorPoint"
 		from: 0 to: ((workPane allMorphs) select: [:m| m isScriptablePhratchMorph]) size * 3
-		during: [:bar | | i | i := 0.
-
-	self updatePanes.
-	self
-		view: scriptsPane target
-		tab: scriptsPane tabPane currentTab
-		category: viewerPane currentCategory].
+		during: [:bar |
+			self updatePanes.
+			self
+				view: scriptsPane target
+				tab: scriptsPane tabPane currentTab
+				category: viewerPane currentCategory].
 
 ]
 
@@ -3139,19 +3138,19 @@ PhratchFrameMorph >> setLanguage: aString [
 	'updating...' 
 		displayProgressAt: self center - (32@5)  "Sensor cursorPoint"
 		from: 0 to: ((workPane allMorphs) select: [:m| m isScriptablePhratchMorph]) size * 2
-		during: [:bar | | i | i := 0.
+		during: [:bar |
 
-	tempJustSaved := justSaved.
+			tempJustSaved := justSaved.
 
-	PhratchTranslator setLanguage: (PhratchTranslator isoCodeForName: aString).
-	viewerPane rebuildCategorySelectors.
+			PhratchTranslator setLanguage: (PhratchTranslator isoCodeForName: aString).
+			viewerPane rebuildCategorySelectors.
 
-	self updatePanes.
-	self
-		view: scriptsPane target
-		tab: scriptsPane tabPane currentTab
-		category: viewerPane currentCategory.
-	justSaved := tempJustSaved].
+			self updatePanes.
+			self
+				view: scriptsPane target
+				tab: scriptsPane tabPane currentTab
+				category: viewerPane currentCategory.
+			justSaved := tempJustSaved].
 
 ]
 

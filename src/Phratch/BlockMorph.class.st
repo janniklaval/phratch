@@ -47,7 +47,7 @@ BlockMorph class >> initBlock: aBlock on: aScriptablePhratchMorph withSpec: spec
 	
 	rcvr := (ScriptablePhratchMorph isSpriteSpecificTarget: aScriptablePhratchMorph selector: selector)
 		ifTrue: [ aScriptablePhratchMorph ]
-		ifFalse: [ aScriptablePhratchMorph ownerOrYourselfThatIsA: PhratchStageMorph ].
+		ifFalse: [ aScriptablePhratchMorph ownerOrYourselfThatIsAPhratchStageMorph ].
 		
 	^ aBlock
 		argPermutation: argPermutation;
@@ -212,11 +212,9 @@ BlockMorph >> click: evt [
 BlockMorph >> closestAttachTargetIn: newOwner [
 	"Answer the closest block attachment point among the blocks and stack submorphs of the given morph. Answer nil if there are no blocks close enough to attach myself to."
 
-	| xThresh yThresh attachPoints best bestDist targetP dist ref topUsed bottomUsed |
+	| xThresh yThresh attachPoints best bestDist targetP dist ref |
 	xThresh := 65.
 	yThresh := self yThresh.
-	topUsed := false.
-	bottomUsed := false.
 	attachPoints := OrderedCollection new: 100.
 	newOwner allMorphs reject: [ :m | m == newOwner ]
 		thenDo: [ :m | 
@@ -227,7 +225,7 @@ BlockMorph >> closestAttachTargetIn: newOwner [
 							m ~~ self topBlock
 								and: [ m ~~ self owner and: [ (m isBlockMorph) and: [ m isReporter not | (m isCommandScriptBlockMorph) ] ] ] ] ])
 				ifTrue: [ m blockAttachPoints: attachPoints ] ].
-	((self isHatBlockMorph) or: [ (self ownerOrYourselfThatIsA: HatBlockMorph) notNil ])
+	((self isHatBlockMorph) or: [ (self ownerOrYourselfThatIsAHatBlockMorph) notNil ])
 		ifTrue: [ 
 			"if I am a HatBlock or the bottom block of a HatBlock stack, I can only attach to the top block of a stack"
 			attachPoints := attachPoints select: [ :assoc | assoc value owner = newOwner and: [ assoc key y = assoc value top ] ] ].
@@ -253,14 +251,14 @@ BlockMorph >> closestAttachTargetIn: newOwner [
 							dist :=(self position - targetP) r .
 							dist < bestDist
 								ifTrue: [ 
-									(self top - targetP y) abs < yThresh
+									"(self top - targetP y) abs < yThresh
 										ifTrue: [ 
 											topUsed := true.
 											bottomUsed := false ].
 									(self nextBlock isNil and: [ (self bottom - targetP y) abs < yThresh ])
 										ifTrue: [ 
 											topUsed := false.
-											bottomUsed := true ].
+											bottomUsed := true ]."
 									best := assoc.
 									bestDist := dist ] ] ] ].	"special case for the auto-wrapping of c-shaped/if-else blocks"
 	
@@ -300,7 +298,7 @@ BlockMorph >> commentMorph [
 	"answer a comment which has been sticked to the receiver, if any"
 
 	| sm |
-	sm := self ownerOrYourselfThatIsA: PhratchScriptsMorph.
+	sm := self ownerOrYourselfThatIsAPhratchScriptsMorph.
 	sm ifNil: [^ nil].
 	^ sm submorphs detect: [: m |
 		(m isPhratchCommentMorph) and: [
@@ -382,7 +380,7 @@ BlockMorph >> delete [
 BlockMorph >> disinheritAttribute [
 
 	| sel rcv oi |
-	(self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph)
+	(self ownerOrYourselfThatIsAPhratchBlockPaletteMorph)
 		ifNil: [^ false].
 	(self respondsTo: #selector) ifFalse: [
 		^ false].
@@ -737,8 +735,8 @@ BlockMorph >> handleReporterDrop [
 	"This block, a reporter, has just been dropped. Try to embed it in a command block."
 
 	| scriptsMorph editorMorph argM argOwner trgt|
-	scriptsMorph := self ownerOrYourselfThatIsA: PhratchScriptsMorph.
-	editorMorph := self ownerOrYourselfThatIsA: BlockEditorFrameMorph.
+	scriptsMorph := self ownerOrYourselfThatIsAPhratchScriptsMorph.
+	editorMorph := self ownerOrYourselfThatIsABlockEditorFrameMorph.
 	trgt := scriptsMorph ifNil: [editorMorph].
 
 	self isReporter ifTrue: [
@@ -825,7 +823,7 @@ BlockMorph >> handleTool: toolName hand: hand [
 				ifTrue: [ myOwner step ].
 			^ self ]
 		ifFalse: [ 
-			sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
+			sFrame := self ownerOrYourselfThatIsAPhratchFrameMorph.
 			sFrame ifNil: [ ^ self ].
 			((owner isPhratchBlockPaletteMorph) and: [ sFrame viewerPane currentCategory = #variables ])
 				ifTrue: [ 
@@ -884,7 +882,7 @@ BlockMorph >> helpScreenName [
 BlockMorph >> inheritAttribute [
 
 	| sel rcv oi |
-	(self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph)
+	(self ownerOrYourselfThatIsAPhratchBlockPaletteMorph)
 		ifNil: [^ false].
 	(self respondsTo: #selector) ifFalse: [
 		^ false].
@@ -973,7 +971,7 @@ BlockMorph >> isCustomBlock [
 { #category : #byob }
 BlockMorph >> isDeletedAttribute [
 	| sel rcv oi |
-	(self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph) ifNil: [ ^ false ].
+	(self ownerOrYourselfThatIsAPhratchBlockPaletteMorph) ifNil: [ ^ false ].
 	(self respondsTo: #selector)
 		ifFalse: [ ^ false ].
 	sel := self selector.
@@ -1005,7 +1003,7 @@ BlockMorph >> isInheritableAttribute [
 	"indicate if my context menu lets me delete my attribute"
 
 	| sel rcv oi |
-	(self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph)
+	(self ownerOrYourselfThatIsAPhratchBlockPaletteMorph)
 		ifNil: [^ false].
 	(self respondsTo: #selector) ifFalse: [
 		^ false].
@@ -1075,15 +1073,15 @@ BlockMorph >> justDroppedInto: newOwner event: evt [
 
 	owner ifNil:	[^self].
 
-	(frame := newOwner ownerOrYourselfThatIsA: PhratchFrameMorph)
+	(frame := newOwner ownerOrYourselfThatIsAPhratchFrameMorph)
 		ifNotNil: [frame projectModified].
 
-	((self ownerOrYourselfThatIsA: PhratchViewerMorph) notNil) ifTrue: [
+	((self ownerOrYourselfThatIsAPhratchViewerMorph) notNil) ifTrue: [
 		"delete myself when dropped in the blocks palette area"
 		self delete.
 		^ self].
 
-	((self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph) notNil) ifTrue: [
+	((self ownerOrYourselfThatIsAPhratchBlockPaletteMorph) notNil) ifTrue: [
 		"delete myself when dropped in the blocks palette area of a Block Editor"
 		self delete.
 		^ self].
@@ -1349,7 +1347,7 @@ BlockMorph >> presentHelpScreen [
 	"Answer the name of the help screen for this block, or nil if no help is available."
 
 	| fr |
-	fr := self ownerOrYourselfThatIsA: PhratchFrameMorph.
+	fr := self ownerOrYourselfThatIsAPhratchFrameMorph.
 	fr
 		ifNil: [^ nil]
 		ifNotNil: [fr presentHelpScreen: self helpScreenName]
@@ -1489,7 +1487,7 @@ BlockMorph >> slideBackToFormerSituation: evt [
 	(o := evt hand formerOwner) ifNil: [^ self].
 	(o isBlockMorph) ifTrue: [
 		wasEmbedded := true.
-		(pane := o ownerOrYourselfThatIsA: PhratchScriptsMorph) ifNotNil: [
+		(pane := o ownerOrYourselfThatIsAPhratchScriptsMorph) ifNotNil: [
 			o := pane]].
 
 	"restore the old position relative to the old owner,
@@ -1507,7 +1505,7 @@ BlockMorph >> slideBackToFormerSituation: evt [
 
 	"scroll the dropped morph into view in case the owner has been
 	scrolled in the meantime"
-	s := o ownerOrYourselfThatIsA: ScrollFrameMorph.
+	s := o ownerOrYourselfThatIsAScrollFrameMorph.
 	s ifNotNil: [s scrollMorphIntoView: self ]
 
 

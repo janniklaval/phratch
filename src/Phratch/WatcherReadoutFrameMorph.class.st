@@ -95,7 +95,7 @@ WatcherReadoutFrameMorph >> drawOn: aCanvas [
 WatcherReadoutFrameMorph >> fixLayout [
 	| watcher readout isLarge s e readoutWidth yOffset w inset blist |
 	"((submorphs size = 1) and: [submorphs first isStringMorph]) ifFalse: [^ self]."
-	watcher := self ownerOrYourselfThatIsA: WatcherMorph.
+	watcher := self ownerOrYourselfThatIsAWatcherMorph.
 	readout := submorphs first.
 	
 	previousContent = readout contents ifTrue:[^self].
@@ -176,4 +176,10 @@ WatcherReadoutFrameMorph >> isLarge [
 
 	^ submorphs size > 0 and: [self firstSubmorph font pointSize > 10]
 
+]
+
+{ #category : #'as yet unclassified' }
+WatcherReadoutFrameMorph >> isWatcherReadoutFrameMorph [
+
+	^ true
 ]

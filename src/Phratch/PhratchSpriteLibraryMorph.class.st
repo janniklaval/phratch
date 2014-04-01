@@ -10,7 +10,7 @@ PhratchSpriteLibraryMorph >> acceptDroppingMorph: aMorph event: evt [
 
 	| insertAfter libraryItems spriteLibrary movedThumbnail mostOverlap mostOverlapIndex sf |
 	((aMorph isLibraryItemMorph)
-		and: [ (spriteLibrary := self ownerOrYourselfThatIsA: PhratchSpriteLibraryMorph) notNil ])
+		and: [ (spriteLibrary := self ownerOrYourselfThatIsAPhratchSpriteLibraryMorph) notNil ])
 		ifFalse: [ ^ super acceptDroppingMorph: aMorph event: evt ].	"Set the new position of the morph that just moved"
 	movedThumbnail := self submorphs detect: [ :m | m target == aMorph target ] ifNone: [ ^ self ].
 	libraryItems := self submorphs select: [ :m | (m bounds intersects: aMorph bounds) and: [ m ~~ aMorph ] ].	"Select the thumbnail with the most overlap with movedThumbnail"
@@ -30,7 +30,7 @@ PhratchSpriteLibraryMorph >> acceptDroppingMorph: aMorph event: evt [
 						ifFalse: [ self submorphs at: mostOverlapIndex + 1 ] ]
 				ifFalse: [ insertAfter := mostOverlap ] ].	"end of list"
 	spriteLibrary insertItem: movedThumbnail before: insertAfter.
-	sf := self ownerOrYourselfThatIsA: PhratchFrameMorph.
+	sf := self ownerOrYourselfThatIsAPhratchFrameMorph.
 	sf ifNotNil: [ sf workPane updateSpritesList ]
 ]
 
@@ -51,7 +51,7 @@ PhratchSpriteLibraryMorph >> insertItem: item1 before: item2orNil [
 					self replaceSubmorph: s by: nextItem.
 					nextItem := s].
 				self addMorphBack: nextItem]].
-	(self ownerOrYourselfThatIsA: PhratchLibraryMorph) fixLayout.
+	(self ownerOrYourselfThatIsAPhratchLibraryMorph) fixLayout.
 
 ]
 
@@ -60,6 +60,12 @@ PhratchSpriteLibraryMorph >> isPartsBin [
 
 	^ true
 
+]
+
+{ #category : #'as yet unclassified' }
+PhratchSpriteLibraryMorph >> isPhratchSpriteLibraryMorph [
+
+	^ true
 ]
 
 { #category : #'dropping/grabbing' }

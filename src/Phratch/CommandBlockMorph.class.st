@@ -627,7 +627,7 @@ CommandBlockMorph >> fixBlockLayout [
 CommandBlockMorph >> fixBlockLayoutNoWrap [
 	"Update the positions of my submorphs."
 
-	| isFirst h x minXForArgs hAdjust nextB w oldPos oldExtent space |
+	| isFirst h x minXForArgs hAdjust nextB w space |
 	blockLayoutNeeded
 		ifFalse: [ ^ self ].
 	space := 4.
@@ -636,8 +636,8 @@ CommandBlockMorph >> fixBlockLayoutNoWrap [
 			self isTemplate
 				ifTrue: [ space := 2 ] ].
 	super fixBlockLayout.
-	oldPos := self position.
-	oldExtent := self extent.
+	self position.
+	self extent.
 	hAdjust := 4.
 	isFirst := true.
 	h := 14.	"minimum height"
@@ -1098,11 +1098,11 @@ CommandBlockMorph >> organizeArgs: argList [
 CommandBlockMorph >> phratchObject [
 
 	| be sm sf so |
-	be := self ownerOrYourselfThatIsA: BlockEditorFrameMorph.
+	be := self ownerOrYourselfThatIsABlockEditorFrameMorph.
 	be isNil
 		ifTrue: [
-			sm := self ownerOrYourselfThatIsA: PhratchScriptsMorph.
-			sf := self ownerOrYourselfThatIsA: PhratchFrameMorph.
+			sm := self ownerOrYourselfThatIsAPhratchScriptsMorph.
+			sf := self ownerOrYourselfThatIsAPhratchFrameMorph.
 			sm isNil | sf isNil ifTrue: [^ nil].
 			so := sf phratchObjects detect: [:obj | obj blocksBin = sm] ifNone: [sf workPane]]
 		ifFalse: [so := be template receiver].
@@ -1249,7 +1249,7 @@ CommandBlockMorph >> scriptVars [
 			blockVars addAll: o argMorph allVarNames ].
 		(o isReporterBlockDropTargetMorph)
 			ifTrue: [
-				be := o ownerOrYourselfThatIsA: BlockEditorFrameMorph.
+				be := o ownerOrYourselfThatIsABlockEditorFrameMorph.
 				blockVars addAll: be template allVarNames.
 				o := be hat bottomBlock.
 				(o isVariableDeclarationBlockMorph) ifTrue: [
@@ -1311,8 +1311,8 @@ CommandBlockMorph >> start [
 
 	rcvr := self receiver.
 	(rcvr isScriptablePhratchMorph)
-		ifTrue: [ (stage := rcvr ownerOrYourselfThatIsA: PhratchStageMorph) ifNil: [^ self]]
-		ifFalse: [stage := (self ownerOrYourselfThatIsA: PhratchFrameMorph) workPane].	
+		ifTrue: [ (stage := rcvr ownerOrYourselfThatIsAPhratchStageMorph) ifNil: [^ self]]
+		ifFalse: [stage := (self ownerOrYourselfThatIsAPhratchFrameMorph) workPane].	
 
 	phratchProc := stage startProcessFor: self.
 	self changed.

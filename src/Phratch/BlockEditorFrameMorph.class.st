@@ -411,7 +411,7 @@ BlockEditorFrameMorph >> mouseUp: evt [
 
 { #category : #scripts }
 BlockEditorFrameMorph >> phratchFrame [
-	^receiver ownerOrYourselfThatIsA: PhratchFrameMorph
+	^receiver ownerOrYourselfThatIsAPhratchFrameMorph
 ]
 
 { #category : #accessing }
@@ -498,7 +498,7 @@ BlockEditorFrameMorph >> yes [
 	#none = definition type ifFalse: [
 		definition answer: answerField argument ].
 
-	stage := receiver ownerOrYourselfThatIsA: PhratchStageMorph.
+	stage := receiver ownerOrYourselfThatIsAPhratchStageMorph.
 	receiver
 		updateCustomBlockDefinitionId: definition id with: definition;
 		updateLocalId: definition id withSpec: definition userSpec.
@@ -510,7 +510,7 @@ BlockEditorFrameMorph >> yes [
 					updateCustomBlockDefinitionId: definition id with: definition;
 					updateOnlyLocalId: definition id withSpec: definition userSpec]].	
 
-	sf := receiver ownerOrYourselfThatIsA: PhratchFrameMorph.
+	sf := receiver ownerOrYourselfThatIsAPhratchFrameMorph.
 	sf viewerPane categoryChanged: 'variables'.
 	#none = definition category ifFalse: [
 		sf viewerPane categoryChanged: definition category asString ].

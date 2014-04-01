@@ -103,7 +103,7 @@ PhratchScriptsMorph >> isScreenshooting [
 PhratchScriptsMorph >> makeNewBlock [
 
 	| be sf |
-	be := self ownerOrYourselfThatIsA: BlockEditorFrameMorph.
+	be := self ownerOrYourselfThatIsABlockEditorFrameMorph.
 	be ifNil: [^self].
 	sf := be phratchFrame.
 	sf ifNil: [^self].
@@ -115,7 +115,7 @@ PhratchScriptsMorph >> makeNewBlock [
 PhratchScriptsMorph >> migrateBlockVars [
 
 	| be |
-	be := self ownerOrYourselfThatIsA: BlockEditorFrameMorph.
+	be := self ownerOrYourselfThatIsABlockEditorFrameMorph.
 	be ifNil: [^self ].
  	be definition migrateBlockVars.
 	be buildScript
@@ -138,7 +138,7 @@ PhratchScriptsMorph >> mouseDown: evt [
 
 	evt rightButtonPressed ifTrue: [
 		Sensor waitNoButton.
-		(m := self ownerOrYourselfThatIsA: PhratchScriptEditorMorph) ifNil: [^ self rightButtonMenu].
+		(m := self ownerOrYourselfThatIsAPhratchScriptEditorMorph) ifNil: [^ self rightButtonMenu].
 		(m target notNil and: [m currentCategory = 'Scripts'])
 			ifTrue: [m scriptsMenu: evt hand position].
 		^ self].
@@ -151,7 +151,7 @@ PhratchScriptsMorph >> mouseEnterDragging: evt [
 	"Switch the tabs to script if a block is current being dragged"
 
 	| scriptEditorMorph |
-	scriptEditorMorph := self ownerOrYourselfThatIsA: PhratchScriptEditorMorph.
+	scriptEditorMorph := self ownerOrYourselfThatIsAPhratchScriptEditorMorph.
 	(scriptEditorMorph currentCategory = 'Scripts') ifFalse:[
 		scriptEditorMorph currentCategory: 'Scripts'].
 
@@ -183,7 +183,7 @@ PhratchScriptsMorph >> rightButtonMenu [
 	menu := MenuMorph new defaultTarget: self.
 	menu add: 'clean up' translated action: #cleanUp.
 	menu add: 'save picture of scripts' translated action: #saveScriptsToImage.
-	be := self ownerOrYourselfThatIsA: BlockEditorFrameMorph.
+	be := self ownerOrYourselfThatIsABlockEditorFrameMorph.
 	be
 		ifNotNil: [ 
 			be definition varNames size > 0

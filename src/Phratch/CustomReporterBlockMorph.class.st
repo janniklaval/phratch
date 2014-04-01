@@ -293,7 +293,7 @@ CustomReporterBlockMorph >> evaluateWithArgs: rawArgs [
 	"Evalue this block with the given argument list."
 
 	self start.
-	phratchProc stepUntilDoneFor: (receiver ownerOrYourselfThatIsA: PhratchStageMorph).
+	phratchProc stepUntilDoneFor: (receiver ownerOrYourselfThatIsAPhratchStageMorph).
 	^phratchProc answer	
 ]
 
@@ -594,7 +594,7 @@ CustomReporterBlockMorph >> showValue [
 	gotError := false.
 	[ 
 	self start.
-	phratchProc stepUntilDoneFor: (receiver ownerOrYourselfThatIsA: PhratchStageMorph).
+	phratchProc stepUntilDoneFor: (receiver ownerOrYourselfThatIsAPhratchStageMorph).
 	msg := phratchProc answer ]
 		ifError: [ 
 			gotError := true.
@@ -680,7 +680,7 @@ CustomReporterBlockMorph >> updateSpecWithDnDSpec [
 	5. 	update every instance of the definition if it is global
 	6.	update the definition's userSpec -> update every instance of the definition"
 
-	stage := receiver ownerOrYourselfThatIsA: PhratchStageMorph.
+	stage := receiver ownerOrYourselfThatIsAPhratchStageMorph.
 
 	def isGlobal not | stage isNil
 		ifTrue: [
@@ -709,7 +709,7 @@ CustomReporterBlockMorph >> updateSpecWithDnDSpec [
 
 	"7.	update the Block Editor"
 
-	be := self ownerOrYourselfThatIsA: BlockEditorFrameMorph.
+	be := self ownerOrYourselfThatIsABlockEditorFrameMorph.
 
 	be definition
 		declarations: types copy;
@@ -724,7 +724,7 @@ CustomReporterBlockMorph >> updateSpecWithDnDSpec [
 
 	"8.	update the Phratch Window"
 
-	sf := receiver ownerOrYourselfThatIsA: PhratchFrameMorph.
+	sf := receiver ownerOrYourselfThatIsAPhratchFrameMorph.
 	sf viewerPane categoryChanged: 'variables'.
 	#none = def category ifFalse: [
 		sf viewerPane categoryChanged: def category asString ]

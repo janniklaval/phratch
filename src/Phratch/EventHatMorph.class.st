@@ -17,7 +17,7 @@ EventHatMorph class >> blockTypeOn: aScriptablePhratchMorph spec: spec color: bl
 	|stage evtName|
 	
 	evtName := ''.
-	(stage := aScriptablePhratchMorph ownerOrYourselfThatIsA: PhratchStageMorph)
+	(stage := aScriptablePhratchMorph ownerOrYourselfThatIsAPhratchStageMorph)
 		ifNotNil: [evtName := stage defaultEventName].
 	^ (self new 
 		scriptOwner: aScriptablePhratchMorph; 
@@ -49,8 +49,8 @@ EventHatMorph >> eventName: aString [
 
 	scriptNameMorph eventName: aString.
 	self fixBlockLayout.
-	(self ownerOrYourselfThatIsA: PhratchViewerMorph) ifNotNil:[
-		(self ownerOrYourselfThatIsA: PhratchViewerMorph) updateContents].
+	(self ownerOrYourselfThatIsAPhratchViewerMorph) ifNotNil:[
+		(self ownerOrYourselfThatIsAPhratchViewerMorph) updateContents].
 
 ]
 
@@ -145,7 +145,7 @@ EventHatMorph >> startForEvent: aPhratchEvent [
 	self hasRunningProcess ifTrue: [^ nil].  "don't re-trigger if running"
 
 	scriptOwner ifNil: [^ nil].
-	(stage := scriptOwner ownerOrYourselfThatIsA: PhratchStageMorph) ifNil: [^ nil].
+	(stage := scriptOwner ownerOrYourselfThatIsAPhratchStageMorph) ifNil: [^ nil].
 	phratchProc := stage startProcessFor: self.
 	self changed.
 	^ phratchProc

@@ -501,26 +501,26 @@ StringFieldMorph >> keyStroke: evt [
 
 	ch = 9 ifTrue: [  "tab"
 
-		(m := self ownerOrYourselfThatIsA: DialogBoxMorph) ifNotNil: [
+		(m := self ownerOrYourselfThatIsADialogBoxMorph) ifNotNil: [
 			Sensor shiftPressed 
 				ifTrue: [ m tabToPreviousField: evt]
 				ifFalse: [ m tabToNextField: evt].
 			^ self].
 
-		(m := self ownerOrYourselfThatIsA: CommandBlockMorph) ifNotNil: [
+		(m := self ownerOrYourselfThatIsACommandBlockMorph) ifNotNil: [
 			Sensor shiftPressed 
 				ifTrue: [ m tabToPreviousField: evt]
 				ifFalse: [ m tabToNextField: evt].
 			^ self]].
 
 	({10 . 13} includes: ch) ifTrue: [  "cr, lf, or enter key"
-		(m := self ownerOrYourselfThatIsA: DialogBoxMorph) ifNotNil: [^ m enterKeyPressed: evt].
-		(m := self ownerOrYourselfThatIsA: PhratchPrompterMorph) ifNotNil: [^ m enterKeyPressed].
+		(m := self ownerOrYourselfThatIsADialogBoxMorph) ifNotNil: [^ m enterKeyPressed: evt].
+		(m := self ownerOrYourselfThatIsAPhratchPrompterMorph) ifNotNil: [^ m enterKeyPressed].
 		evt hand newKeyboardFocus: nil.
 		^ self].
 
 	ch = 27 ifTrue: [  "escape key"
-		(m := self ownerOrYourselfThatIsA: DialogBoxMorph) ifNotNil: [m escapeKeyPressed: evt].
+		(m := self ownerOrYourselfThatIsADialogBoxMorph) ifNotNil: [m escapeKeyPressed: evt].
 		^ self].
 
 	ch = 8 ifTrue: [^ self backspace].
@@ -796,7 +796,7 @@ StringFieldMorph >> startDrag: evt [
 	| myBlock |
 	isKeyboardFocus
 		ifTrue: [ ^ self ].
-	myBlock := self ownerOrYourselfThatIsA: BlockMorph.
+	myBlock := self ownerOrYourselfThatIsABlockMorph.
 	myBlock ifNil: [ super startDrag: evt ] ifNotNil: [ myBlock startDrag: evt ]
 ]
 

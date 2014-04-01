@@ -149,16 +149,16 @@ ResizableToggleButton >> keyStroke: evt [
 	ch = 9
 		ifTrue: [ 
 			"tab"
-			(m := self ownerOrYourselfThatIsA: DialogBoxMorph) ifNotNil: [ m tabToNextField: evt ].
+			(m := self ownerOrYourselfThatIsADialogBoxMorph) ifNotNil: [ m tabToNextField: evt ].
 			^ self ].
 	ch = 27
 		ifTrue: [ 
 			"escape key"
-			(m := self ownerOrYourselfThatIsA: DialogBoxMorph) ifNotNil: [ m escapeKeyPressed: evt ].
+			(m := self ownerOrYourselfThatIsADialogBoxMorph) ifNotNil: [ m escapeKeyPressed: evt ].
 			^ self ].
 	({10 . 13} includes: ch)
 		ifFalse: [ ^ self ].
-	(m := self ownerOrYourselfThatIsA: DialogBoxMorph) ifNotNil: [ ^ m enterKeyPressed: evt ].
+	(m := self ownerOrYourselfThatIsADialogBoxMorph) ifNotNil: [ ^ m enterKeyPressed: evt ].
 	evt hand newKeyboardFocus: nil.
 	^ self
 ]
@@ -389,7 +389,7 @@ ResizableToggleButton >> presentHelpScreen [
 	"Answer the name of the help screen for this block, or nil if no help is available."
 
 	| fr |
-	fr := self ownerOrYourselfThatIsA: PhratchFrameMorph.
+	fr := self ownerOrYourselfThatIsAPhratchFrameMorph.
 	fr
 		ifNil: [^ nil]
 		ifNotNil: [fr presentHelpScreen: self helpScreenName].

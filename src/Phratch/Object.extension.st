@@ -235,6 +235,12 @@ Object >> isPhratchCommentMorph [
 ]
 
 { #category : #'*Phratch-Extensions' }
+Object >> isPhratchFileChooserDialog [
+
+	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
 Object >> isPhratchFilePicker [
 
 	^ false
@@ -283,9 +289,21 @@ Object >> isPhratchPrompterMorph [
 ]
 
 { #category : #'*Phratch-Extensions' }
+Object >> isPhratchScriptEditorMorph [
+
+	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
 Object >> isPhratchScriptsMorph [
 
 	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
+Object >> isPhratchSpriteLibraryMorph [
+
+	^false
 ]
 
 { #category : #'*Phratch-Extensions' }
@@ -409,6 +427,12 @@ Object >> isVariableFrame [
 
 { #category : #'*Phratch-Extensions' }
 Object >> isWatcherMorph [
+
+	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
+Object >> isWatcherReadoutFrameMorph [
 
 	^ false
 ]

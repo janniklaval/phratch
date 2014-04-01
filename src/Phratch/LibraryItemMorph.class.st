@@ -93,9 +93,9 @@ LibraryItemMorph >> childrenMenu [
 	"Present the children menu on a sprite icon"
 
 	| menu library frame |
-	library := self ownerOrYourselfThatIsA: PhratchLibraryMorph.
+	library := self ownerOrYourselfThatIsAPhratchLibraryMorph.
 	library ifNil: [^ self].
-	frame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
+	frame := self ownerOrYourselfThatIsAPhratchFrameMorph.
 	frame ifNil: [^ self].
 
 	menu := MenuMorphNG new defaultTarget: self.
@@ -225,8 +225,8 @@ LibraryItemMorph >> justDroppedInto: aMorph event: evt [
 	^ self.
 
 	"delete me when dropped on the blocks palette or the script editor"
-	"(((aMorph ownerOrYourselfThatIsA: PhratchViewerMorph) notNil) 
-		or: [(aMorph ownerOrYourselfThatIsA: PhratchScriptEditorMorph) notNil]) ifTrue: [
+	"(((aMorph ownerOrYourselfThatIsAPhratchViewerMorph) notNil) 
+		or: [(aMorph ownerOrYourselfThatIsAPhratchScriptEditorMorph) notNil]) ifTrue: [
 		^ self target undoableDeleteSprite]."
 
 	"blocks cannot be dropped onto the stage"
@@ -268,7 +268,7 @@ LibraryItemMorph >> mouseDown: evt [
 			ifFalse:	[
 				target closeBlockEditor.
 				self select.
-				frame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
+				frame := self ownerOrYourselfThatIsAPhratchFrameMorph.
 				"Set the viewerPane target to my target so I stay highlighted while I am being dragged. This is sort of a hack because my target is not actually being viewed until the mouseUp: command is called."
 				frame viewerPane target: self target.
 				evt hand waitForClicksOrDrag: self event: evt]].
@@ -324,7 +324,7 @@ LibraryItemMorph >> mouseUp: evt [
 	"View my target if it is not already beeing viewed."
 
 	| frame |
-	frame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
+	frame := self ownerOrYourselfThatIsAPhratchFrameMorph.
 	frame ifNil: [^ self].
 	self target ifNil: [^ self]. "deleted"
 
@@ -374,7 +374,7 @@ LibraryItemMorph >> rightButtonMenu [
 { #category : #'event handling' }
 LibraryItemMorph >> select [
 
-	(self ownerOrYourselfThatIsA: PhratchLibraryMorph) unhighlightAll. "unhighlight others"
+	(self ownerOrYourselfThatIsAPhratchLibraryMorph) unhighlightAll. "unhighlight others"
 	self highlight: true.
 	World displayWorldSafely. "force immediate feedback"
 
@@ -385,9 +385,9 @@ LibraryItemMorph >> stageMenu [
 	"Present the right button menu on the stage icon"
 
 	| menu library frame |
-	library := self ownerOrYourselfThatIsA: PhratchLibraryMorph.
+	library := self ownerOrYourselfThatIsAPhratchLibraryMorph.
 	library ifNil: [^ self].
-	frame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
+	frame := self ownerOrYourselfThatIsAPhratchFrameMorph.
 	frame ifNil: [^ self].
 
 	menu := MenuMorphNG  new defaultTarget: self.
@@ -407,7 +407,7 @@ LibraryItemMorph >> startDrag: evt [
 
 	(self target isPhratchStageMorph) ifTrue: [^ self]. "cannot drag stage thumbnail"
 
-	(self ownerOrYourselfThatIsA: PhratchLibraryMorph)
+	(self ownerOrYourselfThatIsAPhratchLibraryMorph)
 		ifNil: [evt hand grabMorph: self]
 		ifNotNil: [evt hand attachMorph: self fullCopy].
 
@@ -419,7 +419,7 @@ LibraryItemMorph >> step [
 
 	| changeTime stage frame |
 	target ifNil: [
-		(frame := (self ownerOrYourselfThatIsA: PhratchFrameMorph)) ifNotNil: [
+		(frame := (self ownerOrYourselfThatIsAPhratchFrameMorph)) ifNotNil: [
 			(stage := frame workPane) ifNotNil: [
 				stage updateSpritesList]].
 		^ self].

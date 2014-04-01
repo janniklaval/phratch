@@ -272,10 +272,10 @@ PhratchCommentMorph >> justDroppedInto: newOwner event: evt [
 	"Handle being dropped into a new situation."
 
 	| frame target |
-	(frame := newOwner ownerOrYourselfThatIsA: PhratchFrameMorph)
+	(frame := newOwner ownerOrYourselfThatIsAPhratchFrameMorph)
 		ifNotNil: [frame projectModified].
 
-	((self ownerOrYourselfThatIsA: PhratchViewerMorph) notNil) ifTrue: [
+	((self ownerOrYourselfThatIsAPhratchViewerMorph) notNil) ifTrue: [
 		"delete myself when dropped in the blocks palette area"
 		self delete.
 		^ self].
@@ -425,7 +425,7 @@ PhratchCommentMorph >> slideBackToFormerSituation: evt [
 	(o := evt hand formerOwner) ifNil: [^ self].
 	(o isBlockMorph) ifTrue: [
 		wasEmbedded := true.
-		(pane := o ownerOrYourselfThatIsA: PhratchScriptsMorph) ifNotNil: [
+		(pane := o ownerOrYourselfThatIsAPhratchScriptsMorph) ifNotNil: [
 			o := pane]].
 
 	"restore the old position relative to the old owner,
@@ -443,7 +443,7 @@ PhratchCommentMorph >> slideBackToFormerSituation: evt [
 
 	"scroll the dropped morph into view in case the owner has been
 	scrolled in the meantime"
-	s := o ownerOrYourselfThatIsA: ScrollFrameMorph.
+	s := o ownerOrYourselfThatIsAScrollFrameMorph.
 	s ifNotNil: [s scrollMorphIntoView: self ]
 
 ]

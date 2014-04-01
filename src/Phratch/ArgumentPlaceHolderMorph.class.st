@@ -203,9 +203,9 @@ ArgumentPlaceHolderMorph >> mouseLeaveDragging: evt [
 ArgumentPlaceHolderMorph >> template [
 
 	| template |
-	template := self ownerOrYourselfThatIsA: CustomCommandBlockMorph.
+	template := self ownerOrYourselfThatIsACustomCommandBlockMorph.
 	template ifNil: [
-		template := self ownerOrYourselfThatIsA: CustomReporterBlockMorph].
+		template := self ownerOrYourselfThatIsACustomReporterBlockMorph].
 	^ template 
 
 ]

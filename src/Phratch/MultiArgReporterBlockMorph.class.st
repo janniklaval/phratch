@@ -121,7 +121,7 @@ MultiArgReporterBlockMorph >> evaluate [
 	"Evalue this block with the given argument list."
 
 	self start.
-	phratchProc stepUntilDoneFor: (receiver ownerOrYourselfThatIsA: PhratchStageMorph).
+	phratchProc stepUntilDoneFor: (receiver ownerOrYourselfThatIsAPhratchStageMorph).
 	^phratchProc answer	
 ]
 
@@ -130,7 +130,7 @@ MultiArgReporterBlockMorph >> evaluateWithArgs: rawArgs [
 	"Evalue this block with the given argument list."
 
 	self start.
-	phratchProc stepUntilDoneFor: (receiver ownerOrYourselfThatIsA: PhratchStageMorph).
+	phratchProc stepUntilDoneFor: (receiver ownerOrYourselfThatIsAPhratchStageMorph).
 	^phratchProc answer	
 ]
 
@@ -259,8 +259,8 @@ MultiArgReporterBlockMorph >> fixBlockLayoutWrap [
 					(m isMultiArgMorph)
 						ifTrue: [ m loopsWidth: self bodyRight - self bodyLeft ] ] ]
 		ifFalse: [ self extent: w @ h ].
-	(self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph)
-		ifNotNil: [ (self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph) fixLayout ]
+	(self ownerOrYourselfThatIsAPhratchBlockPaletteMorph)
+		ifNotNil: [ (self ownerOrYourselfThatIsAPhratchBlockPaletteMorph) fixLayout ]
 ]
 
 { #category : #accessing }
@@ -320,7 +320,7 @@ MultiArgReporterBlockMorph >> showValue [
 	gotError := false.
 	[ 
 	self start.
-	phratchProc stepUntilDoneFor: (receiver ownerOrYourselfThatIsA: PhratchStageMorph).
+	phratchProc stepUntilDoneFor: (receiver ownerOrYourselfThatIsAPhratchStageMorph).
 	msg := phratchProc answer ]
 		ifError: [ 
 			gotError := true.

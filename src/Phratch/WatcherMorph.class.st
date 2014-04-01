@@ -388,7 +388,7 @@ WatcherMorph >> replaceArgIn: aString with: arg [
 WatcherMorph >> rightButtonMenu [
 
 	| menu hasSlider |
-	(self ownerOrYourselfThatIsA: PhratchStageMorph) ifNil: [^ self].
+	(self ownerOrYourselfThatIsAPhratchStageMorph) ifNil: [^ self].
 
 	menu := MenuMorph new defaultTarget: self.
 	hasSlider := self isVariableWatcher and: [phratchSlider notNil].
@@ -639,7 +639,7 @@ WatcherMorph >> updateTargetName [
 	"Check if I should display my target's name."
 
 	| targetName |
-	(self ownerOrYourselfThatIsA: HandMorph) ifNotNil: [^ self].  "do nothing when in a HandMorph"
+	(self ownerOrYourselfThatIsAHandMorph) ifNotNil: [^ self].  "do nothing when in a HandMorph"
 	isLarge ifTrue: [^ self].  "don't show target or var name if large readout showing"
 
 	targetName := readout target objName.

@@ -143,7 +143,7 @@ WatcherSliderMorph >> updateSliderPosition [
 
 	| watcher val |
 	self target ifNil: [^ self].
-	(watcher := self ownerOrYourselfThatIsA: WatcherMorph) ifNil: [^ self].
+	(watcher := self ownerOrYourselfThatIsAWatcherMorph) ifNil: [^ self].
 
 	val := self target getVar: watcher getVariable.
 	val ifNil: [^ self].  "can happen when variable has been deleted"

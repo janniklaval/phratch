@@ -433,7 +433,7 @@ PhratchProcess >> doApplyEval [
 
 	(block selector beginsWith: 'doFork')
 		ifTrue: [
-			stage := block receiver ownerOrYourselfThatIsA: PhratchStageMorph.
+			stage := block receiver ownerOrYourselfThatIsAPhratchStageMorph.
 			"self popStackFrame."
 			stage startProcessForSequence: scriptList]
 		ifFalse: [
@@ -500,7 +500,7 @@ PhratchProcess >> doBroadcastAndWait [
 				blockVarList ifNotNil: [blockVarList isEmpty ifFalse: [
 					vars := blockVarList last.
 					eventName := (vars getVar: arg variable) asString ]]].
-			stage := block receiver ownerOrYourselfThatIsA: PhratchStageMorph.
+			stage := block receiver ownerOrYourselfThatIsAPhratchStageMorph.
 			procs := stage broadcastEventNamed: eventName with: 0]
 		ifFalse: [
 			procs := args first].

@@ -430,9 +430,9 @@ CustomCommandBlockMorph >> privateSetUserSpec: aString [
 CustomCommandBlockMorph >> remove [
 	|nb sm|
 	nb := self nextBlock.
-	(self ownerOrYourselfThatIsA: BlockEditorFrameMorph) isNil
+	(self ownerOrYourselfThatIsABlockEditorFrameMorph) isNil
 		ifTrue: [
-			sm := self ownerOrYourselfThatIsA: PhratchScriptsMorph.
+			sm := self ownerOrYourselfThatIsAPhratchScriptsMorph.
 			(nb notNil & sm notNil) ifTrue: [sm addMorph: nb]]
 		ifFalse: [
 			sm := self owner.
@@ -665,7 +665,7 @@ CustomCommandBlockMorph >> updateSpecWithDnDSpec [
 	5. 	update every instance of the definition if it is global
 	6.	update the definition's userSpec -> update every instance of the definition"
 
-	stage := receiver ownerOrYourselfThatIsA: PhratchStageMorph.
+	stage := receiver ownerOrYourselfThatIsAPhratchStageMorph.
 
 	def isGlobal not | stage isNil
 		ifTrue: [
@@ -694,7 +694,7 @@ CustomCommandBlockMorph >> updateSpecWithDnDSpec [
 
 	"7.	update the Block Editor"
 
-	be := self ownerOrYourselfThatIsA: BlockEditorFrameMorph.
+	be := self ownerOrYourselfThatIsABlockEditorFrameMorph.
 
 	be definition
 		declarations: types copy;
@@ -709,7 +709,7 @@ CustomCommandBlockMorph >> updateSpecWithDnDSpec [
 
 	"8.	update the Phratch Window"
 
-	sf := receiver ownerOrYourselfThatIsA: PhratchFrameMorph.
+	sf := receiver ownerOrYourselfThatIsAPhratchFrameMorph.
 	sf viewerPane categoryChanged: 'variables'.
 	#none = def category ifFalse: [
 		sf viewerPane categoryChanged: def category asString ]

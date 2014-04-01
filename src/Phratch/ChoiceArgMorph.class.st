@@ -57,7 +57,7 @@ ChoiceArgMorph >> choice: aSymbol [
 	"Update the toggle button when an argument is changed within a block."
 
 	| frame palette block doLocalization label |
-	frame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
+	frame := self ownerOrYourselfThatIsAPhratchFrameMorph.
 	((#soundNames = getOptionsSelector) and:
 	 [aSymbol = ('record' localized, '...')]) ifTrue: [
 		frame ifNotNil: [^ frame newSound]].
@@ -94,8 +94,8 @@ ChoiceArgMorph >> choice: aSymbol [
 		(owner respondsTo: #adjustInputParadigm:) ifTrue: [
 			owner adjustInputParadigm: choice localized]]. 
 
-	(palette := self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph) ifNil: [^ self].
-	(block := self ownerOrYourselfThatIsA: BlockMorph) ifNil: [^ self].
+	(palette := self ownerOrYourselfThatIsAPhratchBlockPaletteMorph) ifNil: [^ self].
+	(block := self ownerOrYourselfThatIsABlockMorph) ifNil: [^ self].
 
 	block isReporter ifTrue: [palette updateWatcherButtonsForFrame: frame].
 

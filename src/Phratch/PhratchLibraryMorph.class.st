@@ -57,7 +57,7 @@ PhratchLibraryMorph >> buildPanes [
 		position: self position;
 		yourself.
 	spriteLabel := self buildSpriteLabel.
-	buttonPane := self makeNewSpriteButtons: (self ownerOrYourselfThatIsA: PhratchFrameMorph).
+	buttonPane := self makeNewSpriteButtons: (self ownerOrYourselfThatIsAPhratchFrameMorph).
 
 	self addMorph: spritePane.
 	self addMorph: spriteLabel.
@@ -90,7 +90,7 @@ PhratchLibraryMorph >> clearLibrary [
 	spriteLabel delete.
 	spriteLabel := self buildSpriteLabel.
 
-	sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
+	sFrame := self ownerOrYourselfThatIsAPhratchFrameMorph.
 	(sFrame isNil or:
 	 [sFrame viewMode = #normal]) ifTrue: [
 		self addMorph: spriteLabel].
@@ -112,7 +112,7 @@ PhratchLibraryMorph >> doesNotUnderstand: aMessage [
 		tn target objName = aMessage selector] ifNone: [nil].
 	sel ifNil: [	^ super doesNotUnderstand: aMessage].
 
-	frame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
+	frame := self ownerOrYourselfThatIsAPhratchFrameMorph.
 	frame ifNil: [^ self].
 
 	sel select.
@@ -168,7 +168,7 @@ PhratchLibraryMorph >> fixLayout [
 	spritePane width: self width.
 	spritePane height: topSectionHeight.
 	spriteLabel position: (self left + 15) @ (self top + (topSectionHeight // 2) - (spriteLabel height // 2) + 3).
-	sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
+	sFrame := self ownerOrYourselfThatIsAPhratchFrameMorph.
 	(sFrame isNil or: [ sFrame viewMode = #normal ])
 		ifTrue: [ buttonPane position: (spriteLabel right + 10) @ (self top + (topSectionHeight // 2) - (buttonPane height // 2) + 3) ]
 		ifFalse: [ buttonPane position: (self left + 12) @ (self top + (topSectionHeight // 2) - (buttonPane height // 2) + 3) ].
@@ -271,7 +271,7 @@ PhratchLibraryMorph >> step [
 
 	| sFrame workPane morphsWithThumbnails doLayout workPaneObjects |
 	
-	(sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNil: [^ self].
+	(sFrame := self ownerOrYourselfThatIsAPhratchFrameMorph) ifNil: [^ self].
 	sFrame paintingInProgress
 		ifTrue: [^ self]
 		ifFalse: [scrollPane owner ifNil: [self addMorph: scrollPane]].
@@ -331,7 +331,7 @@ PhratchLibraryMorph >> unhighlightAll [
 PhratchLibraryMorph >> updateHighlight [
 
 	| sFrame viewedObj |
-	(sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNil: [^ self].
+	(sFrame := self ownerOrYourselfThatIsAPhratchFrameMorph) ifNil: [^ self].
 	viewedObj := sFrame viewerPane target.
 
 	scrollPane contents submorphs do: [:m | 

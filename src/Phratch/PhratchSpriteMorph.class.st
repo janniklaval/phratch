@@ -354,7 +354,7 @@ PhratchSpriteMorph >> children [
 { #category : #'byob OOP' }
 PhratchSpriteMorph >> choosePrototype [
 	| stage choice |
-	stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
+	stage := self ownerOrYourselfThatIsAPhratchStageMorph.
 	stage ifNil: [^ self].
 	choice := stage userSelectSpriteDefault: prototype butNotAnyOf: {self. prototype}.
 	choice ifNil: [^ self].
@@ -368,7 +368,7 @@ PhratchSpriteMorph >> clearPenTrails [
 	"Clear the pen trails layer."
 	<phratchItem: 'clear pen trails' kind: #- category: 'pen' defaultValues: #() subCategory: #a5 special: #()>
 	| m |
-	(m := self ownerOrYourselfThatIsA: PhratchStageMorph)
+	(m := self ownerOrYourselfThatIsAPhratchStageMorph)
 		ifNotNil: [m clearPenTrails].
 
 ]
@@ -643,7 +643,7 @@ PhratchSpriteMorph >> feedbackMorph [
 		combinationRule: Form paint;
 		copyQuad: outline1 boundingBox innerCorners toRect: (outline2 boundingBox insetBy: 3).
 
-	stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
+	stage := self ownerOrYourselfThatIsAPhratchStageMorph.
 	(stage notNil and: [stage isQuarterSize]) ifTrue: [
 		outline2 := outline2 magnifyBy: 0.5.
 		realPos := stage position + (self position - stage position / 2).
@@ -1224,7 +1224,7 @@ PhratchSpriteMorph >> passivePenDown: aBoolean [
 	penColor ifNil: [penColor := Color black].  "initialize if necessary"
 	penSize ifNil: [penSize := 1].  "initialize if necessary"
 
-	(m := self ownerOrYourselfThatIsA: PhratchStageMorph)
+	(m := self ownerOrYourselfThatIsAPhratchStageMorph)
 		ifNotNil: [m penUpOrDownChangeFor: self].
 
 	self propagate: #penDown
@@ -1252,7 +1252,7 @@ PhratchSpriteMorph >> passiveRotationStyle: aNumber [
 	rotationStyle := #(none normal leftRight) at: aNumber asNumberNoError rounded + 1 ifAbsent: [#normal].
 	self costumeChanged.
 	self positionTalkBubble.
-	se := blocksBin ownerOrYourselfThatIsA: PhratchScriptEditorMorph.
+	se := blocksBin ownerOrYourselfThatIsAPhratchScriptEditorMorph.
 	se ifNil: [^ self].
 	se updateRotationButtonHighlight.
 	se animateRotationStyle.
@@ -1266,7 +1266,7 @@ PhratchSpriteMorph >> passiveSetDraggable: aBoolean [
 
 	| se |
 	draggable := aBoolean.
-	se := blocksBin ownerOrYourselfThatIsA: PhratchScriptEditorMorph.
+	se := blocksBin ownerOrYourselfThatIsAPhratchScriptEditorMorph.
 	se ifNil: [^ self].
 	se updateLockButton
 
@@ -1552,7 +1552,7 @@ PhratchSpriteMorph >> positionTalkBubble [
 
 	| bubble stage stageBounds y f r yInset strip x |
 	(bubble := self valueOfProperty: #talkBubble) ifNil: [^ self].
-	(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNil: [^ self].
+	(stage := self ownerOrYourselfThatIsAPhratchStageMorph) ifNil: [^ self].
 	stageBounds := stage bounds.
 
 	f := self imageForm.
@@ -1626,7 +1626,7 @@ PhratchSpriteMorph >> prototype: aSprite [
 		undeleteAllAttributes;
 		undeleteAllVariables;
 		undeleteAllBlocks.
-	(sFrame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNil: [^ self].
+	(sFrame := self ownerOrYourselfThatIsAPhratchFrameMorph) ifNil: [^ self].
 	sFrame viewerPane categoryChanged: sFrame viewerPane currentCategory.
 	self inheritCostumesNow.
 	self inheritSoundsNow
@@ -2076,9 +2076,9 @@ PhratchSpriteMorph >> spawn [
 	<phratchItem: 'duplicate' kind: #ReporterBlockMorph category: 'operators' defaultValues: #() subCategory: #b3 special: #()>
 	| stage child |
 "
-	(frame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNil: [^ nil].
+	(frame := self ownerOrYourselfThatIsAPhratchFrameMorph) ifNil: [^ nil].
 "
-	stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
+	stage := self ownerOrYourselfThatIsAPhratchStageMorph.
 	stage ifNil: [^ self].
 	child := self fullCopy.
 	child blocksBin allMorphsDo: [:m |
@@ -2137,7 +2137,7 @@ PhratchSpriteMorph >> stampCostume [
 	<phratchItem: 'stamp' kind: #- category: 'pen' defaultValues: #() subCategory: #a4 special: #()>
 	| m |
 	self step.  "update costume if necessary"
-	(m := self ownerOrYourselfThatIsA: PhratchStageMorph)
+	(m := self ownerOrYourselfThatIsAPhratchStageMorph)
 		ifNotNil: [m stampCostume: self].
 
 ]
@@ -2221,7 +2221,7 @@ PhratchSpriteMorph >> touching: anObject [
 	aSpriteOrSymbol := self coerceSpriteArg: anObject.
 
 	aSpriteOrSymbol = #mouse ifTrue: [
-		(stage := self ownerOrYourselfThatIsA: PhratchStageMorph) ifNil: [^ false].
+		(stage := self ownerOrYourselfThatIsAPhratchStageMorph) ifNil: [^ false].
 		result := self containsPoint: stage adjustedCursorPoint.
 			result ifTrue: [^true].
 	^(subsprites collect: [:sub | sub touching: anObject ]) includes: true ].

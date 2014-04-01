@@ -181,8 +181,8 @@ SpriteArgMorph >> presentMenu [
 
 	| frame sel objList menu choice be |
 
-	(frame := self ownerOrYourselfThatIsA: PhratchFrameMorph) ifNil: [
-		be := self ownerOrYourselfThatIsA: BlockEditorFrameMorph.
+	(frame := self ownerOrYourselfThatIsAPhratchFrameMorph) ifNil: [
+		be := self ownerOrYourselfThatIsABlockEditorFrameMorph.
 		be ifNil: [^self].
 		(frame := be phratchFrame) ifNil: [^ self]].
 
@@ -312,8 +312,8 @@ SpriteArgMorph >> updateLabel [
 	menuIconMorph position: (self right - borderWidth - 10) @ (self top + borderWidth + 4).
 	(self owner isBlockMorph)
 		ifTrue: [ self owner addLabel ].
-	(self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph)
-		ifNotNil: [ (self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph) fixLayout ]
+	(self ownerOrYourselfThatIsAPhratchBlockPaletteMorph)
+		ifNotNil: [ (self ownerOrYourselfThatIsAPhratchBlockPaletteMorph) fixLayout ]
 ]
 
 { #category : #copy }

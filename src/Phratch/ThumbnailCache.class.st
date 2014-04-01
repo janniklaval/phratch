@@ -85,8 +85,8 @@ ThumbnailCache >> thumbnailFromImageData: aByteArray [
 ThumbnailCache >> updateThumbnails [
 	"Update my dictionary by creating thumbnails for all the image files in my directory. If updates were needed, try to save save the thumbnails cache."
 
-	| didRemove fList n thumb buf fSize |
-	didRemove := self removeObsoleteEntries.
+	|  fList n thumb buf fSize |
+	self removeObsoleteEntries.
 	fList := self filesToUpdate.
 	fList size > 0
 		ifFalse: [ ^ self ].

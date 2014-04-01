@@ -31,7 +31,7 @@ PhratchCategoryMotion class >> viewerPageFor: aScriptablePhratchMorph [
 			]
 		ifFalse: [
 			isStage := false.
-			aScriptablePhratchMorph ownerOrYourselfThatIsA: PhratchStageMorph.
+			aScriptablePhratchMorph ownerOrYourselfThatIsAPhratchStageMorph.
 			].
 
 	(isStage) ifTrue: [
