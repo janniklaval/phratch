@@ -302,7 +302,7 @@ image in end-user (fillScreen) mode?') ifFalse: [^ self].
 PhratchInstaller class >> saveImageForEndUserSilently [
 
 	| frame |
-	frame := PhratchFrameMorph new.
+	frame := PhratchFrameMorph open.
 	self prepareImageForEndUserSilently: frame.
 	Smalltalk snapshot: true andQuit: true.
 	frame startup.
