@@ -38,7 +38,9 @@ Class {
 		'lastViewMode',
 		'viewModeButtonsPanel',
 		'toolbarPanel',
-		'quitFlag'
+		'quitFlag',
+		'currentProcessToRun',
+		'previousProcessToRun'
 	],
 	#classVars : [
 		'AllowSharing',
@@ -1211,7 +1213,6 @@ PhratchFrameMorph >> deletingWatcher [
 PhratchFrameMorph >> drawOn: aCanvas [
 	"Optimization: Don't draw myself at all since I am completely tiled."
 
-
 ]
 
 { #category : #byob }
@@ -1412,7 +1413,7 @@ PhratchFrameMorph >> extent: aPoint [
 	"Position all my submorphs whenever I get resized."
 
 	super extent: aPoint.
-	self fixLayout.
+	"self fixLayout."
 
 ]
 
@@ -1546,6 +1547,7 @@ PhratchFrameMorph >> fillScreenOff [
 	UseErrorCatcher := false.
 	ScriptablePhratchMorph noviceMode: false.
 	Paragraph insertionPointColor: (Color r: 0.4 g: 1.0 b: 0.0).
+	self fixLayout.
 
 ]
 
@@ -1569,6 +1571,7 @@ PhratchFrameMorph >> fillScreenOn [
 	ScriptablePhratchMorph noviceMode: true.
 	Paragraph insertionPointColor: (Color r: 0.353 g: 0.607 b: 0.788).
 	self updateProjectName.
+	self fixLayout.
 	self step.
 
 ]
@@ -2643,37 +2646,6 @@ PhratchFrameMorph >> phratchWatchers [
 
 ]
 
-{ #category : #'menu/button actions' }
-PhratchFrameMorph >> prepareImageForEndUserSilently [
-
-"	(self confirm: '
-Close non-Phratch windows and save this
-image in end-user (fillScreen) mode?') ifFalse: [^ self].
-"
-
-	self setLanguage: 'en'.
-
-	self enterNormalMode.
-	self blockContrastStrong.
-	ScriptablePhratchMorph keepOnStage: true.
-	
-	EventHatMorph threadSafeMode: false.
-
-	BlockLabelFragmentDialog isExpanded: false.
-
-	World submorphs do: [:m |
-		(m isKindOf: SystemWindow) ifTrue: [m delete]].
-	self clearStage.
-
-	Display newDepth: 32.
-	self fillScreenOn.
-	World doOneCycleNow.
-	self newPhratchProject.
-	ImageCleaner cleanUpForProduction.
-
-	
-]
-
 { #category : #'falta adaptar' }
 PhratchFrameMorph >> presentHelpScreen: aStringOrNil [
 	"Look for a help screen with the given name in the 'Help' folder. If found, present it to the user."
@@ -3002,19 +2974,6 @@ image in end-user (fillScreen) mode?') ifFalse: [^ self].
 
 ]
 
-{ #category : #'menu/button actions' }
-PhratchFrameMorph >> saveImageForEndUserSilently [
-
-"	(self confirm: '
-Close non-Phratch windows and save this
-image in end-user (fillScreen) mode?') ifFalse: [^ self].
-"
-	self prepareImageForEndUserSilently.
-	Smalltalk snapshot: true andQuit: true.
-	self startup.
-
-]
-
 { #category : #'file read/write' }
 PhratchFrameMorph >> savePhratchProject [
 
@@ -3334,10 +3293,16 @@ PhratchFrameMorph >> step [
 
 	"self updateToolButtons."
 	"self processKeyboardEvents. "
+	
 	workPane stepProcesses.
-	workPane processesToRun size > 0
+	currentProcessToRun := workPane processesToRun size.
+	
+	currentProcessToRun = previousProcessToRun ifFalse:[
+	currentProcessToRun > 0
 		ifTrue: [flagButton on]
-		ifFalse: [flagButton off. self showPause]
+		ifFalse: [flagButton off. self showPause].
+	].		
+	previousProcessToRun := workPane processesToRun size.
 
 ]
 

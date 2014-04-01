@@ -267,3 +267,44 @@ PhratchInstaller class >> pluginsURL [
 								error:
 									'Your operating system is not supported yet by the installer.' ] ] ]
 ]
+
+{ #category : #setting }
+PhratchInstaller class >> prepareImageForEndUserSilently: aFrameMorph [
+
+"	(self confirm: '
+Close non-Phratch windows and save this
+image in end-user (fillScreen) mode?') ifFalse: [^ self].
+"
+	aFrameMorph setLanguage: 'en'.
+
+	aFrameMorph enterNormalMode.
+	aFrameMorph blockContrastStrong.
+	ScriptablePhratchMorph keepOnStage: true.
+	
+	EventHatMorph threadSafeMode: false.
+
+	BlockLabelFragmentDialog isExpanded: false.
+
+	World submorphs do: [:m |
+		(m isKindOf: SystemWindow) ifTrue: [m delete]].
+	aFrameMorph clearStage.
+
+	Display newDepth: 32.
+	aFrameMorph fillScreenOn.
+	World doOneCycleNow.
+	aFrameMorph newPhratchProject.
+	ImageCleaner cleanUpForProduction.
+
+	
+]
+
+{ #category : #setting }
+PhratchInstaller class >> saveImageForEndUserSilently [
+
+	| frame |
+	frame := PhratchFrameMorph new.
+	self prepareImageForEndUserSilently: frame.
+	Smalltalk snapshot: true andQuit: true.
+	frame startup.
+
+]
