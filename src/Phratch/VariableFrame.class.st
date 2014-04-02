@@ -42,7 +42,7 @@ VariableFrame class >> variableBlockColor [
 
 	ScopeContrast
 		ifTrue: [^ (Color brown darker mixed: 0.8 with: Color orange) lighter]
-		ifFalse: [^ ScriptablePhratchMorph blockColorFor: 'variables']
+		ifFalse: [^ PhratchCategory blockColorFor: 'variables']
 	
 
 ]

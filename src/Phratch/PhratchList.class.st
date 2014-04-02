@@ -23,12 +23,6 @@ PhratchList >> clear [
 ]
 
 { #category : #accessing }
-PhratchList >> contents [
-
-	^ self
-]
-
-{ #category : #accessing }
 PhratchList >> contents: anOrderedCollection [
 
 	self removeAll.

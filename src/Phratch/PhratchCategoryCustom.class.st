@@ -20,8 +20,3 @@ PhratchCategoryCustom class >> initialize [
 PhratchCategoryCustom class >> label [
 	^'custom'
 ]
-
-{ #category : #accessing }
-PhratchCategoryCustom class >> order [
-	^0
-]

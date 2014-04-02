@@ -281,7 +281,7 @@ ScrollFrameMorph >> isScrollable [
 	"private - answer true if the receiver is partially hidden and thus can be scrolled"
 
 	^(self findA: PhratchScrollBar) notNil and: [
-		(self ownerThatIsA: OffscreenWorldMorph) isNil ]
+		(self ownerThatIsAOffscreenWorldMorph) isNil ]
 ]
 
 { #category : #geometry }

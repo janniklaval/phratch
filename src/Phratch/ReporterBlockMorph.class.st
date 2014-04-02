@@ -237,8 +237,8 @@ ReporterBlockMorph >> fixBlockLayout [
 	x := x + (isBoolean ifTrue: [1] ifFalse: [-3]).
 
 	self extent: (x + 4) @ h.
-	(self ownerThatIsA: PhratchBlockPaletteMorph) ifNotNil: [
-		(self ownerThatIsA: PhratchBlockPaletteMorph) fixLayout].
+	(self ownerThatIsAPhratchBlockPaletteMorph) ifNotNil: [
+		(self ownerThatIsAPhratchBlockPaletteMorph) fixLayout].
 
 ]
 
@@ -503,7 +503,7 @@ ReporterBlockMorph >> lambdafied [
 
 	| lambda |
 	lambda := (ReporterScriptBlockMorph new
-		color: (ScriptablePhratchMorph blockColorFor: 'operators');
+		color: (PhratchCategory blockColorFor: 'operators');
 		receiver: receiver;
 		isSpecialForm: false;
 		minArgs: 1;

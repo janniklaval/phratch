@@ -15,16 +15,16 @@ UnevaluatedExpressionArgMorph >> evaluate [
 	rcv ifNil: [ rcv := ScriptablePhratchMorph new ].
 	answerBlock := rcv
 		blockFromSpec: (rcv wholeBlockSpecForSelector: #procedure)
-		color: (ScriptablePhratchMorph blockColorFor: 'operators').
+		color: (PhratchCategory blockColorFor: 'operators').
 	answerBlock isAtomic: true.
 	reportBlock := rcv
 		blockFromSpec: (rcv wholeBlockSpecForSelector: #doAnswer)
-		color: (ScriptablePhratchMorph blockColorFor: 'control').
+		color: (PhratchCategory blockColorFor: 'control').
 	(xpr isBoolean)
 		ifTrue: [ 
 			bool := xpr
-				ifTrue: [ rcv blockFromSpec: (rcv wholeBlockSpecForSelector: #getTrue) color: (ScriptablePhratchMorph blockColorFor: 'operators') ]
-				ifFalse: [ rcv blockFromSpec: (rcv wholeBlockSpecForSelector: #getFalse) color: (ScriptablePhratchMorph blockColorFor: 'operators') ].
+				ifTrue: [ rcv blockFromSpec: (rcv wholeBlockSpecForSelector: #getTrue) color: (PhratchCategory blockColorFor: 'operators') ]
+				ifFalse: [ rcv blockFromSpec: (rcv wholeBlockSpecForSelector: #getFalse) color: (PhratchCategory blockColorFor: 'operators') ].
 			reportBlock replaceArgMorph: reportBlock argMorphs first by: bool ]
 		ifFalse: [ reportBlock argMorphs first defaultValue: xpr ].
 	answerBlock attachBlock: reportBlock.

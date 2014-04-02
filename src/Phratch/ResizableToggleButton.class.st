@@ -38,18 +38,6 @@ ResizableToggleButton >> color [
 
 ]
 
-{ #category : #'event handling' }
-ResizableToggleButton >> copyRecordingIn: dict [
-	"Copy frame morphs for all states."
-
-	| result |
-	result := super copyRecordingIn: dict.
-	normal ifNotNil: [result normal: (normal copyRecordingIn: dict)].
-	pressed ifNotNil: [result pressed: (pressed copyRecordingIn: dict)].
-	over ifNotNil: [result over: (over copyRecordingIn: dict)].
-	^ result
-]
-
 { #category : #geometry }
 ResizableToggleButton >> extent: aPoint [
 

@@ -195,7 +195,7 @@ LambdaBlockMorph >> newChangeVarBlock: varName [
 		receiver: initialFrame;	
 		selector: #changeBlockVar:by:;
 		yourself ";
-		color: (ScriptablePhratchMorph blockColorFor: 'variables')".
+		color: (PhratchCategory blockColorFor: 'variables')".
 	block expressionArg stringExpression: '0'.
 	^ block
 
@@ -211,7 +211,7 @@ LambdaBlockMorph >> newSetVarBlock: varName [
 		receiver: initialFrame;	
 		selector: #setBlockVar:to:;
 		yourself  ";
-		color: (ScriptablePhratchMorph blockColorFor: 'variables')".
+		color: (PhratchCategory blockColorFor: 'variables')".
 	block expressionArg stringExpression: '0'.
 	^ block
 
@@ -224,7 +224,7 @@ LambdaBlockMorph >> newVarBlock: varName [
 		isSpecialForm: true;
 		receiver: initialFrame;	
 		selector: #getBlockVar:;
-"		color: (ScriptablePhratchMorph blockColorFor: 'variables');"
+"		color: (PhratchCategory blockColorFor: 'variables');"
 		commandSpec: varName;
 		yourself
 

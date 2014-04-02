@@ -477,7 +477,7 @@ Please report bugs to https://code.google.com/p/phratch/issues/list.
 	dialogBox
 		setBalloonText:
 			(CommandBlockMorph new
-				color: (ScriptablePhratchMorph blockColorFor: 'control');
+				color: (PhratchCategory blockColorFor: 'control');
 				commandSpec: 'B Y $OSReporter$ B';
 		yourself) asLambda displayForm.
 	dialogBox getUserResponse
@@ -1655,15 +1655,6 @@ PhratchFrameMorph >> fixLayout [
 ]
 
 { #category : #private }
-PhratchFrameMorph >> fixNestedBlocks [
-	"Not the best solution, I'm sure, but working"
-
-	viewerPane rebuildCategorySelectors.
-
-	self updatePanes.
-]
-
-{ #category : #private }
 PhratchFrameMorph >> fixProjectTitleMorphLayout [
  
 	| s truncated eWidth w |
@@ -1824,7 +1815,7 @@ PhratchFrameMorph >> htmlDoc [
 							comment ifNil: [ comment := '' ] ifNotNil: [ comment := comment copyFrom: 2 to: comment size - 1 ].
 							PNGReadWriter
 								putForm:
-									(aP methodClass new blockFromSpec: prov color: (aP methodClass blockColorFor: (aP arguments at: 3))) imageForm
+									(aP methodClass new blockFromSpec: prov color: (PhratchCategory blockColorFor: (aP arguments at: 3))) imageForm
 								onFileNamed: (imgDir / (pngName , '.png')) fullName.
 							html
 								nextPutAll:
@@ -1889,7 +1880,7 @@ PhratchFrameMorph >> htmlDocForWebsite [
 							comment ifNil: [ comment := '' ] ifNotNil: [ comment := comment copyFrom: 2 to: comment size - 1 ].
 							PNGReadWriter
 								putForm:
-									(aP methodClass new blockFromSpec: prov color: (aP methodClass blockColorFor: (aP arguments at: 3))) imageForm
+									(aP methodClass new blockFromSpec: prov color: (PhratchCategory blockColorFor: (aP arguments at: 3))) imageForm
 								onFileNamed: (imgDir / (pngName , '.png')) fullName.
 							html
 								nextPutAll:
@@ -2714,28 +2705,6 @@ PhratchFrameMorph >> printTupleList: anArray on: s [
 		self printTupleElement: (anArray at: i)  on: s.
 		i = anArray size ifFalse: [s space]].
 	s nextPut: $).
-
-]
-
-{ #category : #stepping }
-PhratchFrameMorph >> processKeyboardEvents [
-
-	| evt ch |
-	World hands do: [:h |
-		[(evt := h nextUnclaimedKeystrokeOrNil) notNil] whileTrue: [
-			ch := evt keyValue.
-			evt commandKeyPressed ifTrue: [ch := ch \\ 32].	"map cmd/alt keys to control keys"
-			({3 . 13} includes: ch) ifTrue: [^ self pressGreenFlagButton].
-			ch = 15 ifTrue: [^ self openPhratchProject].
-			ch = 17 ifTrue: [^ self quitPhratch].
-			ch = 19 ifTrue: [^ self savePhratchProjectNoDialog].
-			ch = 27 ifTrue: [
-				PhratchFrameMorph takeOverScreen ifTrue: [
-					Display fullScreenMode: false.
-					Display fullScreenMode: true.
-					World restoreDisplay].
-				^ self].
-			workPane broadcastEventNamed: 'Phratch-KeyPressedEvent' with: evt]].
 
 ]
 
@@ -3646,25 +3615,6 @@ PhratchFrameMorph >> updateProjectName [
 		ifFalse: [ 'PHR ' , Version asString ].
 	PhratchPlugin primSetWindowTitle: s.
 	self fixLayout
-]
-
-{ #category : #'falta adaptar' }
-PhratchFrameMorph >> updateToolButtons [
-	"Update the highlighting of my tool buttons."
-
-	| toolButtons currentTool |
-	Sensor anyButtonPressed ifTrue: [^ self].  "don't update if mouse button pressed"
-
-	toolButtons := toolbarPanel submorphs select: [:m |
-		(m isToggleButton) and: [m actionSelector endsWith: 'Tool']].
-
-	currentTool := (World activeHand toolType ifNil: ['none']) asLowercase.
-	toolButtons do: [:b |
-		(b actionSelector asLowercase = currentTool)
-			ifTrue: [b on]
-			ifFalse: [b off]].
-
-
 ]
 
 { #category : #'view mode' }

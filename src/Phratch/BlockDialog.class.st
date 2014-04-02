@@ -258,7 +258,7 @@ BlockDialog >> disableAllButCategoryAndShape [
 BlockDialog >> formTypeCommandOff [
 
 	^ (CommandBlockMorph new 
-			color: ((ScriptablePhratchMorph blockColorFor: category asString) mixed: 0.2 with: Color veryLightGray); 
+			color: ((PhratchCategory blockColorFor: category asString) mixed: 0.2 with: Color veryLightGray); 
 			commandSpec: 'command' localized;
 		yourself) 
 		imageForm.
@@ -269,7 +269,7 @@ BlockDialog >> formTypeCommandOff [
 BlockDialog >> formTypeCommandOn [
 
 	^ (CommandBlockMorph new
-			color: (ScriptablePhratchMorph blockColorFor: category asString); 
+			color: (PhratchCategory blockColorFor: category asString); 
 			commandSpec: 'command' localized;
 		yourself) 
 		imageForm.
@@ -280,7 +280,7 @@ BlockDialog >> formTypeCommandOn [
 BlockDialog >> formTypeCommandOver [
 
 	^ (CommandBlockMorph new 
-			color: ((ScriptablePhratchMorph blockColorFor: category asString) mixed: 0.4 with: Color veryLightGray); 
+			color: ((PhratchCategory blockColorFor: category asString) mixed: 0.4 with: Color veryLightGray); 
 			commandSpec: 'command' localized;
 		yourself) 
 		imageForm.
@@ -292,7 +292,7 @@ BlockDialog >> formTypePredicateOff [
 
 	^ (ReporterBlockMorph new 
 			isBoolean: true; 
-			color: ((ScriptablePhratchMorph blockColorFor: category asString) mixed: 0.2 with: Color veryLightGray); 
+			color: ((PhratchCategory blockColorFor: category asString) mixed: 0.2 with: Color veryLightGray); 
 			commandSpec: 'predicate' localized;
 		yourself) 
 		imageForm.
@@ -304,7 +304,7 @@ BlockDialog >> formTypePredicateOn [
 
 	^ (ReporterBlockMorph new 
 			isBoolean: true; 
-			color: (ScriptablePhratchMorph blockColorFor: category asString); 
+			color: (PhratchCategory blockColorFor: category asString); 
 			commandSpec: 'predicate' localized;
 		yourself) 
 		imageForm.
@@ -316,7 +316,7 @@ BlockDialog >> formTypePredicateOver [
 
 	^ (ReporterBlockMorph new 
 			isBoolean: true; 
-			color: ((ScriptablePhratchMorph blockColorFor: category asString) mixed: 0.4 with: Color veryLightGray); 
+			color: ((PhratchCategory blockColorFor: category asString) mixed: 0.4 with: Color veryLightGray); 
 			commandSpec: 'predicate' localized;
 		yourself) 
 		imageForm.
@@ -326,7 +326,7 @@ BlockDialog >> formTypePredicateOver [
 BlockDialog >> formTypeReporterOff [
 
 	^ (ReporterBlockMorph new 
-			color: ((ScriptablePhratchMorph blockColorFor: category asString) mixed: 0.2 with: Color veryLightGray); 
+			color: ((PhratchCategory blockColorFor: category asString) mixed: 0.2 with: Color veryLightGray); 
 			commandSpec: 'reporter' localized;
 		yourself) 
 		imageForm.
@@ -336,7 +336,7 @@ BlockDialog >> formTypeReporterOff [
 { #category : #private }
 BlockDialog >> formTypeReporterOn [
 
-	^ (ReporterBlockMorph new color: (ScriptablePhratchMorph blockColorFor: category asString); commandSpec: 'reporter' localized;
+	^ (ReporterBlockMorph new color: (PhratchCategory blockColorFor: category asString); commandSpec: 'reporter' localized;
 		yourself) imageForm.
 
 ]
@@ -345,7 +345,7 @@ BlockDialog >> formTypeReporterOn [
 BlockDialog >> formTypeReporterOver [
 
 	^ (ReporterBlockMorph new 
-			color: ((ScriptablePhratchMorph blockColorFor: category asString) mixed: 0.4 with: Color veryLightGray); 
+			color: ((PhratchCategory blockColorFor: category asString) mixed: 0.4 with: Color veryLightGray); 
 			commandSpec: 'reporter' localized;
 		yourself) 
 		imageForm.

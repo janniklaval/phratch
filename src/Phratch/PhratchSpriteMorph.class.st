@@ -378,8 +378,8 @@ PhratchSpriteMorph >> cloneMe [
 	"Clone me without registering me in the environemnt"
 	<phratchItem: 'clone me' kind: #- category: 'control' defaultValues: #() subCategory: #self special: #()>
 	| stage clone |
-	(self ownerThatIsA: OffscreenWorldMorph) ifNotNil: [
-		stage := (self ownerThatIsA: OffscreenWorldMorph) frame workPane.
+	(self ownerThatIsAOffscreenWorldMorph) ifNotNil: [
+		stage := (self ownerThatIsAOffscreenWorldMorph) frame workPane.
 		clone := (self fullCopy).
 		stage addMorphFront: clone.]
 	ifNil: [
@@ -460,22 +460,6 @@ PhratchSpriteMorph >> copyForExport [
 					updateLocalId: eachDef id withSpec: eachDef userSpec]]].
 	objToExport addMorph: super copyForExport.
 	^ objToExport
-
-]
-
-{ #category : #'as yet unclassified' }
-PhratchSpriteMorph >> copyRecordingIn: dict [
-	"Copy my fields and scripts."
-
-	| newCopy  |
-	newCopy := super copyRecordingIn: dict.
-	
-	newCopy refPos: self referencePosition.
-	newCopy privateSubsprites: (self subsprites collect: [:sub |
-			(sub copyRecordingIn: dict)
-				privateOwnerSprite: newCopy ]).
-
-	^ newCopy
 
 ]
 
@@ -1586,18 +1570,6 @@ PhratchSpriteMorph >> prepareForExport [
 
 ]
 
-{ #category : #nesting }
-PhratchSpriteMorph >> privateOwnerSprite: aSprite [
-
-	ownerSprite := aSprite
-]
-
-{ #category : #nesting }
-PhratchSpriteMorph >> privateSubsprites: anOrderedCollection [
-
-	subsprites := anOrderedCollection
-]
-
 { #category : #'blocks API' }
 PhratchSpriteMorph >> procedure [
 	"Return the given script without executing it"
@@ -1675,16 +1647,6 @@ PhratchSpriteMorph >> recordScene: sceneName [
 	state at: #heading put: self heading.
 	sceneStates at: sceneName put: state.
 
-]
-
-{ #category : #nesting }
-PhratchSpriteMorph >> refPos [
-	^refPos
-]
-
-{ #category : #nesting }
-PhratchSpriteMorph >> refPos: aPoint [
-	refPos := aPoint
 ]
 
 { #category : #accessing }

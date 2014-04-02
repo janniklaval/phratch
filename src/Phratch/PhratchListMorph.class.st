@@ -904,12 +904,12 @@ PhratchListMorph >> stepTime [
 PhratchListMorph >> sublistIcon [
 
 	| block slot form halfList big |
-	block := ReporterBlockMorph new color: (ScriptablePhratchMorph blockColorFor: 'list'); commandSpec: '$String$';
+	block := ReporterBlockMorph new color: (PhratchCategory blockColorFor: 'list'); commandSpec: '$String$';
 		yourself.
 	slot := block argMorphs first.
 	slot extent: 7 @ 4.
 	form := slot imageForm.
-	form replaceColor: (form colorAt: 2@2) withColor: (ScriptablePhratchMorph blockColorFor: 'list').
+	form replaceColor: (form colorAt: 2@2) withColor: (PhratchCategory blockColorFor: 'list').
 	halfList := slot extent + 1.
 	big := Form extent: halfList x @ (halfList y * 2) depth: 8.
 	(WarpBlt toForm: big)

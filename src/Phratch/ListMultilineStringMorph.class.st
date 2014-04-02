@@ -143,7 +143,7 @@ ListMultilineStringMorph >> mouseDown: evt [
 	(list := self ownerOrYourselfThatIsAPhratchListMorph)
 		ifNotNil: [list focusCell: owner].
 
-	ownerList := self ownerThatIsA: PhratchListMorph.
+	ownerList := self ownerThatIsAPhratchListMorph.
 	((deleteMorph bounds expandBy: 4) containsPoint: p) ifTrue: [
 		(ownerList notNil) ifTrue: [
 			i := ownerList indexOfCell: self owner. 

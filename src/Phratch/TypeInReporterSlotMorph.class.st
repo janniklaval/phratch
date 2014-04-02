@@ -17,10 +17,10 @@ TypeInReporterSlotMorph >> evaluate [
 	rcv := self receiver.
 	rcv ifNil: [rcv := ScriptablePhratchMorph new].
 	answerBlock := rcv blockFromSpec: (rcv wholeBlockSpecForSelector: #procedure) 
-							color: (ScriptablePhratchMorph blockColorFor: 'operators').
+							color: (PhratchCategory blockColorFor: 'operators').
 	answerBlock isAtomic: true.
 	reportBlock := rcv blockFromSpec: (rcv wholeBlockSpecForSelector: #doAnswer) 
-							color: (ScriptablePhratchMorph blockColorFor: 'control').
+							color: (PhratchCategory blockColorFor: 'control').
 	reportBlock argMorphs first defaultValue: submorphs first evaluate.
 	answerBlock attachBlock: reportBlock.
 	^ answerBlock

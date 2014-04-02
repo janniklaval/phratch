@@ -745,11 +745,11 @@ ScrollingStringMorph >> keyStroke: evt [
 	(ch = 3) & (evt buttons = 0) ifTrue: [ch := 13].	"map enter key to cr"
 
 	ch = 9 ifTrue: [  "tab"
-		(m := self ownerThatIsA: DialogBoxMorph) ifNotNil: [m tabToNextField: evt].
+		(m := self ownerThatIsADialogBoxMorph) ifNotNil: [m tabToNextField: evt].
 		^ self].
 
 	ch = 27 ifTrue: [  "escape key"
-		(m := self ownerThatIsA: DialogBoxMorph) ifNotNil: [m escapeKeyPressed: evt].
+		(m := self ownerThatIsADialogBoxMorph) ifNotNil: [m escapeKeyPressed: evt].
 		^ self].
 
 	evt controlKeyPressed | evt commandKeyPressed ifTrue: [	"ctrl (or alt) is pressed"

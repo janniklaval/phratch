@@ -729,7 +729,7 @@ CustomCommandBlockMorph >> userSpec: aString [
 	isTemplate ifTrue: [self removeVariableTemplates].
 	cat := self category.
 	cat ifNotNil: [
-		self color: (ScriptablePhratchMorph blockColorFor: cat asString) ].
+		self color: (PhratchCategory blockColorFor: cat asString) ].
 	def := receiver definitionFor: self id.
 	def ifNil: [^ self].
 	self commandSpec: def commandSpec.

@@ -59,10 +59,10 @@ ScriptablePhratchMorph class >> blockColorDict [
 
 ]
 
-{ #category : #'block specs' }
+{ #category : #deprecated }
 ScriptablePhratchMorph class >> blockColorFor: aCategory [
 	"Answer the block color for the given category."
-
+	self deprecated: 'use PhratchCategory blockColorFor:'.
 	^(PhratchCategory allSubclasses detect:[:e | e label = aCategory] ifNone: [PhratchCategory]) color.
 
 ]
@@ -439,7 +439,6 @@ ScriptablePhratchMorph >> addCostumeTyped: aString [
 
 	| newC frameForm title result fList type |
 	aString = 'camera' ifTrue: [
-		"newC := ImageMedia new form: (Form extent: (self ownerThatIsA: ScratchStageMorph) extent) fillBlack."
 		
 		self cameraIsOpen ifTrue: [
 			self flag:'this is crappy, but works...'.
@@ -676,7 +675,7 @@ ScriptablePhratchMorph >> addGlobalColor [
 	"Ask the user for a color variable name, then add a background (global) variable of that name."
 
 	| sFrame cName |
-	(sFrame := self ownerThatIsA: PhratchFrameMorph) ifNil: [^ Beeper beep].
+	(sFrame := self ownerThatIsAPhratchFrameMorph) ifNil: [^ Beeper beep].
 
 	cName := StringDialog ask: 'Variable name?'.
 	cName size = 0 ifTrue: [^ self].
@@ -839,7 +838,7 @@ ScriptablePhratchMorph >> addVariable [
 	self addWatcherForNewVariable: varName withScope: varOwner.
 
 	w := sFrame watcherForBlock: (VariableBlockMorph new receiver: self; commandSpec: varName; yourself).
-	w ifNotNil: [w setCategoryColor: (ScriptablePhratchMorph blockColorFor: 'variables')].
+	w ifNotNil: [w setCategoryColor: (PhratchCategory blockColorFor: 'variables')].
 
 
 ]
@@ -1073,8 +1072,8 @@ ScriptablePhratchMorph >> askForFileIO [
 	"Ask the user to either allow or deny file I/O, or return the preference from the sFrame if it exists."
 	
 	| sFrame dialog |
-	(sFrame := self ownerThatIsA: PhratchFrameMorph) ifNil: [
-		sFrame := (self ownerThatIsA: OffscreenWorldMorph) frame].
+	(sFrame := self ownerThatIsAPhratchFrameMorph) ifNil: [
+		sFrame := (self ownerThatIsAOffscreenWorldMorph) frame].
 	ScriptablePhratchMorph fileIOPreference ifNotNil: [^ ScriptablePhratchMorph fileIOPreference].
 	dialog := FileIOAskerDialog new forPhratchFrame: sFrame.
 	^ dialog getUserResponse.
@@ -1114,12 +1113,6 @@ ScriptablePhratchMorph >> blockCategories [
 
 ]
 
-{ #category : #byob }
-ScriptablePhratchMorph >> blockDefinition: anOrderedList [
-	customBlocks := anOrderedList
-
-]
-
 { #category : #'BYOB OOP message passing' }
 ScriptablePhratchMorph >> blockForSelector: aSymbol [
 	"Answer a block for the give selector or nil"
@@ -1131,7 +1124,7 @@ ScriptablePhratchMorph >> blockForSelector: aSymbol [
 			ifTrue: [cat := spec].
 
 		((spec isArray) and: [(spec at: 3) = aSymbol])
-			ifTrue: [^ self blockFromSpec: spec color: (self class blockColorFor: cat)]].
+			ifTrue: [^ self blockFromSpec: spec color: (PhratchCategory blockColorFor: cat)]].
 
 	^ nil
 
@@ -1199,7 +1192,7 @@ ScriptablePhratchMorph >> blocksFor: aCategory [
 	"Answer a collection of blocks for the given category. Mixed with the blocks are dash and tilde symbols (#- and #~) indicating where full and half spaces should be inserted when laying out the blocks."
 
 	| blockColor blocksList category b cdefs inherited all |
-	blockColor := self class blockColorFor: aCategory.
+	blockColor := PhratchCategory blockColorFor: aCategory.
 	blocksList := OrderedCollection new.
 	category := nil.
 	self class blockSpecs do: [:spec |
@@ -1322,7 +1315,7 @@ ScriptablePhratchMorph >> changeVar: varName by: increment [
 					commandSpec: varName; 
 					yourself).
 			w ifNotNil: [
-				w setCategoryColor: (ScriptablePhratchMorph blockColorFor: 'variables') ]].
+				w setCategoryColor: (PhratchCategory blockColorFor: 'variables') ]].
 		^ self].
 
 	n := vars at: varName asString ifAbsent: [^ self].
@@ -1461,10 +1454,10 @@ ScriptablePhratchMorph >> colorAtX: x y: y [
 	<phratchItem: 'color of pixel x: $Number$ y: $Number$' kind: #ColorBlockMorph category: 'colors' defaultValues: #(0 0) subCategory:
 		#a3 special: #()>
 	| frame w newX newY p |
-	frame := self ownerThatIsA: PhratchFrameMorph.
+	frame := self ownerThatIsAPhratchFrameMorph.
 	frame
 		ifNil: [ 
-			(w := self ownerThatIsA: OffscreenWorldMorph) ifNil: [ ^ self ].
+			(w := self ownerThatIsAOffscreenWorldMorph) ifNil: [ ^ self ].
 			frame := w frame ].
 	newX := x.
 	newX isNaN
@@ -1572,7 +1565,7 @@ ScriptablePhratchMorph >> colorsMenu [
 	"Ask the user which user variable to show, then show it."
 
 	| sFrame stage menu  |
-	sFrame := self ownerThatIsA: PhratchFrameMorph.
+	sFrame := self ownerThatIsAPhratchFrameMorph.
 	sFrame ifNil: [^ self].
 
 	stage := sFrame workPane.
@@ -1644,22 +1637,6 @@ ScriptablePhratchMorph >> contentsOfList: listName [
 
 ]
 
-{ #category : #byob }
-ScriptablePhratchMorph >> copyBlockDefinitionsFor: aSprite [
-	"Answer a deep copy of my custom block definition list"
-
-	|result|
-	result := customBlocks deepCopy.
-	result ifNil: [^nil].
-	result do: [:def|
-	 def body ifNotNil: [
-			def body allMorphs do: [:m|
-				((m isBlockMorph) and: [
-				m receiver = self]) ifTrue: [m receiver: aSprite]]]].
-	^ result
-
-]
-
 { #category : #private }
 ScriptablePhratchMorph >> copyForExport [
 	"Answer a copy of me for exporting."
@@ -1672,52 +1649,12 @@ ScriptablePhratchMorph >> copyForExport [
 
 ]
 
-{ #category : #private }
-ScriptablePhratchMorph >> copyListsFor: aSprite [
-	"Answer a deep copy of my list variables dictionary."
-
-	| result oldList copiedList |
-	result := lists species new.
-	lists associationsDo: [:assoc |
-		oldList := assoc value.
-		copiedList := PhratchListMorph new
-			listName: oldList listName target: aSprite;
-			newContents: oldList listContents;
-		yourself.
-		result at: assoc key put: copiedList].
-	^ result
-
-
-]
-
 { #category : #byob }
 ScriptablePhratchMorph >> copyOfList: aList [
 	"Return a copy of the given list"
 	<phratchItem: 'copy of $SAList$' kind: #ReporterBlockMorph category: 'list' defaultValues: #() subCategory: #a7 special: #()>
 	aList ifNil: [^ PhratchListMorph on: #()].
 	^ PhratchListMorph on: aList asArray
-
-]
-
-{ #category : #private }
-ScriptablePhratchMorph >> copyRecordingIn: dict [
-	"Copy my fields and scripts."
-
-	| newCopy newBlocksBin |
-	(self respondsTo: #sayNothing) ifTrue: [self sayNothing].  "remove talk bubble before copying"
-	newCopy := super copyRecordingIn: dict.
-	newCopy renewFilterPack.
-	newBlocksBin := blocksBin fullCopy.
-	newBlocksBin allMorphsDo: [:m |
-		(m isHatBlockMorph) ifTrue: [m scriptOwner: newCopy].
-		(m isCommandBlockMorph) ifTrue: [m mapReceiver: self to: newCopy]].
-	newCopy vars: vars copy lists: (self copyListsFor: newCopy) blocksBin: newBlocksBin.
-	newCopy blockDefinition: (self copyBlockDefinitionsFor: newCopy).
-	newCopy objName: self nextInstanceName.
-	newCopy setMedia: (media collect: [:el | el copy]).
-	newCopy lookLike: costume mediaName.
-
-	^ newCopy
 
 ]
 
@@ -2408,7 +2345,7 @@ ScriptablePhratchMorph >> deleteVariable: varName [
 	vars removeKey: varName asString ifAbsent: [^ self].
 	frame viewerPane categoryChanged: 'variables'.
 	w := frame watcherForBlock: (VariableBlockMorph new receiver: self; commandSpec: varName; yourself).
-	w ifNotNil: [w setCategoryColor: (ScriptablePhratchMorph blockColorFor: 'variables') twiceLighter].
+	w ifNotNil: [w setCategoryColor: (PhratchCategory blockColorFor: 'variables') twiceLighter].
 	self isClone: false.
 
 ]
@@ -2733,7 +2670,7 @@ ScriptablePhratchMorph >> editDrawingOldCostumeName: oldCostumeName deleteOnCanc
 
 	| sFrame paintEditor |
 	costume isMovie ifTrue: [^ Beeper beep].
-	(sFrame := self ownerThatIsA: PhratchFrameMorph) ifNil: [(sFrame := (self ownerThatIsA: OffscreenWorldMorph) frame) ifNil: [^ self]].
+	(sFrame := self ownerThatIsAPhratchFrameMorph) ifNil: [(sFrame := (self ownerThatIsAOffscreenWorldMorph) frame) ifNil: [^ self]].
 
 	sFrame paintingInProgress ifTrue: [^ Beeper beep].
 	"sFrame stopAll."
@@ -2988,7 +2925,7 @@ ScriptablePhratchMorph >> eventReceivedNamed: eventName [
 	"Collect an array of all stacks that respond to the given event and keep only the ones that are running. Answer true if the final list has any items."
 	<phratchItem: '$Event$ received?' kind: #BooleanBlockMorph category: 'control' defaultValues: #() subCategory: #broadcast special: #()>
 	| targetScripts procs |
-	self isSprite ifTrue: [^ (self ownerThatIsA: PhratchStageMorph) eventReceivedNamed: eventName].
+	self isSprite ifTrue: [^ (self ownerThatIsAPhratchStageMorph) eventReceivedNamed: eventName].
 	targetScripts := self scripts select: [:s |
 		((s class == EventHatMorph) or: [s class == StartEventHatMorph]) and: [s eventName caseInsensitiveEqual: eventName]].
 	targetScripts := targetScripts asOrderedCollection.
@@ -3384,7 +3321,7 @@ ScriptablePhratchMorph >> hideColor [
 	"Ask the user which user variable to hide, then hide it."
 
 	| sFrame stage menu choice |
-	sFrame := self ownerThatIsA: PhratchFrameMorph.
+	sFrame := self ownerThatIsAPhratchFrameMorph.
 	sFrame ifNil: [^ self].
 
 	stage := sFrame workPane.
@@ -4730,7 +4667,7 @@ ScriptablePhratchMorph >> moveVar: aVarName toX: x y: y [
 	| stage |
 	self positionVar: aVarName atX: x y: y.
 
-	stage := self ownerThatIsA: PhratchStageMorph.
+	stage := self ownerThatIsAPhratchStageMorph.
 	stage ~= self ifTrue: [stage positionVar: aVarName atX: x y: y].
 ]
 
@@ -5184,10 +5121,10 @@ ScriptablePhratchMorph >> positionVar: varName atX: x y: y [
 	| frame w b newX newY p |
 	(self varNames includes: varName)
 		ifFalse: [ ^ self ].
-	frame := self ownerThatIsA: PhratchFrameMorph.
+	frame := self ownerThatIsAPhratchFrameMorph.
 	frame
 		ifNil: [ 
-			(w := self ownerThatIsA: OffscreenWorldMorph) ifNil: [ ^ self ].
+			(w := self ownerThatIsAOffscreenWorldMorph) ifNil: [ ^ self ].
 			frame := w frame ].
 	b := VariableBlockMorph new
 		commandSpec: varName;
@@ -5408,7 +5345,7 @@ ScriptablePhratchMorph >> quietCreateListNamed: listName [
 	(self variableNameInUse: listName) ifTrue: [^ self].
 
 	lists at: listName put: (list := PhratchListMorph new listName: listName target: self).
-	(stage := self ownerThatIsA: PhratchStageMorph) ifNotNil: [
+	(stage := self ownerThatIsAPhratchStageMorph) ifNotNil: [
 		n := (stage submorphs select: [:m | m isPhratchListMorph]) size.
 		stage addMorph: (list position: stage topRight - ((list width + 10)@0) + (0@(10+(20*n)))).
 		list startStepping].
@@ -5496,12 +5433,6 @@ ScriptablePhratchMorph >> rejectDropEvent: evt [
 		ifTrue: [ ^ false ]
 ]
 
-{ #category : #accessing }
-ScriptablePhratchMorph >> renewFilterPack [
-
-	filterPack := FilterPack new.
-]
-
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> replaceCostume: aNumber with: aString [
 	
@@ -5511,7 +5442,6 @@ ScriptablePhratchMorph >> replaceCostume: aNumber with: aString [
 	i := ((aNumber rounded - 1) \\ cList size) + 1.
 	name := (cList at: i) mediaName.
 	aString = 'camera' ifTrue: [
-		"newC := ImageMedia new form: (Form extent: (self ownerThatIsA: ScratchStageMorph) extent) fillBlack."
 		"(CameraPlugin openCamera: 1 width: 480 height: 360) ifNotNil: [
 			CameraPlugin waitForCameraStart.
 			(CameraPlugin frameExtent: 1) x = 0 ifFalse: ["
@@ -5556,7 +5486,7 @@ ScriptablePhratchMorph >> reportColor: colorName [
 	| stage |
 	(self colorNames includes: colorName)
 		ifTrue: [^ self getColor: colorName].
-	(stage := self ownerThatIsA: PhratchStageMorph)
+	(stage := self ownerThatIsAPhratchStageMorph)
 		ifNotNil: [^ stage getColor: colorName]
 ]
 
@@ -5567,7 +5497,7 @@ ScriptablePhratchMorph >> reportVar: varName [
 	| stage |
 	(self varNames includes: varName)
 		ifTrue: [^ self getVar: varName].
-	(stage := self ownerThatIsA: PhratchStageMorph)
+	(stage := self ownerThatIsAPhratchStageMorph)
 		ifNotNil: [^ stage getVar: varName]
 
 ]
@@ -5676,7 +5606,7 @@ ScriptablePhratchMorph >> saveProj [
 	"Save the current project"
 	<phratchItem: 'save project' kind: #- category: 'control' defaultValues: #() subCategory: #project special: #()>
 | t1 |
-t1 := self ownerThatIsA: PhratchFrameMorph.
+t1 := self ownerThatIsAPhratchFrameMorph.
 t1 savePhratchProject
 ]
 
@@ -5773,7 +5703,7 @@ ScriptablePhratchMorph >> setColor: colorName to: newValue [
 	| cName stage |
 	cName := colorName asString. "convert Symbol to String if needed"
 	(colors includesKey: cName) ifFalse: [
-		stage := self ownerThatIsA: PhratchStageMorph.
+		stage := self ownerThatIsAPhratchStageMorph.
 		(stage notNil and: [stage ~= self]) ifTrue: [
 			stage setColor: cName to: newValue].
 		^ self].
@@ -5816,9 +5746,9 @@ ScriptablePhratchMorph >> setLayoutOfVar: varName to: aString [
 	<phratchItem: 'set layout of $Variable$ to $LayoutStyles$' kind: #- category: 'variables' defaultValues: #('' '') subCategory: #a5 special: #()>
 	| symbol b w frame stage |
 	symbol := aString asSymbol.
-	frame := self ownerThatIsA: PhratchFrameMorph.
+	frame := self ownerThatIsAPhratchFrameMorph.
 	frame ifNil: [
-		(w := self ownerThatIsA: OffscreenWorldMorph) ifNil: [^ self].
+		(w := self ownerThatIsAOffscreenWorldMorph) ifNil: [^ self].
 		frame := w frame].
 	(self varNames includes: varName) ifFalse: [
 		stage := frame workPane.
@@ -5837,14 +5767,6 @@ ScriptablePhratchMorph >> setLine: lineNum ofList: listName to: anObject [
 	| list |
 	list := self listNamed: listName ifNone: [^ ''].
 	^ list setLineAt: (self lineNum: lineNum forList: list) to: (self asListElement: anObject)
-
-]
-
-{ #category : #media }
-ScriptablePhratchMorph >> setMedia: mediaCollection [
-	"Set my media to the given collection when copying."
-
-	media := mediaCollection.
 
 ]
 
@@ -5887,7 +5809,7 @@ ScriptablePhratchMorph >> setVar: varName to: newValue [
 						commandSpec: varName; 
 						yourself).
 				w ifNotNil: [
-				w setCategoryColor: (ScriptablePhratchMorph blockColorFor: 'variables').
+				w setCategoryColor: (PhratchCategory blockColorFor: 'variables').
 				^ self]].
 			stage := self ownerOrYourselfThatIsAPhratchStageMorph.
 		(stage notNil and: [stage ~= self]) 
@@ -5923,7 +5845,7 @@ ScriptablePhratchMorph >> showColor [
 	"Ask the user which user variable to show, then show it."
 
 	| sFrame stage menu choice |
-	sFrame := self ownerThatIsA: PhratchFrameMorph.
+	sFrame := self ownerThatIsAPhratchFrameMorph.
 	sFrame ifNil: [^ self].
 
 	stage := sFrame workPane.
@@ -5979,12 +5901,12 @@ ScriptablePhratchMorph >> showOrHideColor: varName show: showFlag [
 
 	| frame w b palette |
 	(self colorNames includes: varName) ifFalse: [^ self].
-	frame := self ownerThatIsA: PhratchFrameMorph.
+	frame := self ownerThatIsAPhratchFrameMorph.
 	frame ifNil: [
-		(w := self ownerThatIsA: OffscreenWorldMorph) ifNil: [^ self].
+		(w := self ownerThatIsAOffscreenWorldMorph) ifNil: [^ self].
 		frame := w frame].
 
-	b := (self blockFromSpec: #('$ColorVar$' ColorBlockMorph reportColor: '')  color: (self class blockColorFor: 'colors')) defaultArgs: {varName}.
+	b := (self blockFromSpec: #('$ColorVar$' ColorBlockMorph reportColor: '')  color: (PhratchCategory blockColorFor: 'colors')) defaultArgs: {varName}.
 	w := frame watcherForBlock: b.
 	showFlag
 		ifTrue: [w ifNil: [frame showWatcher: b createWatcher]]
@@ -6000,7 +5922,7 @@ ScriptablePhratchMorph >> showOrHideList: aList show: aBoolean [
 	"Show or hide the given list"
  
 	| list stage sFrame |
-	(stage := self ownerThatIsA: PhratchStageMorph).
+	(stage := self ownerThatIsAPhratchStageMorph).
 	(self listVarNames includes: aList)
 		ifFalse: [stage
 			ifNotNil: [(stage listVarNames includes: aList)
@@ -6011,7 +5933,7 @@ ScriptablePhratchMorph >> showOrHideList: aList show: aBoolean [
 	aBoolean
 		ifTrue: [stage addMorph: list]
 		ifFalse: [list delete].
-	(sFrame := self ownerThatIsA: PhratchFrameMorph) ifNil: [^ self].
+	(sFrame := self ownerThatIsAPhratchFrameMorph) ifNil: [^ self].
 	sFrame viewerPane categoryChanged: 'variables'
 ]
 
@@ -6697,16 +6619,6 @@ ScriptablePhratchMorph >> variableNameInUse: varName [
 { #category : #byob }
 ScriptablePhratchMorph >> vars [
 	^vars
-]
-
-{ #category : #private }
-ScriptablePhratchMorph >> vars: varsDict lists: listsDict blocksBin: aBlocksBin [
-	"Private! Set my variables and blocks bin. Used by copyRecordingIn:."
-
-	vars := varsDict.
-	lists := listsDict.
-	blocksBin := aBlocksBin.
-
 ]
 
 { #category : #blocks }

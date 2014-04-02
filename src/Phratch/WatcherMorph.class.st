@@ -93,17 +93,6 @@ WatcherMorph >> convertFromOldWatcher [
 
 ]
 
-{ #category : #copying }
-WatcherMorph >> copyRecordingIn: dict [
-	"Overridden to copy my readout if it is not currently showing. This avoids accidentally sharing the readout morph with the original Watcher that is being copied. If the readout is showing, it is copied by the fullCopy operation, so we don't need to copy it."
-
-	| result |
-	result := super copyRecordingIn: dict.
-	readoutFrame owner ifNil: [result readoutFrame: readoutFrame fullCopy].
-	^ result
-
-]
-
 { #category : #'right button menu' }
 WatcherMorph >> delete [
 
@@ -348,15 +337,6 @@ WatcherMorph >> mouseDown: evt [
 WatcherMorph >> parameter [
 
 	^ readout parameter
-
-]
-
-{ #category : #copying }
-WatcherMorph >> readoutFrame: readoutFrameMorph [
-	"Fix up my readout when copying."
-
-	readoutFrame := readoutFrameMorph.
-	readout := readoutFrameMorph firstSubmorph.
 
 ]
 

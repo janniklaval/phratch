@@ -361,13 +361,6 @@ BlockMorph >> contrastColor [
 						ifTrue: [ m contrastColor ] ] ]
 ]
 
-{ #category : #private }
-BlockMorph >> copyRecordingIn: aDict [
-
-		^ (super copyRecordingIn: aDict) clearProcess.
-	
-]
-
 { #category : #'event handling' }
 BlockMorph >> delete [
 	self topBlock stop.
@@ -609,46 +602,6 @@ BlockMorph >> drawTopEdgeOn: aCanvas [
 BlockMorph >> duplicate [
 
 	World activeHand attachMorph: self veryDeepCopy.
-
-]
-
-{ #category : #byob }
-BlockMorph >> fastCopy [
-
-	"copies only the receiver without the nextBlock and its parts"
-
-	| dict new |
-	dict := IdentityDictionary new: 100.
-	new := self fastCopyRecordingIn: dict.
-	new allMorphsDo: [:m | m updateReferencesUsing: dict].
-	^ new	
-]
-
-{ #category : #byob }
-BlockMorph >> fastCopyRecordingIn: dict [
-
-	"copies just the receiver withoug the nextBlock and its parts"
-
-	| new parts |
-	new := self copy.
-	dict at: self put: new.
-	parts := self nonControlFlowSubmorphs.
-	parts size > 0 ifTrue: [
-		new privateSubmorphs:
-			(parts collect: [:m |
-				(m copyRecordingIn: dict) privateOwner: new])].
-
-	self otherProperties ifNotNil: [new setProperties: self otherProperties copy].
-	^ new
-
-]
-
-{ #category : #byob }
-BlockMorph >> fastDuplicate [
-
-	"for debugging"
-
-	World activeHand attachMorph: self fastCopy.
 
 ]
 
@@ -920,14 +873,6 @@ BlockMorph >> invalidRect: damageRect [
 
 	super invalidRect: (damageRect expandBy: 3).  "allows for running feedback"
 	cachedForm := nil.
-
-]
-
-{ #category : #accessing }
-BlockMorph >> isArgMorph [
-	"True only for ArgMorphs."
-
-	^ false
 
 ]
 

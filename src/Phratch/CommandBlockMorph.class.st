@@ -1189,8 +1189,6 @@ CommandBlockMorph >> rightButtonMenu [
 
 		menu addLine.
 		menu add: 'duplicate' value: #duplicate.
-		(self isReporterBlockMorph) ifFalse: [
-			menu add: '- this block' value: #fastDuplicate].
 		(self isVariableBlockMorph) ifTrue: [
 			menu add: 'relabel' value: #rename].
 		(self owner isBlockMorph) ifFalse: [  "can't yet delete a blocks inside a script"
@@ -1219,7 +1217,7 @@ CommandBlockMorph >> rightButtonMenu [
 
 	
 	(choice := (menu localize; invokeModal"popUpAt: World activeHand position  inWorld:   World"; yourself)selectedValue) ifNil: [^ self].
-	(#(presentHelpScreen duplicate fastDuplicate rename delete showElements editElements inheritAttribute disinheritAttribute) includes: choice) ifTrue: [^ self perform: choice].
+	(#(presentHelpScreen duplicate rename delete showElements editElements inheritAttribute disinheritAttribute) includes: choice) ifTrue: [^ self perform: choice].
 
 	"change operator"
 	spec := '$Number$ ', choice, ' $Number$'.

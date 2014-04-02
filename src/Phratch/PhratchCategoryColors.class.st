@@ -41,7 +41,7 @@ PhratchCategoryColors class >> viewerPageFor: aScriptablePhratchMorph [
 		yourself).
 	y := addButton bottom + 3.
 	hasColors := aScriptablePhratchMorph colorNames size > 0.
-	(stage := aScriptablePhratchMorph ownerThatIsA: PhratchStageMorph)
+	(stage := aScriptablePhratchMorph ownerThatIsAPhratchStageMorph)
 		ifNotNil: [ 
 			stage colorNames size > 0
 				ifTrue: [ hasColors := true ] ].
@@ -77,7 +77,7 @@ PhratchCategoryColors class >> viewerPageFor: aScriptablePhratchMorph [
 			]  "insert a line"
 			ifFalse: [
 				y := aScriptablePhratchMorph createBlock: blockOrSym atPosition: x@y onPage: page.
-				page submorphs last color: (ScriptablePhratchMorph blockColorFor: self label)
+				page submorphs last color: (PhratchCategory blockColorFor: self label)
 			]].
 	
 	

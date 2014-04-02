@@ -677,9 +677,9 @@ BlockLabelFragmentDialog >> initialize [
 { #category : #drawing }
 BlockLabelFragmentDialog >> inputButtonForm [
 	| bg block |
-	block := VariableBlockMorph new commandSpec: 'Input name' localized; color: (ScriptablePhratchMorph blockColorFor: 'variables');
+	block := VariableBlockMorph new commandSpec: 'Input name' localized; color: (PhratchCategory blockColorFor: 'variables');
 		yourself.
-	bg := LabelFragmentBlockMorph new commandSpec: '$ListIndex$'; color: (ScriptablePhratchMorph blockColorFor: category asString);
+	bg := LabelFragmentBlockMorph new commandSpec: '$ListIndex$'; color: (PhratchCategory blockColorFor: category asString);
 		yourself.
 	bg replaceArgMorph: bg argMorphs first by: block.
 	^bg imageForm
@@ -691,7 +691,7 @@ BlockLabelFragmentDialog >> labelButtonForm [
 	| block |
 
 	block := LabelFragmentBlockMorph new 
-		color: (ScriptablePhratchMorph blockColorFor: category asString);
+		color: (PhratchCategory blockColorFor: category asString);
 		commandSpec: 'Title text' localized;
 		yourself.
 
@@ -753,7 +753,7 @@ BlockLabelFragmentDialog >> slotShapeFormFor: type size: aPoint [
 		at: #object put: '$SAObjS$'.
 
 	block := LabelFragmentBlockMorph new
-		color: (ScriptablePhratchMorph blockColorFor: category asString); 
+		color: (PhratchCategory blockColorFor: category asString); 
 		commandSpec: '_', (specs at: type), '_';
 		yourself.
 

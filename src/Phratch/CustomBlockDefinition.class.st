@@ -91,7 +91,7 @@ CustomBlockDefinition >> answerBlock [
 CustomBlockDefinition >> blockColor [
 	#none = category
 		ifTrue: [^ Color lightGray]
-		ifFalse: [^ ScriptablePhratchMorph blockColorFor: category]
+		ifFalse: [^ PhratchCategory blockColorFor: category]
 ]
 
 { #category : #accessing }
@@ -291,11 +291,6 @@ CustomBlockDefinition >> migrateBlockVars [
 	body := dec.
 	rest ifNotNil: [
 		body nextBlock: rest ]
-]
-
-{ #category : #private }
-CustomBlockDefinition >> ownerOrYourselfThatIsA: aClassName [
-	^nil
 ]
 
 { #category : #private }

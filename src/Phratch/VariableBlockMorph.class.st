@@ -235,7 +235,7 @@ VariableBlockMorph >> isSpecialForm: bool [
 	super isSpecialForm: bool.
 	isSpecialForm
 		ifTrue: [self color: VariableFrame new variableBlockColor]
-		ifFalse: [self color: (ScriptablePhratchMorph blockColorFor: 'variables')].
+		ifFalse: [self color: (PhratchCategory blockColorFor: 'variables')].
 
 ]
 

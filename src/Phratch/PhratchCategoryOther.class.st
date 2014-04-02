@@ -20,8 +20,3 @@ PhratchCategoryOther class >> initialize [
 PhratchCategoryOther class >> label [
 	^'other'
 ]
-
-{ #category : #accessing }
-PhratchCategoryOther class >> order [
-	^0
-]

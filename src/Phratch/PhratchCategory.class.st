@@ -8,6 +8,14 @@ Class {
 }
 
 { #category : #accessing }
+PhratchCategory class >> blockColorFor: aCategory [
+	"Answer the block color for the given category."
+
+	^(self allSubclasses detect:[:e | e label = aCategory] ifNone: [self]) color.
+
+]
+
+{ #category : #accessing }
 PhratchCategory class >> color [
 	^(Color h: 0 s: 0.81 v: 0.83)
 ]

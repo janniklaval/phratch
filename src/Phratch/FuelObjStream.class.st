@@ -52,9 +52,9 @@ FuelObjStream >> readObjFrom: aStream showProgress: showProgress [
 	"Read the root object from the given binary stream. If showProgress is true, display a progress bar."
 
 	self readFileHeader: aStream.
-	objects := showProgress
-		ifTrue: [ (FLMaterializer newDefault materializeFrom: aStream) root	"showProgress;" ]
-		ifFalse: [ (FLMaterializer newDefault materializeFrom: aStream) root ].
+	objects := "showProgress
+		ifTrue: [ (FLMaterializer newDefault materializeFrom: aStream) root	 showProgress; ]
+		ifFalse: [ "(FLMaterializer newDefault materializeFrom: aStream) root "]".
 	^ objects
 ]
 

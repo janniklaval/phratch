@@ -39,24 +39,6 @@ Morph >> centering: aSymbol [
 ]
 
 { #category : #'*Phratch-Extensions' }
-Morph >> copyRecordingIn: dict [
-	"Recursively copy this entire composite morph, recording the correspondence between old and new morphs in the given dictionary. This dictionary will be used to update intra-composite references in the copy. See updateReferencesUsing:.
-	Note: This default implementation copies ONLY morphs in the submorph hierarchy. If a subclass stores morphs in instance variables that it wants to copy, then it should override this method to do so. The same goes for subclasses that contain other data that should be copied when the morph is duplicated."
-
-	| new |
-	new := self copy.
-	dict at: self put: new.
-	submorphs size > 0 ifTrue: [
-		new privateSubmorphs:
-			(submorphs collect: [:m |
-				(m copyRecordingIn: dict) privateOwner: new])].
-
-	self otherProperties ifNotNil: [new setProperties: self otherProperties copy].
-	^ new
-
-]
-
-{ #category : #'*Phratch-Extensions' }
 Morph >> flags [
 
 	self valueOfProperty: #flags ifAbsentPut: [ 0 ].
@@ -122,21 +104,6 @@ Morph >> orientation: aSymbol [
 	self listDirection: (aSymbol caseOf: {
 		[#vertical] -> [#topToBottom].
 		[#horizontal] -> [#leftToRight]})
-]
-
-{ #category : #'*Phratch-Extensions-OwnerOrYourself' }
-Morph >> ownerOrYourselfThatIsA: aClass [
-	"Answer this the first morph in the owner chain of the given class, or nil if there isn't one."
-
-	| current meth |
-	current := self.
-	meth := ('is', aClass asString) asSymbol.
-	[ current isNil ]
-		whileFalse: [ 
-			([current perform: meth] on: Error do: [Transcript show: 'Error in ownerOrYourselfThatIsA: ' .Transcript show: aClass asString. Transcript cr .(current isKindOf: aClass)])
-				ifTrue: [ ^ current ].
-			current := current owner ].
-	^ current
 ]
 
 { #category : #'*Phratch-Extensions-OwnerOrYourself' }
@@ -445,6 +412,48 @@ Morph >> ownerOrYourselfThatIsAWatcherReadoutFrameMorph [
 				ifTrue: [ ^ current ].
 			current := current owner ].
 	^ current
+]
+
+{ #category : #'*Phratch-Extensions-OwnerOrYourself' }
+Morph >> ownerThatIsADialogBoxMorph [
+	"Return the first enclosing morph that is a kind of aClass, or nil if none"
+
+	^ self firstOwnerSuchThat: [:m | m isDialogBoxMorph]
+]
+
+{ #category : #'*Phratch-Extensions-OwnerOrYourself' }
+Morph >> ownerThatIsAOffscreenWorldMorph [
+	"Return the first enclosing morph that is a kind of aClass, or nil if none"
+
+	^ self firstOwnerSuchThat: [:m | m isOffscreenWorldMorph]
+]
+
+{ #category : #'*Phratch-Extensions-OwnerOrYourself' }
+Morph >> ownerThatIsAPhratchBlockPaletteMorph [
+	"Return the first enclosing morph that is a kind of aClass, or nil if none"
+
+	^ self firstOwnerSuchThat: [:m | m isPhratchBlockPaletteMorph]
+]
+
+{ #category : #'*Phratch-Extensions-OwnerOrYourself' }
+Morph >> ownerThatIsAPhratchFrameMorph [
+	"Return the first enclosing morph that is a kind of aClass, or nil if none"
+
+	^ self firstOwnerSuchThat: [:m | m isPhratchFrameMorph]
+]
+
+{ #category : #'*Phratch-Extensions-OwnerOrYourself' }
+Morph >> ownerThatIsAPhratchListMorph [
+	"Return the first enclosing morph that is a kind of aClass, or nil if none"
+
+	^ self firstOwnerSuchThat: [:m | m isPhratchListMorph]
+]
+
+{ #category : #'*Phratch-Extensions-OwnerOrYourself' }
+Morph >> ownerThatIsAPhratchStageMorph [
+	"Return the first enclosing morph that is a kind of aClass, or nil if none"
+
+	^ self firstOwnerSuchThat: [:m | m isPhratchStageMorph]
 ]
 
 { #category : #'*Phratch-Extensions' }

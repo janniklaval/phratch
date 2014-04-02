@@ -20,8 +20,3 @@ PhratchCategoryNone class >> initialize [
 PhratchCategoryNone class >> label [
 	^'none'
 ]
-
-{ #category : #accessing }
-PhratchCategoryNone class >> order [
-	^0
-]

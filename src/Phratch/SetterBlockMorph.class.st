@@ -16,7 +16,7 @@ SetterBlockMorph >> contrastColor [
 	| newColor |
 	newColor := isSpecialForm
 		ifTrue: [ VariableFrame variableBlockColor ]
-		ifFalse: [ ScriptablePhratchMorph blockColorFor: 'variables' ].
+		ifFalse: [ PhratchCategory blockColorFor: 'variables' ].
 	color = newColor
 		ifFalse: [ self color: newColor ].
 	super contrastColor
@@ -34,7 +34,7 @@ SetterBlockMorph >> determineIfSpecialForm [
 
 	isSpecialForm
 		ifTrue: [self color: VariableFrame variableBlockColor]
-		ifFalse: [self color: (ScriptablePhratchMorph blockColorFor: 'variables')].
+		ifFalse: [self color: (PhratchCategory blockColorFor: 'variables')].
 
 
 ]

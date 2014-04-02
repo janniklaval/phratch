@@ -34,7 +34,7 @@ Class {
 PhratchFileChooserDialog class >> chooseExistingFileType: type extensions: anArrayOrNil title: titleString [
 
 	| m |
-	PhratchFileChooserDialog deleteDuplicates.
+	self deleteDuplicates.
 	m := self new
 		createFileChooserLayout: false;
 		type: type;
@@ -50,7 +50,7 @@ PhratchFileChooserDialog class >> chooseExistingFileType: type extensions: anArr
 PhratchFileChooserDialog class >> chooseFolder: aDirectory [
 
 	| m |
-	PhratchFileChooserDialog deleteDuplicates.
+	self deleteDuplicates.
 	m := self new
 		createFileChooserLayout: false;
 		choosingFolder: true;
@@ -68,7 +68,7 @@ PhratchFileChooserDialog class >> chooseImageFileType: type title: aString [
 	"PhratchFileChooserDialog chooseImageFileType: #costume title: 'Costume'"
 
 	| m |
-	PhratchFileChooserDialog deleteDuplicates.
+	self deleteDuplicates.
 	m := self new
 		createFileChooserLayout: false;
 		showThumbnails: true;
@@ -90,7 +90,7 @@ PhratchFileChooserDialog class >> chooseImageFileType: type title: aString [
 PhratchFileChooserDialog class >> chooseNewFileDefault: defaultName title: titleString type: type [
 
 	| m |
-	PhratchFileChooserDialog deleteDuplicates.
+	self deleteDuplicates.
 	m := self new
 		createFileChooserLayout: true;
 		type: type;
@@ -108,7 +108,7 @@ PhratchFileChooserDialog class >> chooseSpriteCostumeFor: aPhratchFrameMorph [
 	"PhratchFileChooserDialog chooseSpriteCostumeFor: nil"
 
 	| m |
-	PhratchFileChooserDialog deleteDuplicates.
+	self deleteDuplicates.
 	m := self new
 		createFileChooserLayout: false;
 		title: 'New Sprite' translated;
@@ -155,7 +155,7 @@ PhratchFileChooserDialog class >> deleteDuplicates [
 	"If another file chooser dialog box is already opened, delete it"
 
 	World submorphs do: [:i | 
-		(i isKindOf: PhratchFileChooserDialog) ifTrue: [i delete]].
+		(i isPhratchFileChooserDialog) ifTrue: [i delete]].
 
 ]
 
@@ -190,7 +190,7 @@ PhratchFileChooserDialog class >> getLastFolderForType: type [
 	dir ifNotNil: [
 		dir asFileReference exists ifTrue: [^ dir]].
 
-	^ PhratchFileChooserDialog getDefaultFolderForType: type
+	^ self getDefaultFolderForType: type
 
 ]
 
@@ -235,10 +235,10 @@ PhratchFileChooserDialog class >> openPhratchFileFor: aPhratchFrameMorph [
 		the full file name, if a local file is selected
 		a ByteArray containing the project data, if a remote file is selected.
 	As the user selects files in the file picker, preview the project thumbnail and info string for the selected project. If the file 'servers.txt' is found in the Phratch folder, then allow browsing and selecting of Phratch projects on a remote HTTP server."
-	"PhratchFileChooserDialog openPhratchFileFor: nil"
+	"self openPhratchFileFor: nil"
 
 	| m response |
-	PhratchFileChooserDialog deleteDuplicates.
+	self deleteDuplicates.
 	m := self new
 		createPhratchFileChooserFor: aPhratchFrameMorph saving: false;
 		type: #project;
@@ -267,7 +267,7 @@ PhratchFileChooserDialog class >> savePhratchFileFor: aPhratchFrameMorph [
 	"PhratchFileChooserDialog savePhratchFileFor: nil"
 
 	| m result |
-	PhratchFileChooserDialog deleteDuplicates.
+	self deleteDuplicates.
 	m := self new
 		createPhratchFileChooserFor: aPhratchFrameMorph saving: true;
 		type: #project;

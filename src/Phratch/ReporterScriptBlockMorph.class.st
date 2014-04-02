@@ -147,11 +147,11 @@ ReporterScriptBlockMorph >> optimized [
 		ifFalse: [ #procedureWithArgs ].
 	newBlock := rcv
 		blockFromSpec: (rcv wholeBlockSpecForSelector: sel)
-		color: (ScriptablePhratchMorph blockColorFor: 'operators').
+		color: (PhratchCategory blockColorFor: 'operators').
 	newBlock isAtomic: (isAtomic or: [ self isOSlotMorph ]).
 	reportBlock := rcv
 		blockFromSpec: (rcv wholeBlockSpecForSelector: #doAnswer)
-		color: (ScriptablePhratchMorph blockColorFor: 'control').
+		color: (PhratchCategory blockColorFor: 'control').
 	body := self body.
 	body ifNotNil: [ reportBlock replaceArgMorph: reportBlock argMorphs first by: body ].
 	2 to: argMorphs size - 1 do: [ :i | newBlock addItem ].
