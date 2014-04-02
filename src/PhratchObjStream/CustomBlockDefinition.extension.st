@@ -63,6 +63,11 @@ CustomBlockDefinition >> isBoolean [
 ]
 
 { #category : #'*PhratchObjStream' }
+CustomBlockDefinition >> ownerOrYourselfThatIsA: aClassName [
+	^nil
+]
+
+{ #category : #'*PhratchObjStream' }
 CustomBlockDefinition >> storeFieldsOn: anObjStream [
 
 	self storeFieldsNamed: #(

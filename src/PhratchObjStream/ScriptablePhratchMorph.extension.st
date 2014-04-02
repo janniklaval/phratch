@@ -89,7 +89,7 @@ ScriptablePhratchMorph >> blockFromOldFormTuple: tuple receiver: scriptOwner [
 	(#(#doCallBlockWithArgs #doReport) includes: k)
 		ifTrue: [ 
 			block := MultiArgReporterBlockMorph new
-				color: (ScriptablePhratchMorph blockColorFor: 'control');
+				color: (PhratchCategory blockColorFor: 'control');
 				receiver: scriptOwner;
 				isSpecialForm: true;
 				minArgs: 1;
@@ -115,7 +115,7 @@ ScriptablePhratchMorph >> blockFromOldFormTuple: tuple receiver: scriptOwner [
 	(#(#function #functionWithArgs) includes: k)
 		ifTrue: [ 
 			block := ReporterScriptBlockMorph new
-				color: (ScriptablePhratchMorph blockColorFor: 'operators');
+				color: (PhratchCategory blockColorFor: 'operators');
 				receiver: scriptOwner;
 				isSpecialForm: false;
 				minArgs: 1;
@@ -342,7 +342,7 @@ ScriptablePhratchMorph >> blockFromTuple: tuple receiver: scriptOwner [
 	(#(#doCallBlockWithArgs #doReport #doCallBlockWithArgList) includes: k)
 		ifTrue: [ 
 			block := MultiArgReporterBlockMorph new
-				color: (ScriptablePhratchMorph blockColorFor: 'control');
+				color: (PhratchCategory blockColorFor: 'control');
 				receiver: rcvr;
 				isSpecialForm: true;
 				minArgs: 1;
@@ -372,7 +372,7 @@ ScriptablePhratchMorph >> blockFromTuple: tuple receiver: scriptOwner [
 	(#(#function #functionWithArgs) includes: k)
 		ifTrue: [ 
 			block := ReporterScriptBlockMorph new
-				color: (ScriptablePhratchMorph blockColorFor: 'operators');
+				color: (PhratchCategory blockColorFor: 'operators');
 				receiver: rcvr;
 				isSpecialForm: false;
 				minArgs: 1;
@@ -606,7 +606,7 @@ ScriptablePhratchMorph >> blockVariableBlockFromTuple: tuple receiver: scriptOwn
 			rcvr := ((tuple at: 6) isKindOf: VariableFrame)
 				ifTrue: [ (tuple at: 6) convertTuplesToStacks ]
 				ifFalse: [ rcvr definitionFor: (CustomBlockDefinition idFromSpec: (tuple at: 6)) ].
-			block := SetterBlockMorph new color: (ScriptablePhratchMorph blockColorFor: 'variables').
+			block := SetterBlockMorph new color: (PhratchCategory blockColorFor: 'variables').
 			(#(#setVar:to: #setBlockVar:to:) includes: selector)
 				ifTrue: [ block initSetterForVar: varName ]
 				ifFalse: [ block initChangerForVar: varName ].
@@ -654,7 +654,7 @@ ScriptablePhratchMorph >> blockVariableBlockFromTupleOldForm: tuple receiver: sc
 				ifFalse: [ rcvr definitionFor: (CustomBlockDefinition idFromSpec: tuple fourth) ].
 			block := SetterBlockMorph new
 				receiver: rcvr;
-				color: (ScriptablePhratchMorph blockColorFor: 'variables');
+				color: (PhratchCategory blockColorFor: 'variables');
 		yourself.
 			(#(#setVar:to: #setBlockVar:to:) includes: selector)
 				ifTrue: [ block initSetterForVar: varName ]

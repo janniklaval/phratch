@@ -47,6 +47,21 @@ Morph >> isPartsDonor: aBoolean [
 ]
 
 { #category : #'*PhratchObjStream' }
+Morph >> ownerOrYourselfThatIsA: aClass [
+	"Answer this the first morph in the owner chain of the given class, or nil if there isn't one."
+
+	| current meth |
+	current := self.
+	meth := ('is', aClass asString) asSymbol.
+	[ current isNil ]
+		whileFalse: [ 
+			([current perform: meth] on: Error do: [Transcript show: 'Error in ownerOrYourselfThatIsA: ' .Transcript show: aClass asString. Transcript cr .(current isKindOf: aClass)])
+				ifTrue: [ ^ current ].
+			current := current owner ].
+	^ current
+]
+
+{ #category : #'*PhratchObjStream' }
 Morph >> storeFieldsOn: anObjStream [
 	| flags |
 	self storeFieldsNamed: #(#bounds #owner #submorphs #color) on: anObjStream.

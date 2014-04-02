@@ -75,6 +75,16 @@ PhratchSpriteMorph >> initFieldsFrom: anObjStream version: classVersion [
 ]
 
 { #category : #'*PhratchObjStream' }
+PhratchSpriteMorph >> refPos [
+	^refPos
+]
+
+{ #category : #'*PhratchObjStream' }
+PhratchSpriteMorph >> refPos: aPos [
+	refPos := aPos
+]
+
+{ #category : #'*PhratchObjStream' }
 PhratchSpriteMorph >> storeFieldsOn: anObjStream [
 
 	| oldP |
