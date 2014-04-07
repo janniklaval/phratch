@@ -221,7 +221,7 @@ ScriptablePhratchMorph >> blockFromTuple: tuple receiver: scriptOwner [
 	(#byob = tuple first or:[#phratch = tuple first]) 
 		ifFalse: [ ^ self blockFromOldFormTuple: tuple receiver: scriptOwner ].
 	'Stage' = tuple second
-		ifTrue: [ rcvr := self ownerOrYourselfThatIsA: PhratchStageMorph ]
+		ifTrue: [ rcvr := self ownerOrYourselfThatIsAPhratchStageMorph ]
 		ifFalse: [ 
 			(tuple second isKindOf: VariableFrame)
 				ifFalse: [ rcvr := self coerceSpriteArg: tuple second ] ].
@@ -866,7 +866,7 @@ ScriptablePhratchMorph >> convertVarTuplesToListReferences [
 				ifTrue: [ obj convertTuplesToStacks ].
 			(obj isKindOf: Array)
 				ifTrue: [ 
-					stage := self ownerOrYourselfThatIsA: PhratchStageMorph.
+					stage := self ownerOrYourselfThatIsAPhratchStageMorph.
 					rcvr := obj second = 'Stage'
 						ifTrue: [ stage ]
 						ifFalse: [ stage coerceSpriteArg: obj second ].
@@ -1041,7 +1041,7 @@ ScriptablePhratchMorph >> variableBlockFromTuple: tuple receiver: scriptOwner [
 	(varName isKindOf: Array) ifFalse: [
 		varName = '' ifFalse: [
 			(scriptOwner varNames includes: varName) ifFalse: [
-				bg := scriptOwner ownerOrYourselfThatIsA: PhratchStageMorph.
+				bg := scriptOwner ownerOrYourselfThatIsAPhratchStageMorph.
 				bg
 					ifNil: [scriptOwner addVariable: varName]
 					ifNotNil: [
@@ -1091,7 +1091,7 @@ ScriptablePhratchMorph >> variableBlockFromTupleOldForm: tuple receiver: scriptO
 	varName := tuple at: 2.
 	rcvr := scriptOwner.
 	(scriptOwner varNames includes: varName) ifFalse: [
-		bg := scriptOwner ownerOrYourselfThatIsA: PhratchStageMorph.
+		bg := scriptOwner ownerOrYourselfThatIsAPhratchStageMorph.
 		bg
 			ifNil: [scriptOwner addVariable: varName]
 			ifNotNil: [

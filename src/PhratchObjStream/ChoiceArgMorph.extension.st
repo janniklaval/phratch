@@ -29,7 +29,7 @@ ChoiceArgMorph >> privateSetChoice: aSymbol [
 	"Update the toggle button when an argument is changed within a block."
 
 	| frame palette block doLocalization label |
-	frame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
+	frame := self ownerOrYourselfThatIsAPhratchFrameMorph.
 	((#soundNames = getOptionsSelector) and:
 	 [aSymbol = ('record' localized, '...')]) ifTrue: [
 		frame ifNotNil: [^ frame newSound]].
@@ -53,7 +53,7 @@ ChoiceArgMorph >> privateSetChoice: aSymbol [
 
 	menuIconMorph position: (self right - borderWidth - 10)@(self top + borderWidth + 4).
 
-	(block := self ownerOrYourselfThatIsA: HatBlockMorph) ifNotNil: [
+	(block := self ownerOrYourselfThatIsAHatBlockMorph) ifNotNil: [
 		block fixBlockLayout].
 
 	(owner isKindOf: SetterBlockMorph) ifTrue: [ owner determineIfSpecialForm ].
@@ -63,8 +63,8 @@ ChoiceArgMorph >> privateSetChoice: aSymbol [
 		(owner respondsTo: #adjustInputParadigm:) ifTrue: [
 			owner adjustInputParadigm: choice ]].
 "
-	(palette := self ownerOrYourselfThatIsA: PhratchBlockPaletteMorph) ifNil: [^ self].
-	(block := self ownerOrYourselfThatIsA: BlockMorph) ifNil: [^ self].
+	(palette := self ownerOrYourselfThatIsAPhratchBlockPaletteMorph) ifNil: [^ self].
+	(block := self ownerOrYourselfThatIsABlockMorph) ifNil: [^ self].
 
 	block isReporter ifTrue: [palette updateWatcherButtonsForFrame: frame].
 

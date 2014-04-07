@@ -13,7 +13,7 @@ BlockMorph >> blockID [
 	sticky comments"
 
 	| sm |
-	sm := self ownerOrYourselfThatIsA: PhratchScriptsMorph.
+	sm := self ownerOrYourselfThatIsAPhratchScriptsMorph.
 	sm ifNil: [^ nil].
 	^ (sm allMorphs select: [:m |
 		m isKindOf: BlockMorph]) indexOf: self

@@ -28,7 +28,7 @@ PhratchListMorph >> asReferenceTuple [
 			ref := stage referenceToList: self.
 			ref ifNil: [ ^ nil ].
 			^ (Array with: #variableList) , ref ].
-	stage := target ownerOrYourselfThatIsA: PhratchStageMorph.
+	stage := target ownerOrYourselfThatIsAPhratchStageMorph.
 	rcvr := target == stage
 		ifTrue: [ 'Stage' ]
 		ifFalse: [ target objName ].
@@ -152,7 +152,7 @@ PhratchListMorph >> convertTuplesToStacks [
 				ifTrue: [ 
 					stage := target isNil
 						ifTrue: [ PhratchFrameMorph someInstance workPane ]
-						ifFalse: [ target ownerOrYourselfThatIsA: PhratchStageMorph ].
+						ifFalse: [ target ownerOrYourselfThatIsAPhratchStageMorph ].
 					rcvr := obj second = 'Stage'
 						ifTrue: [ stage ]
 						ifFalse: [ stage coerceSpriteArg: obj second ].
