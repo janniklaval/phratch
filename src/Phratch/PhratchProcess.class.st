@@ -247,7 +247,7 @@ PhratchProcess >> doApplyEval [
 
 	| block script lambda varsFrame parms emptySlots nestedLambdas argsList stage stopFrame |
 
-	self isAtomic. "allow escaping out of infinite recursion"
+	"self isAtomic." "allow escaping out of infinite recursion"
 	block := stackFrame expression.
 
 	"evaluate arguments, if necessary"
@@ -616,6 +616,7 @@ PhratchProcess >> doIf [
 	"Evaluate the current expression (which must be an if)."
 
 	| block arguments argExp |
+	
 	block := stackFrame expression.
 	arguments := stackFrame arguments.
 

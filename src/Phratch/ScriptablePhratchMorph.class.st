@@ -117,7 +117,7 @@ ScriptablePhratchMorph class >> buildBlockSpecDictionary [
 		cl blockSpecs do: [:spec |
 			((spec isString) and: [spec size > 1]) ifTrue: [
 				"set color  for this category"
-				blockColor := self blockColorFor: spec].
+				blockColor := PhratchCategory blockColorFor: spec].
 			(spec isMemberOf: Array) ifTrue: [
 				sel := spec at: 3.
 				BlockSpecDict at: sel put: spec.

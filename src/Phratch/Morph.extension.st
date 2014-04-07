@@ -10,21 +10,6 @@ Morph >> allowSubmorphExtraction [
 ]
 
 { #category : #'*Phratch-Extensions' }
-Morph >> backgroundColor [
-	"Answer the background color for this morph, taken to be color of the first owner that is not transparent. Note that this does not take sibling morphs into account."
-
-	| m |
-	m := owner.
-	[m notNil] whileTrue: [
-		(m isKindOf: SystemWindow) ifTrue: [^ Color transparent].
-		m color isTransparent ifFalse: [^ m color].
-		m := m owner].
-
-	^ m ifNil: [Color white] ifNotNil: [m color].
-
-]
-
-{ #category : #'*Phratch-Extensions' }
 Morph >> centerInOwner [
 
 	owner ifNil: [^ self].
@@ -494,6 +479,24 @@ Morph >> rootForGrabOf: aMorph [
 						ifTrue: [^ self]
 						ifFalse: [^ owner rootForGrabOf: aMorph]]].
 
+]
+
+{ #category : #'*Phratch-Extensions' }
+Morph >> unlockedMorphsAt: aPoint [
+	"Return a collection of all unlocked morphs in this morph structure that contain the given point, possibly including the receiver itself.  Simplified "
+
+	^ self unlockedMorphsAt: aPoint addTo: OrderedCollection new
+]
+
+{ #category : #'*Phratch-Extensions' }
+Morph >> unlockedMorphsAt: aPoint addTo: mList [
+	"Return a collection of all morphs in this morph structure that contain the given point, possibly including the receiver itself.  Must do this recursively because of transforms.  "
+	(self fullBounds containsPoint: aPoint) ifFalse: [^ mList].  "quick elimination"
+	self isLocked ifTrue: [^ mList].
+	submorphs size > 0 ifTrue:
+		[submorphs do: [:m | m unlockedMorphsAt: aPoint addTo: mList]].
+	(self containsPoint: aPoint) ifTrue: [mList addLast: self].
+	^ mList
 ]
 
 { #category : #'*Phratch-Extensions' }

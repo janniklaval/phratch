@@ -1408,15 +1408,6 @@ PhratchFrameMorph >> exportSprite [
 
 ]
 
-{ #category : #geometry }
-PhratchFrameMorph >> extent: aPoint [
-	"Position all my submorphs whenever I get resized."
-
-	super extent: aPoint.
-	"self fixLayout."
-
-]
-
 { #category : #'file read/write' }
 PhratchFrameMorph >> extractInfoFrom: aByteArray [
 	"Answer a Phratch info dictionary from the given ByteArray. Answer an empty dictionary if it is an old project."
@@ -2199,7 +2190,6 @@ PhratchFrameMorph >> launchDocFile: aFilename [
 	| helpDir  |
 	
 	helpDir := FileSystem workingDirectory / 'htmlDoc'.
-	helpDir exists ifFalse: [^ Beeper beep].  "no help folder"
 	self stopAll.
 	
 	(helpDir / aFilename) exists

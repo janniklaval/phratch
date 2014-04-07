@@ -1067,14 +1067,6 @@ BlockMorph >> justDroppedInto: newOwner event: evt [
 
 	targetP y = targetBlock top
 		ifTrue: [
-			"c-shaped block should nest the target block"
-			"((bottomBlockUsed not) and: [(self isCBlockMorph)]) ifTrue:[
-				(targetBlock owner isBlockMorph)
-					ifTrue: [(targetBlock owner) attachBlock: self]
-					ifFalse: [self position: (targetP x - self bracketThickness)@(targetP y - self topBarHeight - 3)].
-				(newOwner respondsTo: #recordNestedStack:) ifTrue: [
-					newOwner recordNestedStack: targetBlock ].
-				self attachBlockNested: targetBlock. ^ self]."
 			
 			((bottomBlockUsed not) and: [(self isCBlockMorph)]) ifTrue:[
 				self bottomBlock position: targetP x @ (targetP y - (self bottomBlock height) -4 ).

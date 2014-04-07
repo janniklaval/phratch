@@ -16,8 +16,7 @@ Class {
 	#instVars : [
 		'pathToFile',
 		'fileBits',
-		'fileIndex',
-		'isBigEndian'
+		'fileIndex'
 	],
 	#classVars : [
 		'Registry'
@@ -185,7 +184,7 @@ MPEGFile >> hasVideo [
 { #category : #'initialize-release' }
 MPEGFile >> initialize [
 
-	pathToFile := fileBits := fileIndex := isBigEndian := nil.
+	pathToFile := fileBits := fileIndex := nil.
 
 ]
 
@@ -215,7 +214,6 @@ MPEGFile >> openFile: aPath [
 	fileBits notNil ifTrue: [
 		fileIndex := Smalltalk registerExternalObject: fileBits.
 		self class register: self].
-	isBigEndian := nil.  "clear endian cache"
 
 ]
 

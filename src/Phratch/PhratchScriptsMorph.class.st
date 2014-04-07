@@ -11,8 +11,7 @@ Class {
 		'lambdaMorph',
 		'droppedBlock',
 		'droppedBottom',
-		'kickedOutReporter',
-		'nestedStack'
+		'kickedOutReporter'
 	],
 	#category : #'Phratch-UI-Panes'
 }
@@ -173,8 +172,7 @@ PhratchScriptsMorph >> recordDroppedBlock: aBlockMorph bottom: stackBottom kicke
 
 	droppedBlock := aBlockMorph.
 	droppedBottom := stackBottom.
-	kickedOutReporter := aReporter. 
-	nestedStack := nil
+	kickedOutReporter := aReporter.
 ]
 
 { #category : #'event handling' }
@@ -459,7 +457,6 @@ PhratchScriptsMorph >> undoLastDrop [
 		^self activeHand attachMorph: droppedBlock ].
 
 	next := droppedBottom nextBlock.
-	nestedStack ifNotNil: [next := nestedStack ].
 	next ifNotNil: [droppedBlock owner addMorph: next ].
 	(droppedBlock owner isBlockMorph) ifTrue: [
 		next ifNotNil: 
