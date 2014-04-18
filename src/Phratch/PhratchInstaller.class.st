@@ -204,14 +204,6 @@ PhratchInstaller class >> phratchSettingsOn: aBuilder [
 				label: 'noviceMode' translated;
 		 		target: ScriptablePhratchMorph;
 		 		description: '...' translated.	
-			(aBuilder setting: #standardButtonFont) 
-				label: 'standardButtonFont' translated;
-		 		target: PhratchFrameMorph;
-		 		description: '...' translated.	
-			(aBuilder setting: #standardMenuFont) 
-				label: 'standardMenuFont' translated;
-		 		target: PhratchFrameMorph;
-		 		description: '...' translated.	
 			(aBuilder setting: #takeOverScreen) 
 				label: 'takeOverScreen' translated;
 		 		target: PhratchFrameMorph;
