@@ -246,13 +246,6 @@ CustomReporterBlockMorph >> answer [
 	self definition answer
 ]
 
-{ #category : #private }
-CustomReporterBlockMorph >> canBecomeWatcher [
-
-	^ false
-
-]
-
 { #category : #accessing }
 CustomReporterBlockMorph >> category [
 

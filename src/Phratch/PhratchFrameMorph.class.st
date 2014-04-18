@@ -47,8 +47,6 @@ Class {
 		'Clipboard',
 		'DefaultNotes',
 		'DefaultSprite',
-		'Fonts',
-		'FontsXO',
 		'PhratchSkin',
 		'PhratchSkinXO',
 		'StandardButtonFont',
@@ -127,84 +125,59 @@ PhratchFrameMorph class >> disableSharing [
 PhratchFrameMorph class >> getFont: aSymbol [
 	"Get a font for a given purpose (specified by aSymbol) based on the current font setting."
 
-	^ Fonts at: aSymbol
+	|  fonts  |
+	fonts := {#Arg				->	1.
+#Label			->	1.
+#MenuTitle		->	5.
+#Button			->	1.
+#Category		->	1.
+#Tab						->		2.
+#CommentBlock				->		1.
+#TalkBubble					->		3.
+#ToolTip						->		4.
+#ReporterToolTip				->		5.
+#XYReadout					->		1.
+#XYReadoutBold				->		1.
+#CostumesPage				->		2.
+#SoundsPage					->		2.
+#ViewerPage				->		2.
+#UpdatingStringField			->		2.
+#Watcher					->		1.
+#WatcherLarge				->		5.
+#PaintUtilityButton			->		1.
+#PaintSetRotationCenter		->		2.
+#LibraryItemName			->		0.
+#LibraryItemInfo			->		-3.
+#MediaItemInfo				->		-3.
+#DialogBoxTitle				->		5.
+#DialogBoxMessage			->		4.
+#DialogBoxButton			->		2.
+#ProjectNotes				->		1.
+#LinkMorphDefault			->		1.
+#ShareLink					->		4.
+#SoundRecorderButton		->		4.
+#SoundRecorderTimer		->	1.
+#StringDialogTypeIn			->		3.
+#NewVariableDialogBox		->		2.
+#AboutPhratch				->		2.
+#UploadTagLabel				->		1.
+#UploadTag					->		1.
+#UploadDialogLabel			->		1.
+#UploadDialogContents		->		1.
+#UploadDialogComment		->		1.
+#FolderShortcut				->		2.
+#FileChooserNewFileTitle		->		1.
+#FileChooserNewFilename		->		1.
+#FileChooserLabel			->		1.
+#FileChooserContents			->		3.
+#FileChooserComment			->		1.
+#FilePickerDirectoryName	->		0.
+#FilePickerEntry				->		2.
+#FilePickerEntryHighlighted	->		2.
+#FrameMorphProjectTitle		->		4.
+} asDictionary.
 
-]
-
-{ #category : #'scratch skin' }
-PhratchFrameMorph class >> initFonts [
-	"self initFonts"
-
-	| fontSpecs fonts fontsXO |
-	fontSpecs := #(
-		(Arg						Verdana		10	HelveticaMedium 14)
-		(Label			VerdanaBoldNarrowSpace	10	Helvetica		18)
-		(MenuTitle					VerdanaBold		14	ArialBold		16)
-		(Button						VerdanaBold		10	ArialBold		16)
-		(Category					VerdanaBold		10	ArialBold		16)
-		(Tab						VerdanaBold		11	ArialBold		16)
-		(CommentBlock				Verdana		10	Verdana		14)
-		(TalkBubble					VerdanaBold		12	VerdanaBold		18)
-		(ToolTip						Verdana		13	ArialBold		16)
-		(ReporterToolTip				Verdana		14	ArialBold		16)
-		(XYReadout					Verdana		10	Arial			14)
-		(XYReadoutBold				VerdanaBold		10	ArialBold		14)
-		(CostumesPage				VerdanaBold		11	ArialBold		14)
-		(SoundsPage					VerdanaBold		11	ArialBold		14)
-		(ViewerPage				VerdanaBold		11	ArialBold		14)
-		(UpdatingStringField			VerdanaBold		11	VerdanaBold		14)
-		(Watcher					VerdanaBold		10	ArialBold		14)
-		(WatcherLarge				VerdanaBold		14	VerdanaBold		14)
-
-		(PaintUtilityButton			VerdanaBold		10	ArialBold		16)
-		(PaintSetRotationCenter		VerdanaBold		11	ArialBold		14)
-
-		"Library"
-		(LibraryItemName			VerdanaBold		9	ArialBold		14)
-		(LibraryItemInfo			Verdana		6	Verdana		10)
-		(MediaItemInfo				Verdana		9	Arial			14)
-
-		"Dialog Boxes"
-		(DialogBoxTitle				VerdanaBold		14	VerdanaBold		16)
-		(DialogBoxMessage			VerdanaBold		13	VerdanaBold		16)
-		(DialogBoxButton			VerdanaBold		11	VerdanaBold		16)
-		(ProjectNotes				Verdana		10	Verdana		12)
-		(LinkMorphDefault			VerdanaBold		10	VerdanaBold		12)
-		(ShareLink					VerdanaBold		13	VerdanaBold		12)
-		(SoundRecorderButton		VerdanaBold		13	VerdanaBold		12)
-		(SoundRecorderTimer		NewYorkBold	10	NewYorkBold	12)
-		(StringDialogTypeIn			Verdana		12	Verdana		16)
-		(NewVariableDialogBox		Verdana		11	Verdana		14)
-		(AboutPhratch				VerdanaBold		11	VerdanaBold		14)
-		(UploadTagLabel				VerdanaBold		10	VerdanaBold		12)
-		(UploadTag					Verdana		10	Verdana		12)
-		(UploadDialogLabel			VerdanaBold		10	VerdanaBold		12)
-		(UploadDialogContents		Verdana		10	Verdana		12)
-		(UploadDialogComment		Verdana		10	Verdana		12)
-
-		"File Choosers"
-		"This is the for the folder shortcuts in the file dialog"
-		(FolderShortcut				Verdana		11	Verdana		14)
-		(FileChooserNewFileTitle		VerdanaBold		10	VerdanaBold		14)
-		(FileChooserNewFilename		Verdana		10	Verdana		12)
-		(FileChooserLabel			VerdanaBold		10	VerdanaBold		14)
-		(FileChooserContents			Verdana		12	Verdana		12)
-		(FileChooserComment			Verdana		10	Verdana		12)
-		(FilePickerDirectoryName	VerdanaBold		9	VerdanaBold		12)
-		(FilePickerEntry				Verdana		11	Verdana		13)
-		(FilePickerEntryHighlighted	VerdanaBold		11	VerdanaBold		13)
-
-		(FrameMorphProjectTitle		VerdanaBold		13	ArialBold		16)
-	).
-
-	fonts := Dictionary new.
-	fontsXO := Dictionary new.
-	fontSpecs do: [:r |
-		fonts at: (r at: 1) put: (StrikeFont fontName: (r at: 2) size: (r at: 3)).
-		fontsXO at: (r at: 1) put: (StrikeFont fontName: (r at: 4) size: (r at: 5))].
-	Fonts := fonts.
-	FontsXO := fontsXO.
-
+	^ StrikeFont fontName: (StandardFonts defaultFont familyName) size: (StandardFonts defaultFont  pointSize + (fonts at: aSymbol))
 ]
 
 { #category : #'class initialization' }
@@ -217,8 +190,6 @@ PhratchFrameMorph class >> initialize [
 	AllowSharing := true.
 	DefaultNotes := ''.
 	Version := '0.1'.
-
-	self initFonts.
 
 
 ]
@@ -2270,9 +2241,8 @@ PhratchFrameMorph >> makeXYReadout [
 	boldFont := PhratchFrameMorph getFont: #XYReadoutBold.
 	PhratchTranslator renderScale ~= 1
 		ifTrue: [ 
-			"force fonts to be fixed size:"
 			normalFont := StrikeFont
-				osFontName: normalFont name
+				osFontName: normalFont familyName
 				size: normalFont pointSize / PhratchTranslator renderScale asFloat.
 			boldFont := StrikeFont osFontName: boldFont name size: boldFont pointSize / PhratchTranslator renderScale asFloat ].
 	panel := Morph new color: (Color r: 0.753 g: 0.764 b: 0.776).
@@ -3111,7 +3081,7 @@ PhratchFrameMorph >> showPlay [
 PhratchFrameMorph >> showSettingBrowser [
 
 	<phratchMenu: 'Settings' category: 'edit' position: 7 sub:3 shift: false>
-	SettingBrowser new changePackageSet: {RPackageOrganizer default packageNamed: 'Phratch' . RPackageOrganizer default packageNamed: 'Settings-Network' }; open
+	SettingBrowser new changePackageSet: {RPackageOrganizer default packageNamed: 'Phratch' . RPackageOrganizer default packageNamed: 'Settings-Network' . RPackageOrganizer default packageNamed: 'Graphics-Fonts' .RPackageOrganizer default packageNamed: 'Settings-FreeType' }; open
 ]
 
 { #category : #watchers }

@@ -34,7 +34,6 @@ PhratchInstaller class >> beginInstall [
 	].
 
 	SoundPlayer stopReverb.
-	PhratchFrameMorph initFonts.
 	(Workspace
 		openContents:
 			'"To try it out run the following expression:" ' 

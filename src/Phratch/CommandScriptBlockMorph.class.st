@@ -119,12 +119,6 @@ CommandScriptBlockMorph >> bracketThickness [
 
 ]
 
-{ #category : #drawing }
-CommandScriptBlockMorph >> canBecomeWatcher [
-	^false
-
-]
-
 { #category : #'geometry testing' }
 CommandScriptBlockMorph >> containsPoint: aPoint [
 

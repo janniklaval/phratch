@@ -81,7 +81,7 @@ PhratchSpriteMorph >> allSubsprites [
 { #category : #accessing }
 PhratchSpriteMorph >> area [
 	"Compute the area based on the height and width of the sprite"
-	<phratchItem: 'area' kind: #ReporterBlockMorph category: 'looks' defaultValues: #() subCategory: #a4 special: #()>
+	<phratchItem: 'area' kind: #ReporterWatcherBlockMorph category: 'looks' defaultValues: #() subCategory: #a4 special: #()>
 ^self height * self width
 ]
 
@@ -686,13 +686,13 @@ PhratchSpriteMorph >> forward: distance [
 { #category : #'blocks API' }
 PhratchSpriteMorph >> function [
 	"Return the given block without executing it"
-	<phratchItem: 'the $SAReporter$ block' kind: #ReporterScriptBlockMorph category: 'operators' defaultValues: #() subCategory: #b2 special: #()>
+	<phratchItem: 'the $SAReporter$ block' kind: #ReporterScriptBlockMorph category: 'control' defaultValues: #() subCategory: #process special: #()>
 ]
 
 { #category : #'blocks API' }
 PhratchSpriteMorph >> functionWithArgs [
 	"Return the given block with args without executing it"
-	<phratchItem: 'the $SAReporter$ block. Input names: $String$' kind: #ReporterScriptBlockMorph category: 'operators' defaultValues: #() subCategory: #b2 special: #()>
+	<phratchItem: 'the $SAReporter$ block. Input names: $String$' kind: #ReporterScriptBlockMorph category: 'control' defaultValues: #() subCategory: #process special: #()>
 ]
 
 { #category : #private }
@@ -905,7 +905,7 @@ PhratchSpriteMorph >> hasSubsprites [
 { #category : #accessing }
 PhratchSpriteMorph >> heading [
 	"Answer my heading in degrees, a number between -180 and 180."
-	<phratchItem: 'direction' kind: #ReporterBlockMorph category: 'motion' defaultValues: #() subCategory: #a7 special: #()>
+	<phratchItem: 'direction' kind: #ReporterWatcherBlockMorph category: 'motion' defaultValues: #() subCategory: #a7 special: #()>
 	| result att |
 	att := #heading.
 	self prototype ifNotNil: [
@@ -931,7 +931,7 @@ PhratchSpriteMorph >> heading: headingDegrees [
 { #category : #geometry }
 PhratchSpriteMorph >> height [
 	"Answer my height."
-	<phratchItem: 'height' kind: #ReporterBlockMorph category: 'looks' defaultValues: #() subCategory: #a4 special: #()>
+	<phratchItem: 'height' kind: #ReporterWatcherBlockMorph category: 'looks' defaultValues: #() subCategory: #a4 special: #()>
 ^super height
 ]
 
@@ -994,7 +994,7 @@ PhratchSpriteMorph >> isClone: aBoolean [
 { #category : #'panther actions' }
 PhratchSpriteMorph >> isDraggable [
 	"Return true if I am draggable"
-	<phratchItem: 'draggable?' kind: #BooleanBlockMorph category: 'motion' defaultValues: #() subCategory: #a8 special: #()>
+	<phratchItem: 'draggable?' kind: #BooleanWatcherBlockMorph category: 'motion' defaultValues: #() subCategory: #a8 special: #()>
 	^ draggable.
 ]
 
@@ -1042,7 +1042,7 @@ PhratchSpriteMorph >> isSprite [
 { #category : #'looks ops' }
 PhratchSpriteMorph >> isVisible [
 	"Return true if I am visible."
-	<phratchItem: 'visible?' kind: #BooleanBlockMorph category: 'looks' defaultValues: #() subCategory: #a6 special: #()>
+	<phratchItem: 'visible?' kind: #BooleanWatcherBlockMorph category: 'looks' defaultValues: #() subCategory: #a6 special: #()>
 	^super isVisible
 
 ]
@@ -1400,7 +1400,7 @@ PhratchSpriteMorph >> passiveYpos: aNumber [
 { #category : #'pen ops' }
 PhratchSpriteMorph >> penColor [
 	"Return my pen color"
-	<phratchItem: 'pen color' kind: #ReporterBlockMorph category: 'pen' defaultValues: #() subCategory: #a1 special: #()>
+	<phratchItem: 'pen color' kind: #ReporterWatcherBlockMorph category: 'pen' defaultValues: #() subCategory: #a1 special: #()>
 	^ penColor
 
 ]
@@ -1436,7 +1436,7 @@ PhratchSpriteMorph >> penDown: aBoolean [
 { #category : #'BYOB attributes' }
 PhratchSpriteMorph >> penHue [
 	"Return my pen hue"
-	<phratchItem: 'pen hue' kind: #ReporterBlockMorph category: 'pen' defaultValues: #() subCategory: #a1 special: #()>
+	<phratchItem: 'pen hue' kind: #ReporterWatcherBlockMorph category: 'pen' defaultValues: #() subCategory: #a1 special: #()>
 	| att |
 	att := #penColor.
 	self prototype ifNotNil: [
@@ -1456,7 +1456,7 @@ PhratchSpriteMorph >> penPosition [
 { #category : #'BYOB attributes' }
 PhratchSpriteMorph >> penShade [
 	"Return my pen shade"
-	<phratchItem: 'pen shade' kind: #ReporterBlockMorph category: 'pen' defaultValues: #() subCategory: #a1 special: #()>
+	<phratchItem: 'pen shade' kind: #ReporterWatcherBlockMorph category: 'pen' defaultValues: #() subCategory: #a1 special: #()>
 	| att |
 	att := #penShade.
 	self prototype ifNotNil: [
@@ -1469,7 +1469,7 @@ PhratchSpriteMorph >> penShade [
 { #category : #'pen ops' }
 PhratchSpriteMorph >> penSize [
 	"Return my pen size"
-	<phratchItem: 'pen size' kind: #ReporterBlockMorph category: 'pen' defaultValues: #() subCategory: #a1 special: #()>
+	<phratchItem: 'pen size' kind: #ReporterWatcherBlockMorph category: 'pen' defaultValues: #() subCategory: #a1 special: #()>
 	| att |
 	att := #penSize.
 	self prototype ifNotNil: [
@@ -1491,7 +1491,7 @@ PhratchSpriteMorph >> penSize: aNumber [
 { #category : #'blocks API' }
 PhratchSpriteMorph >> perimeter [
 "Return the perimeter based on the width and height"
-	<phratchItem: 'perimeter' kind: #ReporterBlockMorph category: 'looks' defaultValues: #() subCategory: #a4 special: #()>
+	<phratchItem: 'perimeter' kind: #ReporterWatcherBlockMorph category: 'looks' defaultValues: #() subCategory: #a4 special: #()>
 ^ (2 * self height) + (2 * self width)
 ]
 
@@ -1573,13 +1573,13 @@ PhratchSpriteMorph >> prepareForExport [
 { #category : #'blocks API' }
 PhratchSpriteMorph >> procedure [
 	"Return the given script without executing it"
-	<phratchItem: 'the script' kind: #CommandScriptBlockMorph category: 'operators' defaultValues: #() subCategory: #b2 special: #()>
+	<phratchItem: 'the script' kind: #CommandScriptBlockMorph category: 'control' defaultValues: #() subCategory: #process special: #()>
 ]
 
 { #category : #'blocks API' }
 PhratchSpriteMorph >> procedureWithArgs [
 "Return the given script with arguments without executing it"
-	<phratchItem: 'the script. Input names: $String$' kind: #CommandScriptBlockMorph category: 'operators' defaultValues: #() subCategory: #b2 special: #()>
+	<phratchItem: 'the script. Input names: $String$' kind: #CommandScriptBlockMorph category: 'control' defaultValues: #() subCategory: #process special: #()>
 ]
 
 { #category : #'byob OOP' }
@@ -1846,7 +1846,7 @@ PhratchSpriteMorph >> rotationDegrees: newRotationDegrees scalePoint: newScalePo
 { #category : #accessing }
 PhratchSpriteMorph >> rotationStyle [
 "Return my rotation style"
-	<phratchItem: 'rotation style' kind: #ReporterBlockMorph category: 'motion' defaultValues: #() subCategory: #a6 special: #()>
+	<phratchItem: 'rotation style' kind: #ReporterWatcherBlockMorph category: 'motion' defaultValues: #() subCategory: #a6 special: #()>
     ^ rotationStyle
 ]
 
@@ -1899,7 +1899,7 @@ PhratchSpriteMorph >> sayNothing [
 { #category : #accessing }
 PhratchSpriteMorph >> scale [
 	"Return the size"
-	<phratchItem: 'size' kind: #ReporterBlockMorph category: 'looks' defaultValues: #() subCategory: #a4 special: #()>
+	<phratchItem: 'size' kind: #ReporterWatcherBlockMorph category: 'looks' defaultValues: #() subCategory: #a4 special: #()>
 	| att |
 	att := #size.
 	self prototype ifNotNil: [
@@ -2035,7 +2035,7 @@ PhratchSpriteMorph >> slideBackToFormerSituation: evt [
 { #category : #'byob OOP' }
 PhratchSpriteMorph >> spawn [
 	"Duplicate me: My duplication is registered in the environment"
-	<phratchItem: 'duplicate' kind: #ReporterBlockMorph category: 'operators' defaultValues: #() subCategory: #b3 special: #()>
+	<phratchItem: 'duplicate' kind: #ReporterBlockMorph category: 'control' defaultValues: #() subCategory: #self special: #()>
 	| stage child |
 "
 	(frame := self ownerOrYourselfThatIsAPhratchFrameMorph) ifNil: [^ nil].
@@ -2414,14 +2414,14 @@ PhratchSpriteMorph >> whenSpriteCreated [
 { #category : #geometry }
 PhratchSpriteMorph >> width [
 	"Return my width"
-	<phratchItem: 'width' kind: #ReporterBlockMorph category: 'looks' defaultValues: #() subCategory: #a4 special: #()>
+	<phratchItem: 'width' kind: #ReporterWatcherBlockMorph category: 'looks' defaultValues: #() subCategory: #a4 special: #()>
 ^super width
 ]
 
 { #category : #accessing }
 PhratchSpriteMorph >> xpos [
 	"Return my x position"
-	<phratchItem: 'x position' kind: #ReporterBlockMorph category: 'motion' defaultValues: #() subCategory: #a7 special: #()>
+	<phratchItem: 'x position' kind: #ReporterWatcherBlockMorph category: 'motion' defaultValues: #() subCategory: #a7 special: #()>
 	| att |
 	att := #xPosition.
 	self prototype ifNotNil: [
@@ -2443,7 +2443,7 @@ PhratchSpriteMorph >> xpos: aNumber [
 { #category : #accessing }
 PhratchSpriteMorph >> ypos [
 	"Return my y position"
-	<phratchItem: 'y position' kind: #ReporterBlockMorph category: 'motion' defaultValues: #() subCategory: #a7 special: #()>
+	<phratchItem: 'y position' kind: #ReporterWatcherBlockMorph category: 'motion' defaultValues: #() subCategory: #a7 special: #()>
 	| att |
 	att := #yPosition.
 	self prototype ifNotNil: [

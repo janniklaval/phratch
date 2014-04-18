@@ -72,7 +72,11 @@ PhratchCategoryColors class >> viewerPageFor: aScriptablePhratchMorph [
 	(aScriptablePhratchMorph blocksFor: self label) do: [:blockOrSym |
 		({#- . #~ } includes: blockOrSym)
 			ifTrue: [
-				(blockOrSym = #-) ifTrue: [y := y + 15].  "insert a full space"
+				(blockOrSym = #-) ifTrue: [
+					y := y + 7.
+					page addMorph: ((ImageMorph new form: (PhratchFrameMorph skinAt: #connector)) position: x@y).
+					y := y + 20
+					"y := y + 15"].  "insert a full space"
 				(blockOrSym = #~) ifTrue: [y := y + 5].  "insert a half space"
 			]  "insert a line"
 			ifFalse: [

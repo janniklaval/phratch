@@ -28,6 +28,23 @@ UpdatingStringMorph >> formatValue: v [
 ]
 
 { #category : #'*Phratch-Extensions' }
+UpdatingStringMorph >> initialize [
+	"Initialie the receiver to have default values in its instance variables "
+	super initialize.
+
+	format := #default.
+	"formats: #string, #default"
+	target := getSelector := putSelector := nil.
+	floatPrecision := 1.
+	growable := true.
+	stepTime := 50.
+	autoAcceptOnFocusLoss := true.
+	minimumWidth := 8.
+	maximumWidth := 300.
+	isUpdating:= false.
+]
+
+{ #category : #'*Phratch-Extensions' }
 UpdatingStringMorph >> kern: ignored [
 ]
 
@@ -56,6 +73,22 @@ UpdatingStringMorph >> readFromTarget [
 ]
 
 { #category : #'*Phratch-Extensions' }
+UpdatingStringMorph >> step [
+
+	super step.
+	hasFocus ifFalse:
+		[
+		isUpdating ifFalse:[
+				[isUpdating := true.
+				self updateContentsFrom: self readFromTarget.
+				isUpdating := false] fork.
+			]
+		]
+	
+
+]
+
+{ #category : #'*Phratch-Extensions' }
 UpdatingStringMorph >> valueFromTargetOrNil [
 	"Answer the value read from my target. Answer nil if my target or selector is nil.."
 
@@ -66,6 +99,6 @@ UpdatingStringMorph >> valueFromTargetOrNil [
 	[ 
 	result := self parameter
 		ifNil: [ target perform: getSelector ]
-		ifNotNil: [ target perform: getSelector with: self parameter ] ] ifError: [PhratchError error  ].
+		ifNotNil: [ target perform: getSelector with: self parameter ]] ifError: [PhratchError error  ].
 	^ result
 ]

@@ -32,7 +32,7 @@ StrikeFont class >> osFontName: fontName size: desiredSize [
 	"copy a Squeak font of similar size:"
 	font := (StrikeFont familyName: 'Verdana' size: desiredSize) copy.
 	font
-		name: fontName;
+		familyName: fontName;
 		pointSize: desiredSize ";
 		isOSFont: true".
 	^ font

@@ -326,38 +326,6 @@ CommandBlockMorph >> blockWidth [
 	^self width
 ]
 
-{ #category : #private }
-CommandBlockMorph >> canBecomeWatcher [
-	"I determine which blocks can become watchers."
-
-	| i |
-	(#(	contentsOfList: 
-		lambda: 
-		doReport 
-		listNamed: 
-		newList:
-		getTrue 
-		getFalse 
-		function 
-		functionWithArgs
-		copyOfList:
-		doPauseThreadReporter
-		asciiLetter:
-		asciiCodeOf:
-		getObject:
-		getSpawnOf:
-		spawn
-		get:
-	) includes: selector) ifTrue: [^false].
-
-	i := selector asString findAnySubStr: #('mouse' 'key' 'touching' 'distance' 'File' 'Url') startingAt: 1.
-	^ (self isReporter) &
-	   (self argumentCount <= 1) &
-	   ((#(not atRandom abs rounded lineCountOfList: stringLength: keyPressed: numericConstant: true false returnW: objName stringToBoolean: reportVar: contentsOfList: reportColor:) includes: selector) not) &
-	   (i > selector asString size)
-
-]
-
 { #category : #evaluation }
 CommandBlockMorph >> coerceArgs: argList [
 	"Answer an arguments array in which all arguments that should be numbers have been coerced to numbers if necessary."

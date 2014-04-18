@@ -51,7 +51,11 @@ PhratchCategoryMotion class >> viewerPageFor: aScriptablePhratchMorph [
 	(aScriptablePhratchMorph blocksFor: 'motion') do: [:blockOrSym |
 		({#- . #~ . #=} includes: blockOrSym)
 			ifTrue: [
-				(blockOrSym = #-) ifTrue: [y := y + 15].  "insert a full space"
+				(blockOrSym = #-) ifTrue: [
+					y := y + 7.
+					bin addMorph: ((ImageMorph new form: (PhratchFrameMorph skinAt: #connector)) position: x@y).
+					y := y + 20
+					"y := y + 15"].  "insert a full space"
 				(blockOrSym = #~) ifTrue: [y := y + 5].  "insert a half space"
 				(blockOrSym = #=) ifTrue: [
 					y := y + 7.
