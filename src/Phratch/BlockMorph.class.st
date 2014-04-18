@@ -1327,7 +1327,7 @@ BlockMorph >> properties [
 BlockMorph >> receiver [
 	"Overridden by blocks which have receivers."
 
-	^ nil
+	^ false
 
 ]
 
@@ -1391,6 +1391,14 @@ BlockMorph >> rootForGrabOf: aMorph [
 
 		ifTrue: [^ super rootForGrabOf: aMorph]
 		ifFalse: [^ self].
+
+]
+
+{ #category : #accessing }
+BlockMorph >> selector [
+	"Overridden by blocks which have selector."
+
+	^ false
 
 ]
 
