@@ -25,6 +25,7 @@ PhratchInstaller class >> beginInstall [
 	SampledSound initialize.
 	
 	InputEventSensor addInstVarNamed: #keyPressed.
+	UpdatingStringMorph addInstVarNamed: #isUpdating.
 
 	self flag:'need to be removed after Pharo2.0 version'.
 	SystemVersion current major >= 3 ifTrue:[
