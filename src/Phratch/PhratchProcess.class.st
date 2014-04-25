@@ -889,7 +889,8 @@ PhratchProcess >> doWaitUntil [
 	| block args hasBoolean|
 	block := stackFrame expression.
 	args := stackFrame arguments.
-	hasBoolean := block submorphs second submorphs size > 0.
+	
+	hasBoolean := block submorphs last submorphs size > 0.
 
 	hasBoolean ifFalse: [^ self popStackFrame].
 	"evaluate the termination expression if we haven't yet."

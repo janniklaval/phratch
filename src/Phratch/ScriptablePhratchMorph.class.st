@@ -2516,7 +2516,7 @@ ScriptablePhratchMorph >> doUntil [
 ScriptablePhratchMorph >> doWaitUntil [
 	"Do nothing; just wait until the given condition."
 	<phratchItem: 'wait until $Boolean$' kind: #SpecialBlockMorph category: 'control' defaultValues: #() subCategory: #time special: #()>
-	^ nil
+
 
 ]
 
