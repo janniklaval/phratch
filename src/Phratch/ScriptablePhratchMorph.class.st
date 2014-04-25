@@ -4868,7 +4868,7 @@ ScriptablePhratchMorph >> numberSort: t1 [
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> numberToInteger: aString [
-	"Answer the given string as a boolean."
+	"Answer the given string as an integer."
 	<phratchItem: '$String$ as integer' kind: #ReporterBlockMorph category: 'operators' defaultValues: #('1.0') subCategory: #a4 special: #()>
 	| s |
 	s := aString asInteger.
