@@ -428,7 +428,7 @@ StringFieldMorph >> insertCharacter: unicodeChar [
 	| str newStr insertion |
 	isNumeric ifTrue: [
 		('-0123456789.,' includes: unicodeChar)
-			ifFalse: [^ Beeper beep]].
+			ifFalse: [^ PhratchError error: 'beep'.]].
 
 	self recordUndoState.
 	str := stringMorph contents.

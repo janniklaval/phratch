@@ -557,7 +557,7 @@ PhratchFrameMorph >> addSpriteMorph [
 
 	| result f m el |
 	self world activeHand toolType: nil.
-	self paintingInProgress ifTrue: [^ Beeper beep].
+	self paintingInProgress ifTrue: [^PhratchError error: 'beep'].
 
 	result := PhratchFileChooserDialog chooseSpriteCostumeFor: self.
 	result = #cancelled ifTrue: [^ self].
@@ -875,7 +875,7 @@ PhratchFrameMorph >> compressSounds [
 PhratchFrameMorph >> copyTool [
 
 	| hand cursorForm offset |
-	self paintingInProgress ifTrue: [^ Beeper beep].
+	self paintingInProgress ifTrue: [^ PhratchError error: 'beep'.].
 	hand := self world activeHand.
 	hand toolType: 'CopyTool'.
 
@@ -1112,7 +1112,7 @@ PhratchFrameMorph >> createViewModeButtonsPanel [
 PhratchFrameMorph >> cutTool [
 
 	| hand cursorForm offset |
-	self paintingInProgress ifTrue: [^ Beeper beep].
+	self paintingInProgress ifTrue: [^ PhratchError error: 'beep'.].
 	hand := self world activeHand.
 	hand toolType: 'CutTool'.
 
@@ -1285,9 +1285,7 @@ PhratchFrameMorph >> enterPresentationMode [
 	"Go into presentation mode."
 
 	| presenter |
-	"PhratchPlugin pluginAvailable ifFalse: [
-		self updateViewModeButtons.
-		^ Beeper beepPrimitive]."
+	
 	(viewMode = #presentation) ifTrue: [^ self].
 
 	lastViewMode := viewMode.
@@ -2162,7 +2160,7 @@ PhratchFrameMorph >> launchDocFile: aFilename [
 	
 	helpDir := FileSystem workingDirectory / 'htmlDoc'.
 	self stopAll.
-	
+	0.5 second wait.
 	(helpDir / aFilename) exists
 		ifTrue: [ 
 			self open: (((helpDir / aFilename) fullName))]
@@ -2177,7 +2175,7 @@ PhratchFrameMorph >> launchHelpFile: aFilename [
 	| helpDir subDir |
 	
 	helpDir := FileSystem workingDirectory / 'Help'.
-	helpDir exists ifFalse: [^ Beeper beep].  "no help folder"
+	helpDir exists ifFalse: [^ PhratchError error: 'beep'.].  "no help folder"
 	self stopAll.
 	
 
@@ -2602,9 +2600,9 @@ PhratchFrameMorph >> presentHelpScreen: aStringOrNil [
 	"Look for a help screen with the given name in the 'Help' folder. If found, present it to the user."
 
 	| helpDir subDir fileNames helpFileName helpForm |
-	aStringOrNil ifNil: [^ Beeper beep].
+	aStringOrNil ifNil: [^ PhratchError error: 'beep'.].
 
-	(FileSystem workingDirectory fileSystem exists: 'Help') ifFalse: [^ Beeper beep].  "no help folder"
+	(FileSystem workingDirectory fileSystem exists: 'Help') ifFalse: [^ PhratchError error: 'beep'.].  "no help folder"
 	helpDir := FileSystem workingDirectory / 'Help'.
 
 	"use the English subfolder by default if it exists"
@@ -2622,7 +2620,7 @@ PhratchFrameMorph >> presentHelpScreen: aStringOrNil [
 			helpFileName := aStringOrNil, '.', ext.
 			(fileNames includes: helpFileName asLowercase)
 				ifFalse: [helpFileName := nil]]].
-	helpFileName ifNil: [^ Beeper beep].
+	helpFileName ifNil: [^ PhratchError error: 'beep'.].
 
 	World doOneCycle.  "update cursor before fetching helpForm"
 	[helpForm := Form fromFileNamed: (helpDir / helpFileName) fullName]
@@ -3276,7 +3274,7 @@ PhratchFrameMorph >> surpriseSpriteMorph [
 
 	| fileName f el m e |
 	self world activeHand toolType: nil.
-	self paintingInProgress ifTrue: [^ Beeper beep].
+	self paintingInProgress ifTrue: [PhratchError error: 'beep'.^ PhratchError error: 'beep'.].
 
 	fileName := self nextSurpriseCostumeName.
 	fileName ifNil: [
@@ -3345,12 +3343,12 @@ PhratchFrameMorph >> undoTool [
 
 	<phratchMenu: 'Undelete' category: 'edit' position: 1 sub:1 shift: false>
 	| m newOwner oldName |
-	self paintingInProgress ifTrue: [^ Beeper beep].
-	Clipboard ifNil: [^ Beeper beep].
+	self paintingInProgress ifTrue: [^ PhratchError error: 'beep'.].
+	Clipboard ifNil: [^ PhratchError error: 'beep'.].
 	self activeHand toolType: nil.
 	m := Clipboard copy.
 	((m isBlockMorph) and: [m isCustomBlock and: [m definition isNil]])
-		ifTrue: [^ Beeper beep].
+		ifTrue: [^ PhratchError error: 'beep'.].
 	"Reset clipboard to empty since an undo just happened"
 	
 	(m isBlockMorph) ifTrue: [
@@ -3913,7 +3911,7 @@ PhratchFrameMorph >> writeSummaryTotalsOn: aStream [
 PhratchFrameMorph >> zoomInTool [
 
 	| hand cursorForm offset |
-	self paintingInProgress ifTrue: [^ Beeper beep].
+	self paintingInProgress ifTrue: [^ PhratchError error: 'beep'.].
 	hand := self world activeHand.
 	hand toolType: 'ZoomInTool'.
 
@@ -3928,7 +3926,7 @@ PhratchFrameMorph >> zoomInTool [
 PhratchFrameMorph >> zoomOutTool [
 
 	| hand cursorForm offset |
-	self paintingInProgress ifTrue: [^ Beeper beep].
+	self paintingInProgress ifTrue: [^ PhratchError error: 'beep'.].
 	hand := self world activeHand.
 	hand toolType: 'ZoomOutTool'.
 

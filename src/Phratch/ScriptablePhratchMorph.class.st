@@ -390,14 +390,14 @@ ScriptablePhratchMorph >> \\ aNumber [
 ScriptablePhratchMorph >> addColor [
 
 	| sFrame result colorName colorOwner |
-	(sFrame := self ownerOrYourselfThatIsAPhratchFrameMorph) ifNil: [^ Beeper beep].
+	(sFrame := self ownerOrYourselfThatIsAPhratchFrameMorph) ifNil: [^ PhratchError error: 'beep'.].
 
 	result := NewVariableDialog ask: 'Color name?'.
 	result = #cancelled ifTrue: [^ self].
 	colorName := result first.
 	colorOwner := result second ifTrue: [self] ifFalse: [sFrame workPane].
 	(colorOwner variableNameInUse: colorName) ifTrue: [
-		Beeper beep.
+		PhratchError error: 'beep'.
 		DialogBoxMorph warn: 'That variable name is already in use'.
 		^ self].
 
@@ -411,7 +411,7 @@ ScriptablePhratchMorph >> addColor: colorName [
 	"Add a new random color with the given name to this object."
 	<phratchItem: 'make color $String$' kind: #- category: 'colors' defaultValues: #('a color') subCategory: #a3 special: #()>
 	| sFrame stage isGlobal |
-	(sFrame := self ownerOrYourselfThatIsAPhratchFrameMorph) ifNil: [^ Beeper beep].
+	(sFrame := self ownerOrYourselfThatIsAPhratchFrameMorph) ifNil: [^ PhratchError error: 'beep'.].
 	isGlobal := false.
 	(stage := self ownerOrYourselfThatIsAPhratchStageMorph)
 		ifNotNil: [isGlobal := stage colorNames includes: colorName asString].
@@ -675,13 +675,13 @@ ScriptablePhratchMorph >> addGlobalColor [
 	"Ask the user for a color variable name, then add a background (global) variable of that name."
 
 	| sFrame cName |
-	(sFrame := self ownerThatIsAPhratchFrameMorph) ifNil: [^ Beeper beep].
+	(sFrame := self ownerThatIsAPhratchFrameMorph) ifNil: [^ PhratchError error: 'beep'.].
 
 	cName := StringDialog ask: 'Variable name?'.
 	cName size = 0 ifTrue: [^ self].
 	cName := cName.
 	(sFrame workPane colorNames includes: cName) ifTrue: [
-		Beeper beep.
+		PhratchError error: 'beep'.
 		DialogBoxMorph warn: 'That variable name is already in use'.
 		^ self].
 
@@ -693,7 +693,7 @@ ScriptablePhratchMorph >> addGlobalColor [
 ScriptablePhratchMorph >> addGlobalList [
 
 	| sFrame listName |
-	(sFrame := self ownerOrYourselfThatIsAPhratchFrameMorph) ifNil: [^ Beeper beep].
+	(sFrame := self ownerOrYourselfThatIsAPhratchFrameMorph) ifNil: [^ PhratchError error: 'beep'.].
 
 	listName := StringDialog ask: 'List name?'.
 	listName size = 0 ifTrue: [^ self].
@@ -707,13 +707,13 @@ ScriptablePhratchMorph >> addGlobalVariable [
 	"Ask the user for a variable name, then add a background (global) variable of that name."
 
 	| sFrame varName |
-	(sFrame := self ownerOrYourselfThatIsAPhratchFrameMorph) ifNil: [^ Beeper beep].
+	(sFrame := self ownerOrYourselfThatIsAPhratchFrameMorph) ifNil: [^ PhratchError error: 'beep'.].
 
 	varName := StringDialog ask: 'Variable name?'.
 	varName size = 0 ifTrue: [^ self].
 	varName := varName.
 	(sFrame workPane variableNameInUse: varName) ifTrue: [
-		Beeper beep.
+		PhratchError error: 'beep'.
 		DialogBoxMorph warn: 'That variable name is already in use'.
 		^ self].
 
@@ -727,7 +727,7 @@ ScriptablePhratchMorph >> addGlobalVariable [
 ScriptablePhratchMorph >> addList [
 
 	| sFrame result listName |
-	(sFrame := self ownerOrYourselfThatIsAPhratchFrameMorph) ifNil: [^ Beeper beep].
+	(sFrame := self ownerOrYourselfThatIsAPhratchFrameMorph) ifNil: [^ PhratchError error: 'beep'.].
 
 	result := NewVariableDialog ask: 'List name?'.
 	result = #cancelled ifTrue: [^ self].
@@ -822,14 +822,14 @@ ScriptablePhratchMorph >> addVariable [
 	"Ask the user for a variable name, then add a user variable of that name. This version is for sprites and supports the option of making the variable specific to the sprite (i.e. local)."
 
 	| sFrame result varName varOwner w |
-	(sFrame := self ownerOrYourselfThatIsAPhratchFrameMorph) ifNil: [^ Beeper beep].
+	(sFrame := self ownerOrYourselfThatIsAPhratchFrameMorph) ifNil: [^ PhratchError error: 'beep'.].
 
 	result := NewVariableDialog ask: 'Variable name?'.
 	result = #cancelled ifTrue: [^ self].
 	varName := result first.
 	varOwner := result second ifTrue: [self] ifFalse: [sFrame workPane].
 	(varOwner variableNameInUse: varName) ifTrue: [
-		Beeper beep.
+		PhratchError error: 'beep'.
 		DialogBoxMorph warn: 'That variable name is already in use'.
 		^ self].
 
@@ -848,7 +848,7 @@ ScriptablePhratchMorph >> addVariable: varName [
 	"Add a new user variable with the given name to this object. Do nothing if the variable already exists or is built in."
 	<phratchItem: 'make $String$' kind: #- category: 'variables' defaultValues: #('a variable') subCategory: #a1 special: #()>
 	| sFrame |
-	(sFrame := self ownerOrYourselfThatIsAPhratchFrameMorph) ifNil: [^ Beeper beep].
+	(sFrame := self ownerOrYourselfThatIsAPhratchFrameMorph) ifNil: [^ PhratchError error: 'beep'.].
 	(vars includesKey: varName asString) ifFalse: [
 		vars at: varName asString put: 0].
 	self isClone: false.
@@ -1860,7 +1860,7 @@ ScriptablePhratchMorph >> createListNamed: listName [
 
 	| list stage n |
 	(self variableNameInUse: listName) ifTrue: [
-		Beeper beep.
+		PhratchError error: 'beep'.
 		DialogBoxMorph warn: 'That variable name is already in use'.
 		^ self].
 
@@ -2132,7 +2132,7 @@ ScriptablePhratchMorph >> deleteList: listName [
 	"Delete the list variable with the given name. Do nothing if the variable doesn't exist."
 	<phratchItem: 'delete list $String$' kind: #- category: 'list' defaultValues: #('a list') subCategory: #a2 special: #()>
 	| stage sFrame |
-	(sFrame := self ownerOrYourselfThatIsAPhratchFrameMorph) ifNil: [^ Beeper beep].
+	(sFrame := self ownerOrYourselfThatIsAPhratchFrameMorph) ifNil: [^ PhratchError error: 'beep'.].
 	stage := self ownerOrYourselfThatIsAPhratchStageMorph.
 	lists removeKey: listName asString ifAbsent: [].
 	(self prototype notNil and: [self prototype lists includesKey: listName]) ifFalse: [ 
@@ -2639,10 +2639,10 @@ ScriptablePhratchMorph >> editDrawingOldCostumeName: oldCostumeName deleteOnCanc
 	"Edit my original form with the paint editor."
 
 	| sFrame paintEditor |
-	costume isMovie ifTrue: [^ Beeper beep].
+	costume isMovie ifTrue: [^ PhratchError error: 'beep'.].
 	(sFrame := self ownerOrYourselfThatIsAPhratchFrameMorph)
 		ifNotNil: [
-			sFrame paintingInProgress ifTrue: [^ Beeper beep].
+			sFrame paintingInProgress ifTrue: [^ PhratchError error: 'beep'.].
 			sFrame stopAll.
 			sFrame paintingInProgress: true].
 
@@ -2669,10 +2669,10 @@ ScriptablePhratchMorph >> editDrawingOldCostumeName: oldCostumeName deleteOnCanc
 	"Edit my original form with the paint editor."
 
 	| sFrame paintEditor |
-	costume isMovie ifTrue: [^ Beeper beep].
+	costume isMovie ifTrue: [^ PhratchError error: 'beep'.].
 	(sFrame := self ownerThatIsAPhratchFrameMorph) ifNil: [(sFrame := (self ownerThatIsAOffscreenWorldMorph) frame) ifNil: [^ self]].
 
-	sFrame paintingInProgress ifTrue: [^ Beeper beep].
+	sFrame paintingInProgress ifTrue: [^ PhratchError error: 'beep'.].
 	"sFrame stopAll."
 	sFrame paintingInProgress: true.
 
@@ -3294,7 +3294,7 @@ ScriptablePhratchMorph >> handleTool: toolName hand: hand [
 
 	"exit now if I am not scalable"
 	(self respondsTo: #multiplySizeBy:) ifFalse: [
-		Beeper beep.
+		PhratchError error: 'beep'.
 		hand toolType: nil.
 		^ self].
 
@@ -5423,7 +5423,7 @@ ScriptablePhratchMorph >> recordSound [
 
 	| frame |
 	frame := self ownerOrYourselfThatIsAPhratchFrameMorph.
-	frame ifNil: [^ Beeper beep].
+	frame ifNil: [^ PhratchError error: 'beep'.].
 	frame stopAll.
 	World submorphs do: [:m |
 		(m isKindOf: PhratchSoundRecorderDialogMorph) ifTrue: [m delete]].

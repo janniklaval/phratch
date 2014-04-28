@@ -283,7 +283,7 @@ PaintCanvas >> copyMoveSelection [
 	"If we've made a selection with the move tool but haven't yet picked it up, make a copy of the selection."
 
 	| f r |
-	((palette mode = #move) & selectionRect notNil) ifFalse: [^ Beeper beep].
+	((palette mode = #move) & selectionRect notNil) ifFalse: [^PhratchError error: 'beep'.].
 
 	moveOrStampForm
 		ifNil: [moveOrStampForm := canvasForm copy: selectionRect]
@@ -911,8 +911,7 @@ PaintCanvas >> keyStroke: evt [
 		k = 29 ifTrue: [^ self nudge:  1@0].  "right"
 		k = 30 ifTrue: [^ self nudge:  0@(-1)].  "up"
 		k = 31 ifTrue: [^ self nudge:  0@1]].  "down"
-
-      Beeper beep.
+	PhratchError error: 'beep'.
 
 ]
 
@@ -1138,12 +1137,12 @@ PaintCanvas >> prepareToTransform [
 { #category : #'button actions' }
 PaintCanvas >> redo [
 
-	palette mode = #text ifTrue: [^ Beeper beep].
+	palette mode = #text ifTrue: [^ PhratchError error: 'beep'.].
 
 	palette showRotationCenter ifTrue: [^ self redoRegPointMove].
 	transformSrcForm ifNotNil: [^ self redoTransform].
 
-	undoIndex > 1 ifFalse: [^ Beeper beep].  "nothing more to redo"
+	undoIndex > 1 ifFalse: [^ PhratchError error: 'beep'.].  "nothing more to redo"
 	undoIndex := undoIndex - 1.
 	canvasForm := undoList at: undoIndex.
 	self clearMoveState.
@@ -1154,8 +1153,8 @@ PaintCanvas >> redo [
 { #category : #'registration point' }
 PaintCanvas >> redoRegPointMove [
 
-	regPointUndoList ifNil: [^ Beeper beep].  "no undo entries yet"
-	regPointUndoIndex < 2 ifTrue: [^ Beeper beep].  "nothing more to redo"
+	regPointUndoList ifNil: [^ PhratchError error: 'beep'.].  "no undo entries yet"
+	regPointUndoIndex < 2 ifTrue: [^ PhratchError error: 'beep'.].  "nothing more to redo"
 	regPointUndoIndex := regPointUndoIndex - 1.
 	registrationPoint := regPointUndoList at: regPointUndoIndex.
 	self changed.
@@ -1166,8 +1165,8 @@ PaintCanvas >> redoRegPointMove [
 PaintCanvas >> redoTransform [
 
 	| rec |
-	transformUndoList ifNil: [^ Beeper beep].  "no undo entries yet"
-	transformUndoIndex < 2 ifTrue: [^ Beeper beep].  "nothing more to redo"
+	transformUndoList ifNil: [^ PhratchError error: 'beep'.].  "no undo entries yet"
+	transformUndoIndex < 2 ifTrue: [^ PhratchError error: 'beep'.].  "nothing more to redo"
 	transformUndoIndex := transformUndoIndex - 1.
 
 	rec := transformUndoList at: transformUndoIndex.
@@ -1562,12 +1561,12 @@ PaintCanvas >> textMouseMove: evt [
 { #category : #'button actions' }
 PaintCanvas >> undo [
 
-	palette mode = #text ifTrue: [^ Beeper beep].
+	palette mode = #text ifTrue: [^ PhratchError error: 'beep'.].
 
 	palette showRotationCenter ifTrue: [^ self undoRegPointMove].
 	transformSrcForm ifNotNil: [^ self undoTransform].
 
-	undoIndex >= undoList size ifTrue: [^ Beeper beep].  "nothing more to undo"
+	undoIndex >= undoList size ifTrue: [^ PhratchError error: 'beep'.].  "nothing more to undo"
 
 	palette mode = #move ifTrue: [moveOrStampForm := selectionRect := nil].
 
@@ -1585,8 +1584,8 @@ PaintCanvas >> undo [
 { #category : #'registration point' }
 PaintCanvas >> undoRegPointMove [
 
-	regPointUndoList ifNil: [^ Beeper beep].  "no undo entries yet"
-	regPointUndoIndex >= regPointUndoList size ifTrue: [^ Beeper beep].  "nothing more to undo"
+	regPointUndoList ifNil: [^ PhratchError error: 'beep'.].  "no undo entries yet"
+	regPointUndoIndex >= regPointUndoList size ifTrue: [^ PhratchError error: 'beep'.].  "nothing more to undo"
 	regPointUndoIndex = 0 ifTrue: [
 		self saveRegPointForUndo.
 		regPointUndoIndex := 1].
@@ -1601,8 +1600,8 @@ PaintCanvas >> undoRegPointMove [
 PaintCanvas >> undoTransform [
 
 	| rec |
-	transformUndoList ifNil: [^ Beeper beep].  "no undo entries yet"
-	transformUndoIndex >= transformUndoList size ifTrue: [^ Beeper beep].  "nothing more to undo"
+	transformUndoList ifNil: [^ PhratchError error: 'beep'.].  "no undo entries yet"
+	transformUndoIndex >= transformUndoList size ifTrue: [^ PhratchError error: 'beep'.].  "nothing more to undo"
 	transformUndoIndex = 0 ifTrue: [
 		self saveTransformForUndo.
 		transformUndoIndex := 1].

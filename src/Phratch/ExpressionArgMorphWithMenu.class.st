@@ -360,7 +360,7 @@ ExpressionArgMorphWithMenu >> mouseDown: evt [
 
 	(getMenuSelector notNil and:
 	 [(owner isBlockMorph) and: 
-	 [(rcvr := owner receiver) notNil]]) ifFalse: [^ Beeper beep].
+	 [(rcvr := owner receiver) notNil]]) ifFalse: [^ PhratchError error: 'beep'.].
 	menu := rcvr perform: getMenuSelector.
 	(menu isKindOf: PhratchNoteSelector) ifTrue: [
 		menu position: owner bottomLeft + (((owner width - menu width) // 2) @ -4).

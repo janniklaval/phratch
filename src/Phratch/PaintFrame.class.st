@@ -319,7 +319,7 @@ PaintFrame >> exitPaintEditor [
 PaintFrame >> export [
 	| triple form textBox fName f |
 	triple := self newFormTextBoxAndRegPoint.
-	triple ifNil: [ ^ Beeper beep ].	"empty drawing"
+	triple ifNil: [^ PhratchError error: 'beep'. ].	"empty drawing"
 	form := triple first.
 	textBox := triple second.
 	(textBox isNil or: [ textBox contents isEmpty ])
@@ -637,7 +637,7 @@ PaintFrame >> yes [
 	originalObject ifNil: [^ self exitPaintEditor].
 
 	triple := self newFormTextBoxAndRegPoint.
-	triple ifNil: [ Beeper  beep. ^self cancelled].
+	triple ifNil: [ PhratchError error: 'beep'.Beeper  beep. ^self cancelled].
 
 	originalObject
 		editedForm: triple first textBox: triple second;

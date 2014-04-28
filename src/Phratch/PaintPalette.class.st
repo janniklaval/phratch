@@ -484,7 +484,7 @@ PaintPalette >> textSizeMenu [
 		ifTrue: [ #(8 9 10 12 14 18 24 36 48 60 72 96 120 144 216 288) ]
 		ifFalse: [ StrikeFont sizesForFontName: font name ].
 	sizeList size = 0
-		ifTrue: [ ^ Beeper beep ].	"should not happen"
+		ifTrue: [^PhratchError error: 'beep'. ].	"should not happen"
 	sizeList
 		do: [ :n | 
 			menu

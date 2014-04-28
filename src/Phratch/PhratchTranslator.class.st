@@ -425,7 +425,7 @@ PhratchTranslator class >> renderingMenu [
 	World activeHand toolType: nil.
 	Cursor normal show.
 	RenderWithSqueak
-		ifTrue: [ ^ Beeper beep ].
+		ifTrue: [ ^ PhratchError error: 'beep'. ].
 
 	menu := MenuMorph new defaultTarget: self.
 	menu add: 'set font scale...' translated action: #fontScaleMenu.
