@@ -1377,6 +1377,13 @@ PhratchFrameMorph >> exportSprite [
 
 ]
 
+{ #category : #'as yet unclassified' }
+PhratchFrameMorph >> extent: aPoint [
+
+	super extent: aPoint.
+	self fixLayout.
+]
+
 { #category : #'file read/write' }
 PhratchFrameMorph >> extractInfoFrom: aByteArray [
 	"Answer a Phratch info dictionary from the given ByteArray. Answer an empty dictionary if it is an old project."
@@ -3199,16 +3206,17 @@ PhratchFrameMorph >> step [
 	"Run each process until it gives up control, then filter out any processes that have terminated."
 
 
-"	fillScreenFlag ifTrue: [
+	| screenExtent oldJustSaved |
+
+	fillScreenFlag ifTrue: [
 		screenExtent := Display extent.
-		((self position = (0@0)) and: [self extent = screenExtent]) ifFalse: [
+		(self extent = screenExtent) ifFalse: [
 			oldJustSaved := justSaved.
 			self position: 0@0.
 			self extent: screenExtent.
-			self enterQuarterModeIfSmallScreen.
 			scriptsPane currentCategory: scriptsPane currentCategory.
 			justSaved := oldJustSaved.
-			^ self]]." "simplify at the moment"
+			^ self]]. "simplify at the moment"
 
 	"workPane ifNotNil: [
 		ScriptablePhratchMorph phratchOrigin: workPane center.

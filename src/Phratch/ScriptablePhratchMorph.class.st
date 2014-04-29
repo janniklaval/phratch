@@ -6477,8 +6477,8 @@ ScriptablePhratchMorph >> unusedMediaNameFromBaseName: baseName forMedia: aMedia
 { #category : #'debug and other' }
 ScriptablePhratchMorph >> updateAfterPopUp [
 
-	self flag:'crappy line to solve Issue 53:	some blocks are executable only once'.
 	PhratchFrameMorph allInstancesDo:[:d | d  updateWorkPane].
+	
 ]
 
 { #category : #byob }

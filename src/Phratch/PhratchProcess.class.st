@@ -560,7 +560,6 @@ PhratchProcess >> doForever [
 	"Right now, the forever special form is at the top of the stack.  We're going to add two more things on top of this:  (1) a frame for evaluating the blocks in the forever block, and (2) a frame that just results in yielding control.  That way we'll evaluate the contents of the block, give up control, and do it all again."
 
 	| blocks |
-self halt.
 	"Remember blocks to evaluate before we clobber the stack."
 	blocks := stackFrame expression firstBlockList.	
 
