@@ -238,6 +238,82 @@ ConfigurationOfPhratch >> baseline20: spec [
 ]
 
 { #category : #'as yet unclassified' }
+ConfigurationOfPhratch >> baseline30: spec [
+	<version:'3.0-baseline'>
+	spec for: #common do: [
+			spec blessing: #baseline.
+			spec repository: 'http://smalltalkhub.com/mc/JLaval/Phratch/main'.
+			
+			spec project: 'Sound' with: [
+				spec 
+					className: 'ConfigurationOfPharoSound';
+					file: 'ConfigurationOfPharoSound' ;
+					version: #stable;
+					repository: 'http://smalltalkhub.com/mc/PharoExtras/Sound/main'.
+			].
+			spec project: 'OSProcess' with: [
+				spec
+					repository: 'http://www.squeaksource.com/MetacelloRepository'; 
+					className: 'ConfigurationOfOSProcess';
+					version: #stable ].
+	].
+	spec for: #'pharo2.x' do: [
+			spec repository: 'http://smalltalkhub.com/mc/JLaval/Phratch/main'.
+			spec
+				package: 'Phratch' with: [ 
+					spec requires: #('Sound' 'OSProcess')
+			].
+			spec
+				package: 'Phratch3CleanSound' with: [ 
+					spec requires: #('Phratch')
+			].
+	].
+	spec for: #'pharo3.x' do: [
+			spec repository: 'http://smalltalkhub.com/mc/JLaval/Phratch/main'.
+			spec
+				package: 'Phratch' with: [ 
+					spec requires: #('Sound' 'OSProcess')
+			].
+			spec
+				package: 'Phratch3CleanSound' with: [ 
+					spec requires: #('Phratch')
+			].
+	]
+]
+
+{ #category : #'as yet unclassified' }
+ConfigurationOfPhratch >> baseline40: spec [
+	<version:'4.0-baseline'>
+	spec for: #common do: [
+			spec blessing: #baseline.
+			spec repository: 'http://smalltalkhub.com/mc/JLaval/Phratch/main'.
+			
+			spec project: 'Sound' with: [
+				spec 
+					className: 'ConfigurationOfPharoSound';
+					file: 'ConfigurationOfPharoSound' ;
+					version: #stable;
+					repository: 'http://smalltalkhub.com/mc/PharoExtras/Sound/main'.
+			].
+			spec project: 'OSProcess' with: [
+				spec
+					repository: 'http://www.squeaksource.com/MetacelloRepository'; 
+					className: 'ConfigurationOfOSProcess';
+					version: #stable ].
+			spec repository: 'http://smalltalkhub.com/mc/JLaval/Phratch/main'.
+			spec
+				package: 'Phratch' with: [ 
+					spec requires: #('Sound' 'OSProcess')
+			].
+			spec
+				package: 'Phratch3CleanSound' with: [ 
+					spec requires: #('Phratch')
+			].
+	].
+			
+]
+
+{ #category : #'as yet unclassified' }
 ConfigurationOfPhratch >> project [
 	^ project ifNil: [
 		 | constructor |
@@ -297,7 +373,21 @@ ConfigurationOfPhratch >> version20: spec [
 
 { #category : #'as yet unclassified' }
 ConfigurationOfPhratch >> version30: spec [
-	<version:'3.0' imports: #('2.0-baseline' )>
+	<version:'3.0' imports: #('3.0-baseline' )>
+	spec for: #common do: [
+			spec repository: 'http://smalltalkhub.com/mc/JLaval/Phratch/main'.
+			spec
+				package: 'Phratch';
+				package: 'Phratch3CleanSound'.
+			spec
+				project: 'Sound' with: #stable;
+				project: 'OSProcess' with: #stable.
+	].
+]
+
+{ #category : #'as yet unclassified' }
+ConfigurationOfPhratch >> version40: spec [
+	<version:'4.0' imports: #('4.0-baseline' )>
 	spec for: #common do: [
 			spec repository: 'http://smalltalkhub.com/mc/JLaval/Phratch/main'.
 			spec
