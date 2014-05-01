@@ -305,10 +305,6 @@ ConfigurationOfPhratch >> baseline40: spec [
 				package: 'Phratch' with: [ 
 					spec requires: #('Sound' 'OSProcess')
 			].
-			spec
-				package: 'Phratch3CleanSound' with: [ 
-					spec requires: #('Phratch')
-			].
 	].
 			
 ]
