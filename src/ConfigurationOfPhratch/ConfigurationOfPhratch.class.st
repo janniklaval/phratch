@@ -263,20 +263,12 @@ ConfigurationOfPhratch >> baseline30: spec [
 				package: 'Phratch' with: [ 
 					spec requires: #('Sound' 'OSProcess')
 			].
-			spec
-				package: 'Phratch3CleanSound' with: [ 
-					spec requires: #('Phratch')
-			].
 	].
 	spec for: #'pharo3.x' do: [
 			spec repository: 'http://smalltalkhub.com/mc/JLaval/Phratch/main'.
 			spec
 				package: 'Phratch' with: [ 
 					spec requires: #('Sound' 'OSProcess')
-			].
-			spec
-				package: 'Phratch3CleanSound' with: [ 
-					spec requires: #('Phratch')
 			].
 	]
 ]
@@ -373,8 +365,7 @@ ConfigurationOfPhratch >> version30: spec [
 	spec for: #common do: [
 			spec repository: 'http://smalltalkhub.com/mc/JLaval/Phratch/main'.
 			spec
-				package: 'Phratch' with: 'Phratch-janniklaval.341';
-				package: 'Phratch3CleanSound' with: 'Phratch3CleanSound-jlaval.1'.
+				package: 'Phratch' with: 'Phratch-janniklaval.342'.
 			spec
 				project: 'Sound' with: #stable;
 				project: 'OSProcess' with: #stable.
