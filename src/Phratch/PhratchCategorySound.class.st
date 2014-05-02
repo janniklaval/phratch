@@ -10,6 +10,13 @@ PhratchCategorySound class >> color [
 ]
 
 { #category : #accessing }
+PhratchCategorySound class >> initialize [ 	
+	"self initialize"
+	super initialize.
+	visible  := false.
+]
+
+{ #category : #accessing }
 PhratchCategorySound class >> label [
 	^'sound'
 ]

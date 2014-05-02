@@ -827,7 +827,7 @@ PhratchFrameMorph >> compressImages [
 
 { #category : #'menu/button actions' }
 PhratchFrameMorph >> compressSounds [
-	<phratchMenu: 'Compress Sounds' category: 'edit' position: 3 sub:2 shift: false>
+	"<phratchMenu: 'Compress Sounds' category: 'edit' position: 3 sub:2 shift: false>"
 	| menu bitsPerSample count |
 	menu := MenuMorph new
 		title: 'Sound quality:' translated;
@@ -3515,10 +3515,10 @@ PhratchFrameMorph >> updateMediaCategoryFor: anObject [
 	"Update the media viewer for the given object's media category. Do nothing if the media category of the given object is not being viewed."
 
 	scriptsPane target = anObject ifTrue: [
-		scriptsPane categoryChanged: 'Sounds'.
+		"scriptsPane categoryChanged: 'Sounds'."
 		scriptsPane categoryChanged: 'Costumes'].
 	viewerPane target = anObject ifTrue: [
-		viewerPane categoryChanged: 'Sound'].
+		"viewerPane categoryChanged: 'Sound'"].
 
 ]
 
