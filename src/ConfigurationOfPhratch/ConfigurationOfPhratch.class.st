@@ -373,7 +373,7 @@ ConfigurationOfPhratch >> version30: spec [
 	spec for: #common do: [
 			spec repository: 'http://smalltalkhub.com/mc/JLaval/Phratch/main'.
 			spec
-				package: 'Phratch' with: 'Phratch-jlaval.340';
+				package: 'Phratch' with: 'Phratch-jlaval.341';
 				package: 'Phratch3CleanSound' with: 'Phratch3CleanSound-jlaval.1'.
 			spec
 				project: 'Sound' with: #stable;
