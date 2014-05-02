@@ -6049,8 +6049,9 @@ ScriptablePhratchMorph >> soundNames [
 			nm := el mediaName.
 			(result anySatisfy: [:s | s caseInsensitiveEqual: nm])
 				ifFalse: [result add: nm]]].
-	result addLast: '-'.
-	result addLast: 'record' localized, '...'.
+	self flag:'remove record because does not work'.
+	"result addLast: '-'.
+	result addLast: 'record' localized, '...'."
 	^ result asArray
 
 ]
@@ -6082,7 +6083,8 @@ ScriptablePhratchMorph >> soundsPage: xOffset [
 
 	recBut := PhratchFrameMorph buttonLabel: 'Record' localized selector: #recordSound.
 	recBut target: self.
-	bin addMorph: recBut.
+	self flag:'remove record because does not work'.
+	"bin addMorph: recBut."
 
 	impBut := PhratchFrameMorph buttonLabel: 'Import' localized selector: #importSound.
 	impBut target: self.

@@ -136,7 +136,8 @@ PhratchSoundRecorderDialogMorph >> makeModeButtonsPane [
 
 	modeButtonsPane := AlignmentMorph newRow vResizing: #shrinkWrap.
 	modeButtonsPane color: Color transparent.
-	#(play stop record) do: [:n |
+	self flag:'remove record because does not work'.
+	#(play stop "record") do: [:n |
 		button := (self buttonType: n asString capitalized action: n).
 		button setProperty: #balloonText toValue: n asString localized.
 		modeButtonsPane addMorphBack: button].
