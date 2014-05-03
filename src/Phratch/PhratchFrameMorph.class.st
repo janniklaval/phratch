@@ -769,10 +769,10 @@ PhratchFrameMorph >> closeMediaEditorsAndDialogs [
 		mList do: [:m | m cancelled; delete].
 		paintingInProgress := false].
 
-	mList := PhratchSoundRecorderDialogMorph allInstances select: [:m | m isInWorld].
+	"mList := PhratchSoundRecorderDialogMorph allInstances select: [:m | m isInWorld].
 	mList size > 0 ifTrue: [
 		(DialogBoxMorph ask: 'Close sound recorder?') ifFalse: [^ false].
-		mList do: [:m | m cancelled; delete]].
+		mList do: [:m | m cancelled; delete]]."
 
 	mList := DialogBoxMorph allInstances select: [:m | m isInWorld].
 	mList size > 0 ifTrue: [
@@ -2316,14 +2316,6 @@ PhratchFrameMorph >> newPhratchProject [
 	blockEditors := Set new.
 	justSaved := true.
 
-]
-
-{ #category : #other }
-PhratchFrameMorph >> newSound [
-	"Open the dialog to record a new sound."
-
-	scriptsPane tabPane currentTab: 'Sounds'.
-	viewerPane target recordSound.
 ]
 
 { #category : #private }

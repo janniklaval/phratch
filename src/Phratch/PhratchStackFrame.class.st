@@ -163,14 +163,6 @@ PhratchStackFrame >> startValue: aTime [
 ]
 
 { #category : #accessing }
-PhratchStackFrame >> stopMIDI [
-
-	(self startValue isKindOf: PhratchNotePlayer)
-		ifTrue: [startValue noteOff].
-
-]
-
-{ #category : #accessing }
 PhratchStackFrame >> stopTalkThinkAsk [
 	| query |
 	expression isArray

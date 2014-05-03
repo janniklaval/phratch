@@ -672,21 +672,6 @@ PhratchFilePicker >> showThumbnails: aBoolean [
 
 ]
 
-{ #category : #accessing }
-PhratchFilePicker >> startPlayingSound: fullName [
-	"Attempt to play the sound with given name."
-
-	self stopPlayingSound.
-	sound := (fullName asLowercase endsWith: '.mp3')
-		ifTrue: [ [ StreamingMP3Sound onFileNamed: fullName ] ifError: [ nil ] ]
-		ifFalse: [ [ SampledSound fromFileNamed: fullName ] ifError: [ nil ] ].
-	sound
-		ifNotNil: [ 
-			(sound respondsTo: #volume:)
-				ifTrue: [ sound volume: 1.0 ].
-			sound play ]
-]
-
 { #category : #'private-thumbnails' }
 PhratchFilePicker >> startThumbnailFetchProcess [
 	"Start a background process to fetch thumbnails. This process runs at lower priority than the UI thread. The step method looks for thumbnails that have become ready and updates the display."
