@@ -205,3 +205,31 @@ ExpressionArgMorphWithMenu >> midiInstrumentMenu [
 	^ menu
 
 ]
+
+{ #category : #'*PhratchSound' }
+ExpressionArgMorphWithMenu >> mouseDown: evt [
+
+	| rcvr menu choice |
+	menuMorph ifNil: [^ super mouseDown: evt].
+	(evt cursorPoint x < (menuMorph left - 1)) ifTrue: [^ super mouseDown: evt].
+
+	(getMenuSelector notNil and:
+	 [(owner isBlockMorph) and: 
+	 [(rcvr := owner receiver) notNil]]) ifFalse: [^ PhratchError error: 'beep'.].
+	menu := rcvr perform: getMenuSelector.
+	(menu isKindOf: PhratchNoteSelector) ifTrue: [
+		menu position: owner bottomLeft + (((owner width - menu width) // 2) @ -4).
+		].
+	menu ifNil:[^self].
+	choice := menu selectedValue.
+	choice ifNil: [^ self].
+	evt hand newKeyboardFocus: nil.  "close mini-editor, if any"
+	(#(listIndexMenu listIndexForDeleteMenu) includes: getMenuSelector) ifTrue: [
+		^ self specialValue: choice].
+
+	isNumber
+		ifTrue: [self numExpression: choice]
+		ifFalse: [self stringExpression: choice].
+
+
+]
