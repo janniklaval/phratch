@@ -1,6 +1,34 @@
 Extension { #name : #PhratchStageMorph }
 
 { #category : #'*PhratchSound' }
+PhratchStageMorph >> attribute: attr [
+	"Answer the value of my variable or built-in attribute with the given name. Answer zero if I have no attribute or variable with the given name."
+
+	| a |
+	
+	(attr isCommandBlockMorph)
+		ifTrue: [^ attr fullCopy newScriptOwner: self; yourself] 		"self blockLike: attr body]".
+
+	a := attr asString.
+	(vars includesKey: a) ifTrue: [^ vars at: a].
+	(self allLocalBlockIds includes: a) ifTrue: [ ^self lambda: a ].
+
+	a := a localized.
+	'background #' localized = a ifTrue: [^ self backgroundIndex].
+	'costume #' localized = a ifTrue: [^ self backgroundIndex].
+	'volume' localized = a ifTrue: [^ self volume].
+	^ 0
+
+]
+
+{ #category : #'*PhratchSound' }
+PhratchStageMorph >> setTempoTo: aNumber [
+
+	tempoBPM := (aNumber asNumberNoError within: 20 and: 500).
+
+]
+
+{ #category : #'*PhratchSound' }
 PhratchStageMorph >> stopAll [
 	"Stop all processes and make sure I am stepping."
 
@@ -27,6 +55,16 @@ PhratchStageMorph >> stopAll [
 		World startSteppingSubmorphsOf: sFrame].
 
 	World startSteppingSubmorphsOf: self. 
+
+]
+
+{ #category : #'*PhratchSound' }
+PhratchStageMorph >> stopAllSounds [
+	"Stop all sounds and MIDI notes/drums."
+
+	SoundPlayer shutDown.
+	self midiAllNotesOff.
+
 
 ]
 
