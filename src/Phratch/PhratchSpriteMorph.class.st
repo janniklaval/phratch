@@ -140,7 +140,7 @@ PhratchSpriteMorph >> attribute: attr [
 	'direction' localized = a ifTrue: [^ self heading].
 	'costume #' localized = a ifTrue: [^ self costumeIndex].
 	'size' localized = a ifTrue: [^ self scale].
-	'volume' localized = a ifTrue: [^ self volume].
+	"'volume' localized = a ifTrue: [^ self volume]."
 
 	'name' localized = a ifTrue: [^ self objName].
 	'prototype' localized = a ifTrue: [^ self prototype].

@@ -97,16 +97,6 @@ PhratchType >> directions [
 ]
 
 { #category : #'as yet unclassified' }
-PhratchType >> drums [
-	
-	<phratchType: #'Drums'>
-	^ ExpressionArgMorphWithMenu new 
-		numExpression: '48'; 
-		menuSelector: #midiDrumMenu;
-		yourself
-]
-
-{ #category : #'as yet unclassified' }
 PhratchType >> effects [
 	
 	<phratchType: #'Effects'>
@@ -128,16 +118,6 @@ PhratchType >> input [
 	
 	<phratchType: #'Input'>
 	 ^ ChoiceArgMorph new options: {'with inputs' localized. 'with input list' localized}; choice: 'with inputs';
-		yourself
-]
-
-{ #category : #'as yet unclassified' }
-PhratchType >> instruments [
-	
-	<phratchType: #'Instruments'>
-	^ ExpressionArgMorphWithMenu new 
-		numExpression: '1'; 
-		menuSelector: #midiInstrumentMenu;
 		yourself
 ]
 
@@ -301,6 +281,16 @@ PhratchType >> newCostume [
 	^ ChoiceArgMorph new 
 		getOptionsSelector: #newCostumeTypes; 
 		choice: 'camera';
+		yourself
+]
+
+{ #category : #'as yet unclassified' }
+PhratchType >> notes [
+	
+	<phratchType: #'Notes'>
+	^ ExpressionArgMorphWithMenu new 
+		numExpression: '60'; 
+		menuSelector: #noteSelector;
 		yourself
 ]
 

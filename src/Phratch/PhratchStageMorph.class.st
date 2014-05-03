@@ -105,7 +105,7 @@ PhratchStageMorph >> attribute: attr [
 	a := a localized.
 	'background #' localized = a ifTrue: [^ self backgroundIndex].
 	'costume #' localized = a ifTrue: [^ self backgroundIndex].
-	'volume' localized = a ifTrue: [^ self volume].
+	"'volume' localized = a ifTrue: [^ self volume]."
 	^ 0
 
 ]
@@ -992,13 +992,6 @@ PhratchStageMorph >> setHPanTo: aNumber [
 
 ]
 
-{ #category : #'sound ops' }
-PhratchStageMorph >> setTempoTo: aNumber [
-
-	tempoBPM := (aNumber asNumberNoError within: 20 and: 500).
-
-]
-
 { #category : #'looks ops' }
 PhratchStageMorph >> setVPanTo: aNumber [
 	"Set my vertical pan to the given offset."
@@ -1207,7 +1200,7 @@ PhratchStageMorph >> stopAll [
 	| sFrame |
 	World hands do: [:h | h newKeyboardFocus: nil; clearUnclaimedKeystrokes].
 	Sensor clearKeystate.
-	SoundPlayer stopPlayingAll.
+	"SoundPlayer stopPlayingAll."
 	self class stopSoundRecorder.
 	self stopAllProcesses.
 	self stopAsks.
@@ -1257,16 +1250,6 @@ PhratchStageMorph >> stopAllScriptsFor: eventName [
 	submorphs do: [:m | (m isScriptablePhratchMorph) ifTrue: [
 		m stopScriptsFor: eventName]].
 	self stopScriptsFor: eventName 
-
-]
-
-{ #category : #'scratch processes/events' }
-PhratchStageMorph >> stopAllSounds [
-	"Stop all sounds and MIDI notes/drums."
-
-	SoundPlayer shutDown.
-	self midiAllNotesOff.
-
 
 ]
 
