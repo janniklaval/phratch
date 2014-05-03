@@ -1214,7 +1214,7 @@ PhratchStageMorph >> stopAll [
 	self deleteAllClones.
 	self midiAllNotesOff.
 	self stopPlaying.
-	self stopAllSounds.
+	"self stopAllSounds."
 	self allMorphsDo: [:m |
 		(m isScriptablePhratchMorph) ifTrue: [m stopPlaying]].
 
@@ -1276,13 +1276,6 @@ PhratchStageMorph >> stopAsks [
 
 	PhratchPrompterMorph allInstancesDo: [:m | m stopAsk].
 	PhratchPrompterMorph clearLastAnswer.
-
-]
-
-{ #category : #'sound ops' }
-PhratchStageMorph >> tempo [
-
-	^ tempoBPM
 
 ]
 

@@ -305,16 +305,6 @@ PhratchType >> newCostume [
 ]
 
 { #category : #'as yet unclassified' }
-PhratchType >> notes [
-	
-	<phratchType: #'Notes'>
-	^ ExpressionArgMorphWithMenu new 
-		numExpression: '60'; 
-		menuSelector: #noteSelector;
-		yourself
-]
-
-{ #category : #'as yet unclassified' }
 PhratchType >> number [
 	
 	<phratchType: #'Number'>

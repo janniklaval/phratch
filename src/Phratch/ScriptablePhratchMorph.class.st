@@ -1286,14 +1286,6 @@ ScriptablePhratchMorph >> changeGraphicEffect: effect by: aNumber [
 
 ]
 
-{ #category : #'sound ops' }
-ScriptablePhratchMorph >> changeTempoBy: aNumber [
-	"Change the tempo by the given value."
-	<phratchItem: 'change tempo by $Number$' kind: #- category: 'sound' defaultValues: #(20) subCategory: #a5 special: #()>
-	self setTempoTo: self tempo + aNumber.
-
-]
-
 { #category : #variables }
 ScriptablePhratchMorph >> changeVar: varName by: increment [
 	"Change the value of the given variable of this object by the given amount."
@@ -1320,14 +1312,6 @@ ScriptablePhratchMorph >> changeVar: varName by: increment [
 
 	n := vars at: varName asString ifAbsent: [^ self].
 	self setVar: varName to: n asNumberNoError + increment asNumberNoError.
-
-]
-
-{ #category : #'sound ops' }
-ScriptablePhratchMorph >> changeVolumeBy: aNumber [
-	"Change the volume by the given value."
-	<phratchItem: 'change volume by $Number$' kind: #- category: 'sound' defaultValues: #(-10) subCategory: #a4 special: #()>
-	self setVolumeTo: volume + aNumber.
 
 ]
 
@@ -2557,20 +2541,6 @@ ScriptablePhratchMorph >> drawNewCostume [
 	
 	self propagateCostumes
 
-
-]
-
-{ #category : #'sound ops' }
-ScriptablePhratchMorph >> drum: midiKey duration: beats elapsed: elapsedMSecs from: aNotePlayer [
-	"play drum with the given parameters"
-	<phratchItem: 'play drum $Drums$ for $Number$ beats' kind: #TimeBlockMorph category: 'sound' defaultValues: #(48 0.2) subCategory: #a2 special: #()>
-	| stage player |
-	aNotePlayer ifNil: [  "first call, start playing the drum"
-		(stage := self ownerOrYourselfThatIsAPhratchStageMorph) ifNil: [^ PhratchNotePlayer new].
-		(player := stage notePlayerFor: self) ifNil: [^ PhratchNotePlayer new].
-		^ [player copy drumOn: midiKey] on: Error do:[stage stopAllSounds. player copy drumOn: midiKey ]].
-
-	elapsedMSecs >= ((60000 * beats) // self tempo) ifTrue: [aNotePlayer drumOff].
 
 ]
 
@@ -4394,17 +4364,6 @@ ScriptablePhratchMorph >> midiDrumMenu [
 ]
 
 { #category : #'sound ops' }
-ScriptablePhratchMorph >> midiInstrument: aNumber [
-	"Set the MIDI instrument used for note sounds."
-	<phratchItem: 'set instrument to $Instruments$' kind: #- category: 'sound' defaultValues: #(1) subCategory: #a3 special: #()>
-	| stage player |
-	(stage := self ownerOrYourselfThatIsAPhratchStageMorph) ifNil: [^ self].
-	(player := stage notePlayerFor: self) ifNotNil: [
-		[player instrument: aNumber] on: Error do:[stage stopAllSounds. player instrument: aNumber ]  ].
-
-]
-
-{ #category : #'sound ops' }
 ScriptablePhratchMorph >> midiInstrumentMenu [
 	"Provides a drop-down menu for setting the instrument number."
 
@@ -4773,34 +4732,6 @@ ScriptablePhratchMorph >> notEditingBlock [
 	sf := self ownerOrYourselfThatIsAPhratchFrameMorph.
 	sf ifNil: [^true].
 	^sf notEditingBlock
-]
-
-{ #category : #'sound ops' }
-ScriptablePhratchMorph >> noteOn: midiKey duration: beats elapsed: elapsedMSecs from: aNotePlayer [
-	"Play the given note"
-	<phratchItem: 'play note $Notes$ for $Number$ beats' kind: #TimeBlockMorph category: 'sound' defaultValues: #(60 0.5) subCategory: #a3 special: #()>
-	| stage player |
-	aNotePlayer ifNil: [  "first call, start playing the note"
-		(stage := self ownerOrYourselfThatIsAPhratchStageMorph) ifNil: [^ PhratchNotePlayer new].
-		(player := stage notePlayerFor: self) ifNil: [^ PhratchNotePlayer new].
-		^ [player noteOn: midiKey] on: Error do:[stage stopAllSounds. player noteOn: midiKey ] ].
-
-	elapsedMSecs >= ((60000 * beats) // self tempo) ifTrue: [aNotePlayer noteOff].
-
-]
-
-{ #category : #'sound ops' }
-ScriptablePhratchMorph >> noteSelector [
-	"Returns an instance of a PhratchNoteSelector for selecting notes. This object behaves like a CustomMenu."
-
-	| stageMorph notePlayer |
-	stageMorph := (self ownerOrYourselfThatIsAPhratchStageMorph).
-	stageMorph ifNil: [^ self midiNoteMenu].
-	notePlayer := stageMorph notePlayerFor: self.
-	notePlayer ifNil: [^ self midiNoteMenu].
-
-	^ (PhratchNoteSelector new setNotePlayer: notePlayer)
-
 ]
 
 { #category : #'panther actions' }
@@ -5508,14 +5439,6 @@ ScriptablePhratchMorph >> reportVar: varName [
 		ifTrue: [^ self getVar: varName].
 	(stage := self ownerThatIsAPhratchStageMorph)
 		ifNotNil: [^ stage getVar: varName]
-
-]
-
-{ #category : #'sound ops' }
-ScriptablePhratchMorph >> rest: duration elapsed: elapsed from: ignored [
-	"Do nothing; just wait for the time interval to elapse."
-	<phratchItem: 'rest for $Number$ beats' kind: #TimeBlockMorph category: 'sound' defaultValues: #(0.2) subCategory: #a2 special: #()>
-	^ nil
 
 ]
 
@@ -6268,16 +6191,6 @@ ScriptablePhratchMorph >> takePhoto [
 		client: self;
 		openInWorld;
 		openCamera.
-
-]
-
-{ #category : #'sound ops' }
-ScriptablePhratchMorph >> tempo [
-	"Return the tempo"
-	<phratchItem: 'tempo' kind: #ReporterWatcherBlockMorph category: 'sound' defaultValues: #() subCategory: #a5 special: #()>
-	| stage |
-	(stage := self ownerOrYourselfThatIsAPhratchStageMorph) ifNil: [^ 60].
-	^ stage tempo
 
 ]
 
