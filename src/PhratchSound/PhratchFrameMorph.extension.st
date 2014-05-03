@@ -1,6 +1,55 @@
 Extension { #name : #PhratchFrameMorph }
 
 { #category : #'*PhratchSound' }
+PhratchFrameMorph >> closeMediaEditorsAndDialogs [
+	"Close any open paint or sound editors, asking the user first to avoid losing edits. Answer true if all are closed."
+
+	| mList mHasCancel |
+	mList := PaintFrame allInstances select: [:m | m isInWorld].
+	mList size > 0 ifTrue: [
+		(DialogBoxMorph ask: 'Close paint editor?') ifFalse: [^ false].
+		mList do: [:m | m cancelled; delete].
+		paintingInProgress := false].
+
+	mList := PhratchSoundRecorderDialogMorph allInstances select: [:m | m isInWorld].
+	mList size > 0 ifTrue: [
+		(DialogBoxMorph ask: 'Close sound recorder?') ifFalse: [^ false].
+		mList do: [:m | m cancelled; delete]].
+
+	mList := DialogBoxMorph allInstances select: [:m | m isInWorld].
+	mList size > 0 ifTrue: [
+		(DialogBoxMorph ask: 'Close dialog?') ifFalse: [^ false].
+		mList do: [:m |
+			mHasCancel := false.
+			m buttons do: [:b |
+				b action = #cancelled ifTrue: [mHasCancel := true]].
+			mHasCancel
+				ifTrue: [m cancelled; delete]
+				ifFalse: [m no; delete]]].
+
+	DialogBoxMorph subclassesDo: [:c |
+		mList := c allInstances select: [:m | m isInWorld].
+		mList size > 0 ifTrue: [
+			(DialogBoxMorph ask: 'Close dialog?') ifFalse: [^ false].
+			mList do: [:m |
+				mHasCancel := false.
+				m buttons do: [:b |
+					b action = #cancelled ifTrue: [mHasCancel := true]].
+				mHasCancel
+					ifTrue: [m cancelled; delete]
+					ifFalse: [m no; delete]]]].
+
+	"subclass of a subclass of DialogBoxMorph"
+	mList := NewVariableDialog allInstances select: [:m | m isInWorld].
+	mList size > 0 ifTrue: [
+		(DialogBoxMorph ask: 'Close dialog?') ifFalse: [^ false].
+		mList do: [:m | m cancelled; delete]].
+
+	^ true
+
+]
+
+{ #category : #'*PhratchSound' }
 PhratchFrameMorph >> compressSounds [
 	<phratchMenu: 'Compress Sounds' category: 'edit' position: 3 sub:2 shift: false>
 	| menu bitsPerSample count |
@@ -44,6 +93,14 @@ PhratchFrameMorph >> compressSounds [
 	count := self canonicalizeSoundsBits: bitsPerSample saveOriginal: false.
 	scriptsPane categoryChanged: 'Sounds'.
 	DialogBoxMorph inform: 'Sounds compressed' withDetails: count printString
+]
+
+{ #category : #'*PhratchSound' }
+PhratchFrameMorph >> newSound [
+	"Open the dialog to record a new sound."
+
+	scriptsPane tabPane currentTab: 'Sounds'.
+	viewerPane target recordSound.
 ]
 
 { #category : #'*PhratchSound' }
