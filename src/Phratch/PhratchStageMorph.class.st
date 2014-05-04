@@ -527,7 +527,7 @@ PhratchStageMorph >> initialize [
 	self enableDragNDrop: true.
 	objName := 'Stage' localized.
 	costume := self defaultImageMedia.
-	media := OrderedCollection with: costume with: SoundMedia new.
+	media := OrderedCollection with: costume "with: SoundMedia new".
 	hPan := 0.
 	vPan := 0.
 	runningBlocks := OrderedCollection new.

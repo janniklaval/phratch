@@ -1833,7 +1833,7 @@ current project."
 PhratchFrameMorph >> importSpriteOrProject: fileNameOrData [
 	"Read the sprite or project file and merge into the current project."
 
-	| data f importedStage defaultForm defaultSound |
+	| data f importedStage defaultForm  |
 	data := fileNameOrData.
 	(data isKindOf: FileReference) ifTrue: [  "read the contents of a local file"
 		fileNameOrData exists ifFalse: [^ self].
@@ -1862,12 +1862,12 @@ PhratchFrameMorph >> importSpriteOrProject: fileNameOrData [
 
 	"add imported background costumes and scripts to my stage, filtering out default items"
 	defaultForm := workPane defaultImageMedia form hibernateForPhratch.
-	defaultSound := SoundMedia new sound.
+	"defaultSound := SoundMedia new sound."
 	importedStage media do: [:media |
 		(media isImage and: [media form hibernate bits ~= defaultForm bits])
 			ifTrue: [workPane addMediaItem: media].
-		(media isSound and: [media sound samples ~= defaultSound samples])
-			ifTrue: [workPane addMediaItem: media]].
+		"(media isSound and: [media sound samples ~= defaultSound samples])
+			ifTrue: [workPane addMediaItem: media]"].
 
 	"add imported global custom block definitions"
 	importedStage customBlocks ifNotNil: [
@@ -2957,10 +2957,10 @@ PhratchFrameMorph >> setDefaultSprite [
 		(d / fName) asFileReference exists ifTrue: [
 			DefaultSprite := PhratchSpriteMorph new
 				importMedia: (d / fName) fullName;
-				addMediaItem: (SoundMedia new
+				"addMediaItem: (SoundMedia new
 					mediaName: 'pop' localized;
 					sound: PhratchSpriteMorph popSound;
-		yourself);
+		yourself);"
 		yourself.
 			^ self]].
 

@@ -3404,9 +3404,9 @@ ScriptablePhratchMorph >> importMedia: fileName [
 
 	elList := OrderedCollection new.
 
-	(#(aif aiff wav mp3) includes: extensionLoc) ifTrue: [
+	"(#(aif aiff wav mp3) includes: extensionLoc) ifTrue: [
 		baseName := self mediaNameFromFileName: fileName default: 'sound'.
-		[elList addLast: (SoundMedia new loadFile: fileName)] ifError: [^ self]].
+		[elList addLast: (SoundMedia new loadFile: fileName)] ifError: [^ self]]."
 
 	(#(jpg jpeg gif bmp png) includes: extensionLoc) ifTrue: [
 		baseName := self
