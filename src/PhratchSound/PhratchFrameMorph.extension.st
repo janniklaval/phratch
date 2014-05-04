@@ -96,11 +96,130 @@ PhratchFrameMorph >> compressSounds [
 ]
 
 { #category : #'*PhratchSound' }
+PhratchFrameMorph >> importSpriteOrProject: fileNameOrData [
+	"Read the sprite or project file and merge into the current project."
+
+	| data f importedStage defaultForm defaultSound |
+	data := fileNameOrData.
+	(data isKindOf: FileReference) ifTrue: [  "read the contents of a local file"
+		fileNameOrData exists ifFalse: [^ self].
+		f := (FileStream readOnlyFileNamed: fileNameOrData) binary.
+		f ifNil: [^ self].
+		data := f contentsOfEntireFile].
+
+	[importedStage := self extractProjectFrom: data] ifError: [^ self].
+
+	"fix references to old stage"
+	importedStage allMorphsDo: [:m |
+		(m isWatcherMorph) ifTrue: [m mapReceiver: importedStage to: workPane].
+		(m isScriptablePhratchMorph) ifTrue: [
+			m blocksBin submorphs do: [:stack |
+				(stack isBlockMorph) ifTrue: [
+					stack blockSequence do: [:b | b mapReceiver: importedStage to: workPane]]]]].
+
+	"add global variables from importated stage to my stage"
+	importedStage varNames do: [:v |
+		workPane addVariable: v value: (importedStage getVar: v)].
+	importedStage varNames do: [:v | workPane addVariable: v].
+
+	"add imported stage scripts"
+	importedStage blocksBin submorphs do: [:stack |
+		(stack isBlockMorph) ifTrue: [workPane addStack: stack fullCopy]].
+
+	"add imported background costumes and scripts to my stage, filtering out default items"
+	defaultForm := workPane defaultImageMedia form hibernateForPhratch.
+	defaultSound := SoundMedia new sound.
+	importedStage media do: [:media |
+		(media isImage and: [media form hibernate bits ~= defaultForm bits])
+			ifTrue: [workPane addMediaItem: media].
+		(media isSound and: [media sound samples ~= defaultSound samples])
+			ifTrue: [workPane addMediaItem: media]].
+
+	"add imported global custom block definitions"
+	importedStage customBlocks ifNotNil: [
+
+		'installing globals...' 
+			displayProgressAt: self center - (32@5)  "Sensor cursorPoint"
+			from: 0 to: importedStage customBlocks size
+			during: [:bar | | i | i := 0.
+
+		importedStage customBlocks do: [:eachDef |
+			i := i + 1. bar value: i.
+			workPane sprites, {workPane} do: [:obj |
+				obj
+					updateCustomBlockDefinitionId: eachDef id with: eachDef;
+					updateLocalId: eachDef id withSpec: eachDef userSpec]]]].
+
+	importedStage position: workPane position.
+
+	importedStage submorphs do: [:m | 
+		(m isPhratchSpriteMorph) ifTrue: [
+			"m objName: m  nextInstanceName".
+			workPane addMorphFront: m.
+			m startStepping.
+			workPane sprites addLast: m.
+			self view: m tab: 'Scripts' category: 'motion'.
+			m refPos ifNotNil: [
+				m referencePosition: m refPos + (50@ -50) ].
+			m layoutChanged.
+			m changed
+			]].
+
+	workPane layoutChanged.
+
+]
+
+{ #category : #'*PhratchSound' }
 PhratchFrameMorph >> newSound [
 	"Open the dialog to record a new sound."
 
 	scriptsPane tabPane currentTab: 'Sounds'.
 	viewerPane target recordSound.
+]
+
+{ #category : #'*PhratchSound' }
+PhratchFrameMorph >> setDefaultSprite [
+	"Look for default sprite in Media directory. If none found, use the DefaultCatSprite"
+
+	| d f data importedProject fName |
+
+	DefaultSprite := nil.
+
+	"if dfault.ysp exists, use that"
+	d := PhratchFileChooserDialog getDefaultFolderForType: #costume.
+	(d / 'default.sprite') exists ifTrue: [
+		f := (FileStream readOnlyFileNamed: (d / 'default.sprite') fullName) binary.
+		f ifNotNil: [
+			data := f contentsOfEntireFile.
+			importedProject := [self extractProjectFrom: data] ifError: [nil].
+			importedProject ifNil: [^ self].
+			
+			"add imported global custom block definitions"
+"
+			importedProject customBlocks ifNotNil: [
+				importedProject customBlocks do: [:eachDef |
+					workPane sprites, {workPane} do: [:obj |
+						obj
+							updateCustomBlockDefinitionId: eachDef id with: eachDef;
+							updateLocalId: eachDef id withSpec: eachDef userSpec]]].
+"
+			importedProject submorphs do: [:m |
+				(m isPhratchSpriteMorph) ifTrue: [DefaultSprite := m].
+				^ self]]].
+
+	"if default image exists, use the image and add 'pop' sound"
+	#(gif png jpg bmp) do: [:e |
+		fName := 'default.', e.
+		(d / fName) asFileReference exists ifTrue: [
+			DefaultSprite := PhratchSpriteMorph new
+				importMedia: (d / fName) fullName;
+				addMediaItem: (SoundMedia new
+					mediaName: 'pop' localized;
+					sound: PhratchSpriteMorph popSound;
+		yourself);
+		yourself.
+			^ self]].
+
 ]
 
 { #category : #'*PhratchSound' }

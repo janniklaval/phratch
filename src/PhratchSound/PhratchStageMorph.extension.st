@@ -22,6 +22,25 @@ PhratchStageMorph >> attribute: attr [
 ]
 
 { #category : #'*PhratchSound' }
+PhratchStageMorph >> initialize [
+
+	super initialize.
+	color := Color white.
+	self enableDragNDrop: true.
+	objName := 'Stage' localized.
+	costume := self defaultImageMedia.
+	media := OrderedCollection with: costume with: SoundMedia new.
+	hPan := 0.
+	vPan := 0.
+	runningBlocks := OrderedCollection new.
+	inProcessStep := false.
+	midiPortNum := -1.
+	notePlayerDict := Dictionary new.
+	sprites := OrderedCollection new.
+
+]
+
+{ #category : #'*PhratchSound' }
 PhratchStageMorph >> notePlayerFor: aPhratchObject [
 	"Answer a note player for the given object, creating one if necessary. Open the MIDI port if necessary."
 
