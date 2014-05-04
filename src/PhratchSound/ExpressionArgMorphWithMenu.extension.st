@@ -233,3 +233,10 @@ ExpressionArgMorphWithMenu >> mouseDown: evt [
 
 
 ]
+
+{ #category : #'*PhratchSound' }
+ExpressionArgMorphWithMenu >> numberInParens: aNumber [
+
+	^" (String  with: 16r200E) asUTF8," '(' "asUTF8", aNumber printString, ') ' 
+
+]

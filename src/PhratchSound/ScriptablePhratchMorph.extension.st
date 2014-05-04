@@ -37,6 +37,33 @@ ScriptablePhratchMorph >> drum: midiKey duration: beats elapsed: elapsedMSecs fr
 ]
 
 { #category : #'*PhratchSound' }
+ScriptablePhratchMorph >> importSound [
+	"Import a new sound from a file and add it to my media."
+
+	| result el newName |
+	result := PhratchFileChooserDialog
+		chooseExistingFileType: #sound
+		extensions: #(aif aiff au wav mp3)
+		title: 'Import Sound'.
+
+	result = #cancelled ifTrue: [^ self].
+
+	el := [SoundMedia new loadFile: result]
+		ifError: [:err :rcvr |
+			PhratchError errorWithDialog: err.
+			nil].
+	el ifNil: [^ self].
+
+	newName := self mediaNameFromFileName: result default: 'sound'.
+	el mediaName: (String withAll: (self unusedMediaNameFromBaseName: newName)).
+	media addLast: el.
+	self updateMediaCategory.
+
+	self undeleteAttribute: #sounds.
+	self propagateSounds
+]
+
+{ #category : #'*PhratchSound' }
 ScriptablePhratchMorph >> midiDrumMenu [
 	"Provides a drop-down menu for setting the drum number."
 
@@ -355,6 +382,22 @@ ScriptablePhratchMorph >> rest: duration elapsed: elapsed from: ignored [
 	"Do nothing; just wait for the time interval to elapse."
 	<phratchItem: 'rest for $Number$ beats' kind: #TimeBlockMorph category: 'sound' defaultValues: #(0.2) subCategory: #a2 special: #()>
 	^ nil
+
+]
+
+{ #category : #'*PhratchSound' }
+ScriptablePhratchMorph >> saveSound: aSampledSound name: baseName [
+
+	| sndItem |
+	sndItem := SoundMedia new.
+	sndItem mediaName: (self unusedMediaNameFromBaseName: baseName).
+	media addLast: sndItem.
+
+	sndItem sound: aSampledSound.
+	self updateMediaCategory.
+
+	self undeleteAttribute: #sounds.
+	self propagateSounds
 
 ]
 
