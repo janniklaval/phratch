@@ -40,16 +40,6 @@ HandMorph >> hasMouseFocus: aMorph [
 ]
 
 { #category : #'*Phratch-Extensions' }
-HandMorph >> nextUnclaimedKeystrokeOrNil [
-	"Answer the next unclaimed keystroke from the buffer or nil if there isn't one."
-
-	(self unclaimedKeystrokes isNil or: [self unclaimedKeystrokes size = 0])
-		ifTrue: [^ nil]
-		ifFalse: [^ self unclaimedKeystrokes removeFirst]
-
-]
-
-{ #category : #'*Phratch-Extensions' }
 HandMorph >> rejectDropMorph: aMorph event: evt [
 	"aMorph has been rejected, and must be put back somewhere.  There are three cases:
 	(1)  It remembers its former owner and position, and goes right back there

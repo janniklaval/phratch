@@ -277,12 +277,6 @@ Object >> isPhratchListMorph [
 ]
 
 { #category : #'*Phratch-Extensions' }
-Object >> isPhratchNoteSelectorKeyMorph [
-
-	^ false
-]
-
-{ #category : #'*Phratch-Extensions' }
 Object >> isPhratchPrompterMorph [
 
 	^ false

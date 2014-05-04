@@ -28,6 +28,11 @@ ManifestPhratch class >> ruleExcessiveArgumentsRuleV1FalsePositive [
 ]
 
 { #category : #'meta data' }
+ManifestPhratch class >> ruleImplementedNotSentRuleV1FalsePositive [
+^ #(#(#(#RGMethodDefinition #(#'PhratchInstaller class' #saveImageForEndUserSilently #true)) #'2014-05-04T19:03:35.982613+02:00') #(#(#RGMethodDefinition #(#PhratchFilePickerImageEntry #computeThumbnail #false)) #'2014-05-04T19:03:35.982613+02:00') #(#(#RGMethodDefinition #(#PhratchProcess #doIf #false)) #'2014-05-04T19:03:35.982613+02:00') #(#(#RGMethodDefinition #(#'PhratchFrameMorph class' #closeAndOpen #true)) #'2014-05-04T19:03:35.982613+02:00') #(#(#RGMethodDefinition #(#PhratchProcess #doPauseThread #false)) #'2014-05-04T19:03:35.982613+02:00') #(#(#RGMethodDefinition #(#PhratchProcess #doWaitUntil #false)) #'2014-05-04T19:03:35.982613+02:00') #(#(#RGMethodDefinition #(#PhratchProcess #getVarNamed: #false)) #'2014-05-04T19:03:35.982613+02:00') #(#(#RGMethodDefinition #(#FuelObjStream #readSpriteFrom:showProgress: #false)) #'2014-05-04T19:03:35.982613+02:00') #(#(#RGMethodDefinition #(#PhratchFrameMorph #htmlDocForWebsite #false)) #'2014-05-04T19:03:35.982613+02:00') #(#(#RGMethodDefinition #(#PhratchProcess #doWithCamOpen #false)) #'2014-05-04T19:03:35.982613+02:00') #(#(#RGMethodDefinition #(#PhratchProcess #doWhile #false)) #'2014-05-04T19:03:35.982613+02:00') #(#(#RGMethodDefinition #(#PhratchProcess #doIfElse #false)) #'2014-05-04T19:03:35.982613+02:00') #(#(#RGMethodDefinition #(#ReporterBlockMorph #stepTimeForWatcher: #false)) #'2014-05-04T19:03:35.982613+02:00') )
+]
+
+{ #category : #'meta data' }
 ManifestPhratch class >> ruleJustSendsSuperRuleV1FalsePositive [
 ^ #(#(#(#RGMethodDefinition #(#PhratchSpriteMorph #width #false)) #'2014-04-07T09:03:47.621102+02:00') #(#(#RGMethodDefinition #(#ScriptablePhratchMorph #= #false)) #'2014-04-07T09:03:47.621102+02:00') #(#(#RGMethodDefinition #(#PhratchSpriteMorph #nextCostume #false)) #'2014-04-07T09:03:47.621102+02:00') #(#(#RGMethodDefinition #(#PhratchSpriteMorph #comeToFront #false)) #'2014-04-07T09:03:47.621102+02:00') #(#(#RGMethodDefinition #(#PhratchSpriteMorph #isVisible #false)) #'2014-04-07T09:03:47.621102+02:00') #(#(#RGMethodDefinition #(#PhratchSpriteMorph #height #false)) #'2014-04-07T09:03:47.621102+02:00') )
 ]

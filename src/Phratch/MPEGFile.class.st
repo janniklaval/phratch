@@ -64,14 +64,6 @@ MPEGFile >> audioChannels: aStream [
 ]
 
 { #category : #audio }
-MPEGFile >> audioGetSample: aStream [
-	"Returns number of current sample, or -1 if error"
-	self hasAudio ifFalse: [^-1].
-	^[(self primGetSample: self fileHandle stream: aStream) asInteger] ifError: [-1]
-
-]
-
-{ #category : #audio }
 MPEGFile >> audioReReadBuffer: aBuffer stream: aStreamNumber channel: aChannelNumber [
 	"Used to read other channels after first ReadBuffer 
 	Returns -1 if error, otherwise 0"

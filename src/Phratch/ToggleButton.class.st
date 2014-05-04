@@ -321,17 +321,6 @@ ToggleButton >> onForm: f1 offForm: f2 overForm: f3 [
 ]
 
 { #category : #initialization }
-ToggleButton >> onForm: f1 offForm: f2 overForm: f3 disabledForm: f4 [
-
-	onForm := f1.
-	offForm := f2.
-	overForm := f3.
-	disabledForm := f4.
-	self on; off.
-
-]
-
-{ #category : #initialization }
 ToggleButton >> overForm: f1 [
 
 	overForm := f1.

@@ -29,13 +29,6 @@ Class {
 }
 
 { #category : #'language translation' }
-PhratchTranslator class >> addMIDITranslation: aString [
-
-	MIDITranslationSet add: aString.
-
-]
-
-{ #category : #'language translation' }
 PhratchTranslator class >> addSensorTranslations [
 	"Add translations for the sensor names such as 'resistance-A' and 'A connected' from the translations of the root words if they exist."
 

@@ -173,13 +173,6 @@ ExpressionArgMorphWithMenu >> mouseDown: evt [
 
 ]
 
-{ #category : #menus }
-ExpressionArgMorphWithMenu >> numberInParens: aNumber [
-
-	^" (String  with: 16r200E) asUTF8," '(' "asUTF8", aNumber printString, ') ' 
-
-]
-
 { #category : #accessing }
 ExpressionArgMorphWithMenu >> specialValue: aString [
 	"A special value is a menu selection such as 'last' for a list index that appears as a string in a number if field. If the user edits the field, then it only accepts numeric input. The argumet is retained in the specialValue instance variable."

@@ -257,14 +257,6 @@ SoundMedia >> playFrom: startSecs to: endSecs [
 
 ]
 
-{ #category : #'scratch ops' }
-SoundMedia >> playFromStart [
-	"Play my sound from beginning to end."
-
-	self playFrom: 0 to: self totalSeconds.
-
-]
-
 { #category : #accessing }
 SoundMedia >> savedSound [
 

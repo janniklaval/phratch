@@ -3443,33 +3443,6 @@ ScriptablePhratchMorph >> importMedia: fileName [
 
 ]
 
-{ #category : #media }
-ScriptablePhratchMorph >> importSound [
-	"Import a new sound from a file and add it to my media."
-
-	| result el newName |
-	result := PhratchFileChooserDialog
-		chooseExistingFileType: #sound
-		extensions: #(aif aiff au wav mp3)
-		title: 'Import Sound'.
-
-	result = #cancelled ifTrue: [^ self].
-
-	el := [SoundMedia new loadFile: result]
-		ifError: [:err :rcvr |
-			PhratchError errorWithDialog: err.
-			nil].
-	el ifNil: [^ self].
-
-	newName := self mediaNameFromFileName: result default: 'sound'.
-	el mediaName: (String withAll: (self unusedMediaNameFromBaseName: newName)).
-	media addLast: el.
-	self updateMediaCategory.
-
-	self undeleteAttribute: #sounds.
-	self propagateSounds
-]
-
 { #category : #accessing }
 ScriptablePhratchMorph >> inPresentationMode [
 
@@ -5259,22 +5232,6 @@ ScriptablePhratchMorph >> saveProj [
 | t1 |
 t1 := self ownerThatIsAPhratchFrameMorph.
 t1 savePhratchProject
-]
-
-{ #category : #media }
-ScriptablePhratchMorph >> saveSound: aSampledSound name: baseName [
-
-	| sndItem |
-	sndItem := SoundMedia new.
-	sndItem mediaName: (self unusedMediaNameFromBaseName: baseName).
-	media addLast: sndItem.
-
-	sndItem sound: aSampledSound.
-	self updateMediaCategory.
-
-	self undeleteAttribute: #sounds.
-	self propagateSounds
-
 ]
 
 { #category : #'looks ops' }

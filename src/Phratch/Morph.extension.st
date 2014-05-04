@@ -10,14 +10,6 @@ Morph >> allowSubmorphExtraction [
 ]
 
 { #category : #'*Phratch-Extensions' }
-Morph >> centerInOwner [
-
-	owner ifNil: [^ self].
-	self left: owner left + ((owner width - self width) // 2).
-
-]
-
-{ #category : #'*Phratch-Extensions' }
 Morph >> centering: aSymbol [
 
 	self wrapCentering: aSymbol

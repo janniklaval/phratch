@@ -69,14 +69,6 @@ String >> localized [
 ]
 
 { #category : #'*Phratch-Extensions' }
-String >> localizedMIDI [
-	"Answer myself translated into the current Scratch language. If there is no translation for me, then answer myself."
-
-	PhratchTranslator addMIDITranslation: self.
-	^ PhratchTranslator translationFor: self
-]
-
-{ #category : #'*Phratch-Extensions' }
 String >> trailingDigits [
 	"Answer the trailing digits of a string such as 'foo123' If the string does not end in a digit, answer the empty string."
 	"'foo123' trailingDigits"
