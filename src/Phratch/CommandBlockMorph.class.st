@@ -952,99 +952,71 @@ CommandBlockMorph >> oldUncoloredArgMorphFor: specString [
 	| code |
 	code := specString copyFrom: 2 to: specString size-1.
 	
-	$a			= code ifTrue: [^ AttributeArgMorph new choice: ''].
-	$b			= code ifTrue: [^ BooleanArgMorph new].
-	$c				= code ifTrue: [^ ColorArgMorph new showPalette: true].
-	$C		= code ifTrue: [^ ColorArgMorph new showPalette: false]. 
-	$d			= code ifTrue: [^ ExpressionArgMorphWithMenu new numExpression: '0'; menuSelector: #directionMenu;
-		yourself].
-	$D				= code ifTrue: [^ ExpressionArgMorphWithMenu new numExpression: '48'; menuSelector: #midiDrumMenu;
-		yourself].
-	$e				= code ifTrue: [^ EventTitleMorph new].
-	$f		= code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #mathFunctionNames; choice: #sqrt;
-		yourself].
-	$3			= code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #constantNames].
-	$g				= code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #graphicEffectNames; choice: #color;
-		yourself].
-	$4 		= code ifTrue: [^ ExpressionArgMorphWithMenu new stringExpression: 'a color'; menuSelector: #colorsMenu;
-		yourself].
-	$I 		= code ifTrue: [^ ExpressionArgMorphWithMenu new numExpression: '1'; menuSelector: #midiInstrumentMenu;
-		yourself].
-	$i 			= code ifTrue: [^ ExpressionArgMorphWithMenu new numExpression: '1'; menuSelector: #listIndexMenu;
-		yourself].
-	$k 				= code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #keyNames; choice: 'space';
-		yourself].
-	$5 		= code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #namedColors; choice: #black;
-		yourself].
-	$L 				= code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #listVarMenu].
-	$l 			= code ifTrue: [^ ChoiceOrExpressionArgMorph new getOptionsSelector: #costumeNames; choice: 'costume1';
-		yourself].
-	$m 				= code ifTrue: [^ SpriteArgMorph new].
-	$n 			= code ifTrue: [^ ExpressionArgMorph new numExpression: '10'].
-	$N 				= code ifTrue: [^ ExpressionArgMorphWithMenu new numExpression: '60'; menuSelector: #noteSelector;
-		yourself].
-	$s 				= code ifTrue: [^ ExpressionArgMorph new stringExpression: ''].
-	$S 		= code ifTrue: [^ ChoiceOrExpressionArgMorph new getOptionsSelector: #soundNames; choice: 'pop';
-		yourself].
-	$6 			= code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #timeDates; choice: 'time';
-		yourself].
-	$7 		= code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #layoutStyles; choice: 'large';
-		yourself].
-	$v 			= code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #varNamesMenu; choice: '';
-		yourself].
-	$x 		= code ifTrue: [^ ChoiceOrExpressionArgMorph new getOptionsSelector: #sceneNames; choice: '';
-		yourself].
-	$8 		= code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #newCostumeTypes; choice: 'camera';
-		yourself].
-	$y 			= code ifTrue: [^ ExpressionArgMorphWithMenu new numExpression: '1'; menuSelector: #listIndexForDeleteMenu;
-		yourself].
-
-	$B  = code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #blockId; choice: '';
-		yourself].
+	$a	= code ifTrue: [^ 'Attributes'].
+	$b	= code ifTrue: [^ 'Boolean'].
+	$c	= code ifTrue: [^ 'Color'].
+	$C	= code ifTrue: [^ 'ScreenColor']. 
+	$d	= code ifTrue: [^ 'Directions'].
+	$D	= code ifTrue: [^ 'Drums'].
+	$e	= code ifTrue: [^ 'Event'].
+	$f	= code ifTrue: [^ 'MathFunctions'].
+	$3	= code ifTrue: [^ 'Constants'].
+	$g	= code ifTrue: [^ 'Effects'].
+	$4 	= code ifTrue: [^ 'ColorVar'].
+	$I 	= code ifTrue: [^ 'Instruments'].
+	$i 	= code ifTrue: [^ 'ListIndex'].
+	$k 	= code ifTrue: [^ 'Keys'].
+	$5 	= code ifTrue: [^ 'NamedColors'].
+	$L 	= code ifTrue: [^ 'List'].
+	$l 	= code ifTrue: [^ 'Costumes'].
+	$m 	= code ifTrue: [^ 'Sprite'].
+	$n 	= code ifTrue: [^ 'Number'].
+	$N 	= code ifTrue: [^ 'Notes'].
+	$s 	= code ifTrue: [^ 'String'].
+	$S 	= code ifTrue: [^ 'SoundNames'].
+	$6 	= code ifTrue: [^ 'TimeDates'].
+	$7 	= code ifTrue: [^ 'LayoutStyles'].
+	$v 	= code ifTrue: [^ 'Variable'].
+	$x 	= code ifTrue: [^ 'SceneNames'].
+	$8 	= code ifTrue: [^ 'NewCostume'].
+	$y 	= code ifTrue: [^ 'ListDelete'].
+	$B  = code ifTrue: [^ 'BlockId'].
 	"special args"
-	$o  = code ifTrue: [ ^ CSlotMorph new "SpecialArgMorph new type: #command"].
-	$E  = code ifTrue: [ ^ CSlotMorph new "SpecialArgMorph new type: #command"].
-	$O  = code ifTrue: [ ^ MultiArgMorph type: #command].
-	$r  = code ifTrue: [ ^ OSlotMorph new receiver: receiver; type: #reporterslot; yourself "SpecialArgMorph new type: #reporter"].
-	$R  = code ifTrue: [ ^ MultiArgMorph type: #reporter].
-	$p  = code ifTrue: [ ^ OSlotMorph new receiver: receiver; type: #booleanslot; yourself "SpecialArgMorph new type: #predicate"].
-	$P  = code ifTrue: [ ^ MultiArgMorph type: #predicate].
-	$t  = code ifTrue: [ ^ SpecialArgMorph new type: #list].
-	$u  = code ifTrue: [ ^ MultiArgMorph type: #list].
-	$T  = code ifTrue: [ ^ ExpressionArgMorph new stringExpression: ''; isText: true;
-		yourself.  "SpecialArgMorph new type: #text"].
-	$U  = code ifTrue: [ ^ MultiArgMorph type: #text].
-	$V  = code ifTrue: [ ^ MultiArgMorph type: #boolean].
-	$w  = code ifTrue: [ ^ MultiArgMorph type: #number].
-	$X  = code ifTrue: [ ^ MultiArgMorph type: #any].
-	$z  = code ifTrue: [ ^ VariableBlockMorph new 
-							isSpecialForm: true; 
-							selector: #getVar:;
-							commandSpec: '?';
-		yourself].
-	$Z  = code ifTrue: [ ^ SpecialArgMorph new type: #reporterslot].
-	$Y  = code ifTrue: [ ^ SpecialArgMorph new type: #booleanslot].
+	$o  = code ifTrue: [ ^ 'CSlot'].
+	$E  = code ifTrue: [ ^ 'CSlot'].
+	$O  = code ifTrue: [ ^ 'MACommand'].
+	$r  = code ifTrue: [ ^ 'OSReporter'].
+	$R  = code ifTrue: [ ^ 'MAReporter'].
+	$p  = code ifTrue: [ ^ 'OSBoolean'].
+	$P  = code ifTrue: [ ^ 'MAPredicate'].
+	$t  = code ifTrue: [ ^ 'SAList'].
+	$u  = code ifTrue: [ ^ 'MAList'].
+	$T  = code ifTrue: [ ^ 'Text'].
+	$U  = code ifTrue: [ ^ 'MAText'].
+	$V  = code ifTrue: [ ^ 'MABoolean'].
+	$w  = code ifTrue: [ ^ 'MANumber'].
+	$X  = code ifTrue: [ ^ 'MAAny'].
+	$z  = code ifTrue: [ ^ 'SpecialVar'].
+	$Z  = code ifTrue: [ ^ 'SAReporter'].
+	$Y  = code ifTrue: [ ^ 'SABoolean'].
 	
-	$A = code ifTrue: [ ^ ChoiceArgMorph new options: {'with inputs' localized. 'with input list' localized}; choice: 'with inputs';
-		yourself].
-	$F  = code ifTrue: [ ^ ChoiceArgMorph new options: {'number' localized. 'text' localized. 'boolean' localized. 'list' localized. 'command' localized. 'reporter' localized. 'predicate' localized. 'object' localized}; choice: 'number' localized;
-		yourself].
+	$A = code ifTrue: [ ^ 'Input'].
+	$F  = code ifTrue: [ ^ 'Type'].
 
-	$G  = code ifTrue: [ ^ CArgSlotMorph new].
-	$J  = code ifTrue: [ ^ MultiArgMorph type: #loop].
+	$G  = code ifTrue: [ ^ 'CArgSlot'].
+	$J  = code ifTrue: [ ^ 'Loop'].
 
-	$j  = code ifTrue: [ ^ UnevaluatedExpressionArgMorph new stringExpression: ''].
-	$q  = code ifTrue: [ ^ MultiArgMorph type: #unevaluated].
-	$Q  = code ifTrue: [ ^ UnevaluatedBooleanArgMorph new].
-	$K  = code ifTrue: [ ^ MultiArgMorph type: #unevaluatedBoolean].
+	$j  = code ifTrue: [ ^ 'UnEExp'].
+	$q  = code ifTrue: [ ^ 'MAUneval'].
+	$Q  = code ifTrue: [ ^ 'UnEBool'].
+	$K  = code ifTrue: [ ^ 'MAUnEBool'].
 
-	$1  = code ifTrue: [ ^ SpecialArgMorph new type: #objSlot].
-	$2  = code ifTrue: [ ^ MultiArgMorph type: #objSlot].	
+	$1  = code ifTrue: [ ^ 'SAObjS'].
+	$2  = code ifTrue: [ ^ 'MAObjS'].	
 	
-	$r  = code ifTrue: [^ ChoiceArgMorph new getOptionsSelector: #rotationStyleChanger; choice: 'normal';
-		yourself].
+	$r  = code ifTrue: [^ 'Rotation'].
 			
-	^ ExpressionArgMorph new numExpression: '10'
+	^ 'Number'
 ]
 
 { #category : #evaluation }
@@ -1373,11 +1345,13 @@ CommandBlockMorph >> uncoloredArgMorphFor: specString [
 	allPragmas := Pragma allNamed: #phratchType: in: PhratchType sortedByArgument: 1.
 	prag := allPragmas detect: [ :pragma | (pragma arguments at: 1) asString = code asString ] ifNone: [ nil ].
 	prag isNil
-		ifFalse: [ 
-			^ PhratchType new
+		ifTrue: [
+			 prag := allPragmas detect: [ :pragma | (self oldUncoloredArgMorphFor: specString) asString = code asString ] ifNone: [ nil ].
+		].
+	
+	^ PhratchType new
 				receiver: self receiver;
-				perform: prag method selector ].
-	^ self oldUncoloredArgMorphFor: specString
+				perform: prag method selector
 ]
 
 { #category : #private }
