@@ -509,6 +509,24 @@ ScriptablePhratchMorph >> soundNamed: soundNameOrIndex ifAbsent: absentBlock [
 ]
 
 { #category : #'*PhratchSound' }
+ScriptablePhratchMorph >> soundNames [
+	"Answer a list of my sound names. Suppress duplicates (ignoring case differences)."
+
+	| result nm |
+	result := OrderedCollection new.
+	media do: [:el |
+		el isSound ifTrue: [
+			nm := el mediaName.
+			(result anySatisfy: [:s | s caseInsensitiveEqual: nm])
+				ifFalse: [result add: nm]]].
+	self flag:'remove record because does not work'.
+	"result addLast: '-'.
+	result addLast: 'record' localized, '...'."
+	^ result asArray
+
+]
+
+{ #category : #'*PhratchSound' }
 ScriptablePhratchMorph >> soundsPage: xOffset [
 	"Answer a morph containing thumbnails of my sounds."
 

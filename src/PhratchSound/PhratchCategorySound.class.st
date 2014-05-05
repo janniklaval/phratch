@@ -22,6 +22,19 @@ PhratchCategorySound class >> label [
 ]
 
 { #category : #accessing }
+PhratchCategorySound class >> objectInterface [
+
+	^ 
+	{	"attribute					category		getter				setter				menu string			inheritable"
+		#sounds				->	#(	sound			sounds				-					'sounds'				+			).
+		#instrument			->	#(	sound			-					midiInstrument:		'instrument'			-			).
+		#volume			->	#(	sound			volume				setVolumeTo:		'volume'			+			).
+		#tempo				->	#(	sound			tempo				setTempoTo:			'tempo'				+			).
+
+	} asDictionary
+]
+
+{ #category : #accessing }
 PhratchCategorySound class >> order [
 	^5
 ]

@@ -29,3 +29,13 @@ PhratchType >> notes [
 		menuSelector: #noteSelector;
 		yourself
 ]
+
+{ #category : #'*PhratchSound' }
+PhratchType >> soundNames [
+	
+	<phratchType: #'SoundNames'>
+	^ ChoiceOrExpressionArgMorph new 
+		getOptionsSelector: #soundNames; 
+		choice: 'pop';
+		yourself
+]
