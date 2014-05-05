@@ -70,6 +70,14 @@ PhratchSpriteMorph >> hScale [
 ]
 
 { #category : #'*PhratchLooks' }
+PhratchSpriteMorph >> hide [
+	"Make myself invisible."
+	<phratchItem: 'hide' kind: #- category: 'looks' defaultValues: #() subCategory: #a6 special: #()>
+	self setHideFlagTo: true
+
+]
+
+{ #category : #'*PhratchLooks' }
 PhratchSpriteMorph >> nextCostume [
 	"Show the next costume in my costumes list."
 	<phratchItem: 'next costume' kind: #- category: 'looks' defaultValues: #() subCategory: #a1 special: #()>
@@ -117,6 +125,14 @@ PhratchSpriteMorph >> setVStretchTo: percent [
 	maxStretch := 500.0 / (baseScale * origExtent y). "max height 500 pixels"
 	newStretchFactor := ((percent max: 0) / 100.0) within: minStretch and: maxStretch.
 	self scalePoint: baseScale * (1.0 @ newStretchFactor).
+]
+
+{ #category : #'*PhratchLooks' }
+PhratchSpriteMorph >> show [
+	"Make myself visible."
+	<phratchItem: 'show' kind: #- category: 'looks' defaultValues: #() subCategory: #a6 special: #()>
+	self setHideFlagTo: false
+
 ]
 
 { #category : #'*PhratchLooks' }
