@@ -409,6 +409,26 @@ ScriptablePhratchMorph >> showList: aList [
 ]
 
 { #category : #'*PhratchList' }
+ScriptablePhratchMorph >> showOrHideList: aList show: aBoolean [
+	"Show or hide the given list"
+ 
+	| list stage sFrame |
+	(stage := self ownerThatIsAPhratchStageMorph).
+	(self listVarNames includes: aList)
+		ifFalse: [stage
+			ifNotNil: [(stage listVarNames includes: aList)
+				ifTrue: [list := stage lists at: aList]
+				ifFalse: [^ self]]
+			ifNil: [^ self]]
+		ifTrue: [list := lists at: aList].
+	aBoolean
+		ifTrue: [stage addMorph: list]
+		ifFalse: [list delete].
+	(sFrame := self ownerThatIsAPhratchFrameMorph) ifNil: [^ self].
+	sFrame viewerPane categoryChanged: 'variables'
+]
+
+{ #category : #'*PhratchList' }
 ScriptablePhratchMorph >> stringSort: t1 [
 	"Sort the list using the character order"
 	<phratchItem: 'sort items of $List$ by string value' kind: #- category: 'list' defaultValues: #('list') subCategory: #a6 special: #()> 
