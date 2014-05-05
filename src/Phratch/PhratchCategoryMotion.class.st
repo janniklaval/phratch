@@ -14,6 +14,17 @@ PhratchCategoryMotion class >> label [
 	^'motion'
 ]
 
+{ #category : #drawing }
+PhratchCategoryMotion class >> objectInterface [
+
+	^ 
+	{	"attribute					category		getter				setter				menu string			inheritable"
+		#xPosition			->	#(	motion			xpos 				xpos:				'x position'			+ 			).
+		#yPosition			->	#(	motion			ypos 				ypos:				'y position'			+			).
+		#heading			->	#(	motion			heading 			heading:			'direction'			+			).
+	} asDictionary
+]
+
 { #category : #accessing }
 PhratchCategoryMotion class >> order [
 	^1

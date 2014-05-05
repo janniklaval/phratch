@@ -333,7 +333,6 @@ CommandBlockMorph >> coerceArgs: argList [
 	| args specialCommands ignoreCases numFlags |
 	args := argList asArray.
 	specialCommands := #(
-		"append:toList: deleteLine:ofList: getLine:ofList: insert:at:ofList: list:contains: setLine:ofList:to:"
 		lookLike: showBackground:
 		playSound: doPlaySoundAndWait
 		"setVar:to:").

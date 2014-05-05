@@ -30,6 +30,25 @@ PhratchCategory class >> label [
 	^'Generic Category'
 ]
 
+{ #category : #drawing }
+PhratchCategory class >> objectInterface [
+
+	^ 
+	{	"attribute					category		getter				setter				menu string			inheritable"
+
+		#name				->	#(	sprite			objName 			objName:			'name'				-			).
+		#isDraggable		->	#(	sprite			getIsDraggable		draggable:			'draggable?'			+			).
+		#rotationStyle		->	#(	sprite			getRotationStyle 	setRotationStyle:		'rotation style'		+			).
+		#rotateWithOwner	->	#(	sprite			rotateWithOwner 	rotateWithOwner:	'synchronous?'		+			).
+
+		#prototype			->	#(	relationship		prototype			prototype:			'parent'				-			).
+		#instances			->	#(	relationship		children			-					'children'			-			).
+		#anchor			->	#(	relationship		ownerSprite			stickTo:				'anchor'			+			).
+		#parts				->	#(	relationship		parts				-					'parts'				-			).
+
+	} asDictionary
+]
+
 { #category : #accessing }
 PhratchCategory class >> order [
 	^0

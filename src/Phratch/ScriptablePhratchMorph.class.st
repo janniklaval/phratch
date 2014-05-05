@@ -386,40 +386,6 @@ ScriptablePhratchMorph >> \\ aNumber [
 
 ]
 
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> addColor [
-
-	| sFrame result colorName colorOwner |
-	(sFrame := self ownerOrYourselfThatIsAPhratchFrameMorph) ifNil: [^ PhratchError error: 'beep'.].
-
-	result := NewVariableDialog ask: 'Color name?'.
-	result = #cancelled ifTrue: [^ self].
-	colorName := result first.
-	colorOwner := result second ifTrue: [self] ifFalse: [sFrame workPane].
-	(colorOwner variableNameInUse: colorName) ifTrue: [
-		PhratchError error: 'beep'.
-		DialogBoxMorph warn: 'That variable name is already in use'.
-		^ self].
-
-	colorOwner addColor: colorName.
-	sFrame viewerPane categoryChanged: 'colors'.
-	
-]
-
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> addColor: colorName [
-	"Add a new random color with the given name to this object."
-	<phratchItem: 'make color $String$' kind: #- category: 'colors' defaultValues: #('a color') subCategory: #a3 special: #()>
-	| sFrame stage isGlobal |
-	(sFrame := self ownerOrYourselfThatIsAPhratchFrameMorph) ifNil: [^ PhratchError error: 'beep'.].
-	isGlobal := false.
-	(stage := self ownerOrYourselfThatIsAPhratchStageMorph)
-		ifNotNil: [isGlobal := stage colorNames includes: colorName asString].
-	((colors includesKey: colorName asString) or: [isGlobal]) ifFalse: [
-		colors at: colorName asString put: (Color black)].
-	sFrame viewerPane categoryChanged: 'colors'.
-]
-
 { #category : #scripts }
 ScriptablePhratchMorph >> addComment: aPhratchCommentMorph [
 	"Aligns the newly added script below the lowest script in the pane."
@@ -432,46 +398,6 @@ ScriptablePhratchMorph >> addComment: aPhratchCommentMorph [
 			y := y max: bottom ].
 	aPhratchCommentMorph position: blocksBin position + (20 @ (y + 10)).
 	blocksBin addMorph: aPhratchCommentMorph
-]
-
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> addCostumeTyped: aString [
-
-	| newC frameForm title result fList type |
-	aString = 'camera' ifTrue: [
-		
-		self cameraIsOpen ifTrue: [
-			self flag:'this is crappy, but works...'.
-			frameForm := Form extent: (CameraPlugin frameExtent: 1) depth: 32.
-			CameraPlugin getFrameForCamera: 1 into: frameForm bits.
-			(2 seconds) asDelay wait.
-			CameraPlugin getFrameForCamera: 1 into: frameForm bits.
-			
-			
-			newC := ImageMedia new form: frameForm]
-		ifFalse: [^ self]]."]]]."
-	aString = 'stage' ifTrue: [newC := ImageMedia new form: ((self ownerOrYourselfThatIsAPhratchStageMorph) stageShotForm"Sized: 480@360")].
-	aString = 'paint new' ifTrue: [self drawNewCostume.
-		^ self updateAfterPopUp
-	].
-	aString = 'import' ifTrue: [
-		(self isPhratchStageMorph)
-			ifTrue: [type := #background. title := 'Import Background']
-			ifFalse: [type := #costume. title := 'Import Costume'].
-		result := PhratchFileChooserDialog
-			chooseImageFileType: type
-			title: title.
-		result = #cancelled ifTrue: [^ self updateAfterPopUp].
-
-		fList := OrderedCollection new.
-		[fList addLast: (Form fromFileNamed: result)] ifError: [^ self updateAfterPopUp].
-
-		newC := ImageMedia new form: fList first.
-		self updateAfterPopUp].
-	newC mediaName: (self unusedMediaNameFromBaseName: (self defaultImageMedia mediaName)).
-	media addLast: newC.
-	self lookLike: newC mediaName.
-	self updateMediaCategory.
 ]
 
 { #category : #byob }
@@ -550,54 +476,6 @@ ScriptablePhratchMorph >> addEventNamesTo: aSet [
 ]
 
 { #category : #blocks }
-ScriptablePhratchMorph >> addGenericListBlocksTo: page y: startY [
-	"Add the generic list blocks to the given page starting at the given y offset."
-
-	| addButton deleteButton x y hasLists stage |
-	addButton := PhratchFrameMorph
-		buttonLabel: 'Make a list' localized
-		selector: #addList.
-	(self isPhratchStageMorph) ifTrue: [addButton actionSelector: #addGlobalList].
-
-	deleteButton := PhratchFrameMorph
-		buttonLabel: 'Delete a list' localized
-		selector: #deleteList.
-
-	x := 13.
-	y := startY + 10.
-	page addMorph: (addButton target: self; position: x@y;
-		yourself).
-	y := addButton bottom + 3.
-
-	hasLists := self listVarNames size > 0.
-	(stage := self ownerOrYourselfThatIsAPhratchStageMorph) ifNotNil: [
-		stage listVarNames size > 0 ifTrue: [hasLists := true]].
-	hasLists ifTrue: [
-
-		page addMorph: (deleteButton target: self; position: x@y;
-		yourself).
-		y := deleteButton bottom + 10.
-
-		y := (self addListReportersTo: page x: x y: y) + 10 ].
-
-
-	(self blocksFor: 'list') do: [:blockOrSym |
-		({#- . #~ . #=} includes: blockOrSym)
-			ifTrue: [
-				(blockOrSym = #-) ifTrue: [y := y + 15].  "insert a full space"
-				(blockOrSym = #~) ifTrue: [y := y + 5].  "insert a half space"
-				(blockOrSym = #=) ifTrue: [
-					y := y + 7.
-					page addMorph: ((ImageMorph new form: (PhratchFrameMorph skinAt: #connector)) position: x@y).
-					y := y + 20]]  "insert a line"
-			ifFalse: [
-				y := self createBlock: blockOrSym atPosition: x@y onPage: page.
-				page submorphs last color: ScriptablePhratchMorph listBlockColor]].
-	^y
-
-]
-
-{ #category : #blocks }
 ScriptablePhratchMorph >> addGenericVariableBlocksTo: page x: x y: startY [
 	"Add the generic variable blocks to the given page starting at the given y offset. Answer the new y."
 
@@ -670,38 +548,6 @@ ScriptablePhratchMorph >> addGenericVariableBlocksTo: page x: x y: startY [
 	^ y
 ]
 
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> addGlobalColor [
-	"Ask the user for a color variable name, then add a background (global) variable of that name."
-
-	| sFrame cName |
-	(sFrame := self ownerThatIsAPhratchFrameMorph) ifNil: [^ PhratchError error: 'beep'.].
-
-	cName := StringDialog ask: 'Variable name?'.
-	cName size = 0 ifTrue: [^ self].
-	cName := cName.
-	(sFrame workPane colorNames includes: cName) ifTrue: [
-		PhratchError error: 'beep'.
-		DialogBoxMorph warn: 'That variable name is already in use'.
-		^ self].
-
-	sFrame workPane addColor: cName.
-	sFrame viewerPane categoryChanged: 'colors'.
-]
-
-{ #category : #'list ops' }
-ScriptablePhratchMorph >> addGlobalList [
-
-	| sFrame listName |
-	(sFrame := self ownerOrYourselfThatIsAPhratchFrameMorph) ifNil: [^ PhratchError error: 'beep'.].
-
-	listName := StringDialog ask: 'List name?'.
-	listName size = 0 ifTrue: [^ self].
-	sFrame workPane createListNamed: listName.
-	sFrame viewerPane categoryChanged: 'variables'.
-
-]
-
 { #category : #variables }
 ScriptablePhratchMorph >> addGlobalVariable [
 	"Ask the user for a variable name, then add a background (global) variable of that name."
@@ -720,75 +566,6 @@ ScriptablePhratchMorph >> addGlobalVariable [
 	sFrame workPane addVariable: varName.
 	sFrame viewerPane categoryChanged: 'variables'.
 	self addWatcherForNewVariable: varName withScope: sFrame workPane.
-
-]
-
-{ #category : #'list ops' }
-ScriptablePhratchMorph >> addList [
-
-	| sFrame result listName |
-	(sFrame := self ownerOrYourselfThatIsAPhratchFrameMorph) ifNil: [^ PhratchError error: 'beep'.].
-
-	result := NewVariableDialog ask: 'List name?'.
-	result = #cancelled ifTrue: [^ self].
-	listName := result first.
-	result second
-		ifTrue: [self createListNamed: listName]
-		ifFalse: [sFrame workPane createListNamed: listName].
-	sFrame viewerPane categoryChanged: 'variables'.
-
-]
-
-{ #category : #blocks }
-ScriptablePhratchMorph >> addListReportersTo: page x: x y: startY [
-	"Add the list block reporters to the given page starting at the given y offset. Answer the new y."
-
-	| y stage b watcherButton yOffset line line2 |
-	y := startY.
-	stage := self ownerOrYourselfThatIsAPhratchStageMorph.
-	(stage notNil and: [stage ~= self]) ifTrue: [
-		stage listVarNames do: [:listVarName |
-			b := ListContentsBlockMorph new
-				color: ScriptablePhratchMorph listBlockColor;
-				receiver: stage blockReceiver;
-				commandSpec: listVarName;
-				selector: #listNamed:;
-		yourself.
-			watcherButton := self createToggleButtonFor: b.
-			yOffset := (b fullBounds height - watcherButton height) // 2.
-			page addMorph: (watcherButton position: x @ (y + yOffset)).
-			page addMorph: (b position: (x + watcherButton width + 4)@y).
-			y := y + b height + 3].
-		(self listVarNames size > 0) ifTrue: [
-			line := Morph new.
-			line
-				extent: 90@1;
-				color: Color gray darker darker;
-				position: x@(y+2).
-			line2 := Morph new.
-			line2
-				extent: 90@1;
-				color: Color gray lighter;
-				position: x@(y+3).
-			page
-				addMorph: line;
-				addMorph: line2.
-			y := y + 9]].
-
-	self listVarNames do: [:listVarName |
-		b := ListContentsBlockMorph new
-			color: ScriptablePhratchMorph listBlockColor;
-			receiver: self blockReceiver;
-			commandSpec: listVarName;
-			selector: #listNamed:;
-		yourself.
-		watcherButton := self createToggleButtonFor: b.
-		yOffset := (b fullBounds height - watcherButton height) // 2.
-		page addMorph: (watcherButton position: x @ (y + yOffset)).
-		page addMorph: (b position: (x + watcherButton width + 4)@y).
-		y := y + b height + 3].
-
-	^ y
 
 ]
 
@@ -989,17 +766,6 @@ ScriptablePhratchMorph >> answer [
 ]
 
 { #category : #'list ops' }
-ScriptablePhratchMorph >> append: anObject toList: listName [
-	"Add a new value to the selected list."
-	<phratchItem: 'add $String$ to $List$' kind: #- category: 'list' defaultValues: #('thing') subCategory: #a4 special: #()>
-	| list |
-	list := (listName isPhratchListMorph)
-		ifTrue: [ listName ]
-		ifFalse: [ self listNamed: listName ifNone: [ ^ 0 ] ].
-	list insertLine: (self asListElement: anObject) at: list lineCount + 1
-]
-
-{ #category : #'list ops' }
 ScriptablePhratchMorph >> asListElement: anObject [
 	"Answer the given object converted to an object suitable for storing in a list."
 
@@ -1065,18 +831,6 @@ ScriptablePhratchMorph >> asciiLetter: anInteger [
 	code := anInteger asNumberNoError.
 
 	^ String with: (Character value: code)
-]
-
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> askForFileIO [
-	"Ask the user to either allow or deny file I/O, or return the preference from the sFrame if it exists."
-	
-	| sFrame dialog |
-	(sFrame := self ownerThatIsAPhratchFrameMorph) ifNil: [
-		sFrame := (self ownerThatIsAOffscreenWorldMorph) frame].
-	ScriptablePhratchMorph fileIOPreference ifNotNil: [^ ScriptablePhratchMorph fileIOPreference].
-	dialog := FileIOAskerDialog new forPhratchFrame: sFrame.
-	^ dialog getUserResponse.
 ]
 
 { #category : #'byob OOP' }
@@ -1270,22 +1024,6 @@ ScriptablePhratchMorph >> cameraIsOpen [
 	^ CameraPlugin cameraIsOpen: 1.
 ]
 
-{ #category : #'looks ops' }
-ScriptablePhratchMorph >> changeGraphicEffect: effect by: aNumber [
-	"Change the given graphic effect by the given value."
-	<phratchItem: 'change $Effects$ effect by $Number$' kind: #- category: 'looks' defaultValues: #('color' 25) subCategory: #a3 special: #()>
-	
-	'brightness' = effect ifTrue: [self brightnessEffect: self brightnessEffect + aNumber asNumberNoError].
-	'fisheye' = effect ifTrue: [self fisheyeEffect: self fisheyeEffect + aNumber asNumberNoError].
-	'color' = effect ifTrue: [self colorEffect: self colorEffect + aNumber asNumberNoError].
-	'mosaic' = effect ifTrue: [self mosaicEffect: self mosaicEffect + aNumber asNumberNoError].
-	'pixelate' = effect ifTrue: [self pixelateEffect: self pixelateEffect + aNumber asNumberNoError].
-	'ghost' = effect ifTrue: [
-		self transparencyEffect: self transparencyEffect + aNumber asNumberNoError].
-	'whirl' = effect ifTrue: [self whirlEffect: self whirlEffect + aNumber asNumberNoError].
-
-]
-
 { #category : #variables }
 ScriptablePhratchMorph >> changeVar: varName by: increment [
 	"Change the value of the given variable of this object by the given amount."
@@ -1327,17 +1065,6 @@ ScriptablePhratchMorph >> checkNil: str [
 	"Verify if the given value is nil"
 	<phratchItem: 'is $String$ nil?' kind: #BooleanBlockMorph category: 'operators' defaultValues: #() subCategory: #a9 special: #()>
 	^ str isNil
-]
-
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> clearFile: aFileNameString [
-	"Clear the given file."
-	<phratchItem: 'clear file $String$' kind: #- category: 'files' defaultValues: #() subCategory: #a special: #()>
-	| f |
-	(self askForFileIO = true) ifFalse: [^ self].
-	aFileNameString asFileReference delete.
-	f := FileStream newFileNamed: aFileNameString.
-	f close
 ]
 
 { #category : #private }
@@ -1394,16 +1121,6 @@ ScriptablePhratchMorph >> closeCamera [
 	self class closeCamera.
 ]
 
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> closeDefinitivelyCamera [
-	"Close the camera. Do nothing if the camera is already close."
-	<phratchItem: 'close camera' kind: #- category: 'looks' defaultValues: #() subCategory: #a9 special: #()>
-	self cameraIsOpen
-		ifFalse: [ ^ self ].
-	CameraOpenings := 0.
-	CameraPlugin closeCamera: 1
-]
-
 { #category : #'sensing ops' }
 ScriptablePhratchMorph >> coerceSpriteArg: anObject [
 	"Coerce the given object to a sprite reference if necessary. If it is a Symbol (e.g. #mouse), just return it. If it is a String, try to find a Sprite with that name. If it is a Number, coerce it to a string and look for a Sprite with a matching name."
@@ -1425,49 +1142,6 @@ ScriptablePhratchMorph >> coerceSpriteArg: anObject [
 
 ]
 
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> colorAsString: aColor [
-	"Give the RGB string representation of the given color"
-	<phratchItem: '$Color$ as string' kind: #ReporterWatcherBlockMorph category: 'colors' defaultValues: #() subCategory: #a7 special: #()>
-	^ aColor asHTMLColor
-]
-
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> colorAtX: x y: y [
-	"select the color of the given pixel"
-	<phratchItem: 'color of pixel x: $Number$ y: $Number$' kind: #ColorBlockMorph category: 'colors' defaultValues: #(0 0) subCategory:
-		#a3 special: #()>
-	| frame w newX newY p |
-	frame := self ownerThatIsAPhratchFrameMorph.
-	frame
-		ifNil: [ 
-			(w := self ownerThatIsAOffscreenWorldMorph) ifNil: [ ^ self ].
-			frame := w frame ].
-	newX := x.
-	newX isNaN
-		ifTrue: [ newX := 0 ].
-	newX := newX min: 240.
-	newX := newX max: -240.
-	newY := y.
-	newY isNaN
-		ifTrue: [ newY := 0 ].
-	newY := newY max: -180.
-	newY := newY min: 180.
-	DoubleSize
-		ifTrue: [ 
-			newX := newX * 2.
-			newY := newY * 2 ].
-	p := newX @ newY negated.
-	^ Display colorAt: PhratchOrigin + p
-]
-
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> colorB: aColor [
-	"give the value of the blue in the RGB representation of the color"
-	<phratchItem: '$Color$ blue' kind: #ReporterWatcherBlockMorph category: 'colors' defaultValues: #() subCategory: #a4 special: #()>
-	^ aColor blue.
-]
-
 { #category : #'BYOB attributes' }
 ScriptablePhratchMorph >> colorEffect [
 
@@ -1486,81 +1160,6 @@ ScriptablePhratchMorph >> colorEffect: aNumber [
 	self undeleteAttribute: #color.
 	self passiveColorEffect: aNumber
 
-]
-
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> colorG: aColor [
-	"give the value of the green in the RGB representation of the color"
-	<phratchItem: '$Color$ green' kind: #ReporterWatcherBlockMorph category: 'colors' defaultValues: #() subCategory: #a4 special: #()>
-	^ aColor green.
-]
-
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> colorH: aColor [
-	"give the value of the hue of the given color"
-	<phratchItem: '$Color$ hue' kind: #ReporterWatcherBlockMorph category: 'colors' defaultValues: #() subCategory: #a5 special: #()>
-	^ aColor hue.
-]
-
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> colorH: h s: s v: v [
-	"Answer the given HSB color."
-	<phratchItem: 'color h: $Number$ s: $Number$ b: $Number$' kind: #ColorBlockMorph category: 'colors' defaultValues: #(0 0 0) subCategory: #a5 special: #()>
-	^ (Color h: h s: s v: v).
-]
-
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> colorNames [
-
-	^ colors keys asArray sort.
-]
-
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> colorR: aColor [
-	"give the value of the red in the RGB representation of the color"
-	<phratchItem: '$Color$ red' kind: #ReporterWatcherBlockMorph category: 'colors' defaultValues: #() subCategory: #a4 special: #()>
-	^ aColor red.
-]
-
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> colorR: r g: g b: b [
-	"Answer the given RGB color."
-
-	<phratchItem: 'color r: $Number$ g: $Number$ b: $Number$' kind: #ColorBlockMorph category: 'colors' defaultValues: #(0 0 0) subCategory: #a4 special: #()>
-	^ (Color r: r g: g b: b).
-]
-
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> colorS: aColor [
-	"give the value of the saturation of the given color"
-	<phratchItem: '$Color$ saturation' kind: #ReporterWatcherBlockMorph category: 'colors' defaultValues: #() subCategory: #a5 special: #()>
-	^ aColor saturation.
-]
-
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> colorV: aColor [
-	"give the value of the brightness of the given color"
-	<phratchItem: '$Color$ brightness' kind: #ReporterWatcherBlockMorph category: 'colors' defaultValues: #() subCategory: #a5 special: #()>
-	^ aColor brightness.
-]
-
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> colorsMenu [
-	"Ask the user which user variable to show, then show it."
-
-	| sFrame stage menu  |
-	sFrame := self ownerThatIsAPhratchFrameMorph.
-	sFrame ifNil: [^ self].
-
-	stage := sFrame workPane.
-
-	menu := MenuMorphNG new.
-	stage colorNames do: [:v | menu add: v value: v].
-	self = stage ifFalse: [
-		stage colorNames isEmpty ifFalse: [menu addLine].
-		self colorNames do: [:v | menu add: v value: v]].
-	menu invokeModal.
-	^ menu
 ]
 
 { #category : #'BYOB attributes' }
@@ -1611,16 +1210,6 @@ ScriptablePhratchMorph >> constantNames [
 		'tab')
 ]
 
-{ #category : #'list ops' }
-ScriptablePhratchMorph >> contentsOfList: listName [
-	"Give the contents of the given list"
-	<phratchItem: '$List$' kind: #ReporterBlockMorph category: 'list' defaultValues: #('a list') subCategory: #a1 special: #()>
-	| list |
-	list := self listNamed: listName ifNone: [^ ''].
-	^ list concatenatedLines
-
-]
-
 { #category : #private }
 ScriptablePhratchMorph >> copyForExport [
 	"Answer a copy of me for exporting."
@@ -1630,15 +1219,6 @@ ScriptablePhratchMorph >> copyForExport [
 	objToExport objName: objName.
 	objToExport prepareForExport.
 	^ objToExport
-
-]
-
-{ #category : #byob }
-ScriptablePhratchMorph >> copyOfList: aList [
-	"Return a copy of the given list"
-	<phratchItem: 'copy of $SAList$' kind: #ReporterBlockMorph category: 'list' defaultValues: #() subCategory: #a7 special: #()>
-	aList ifNil: [^ PhratchListMorph on: #()].
-	^ PhratchListMorph on: aList asArray
 
 ]
 
@@ -1828,34 +1408,6 @@ ScriptablePhratchMorph >> createBlock: block atPosition: pos onPage: page [
 
 ]
 
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> createFile: aFileNameString [
-	"Create the given file name."
-	<phratchItem: 'create file $String$' kind: #- category: 'files' defaultValues: #() subCategory: #a special: #()>
-	| f |
-	(self askForFileIO = true) ifFalse: [^ self].
-	aFileNameString asFileReference delete.
-	f := FileStream newFileNamed: aFileNameString.
-	f close
-]
-
-{ #category : #'list ops' }
-ScriptablePhratchMorph >> createListNamed: listName [
-
-	| list stage n |
-	(self variableNameInUse: listName) ifTrue: [
-		PhratchError error: 'beep'.
-		DialogBoxMorph warn: 'That variable name is already in use'.
-		^ self].
-
-	lists at: listName put: (list := PhratchListMorph new listName: listName target: self).
-	(stage := self ownerOrYourselfThatIsAPhratchStageMorph) ifNotNil: [
-		n := (stage submorphs select: [:m | m isPhratchListMorph]) size.
-		stage addMorph: (list position: stage topRight - ((list width + 10)@0) + (0@(10+(20*n)))).
-		list startStepping].
-
-]
-
 { #category : #blocks }
 ScriptablePhratchMorph >> createToggleButtonFor: block [
 	"Create the toggle button for each variable that could be viewed on the stage."
@@ -1911,19 +1463,6 @@ ScriptablePhratchMorph >> defaultImageMedia [
 		form: (Form extent: 8@8 depth: 8) fillWhite;
 		mediaName: ('costume' localized, '1');
 		yourself
-
-]
-
-{ #category : #'list ops' }
-ScriptablePhratchMorph >> defaultListName [
-
-	| stage |
-	lists size > 0 ifTrue: [^ lists keys asArray sort first].
-
-	(stage := self ownerOrYourselfThatIsAPhratchStageMorph) ifNotNil: [
-		stage lists size > 0 ifTrue: [^ stage lists keys asArray sort first]].
-
-	^ ''
 
 ]
 
@@ -1993,56 +1532,6 @@ ScriptablePhratchMorph >> deleteAttributes: aCollection [
 ]
 
 { #category : #'panther actions' }
-ScriptablePhratchMorph >> deleteColor [
-	"Ask the user which user variable to delete, then remove it."
-
-	| sFrame stage menu choice |
-	sFrame := self ownerOrYourselfThatIsAPhratchFrameMorph.
-	sFrame ifNil: [^ self].
-
-	stage := sFrame workPane.
-	(stage colorNames isEmpty) & (self colorNames isEmpty)
-		ifTrue: [^ self inform: 'No colors.' localized].
-
-	menu := MenuMorphNG new.
-	stage colorNames do: [:v | menu add: v value: (Array with: v with: #global)].
-	self = stage ifFalse: [
-		stage colorNames isEmpty ifFalse: [menu addLine].
-		self colorNames do: [:v | menu add: v value: (Array with: v with: #local)]].
-	choice := menu invokeModal; selectedValue.
-	choice ifNil: [^ self].
-
-	choice second = #global
-		ifTrue: [stage deleteColor: choice first]
-		ifFalse: [self deleteColor: choice first].
-
-	sFrame viewerPane categoryChanged: 'colors'.
-]
-
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> deleteColor: colorName [
-	"Delete the variable with the given name. Do nothing if the variable doesn't exist."
-
-	| frame |
-	colors removeKey: colorName asString ifAbsent: [^ self].
-	(frame := self ownerOrYourselfThatIsAPhratchFrameMorph) ifNil: [frame := (self ownerOrYourselfThatIsAOffscreenWorldMorph) frame].
-	frame deleteWatchersForVar: colorName ofSprite: self.
-	frame viewerPane categoryChanged: 'colors'.
-]
-
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> deleteColorFull: colorName [
-	"Delete the color variable with the given name. Do nothing if the variable doesn't exist."
-	<phratchItem: 'delete color $String$' kind: #- category: 'colors' defaultValues: #('a color') subCategory: #a3 special: #()>
-	| frame stage |
-	(colors includesKey: colorName) ifTrue: [self deleteColor: colorName].
-	stage := self ownerOrYourselfThatIsAPhratchStageMorph.
-	(stage notNil and: [stage colorNames includes: colorName]) ifTrue: [stage deleteColor: colorName].
-	(frame := self ownerOrYourselfThatIsAPhratchFrameMorph) ifNil: [^ self].
-	frame viewerPane categoryChanged: 'colors'.
-]
-
-{ #category : #'panther actions' }
 ScriptablePhratchMorph >> deleteCostumeAt: index [
 	"Delete the costume at the given index."
 
@@ -2066,67 +1555,6 @@ ScriptablePhratchMorph >> deleteDefinitionId: id [
 	stage sprites, {stage} do: [:obj |
 		obj deleteLocalDefinitionId: id]
 	
-]
-
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> deleteFile: aFileNameString [
-	"Delete the given file."
-	<phratchItem: 'delete file $String$' kind: #- category: 'files' defaultValues: #() subCategory: #a special: #()>
-	(self askForFileIO = true) ifFalse: [^ self].
-	aFileNameString asFileReference delete.
-]
-
-{ #category : #'list ops' }
-ScriptablePhratchMorph >> deleteLine: lineNum ofList: listName [
-	"Remove the given entry of the given list"
-	<phratchItem: 'delete $ListDelete$ of $List$' kind: #- category: 'list' defaultValues: #(1) subCategory: #a4 special: #()>
-	| list |
-	list := self listNamed: listName ifNone: [^ self].
-	lineNum = 'all' ifTrue: [list clear. ^ self].
-	list deleteLineAt: (self lineNum: lineNum forList: list)
-
-]
-
-{ #category : #'list ops' }
-ScriptablePhratchMorph >> deleteList [
-	"Ask the user which list variable to delete, then remove it."
-
-	| sFrame stage menu |
-	sFrame := self ownerOrYourselfThatIsAPhratchFrameMorph.
-	sFrame ifNil: [^ self].
-
-	stage := sFrame workPane.
-	(stage listVarNames isEmpty) & (self listVarNames isEmpty)
-		ifTrue: [^ self inform: 'No lists.' localized].
-
-	menu := MenuMorph new defaultTarget: self.
-	stage listVarNames do: [:v | menu add: v target: stage selector: #deleteList: argument: v].
-	self = stage ifFalse: [
-		stage listVarNames isEmpty ifFalse: [menu addLine].
-		self listVarNames do: [:v | menu add: v target: self selector: #deleteList: argument: v]].
-	menu invokeModal.
-	
-
-	sFrame viewerPane categoryChanged: 'variables'.
-
-]
-
-{ #category : #'list ops' }
-ScriptablePhratchMorph >> deleteList: listName [
-	"Delete the list variable with the given name. Do nothing if the variable doesn't exist."
-	<phratchItem: 'delete list $String$' kind: #- category: 'list' defaultValues: #('a list') subCategory: #a2 special: #()>
-	| stage sFrame |
-	(sFrame := self ownerOrYourselfThatIsAPhratchFrameMorph) ifNil: [^ PhratchError error: 'beep'.].
-	stage := self ownerOrYourselfThatIsAPhratchStageMorph.
-	lists removeKey: listName asString ifAbsent: [].
-	(self prototype notNil and: [self prototype lists includesKey: listName]) ifFalse: [ 
-	stage submorphs do: [:m |
-		((m isPhratchListMorph) and: 
-		[(m listName = listName) and: 
-		[m target = self]])
-			ifTrue: [m delete]]].
-	sFrame viewerPane categoryChanged: 'variables'.
-
 ]
 
 { #category : #byob }
@@ -2496,13 +1924,6 @@ ScriptablePhratchMorph >> doWaitUntil [
 	<phratchItem: 'wait until $Boolean$' kind: #SpecialBlockMorph category: 'control' defaultValues: #() subCategory: #time special: #()>
 
 
-]
-
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> doWithCamOpen [
-	"Do the included block while opening the camera"
-	<phratchItem: 'do with camera open' kind: #CBlockMorph category: 'looks' defaultValues: #() subCategory: #a9 special: #()>
-	
 ]
 
 { #category : #'event handling' }
@@ -3106,35 +2527,11 @@ ScriptablePhratchMorph >> getAttribute: attr of: anObject [
 
 ]
 
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> getColor: colorName [
-
-	^ colors at: colorName ifAbsent: [(Color black)]
-]
-
 { #category : #byob }
 ScriptablePhratchMorph >> getFalse [
 	"Return the boolean False"
 	<phratchItem: 'false' kind: #BooleanBlockMorph category: 'operators' defaultValues: #() subCategory: #a4 special: #()>
 	^false
-]
-
-{ #category : #'list ops' }
-ScriptablePhratchMorph >> getLine: lineNum ofList: listName [
-	"Return the value of given item number in the given list"
-	<phratchItem: 'item $ListIndex$ of $List$' kind: #ReporterBlockMorph category: 'list' defaultValues: #(1) subCategory: #a5 special: #()>
-	| list |
-	list := (listName isPhratchListMorph)
-		ifTrue: [ listName ]
-		ifFalse: [ self listNamed: listName ifNone: [ ^ '' ] ].
-	^ list lineAt: (self lineNum: lineNum forList: list)
-]
-
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> getNamedColor: aColorName [
-	"Return the color with the given name"
-	<phratchItem: 'color named $NamedColors$' kind: #ColorBlockMorph category: 'colors' defaultValues: #() subCategory: #a7 special: #()>
-	^ Color fromString: aColorName.
 ]
 
 { #category : #'byob OOP' }
@@ -3212,21 +2609,6 @@ ScriptablePhratchMorph >> getVarOrListNamed: varName [
 	^ value
 ]
 
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> graphicEffectNamed: effect [
-"Answer the provided graphic effect"
-	<phratchItem: '$Effects$ effect' kind: #ReporterWatcherBlockMorph category: 'looks' defaultValues: #('color') subCategory: #a3 special: #()>
-	filterPack ifNil: [filterPack := FilterPack new].
-
-	'brightness' = effect ifTrue: [^ filterPack brightnessShift].
-	'fisheye' = effect ifTrue: [^ filterPack fisheye].
-	'color' = effect ifTrue: [^ filterPack hueShift].
-	'mosaic' = effect ifTrue: [^ filterPack mosaicCount].
-	'pixelate' = effect ifTrue: [^ filterPack pixelateCount].
-	'ghost' = effect ifTrue: [^ self transparency].
-	'whirl' = effect ifTrue: [^ filterPack whirl].
-]
-
 { #category : #'looks ops' }
 ScriptablePhratchMorph >> graphicEffectNames [
 	"Answer a collection of graphic effect names."
@@ -3278,51 +2660,6 @@ ScriptablePhratchMorph >> handlesMouseDown: evt [
 
 	^ self isVisible
 
-]
-
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> hideColor [
-	"Ask the user which user variable to hide, then hide it."
-
-	| sFrame stage menu choice |
-	sFrame := self ownerThatIsAPhratchFrameMorph.
-	sFrame ifNil: [^ self].
-
-	stage := sFrame workPane.
-	(stage colorNames isEmpty) & (self colorNames isEmpty)
-		ifTrue: [^ self inform: 'No colors.' localized].
-
-	menu := MenuMorphNG new.
-	stage colorNames do: [:v | menu add: v value: (Array with: v with: #global)].
-	self = stage ifFalse: [
-		stage colorNames isEmpty ifFalse: [menu addLine].
-		self colorNames do: [:v | menu add: v value:  (Array with: v with: #local)]].
-	choice := menu invokeModal; selectedValue.
-	choice ifNil: [^ self].
-
-	choice second = #global
-		ifTrue: [stage hideColor: choice first]
-		ifFalse: [self hideColor: choice first].
-
-	sFrame viewerPane categoryChanged: 'colors'.
-]
-
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> hideColor: varName [
-	"Hide the watcher(s) for the given color. If the receiver is a sprite and both it and and the stage have the given color, hide both. Do nothing if the color does not exist or is already hidden."
-	<phratchItem: 'hide color $ColorVar$' kind: #- category: 'colors' defaultValues: #('') subCategory: #a2 special: #()>
-	| stage |
-	self showOrHideColor: varName show: false.
-
-	stage := self ownerOrYourselfThatIsAPhratchStageMorph.
-	stage ~= self ifTrue: [stage showOrHideColor: varName show: false].
-]
-
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> hideList: aList [
-	"Hide the watcher(s) for the given list. If the receiver is a sprite and both it and and the stage have the given list, hide both. Do nothing if the list does not exist or is already hidden."
-	<phratchItem: 'hide list $List$' kind: #- category: 'list' defaultValues: #() subCategory: #a3 special: #()>
-	self showOrHideList: aList show: false
 ]
 
 { #category : #variables }
@@ -3450,20 +2787,6 @@ ScriptablePhratchMorph >> inPresentationMode [
 
 ]
 
-{ #category : #'block API' }
-ScriptablePhratchMorph >> indexOf: t1 List: t2 [ 
-	"Return the index of the given value in the given list"
-	<phratchItem: 'first index of $String$ in $List$' kind: #ReporterBlockMorph category: 'list' defaultValues: #('' 'list') subCategory: #a5 special: #()>  
-  | t3 |
-    t3 := 1.
-    (self lineCountOfList: t2)
-        timesRepeat: 
-            [(self getLine: t3 ofList: t2)
-                = t1 ifTrue: [^ t3].
-            t3 := t3 + 1].
-    ^ 0
-]
-
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> indexOf: subString startingAt: aNumber in: aString [
 	"Return the index of the given value in the given list starting at a given index"
@@ -3554,19 +2877,6 @@ ScriptablePhratchMorph >> initializeVarsAndLists [
 
 	vars := Dictionary new.
 	lists := Dictionary new
-]
-
-{ #category : #'list ops' }
-ScriptablePhratchMorph >> insert: anObject at: lineNum ofList: listName [
-	"Insert a value at the given index of the given list"
-	<phratchItem: 'insert $String$ at $ListIndex$ of $List$' kind: #- category: 'list' defaultValues: #('thing' 1) subCategory: #a4 special: #()>
-	| list i |
-	list := self listNamed: listName ifNone: [^ self].
-	i := self lineNum: lineNum forList: list.
-	#last = lineNum ifTrue: [i := list lineCount + 1].
-	list insertLine: (self asListElement: anObject) at: i.
-
-
 ]
 
 { #category : #media }
@@ -4044,44 +3354,6 @@ ScriptablePhratchMorph >> letters: start through: end of: aString [
 ]
 
 { #category : #'list ops' }
-ScriptablePhratchMorph >> lineCountOfList: listName [
-	"Give the number of items in the given list"
-	<phratchItem: 'length of $List$' kind: #ReporterBlockMorph category: 'list' defaultValues: #() subCategory: #a5 special: #()>
-	| list |
-	list := self listNamed: listName ifNone: [^ 0].
-	^ list lineCount
-
-]
-
-{ #category : #'list ops' }
-ScriptablePhratchMorph >> lineNum: lineNum forList: list [
-
-	| s |
-	lineNum isNumber ifTrue: [^ lineNum asInteger].
-
-	s := lineNum.
-	(s isString) ifTrue: [
-		#first = s ifTrue: [^ 1].
-		#last = s ifTrue: [^ list lineCount].
-		#any = s ifTrue: [
-			list lineCount = 0 ifTrue: [^ 1].
-			^ (1 to: list lineCount) atRandom].
-		^ s asNumberNoError].
-	^ 0
-
-]
-
-{ #category : #'list ops' }
-ScriptablePhratchMorph >> list: listName contains: anObject [
-	"Verify if the list contains the given object."
-	<phratchItem: '$List$ contains $String$' kind: #BooleanBlockMorph category: 'list' defaultValues: #('list' 'thing') subCategory: #a5 special: #()>
-	| list |
-	list := self listNamed: listName ifNone: [^ false].
-	^ list includes: anObject
-
-]
-
-{ #category : #'list ops' }
 ScriptablePhratchMorph >> listIndexForDeleteMenu [
 
 	| menu |
@@ -4091,17 +3363,6 @@ ScriptablePhratchMorph >> listIndexForDeleteMenu [
 	menu add: #all value: #all.
 	menu localize invokeModal.
 	^ menu 
-
-]
-
-{ #category : #'list ops' }
-ScriptablePhratchMorph >> listIndexMenu [
-
-	| menu |
-	menu := MenuMorphNG new defaultTarget: self.
-	#('1' last any) do: [:s | menu add: s value: s].
-	menu localize invokeModal.
-	^ menu
 
 ]
 
@@ -4268,20 +3529,6 @@ ScriptablePhratchMorph >> mediaNameFromFileName: fileName default: defaultName [
 
 ]
 
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> mixColor: color1 ratioA: a toB: b with: color2 [
-	"Mix the two colors with the given ratios"
-	<phratchItem: 'mix $Color$ $Number$ : $Number$ with $Color$' kind: #ColorBlockMorph category: 'colors' defaultValues: #() subCategory: #a6 special: #()>
-	^ color1 mixed: (a / (a + b)) with: color2.
-]
-
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> mixColor: color1 with: color2 [
-	"Mix the two colors"
-	<phratchItem: 'mix $Color$ with $Color$' kind: #ColorBlockMorph category: 'colors' defaultValues: #() subCategory: #a6 special: #()>
-	^ color1 mixed: 0.5 with: color2.
-]
-
 { #category : #'BYOB attributes' }
 ScriptablePhratchMorph >> mosaicEffect [
 
@@ -4386,12 +3633,6 @@ ScriptablePhratchMorph >> n: aNumber toPower: aPower [
 	^ aNumber raisedTo: aPower
 ]
 
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> namedColors [
-
-	^ self colorNames.
-]
-
 { #category : #byob }
 ScriptablePhratchMorph >> neg: aNumber [
 	"Returns the negation of a number"
@@ -4423,20 +3664,6 @@ ScriptablePhratchMorph >> newCustomBlockFor: aDefinition [
 	b selector: #doCustomBlock.
 	b setDefaultArgs.
 	^ b
-
-]
-
-{ #category : #byob }
-ScriptablePhratchMorph >> newList: aPhratchListMorph [
-	"Return a list of the given arguments. This list is not stored in the environment"
-	<phratchItem: 'list $MAAny$' kind: #ReporterBlockMorph category: 'list' defaultValues: #() subCategory: #a1 special: #()>
-	^aPhratchListMorph
-]
-
-{ #category : #'looks ops' }
-ScriptablePhratchMorph >> nextCostume [
-	"Show the next costume in my costumes list."
-	self lookLike: self costumeIndex + 1.
 
 ]
 
@@ -4473,62 +3700,6 @@ ScriptablePhratchMorph >> notEditingBlock [
 	sf := self ownerOrYourselfThatIsAPhratchFrameMorph.
 	sf ifNil: [^true].
 	^sf notEditingBlock
-]
-
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> numFileLines: aFileNameString [
-	"Answer the number of lines in the given file."
-	<phratchItem: 'number of lines of file $String$' kind: #ReporterBlockMorph category: 'files' defaultValues: #() subCategory: #a special: #()>
-	| f data |
-	(self askForFileIO = true) ifFalse: [^ self].
-	(aFileNameString asFileReference exists) ifFalse: [^ ''].
-	f := (FileStream readOnlyFileNamed: aFileNameString) binary.
-	f ifNil: [^ ''].
-	data := f contentsOfEntireFile asString.
-	f close.
-	"Replace newlines:
-	data replaceAll: $
- with: $ ."
-	^ data lines size.
-]
-
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> numUrlFileLines: aURLString [
-	"Answer the number of lines in the given URL file."
-	<phratchItem: 'number of lines of file at URL $String$' kind: #ReporterBlockMorph category: 'files' defaultValues: #('http://') subCategory: #a special: #()>
-	^ (ZnHTTPSocketFacade httpGet: aURLString) contents lines size.
-]
-
-{ #category : #'block API' }
-ScriptablePhratchMorph >> numberSort: t1 [ 
-	"Sort the given list numerically"
-	<phratchItem: 'sort items of $List$ by numerical value' kind: #- category: 'list' defaultValues: #('list') subCategory: #a6 special: #()>
-    | t2 t3 t4 t5 t6 |
-    t2 := #() asOrderedCollection.
-    t3 := #() asOrderedCollection.
-    t4 := #() asOrderedCollection.
-    t6 := #() asOrderedCollection.
-    t5 := 1.
-    (self lineCountOfList: t1)
-        timesRepeat: 
-            [t2 add: (self getLine: t5 ofList: t1).
-            t5 := t5 + 1].
-    t2 do: 
-        [:t7 | 
-        t3 add: t7 asNumberNoError.
-        t7 asNumberNoError = 0 ifTrue: [t4 add: t7]].
-    t3 := t3 asArray sort.
-    t3 := t3 asOrderedCollection.
-    t5 := 1.
-    t3 do: 
-        [:t8 | 
-        t8 = 0 ifFalse: [t6 add: t8].
-        t8 = 0
-            ifTrue: 
-                [t6 add: (t4 at: t5).
-                t5 := t5 + 1]].
-    self deleteLine: 'all' ofList: t1.
-    t6 do: [:t9 | self append: t9 toList: t1]
 ]
 
 { #category : #'panther actions' }
@@ -4571,48 +3742,11 @@ ScriptablePhratchMorph >> objName: aString [
 { #category : #'BYOB object interface' }
 ScriptablePhratchMorph >> objectInterface [
 
-	^ 
-	{	"attribute					category		getter				setter				menu string			inheritable"
-
-		#name				->	#(	sprite			objName 			objName:			'name'				-			).
-		#isDraggable		->	#(	sprite			getIsDraggable		draggable:			'draggable?'			+			).
-		#rotationStyle		->	#(	sprite			getRotationStyle 	setRotationStyle:		'rotation style'		+			).
-		#rotateWithOwner	->	#(	sprite			rotateWithOwner 	rotateWithOwner:	'synchronous?'		+			).
-
-		#xPosition			->	#(	motion			xpos 				xpos:				'x position'			+ 			).
-		#yPosition			->	#(	motion			ypos 				ypos:				'y position'			+			).
-		#heading			->	#(	motion			heading 			heading:			'direction'			+			).
-
-		#costumes			->	#(	looks			costumes			-					'costumes'			+			).
-		#costumeIndex		->	#(	looks			costumeIndex		lookLike:			'costume #'			+			).
-		#size				->	#(	looks			scale				setSizeTo:			'size'				+			).
-		#isHidden			->	#(	looks			isHidden				setHideFlagTo:		'hidden?'			+			).
-		#layer				->	#(	looks			layer				setLayerTo:			'layer'				+			).
-
-		#color				->	#(	effects			colorEffect			colorEffect:			'color effect'		+			).
-		#fisheye			->	#(	effects			fisheyeEffect		fisheyeEffect:		'fisheye effect'		+			).
-		#whirl				->	#(	effects			whirlEffect			whirlEffect:			'whirl effect'		+			).
-		#pixelate			->	#(	effects			pixelateEffect		pixelateEffect:		'pixelate effect'		+			).
-		#mosaic				->	#(	effects			mosaicEffect		mosaicEffect:		'mosaic effect'		+			).
-		#brightness			->	#(	effects			brightnessEffect		brightnessEffect:	'brightness'			+			).
-		#ghost				->	#(	effects			transparencyEffect	transparencyEffect:	'ghost effect'		+			).
-
-		#sounds				->	#(	sound			sounds				-					'sounds'				+			).
-		"#instrument			->	#(	sound			-					midiInstrument:		'instrument'			-			)."
-		#volume			->	#(	sound			volume				setVolumeTo:		'volume'			+			).
-		#tempo				->	#(	sound			tempo				setTempoTo:			'tempo'				+			).
-
-		#penDown			->	#(	pen				penDown			penDown:			'pen down?'			+			).
-		#penColor			->	#(	pen				penHue				setPenHueTo:		'pen color'			+			).
-		#penShade			->	#(	pen				penShade			setPenShadeTo:		'pen shade'			+			).
-		#penSize			->	#(	pen				penSize				penSize:				'pen size'			+			).
-
-		#prototype			->	#(	relationship		prototype			prototype:			'parent'				-			).
-		#instances			->	#(	relationship		children			-					'children'			-			).
-		#anchor			->	#(	relationship		ownerSprite			stickTo:				'anchor'			+			).
-		#parts				->	#(	relationship		parts				-					'parts'				-			).
-
-	} asDictionary
+	|s|
+	s := Dictionary new.
+	PhratchCategory allSubclassesDo: [:e | s addAll: e objectInterface].
+	s addAll: PhratchCategory objectInterface.
+	^ s
 ]
 
 { #category : #media }
@@ -4984,21 +4118,6 @@ ScriptablePhratchMorph >> prototype [
 		ifFalse: [^ nil]
 ]
 
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> quietCreateListNamed: listName [
-	"Create the given list silently"
-	<phratchItem: 'make list $String$' kind: #- category: 'list' defaultValues: #('a list') subCategory: #a2 special: #()>
-	| list stage n |
-	(self variableNameInUse: listName) ifTrue: [^ self].
-
-	lists at: listName put: (list := PhratchListMorph new listName: listName target: self).
-	(stage := self ownerThatIsAPhratchStageMorph) ifNotNil: [
-		n := (stage submorphs select: [:m | m isPhratchListMorph]) size.
-		stage addMorph: (list position: stage topRight - ((list width + 10)@0) + (0@(10+(20*n)))).
-		list startStepping].
-	self showOrHideList: listName show: false.
-]
-
 { #category : #'other ops' }
 ScriptablePhratchMorph >> randomFrom: start to: stop [
 	"Answer a random number within the given range. If both min and max are integers, the result is rounded to the nearest integer."
@@ -5014,48 +4133,6 @@ ScriptablePhratchMorph >> randomFrom: start to: stop [
 	^ result
 ]
 
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> readFile: aFileNameString [
-	"Answer the contents of the given file."
-	<phratchItem: 'contents of file $String$' kind: #ReporterBlockMorph category: 'files' defaultValues: #() subCategory: #a special: #()>
-	| f data |
-	(self askForFileIO = true) ifFalse: [^ self].
-	(aFileNameString asFileReference exists) ifFalse: [^ ''].
-	f := (FileStream readOnlyFileNamed: aFileNameString) binary.
-	f ifNil: [^ ''].
-	data := f contentsOfEntireFile asString.
-	f close.
-	^ data
-]
-
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> readFromUrl: aURLString [
-	"Answer the contents of the given URL."
-	<phratchItem: 'contents of file at URL $String$' kind: #ReporterBlockMorph category: 'files' defaultValues: #('http://') subCategory: #a special: #()>
-	^ (ZnHTTPSocketFacade httpGet: aURLString) contents.
-]
-
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> readLine: t1 FromUrl: t2 [ 
-	"Answer the contents of the given line of the given URL."
-	<phratchItem: 'line $Number$ of file at URL $String$' kind: #ReporterBlockMorph category: 'files' defaultValues: #(1 'http://') subCategory: #a special: #()>
-	^ (ZnHTTPSocketFacade httpGet: t2) contents lines at: t1 ifAbsent: [''].
-]
-
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> readLine: lineNum ofFile: aFileNameString [
-	"Answer the contents of the given line of the given file."
-	<phratchItem: 'line $Number$ of file $String$' kind: #ReporterBlockMorph category: 'files' defaultValues: #() subCategory: #a special: #()>
-	| f data |
-	(self askForFileIO = true) ifFalse: [^ self].
-	(aFileNameString asFileReference exists) ifFalse: [^ ''].
-	f := (FileStream readOnlyFileNamed: aFileNameString) binary.
-	f ifNil: [^ ''].
-	data := f contentsOfEntireFile asString.
-	f close.
-	^ data lines at: lineNum ifAbsent: [''].
-]
-
 { #category : #'dropping/grabbing' }
 ScriptablePhratchMorph >> rejectDropEvent: evt [
 	"Reject being dropped by the given event."
@@ -5063,63 +4140,6 @@ ScriptablePhratchMorph >> rejectDropEvent: evt [
 	(self owner isPhratchStageMorph)
 		ifFalse: [ ^ evt hand rejectDropMorph: self event: evt ]
 		ifTrue: [ ^ false ]
-]
-
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> replaceCostume: aNumber with: aString [
-	
-	| cList i newC name j m frameForm title result fList type |
-	cList := media reject: [:l | l isSound].
-	cList size = 0 ifTrue: [^ self].  "should never happen..."
-	i := ((aNumber rounded - 1) \\ cList size) + 1.
-	name := (cList at: i) mediaName.
-	aString = 'camera' ifTrue: [
-		"(CameraPlugin openCamera: 1 width: 480 height: 360) ifNotNil: [
-			CameraPlugin waitForCameraStart.
-			(CameraPlugin frameExtent: 1) x = 0 ifFalse: ["
-		self cameraIsOpen ifTrue: [
-			frameForm := Form extent: (CameraPlugin frameExtent: 1) depth: 32.
-			CameraPlugin getFrameForCamera: 1 into: frameForm bits.
-			newC := ImageMedia new form: frameForm]
-		ifFalse: [^ self]]."]]]."
-	aString = 'stage' ifTrue: [newC := ImageMedia new form: ((self ownerOrYourselfThatIsAPhratchStageMorph) stageShotForm"Sized: 480@360")].
-	aString = 'paint new' ifTrue: [self editDrawingOldCostumeName: name deleteOnCancel: false deleteCostume: false.
-		^ self updateAfterPopUp.
-		].
-	aString = 'import' ifTrue: [
-		(self isPhratchStageMorph)
-			ifTrue: [type := #background. title := 'Import Background']
-			ifFalse: [type := #costume. title := 'Import Costume'].
-		result := PhratchFileChooserDialog
-			chooseImageFileType: type
-			title: title.
-		result = #cancelled ifTrue: [^ self updateAfterPopUp.].
-
-		fList := OrderedCollection new.
-		[fList addLast: (Form fromFileNamed: result)] ifError: [^ self updateAfterPopUp].
-
-		newC := ImageMedia new form: fList first.
-		self updateAfterPopUp].
-	j := 1.
-	newC mediaName: name.
-	[j <= media size] whileTrue: [
-		m := media at: j.
-		((m isSound not) and: [m mediaName = name]) ifTrue: [
-			media at: j put: newC.
-			self lookLike: name.
-			^ self updateMediaCategory.].
-		j := j + 1].
-]
-
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> reportColor: colorName [
-	"Answer the value of the given user color variable of this object or its parent."
-	<phratchItem: '$ColorVar$' kind: #ColorBlockMorph category: 'colors' defaultValues: #('') subCategory: #a1 special: #()>
-	| stage |
-	(self colorNames includes: colorName)
-		ifTrue: [^ self getColor: colorName].
-	(stage := self ownerThatIsAPhratchStageMorph)
-		ifNotNil: [^ stage getColor: colorName]
 ]
 
 { #category : #'panther actions' }
@@ -5304,21 +4324,6 @@ ScriptablePhratchMorph >> set: anObject to: aValue [
 	self error: [ 'cannot set this value' ]
 ]
 
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> setColor: colorName to: newValue [
-	"Set the given color attribute to the given value"
-	<phratchItem: 'set $ColorVar$ to $Color$' kind: #- category: 'colors' defaultValues: #('') subCategory: #a1 special: #()>
-	| cName stage |
-	cName := colorName asString. "convert Symbol to String if needed"
-	(colors includesKey: cName) ifFalse: [
-		stage := self ownerThatIsAPhratchStageMorph.
-		(stage notNil and: [stage ~= self]) ifTrue: [
-			stage setColor: cName to: newValue].
-		^ self].
-
-	colors at: cName put: newValue.
-]
-
 { #category : #'looks ops' }
 ScriptablePhratchMorph >> setGraphicEffect: effect to: aNumber [
 	"Set the given graphic effect to the given value."
@@ -5366,16 +4371,6 @@ ScriptablePhratchMorph >> setLayoutOfVar: varName to: aString [
 		yourself.
 	w := frame watcherForBlock: b.
 	w ifNotNil: [w layoutStyle: symbol].
-]
-
-{ #category : #'list ops' }
-ScriptablePhratchMorph >> setLine: lineNum ofList: listName to: anObject [
-	"Replace the given item of the list by the given value"
-	<phratchItem: 'replace item $ListIndex$ of $List$ with $String$' kind: #- category: 'list' defaultValues: #(1 'list' 'thing') subCategory: #a4 special: #()>
-	| list |
-	list := self listNamed: listName ifNone: [^ ''].
-	^ list setLineAt: (self lineNum: lineNum forList: list) to: (self asListElement: anObject)
-
 ]
 
 { #category : #'as yet unclassified' }
@@ -5430,44 +4425,6 @@ ScriptablePhratchMorph >> showAskDialogWithText: text [
 ]
 
 { #category : #'panther actions' }
-ScriptablePhratchMorph >> showColor [
-	"Ask the user which user variable to show, then show it."
-
-	| sFrame stage menu choice |
-	sFrame := self ownerThatIsAPhratchFrameMorph.
-	sFrame ifNil: [^ self].
-
-	stage := sFrame workPane.
-	(stage colorNames isEmpty) & (self colorNames isEmpty)
-		ifTrue: [^ self inform: 'No colors.' localized].
-
-	menu := MenuMorphNG new.
-	stage colorNames do: [:v | menu add: v value: (Array with: v with: #global)].
-	self = stage ifFalse: [
-		stage colorNames isEmpty ifFalse: [menu addLine].
-		self colorNames do: [:v | menu add: v value: (Array with: v with: #local)]].
-	choice := menu invokeModal; selectedValue.
-	choice ifNil: [^ self].
-
-	choice second = #global
-		ifTrue: [stage showColor: choice first]
-		ifFalse: [self showColor: choice first].
-
-	sFrame viewerPane categoryChanged: 'colors'.
-]
-
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> showColor: varName [
-	"Show the watcher for the given color. If the receiver is a sprite and both it and and the stage have the given color, hide both. Do nothing if the color does not exist or is already hidden."
-	<phratchItem: 'show color $ColorVar$' kind: #- category: 'colors' defaultValues: #('') subCategory: #a2 special: #()>
-	| stage |
-	self showOrHideColor: varName show: true.
-
-	stage := self ownerOrYourselfThatIsAPhratchStageMorph.
-	stage ~= self ifTrue: [stage showOrHideColor: varName show: true].
-]
-
-{ #category : #'panther actions' }
 ScriptablePhratchMorph >> showInformDialog: title withText: text [ 
 	"Show a popup with the given information. Wait for the user to click on the OK button"
 	<phratchItem: 'show dialog $String$ with text $String$' kind: #- category: 'sensing' defaultValues: #('info' '') subCategory: #a1 special: #()>
@@ -5475,35 +4432,6 @@ ScriptablePhratchMorph >> showInformDialog: title withText: text [
 	DialogBoxMorph inform: text title: title.
 	
 	self updateAfterPopUp.
-]
-
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> showList: aList [
-	"Show the watcher(s) for the given list. If the receiver is a sprite and both it and and the stage have the given list, show both. Do nothing if the list does not exist or is already showing."
-	<phratchItem: 'show list $List$' kind: #- category: 'list' defaultValues: #() subCategory: #a3 special: #()>
-	self showOrHideList: aList show: true
-]
-
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> showOrHideColor: varName show: showFlag [
-	"Show the watcher for the given variable. Do nothing if the variable does not exist or is already showing."
-
-	| frame w b palette |
-	(self colorNames includes: varName) ifFalse: [^ self].
-	frame := self ownerThatIsAPhratchFrameMorph.
-	frame ifNil: [
-		(w := self ownerThatIsAOffscreenWorldMorph) ifNil: [^ self].
-		frame := w frame].
-
-	b := (self blockFromSpec: #('$ColorVar$' ColorBlockMorph reportColor: '')  color: (PhratchCategory blockColorFor: 'colors')) defaultArgs: {varName}.
-	w := frame watcherForBlock: b.
-	showFlag
-		ifTrue: [w ifNil: [frame showWatcher: b createWatcher]]
-		ifFalse: [w ifNotNil: [w delete]].
-
-	palette := frame viewerPane pageViewer contents.
-	palette ifNotNil: [palette updateWatcherButtonsForFrame: frame].
-
 ]
 
 { #category : #'panther actions' }
@@ -5575,24 +4503,6 @@ ScriptablePhratchMorph >> soundLevel [
 	"Return the level of sound"
 	<phratchItem: 'loudness' kind: #ReporterWatcherBlockMorph category: 'sensing' defaultValues: #() subCategory: #a4 special: #()>
 	^ self class soundRecorder meterLevel
-
-]
-
-{ #category : #media }
-ScriptablePhratchMorph >> soundNames [
-	"Answer a list of my sound names. Suppress duplicates (ignoring case differences)."
-
-	| result nm |
-	result := OrderedCollection new.
-	media do: [:el |
-		el isSound ifTrue: [
-			nm := el mediaName.
-			(result anySatisfy: [:s | s caseInsensitiveEqual: nm])
-				ifFalse: [result add: nm]]].
-	self flag:'remove record because does not work'.
-	"result addLast: '-'.
-	result addLast: 'record' localized, '...'."
-	^ result asArray
 
 ]
 
@@ -5695,39 +4605,12 @@ ScriptablePhratchMorph >> stopScriptsFor: eventName [
 				ifTrue: [s stop]]]
 ]
 
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> stringAsColor: aString [
-	"Convert the given string into a color"
-	<phratchItem: '$String$ as color' kind: #ColorBlockMorph category: 'colors' defaultValues: #('#FFFFFF') subCategory: #a7 special: #()>
-	^ Color fromString: (aString asString).
-]
-
 { #category : #'string ops' }
 ScriptablePhratchMorph >> stringLength: anObject [
 	"Return the number of characters of the given string"
 	<phratchItem: 'length of $String$' kind: #ReporterBlockMorph category: 'operators' defaultValues: #('world') subCategory: #a6 special: #()>
 	^ anObject asString size
 
-]
-
-{ #category : #'block API' }
-ScriptablePhratchMorph >> stringSort: t1 [
-	"Sort the list using the character order"
-	<phratchItem: 'sort items of $List$ by string value' kind: #- category: 'list' defaultValues: #('list') subCategory: #a6 special: #()> 
-    | t2 t3 |
-    (self lineCountOfList: t1)
-        = 0 ifTrue: [^ self].
-    (self lineCountOfList: t1)
-        = 1 ifTrue: [^ self].
-    t2 := #() asOrderedCollection.
-    t3 := 1.
-    (self lineCountOfList: t1)
-        timesRepeat: 
-            [t2 add: (self getLine: t3 ofList: t1).
-            t3 := t3 + 1].
-    t2 := t2 asArray sort.
-    self deleteLine: 'all' ofList: t1.
-    t2 do: [:t4 | self append: t4 toList: t1]
 ]
 
 { #category : #'panther actions' }
@@ -5778,21 +4661,6 @@ ScriptablePhratchMorph >> timerReset [
 	<phratchItem: 'reset timer' kind: #- category: 'sensing' defaultValues: #() subCategory: #timer special: #()>
 	TimerStartMSecs := Time millisecondClockValue.
 
-]
-
-{ #category : #'block API' }
-ScriptablePhratchMorph >> times: t1 List: t2 [ 
-	"Return the number times that the given value appears in the given list"
-<phratchItem: 'times $String$ appears in $List$' kind: #ReporterBlockMorph category: 'list' defaultValues: #('' 'list') subCategory: #a5 special: #()>
-    | t3 t4 |
-    t3 := 1.
-    t4 := 0.
-    (self lineCountOfList: t2)
-        timesRepeat: 
-            [(self getLine: t3 ofList: t2)
-                = t1 ifTrue: [t4 := t4 + 1].
-            t3 := t3 + 1].
-    ^ t4
 ]
 
 { #category : #'looks ops' }
@@ -6221,20 +5089,6 @@ ScriptablePhratchMorph >> wholeBlockSpecForSelector: aSymbol [
 
 	^ nil
 
-]
-
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> writeText: aString toFile: aFileNameString [
-	"Write the given text in the given file."
-	<phratchItem: 'write $String$ to file $String$' kind: #- category: 'files' defaultValues: #() subCategory: #a special: #()>
-	| f |
-	(self askForFileIO = true) ifFalse: [^ self].
-	(aFileNameString asFileReference exists) ifFalse: [^ self].
-	f := (FileStream fileNamed: aFileNameString) binary.
-	f ifNil: [^ self].
-	f setToEnd.
-	f nextPutAll: aString.
-	f close
 ]
 
 { #category : #private }

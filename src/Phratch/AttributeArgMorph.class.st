@@ -22,10 +22,6 @@ AttributeArgMorph >> choice: aSymbol [
 	 [aSymbol = ('record' localized, '...')]) ifTrue: [
 		frame ifNotNil: [^ frame workPane newScene]].
 
-	((#sceneNames = getOptionsSelector) and:
-	 [aSymbol = ('re-record' localized, '...')]) ifTrue: [
-		frame ifNotNil: [^ frame workPane rerecordScene]].
-
 	choice := label := aSymbol.
 	aSymbol = #null ifTrue: [
 		label := ''].

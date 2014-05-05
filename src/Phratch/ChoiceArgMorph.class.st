@@ -66,10 +66,6 @@ ChoiceArgMorph >> choice: aSymbol [
 	 [aSymbol = ('record' localized, '...')]) ifTrue: [
 		frame ifNotNil: [^ frame workPane newScene]].
 
-	((#sceneNames = getOptionsSelector) and:
-	 [aSymbol = ('re-record' localized, '...')]) ifTrue: [
-		frame ifNotNil: [^ frame workPane rerecordScene]].
-
 	choice := label := aSymbol.
 	label := label asString.
 	doLocalization := (#(costumeNames soundNames varNamesMenu listVarMenu) includes: getOptionsSelector) not. 

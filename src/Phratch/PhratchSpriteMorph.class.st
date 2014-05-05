@@ -39,13 +39,6 @@ Class {
 	#category : #'Phratch-Objects'
 }
 
-{ #category : #adding }
-PhratchSpriteMorph >> addCostTyped: aString [
-	"Add a new costume to the sprite"
-	<phratchItem: 'add $NewCostume$ to costumes' kind: #- category: 'looks' defaultValues: #() subCategory: #a2 special: #()>
-	self addCostumeTyped: aString.
-]
-
 { #category : #nesting }
 PhratchSpriteMorph >> addSubsprite: aSprite [
 	"private"
@@ -76,13 +69,6 @@ PhratchSpriteMorph >> allSubsprites [
 	subsprites do: [: sub |
 		all addAll: sub allSubsprites ].
 	^ all
-]
-
-{ #category : #accessing }
-PhratchSpriteMorph >> area [
-	"Compute the area based on the height and width of the sprite"
-	<phratchItem: 'area' kind: #ReporterWatcherBlockMorph category: 'looks' defaultValues: #() subCategory: #a4 special: #()>
-^self height * self width
 ]
 
 { #category : #'blocks API' }
@@ -270,56 +256,12 @@ PhratchSpriteMorph >> cacheRefPos [
 	self spread
 ]
 
-{ #category : #'pen ops' }
-PhratchSpriteMorph >> changePenHueBy: aNumber [
-	"Change the pen hue by given number."
-	<phratchItem: 'change pen color by $Number$' kind: #- category: 'pen' defaultValues: #() subCategory: #a3 special: #()>
-	self setPenHueTo: penHue + aNumber.
-
-
-]
-
-{ #category : #'pen ops' }
-PhratchSpriteMorph >> changePenShadeBy: aNumber [
-	"Change the pen shade (lightness) by given number"
-	<phratchItem: 'change pen shade by $Number$' kind: #- category: 'pen' defaultValues: #() subCategory: #a3 special: #()>
-	self setPenShadeTo: penShade + aNumber.
-
-]
-
-{ #category : #'pen ops' }
-PhratchSpriteMorph >> changePenSizeBy: aNumber [
-	"Change my pen width."
-	<phratchItem: 'change pen size by $Number$' kind: #- category: 'pen' defaultValues: #(1) subCategory: #a3 special: #()>
-	self penSize: penSize + aNumber.
-
-]
-
 { #category : #'looks ops' }
 PhratchSpriteMorph >> changeSizeBy: delta [
 	"Change my size by the given delta."
 	<phratchItem: 'change size by $Number$' kind: #- category: 'looks' defaultValues: #() subCategory: #a4 special: #()>
 	self setSizeTo: (self virtualScale + delta).
 
-]
-
-{ #category : #'looks ops' }
-PhratchSpriteMorph >> changeStretchBy: delta [
-	"Change my horizontal aspect ratio by the given amount."
-	<phratchItem: 'change horizontal stretch by $Number$%' kind: #- category: 'looks' defaultValues: #() subCategory: #a5 special: #()>
-	| currentStretch |
-	currentStretch := (100.0 * scalePoint x) / scalePoint y.
-	self setStretchTo: (currentStretch + delta).
-
-]
-
-{ #category : #'panther actions' }
-PhratchSpriteMorph >> changeVStretchBy: delta [
-	"Change my vertical aspect ratio by the given amount."
-	<phratchItem: 'change vertical stretch by $Number$%' kind: #- category: 'looks' defaultValues: #() subCategory: #a5 special: #()>
-	| currentVStretch |
-	currentVStretch := (100.0 * scalePoint y) / scalePoint x.
-	self setVStretchTo: (currentVStretch + delta).
 ]
 
 { #category : #'motion ops' }
@@ -390,45 +332,6 @@ PhratchSpriteMorph >> cloneMe [
 
 ]
 
-{ #category : #'motion ops' }
-PhratchSpriteMorph >> color: sensitiveColor sees: soughtColor [
-	"Return true if any of my pixels of sensitiveColor intersect with pixels of soughtColor in the world."
-	<phratchItem: 'color $ScreenColor$ is touching $ScreenColor$?' kind: #BooleanBlockMorph category: 'sensing' defaultValues: #() subCategory: #sensor special: #()>
-	| r myImage sensitivePixelsMask map index imageBelowMe result |
-	r := self bounds intersect: owner bounds.
-	r area = 0 ifTrue: [^ false].
-
-	"make a mask with 1 where pixel = sensitiveColor, 0 elsewhere"
-	myImage := self imageForm asFormOfDepth: 16.
-	sensitivePixelsMask := Form extent: myImage extent depth: 1.
-	map := Bitmap new: (1 bitShift: (myImage depth min: 15)).
-	map at: (index := sensitiveColor indexInMap: map) put: 1.
-	sensitivePixelsMask
-		copyBits: ((r origin - self position) extent: r extent)
-		from: myImage form
-		at: 0@0
-		colorMap: map.
-
-	"grab an image of the world below me"
-	imageBelowMe := owner patchAt: r without: self andNothingAbove: false.
-
-	"intersect world pixels of the color we're looking for with sensitive pixels mask"
-	map at: index put: 0.  "clear map and reuse it"
-	map at: (soughtColor indexInMap: map) put: 1.
-
-	sensitivePixelsMask
-		copyBits: imageBelowMe boundingBox
-		from: imageBelowMe at: 0@0 clippingBox: imageBelowMe boundingBox
-		rule: Form and
-		fillColor: nil
-		map: map.
-	result := (sensitivePixelsMask tallyPixelValues at: 2) > 0.
-	result ifTrue: [^true].
-	^(subsprites collect: [:sub | sub color: sensitiveColor sees: soughtColor ]) includes: true 
-
-
-]
-
 { #category : #'as yet unclassified' }
 PhratchSpriteMorph >> comeToFront [
 	"Put me on front of the display"
@@ -471,13 +374,6 @@ PhratchSpriteMorph >> costumeChanged [
 	self layoutChanged.
 	self keepOnScreen.
 
-]
-
-{ #category : #'blocks API' }
-PhratchSpriteMorph >> deleteCostAt: aNumber [
-	"Delete the given costume"
-	<phratchItem: 'delete costume $Number$' kind: #- category: 'looks' defaultValues: #(1) subCategory: #a2 special: #()>
-	self deleteCostumeAt: aNumber.
 ]
 
 { #category : #'panther actions' }
@@ -802,20 +698,6 @@ PhratchSpriteMorph >> glideSecs: duration toX: endX y: endY elapsed: elapsed fro
 "
 ]
 
-{ #category : #'looks ops' }
-PhratchSpriteMorph >> goBackByLayers: aNumber [
-	"Decrease my layer by (i.e., move me towards the back by) the given number of layers."
-	<phratchItem: 'go back $Number$ layers' kind: #- category: 'looks' defaultValues: #(1) subCategory: #a7 special: #()>
-	self setLayerTo: self layer + aNumber truncated
-]
-
-{ #category : #'looks ops' }
-PhratchSpriteMorph >> goUpByLayers: aNumber [
-	"Decrease my layer by (i.e., move me towards the back by) the given number of layers."
-	<phratchItem: 'come up $Number$ layers' kind: #- category: 'looks' defaultValues: #(1) subCategory: #a7 special: #()>
-	self setLayerTo: self layer - aNumber truncated
-]
-
 { #category : #'motion ops' }
 PhratchSpriteMorph >> gotoSpriteOrMouse: anObject [
 	"Go to the given sprite or mouse position."
@@ -880,21 +762,6 @@ PhratchSpriteMorph >> grabFromScreen [
 	self undeleteAttribute: #costumes.
 	self propagateCostumes
 
-]
-
-{ #category : #'blocks API' }
-PhratchSpriteMorph >> hFlip [
-	"Make my costume an horizontal flip"
-	<phratchItem: 'horizontal flip' kind: #- category: 'looks' defaultValues: #() subCategory: #a5 special: #()>
-    costume form: (self form flipBy: #horizontal centerAt: 0 @ 0).
-    self costumeChanged
-]
-
-{ #category : #'panther actions' }
-PhratchSpriteMorph >> hScale [
-	"Answer my horizontal stretch."
-	<phratchItem: 'horizontal stretch' kind: #ReporterBlockMorph category: 'looks' defaultValues: #() subCategory: #a5 special: #()>
-	^ (100 * scalePoint x) rounded
 ]
 
 { #category : #nesting }
@@ -1147,15 +1014,6 @@ PhratchSpriteMorph >> multiplySizeBy: factor [
 
 ]
 
-{ #category : #'looks ops' }
-PhratchSpriteMorph >> nextCostume [
-	"Show the next costume in my costumes list."
-	<phratchItem: 'next costume' kind: #- category: 'looks' defaultValues: #() subCategory: #a1 special: #()>
-	
-	super nextCostume.
-
-]
-
 { #category : #nesting }
 PhratchSpriteMorph >> ownerSprite [
 
@@ -1199,33 +1057,6 @@ PhratchSpriteMorph >> passivePenColor: aColor [
 ]
 
 { #category : #'byob OOP' }
-PhratchSpriteMorph >> passivePenDown: aBoolean [
-
-	| m |
-	(aBoolean isBoolean)
-		ifFalse: [^ self error: 'expecting a boolean'].
-	penDown := aBoolean.
-	penColor ifNil: [penColor := Color black].  "initialize if necessary"
-	penSize ifNil: [penSize := 1].  "initialize if necessary"
-
-	(m := self ownerOrYourselfThatIsAPhratchStageMorph)
-		ifNotNil: [m penUpOrDownChangeFor: self].
-
-	self propagate: #penDown
-
-]
-
-{ #category : #'byob OOP' }
-PhratchSpriteMorph >> passivePenSize: aNumber [
-	"Set my pen width."
-
-	penSize := aNumber asNumberNoError rounded min: (PhratchFrameMorph workpaneExtent x * 2) max: 1.
-
-	self propagate: #penSize
-
-]
-
-{ #category : #'byob OOP' }
 PhratchSpriteMorph >> passiveRotationStyle: aNumber [
 	"Set my rotation style to #normal, #leftRight, or #none. Styles mean:
 		#normal	-- smooth 360 degree rotation
@@ -1253,40 +1084,6 @@ PhratchSpriteMorph >> passiveSetDraggable: aBoolean [
 	se := blocksBin ownerOrYourselfThatIsAPhratchScriptEditorMorph.
 	se ifNil: [^ self].
 	se updateLockButton
-
-]
-
-{ #category : #'byob OOP' }
-PhratchSpriteMorph >> passiveSetPenHueTo: aNumber [
-	"Set the pen hue to given number between 0 and 200. (That makes 100 the 'maximum' distance away from the original color on the color wheel.)"
-
-	penHue := aNumber asNumberNoError \\ 200.
-	self setPenShadeTo:  penShade.  "compute and set penColor"
-
-	self propagate: #penColor
-
-]
-
-{ #category : #'byob OOP' }
-PhratchSpriteMorph >> passiveSetPenShadeTo: aNumber [
-	"Set the pen shade (lightness) to given number between 0 and 100. A shade of 0 is black, 100 is white, and 50 is fully saturated color."
-	"Details: We don't want to get all the way to pure black or white, so we divide the range 0..50 by a number > 50 when computing the fraction of the original color to mix with black or white."
-
-	| normalizeShade scale k |
-	penShade := aNumber asNumberNoError asFloat \\ 200.0.
-	penColor := Color h: (360.0 * penHue) / 200.0 s: 1.0 v: 1.0.
-	normalizeShade := penShade > 100.0 ifTrue: [200.0 - penShade] ifFalse: [penShade].
-
-	(normalizeShade closeTo: 50.0) ifTrue: [^ self].  "pure color"
-
-	scale := 1.0 / 60.0.
-	k := 1.0 - (50.0 * scale).
-	normalizeShade < 50.0 ifTrue: [
-		penColor := penColor mixed: (scale * normalizeShade) + k with: Color black].
-	normalizeShade > 50.0 ifTrue: [
-		penColor := penColor mixed: 1.0 - (scale * (normalizeShade - 50.0)) with: Color white].
-
-	self propagate: #penShade
 
 ]
 
@@ -1427,43 +1224,10 @@ PhratchSpriteMorph >> penDown [
 ]
 
 { #category : #'pen ops' }
-PhratchSpriteMorph >> penDown: aBoolean [
-
-	self undeleteAttribute: #penDown.
-	self passivePenDown: aBoolean
-]
-
-{ #category : #'BYOB attributes' }
-PhratchSpriteMorph >> penHue [
-	"Return my pen hue"
-	<phratchItem: 'pen hue' kind: #ReporterWatcherBlockMorph category: 'pen' defaultValues: #() subCategory: #a1 special: #()>
-	| att |
-	att := #penColor.
-	self prototype ifNotNil: [
-		(self deletedAttributes includes: att) ifTrue: [
-			^ self prototype get: att]].
-
-	^ penHue
-]
-
-{ #category : #'pen ops' }
 PhratchSpriteMorph >> penPosition [
 
 	^ self referencePosition
 
-]
-
-{ #category : #'BYOB attributes' }
-PhratchSpriteMorph >> penShade [
-	"Return my pen shade"
-	<phratchItem: 'pen shade' kind: #ReporterWatcherBlockMorph category: 'pen' defaultValues: #() subCategory: #a1 special: #()>
-	| att |
-	att := #penShade.
-	self prototype ifNotNil: [
-		(self deletedAttributes includes: att) ifTrue: [
-			^ self prototype get: att]].
-
-	^ penShade
 ]
 
 { #category : #'pen ops' }
@@ -1478,21 +1242,6 @@ PhratchSpriteMorph >> penSize [
 
 	^ penSize
 
-]
-
-{ #category : #'pen ops' }
-PhratchSpriteMorph >> penSize: aNumber [
-	"Set my pen width."
-	<phratchItem: 'set pen size to $Number$' kind: #- category: 'pen' defaultValues: #(1) subCategory: #a3 special: #()>
-	self undeleteAttribute: #penSize.
-	self passivePenSize: aNumber
-]
-
-{ #category : #'blocks API' }
-PhratchSpriteMorph >> perimeter [
-"Return the perimeter based on the width and height"
-	<phratchItem: 'perimeter' kind: #ReporterWatcherBlockMorph category: 'looks' defaultValues: #() subCategory: #a4 special: #()>
-^ (2 * self height) + (2 * self width)
 ]
 
 { #category : #'motion ops' }
@@ -1604,22 +1353,6 @@ PhratchSpriteMorph >> prototype: aSprite [
 	self inheritSoundsNow
 ]
 
-{ #category : #'pen ops' }
-PhratchSpriteMorph >> putPenDown [
-	"Put down my drawing pen (i.e. start drawing a pen trail)."
-	<phratchItem: 'pen down' kind: #- category: 'pen' defaultValues: #() subCategory: #a2 special: #()>
-	self penDown: true.
-
-]
-
-{ #category : #'pen ops' }
-PhratchSpriteMorph >> putPenUp [
-	"Put up my drawing pen (i.e. stop drawing a pen trail)."
-	<phratchItem: 'pen up' kind: #- category: 'pen' defaultValues: #() subCategory: #a2 special: #()>
-	self penDown: false.
-
-]
-
 { #category : #'blocks API' }
 PhratchSpriteMorph >> randxypos [
 	"Point me to a random position"
@@ -1704,13 +1437,6 @@ PhratchSpriteMorph >> removeSubsprite: aSprite [
 
 	subsprites remove: aSprite ifAbsent: [].
 	self makeVisible
-]
-
-{ #category : #'blocks API' }
-PhratchSpriteMorph >> replaceCost: name with: sel [
-	"Replace the given costume"
-	<phratchItem: 'replace costume $Number$ with $NewCostume$' kind: #- category: 'looks' defaultValues: #(1) subCategory: #a2 special: #()>
-	self replaceCostume: name with: sel.
 ]
 
 { #category : #'handle ops' }
@@ -1939,23 +1665,6 @@ PhratchSpriteMorph >> setMyName: aName [
 	self objName: (aName asString).
 ]
 
-{ #category : #'pen ops' }
-PhratchSpriteMorph >> setPenHueTo: aNumber [
-	"Set the pen hue to given number between 0 and 200. (That makes 100 the 'maximum' distance away from the original color on the color wheel.)"
-	<phratchItem: 'set pen color to $Number$' kind: #- category: 'pen' defaultValues: #(0) subCategory: #a3 special: #()>
-	self undeleteAttribute: #penColor.
-	self passiveSetPenHueTo: aNumber
-]
-
-{ #category : #'pen ops' }
-PhratchSpriteMorph >> setPenShadeTo: aNumber [
-	"Set the pen shade (lightness) to given number between 0 and 100. A shade of 0 is black, 100 is white, and 50 is fully saturated color."
-	"Details: We don't want to get all the way to pure black or white, so we divide the range 0..50 by a number > 50 when computing the fraction of the original color to mix with black or white."
-	<phratchItem: 'set pen shade to $Number$' kind: #- category: 'pen' defaultValues: #(50) subCategory: #a3 special: #()>
-	self undeleteAttribute: #penShade.
-	self passiveSetPenShadeTo: aNumber
-]
-
 { #category : #'byob OOP' }
 PhratchSpriteMorph >> setRotationStyle: aNumber [
 	"Set my rotation style to #normal, #leftRight, or #none. Styles mean:
@@ -1974,33 +1683,6 @@ PhratchSpriteMorph >> setSizeTo: percent [
 	self undeleteAttribute: #size.
 	self passiveSetSizeTo: percent
 
-]
-
-{ #category : #'looks ops' }
-PhratchSpriteMorph >> setStretchTo: percent [
-	"Set x stretch percent relative to y. For example, a stretch of 200 stretches x by a factor of two relative to y while a stretch of 50 compresses x by a factor of two. As my stretch is changed, my x scale changes but my y scale remains the same."
-	<phratchItem: 'set horizontal stretch to $Number$%' kind: #- category: 'looks' defaultValues: #(100) subCategory: #a5 special: #()>
-	| baseScale origExtent minStretch maxStretch newStretchFactor |
-	baseScale := scalePoint y.
-	origExtent := self costumeForm extent.
-	minStretch := 8.0 / (baseScale * origExtent x).  "min width 8 pixels"
-	maxStretch := 500.0 / (baseScale * origExtent x). "max width 500 pixels"
-	newStretchFactor := ((percent max: 0) / 100.0) within: minStretch and: maxStretch.
-	self scalePoint: baseScale * (newStretchFactor @ 1.0).
-
-]
-
-{ #category : #'panther actions' }
-PhratchSpriteMorph >> setVStretchTo: percent [
-	"Set y stretch percent relative to x. For example, a stretch of 200 stretches yt by a factor of two relative to x while a stretch of 50 compresses y by a factor of two. As my stretch is changed, my y scale changes but my x scale remains the same."
-	<phratchItem: 'set vertical stretch to $Number$%' kind: #- category: 'looks' defaultValues: #(100) subCategory: #a5 special: #()>
-	| baseScale origExtent minStretch maxStretch newStretchFactor |
-	baseScale := scalePoint x.
-	origExtent := self costumeForm extent.
-	minStretch := 8.0 / (baseScale * origExtent y).  "min height 8 pixels"
-	maxStretch := 500.0 / (baseScale * origExtent y). "max height 500 pixels"
-	newStretchFactor := ((percent max: 0) / 100.0) within: minStretch and: maxStretch.
-	self scalePoint: baseScale * (1.0 @ newStretchFactor).
 ]
 
 { #category : #'looks ops' }
@@ -2091,17 +1773,6 @@ PhratchSpriteMorph >> spreadToFollowers [
 		args isEmpty
 			ifTrue: [ eachPart perform: sel]
 			ifFalse: [ eachPart perform: sel withArguments: args asArray]]
-]
-
-{ #category : #'pen ops' }
-PhratchSpriteMorph >> stampCostume [
-	"Stamp a copy of my current costume on the pen trails layer."
-	<phratchItem: 'stamp' kind: #- category: 'pen' defaultValues: #() subCategory: #a4 special: #()>
-	| m |
-	self step.  "update costume if necessary"
-	(m := self ownerOrYourselfThatIsAPhratchStageMorph)
-		ifNotNil: [m stampCostume: self].
-
 ]
 
 { #category : #'event handling' }
@@ -2223,46 +1894,6 @@ PhratchSpriteMorph >> touching: anObject [
 
 ]
 
-{ #category : #accessing }
-PhratchSpriteMorph >> touchingColor: soughtColor [
-	"Answer true if any of my non-transparent pixels touch pixels of the given color in the world."
-	<phratchItem: 'touching color $ScreenColor$?' kind: #BooleanBlockMorph category: 'sensing' defaultValues: #() subCategory: #sensor special: #()>
-	| r myImage sensitivePixelsMask map imageBelowMe result |
-	r := self bounds intersect: owner bounds.
-	r area = 0 ifTrue: [^ false].
-
-	"make a mask with 0 where transparent, 1 elsewhere"
-	myImage := self imageForm asFormOfDepth: 16.
-	sensitivePixelsMask := Form extent: myImage extent depth: 1.
-	map := Bitmap new: (1 bitShift: (myImage depth min: 15)).
-	map atAllPut: 1.
-	map at: (Color transparent indexInMap: map) put: 0.
-	sensitivePixelsMask
-		copyBits: ((r origin - self position) extent: r extent)
-		from: myImage form
-		at: 0@0
-		colorMap: map.
-
-	"grab an image of the world below me"
-	imageBelowMe := owner patchAt: r withoutWatchersAnd: self andNothingAbove: false.
-
-	"intersect world pixels of the color we're looking for with sensitive pixels mask"
-	map atAllPut: 0.  "clear map and reuse it"
-	map at: (soughtColor indexInMap: map) put: 1.
-	sensitivePixelsMask
-		copyBits: imageBelowMe boundingBox
-		from: imageBelowMe at: 0@0 clippingBox: imageBelowMe boundingBox
-		rule: Form and
-		fillColor: nil
-		map: map.
-
-	result := (sensitivePixelsMask tallyPixelValues at: 2) > 0.  "true if any pixels are 1"
-	result ifTrue: [^true].
-	^(subsprites collect: [:sub | sub touchingColor: soughtColor ]) includes: true.
-
-
-]
-
 { #category : #'motion ops' }
 PhratchSpriteMorph >> turn: degrees [
 	"Turn clockwise the given number of degrees."
@@ -2336,21 +1967,6 @@ PhratchSpriteMorph >> unhingeAll [
 		each unhinge ].
 
 	LibraryItemMorph allInstances do: [:each| each updateThumbnail]
-]
-
-{ #category : #'blocks API' }
-PhratchSpriteMorph >> vFlip [
-	"Flip vertically myself"
-	<phratchItem: 'vertical flip' kind: #- category: 'looks' defaultValues: #() subCategory: #a5 special: #()>
-    costume form: (self form flipBy: #vertical centerAt: 0 @ 0).
-    self costumeChanged
-]
-
-{ #category : #'panther actions' }
-PhratchSpriteMorph >> vScale [
-	"Stretch vertically myself"
-	<phratchItem: 'vertical stretch' kind: #ReporterBlockMorph category: 'looks' defaultValues: #() subCategory: #a5 special: #()>
-	^ (100 * scalePoint y) rounded
 ]
 
 { #category : #copying }

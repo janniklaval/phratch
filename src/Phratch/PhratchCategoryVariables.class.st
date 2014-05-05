@@ -58,7 +58,7 @@ PhratchCategoryVariables class >> viewerPageFor: aScriptablePhratchMorph [
 
 	y := aScriptablePhratchMorph addGenericVariableBlocksTo: page x: x y: y.
 
-	y := aScriptablePhratchMorph addGenericListBlocksTo: page y: y.
+	"y := aScriptablePhratchMorph addGenericListBlocksTo: page y: y."
 	page updateWatcherButtonsForFrame: (aScriptablePhratchMorph ownerOrYourselfThatIsAPhratchFrameMorph).
 
 	aScriptablePhratchMorph addCustomBlocksTo: page y: y.

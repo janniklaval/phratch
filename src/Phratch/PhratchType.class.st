@@ -51,23 +51,6 @@ PhratchType >> checkBox [
 ]
 
 { #category : #'as yet unclassified' }
-PhratchType >> color [
-	
-	<phratchType: #'Color'>
-	^ ColorArgMorph new showPalette: true
-]
-
-{ #category : #'as yet unclassified' }
-PhratchType >> colorVar [
-	
-	<phratchType: #'ColorVar'>
-	^ ExpressionArgMorphWithMenu new 
-		stringExpression: 'a color'; 
-		menuSelector: #colorsMenu;
-		yourself
-]
-
-{ #category : #'as yet unclassified' }
 PhratchType >> constants [
 	
 	<phratchType: #'Constants'>
@@ -157,16 +140,6 @@ PhratchType >> listDelete [
 	^ ExpressionArgMorphWithMenu new 
 		numExpression: '1'; 
 		menuSelector: #listIndexForDeleteMenu;
-		yourself
-]
-
-{ #category : #'as yet unclassified' }
-PhratchType >> listIndex [
-	
-	<phratchType: #'ListIndex'>
-	^ ExpressionArgMorphWithMenu new 
-		numExpression: '1'; 
-		menuSelector: #listIndexMenu;
 		yourself
 ]
 
@@ -265,16 +238,6 @@ PhratchType >> mathFunctions [
 ]
 
 { #category : #'as yet unclassified' }
-PhratchType >> namedColors [
-	
-	<phratchType: #'NamedColors'>
-	^ ChoiceArgMorph new 
-		getOptionsSelector: #namedColors; 
-		choice: #black;
-		yourself
-]
-
-{ #category : #'as yet unclassified' }
 PhratchType >> newCostume [
 	
 	<phratchType: #'NewCostume'>
@@ -361,23 +324,6 @@ PhratchType >> sceneNames [
 	^ ChoiceOrExpressionArgMorph new 
 		getOptionsSelector: #sceneNames; 
 		choice: '';
-		yourself
-]
-
-{ #category : #'as yet unclassified' }
-PhratchType >> screenColor [
-	
-	<phratchType: #'ScreenColor'>
-	^ ColorArgMorph new showPalette: false
-]
-
-{ #category : #'as yet unclassified' }
-PhratchType >> soundNames [
-	
-	<phratchType: #'SoundNames'>
-	^ ChoiceOrExpressionArgMorph new 
-		getOptionsSelector: #soundNames; 
-		choice: 'pop';
 		yourself
 ]
 
