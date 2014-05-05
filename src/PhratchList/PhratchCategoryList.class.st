@@ -13,7 +13,7 @@ PhratchCategoryList class >> color [
 PhratchCategoryList class >> initialize [ 	
 	"self initialize"
 	super initialize.
-	visible  := false.
+	visible  := true.
 ]
 
 { #category : #accessing }
