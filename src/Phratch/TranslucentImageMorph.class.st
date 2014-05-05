@@ -29,18 +29,3 @@ TranslucentImageMorph >> mouseLeave: evt [
 	PhratchToolTipMorph clearToolTips.
 
 ]
-
-{ #category : #accessing }
-TranslucentImageMorph >> transparency [
-
-	^ transparency
-
-]
-
-{ #category : #accessing }
-TranslucentImageMorph >> transparency: aNumber [
-
-	transparency := aNumber.
-	self changed.
-
-]

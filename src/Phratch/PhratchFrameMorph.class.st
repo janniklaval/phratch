@@ -3313,7 +3313,7 @@ PhratchFrameMorph >> undoTool [
 			viewerPane currentCategory: 'variables']].
 
 	(m isPhratchSpriteMorph) ifTrue: [  "sprite; add to stage"
-		m filterReset; show.
+		"m filterReset; show."
 		m objName: m objName.
 		Clipboard := nil.
 		oldName := m objName.

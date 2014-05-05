@@ -22,12 +22,6 @@ FileIOAskerDialog >> always [
 ]
 
 { #category : #initialization }
-FileIOAskerDialog >> forPhratchFrame: aPhratchFrameMorph [
-
-	phratchFrame := aPhratchFrameMorph
-]
-
-{ #category : #initialization }
 FileIOAskerDialog >> initialize [
 	| spacer |
 	super initialize.

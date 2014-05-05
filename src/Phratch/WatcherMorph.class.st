@@ -216,12 +216,6 @@ WatcherMorph >> isColor [
 	^ isColor
 ]
 
-{ #category : #'panther actions' }
-WatcherMorph >> isColor: aBoolean [
-
-	isColor := aBoolean.
-]
-
 { #category : #accessing }
 WatcherMorph >> isLarge [
 

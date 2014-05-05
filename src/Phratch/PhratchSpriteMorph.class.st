@@ -802,14 +802,6 @@ PhratchSpriteMorph >> height [
 ^super height
 ]
 
-{ #category : #'looks ops' }
-PhratchSpriteMorph >> hide [
-	"Make myself invisible."
-	<phratchItem: 'hide' kind: #- category: 'looks' defaultValues: #() subCategory: #a6 special: #()>
-	self setHideFlagTo: true
-
-]
-
 { #category : #nesting }
 PhratchSpriteMorph >> holdSubsprites [
 	"private"
@@ -1682,14 +1674,6 @@ PhratchSpriteMorph >> setSizeTo: percent [
 	<phratchItem: 'set size to $Number$%' kind: #- category: 'looks' defaultValues: #(100) subCategory: #a4 special: #()>
 	self undeleteAttribute: #size.
 	self passiveSetSizeTo: percent
-
-]
-
-{ #category : #'looks ops' }
-PhratchSpriteMorph >> show [
-	"Make myself visible."
-	<phratchItem: 'show' kind: #- category: 'looks' defaultValues: #() subCategory: #a6 special: #()>
-	self setHideFlagTo: false
 
 ]
 

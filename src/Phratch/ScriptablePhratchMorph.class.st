@@ -980,25 +980,6 @@ ScriptablePhratchMorph >> blocksFor: aCategory [
 
 ]
 
-{ #category : #'BYOB attributes' }
-ScriptablePhratchMorph >> brightnessEffect [
-
-	| att |
-	att := #brightness.
-	self prototype ifNotNil: [
-		(self deletedAttributes includes: att) ifTrue: [
-			^ self prototype get: att]].
-
-	^ [filterPack brightnessShift] ifError: [0]
-]
-
-{ #category : #'BYOB attributes' }
-ScriptablePhratchMorph >> brightnessEffect: aNumber [
-
-	self undeleteAttribute: #brightness.
-	self passiveBrightnessEffect: aNumber
-]
-
 { #category : #'other ops' }
 ScriptablePhratchMorph >> broadcast: name [
 	"Broadcast the given event name with zero as its argument."
@@ -1139,26 +1120,6 @@ ScriptablePhratchMorph >> coerceSpriteArg: anObject [
 
 	^ nil
 
-
-]
-
-{ #category : #'BYOB attributes' }
-ScriptablePhratchMorph >> colorEffect [
-
-	| att |
-	att := #color.
-	self prototype ifNotNil: [
-		(self deletedAttributes includes: att) ifTrue: [
-			^ self prototype get: att]].
-
-	^ [filterPack hueShift] ifError: [0]
-]
-
-{ #category : #'BYOB attributes' }
-ScriptablePhratchMorph >> colorEffect: aNumber [
-
-	self undeleteAttribute: #color.
-	self passiveColorEffect: aNumber
 
 ]
 
@@ -1529,16 +1490,6 @@ ScriptablePhratchMorph >> deleteAttributes: aCollection [
 	self undeleteAllAttributes.
 	aCollection do:[:attrib |
 		self deleteAttribute: attrib ]	
-]
-
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> deleteCostumeAt: index [
-	"Delete the costume at the given index."
-
-	| cList |
-	cList := media reject: [:m | m isSound].
-
-	self deleteMedia: (cList at: index).
 ]
 
 { #category : #byob }
@@ -2049,37 +2000,6 @@ ScriptablePhratchMorph >> editDrawingOldCostumeName: oldCostumeName deleteOnCanc
 
 ]
 
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> editDrawingOldCostumeName: oldCostumeName deleteOnCancel: aBoolean deleteCostume: delCost [
-	"Edit my original form with the paint editor."
-
-	| sFrame paintEditor |
-	costume isMovie ifTrue: [^ PhratchError error: 'beep'.].
-	(sFrame := self ownerThatIsAPhratchFrameMorph) ifNil: [(sFrame := (self ownerThatIsAOffscreenWorldMorph) frame) ifNil: [^ self]].
-
-	sFrame paintingInProgress ifTrue: [^ PhratchError error: 'beep'.].
-	"sFrame stopAll."
-	sFrame paintingInProgress: true.
-
-	paintEditor := PaintFrame new.
-	paintEditor
-		withStartingObject: self;
-		phratchFrame: sFrame;
-		oldCostumeName: oldCostumeName deleteOnCancel: aBoolean;
-		deleteCostumeOnCancel: delCost.
-
-	oldCostumeName ifNotNil: [
-		"When an oldCostumeName is supplied, it means I'm making a new drawing. Clear the initial rotation center."
-		paintEditor clearRotationCenter].
-
-	(paintEditor isDialogBoxMorph)
-		ifTrue: [paintEditor getUserResponse]
-		ifFalse: [
-			World addMorphFront: paintEditor.
-			World startSteppingSubmorphsOf: paintEditor].
-
-]
-
 { #category : #byob }
 ScriptablePhratchMorph >> editScriptId: id [
 	|sf def|
@@ -2410,25 +2330,6 @@ ScriptablePhratchMorph >> factorial: t1 [
     ^ answer
 ]
 
-{ #category : #'looks ops' }
-ScriptablePhratchMorph >> filterReset [
-	"Reset all the graphics filters applied to the sprite"
-	<phratchItem: 'clear graphic effects' kind: #- category: 'looks' defaultValues: #() subCategory: #a3 special: #()>
-	filterPack := nil.
-	self transparency: 0.
-	self costumeChanged.
-	self spread.
-
-	self
-		colorEffect: 0;
-		fisheyeEffect: 0;
-		whirlEffect: 0;
-		pixelateEffect: 0;
-		mosaicEffect: 0;
-		brightnessEffect: 0;
-		transparencyEffect: 0
-]
-
 { #category : #accessing }
 ScriptablePhratchMorph >> filteredForm [
 	
@@ -2442,24 +2343,6 @@ ScriptablePhratchMorph >> filteredForm [
 
 	^ filterPack resultForm as8BitColorForm
 
-]
-
-{ #category : #'BYOB attributes' }
-ScriptablePhratchMorph >> fisheyeEffect [
-
-	| att |
-	att := #fisheye.
-	self prototype ifNotNil: [
-		(self deletedAttributes includes: att) ifTrue: [
-			^ self prototype get: att]].
-	^ [filterPack fisheye] ifError: [0]
-]
-
-{ #category : #'BYOB attributes' }
-ScriptablePhratchMorph >> fisheyeEffect: aNumber [
-
-	self undeleteAttribute: #fisheye.
-	self passiveFisheyeEffect: aNumber
 ]
 
 { #category : #accessing }
@@ -3479,7 +3362,7 @@ ScriptablePhratchMorph >> makeVisible [
 	"Make sure that I am entirely on the screen and visible."
 
 	self isHidden ifTrue: [self isHidden: false].
-	visibility < 30 ifTrue: [self setGraphicEffect: 'ghost' to: 100].
+	"visibility < 30 ifTrue: [self setGraphicEffect: 'ghost' to: 100]."
 	self scale < 10 ifTrue: [self setSizeTo: 100].
 	(owner notNil and: [owner bounds containsPoint: self center]) ifFalse: [
 		self gotoX: 0 y: 0 ].
@@ -3527,25 +3410,6 @@ ScriptablePhratchMorph >> mediaNameFromFileName: fileName default: defaultName [
 	result size > 16 ifTrue: [result := result copyFrom: 1 to: 16].
 	^ result
 
-]
-
-{ #category : #'BYOB attributes' }
-ScriptablePhratchMorph >> mosaicEffect [
-
-	| att |
-	att := #mosaic.
-	self prototype ifNotNil: [
-		(self deletedAttributes includes: att) ifTrue: [
-			^ self prototype get: att]].
-
-	^ [filterPack mosaicCount] ifError: [0]
-]
-
-{ #category : #'BYOB attributes' }
-ScriptablePhratchMorph >> mosaicEffect: aNumber [
-
-	self undeleteAttribute: #mosaic.
-	self passiveMosaicEffect: aNumber
 ]
 
 { #category : #'event handling' }
@@ -3775,56 +3639,10 @@ ScriptablePhratchMorph >> openCamera [
 	CameraOpenings := CameraOpenings +1.
 ]
 
-{ #category : #'BYOB attributes' }
-ScriptablePhratchMorph >> passiveBrightnessEffect: aNumber [
-
-	self privateSetGraphicEffect: 'brightness' to: aNumber asNumberNoError.
-	self propagate: #brightness
-]
-
-{ #category : #'BYOB attributes' }
-ScriptablePhratchMorph >> passiveColorEffect: aNumber [
-
-	self privateSetGraphicEffect: 'color' to: aNumber asNumberNoError.
-	self propagate: #color.
-]
-
-{ #category : #'BYOB attributes' }
-ScriptablePhratchMorph >> passiveFisheyeEffect: aNumber [
-
-	self privateSetGraphicEffect: 'fisheye' to: aNumber asNumberNoError.
-	self propagate: #fisheye
-]
-
 { #category : #'byob OOP' }
 ScriptablePhratchMorph >> passiveLookLike: costumeName [
 
 	self subclassResponsibility 
-]
-
-{ #category : #'BYOB attributes' }
-ScriptablePhratchMorph >> passiveMosaicEffect: aNumber [
-
-	self privateSetGraphicEffect: 'mosaic' to: aNumber asNumberNoError.
-	self propagate: #mosaic
-
-]
-
-{ #category : #'BYOB attributes' }
-ScriptablePhratchMorph >> passivePixelateEffect: aNumber [
-
-	self privateSetGraphicEffect: 'pixelate' to: aNumber asNumberNoError.
-	self propagate: #pixelate
-]
-
-{ #category : #'BYOB attributes' }
-ScriptablePhratchMorph >> passiveSetHideFlagTo: aBool [
-
-	(aBool isBoolean) 
-		ifFalse: [^ self error: 'expecting a Boolean'].
-	self isHidden: aBool.
-	self spread.
-	self propagate: #isHidden
 ]
 
 { #category : #'BYOB attributes' }
@@ -3833,20 +3651,6 @@ ScriptablePhratchMorph >> passiveSetLayerTo: aNumber [
 	self layer: aNumber asNumberNoError truncated.
 	self spread.
 	self propagate: #layer
-]
-
-{ #category : #'BYOB attributes' }
-ScriptablePhratchMorph >> passiveTransparencyEffect: aNumber [
-
-	self privateSetGraphicEffect: 'ghost' to: aNumber asNumberNoError.
-	self propagate: #ghost
-]
-
-{ #category : #'BYOB attributes' }
-ScriptablePhratchMorph >> passiveWhirlEffect: aNumber [
-
-	self privateSetGraphicEffect: 'whirl' to: aNumber asNumberNoError.
-	self propagate: #whirl
 ]
 
 { #category : #menu }
@@ -3876,25 +3680,6 @@ ScriptablePhratchMorph >> phratchFrame [
 	^ frame
 
 
-]
-
-{ #category : #'BYOB attributes' }
-ScriptablePhratchMorph >> pixelateEffect [
-
-	| att |
-	att := #pixelate.
-	self prototype ifNotNil: [
-		(self deletedAttributes includes: att) ifTrue: [
-			^ self prototype get: att]].
-
-	^ [filterPack pixelateCount] ifError: [0]
-]
-
-{ #category : #'BYOB attributes' }
-ScriptablePhratchMorph >> pixelateEffect: aNumber [
-
-	self undeleteAttribute: #pixelate.
-	self passivePixelateEffect: aNumber
 ]
 
 { #category : #'panther actions' }
@@ -4010,26 +3795,6 @@ ScriptablePhratchMorph >> printSummaryOn: aStream [
 			(item isReporterBlockMorph)
 				ifTrue: [ aStream crlf ].
 			aStream crlf ]
-]
-
-{ #category : #'BYOB attributes' }
-ScriptablePhratchMorph >> privateSetGraphicEffect: effect to: aNumber [
-	"Set the given graphic effect to the given value."
-
-	filterPack ifNil: [filterPack := FilterPack new].
-
-	'brightness' = effect ifTrue: [filterPack brightnessShift: aNumber].
-	'fisheye' = effect ifTrue: [filterPack fisheye: aNumber].
-	'color' = effect ifTrue: [filterPack hueShift: aNumber].
-	'mosaic' = effect ifTrue: [filterPack mosaicCount: aNumber].
-	'pixelate' = effect ifTrue: [filterPack pixelateCount: aNumber].
-	'ghost' = effect ifTrue: [self transparency: aNumber].
-	'whirl' = effect ifTrue: [filterPack whirl: aNumber].
-
-	costumeChangeMSecs := Time millisecondClockValue.
-	self layoutChanged.
-	self changed.
-	self spread
 ]
 
 { #category : #private }
@@ -4324,28 +4089,6 @@ ScriptablePhratchMorph >> set: anObject to: aValue [
 	self error: [ 'cannot set this value' ]
 ]
 
-{ #category : #'looks ops' }
-ScriptablePhratchMorph >> setGraphicEffect: effect to: aNumber [
-	"Set the given graphic effect to the given value."
-	<phratchItem: 'set $Effects$ effect to $Number$' kind: #- category: 'looks' defaultValues: #('color' 0) subCategory: #a3 special: #()>
-	
-	'brightness' = effect ifTrue: [self brightnessEffect: aNumber].
-	'fisheye' = effect ifTrue: [self fisheyeEffect: aNumber].
-	'color' = effect ifTrue: [self colorEffect: aNumber].
-	'mosaic' = effect ifTrue: [self mosaicEffect: aNumber].
-	'pixelate' = effect ifTrue: [self pixelateEffect: aNumber].
-	'ghost' = effect ifTrue: [self transparencyEffect: aNumber].
-	'whirl' = effect ifTrue: [self whirlEffect: aNumber].
-
-]
-
-{ #category : #'BYOB attributes' }
-ScriptablePhratchMorph >> setHideFlagTo: aBool [
-
-	self undeleteAttribute: #isHidden.
-	self passiveSetHideFlagTo: aBool
-]
-
 { #category : #'BYOB attributes' }
 ScriptablePhratchMorph >> setLayerTo: aNumber [
 
@@ -4432,26 +4175,6 @@ ScriptablePhratchMorph >> showInformDialog: title withText: text [
 	DialogBoxMorph inform: text title: title.
 	
 	self updateAfterPopUp.
-]
-
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> showOrHideList: aList show: aBoolean [
-	"Show or hide the given list"
- 
-	| list stage sFrame |
-	(stage := self ownerThatIsAPhratchStageMorph).
-	(self listVarNames includes: aList)
-		ifFalse: [stage
-			ifNotNil: [(stage listVarNames includes: aList)
-				ifTrue: [list := stage lists at: aList]
-				ifFalse: [^ self]]
-			ifNil: [^ self]]
-		ifTrue: [list := lists at: aList].
-	aBoolean
-		ifTrue: [stage addMorph: list]
-		ifFalse: [list delete].
-	(sFrame := self ownerThatIsAPhratchFrameMorph) ifNil: [^ self].
-	sFrame viewerPane categoryChanged: 'variables'
 ]
 
 { #category : #variables }
@@ -4587,7 +4310,7 @@ ScriptablePhratchMorph >> stopPlaying [
 
 	| firstCostume |
 	costume stopPlaying.
-	self filterReset.
+	"self filterReset."
 	"self setVolumeTo: 100."	"reset volume"	"exit camera mode"
 	(costume isKindOf: CameraMedia)
 		ifFalse: [ ^ self ].
@@ -4661,41 +4384,6 @@ ScriptablePhratchMorph >> timerReset [
 	<phratchItem: 'reset timer' kind: #- category: 'sensing' defaultValues: #() subCategory: #timer special: #()>
 	TimerStartMSecs := Time millisecondClockValue.
 
-]
-
-{ #category : #'looks ops' }
-ScriptablePhratchMorph >> transparency [
-	"Answer my transparency. 0 is opaque; 100 is transparent."
-
-	^ 100 - self visibility
-
-]
-
-{ #category : #'looks ops' }
-ScriptablePhratchMorph >> transparency: aNumber [
-	"Set my transparency. 0 is opaque; 100 is transparent."
-
-	self visibility: (100 - aNumber abs).
-
-]
-
-{ #category : #'BYOB attributes' }
-ScriptablePhratchMorph >> transparencyEffect [
-
-	| att |
-	att := #ghost.
-	self prototype ifNotNil: [
-		(self deletedAttributes includes: att) ifTrue: [
-			^ self prototype get: att]].
-
-	^ self transparency
-]
-
-{ #category : #'BYOB attributes' }
-ScriptablePhratchMorph >> transparencyEffect: aNumber [
-
-	self undeleteAttribute: #ghost.
-	self passiveTransparencyEffect: aNumber
 ]
 
 { #category : #'BYOB object interface' }
@@ -5058,25 +4746,6 @@ ScriptablePhratchMorph >> whenKeyPressed [
 ScriptablePhratchMorph >> whenSpriteClicked [
 	"Wait for the given srite is clicked"
 	<phratchItem: 'when $Sprite$ clicked' kind: #MouseClickEventHatMorph category: 'control' defaultValues: #() subCategory: #ahat special: #()>
-]
-
-{ #category : #'BYOB attributes' }
-ScriptablePhratchMorph >> whirlEffect [
-
-	| att |
-	att := #whirl.
-	self prototype ifNotNil: [
-		(self deletedAttributes includes: att) ifTrue: [
-			^ self prototype get: att]].
-
-	^ [filterPack whirl] ifError: [0]
-]
-
-{ #category : #'BYOB attributes' }
-ScriptablePhratchMorph >> whirlEffect: aNumber [
-
-	self undeleteAttribute: #whirl.
-	self passiveWhirlEffect: aNumber
 ]
 
 { #category : #blocks }

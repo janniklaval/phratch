@@ -290,11 +290,6 @@ PaintFrame >> clearRotationCenter [
 
 ]
 
-{ #category : #'panther actions' }
-PaintFrame >> deleteCostumeOnCancel: aBoolean [
-
-]
-
 { #category : #drawing }
 PaintFrame >> drawSubmorphsOn: aCanvas [
 	"Optimization: If change is only within PaintCanvas, only redraw that."

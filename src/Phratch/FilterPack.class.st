@@ -128,21 +128,6 @@ FilterPack >> applyStaticFiltersTo: srcForm [
 
 ]
 
-{ #category : #accessing }
-FilterPack >> brightnessShift [
-
-	^ brightnessShift
-
-]
-
-{ #category : #accessing }
-FilterPack >> brightnessShift: aNumber [
-
-	brightnessShift := aNumber within: -100 and: 100.
-	reapply := true.
-
-]
-
 { #category : #filtering }
 FilterPack >> clearFilterCaches [
 	"Clear my caches. This should be called when the costume changes."
@@ -159,72 +144,12 @@ FilterPack >> filtersActive [
 
 ]
 
-{ #category : #accessing }
-FilterPack >> fisheye [
-
-	^ fisheye
-
-]
-
-{ #category : #accessing }
-FilterPack >> fisheye: aNumber [
-
-	fisheye := aNumber.
-	reapply := true.
-
-]
-
-{ #category : #accessing }
-FilterPack >> hueShift [
-
-	^ hueShift
-
-]
-
-{ #category : #accessing }
-FilterPack >> hueShift: aNumber [
-
-	hueShift := aNumber \\ 200.
-	reapply := true.
-
-]
-
 { #category : #initialize }
 FilterPack >> initialize [
 
 	resultForm := nil.
 	reapply := true.
 	self resetAllFilters.
-
-]
-
-{ #category : #accessing }
-FilterPack >> mosaicCount [
-
-	^ mosaicCount
-
-]
-
-{ #category : #accessing }
-FilterPack >> mosaicCount: aNumber [
-
-	mosaicCount := aNumber.
-	reapply := true.
-
-]
-
-{ #category : #accessing }
-FilterPack >> pixelateCount [
-
-	^ pixelateCount
-
-]
-
-{ #category : #accessing }
-FilterPack >> pixelateCount: aNumber [
-
-	pixelateCount := aNumber.
-	reapply := true.
 
 ]
 
@@ -245,20 +170,5 @@ FilterPack >> resetAllFilters [
 FilterPack >> resultForm [
 
 	^ resultForm
-
-]
-
-{ #category : #accessing }
-FilterPack >> whirl [
-
-	^ whirl
-
-]
-
-{ #category : #accessing }
-FilterPack >> whirl: aNumber [
-
-	whirl := aNumber.
-	reapply := true.
 
 ]
