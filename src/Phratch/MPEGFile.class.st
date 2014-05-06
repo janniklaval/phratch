@@ -200,13 +200,12 @@ MPEGFile >> jumpToSeconds: seconds stream: streamIndex [
 
 { #category : #'file ops' }
 MPEGFile >> openFile: aPath [
-
 	pathToFile := aPath.
 	fileBits := self primFileOpen: aPath.
-	fileBits notNil ifTrue: [
-		fileIndex := Smalltalk registerExternalObject: fileBits.
-		self class register: self].
-
+	fileBits notNil
+		ifFalse: [ ^ self ].
+	fileIndex := Smalltalk registerExternalObject: fileBits.
+	self class register: self
 ]
 
 { #category : #primitives }

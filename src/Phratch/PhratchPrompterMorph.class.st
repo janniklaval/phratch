@@ -39,13 +39,6 @@ PhratchPrompterMorph class >> lastAnswer [
 
 ]
 
-{ #category : #accessing }
-PhratchPrompterMorph class >> lastAnswer: anAnswer [
-
-	LastAnswer := anAnswer
-
-]
-
 { #category : #other }
 PhratchPrompterMorph >> accept [
 	"Accept button was pressed."
@@ -97,13 +90,6 @@ PhratchPrompterMorph >> fixLayout [
 
 ]
 
-{ #category : #other }
-PhratchPrompterMorph >> grabKeyboardFocus [
-
-	World activeHand newKeyboardFocus: typeinMorph.
-
-]
-
 { #category : #initialize }
 PhratchPrompterMorph >> initialize [
 	"Set the forms for all my UI elements, create a row to hold my buttons, and a column to hold my shortcut buttons."
@@ -147,31 +133,6 @@ PhratchPrompterMorph >> isDone [
 PhratchPrompterMorph >> isPhratchPrompterMorph [
 
 	^ true
-]
-
-{ #category : #accessing }
-PhratchPrompterMorph >> question: aString [
-	(aString isMorph)
-		ifTrue: [ 
-			| frm |
-			frm := (aString respondsTo: #displayForm)
-				ifTrue: [ aString displayForm ]
-				ifFalse: [ aString imageForm ].
-			questionMorph := ImageMorph new form: frm ]
-		ifFalse: [ 
-			questionMorph := StringMorph new
-				contents: aString asString;
-				font: (PhratchFrameMorph getFont: #DialogBoxButton);
-		yourself ].
-	self addMorph: questionMorph.
-	self height: questionMorph height + typeinMorph height + 16
-]
-
-{ #category : #accessing }
-PhratchPrompterMorph >> sprite: aSprite [
-
-	sprite := aSprite.
-
 ]
 
 { #category : #other }

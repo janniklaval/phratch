@@ -107,36 +107,6 @@ self gotoX: (i1+self xpos) y: self ypos.
 ].
 ]
 
-{ #category : #'byob OOP' }
-PhratchSpriteMorph >> attribute: attr [
-	"Answer the value of my variable or built-in attribute with the given name. Answer zero if I have no attribute or variable with the given name."
-
-	| a |
-	
-	(attr isCommandBlockMorph)
-		ifTrue: [^ attr fullCopy newScriptOwner: self; yourself] 		"self blockLike: attr body]".
-
-	a := attr asString.
-	(vars includesKey: a) ifTrue: [^ vars at: a].
-	(self allLocalBlockIds includes: a) ifTrue: [ ^self lambda: a ].
-
-	a := a localized.
-	'x position' localized = a ifTrue: [^ self xpos].
-	'y position' localized = a ifTrue: [^ self ypos].
-	'direction' localized = a ifTrue: [^ self heading].
-	'costume #' localized = a ifTrue: [^ self costumeIndex].
-	'size' localized = a ifTrue: [^ self scale].
-	"'volume' localized = a ifTrue: [^ self volume]."
-
-	'name' localized = a ifTrue: [^ self objName].
-	'prototype' localized = a ifTrue: [^ self prototype].
-	'owner' localized = a ifTrue: [^ self ownerSprite].
-	'parts' localized = a ifTrue: [^ PhratchListMorph on: self subsprites].
-
-	^ 0
-
-]
-
 { #category : #'sensing ops' }
 PhratchSpriteMorph >> attributeNames [
 
@@ -187,21 +157,6 @@ PhratchSpriteMorph >> bounceOffEdge [
 	self xpos: self xpos.
 	self ypos: self ypos 
 
-]
-
-{ #category : #'blocks API' }
-PhratchSpriteMorph >> bounceOffSprite: aName [ 
-	"Set my direction to bounce off when touching the given sprite"
-	<phratchItem: 'if touching $Sprite$ bounce' kind: #- category: 'motion' defaultValues: #() subCategory: #a5 special: #()>
-    | sprite oldDir |
-    sprite := self coerceSpriteArg: aName.
-    (self touching: sprite)
-        ifFalse: [^ self].
-    oldDir := self heading.
-    self pointTowards: sprite.
-    self turnRight: self heading - oldDir + 180.
-    [self touching: sprite]
-        whileTrue: [self forward: 1]
 ]
 
 { #category : #'looks ops' }
@@ -402,13 +357,6 @@ PhratchSpriteMorph >> directionMenu [
 ]
 
 { #category : #'blocks API' }
-PhratchSpriteMorph >> dist: t1 and: t2 [ 
-	"Compute the distance between two points"
-	<phratchItem: 'distance to x $Number$ y $Number$' kind: #ReporterBlockMorph category: 'sensing' defaultValues: #(0 0) subCategory: #sensor special: #()>
-    ^ ((self xpos - t1) * (self xpos - t1) + ((self ypos - t2) * (self ypos - t2))) abs sqrt
-]
-
-{ #category : #'blocks API' }
 PhratchSpriteMorph >> distance: t1 X: t2 Y: t3 [ 
 	"Make a part of the way to the given point"
 	<phratchItem: 'go $Number$ of the way to x: $Number$ y: $Number$' kind: #- category: 'motion' defaultValues: #() subCategory: #a3 special: #()>
@@ -416,21 +364,6 @@ PhratchSpriteMorph >> distance: t1 X: t2 Y: t3 [
     newX := t1 * 0.01 * (t2 - self xpos).
     newY := t1 * 0.01 * (t3 - self ypos).
     self gotoX: newX + self xpos y: newY + self ypos
-]
-
-{ #category : #'motion ops' }
-PhratchSpriteMorph >> distanceTo: anObject [
-	"Answer the distance to the given sprite."
-	<phratchItem: 'distance to $Sprite$' kind: #ReporterBlockMorph category: 'sensing' defaultValues: #() subCategory: #sensor special: #()>
-	| aSpriteOrSymbol |
-	aSpriteOrSymbol := self coerceSpriteArg: anObject.
-
-	aSpriteOrSymbol = #mouse ifTrue: [
-		^ ((self mouseX @ self mouseY)  - self referencePosition) r].
-
-	(aSpriteOrSymbol isPhratchSpriteMorph) ifFalse: [^ 10000].
-	^ (aSpriteOrSymbol referencePosition - self referencePosition) r
-
 ]
 
 { #category : #accessing }
@@ -1650,13 +1583,6 @@ PhratchSpriteMorph >> scenes [
 
 ]
 
-{ #category : #'panther actions' }
-PhratchSpriteMorph >> setMyName: aName [
-	"Change my name to the given string"
-	<phratchItem: 'set sprite name to $String$' kind: #- category: 'sensing' defaultValues: #() subCategory: #a1 special: #()>
-	self objName: (aName asString).
-]
-
 { #category : #'byob OOP' }
 PhratchSpriteMorph >> setRotationStyle: aNumber [
 	"Set my rotation style to #normal, #leftRight, or #none. Styles mean:
@@ -1674,14 +1600,6 @@ PhratchSpriteMorph >> setSizeTo: percent [
 	<phratchItem: 'set size to $Number$%' kind: #- category: 'looks' defaultValues: #(100) subCategory: #a4 special: #()>
 	self undeleteAttribute: #size.
 	self passiveSetSizeTo: percent
-
-]
-
-{ #category : #'sensing ops' }
-PhratchSpriteMorph >> showQuestion: aString [
-	"Show the given question prompt."
-
-	self bubble: aString thinkFlag: false promptFlag: true.
 
 ]
 

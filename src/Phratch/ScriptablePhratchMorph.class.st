@@ -302,18 +302,6 @@ ScriptablePhratchMorph class >> resetTimer [
 ]
 
 { #category : #other }
-ScriptablePhratchMorph class >> soundRecorder [
-	"Return the shared SoundRecorder. Create and start it, if necessary."
-
-	Recorder ifNil: [
-		Recorder := SoundRecorder new.
-		Recorder startRecording].
-	Recorder isActive ifFalse: [Recorder startRecording].
-	^ Recorder
-
-]
-
-{ #category : #other }
 ScriptablePhratchMorph class >> stopSoundRecorder [
 	"Stop the shared sound recorder."
 	"self stopSoundRecorder"
@@ -831,24 +819,6 @@ ScriptablePhratchMorph >> asciiLetter: anInteger [
 	code := anInteger asNumberNoError.
 
 	^ String with: (Character value: code)
-]
-
-{ #category : #'byob OOP' }
-ScriptablePhratchMorph >> attribute: attr [
-
-	self subclassResponsibility 
-]
-
-{ #category : #'BYOB OOP message passing' }
-ScriptablePhratchMorph >> attribute: attr of: anObject [
-	"Answer the variable or built-in attribute value for the given sprite. Answer zero if the given sprite does not have a built-in attribute or variable of the given name."
-	<phratchItem: 'get $Attributes$ of $Sprite$' kind: #ReporterBlockMorph category: 'sensing' defaultValues: #() subCategory: #a3 special: #()>
-	| aSpriteOrStage |
-	aSpriteOrStage := self coerceSpriteArg: anObject.
-
-	(aSpriteOrStage isScriptablePhratchMorph) ifFalse: [^ 0].
-	^ aSpriteOrStage attribute: attr
-
 ]
 
 { #category : #'sensing ops' }
@@ -1742,13 +1712,6 @@ ScriptablePhratchMorph >> doAnswer [
 
 ]
 
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> doAsk [
-	"Ask for the given question, and wait for an answer"
-	<phratchItem: 'ask $String$ and wait' kind: #SpecialBlockMorph category: 'sensing' defaultValues: #('What''s your name?') subCategory: #a1 special: #()>
-	
-]
-
 { #category : #byob }
 ScriptablePhratchMorph >> doBroadcastAndWait [
 	"send a broadcast message ans wait for all receivers finish their work."
@@ -2397,31 +2360,11 @@ ScriptablePhratchMorph >> get: anObject [
 	^ anObject
 ]
 
-{ #category : #'sensing ops' }
-ScriptablePhratchMorph >> getAttribute: attr of: anObject [
-	"Answer the variable or built-in attribute value for the given sprite. Answer zero if the given sprite does not have a built-in attribute or variable of the given name."
-	<phratchItem: '$Attributes$ of $Sprite$' kind: #ReporterBlockMorph category: 'sensing' defaultValues: #() subCategory: #a3 special: #()>
-	| aSpriteOrStage |
-	aSpriteOrStage := self coerceSpriteArg: anObject.
-	(aSpriteOrStage isScriptablePhratchMorph) ifFalse: [^ 0].
-"	^ aSpriteOrStage getAttribute: attr asString"
-	^ aSpriteOrStage attribute: attr
-
-
-]
-
 { #category : #byob }
 ScriptablePhratchMorph >> getFalse [
 	"Return the boolean False"
 	<phratchItem: 'false' kind: #BooleanBlockMorph category: 'operators' defaultValues: #() subCategory: #a4 special: #()>
 	^false
-]
-
-{ #category : #'byob OOP' }
-ScriptablePhratchMorph >> getObject: anObject [
-	"Return the given sprite"
-	<phratchItem: 'object $Sprite$' kind: #ReporterBlockMorph category: 'sensing' defaultValues: #() subCategory: #a3 special: #()>
-	^ anObject
 ]
 
 { #category : #'byob OOP' }
@@ -2967,14 +2910,6 @@ ScriptablePhratchMorph >> isInteger: t1 [
     ^ t1 = t1 rounded
 ]
 
-{ #category : #'sensing ops' }
-ScriptablePhratchMorph >> isLoud [
-	"Return true if the sound is playing"
-	<phratchItem: 'loud?' kind: #BooleanWatcherBlockMorph category: 'sensing' defaultValues: #() subCategory: #a4 special: #()>
-	^ self class soundRecorder meterLevel > 30
-
-]
-
 { #category : #byob }
 ScriptablePhratchMorph >> isObject: object type: type [
 	"Return true if the given object is a kind of given type"
@@ -3100,16 +3035,6 @@ ScriptablePhratchMorph >> keyNames [
 	   ($a to: $z), ($0 to: $9)
 		 collect: [:ch | ch asString]
 
-]
-
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> keyPressed [
-	"Answer the currently pressed key."
-	<phratchItem: 'key pressed' kind: #ReporterBlockMorph category: 'sensing' defaultValues: #() subCategory: #a2 special: #()>
-	self flag: 'TODO: This needs to be rewritten to use Sensor keyboard or the like.'.
-	self keyNames do: [:ch |
-		(self keyPressed: ch) ifTrue: [^ ch]].
-	^ ''.
 ]
 
 { #category : #'sensing ops' }
@@ -3807,43 +3732,6 @@ ScriptablePhratchMorph >> projectDirectory [
 
 ]
 
-{ #category : #'sensing ops' }
-ScriptablePhratchMorph >> promptForInput: questionString [
-
-	| s prompter |
-	(s := self ownerOrYourselfThatIsAPhratchStageMorph) ifNil: [^ self].
-	prompter := PhratchPrompterMorph new.
-	((self isPhratchStageMorph) | (self isHidden))
-		ifTrue: [
-			prompter question: questionString]
-		ifFalse: [
-			self showQuestion: questionString.
-			prompter sprite: self].
-
-	prompter left: s center x - (prompter width // 2).
-	prompter bottom: s bottom - 5.
-	prompter isSticky: true.
-
-	s addMorphFront: prompter.
-	prompter grabKeyboardFocus.
-"	World doOneCycle."
-
-	^ prompter
-
-	
-]
-
-{ #category : #'sensing ops' }
-ScriptablePhratchMorph >> promptInProgress [
-
-	| s |
-	(s := self ownerOrYourselfThatIsAPhratchStageMorph) ifNil: [^ false].
-	s submorphsDo: [:m |
-		(m isPhratchPrompterMorph) ifTrue: [^ true]].
-	^ false
-
-]
-
 { #category : #'byob OOP' }
 ScriptablePhratchMorph >> propagate: attributeName [
 	"private - apply the method calling me to all subsprites"
@@ -4156,27 +4044,6 @@ ScriptablePhratchMorph >> setVar: varName to: newValue [
 
 ]
 
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> showAskDialogWithText: text [ 
-	"Show a popup with the given question. Wait for the answer."
-	<phratchItem: 'ask $String$ in dialog' kind: #- category: 'sensing' defaultValues: #('What''s your name?') subCategory: #a1 special: #()>
-	"Show an information dialog with the given title and text."
-	PhratchPrompterMorph lastAnswer: (StringDialog ask: text).
-	
-	self updateAfterPopUp.
-	
-]
-
-{ #category : #'panther actions' }
-ScriptablePhratchMorph >> showInformDialog: title withText: text [ 
-	"Show a popup with the given information. Wait for the user to click on the OK button"
-	<phratchItem: 'show dialog $String$ with text $String$' kind: #- category: 'sensing' defaultValues: #('info' '') subCategory: #a1 special: #()>
-	"Show an information dialog with the given title and text."
-	DialogBoxMorph inform: text title: title.
-	
-	self updateAfterPopUp.
-]
-
 { #category : #variables }
 ScriptablePhratchMorph >> showOrHideVariable: varName show: showFlag [
 	"Show the watcher for the given variable. Do nothing if the variable does not exist or is already showing."
@@ -4219,14 +4086,6 @@ ScriptablePhratchMorph >> soleCostume: imageMedia [
 
 	media := media reject: [ :item | item isImage ].
 	self addMediaItem: imageMedia
-]
-
-{ #category : #'sensing ops' }
-ScriptablePhratchMorph >> soundLevel [
-	"Return the level of sound"
-	<phratchItem: 'loudness' kind: #ReporterWatcherBlockMorph category: 'sensing' defaultValues: #() subCategory: #a4 special: #()>
-	^ self class soundRecorder meterLevel
-
 ]
 
 { #category : #'BYOB attributes' }
@@ -4365,25 +4224,6 @@ ScriptablePhratchMorph >> thumbnailImageForm [
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> timeDates [
 	^ #('time' 'hour' 'minute' 'second' 'date' 'day of month' 'day of year' 'weekday-name' 'weekday-#' 'month-name' 'month-#' 'year' )
-]
-
-{ #category : #'sensing ops' }
-ScriptablePhratchMorph >> timer [
-	"Return the timer"
-	<phratchItem: 'timer' kind: #ReporterWatcherBlockMorph category: 'sensing' defaultValues: #() subCategory: #timer special: #()>
-	| now |
-	now := Time millisecondClockValue.
-	TimerStartMSecs ifNil: [ TimerStartMSecs := now ].
-	TimerStartMSecs := TimerStartMSecs min: now.
-	^ (now - TimerStartMSecs) asFloat / 1000.0
-]
-
-{ #category : #'sensing ops' }
-ScriptablePhratchMorph >> timerReset [
-	"Reset the timer"
-	<phratchItem: 'reset timer' kind: #- category: 'sensing' defaultValues: #() subCategory: #timer special: #()>
-	TimerStartMSecs := Time millisecondClockValue.
-
 ]
 
 { #category : #'BYOB object interface' }
