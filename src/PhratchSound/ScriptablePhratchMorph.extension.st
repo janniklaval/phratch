@@ -112,6 +112,14 @@ ScriptablePhratchMorph >> importSound [
 ]
 
 { #category : #'*PhratchSound' }
+ScriptablePhratchMorph >> isLoud [
+	"Return true if the sound is playing"
+	<phratchItem: 'loud?' kind: #BooleanWatcherBlockMorph category: 'sensing' defaultValues: #() subCategory: #a4 special: #()>
+	^ self class soundRecorder meterLevel > 30
+
+]
+
+{ #category : #'*PhratchSound' }
 ScriptablePhratchMorph >> midiDrumMenu [
 	"Provides a drop-down menu for setting the drum number."
 
@@ -482,6 +490,14 @@ ScriptablePhratchMorph >> soundFromIndex: aNumber [
 ]
 
 { #category : #'*PhratchSound' }
+ScriptablePhratchMorph >> soundLevel [
+	"Return the level of sound"
+	<phratchItem: 'loudness' kind: #ReporterWatcherBlockMorph category: 'sensing' defaultValues: #() subCategory: #a4 special: #()>
+	^ self class soundRecorder meterLevel
+
+]
+
+{ #category : #'*PhratchSound' }
 ScriptablePhratchMorph >> soundNamed: soundNameOrIndex ifAbsent: absentBlock [
 	"Return a SoundMedia with the given name (ignoring case differences) or index. If there is none, return the result of evaluating the given block."
 
@@ -523,6 +539,18 @@ ScriptablePhratchMorph >> soundNames [
 	"result addLast: '-'.
 	result addLast: 'record' localized, '...'."
 	^ result asArray
+
+]
+
+{ #category : #'*PhratchSound' }
+ScriptablePhratchMorph class >> soundRecorder [
+	"Return the shared SoundRecorder. Create and start it, if necessary."
+
+	Recorder ifNil: [
+		Recorder := SoundRecorder new.
+		Recorder startRecording].
+	Recorder isActive ifFalse: [Recorder startRecording].
+	^ Recorder
 
 ]
 
