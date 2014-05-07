@@ -130,3 +130,11 @@ PhratchSpriteMorph >> touching: anObject [
 	^(subsprites collect: [:sub | sub touching: anObject ]) includes: true 			"are any pixels of the result non-zero?"
 
 ]
+
+{ #category : #'*PhratchSensing' }
+PhratchSpriteMorph >> warn: t1 [ 
+	"Open a warning dialogbox"
+	<phratchItem: 'warn $String$' kind: #- category: 'sensing' defaultValues: #('Invalid input') subCategory: #a1 special: #()>
+    DialogBoxMorph warn: t1.
+	self updateAfterPopUp.
+]
