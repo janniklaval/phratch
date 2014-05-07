@@ -4,7 +4,7 @@ I hold the scripts and partially assembled scripts for a ScriptableScratchMorph.
 "
 Class {
 	#name : #PhratchScriptsMorph,
-	#superclass : #PhratchPasteUpMorph,
+	#superclass : #PasteUpMorph,
 	#instVars : [
 		'feedbackMorph',
 		'screenshooting',

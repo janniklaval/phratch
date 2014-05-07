@@ -4,7 +4,7 @@ I am an abstract superclass for all kinds of argument morphs--morphs that are us
 "
 Class {
 	#name : #ArgMorph,
-	#superclass : #PhratchBorderedMorph,
+	#superclass : #BorderedMorph,
 	#instVars : [
 		'labelMorph',
 		'implicitValue'

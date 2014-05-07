@@ -4,7 +4,7 @@ I am used as a scrollable blocks palette morph in a ScratchViewerMorph.
 "
 Class {
 	#name : #PhratchBlockPaletteMorph,
-	#superclass : #PhratchBorderedMorph,
+	#superclass : #BorderedMorph,
 	#category : #'Phratch-UI-Support'
 }
 

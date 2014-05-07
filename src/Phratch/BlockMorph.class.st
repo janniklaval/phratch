@@ -4,7 +4,7 @@ I and my subclasses represent statements in a block-based graphical programming 
 "
 Class {
 	#name : #BlockMorph,
-	#superclass : #PhratchMorph,
+	#superclass : #Morph,
 	#instVars : [
 		'isSpecialForm',
 		'oldColor',

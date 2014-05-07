@@ -4,7 +4,7 @@ This subclass of ScrollFrameMorph uses ScratchScrollBars.
 "
 Class {
 	#name : #ScrollFrameMorph,
-	#superclass : #PhratchBorderedMorph,
+	#superclass : #BorderedMorph,
 	#instVars : [
 		'scrollBarStartInset',
 		'scrollBarEndInset',

@@ -11,7 +11,7 @@ Scriptable morphs:
 "
 Class {
 	#name : #ScriptablePhratchMorph,
-	#superclass : #PhratchMorph,
+	#superclass : #Morph,
 	#instVars : [
 		'objName',
 		'vars',
@@ -1183,6 +1183,7 @@ ScriptablePhratchMorph >> costumeFromName: aString [
 	| cameraCostume |
 	((aString = '*** camera ***') and:
 	 [CameraPlugin cameraIsAvailable]) ifTrue: [
+		self halt.
 		cameraCostume := CameraMedia new.
 		(self class = PhratchStageMorph) ifTrue: [cameraCostume frameExtent: self extent].
 		^ cameraCostume].
@@ -3352,14 +3353,6 @@ ScriptablePhratchMorph >> mouseDown: evt [
 	evt rightButtonPressed
 		ifTrue: [Sensor waitNoButton. ^ self rightButtonMenu]
 		ifFalse:	[evt hand waitForClicksOrDrag: self event: evt].
-]
-
-{ #category : #'sensing ops' }
-ScriptablePhratchMorph >> mousePressed [
-	"Return true if the mouse is pressed"
-	<phratchItem: 'mouse down?' kind: #BooleanBlockMorph category: 'sensing' defaultValues: #() subCategory: #a2 special: #()>
-	^ Sensor redButtonPressed
-
 ]
 
 { #category : #'sensing ops' }

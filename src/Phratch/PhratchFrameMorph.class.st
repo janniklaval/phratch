@@ -6,7 +6,7 @@ I keep a list of Scratch processes (threads) and run each one to the its next st
 "
 Class {
 	#name : #PhratchFrameMorph,
-	#superclass : #PhratchMorph,
+	#superclass : #Morph,
 	#instVars : [
 		'pauseButton',
 		'blockEditors',
@@ -3453,6 +3453,18 @@ PhratchFrameMorph >> updateLastHistoryEntryIfNeeded [
 	s := WriteStream on: (String new: 1000).
 	lines do: [:entry | s nextPutAll: entry; cr].
 	projectInfo at: 'history' put: s contents.
+
+]
+
+{ #category : #'as yet unclassified' }
+PhratchFrameMorph >> updateMediaCategoryFor: anObject [
+	"Update the media viewer for the given object's media category. Do nothing if the media category of the given object is not being viewed."
+
+	scriptsPane target = anObject ifTrue: [
+		scriptsPane categoryChanged: 'Sounds'.
+		scriptsPane categoryChanged: 'Costumes'].
+	viewerPane target = anObject ifTrue: [
+		viewerPane categoryChanged: 'Sound'].
 
 ]
 

@@ -1,6 +1,6 @@
 Class {
 	#name : #PaintPalette,
-	#superclass : #PhratchBorderedMorph,
+	#superclass : #BorderedMorph,
 	#instVars : [
 		'canvasMorph',
 		'brushSizeMorph',
