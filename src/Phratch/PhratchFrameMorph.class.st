@@ -2504,7 +2504,7 @@ PhratchFrameMorph >> ownerChanged [
 		ifFalse: [ ^ self ].
 	self position: 0 @ 0.
 	self isSticky: true.
-	self extent: Display extent
+	self extent: Display extent.
 ]
 
 { #category : #'menu/button actions' }
@@ -3164,11 +3164,11 @@ PhratchFrameMorph >> step [
 			justSaved := oldJustSaved.
 			^ self]]. "simplify at the moment"
 
-	"workPane ifNotNil: [
+	workPane ifNotNil: [
 		ScriptablePhratchMorph phratchOrigin: workPane center.
 		viewerPane target isNil 
 			ifTrue: [workPane viewBlocksAndScripts]
-			ifFalse: [viewerPane target isInWorld ifFalse: [workPane viewBlocksAndScriptsQuickly]]]."
+			ifFalse: [viewerPane target isInWorld ifFalse: [workPane viewBlocksAndScriptsQuickly]]].
 
 	paintingInProgress ifTrue: [^ self].
 

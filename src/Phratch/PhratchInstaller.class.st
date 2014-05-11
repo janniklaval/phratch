@@ -27,12 +27,8 @@ PhratchInstaller class >> beginInstall [
 	InputEventSensor addInstVarNamed: #keyPressed.
 	UpdatingStringMorph addInstVarNamed: #isUpdating.
 
-	self flag:'need to be removed after Pharo2.0 version'.
-	SystemVersion current major >= 3 ifTrue:[
-		(Smalltalk at: #SoundSystem)  soundEnabled: true.
-	] ifFalse: [ 
-		(Smalltalk at: #AbstractSoundSystem)  soundEnabled: true.
-	].
+	SoundSystem soundEnabled: true.
+
 
 	SoundPlayer stopReverb.
 	(Workspace
