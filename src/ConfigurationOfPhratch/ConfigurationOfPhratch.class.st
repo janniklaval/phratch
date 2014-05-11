@@ -297,6 +297,34 @@ ConfigurationOfPhratch >> baseline40: spec [
 				package: 'Phratch' with: [ 
 					spec requires: #('Sound' 'OSProcess')
 			].
+			spec
+				package: 'PhratchColor' with: [ 
+					spec requires: #('Phratch')
+			].
+			spec
+				package: 'PhratchFile' with: [ 
+					spec requires: #('Phratch')
+			].
+			spec
+				package: 'PhratchList' with: [ 
+					spec requires: #('Phratch')
+			].
+			spec
+				package: 'PhratchLooks' with: [ 
+					spec requires: #('Phratch')
+			].
+			spec
+				package: 'PhratchMotion' with: [ 
+					spec requires: #('Phratch')
+			].
+			spec
+				package: 'PhratchPen' with: [ 
+					spec requires: #('Phratch')
+			].
+			spec
+				package: 'PhratchSensing' with: [ 
+					spec requires: #('Phratch')
+			].
 	].
 			
 ]
@@ -378,7 +406,14 @@ ConfigurationOfPhratch >> version40: spec [
 	spec for: #common do: [
 			spec repository: 'http://smalltalkhub.com/mc/JLaval/Phratch/main'.
 			spec
-				package: 'Phratch'.
+				package: 'Phratch';
+				package: 'PhratchColor';
+				package: 'PhratchFile';
+				package: 'PhratchList';
+				package: 'PhratchLooks';
+				package: 'PhratchMotion';
+				package: 'PhratchPen';
+				package: 'PhratchSensing'.
 			spec
 				project: 'Sound' with: #stable;
 				project: 'OSProcess' with: #stable.
