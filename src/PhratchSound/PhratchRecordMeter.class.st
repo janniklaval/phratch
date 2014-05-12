@@ -1,6 +1,6 @@
 Class {
 	#name : #PhratchRecordMeter,
-	#superclass : #PhratchMorph,
+	#superclass : #Morph,
 	#instVars : [
 		'lineForm',
 		'level'
