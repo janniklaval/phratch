@@ -200,12 +200,12 @@ PhratchFileChooserDialog class >> homeDir [
 
 	| homeDir |
 	"try in order: documents folder, user home folder, Phratch folder"
-	homeDir := FileLocator documents.  "documents"
+	[homeDir := FileLocator documents.  "documents"
 	(homeDir exists) ifFalse: [
 		homeDir := FileLocator home].  "home"
 	(homeDir exists) ifFalse: [
 		homeDir := FileLocator workingDirectory fullName].  "Phratch folder (last resort)"
-
+	] on: Error do: [homeDir := '/'].
 	^ homeDir
 ]
 
@@ -675,7 +675,7 @@ PhratchFileChooserDialog >> isPhratchFileChooserDialog [
 PhratchFileChooserDialog >> labelForHomeFolder [
 	"Answer the name to use for the home folder."
 
-	^FileLocator home absolutePath basename.
+	^[FileLocator home absolutePath basename] on: Error do: ['/'].
 
 ]
 
@@ -697,7 +697,7 @@ PhratchFileChooserDialog >> myComp [
 PhratchFileChooserDialog >> myDesktop [
 	"My desktop button was pressed."
 
-	list currentDirectory: (FileLocator desktop asFileReference)
+	list currentDirectory: ([FileLocator desktop asFileReference] on: Error do: ['/' asFileReference])
 
 ]
 
