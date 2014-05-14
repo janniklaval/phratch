@@ -23,7 +23,8 @@ Class {
 		'arguments',
 		'pc',
 		'startTime',
-		'startValue'
+		'startValue',
+		'shouldUnlight'
 	],
 	#category : #'Phratch-Execution Engine'
 }
@@ -65,7 +66,7 @@ PhratchStackFrame >> initialize [
 	expression := nil.
 	arguments := OrderedCollection new. 
 	pc := 1.
-
+	shouldUnlight := false
 ]
 
 { #category : #accessing }
@@ -110,7 +111,15 @@ PhratchStackFrame >> printOn: aStream [
 { #category : #accessing }
 PhratchStackFrame >> shouldUnlight [
 
-	^ false
+	^ shouldUnlight
+
+
+]
+
+{ #category : #accessing }
+PhratchStackFrame >> shouldUnlight: aBoolean [
+
+	shouldUnlight := aBoolean.
 
 ]
 

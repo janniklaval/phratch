@@ -898,6 +898,8 @@ PhratchProcess >> errorFlag: aBoolean [
 	| customBlocks |
 	stackFrame expression isArray
 		ifTrue: [ ^ self ].
+	stackFrame expression isSymbol
+		ifTrue: [ ^ self ].
 	errorFlag := aBoolean.
 	stackFrame expression showError.
 	stackFrame expression topBlock showErrorFeedback.
@@ -1196,28 +1198,29 @@ PhratchProcess >> pause [
 PhratchProcess >> popStackFrame [
 	"Pops the current stack frame off the top of the stack, so that the next one becomes the current frame."
 
-	|  frame   |
+	|  frame   command |
 
 	frame := stackFrame.
 	stackFrame := stackFrame parentFrame.
 
-	frame expression.
+	command := frame expression.
 
 	"this effectively disables Scratch's so called single stepping mechanism, a sacrifice that let's us catch up with Scratch speed again,
 	-jens"
-	^self.
+	"^self."
 
 	"and this is the old code"
 
-	"self isAtomic ifTrue: [^self ].
+	self isAtomic ifTrue: [^self ].
 
 	BlockHighlightMSecs > 0 ifTrue: [
 		(frame shouldUnlight not and: [command isBlockMorph]) ifTrue: [
-			""We push a new frame for unlighting this command.""
+			|unlightFrame|
+			"We push a new frame for unlighting this command."
 			unlightFrame := PhratchStackFrame new
-				expression: command.
-			self pushStackFrame: unlightFrame]]."
-
+				expression: command;
+				shouldUnlight: true.
+			self pushStackFrame: unlightFrame]].
 ]
 
 { #category : #'private-stack' }

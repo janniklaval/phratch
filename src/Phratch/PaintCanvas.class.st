@@ -781,7 +781,7 @@ PaintCanvas >> handlesMouseDown: evt [
 { #category : #'event handling' }
 PaintCanvas >> handlesMouseOver: evt [
 
-	^ true
+	^ false
 
 ]
 
