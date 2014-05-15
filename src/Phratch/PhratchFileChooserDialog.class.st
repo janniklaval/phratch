@@ -206,7 +206,7 @@ PhratchFileChooserDialog class >> homeDir [
 	(homeDir exists) ifFalse: [
 		homeDir := FileLocator workingDirectory fullName].  "Phratch folder (last resort)"
 	] on: Error do: [homeDir := '/'].
-	^ homeDir
+	^ homeDir asFileReference
 ]
 
 { #category : #'class initialization' }

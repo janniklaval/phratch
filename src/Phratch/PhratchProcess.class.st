@@ -1289,8 +1289,11 @@ PhratchProcess >> runStepFor: aStageMorph [
 	(self isPaused and: [isTimed not]) ifTrue: [ ^ self].
 
 	readyToYield := false.
+	
 	[readyToYield or: [stackFrame isNil]] whileFalse: [
-		self evaluateFor: aStageMorph].
+		self evaluateFor: aStageMorph.
+		"readyToYield := true."
+		].
 
 	readyToTerminate ifTrue: [
 		"pop all stack frames, unlighting enclosing blocks:"
