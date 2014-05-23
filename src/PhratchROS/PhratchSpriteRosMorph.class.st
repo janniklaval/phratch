@@ -2,10 +2,26 @@ Class {
 	#name : #PhratchSpriteRosMorph,
 	#superclass : #PhratchSpriteMorph,
 	#instVars : [
-		'rosMaster'
+		'rosMaster',
+		'systemInfo'
 	],
 	#category : #PhratchROS
 }
+
+{ #category : #'as yet unclassified' }
+PhratchSpriteRosMorph >> argsOfService: aServiceString [
+
+	<phratchItem: 'arguments needed for service $String$' kind: #ReporterBlockMorph category: 'ros' defaultValues: #() subCategory: #sysInfo special: #()>
+	| list |
+	self listNamed: ('arguments for service', aServiceString) ifNone:[
+		list:= self quietCreateListNamed: ('arguments for service', aServiceString).
+		(systemInfo argsOfService: aServiceString) do:[:e |
+			self append: e toList: ('arguments for service', aServiceString)
+		].
+		list
+	].
+	^self listNamed: ('arguments for service', aServiceString)
+]
 
 { #category : #'as yet unclassified' }
 PhratchSpriteRosMorph >> getParameterNamed: aString [
@@ -26,6 +42,7 @@ PhratchSpriteRosMorph >> initialize [
 
 	super initialize.
 	rosMaster := PhaROSMaster localhost.
+	systemInfo := PhaROSSystemInfo new.
 	self setMyName: 'Ros'.
 	self initializeSkin.
 ]
@@ -74,6 +91,16 @@ PhratchSpriteRosMorph >> parameterNames [
 ]
 
 { #category : #'as yet unclassified' }
+PhratchSpriteRosMorph >> publish: data type: topicType onTopic: aTopic [
+
+	<phratchItem: 'send $String$ type $String$ on topic $String$' kind: #- category: 'ros' defaultValues: #() subCategory: #sysInfo special: #()>
+	| x |
+	x := Geometry_msgsTwist new
+		linear x: 10.
+	^ systemInfo publish: x type: topicType onTopic: aTopic
+]
+
+{ #category : #'as yet unclassified' }
 PhratchSpriteRosMorph >> publishedTopics [
 
 	<phratchItem: 'published topics' kind: #ReporterBlockMorph category: 'ros' defaultValues: #() subCategory: #a special: #()>
@@ -101,6 +128,13 @@ PhratchSpriteRosMorph >> publisherTopics [
 		list
 	].
 	^self listNamed: 'ROS publisher topics'
+]
+
+{ #category : #'as yet unclassified' }
+PhratchSpriteRosMorph >> run: node from: package [
+
+	<phratchItem: 'run node $String$ package $String$' kind: #- category: 'ros' defaultValues: #() subCategory: #sysInfo special: #()>
+	^ systemInfo run: node from: package
 ]
 
 { #category : #'as yet unclassified' }

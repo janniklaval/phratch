@@ -14,7 +14,7 @@ ScriptablePhratchMorph >> addGenericROSBlocksTo: page x: x y: startY [
 				(blockOrSym = #~) ifTrue: [y := y + 5]]	"insert a half space"
 			ifFalse: [
 				y := self createBlock: blockOrSym atPosition: x@y onPage: page.
-				page submorphs last color: (ScriptablePhratchMorph blockColorFor: 'colors')]].
+				page submorphs last color: (PhratchCategory blockColorFor: 'colors')]].
 
 	^ y
 ]
@@ -25,7 +25,7 @@ ScriptablePhratchMorph >> addRos [
 	| newSprite frame |
 	newSprite := PhratchSpriteRosMorph new.
 	
-	frame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
+	frame := self ownerOrYourselfThatIsAPhratchFrameMorph.
 	frame ifNotNil: [
 		frame workPane addMorphFront: newSprite.
 		frame workPane sprites addLast: newSprite].
