@@ -63,6 +63,12 @@ PhratchSpriteLibraryMorph >> isPartsBin [
 ]
 
 { #category : #'dropping/grabbing' }
+PhratchSpriteLibraryMorph >> isPhratchSpriteLibraryMorph [
+
+	^true
+]
+
+{ #category : #'dropping/grabbing' }
 PhratchSpriteLibraryMorph >> rootForGrabOf: aMorph [
 	"I act like a parts bin; answer a new copy of the morph being extracted."
 

@@ -322,6 +322,20 @@ Morph >> ownerOrYourselfThatIsAPhratchScriptsMorph [
 ]
 
 { #category : #'*Phratch-Extensions-OwnerOrYourself' }
+Morph >> ownerOrYourselfThatIsAPhratchSpriteLibraryMorph [
+	"Answer this the first morph in the owner chain of the given class, or nil if there isn't one."
+
+	| current  |
+	current := self.
+	[ current isNil ]
+		whileFalse: [ 
+			(current isPhratchSpriteLibraryMorph)
+				ifTrue: [ ^ current ].
+			current := current owner ].
+	^ current
+]
+
+{ #category : #'*Phratch-Extensions-OwnerOrYourself' }
 Morph >> ownerOrYourselfThatIsAPhratchStageMorph [
 	"Answer this the first morph in the owner chain of the given class, or nil if there isn't one."
 

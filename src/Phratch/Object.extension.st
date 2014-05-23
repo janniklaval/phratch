@@ -295,6 +295,12 @@ Object >> isPhratchScriptsMorph [
 ]
 
 { #category : #'*Phratch-Extensions' }
+Object >> isPhratchSpriteLibraryMorph [
+
+	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
 Object >> isPhratchSpriteMorph [
 
 	^ false
