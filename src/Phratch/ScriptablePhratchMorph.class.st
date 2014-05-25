@@ -496,7 +496,7 @@ ScriptablePhratchMorph >> addGenericVariableBlocksTo: page x: x y: startY [
 			(b isBlockMorph)
 				ifTrue: [ b defaultArgs: (Array with: vName) ].
 			varBlocks add: b ].
-	"block := VariableDeclarationBlockMorph new
+	block := VariableDeclarationBlockMorph new
 		minArgs: 1;
 		commandSpec: 'script variables' localized;
 		receiver: self blockReceiver;
@@ -504,7 +504,7 @@ ScriptablePhratchMorph >> addGenericVariableBlocksTo: page x: x y: startY [
 		isSpecialForm: true;
 		selector: #doDeclareVariables;
 		yourself.
-	varBlocks add: block afterIndex: 5."
+	varBlocks add: block afterIndex: 5.
 	varBlocks
 		do: [ :blockOrSym | 
 			({#- . #~ . #=} includes: blockOrSym)
@@ -2331,6 +2331,18 @@ ScriptablePhratchMorph >> form: aForm [
 
 ]
 
+{ #category : #'blocks API' }
+ScriptablePhratchMorph >> function [
+	"Return the given block without executing it"
+	<phratchItem: 'the $SAReporter$ block' kind: #ReporterScriptBlockMorph category: 'control' defaultValues: #() subCategory: #process special: #()>
+]
+
+{ #category : #'blocks API' }
+ScriptablePhratchMorph >> functionWithArgs [
+	"Return the given block with args without executing it"
+	<phratchItem: 'the $SAReporter$ block. Input names: $String$' kind: #ReporterScriptBlockMorph category: 'control' defaultValues: #() subCategory: #process special: #()>
+]
+
 { #category : #'BYOB object interface' }
 ScriptablePhratchMorph >> get: anObject [
 	"Return the value of the given attribute"
@@ -3713,6 +3725,18 @@ ScriptablePhratchMorph >> printSummaryOn: aStream [
 			(item isReporterBlockMorph)
 				ifTrue: [ aStream crlf ].
 			aStream crlf ]
+]
+
+{ #category : #'blocks API' }
+ScriptablePhratchMorph >> procedure [
+	"Return the given script without executing it"
+	<phratchItem: 'the script' kind: #CommandScriptBlockMorph category: 'control' defaultValues: #() subCategory: #process special: #()>
+]
+
+{ #category : #'blocks API' }
+ScriptablePhratchMorph >> procedureWithArgs [
+"Return the given script with arguments without executing it"
+	<phratchItem: 'the script. Input names: $String$' kind: #CommandScriptBlockMorph category: 'control' defaultValues: #() subCategory: #process special: #()>
 ]
 
 { #category : #private }

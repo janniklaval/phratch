@@ -371,18 +371,6 @@ PhratchSpriteMorph >> followNow [
 
 ]
 
-{ #category : #'blocks API' }
-PhratchSpriteMorph >> function [
-	"Return the given block without executing it"
-	<phratchItem: 'the $SAReporter$ block' kind: #ReporterScriptBlockMorph category: 'control' defaultValues: #() subCategory: #process special: #()>
-]
-
-{ #category : #'blocks API' }
-PhratchSpriteMorph >> functionWithArgs [
-	"Return the given block with args without executing it"
-	<phratchItem: 'the $SAReporter$ block. Input names: $String$' kind: #ReporterScriptBlockMorph category: 'control' defaultValues: #() subCategory: #process special: #()>
-]
-
 { #category : #private }
 PhratchSpriteMorph >> generateRotatedForm [
 	"Compute my rotatedForm and offsetWhenRotated."
@@ -983,18 +971,6 @@ PhratchSpriteMorph >> prepareForExport [
 	self subsprites do: [:sub |
 			sub prepareForExport ]
 
-]
-
-{ #category : #'blocks API' }
-PhratchSpriteMorph >> procedure [
-	"Return the given script without executing it"
-	<phratchItem: 'the script' kind: #CommandScriptBlockMorph category: 'control' defaultValues: #() subCategory: #process special: #()>
-]
-
-{ #category : #'blocks API' }
-PhratchSpriteMorph >> procedureWithArgs [
-"Return the given script with arguments without executing it"
-	<phratchItem: 'the script. Input names: $String$' kind: #CommandScriptBlockMorph category: 'control' defaultValues: #() subCategory: #process special: #()>
 ]
 
 { #category : #'byob OOP' }

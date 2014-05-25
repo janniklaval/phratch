@@ -202,7 +202,7 @@ CSlotMorph >> evaluate [
 
 	implicitValue notNil
 		ifTrue: [^implicitValue].
-	^nil "super evaluate"
+	^super evaluate
 ]
 
 { #category : #'argument slot behavior' }

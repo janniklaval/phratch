@@ -818,7 +818,7 @@ CommandBlockMorph >> isCommandBlockMorph [
 { #category : #accessing }
 CommandBlockMorph >> isForever [
 
-	^ ({#doForever . #doForeverIf} includes: selector)
+	^ ({#doForever . #doForeverIf } includes: selector)
 
 ]
 

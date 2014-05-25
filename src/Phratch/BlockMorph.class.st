@@ -1370,8 +1370,10 @@ BlockMorph >> rightButtonMenu [
 		menu addLine.
 		menu add: 'duplicate' value: #duplicate.	
 		(self owner isBlockMorph) ifFalse: [  "we can't yet delete a blocks inside a script"
-			menu add: 'delete' value: #delete]].
-
+			menu add: 'delete' value: #delete].
+		menu add: 'show algorithm' value: #showCodeString.	
+		].
+	
 	"DebugMenu ifTrue: [
 		menu addLine.
 		menu add: 'show tuples' value: #showTuples]."
@@ -1405,6 +1407,21 @@ BlockMorph >> selector [
 { #category : #'dropping/grabbing' }
 BlockMorph >> shouldDropOnMouseUp [
 	^true
+]
+
+{ #category : #accessing }
+BlockMorph >> showCodeString [
+	"Answer a human-readable string representing the code for this block sequence."
+
+	(Workspace
+		openContents:
+			'"Generated code from your blocks"'
+			, String cr ,
+			self codeString
+			)
+		label: 'Generated from Phratch!'.
+		
+	
 ]
 
 { #category : #accessing }
