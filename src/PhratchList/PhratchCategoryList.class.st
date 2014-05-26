@@ -22,6 +22,11 @@ PhratchCategoryList class >> label [
 ]
 
 { #category : #accessing }
+PhratchCategoryList class >> order [
+	^8.5
+]
+
+{ #category : #accessing }
 PhratchCategoryList class >> viewerPageFor: aScriptablePhratchMorph [ 
 
 	"Answer a morph containing my variables."
