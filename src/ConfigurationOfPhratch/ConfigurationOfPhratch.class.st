@@ -325,6 +325,10 @@ ConfigurationOfPhratch >> baseline40: spec [
 				package: 'PhratchSensing' with: [ 
 					spec requires: #('Phratch')
 			].
+			spec
+				package: 'PhratchDebugger' with: [ 
+					spec requires: #('Phratch')
+			].
 	].
 			
 ]
@@ -413,7 +417,8 @@ ConfigurationOfPhratch >> version40: spec [
 				package: 'PhratchLooks';
 				package: 'PhratchMotion';
 				package: 'PhratchPen';
-				package: 'PhratchSensing'.
+				package: 'PhratchSensing';
+				package: 'PhratchDebugger'.
 			spec
 				project: 'Sound' with: #stable;
 				project: 'OSProcess' with: #stable.
