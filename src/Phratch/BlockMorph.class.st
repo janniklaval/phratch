@@ -605,6 +605,12 @@ BlockMorph >> duplicate [
 
 ]
 
+{ #category : #'as yet unclassified' }
+BlockMorph >> evaluatePhratchProcess: aProcess stage: aStageMorph [
+
+	^ aProcess evaluateCommandFor: aStageMorph
+]
+
 { #category : #'block enumerating' }
 BlockMorph >> firstBlockList [
 	"If I am a control block, answer an array containing the block sequences for my first nested block (i.e., the blocks for the 'true' case of an if-then-else block). If I'm not a control structure block, just answer an empty array."

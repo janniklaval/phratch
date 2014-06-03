@@ -291,7 +291,7 @@ PhratchFrameMorph class >> scaledFormForPaintEditor: aForm [
 		ifTrue: [^ aForm].
 
 	scale := (maxExtent x / aForm width) min: (maxExtent y / aForm height).
-	^ PhratchPlugin scale: aForm by: scale
+	^ aForm magnifyBy: scale
 
 ]
 
@@ -3069,15 +3069,11 @@ PhratchFrameMorph >> showWatcher: watcher [
 { #category : #startup }
 PhratchFrameMorph >> startup [
 
-	| startupFileNames fileName arg presentationMode |
-"
-	HostSystemMenus startUp.
-	HostSystemMenus menuBarControler reviseHostMenus.
-"
+	|    presentationMode |
+
 	ScriptablePhratchMorph randomInit.
 	PhratchTranslator importLanguagesList.
 
-"	PhratchFrameMorph readShareServerEntry."
 	BlockMorph contrastStrong.
 	self keepSpritesOnStage: 1.
 	EventHatMorph threadSafeMode: false.
@@ -3088,7 +3084,9 @@ PhratchFrameMorph >> startup [
 
 	BlockEditorFrameMorph resetDimensions.
 	ElementsEditorFrameMorph resetDimensions.
-	DebuggerFrameMorph resetDimensions.
+	
+	self flag:'for debbuging but does not work'.
+	"DebuggerFrameMorph resetDimensions."
 
 	self updateProjectName.
 	shuffledCostumeNames := nil.
@@ -3097,54 +3095,13 @@ PhratchFrameMorph >> startup [
 	justSaved := true.
 	presentationMode := false.
 	quitFlag := false.
-	
-	startupFileNames := "InputSensor startupFileNames asOrderedCollection" OrderedCollection new.
-	
-	
-	2 to: 10 do: [:i |
-		arg := Smalltalk vm getSystemAttribute: i.
-		(arg notNil and: [arg size > 0]) ifTrue: [
-			startupFileNames addLast: (PhratchPlugin primShortToLongPath: arg)]].
 
-	startupFileNames do: [:n |
-		(n asLowercase = 'presentation') ifTrue: [
-			quitFlag := true. 
-			presentationMode := true.
-			self isHidden: true.
-			Display fillBlack].
-		(n asLowercase = 'fullscreen') ifTrue: [PhratchFrameMorph takeOverScreen: true]].
-"
-	TakeOverScreen ifTrue: [
-		Display fullScreenMode: true.
-		World restoreDisplay].
-"
-			PhratchFrameMorph takeOverScreen: false.
-
-	"self enterQuarterModeIfSmallScreen."
-
-	fileName := startupFileNames
-		detect: [:fn |
-			(fn asLowercase endsWith: '.sb') or: [(fn asLowercase endsWith: '.scratch') or: [(fn asLowercase endsWith: '.ypr') or:[fn asLowercase endsWith: '.phr']]]]
-		ifNone: [presentationMode ifTrue: [self randomProjectName]]. "this is screensaver feature -jens"
-	fileName ifNotNil: [
-		presentationMode ifTrue: [Display fillColor: Color black].
-		self openPhratchProjectNamed: fileName.
-		presentationMode ifTrue: [self enterPresentationMode; shoutGo].
-		^ self].
+	PhratchFrameMorph takeOverScreen: false.
 
 	viewerPane currentCategory: 'motion'.
 	
 	self setDefaultSprite.
 	self newPhratchProject.
-
-	fileName := startupFileNames
-		detect: [:fn | (fn asLowercase endsWith: '.sprite') or: [(fn asLowercase endsWith: '.ysp') or: [(fn asLowercase endsWith: '.phr') or: [fn asLowercase endsWith: '.phsp']]]]
-		ifNone: [^ self].
-
-	"open a .sprite file"
-	workPane submorphs do: [:m | (m isPhratchSpriteMorph) ifTrue: [m deleteSprite]].
-	self importSpriteOrProject: fileName.
-
 ]
 
 { #category : #stepping }

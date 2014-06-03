@@ -89,6 +89,12 @@ ArgMorph >> evaluate [
 	self subclassResponsibility
 ]
 
+{ #category : #'as yet unclassified' }
+ArgMorph >> evaluatePhratchProcess: aProcess stage: aStageMorph [
+
+	^ aProcess evaluateSelfEvaluating
+]
+
 { #category : #other }
 ArgMorph >> fixArgLayout [
 	"Fix my layout. This default implementation does nothing."

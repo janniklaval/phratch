@@ -641,30 +641,6 @@ PhratchProcess >> doMakeNewList [
 
 ]
 
-{ #category : #'BYOB-pause/resume' }
-PhratchProcess >> doPauseThread [
-
-	self nextStep.
-	self popStackFrame.
-
-
-]
-
-{ #category : #'BYOB-pause/resume' }
-PhratchProcess >> doPauseThreadReporter [
-	| value args |
-	self nextStep.
-	args := stackFrame arguments.	"Evaluate the argument, if necessary."
-	args size < stackFrame expression argumentCount
-		ifTrue: [ ^ self evaluateNextArgument ].	"Remember the return value."
-	value := args size > 0
-		ifTrue: [ args first ]
-		ifFalse: [ nil ].
-	answer := value.
-	self returnValueToParentFrame: value.
-	stackFrame ifNotNil: [ self popStackFrame ]
-]
-
 { #category : #'private-special forms' }
 PhratchProcess >> doRepeat [
 	"Handles one iteration of a repeat block."
@@ -924,9 +900,12 @@ PhratchProcess >> evaluateCommandFor: aStageMorph [
 	((blockToDebug notNil and: [blockToDebug ~= self currentBlock]) or: [
 		self currentBlock = nextBlockToDebug]) ifTrue: [
 			((PhratchFrameMorph someInstance viewMode = #presentation) | doneWithDebugging) ifFalse: [
+				self halt.
+				self flag:'for debbuging but does not work'.
+				"
 				self pause.
-				DebuggerFrameMorph new on: self]].
-
+				DebuggerFrameMorph new on: self"]].
+		
 	expression isSpecialForm ifTrue: [^ self evaluateSpecialForm].
 
 	stackFrame ifNil: [
@@ -941,7 +920,6 @@ PhratchProcess >> evaluateCommandFor: aStageMorph [
 
 	self applyPrimitive.
 
-self flag: 'maybe should be remove because not necesary'.
 	aStageMorph ifNotNil: [
 		aStageMorph updateTrailsForm.
 		self isAtomic ifTrue: [^self].
@@ -970,11 +948,8 @@ PhratchProcess >> evaluateFor: aStageMorph [
 		self returnValueToParentFrame: expression evaluate.
 		^ self popStackFrame ].
 
-	expression isCollection ifTrue: [^ self evaluateSequence].
-	expression isArgMorph ifTrue: [^ self evaluateSelfEvaluating].
-	expression isBlockMorph ifTrue: [^ self evaluateCommandFor: aStageMorph].
-
-	self error: 'Unknown expression type:  ', expression printString.
+	[expression evaluatePhratchProcess: self stage: aStageMorph] on: Error do: [ 
+	self error: 'Unknown expression type:  ', expression printString].
 
 ]
 
@@ -1165,15 +1140,6 @@ PhratchProcess >> isRunning [
 ]
 
 { #category : #'BYOB-pause/resume' }
-PhratchProcess >> jumpOver [
-	| cb |
-	cb := self currentBlock.
-	blockToDebug := nil.
-	nextBlockToDebug := cb nextBlock.
-	isPaused := false
-]
-
-{ #category : #'BYOB-pause/resume' }
 PhratchProcess >> nextStep [
 
 	blockToDebug := self currentBlock. 
@@ -1269,8 +1235,10 @@ PhratchProcess >> returnValueToParentFrame: anObject [
 
 	((blockToDebug isBlockMorph) and: [self currentBlock isReporterBlockMorph]) ifTrue: [
 			((PhratchFrameMorph someInstance viewMode = #presentation) | doneWithDebugging) ifFalse: [
-				self pause. 
-				DebuggerFrameMorph new on: self returnValue: obj]].
+				self halt.
+				self flag:'for debbuging but does not work'.
+				"self pause. 
+				DebuggerFrameMorph new on: self returnValue: obj"]].
 
 
 ]

@@ -1771,6 +1771,7 @@ ScriptablePhratchMorph >> doIf [
 	"If the given arg is true, execute the following blocks"
 	<phratchItem: 'if $Boolean$' kind: #CBlockMorph category: 'control' defaultValues: #() subCategory: #if special: #()>
 
+	
 ]
 
 { #category : #'panther actions' }

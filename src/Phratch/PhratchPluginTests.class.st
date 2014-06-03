@@ -22,19 +22,6 @@ PhratchPluginTests >> brightnessShiftTest [
 ]
 
 { #category : #tests }
-PhratchPluginTests >> doubleTest [
-	"self doubleTest"
-
-	| f fOut |
-	f := (Form fromFileNamed: TestFileName) asFormOfDepth: 32.
-	fOut := Form extent: (2 * f extent) + 20 depth: 32.
-	PhratchPlugin primDouble: f bits w: f width h: f height into: fOut bits w: fOut width h: fOut height x: 9 y: 10.
-	"fOut display."
-
-
-]
-
-{ #category : #tests }
 PhratchPluginTests >> filterBenchmark: count [
 	"self filterBenchmark: 100"
 
@@ -121,24 +108,6 @@ PhratchPluginTests >> fisheyeTest2: power [
 ]
 
 { #category : #tests }
-PhratchPluginTests >> halfSizeAverageTest [
-	"self halfSizeAverageTest"
-
-	| f fOut |
-	f := (Form fromFileNamed: TestFileName) asFormOfDepth: 32.
-	fOut := Form extent: f extent // 2 depth: 32.
-	PhratchPlugin
-		primHalfSizeAverage: f bits w: f width h: f height
-		into: fOut bits w: fOut width h: fOut height
-		srcX: 0 srcY: 0
-		dstX: 0 dstY: 0 dstW: fOut width dstH: fOut height.
-	"f display.
-	fOut display."
-
-
-]
-
-{ #category : #tests }
 PhratchPluginTests >> hueShiftTest [
 	"self hueShiftTest"
 
@@ -164,12 +133,6 @@ PhratchPluginTests >> testBrightnessShift [
 ]
 
 { #category : #tests }
-PhratchPluginTests >> testDouble [
-	self doubleTest.
-	self assert: true.
-]
-
-{ #category : #tests }
 PhratchPluginTests >> testFilterBenchmark [
 	self filterBenchmark: 100.
 	self assert:true.
@@ -184,12 +147,6 @@ PhratchPluginTests >> testFisheye [
 { #category : #tests }
 PhratchPluginTests >> testFisheye2 [
 	self fisheyeTest2: 100.
-	self assert: true.
-]
-
-{ #category : #tests }
-PhratchPluginTests >> testHalfSizeAverage [
-	self halfSizeAverageTest.
 	self assert: true.
 ]
 

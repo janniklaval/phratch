@@ -49,10 +49,11 @@ OffscreenWorldMorph >> incrRedrawDouble: doubleFlag [
 				screenR := p extent: (2 * f extent).
 				(Display boundingBox containsRect: screenR) ifTrue: [
 					[
-						PhratchPlugin
-							primDouble: f bits w: f width h: f height
-							into: Display bits w: Display width h: Display height
-							x: (Display width - (f width*2))/2 y: (Display height - (f height*2))/2.
+						(f magnifyBy: 2.0) displayOn: Display at: ((Display width - (f width*2))/2) @ ((Display height - (f height*2))/2).
+						"PhratchPlugin
+							primDouble: f w: f width h: f height
+							into: Display w: Display width h: Display height
+							x: (Display width - (f width*2))/2 y: (Display height - (f height*2))/2."
 					] ifError: [:e | 
 						ScriptablePhratchMorph noviceMode ifFalse:[e signal] ].
 					Display forceToScreen: screenR]]

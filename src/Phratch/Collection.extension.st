@@ -1,6 +1,12 @@
 Extension { #name : #Collection }
 
 { #category : #'*Phratch-Extensions' }
+Collection >> evaluatePhratchProcess: aProcess  stage: aStageMorph [
+
+	^ aProcess evaluateSequence
+]
+
+{ #category : #'*Phratch-Extensions' }
 Collection >> removeAllSansError: aCollection [ 
 
 	"Remove each element of aCollection which is present in the receiver from the receiver. Answer aCollection. No error is raised if an element isn't found. ArrayedCollections cannot respond to this message."
