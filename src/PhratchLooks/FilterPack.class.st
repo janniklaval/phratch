@@ -101,25 +101,32 @@ FilterPack >> applyStaticFiltersTo: srcForm [
 	resultForm unhibernate.
 
 	hueShift = 0 ifFalse: [
-		PhratchPlugin primShiftHue: resultForm bits
-			into: resultForm bits byDegrees: (1.8 * hueShift) asInteger].
+		resultForm := resultForm collectColors: [ :color |
+			Color h: (color hue + hueShift)
+				s: color saturation
+				v: color brightness
+				alpha: color alpha].			
+	].
 	brightnessShift = 0 ifFalse: [
-		PhratchPlugin primShiftBrightness: resultForm bits
-			into: resultForm bits by: brightnessShift asInteger].
+		resultForm := resultForm collectColors: [ :color |
+			color adjustBrightness: (brightnessShift / 100)]].
 
 	whirl = 0 ifFalse: [
 		fOut := resultForm deepCopy.
-		PhratchPlugin primWhirl: resultForm bits
-			into: fOut bits width: resultForm width angle: whirl asInteger.
+		fOut := fOut whirl: whirl asInteger.
+		"PhratchPlugin primWhirl: resultForm bits
+			into: fOut bits width: resultForm width angle: whirl asInteger."
 		resultForm := fOut].
 
 	fisheye = 0 ifFalse: [
 		"Note: The primitive takes power >= 0 where 100 is normal, >100 is fisheye, <100 is blackhole effect"
-		PhratchPlugin
-			primFisheye: resultForm bits copy  "copy the source bits"
+		
+		resultForm := resultForm fishEye: ((fisheye asInteger + 100) max: 0).
+		"PhratchPlugin
+			primFisheye: resultForm bits copy
 			into: resultForm bits
 			width: resultForm width
-			power: ((fisheye asInteger + 100) max: 0)].
+			power: ((fisheye asInteger + 100) max: 0)"].
 
 	pixelateCount abs >= 5 ifTrue: [self applyPixelateFilter].
 	mosaicCount abs >= 5 ifTrue: [self applyMosaicFilter].
