@@ -100,6 +100,7 @@ SampledSound classSide >> readMP3FromFileNamed: fileName [
 	(MPEGFile isFileValidMPEG: fileName) ifFalse: [^ self error: 'Bad MP3 file: ', fileName].
 	mpegFile := MPEGFile openFile: fileName.
 	channels := mpegFile audioChannels: 0. "assume sound track is in stream 0"
+	self halt.
 	channels > 2 ifTrue: [
 		mpegFile close.
 		^ self error: 'Unsupported number of channels: ', channels printString].

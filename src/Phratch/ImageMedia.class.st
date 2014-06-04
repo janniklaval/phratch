@@ -160,7 +160,7 @@ ImageMedia >> jpegCompressIfPossibleQuality: quality [
 	"no transparency; attempt jpeg compression"
 	form hibernate.
 	oldSz := form bits size.
-	jpegBytes := FastJPEG compress: form quality: quality.
+	jpegBytes := PluginBasedJPEGReadWriter new compress: form quality: quality.
 	jpegBytes size <= (oldSz // 3)
 		ifFalse: [jpegBytes := nil].  "not enough savings; don't use JPEG"
 
@@ -180,7 +180,7 @@ ImageMedia >> jpegCompressIfPossibleQuality: quality saveOriginal: saveFlag [
 	wasCompressed & saveFlag not
 		ifTrue: [ 
 			"show the result of doing the compression"
-			form := FastJPEG uncompress: jpegBytes.
+			PluginBasedJPEGReadWriter new uncompress: jpegBytes into: form doDithering: false.
 			compositeForm := nil ].
 	^ wasCompressed
 ]

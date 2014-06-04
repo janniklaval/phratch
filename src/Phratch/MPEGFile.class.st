@@ -21,7 +21,7 @@ Class {
 	#classVars : [
 		'Registry'
 	],
-	#category : #'Phratch-Objects'
+	#category : #'Phratch-Plugins'
 }
 
 { #category : #testing }
