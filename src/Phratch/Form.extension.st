@@ -95,6 +95,40 @@ Form >> fillRadialFromXColorBlock: colorBlock center: aPoint [
 
 ]
 
+{ #category : #'*Phratch-Extensions' }
+Form >> fishEye: power [
+
+	| out centerX centerY scaledPower dx dy r ang srcX srcY xor yor pix |
+	out := self copy.
+	out bits: self bits copy.
+	centerX := self width / 2.
+	centerY := self height / 2.
+	scaledPower := power / 100.
+	
+	
+	0 to: (width - 1) do: [:x |
+		0 to: (height - 1) do: [ :y |
+			dx := (x - centerX) / (centerX).
+			dy := (y - centerY) / (centerY ).
+			r := (((dx * dx) + (dy * dy)) sqrt) raisedTo: scaledPower.
+			(r <= 1.0) ifTrue:[
+				ang := (dy arcTan: dx).
+				srcX := (centerX + ((r * (ang cos)) * centerX)).
+				srcY := (centerY + ((r * (ang sin)) * centerY)).
+			] ifFalse: [ 
+				srcX := x.
+				srcY := y.
+			].
+			xor:=srcX rounded.
+			yor := srcY rounded.
+			pix := self colorAt: xor@yor.
+			out colorAt:(x @ y) put: pix.
+		]
+	].
+	^out
+
+]
+
 { #category : #'*Phratch' }
 Form >> hibernateForPhratch [
 
@@ -420,6 +454,52 @@ Form >> toThumbnail: extent borderWidth: borderWidth borderColor: backgroundColo
 		combinationRule: Form over;
 		copyQuad: self boundingBox innerCorners toRect: (r insetBy: borderWidth + 1).	"do smoothing; this also installs a colormap"
 	^ result
+]
+
+{ #category : #'*Phratch-Extensions' }
+Form >> whirl: degrees [
+
+	| centerX centerY radius scaleX scaleY out whirlRadians radiusSquared dx dy d factor ang sina cosa pix xor yor |
+	out := self copy.
+	out bits: self bits copy.
+	centerX := self width / 2.
+	centerY := self height / 2.
+	
+	(centerX < centerY) ifTrue: [ 
+		radius := centerX.
+		scaleX := centerY  / centerX.
+		scaleY := 1.0.
+	] ifFalse: [ 
+		radius := centerY.
+		scaleX := 1.0.
+		(centerY < centerX) ifTrue:[
+			scaleY := centerX / centerY.
+		] ifFalse: [ 
+			scaleY := 1.0
+		]
+	].
+
+	whirlRadians := (Float pi * degrees) / 180.0.
+	radiusSquared := (radius * radius).
+	0 to: (width - 1) do: [:x |
+		0 to: (height - 1) do: [ :y |
+			dx := scaleX * (x - centerX) .
+			dy := scaleY * (y - centerY).
+			d := (dx * dx) + (dy * dy).
+			(d < radiusSquared) ifTrue:[
+				factor := 1.0 - ((d sqrt) / radius).
+				ang := whirlRadians * (factor * factor).
+				sina := ang sin.
+				cosa := ang cos.
+				xor:=(((((cosa * dx) - (sina * dy)) / scaleX) + centerX)) rounded.
+				yor := (((((sina * dx) + (cosa * dy)) / scaleY) + centerY)) rounded.
+				pix := self colorAt: xor@yor.
+				out colorAt:(x @ y) put: pix.
+			]
+		]
+	].
+	^out
+
 ]
 
 { #category : #'*Phratch' }

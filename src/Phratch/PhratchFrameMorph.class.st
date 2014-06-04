@@ -2165,7 +2165,7 @@ PhratchFrameMorph >> launchHelpPage [
 PhratchFrameMorph >> launchWebsite [
 
 	self world displayWorldSafely.
-	Cursor wait showWhile: [PhratchPlugin primOpenURL: 'http://www.phratch.com/'].
+	Cursor wait showWhile: ["PhratchPlugin primOpenURL:"self open:  'http://www.phratch.com/'].
 
 ]
 
@@ -2397,7 +2397,7 @@ PhratchFrameMorph >> openMIDI [
 PhratchFrameMorph >> openPantherTutorials [
 
 	self world displayWorldSafely.
-	Cursor wait showWhile: [PhratchPlugin primOpenURL: 'http://pantherprogramming.weebly.com/panther-tutorials.html'].
+	Cursor wait showWhile: ["PhratchPlugin primOpenURL:" self open: 'http://pantherprogramming.weebly.com/panther-tutorials.html'].
 
 ]
 
@@ -3482,7 +3482,6 @@ PhratchFrameMorph >> updateProjectName [
 	s := projectTitleMorph contents size > 0
 		ifTrue: [ projectTitleMorph contents , '- PHR' ]
 		ifFalse: [ 'PHR ' , Version asString ].
-	PhratchPlugin primSetWindowTitle: s.
 	self fixLayout
 ]
 
