@@ -14,7 +14,7 @@ ScriptablePhratchMorph >> addGenericPureBlocksTo: page x: x y: startY [
 				(blockOrSym = #~) ifTrue: [y := y + 5]]	"insert a half space"
 			ifFalse: [
 				y := self createBlock: blockOrSym atPosition: x@y onPage: page.
-				page submorphs last color: (ScriptablePhratchMorph blockColorFor: 'colors')]].
+				page submorphs last color: (PhratchCategory blockColorFor: 'colors')]].
 
 	^ y
 ]

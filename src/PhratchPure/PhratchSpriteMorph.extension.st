@@ -6,7 +6,7 @@ PhratchSpriteMorph >> addKompai1 [
 	| newSprite frame |
 	newSprite := PhratchSpritePureMorph new.
 	newSprite initializeKompai1.
-	frame := self ownerOrYourselfThatIsA: PhratchFrameMorph.
+	frame := self ownerOrYourselfThatIsAPhratchFrameMorph.
 	frame ifNotNil: [
 		frame workPane addMorphFront: newSprite.
 		frame workPane sprites addLast: newSprite].

@@ -38,7 +38,7 @@ PhratchSpritePureMorph >> gotoX: x y: y [
 { #category : #'motion ops' }
 PhratchSpritePureMorph >> heading [
 
-	<phratchItem: 'direction' kind: #ReporterBlockType category: 'pure' defaultValues: #() subCategory: #a4 special: #()>
+	<phratchItem: 'direction' kind: #ReporterBlockMorph category: 'pure' defaultValues: #() subCategory: #a4 special: #()>
 	
 	"super heading."
 	[^ connectedRobot localizationService currentPose orientation.
@@ -112,7 +112,7 @@ PhratchSpritePureMorph >> laserpos [
 { #category : #'motion ops' }
 PhratchSpritePureMorph >> minInfraredpos [
 
-	<phratchItem: 'min infrared position' kind: #ReporterBlockType category: 'pure' defaultValues: #() subCategory: #a5 special: #()>
+	<phratchItem: 'min infrared position' kind: #ReporterBlockMorph category: 'pure' defaultValues: #() subCategory: #a5 special: #()>
 	| laser notification |
 	laser := connectedRobot irTelemeterService.
 	[laser enableNotificationsEvery: 100.]on: Exception do:[].
@@ -124,7 +124,7 @@ PhratchSpritePureMorph >> minInfraredpos [
 { #category : #'motion ops' }
 PhratchSpritePureMorph >> minLaserpos [
 
-	<phratchItem: 'min laser position' kind: #ReporterBlockType category: 'pure' defaultValues: #() subCategory: #a5 special: #()>
+	<phratchItem: 'min laser position' kind: #ReporterBlockMorph category: 'pure' defaultValues: #() subCategory: #a5 special: #()>
 	| laser notification |
 	laser := connectedRobot laserService.
 	[laser enableNotificationsEvery: 100.]on: Exception do:[].
@@ -135,7 +135,7 @@ PhratchSpritePureMorph >> minLaserpos [
 { #category : #'motion ops' }
 PhratchSpritePureMorph >> minTelemeterpos [
 	
-	<phratchItem: 'min telemeter position' kind: #ReporterBlockType category: 'pure' defaultValues: #() subCategory: #a5 special: #()>
+	<phratchItem: 'min telemeter position' kind: #ReporterBlockMorph category: 'pure' defaultValues: #() subCategory: #a5 special: #()>
 	| laser notification |
 	laser := connectedRobot sonarTelemeterService.
 	[laser enableNotificationsEvery: 100.]on: Exception do:[].
@@ -160,8 +160,7 @@ PhratchSpritePureMorph >> stopPlaying [
 	"Reset my transient state, such as pen down."
 
 	super stopPlaying.
-	connectedRobot trajectoryService emergencyStop.
-
+	[connectedRobot trajectoryService emergencyStop] ifError: [].
 
 ]
 
@@ -186,7 +185,7 @@ PhratchSpritePureMorph >> telemeterpos [
 { #category : #'motion ops' }
 PhratchSpritePureMorph >> xpos [
 
-	<phratchItem: 'x position' kind: #ReporterBlockType category: 'pure' defaultValues: #() subCategory: #a4 special: #()>
+	<phratchItem: 'x position' kind: #ReporterBlockMorph category: 'pure' defaultValues: #() subCategory: #a4 special: #()>
 	"super xpos."
 	[^ connectedRobot localizationService currentPosition x * 100.
 	] on: Exception do: [ Transcript show: 'xpos'; cr ]
@@ -204,7 +203,7 @@ PhratchSpritePureMorph >> xpos: aNumber [
 { #category : #'motion ops' }
 PhratchSpritePureMorph >> ypos [
 
-	<phratchItem: 'y position' kind: #ReporterBlockType category: 'pure' defaultValues: #() subCategory: #a4 special: #()>
+	<phratchItem: 'y position' kind: #ReporterBlockMorph category: 'pure' defaultValues: #() subCategory: #a4 special: #()>
 	"super ypos."
 	[^ connectedRobot localizationService currentPosition x * 100.
 	] on: Exception do: [ Transcript show: 'ypos'; cr ]
