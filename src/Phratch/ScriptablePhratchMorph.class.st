@@ -2920,8 +2920,11 @@ ScriptablePhratchMorph >> isHidden [
 { #category : #testing }
 ScriptablePhratchMorph >> isInteger: t1 [
 	"Return true if the given value is an integer"
-	<phratchItem: '$Number$ is an integer?' kind: #BooleanBlockMorph category: 'operators' defaultValues: #() subCategory: #a9 special: #()>
-    ^ t1 = t1 rounded
+	<phratchItem: '$String$ is an integer?' kind: #BooleanBlockMorph category: 'operators' defaultValues: #() subCategory: #a9 special: #()>
+	|int|
+	[int:= t1 asNumber] on: Error do: [ ^false ].
+
+    ^ int = int rounded
 ]
 
 { #category : #byob }

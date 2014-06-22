@@ -209,9 +209,8 @@ PhratchScriptsMorph >> saveScriptsToImage [
 	fName = #cancelled ifTrue: [^ self].
 	fName size = 0 ifTrue: [^ self].
 
-	(fName asLowercase endsWith: '.gif') ifFalse: [fName := fName, '.gif'].
-	saveForm writeGIFFileNamed: fName.
-
+	(fName asLowercase endsWith: '.png') ifFalse: [fName := fName, '.png'].
+	PNGReadWriter putForm: saveForm onFileNamed: fName.
 ]
 
 { #category : #screenshot }
