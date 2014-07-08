@@ -12,6 +12,12 @@ ShadowDrawingCanvas >> copyClipRect: aRectangle [
 ]
 
 { #category : #'*Phratch-Extensions' }
+ShadowDrawingCanvas >> copyOffset: aPoint clipRect: sourceClip [
+
+^ myCanvas  copyOffset: aPoint clipRect: sourceClip
+]
+
+{ #category : #'*Phratch-Extensions' }
 ShadowDrawingCanvas >> grafPort [
 
 	^myCanvas grafPort

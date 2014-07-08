@@ -255,7 +255,7 @@ PhratchScrollBar >> mouseDown: evt [
 				ifFalse: [ 
 					self
 						scrollFraction: self scrollFraction + pageDelta;
-						updateTarget ] ]
+						updateTarget ] ].
 ]
 
 { #category : #'event handling' }
@@ -267,8 +267,8 @@ PhratchScrollBar >> mouseMove: evt [
 	sliderStart := (self linearOffset: evt) + dragOffset.
 	sliderStart := (sliderStart max: 0) min: (self maxSliderStart).
 	self updateTarget.
-	"self changed.
-"
+	self changed.
+
 ]
 
 { #category : #'scroll bar protocol' }

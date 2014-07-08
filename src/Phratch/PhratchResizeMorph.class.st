@@ -56,8 +56,8 @@ PhratchResizeMorph >> initialize [
 PhratchResizeMorph >> mouseEnter: evt [
 
 	(type = #edge)
-		ifTrue: [World activeHand showTemporaryCursor: Cursor resizeHorizontally]
-		ifFalse: [World activeHand showTemporaryCursor: Cursor resizeCorner].
+		ifTrue: [World activeHand showTemporaryCursor: (Cursor resizeForEdge: #left)"Cursor resizeHorizontally"]
+		ifFalse: [World activeHand showTemporaryCursor: (Cursor resizeForEdge: #topLeft)"Cursor resizeCorner"].
 
 ]
 

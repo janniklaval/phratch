@@ -219,7 +219,7 @@ DialogBoxMorph >> cancelled [
 	response := #cancelled.
 	done := true.
 	self delete.
-	World doOneCycle.  "erase myself from the screen"
+	"World doOneCycle. " "erase myself from the screen"
 
 ]
 
@@ -248,7 +248,7 @@ DialogBoxMorph >> deleteItem [
 	response := #deleted.
 	done := true.
 	self delete.
-	World doOneCycle.  "erase myself from the screen"
+	"World doOneCycle."  "erase myself from the screen"
 
 ]
 
@@ -531,7 +531,7 @@ DialogBoxMorph >> no [
 	response := false.
 	done := true.
 	self delete.
-	World doOneCycle.  "erase myself from the screen"
+	"World doOneCycle."  "erase myself from the screen"
 
 ]
 
@@ -699,6 +699,6 @@ DialogBoxMorph >> yes [
 	response := true.
 	done := true.
 	self delete.
-	World doOneCycle.  "erase myself from the screen"
+	"World doOneCycle. " "erase myself from the screen"
 
 ]

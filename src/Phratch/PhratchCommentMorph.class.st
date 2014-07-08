@@ -47,9 +47,9 @@ PhratchCommentMorph >> addTopBar [
 		font: (PhratchFrameMorph getFont: #Label);
 		yourself.
 
-	showHideMorph := ImageMorph new form: (PhratchFrameMorph skinAt: #arrowOpenComment).
+	showHideMorph := ImageMorph new image: (PhratchFrameMorph skinAt: #arrowOpenComment).
 	showHideMorph form colors: (Array
-		with: Color transparent
+		with: self topBarColor;
 		with: (self color mixed: 0.5 with: Color black)).
 
 	topBarMorph
@@ -162,7 +162,7 @@ PhratchCommentMorph >> commentsBeforeMe: blocksInStack [
 { #category : #private }
 PhratchCommentMorph >> defaultWidth [
 
-	^ 112
+	^ 150
 
 ]
 

@@ -771,17 +771,10 @@ PaintCanvas >> handlesKeyboard: evt [
 ^true  
 ]
 
-{ #category : #'event handling' }
+{ #category : #'as yet unclassified' }
 PaintCanvas >> handlesMouseDown: evt [
 
 	^ true
-
-]
-
-{ #category : #'event handling' }
-PaintCanvas >> handlesMouseOver: evt [
-
-	^ false
 
 ]
 
@@ -1011,7 +1004,8 @@ PaintCanvas >> mouseLeave: evt [
 	evt hand
 		showTemporaryCursor: nil;
 		turnOffGridding.
-	self changed.
+	"self changed."
+	
 ]
 
 { #category : #'event handling' }
@@ -1054,7 +1048,7 @@ PaintCanvas >> mouseUp: evt [
 			combinationRule: rule;
 			copyBits.
 		feedbackForm := nil.
-		self changed].
+		"self changed"].
 
 ]
 
@@ -1491,7 +1485,7 @@ PaintCanvas >> step [
 { #category : #stepping }
 PaintCanvas >> stepTime [
 
-	^ 50
+	^ 100
 
 ]
 
