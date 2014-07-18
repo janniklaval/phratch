@@ -37,7 +37,6 @@ ImageMedia >> compositeForm [
 	compositeForm := Form extent: form extent depth: 32.
 	form displayOn: compositeForm.
 	textBox
-		suppressAntiAliasing: true;
 		drawTextOn: ((FormCanvas on: compositeForm) copyOffset: textBox topLeft).
 
 	^ compositeForm

@@ -37,7 +37,7 @@ Class {
 	#classVars : [
 		'CR'
 	],
-	#category : #'Phratch-UI-Support'
+	#category : #'Phratch-UI-Watchers'
 }
 
 { #category : #'class initialization' }
@@ -720,6 +720,8 @@ MultilineStringMorph >> keyStroke: evt [
 		ch = 12 ifTrue: [^ self moveCursorPageDownAndSelect: true]].	"page down"
 
 	evt buttons = 0 ifTrue: [ "no modifier keys"
+		ch = 13 ifTrue:[self insertString: (String with: evt keyCharacter).
+			^lines := lines copyWith: self emptyLine].
 		ch = 8 ifTrue: [^ self backspaceChar].						"backspace"
 		ch = 127 ifTrue: [^ self deleteNextChar].						"delete"
 		ch = 1 ifTrue: [^ self moveCursorHomeAndSelect: false].		"home"
@@ -903,14 +905,6 @@ MultilineStringMorph >> paste [
 
 ]
 
-{ #category : #accessing }
-MultilineStringMorph >> renderWithSqueak: aBoolean [
-	"If true, then if my font is a StrikeFont render my contents using that font and the Squeak rendering system. Note that it will only be able to render MacRoman text. This flag allows the text layer from old costumes to be edited in it's original Squeak font."
-
-	renderWithSqueak := aBoolean.
-
-]
-
 { #category : #private }
 MultilineStringMorph >> replaceTabs: aString [
 	"Answer a copy of the given UTF32 with each tab replaced by four spaces and all non-printing characters except spaces and line ends removed. Covert LF's to CR's."
@@ -1019,13 +1013,6 @@ MultilineStringMorph >> stringWidth: aString [
 	"Answer the width of the givne string."
 
 	^ renderer stringWidth: aString
-
-]
-
-{ #category : #accessing }
-MultilineStringMorph >> suppressAntiAliasing: aBoolean [
-
-	suppressAntiAliasing := aBoolean.
 
 ]
 

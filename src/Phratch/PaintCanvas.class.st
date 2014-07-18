@@ -666,8 +666,8 @@ PaintCanvas >> editForm: aForm regPoint: regPoint textBox: savedTextBox isStage:
 		textBox extent: (self extent - textBox topLeft).
 		textColor := textBox textColor.
 		textBox
-			suppressAntiAliasing: true;
-			renderWithSqueak: true;
+			"suppressAntiAliasing: true;"
+			"renderWithSqueak: true;"
 			textColor: Color black;
 			borderWidth: 0].
 
@@ -835,14 +835,12 @@ PaintCanvas >> initialize [
 	textColor := Color black.
 	textBox := MultilineStringMorph new
 		font: (StrikeFont osFontName: 'Helvetica Bold' size: 24);
-		suppressAntiAliasing: true;
 		textColor: Color black;		"pixel value 1 at depth 2"
 		borderColor: Color white;		"pixel value 2 at depth 2"
 		borderWidth: 0; 
 		yourself.
 	textDragMode := #none.
 	self extent: 250@250.
-
 ]
 
 { #category : #private }

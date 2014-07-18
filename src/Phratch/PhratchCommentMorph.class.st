@@ -234,7 +234,7 @@ PhratchCommentMorph >> initialize [
 		cellPositioning: #leftCenter;
 		centering: #center;
 		yourself.
-	resizeMorph := PhratchResizeMorph ofType: #edge.
+	resizeMorph := PhratchResizeMorph ofType: #edge "#corner".
 	resizeMorph vResizing: #spaceFill.
 	commentMorph := MultilineStringMorph new
 		color: self commentMorphColor;
@@ -244,6 +244,7 @@ PhratchCommentMorph >> initialize [
 		contents: 'add comment here' localized, '...';
 		width: self defaultWidth - resizeMorph width;
 		yourself.
+	
 	bottomBar addMorphBack: commentMorph.
 	bottomBar addMorphBack: resizeMorph.
 
@@ -300,8 +301,9 @@ PhratchCommentMorph >> labelWhenClosed [
 	"Answer the label string to used when the comment is closed."
 
 	| maxW firstLine ellipses s w |
-	maxW := self width - 22.
+	maxW := (self width - 40)/3.
 	firstLine := commentMorph lines at: 1.
+	"self halt."
 	(labelMorph stringWidth: firstLine) < maxW ifTrue: [^ firstLine].
 	ellipses := '...'.
 
@@ -312,8 +314,6 @@ PhratchCommentMorph >> labelWhenClosed [
 			^ (firstLine copyFrom: 1 to: i - 1), ellipses]].
 
 	^ firstLine
-
-
 ]
 
 { #category : #private }
