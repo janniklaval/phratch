@@ -57,7 +57,7 @@ ScriptablePhratchMorph >> addGlobalList [
 	listName := StringDialog ask: 'List name?'.
 	listName size = 0 ifTrue: [^ self].
 	sFrame workPane createListNamed: listName.
-	sFrame viewerPane categoryChanged: 'variables'.
+	sFrame viewerPane categoryChanged: 'list'.
 
 ]
 
@@ -73,7 +73,7 @@ ScriptablePhratchMorph >> addList [
 	result second
 		ifTrue: [self createListNamed: listName]
 		ifFalse: [sFrame workPane createListNamed: listName].
-	sFrame viewerPane categoryChanged: 'variables'.
+	sFrame viewerPane categoryChanged: 'list'.
 
 ]
 
@@ -219,9 +219,8 @@ ScriptablePhratchMorph >> deleteList [
 		stage listVarNames isEmpty ifFalse: [menu addLine].
 		self listVarNames do: [:v | menu add: v target: self selector: #deleteList: argument: v]].
 	menu invokeModal.
-	
 
-	sFrame viewerPane categoryChanged: 'variables'.
+	sFrame viewerPane categoryChanged: 'list'.
 
 ]
 
@@ -239,7 +238,7 @@ ScriptablePhratchMorph >> deleteList: listName [
 		[(m listName = listName) and: 
 		[m target = self]])
 			ifTrue: [m delete]]].
-	sFrame viewerPane categoryChanged: 'variables'.
+	sFrame viewerPane categoryChanged: 'list'.
 
 ]
 
