@@ -190,19 +190,6 @@ PhratchCommentMorph >> detach [
 ]
 
 { #category : #'event handling' }
-PhratchCommentMorph >> duplicate [
-
-	| dup |
-	dup := self class new.
-	dup width: self width.
-	dup commentMorph contents: commentMorph contents.
-	isShowing ifFalse: [dup toggleShowing].
-
-	self world activeHand attachMorph: dup.
-
-]
-
-{ #category : #'event handling' }
 PhratchCommentMorph >> handlesMouseDown: evt [
 
 	^ true
@@ -234,20 +221,17 @@ PhratchCommentMorph >> initialize [
 		cellPositioning: #leftCenter;
 		centering: #center;
 		yourself.
-	resizeMorph := PhratchResizeMorph ofType: #edge "#corner".
-	resizeMorph vResizing: #spaceFill.
-	commentMorph := MultilineStringMorph new
+	commentMorph := TextMorph new
 		color: self commentMorphColor;
-		growWithText: true;
-		borderWidth: 0;
-		font: (PhratchFrameMorph getFont: #CommentBlock);
 		contents: 'add comment here' localized, '...';
-		width: self defaultWidth - resizeMorph width;
+		borderWidth: 0;
+		font: (PhratchFrameMorph getFont: #CommentBlock);		
+		width: self defaultWidth;
 		yourself.
 	
 	bottomBar addMorphBack: commentMorph.
-	bottomBar addMorphBack: resizeMorph.
-
+	"bottomBar addMorphBack: resizeMorph.
+"
 	self addMorphBack: bottomBar.
 	isResizing := false.
 	resizeOffset := 0@0.
@@ -302,7 +286,7 @@ PhratchCommentMorph >> labelWhenClosed [
 
 	| maxW firstLine ellipses s w |
 	maxW := (self width - 40)/3.
-	firstLine := commentMorph lines at: 1.
+	firstLine := commentMorph text string lineNumber: 1.
 	"self halt."
 	(labelMorph stringWidth: firstLine) < maxW ifTrue: [^ firstLine].
 	ellipses := '...'.
@@ -355,7 +339,7 @@ PhratchCommentMorph >> mouseMove: evt [
 	isResizing
 		ifFalse: [ ^ self ].
 	self width: (self defaultWidth max: (p - self topLeft + resizeOffset) x).
-	commentMorph width: self width - resizeMorph width
+	commentMorph width: self width "- resizeMorph width"
 ]
 
 { #category : #private }
@@ -401,10 +385,9 @@ PhratchCommentMorph >> rightButtonMenu [
 	menu := MenuMorph new defaultTarget: self.
 	menu addLine.
 	menu add: 'delete' translated action: #delete.
-	menu add: 'duplicate' translated action: #duplicate.
 	menu
 		localize;
-		invokeModal	"localize; invokeOn: self"
+		invokeModal
 ]
 
 { #category : #'dropping/grabbing' }
@@ -485,7 +468,7 @@ PhratchCommentMorph >> toggleShowing [
 			showHideMorph form: (PhratchFrameMorph skinAt: #arrowOpenComment).
 			showHideMorph form colors: colors.
 			(self submorphs at: 2) addMorphBack: commentMorph.
-			(self submorphs at: 2) addMorphBack: resizeMorph.
+			"(self submorphs at: 2) addMorphBack: resizeMorph."
 			commentMorph startStepping.
 			labelMorph contents: ''.
 			self comeToFront.
@@ -494,7 +477,7 @@ PhratchCommentMorph >> toggleShowing [
 			showHideMorph form: (PhratchFrameMorph skinAt: #arrowClosedComment).
 			showHideMorph form colors: colors.
 			commentMorph delete.
-			resizeMorph delete.
+			"resizeMorph delete."
 			labelMorph contents: self labelWhenClosed.
 			self color: self topBarColor].
 
@@ -559,7 +542,7 @@ PhratchCommentMorph >> updatePosition [
 PhratchCommentMorph >> width: aNumber [
 
 	super width: (self defaultWidth max: aNumber).
-	commentMorph notNil & resizeMorph notNil ifTrue: [
-		commentMorph width: self width - resizeMorph width].
+	commentMorph notNil "& resizeMorph notNil" ifTrue: [
+		commentMorph width: self width "- resizeMorph width"].
 
 ]
