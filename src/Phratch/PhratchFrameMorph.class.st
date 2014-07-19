@@ -1295,6 +1295,31 @@ PhratchFrameMorph >> enterQuarterMode [
 
 ]
 
+{ #category : #'as yet unclassified' }
+PhratchFrameMorph >> enterUserMode [
+	"Start filling the entire screen and being sticky. Also configure a few other things for the end user such as turning off halos and the control menu (noviceMode) and making sure that error catching is enabled."
+
+	<phratchMenu: 'Enter user mode' category: 'file' position: 13 sub:5 shift: true>
+	PhratchFrameMorph takeOverScreen ifTrue: [
+		Display fullScreenMode: true.
+		World restoreDisplay].
+
+	fillScreenFlag := true.
+	TaskbarMorph allInstances do: [: e | e hide ].
+	
+	self position: 0@0.
+	self isSticky: true.
+	self extent: Display extent.
+	self comeToFront.
+	UseErrorCatcher := true.
+	ScriptablePhratchMorph noviceMode: true.
+	Paragraph insertionPointColor: (Color r: 0.353 g: 0.607 b: 0.788).
+	self updateProjectName.
+	self fixLayout.
+	self step.
+
+]
+
 { #category : #'view mode' }
 PhratchFrameMorph >> exitPresentationMode [
 	"Exit presentation mode."
@@ -1476,7 +1501,6 @@ PhratchFrameMorph >> fillScreenOff [
 PhratchFrameMorph >> fillScreenOn [
 	"Start filling the entire screen and being sticky. Also configure a few other things for the end user such as turning off halos and the control menu (noviceMode) and making sure that error catching is enabled."
 
-	<phratchMenu: 'Enter user mode' category: 'file' position: 13 sub:5 shift: true>
 	PhratchFrameMorph takeOverScreen ifTrue: [
 		Display fullScreenMode: true.
 		World restoreDisplay].
@@ -1489,7 +1513,7 @@ PhratchFrameMorph >> fillScreenOn [
 	self extent: Display extent.
 	self comeToFront.
 	UseErrorCatcher := true.
-	ScriptablePhratchMorph noviceMode: true.
+	ScriptablePhratchMorph noviceMode: false.
 	Paragraph insertionPointColor: (Color r: 0.353 g: 0.607 b: 0.788).
 	self updateProjectName.
 	self fixLayout.

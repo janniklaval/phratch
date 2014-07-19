@@ -25,7 +25,10 @@ MetaRepoSearcher class >> loadProject: aConfigurationString [
 		url:'http://smalltalkhub.com/mc/JLaval/PhratchMetaRepo/main';
 		package: aConfigurationString asString;
 		load.
-	(Smalltalk at: (aConfigurationString asString asSymbol)) loadBleedingEdge.] on: Error do: [ PhratchError errorWithDialog: 'You need an Internet connection to load AddOns.'].
-
+	((Smalltalk at: (aConfigurationString asString asSymbol)) 
+		project version: #bleedingEdge)
+		silently: true;
+		load.] on: Error do: [ ^ PhratchError errorWithDialog: 'You need an Internet connection to load AddOns.'].
+	DialogBoxMorph inform: aConfigurationString, ' installed'.
 	PhratchFrameMorph rebuildUI.
 ]
