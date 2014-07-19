@@ -421,7 +421,7 @@ PhratchFrameMorph >> aboutPhratch [
 		yourself.
 	dialogBox
 		message:
-			'Phratch 3.0
+			'Phratch 4.0 alpha
 Copyright (c) 2014 Jannik Laval.
 All rights reserved.
 
@@ -1704,9 +1704,8 @@ PhratchFrameMorph >> helpMenu: aMenuTitleMorph [
 PhratchFrameMorph >> htmlDoc [
 	<phratchMenu: 'Generate HTML documentation' category: 'file' position: 12 sub: 5 shift: true>
 	| allPragmas dir imgDir html |
-	
-	(FileSystem workingDirectory / 'htmlDoc') exists ifTrue:[(FileSystem workingDirectory / 'htmlDoc') deleteAll].
-	
+	(FileSystem workingDirectory / 'htmlDoc') exists
+		ifTrue: [ (FileSystem workingDirectory / 'htmlDoc') deleteAll ].
 	dir := (FileSystem workingDirectory / 'htmlDoc') ensureCreateDirectory.
 	imgDir := (dir / 'doc-img') ensureCreateDirectory.
 	allPragmas := (Pragma
@@ -1737,15 +1736,18 @@ PhratchFrameMorph >> htmlDoc [
 					b leftJustifyInset: 10.
 					PNGReadWriter putForm: b imageForm onFileNamed: (imgDir / (c label , '.png')) fullName.
 					html
-						nextPutAll:
-							'<li  style="display: inline; padding-right: 10px;"><a href="#' , c label
-								, '"><img src="./doc-img/' , c label , '.png"/></a></li>' ] ].
+						nextPutAll: '<li  style="display: inline; padding-right: 10px;"><a href="#' , c label , '"><img src="./doc-img/';
+						nextPutAll: c label;
+						nextPutAll: '.png"/></a></li>' ] ].
 	html nextPutAll: '</ul>'.
 	PhratchCategory
 		allSubclassesDo: [ :c | 
 			(c label = 'none' or: [ c label = 'other' or: [ c label = 'custom' ] ])
 				ifFalse: [ 
-					html nextPutAll: '<h2 id="' , c label , '">' , c label , '</h2><table border="0">'.
+					html
+						nextPutAll: '<h2 id="' , c label , '">';
+						nextPutAll: c label;
+						nextPutAll: '</h2><table border="0">'.
 					allPragmas
 						select: [ :pragma | (pragma arguments at: 3) = c label ]
 						thenDo: [ :aP | 
@@ -1763,9 +1765,9 @@ PhratchFrameMorph >> htmlDoc [
 									(aP methodClass new blockFromSpec: prov color: (PhratchCategory blockColorFor: (aP arguments at: 3))) imageForm
 								onFileNamed: (imgDir / (pngName , '.png')) fullName.
 							html
-								nextPutAll:
-									'<tr><td WIDTH=300><img src="./doc-img/' , pngName , '.png"/></td><td>'
-										, comment , '</td></tr>' ].
+								nextPutAll: '<tr><td WIDTH=300><img src="./doc-img/' , pngName , '.png"/></td><td>';
+								nextPutAll: comment;
+								nextPutAll: '</td></tr>' ].
 					html nextPutAll: '</table>' ] ]
 ]
 
@@ -1803,14 +1805,17 @@ PhratchFrameMorph >> htmlDocForWebsite [
 					PNGReadWriter putForm: b imageForm onFileNamed: (imgDir / (c label , '.png')) fullName.
 					html
 						nextPutAll:
-							'<li  style="display: inline; padding-right: 10px;"><a href="#' , c label
-								, '"><img src="http://www.phratch.com/wp-content/uploads/doc-img/' , c label , '.png"/></a></li>' ] ].
+								'<li  style="display: inline; padding-right: 10px;"><a href="#' , c label
+										, '"><img src="http://www.phratch.com/wp-content/uploads/doc-img/' , c label;
+						nextPutAll: '.png"/></a></li>' ] ].
 	html nextPutAll: '</ul>'.
 	PhratchCategory
 		allSubclassesDo: [ :c | 
 			(c label = 'none' or: [ c label = 'other' or: [ c label = 'custom' ] ])
 				ifFalse: [ 
-					html nextPutAll: '<h2 id="' , c label , '">' , c label , '</h2><table border="0">'.
+					html
+						nextPutAll: '<h2 id="' , c label , '">' , c label;
+						nextPutAll: '</h2><table border="0">'.
 					allPragmas
 						select: [ :pragma | (pragma arguments at: 3) = c label ]
 						thenDo: [ :aP | 
@@ -1829,8 +1834,9 @@ PhratchFrameMorph >> htmlDocForWebsite [
 								onFileNamed: (imgDir / (pngName , '.png')) fullName.
 							html
 								nextPutAll:
-									'<tr><td WIDTH=300><img src="http://www.phratch.com/wp-content/uploads/doc-img/' , pngName , '.png"/></td><td>'
-										, comment , '</td></tr>' ].
+										'<tr><td WIDTH=300><img src="http://www.phratch.com/wp-content/uploads/doc-img/' , pngName , '.png"/></td><td>'
+												, comment;
+								nextPutAll: '</td></tr>' ].
 					html nextPutAll: '</table>' ] ]
 ]
 
@@ -1917,8 +1923,8 @@ PhratchFrameMorph >> importSpriteOrProject: fileNameOrData [
 			m startStepping.
 			workPane sprites addLast: m.
 			self view: m tab: 'Scripts' category: 'motion'.
-			m refPos ifNotNil: [
-				m referencePosition: m refPos + (50@ -50) ].
+			m referencePosition ifNotNil: [
+				m referencePosition: m referencePosition + (50@ -50) ].
 			m layoutChanged.
 			m changed
 			]].
@@ -3082,21 +3088,18 @@ PhratchFrameMorph >> startup [
 	EventHatMorph threadSafeMode: false.
 	HandMorph translucentWhenDragging: true.
 	VariableFrame scopeContrast: false.
-	self processSettingsFile.
 	self readDefaultNotes.
 
 	BlockEditorFrameMorph resetDimensions.
 	ElementsEditorFrameMorph resetDimensions.
 	
-	self flag:'for debbuging but does not work'.
-	"DebuggerFrameMorph resetDimensions."
+	DebuggerFrameMorph resetDimensions.
 
 	self updateProjectName.
 	shuffledCostumeNames := nil.
 	author := ''.
 	loginName := ''.
 	justSaved := true.
-	presentationMode := false.
 	quitFlag := false.
 
 	PhratchFrameMorph takeOverScreen: false.

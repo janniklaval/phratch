@@ -228,10 +228,9 @@ PhratchLibraryMorph >> makeNewSpriteButtons: aPhratchFrameMorph [
 
 	buttonSpecs := #(
 		"	icon name				selector					tooltip"
-		(newSpritePaint			addSpecialSprite"paintSpriteMorph"		'Paint new sprite')
+		(newSpritePaint			addSpecialSprite		'Paint new sprite')
 		(newSpriteLibrary		addSpriteMorph			'Choose new sprite from file')
 		(newSpriteSurprise 	surpriseSpriteMorph		'Get surprise sprite')
-		"(newSpriteLibrary 		addSpecialSprite		'Choose a special sprite')"
 	).
 
 	buttons := buttonSpecs collect: [:spec |
