@@ -672,7 +672,7 @@ PhratchSpriteMorph >> keepOnScreen [
 PhratchSpriteMorph >> layoutChanged [
 	"Update rotatedForm and offsetWhenRotated and compute new bounds."
 
-	| refPoint |
+	| refPoint stage |
 	refPoint := bounds origin + offsetWhenRotated.
 	(rotationStyle == #none and: [scalePoint = (1.0@1.0)])
 		ifTrue: [  "zero rotation and scale; use original Form"
@@ -682,6 +682,10 @@ PhratchSpriteMorph >> layoutChanged [
 
 	bounds := (refPoint - offsetWhenRotated) extent: rotatedForm extent.
 	super layoutChanged.
+	
+	(stage := self ownerOrYourselfThatIsAPhratchStageMorph) ifNil: [^ self].
+	stage invalidRect: stage bounds.
+	
 	self changed.
 
 ]

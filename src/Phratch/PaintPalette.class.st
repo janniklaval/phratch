@@ -454,7 +454,7 @@ PaintPalette >> storedColor: aColor [
 { #category : #'event handling' }
 PaintPalette >> textFontMenu [
 
-	| useOSFont fontList lcName menu |
+	| useOSFont fontList  menu lcName |
 
 		useOSFont := false.
 		fontList := StrikeFont fontNames reject: [:fn |
@@ -482,7 +482,7 @@ PaintPalette >> textSizeMenu [
 	font := canvasMorph canvasTextBox font.
 	sizeList := font isOSFont
 		ifTrue: [ #(8 9 10 12 14 18 24 36 48 60 72 96 120 144 216 288) ]
-		ifFalse: [ StrikeFont sizesForFontName: font name ].
+		ifFalse: [ StrikeFont sizesForFontName: font familyName ].
 	sizeList size = 0
 		ifTrue: [^PhratchError error: 'beep'. ].	"should not happen"
 	sizeList
@@ -678,7 +678,7 @@ PaintPalette >> updateOptionsPane [
 	#text = self mode
 		ifTrue: [ 
 			font := StrikeFont fontName: 'VerdanaBold' size: 11.
-			fName := canvasMorph canvasTextBox font name.
+			fName := canvasMorph canvasTextBox font familyName.
 			textFontMenu := ImageMorph new form: (PhratchFrameMorph skinAt: #textFontMenu).
 			textFontMorph := StringMorph new font: font.
 			textFontMorph contents: (textFontMorph stringWithEllipses: fName limitedToWidth: 109).

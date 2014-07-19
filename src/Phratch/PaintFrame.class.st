@@ -493,10 +493,10 @@ PaintFrame >> newFormTextBoxAndRegPoint [
 	| textBox r newForm regPoint |
 	canvasMorph commitMove.
 
-	textBox := canvasMorph canvasTextBox copy.
+	textBox := canvasMorph canvasTextBox.
 	textBox
-		textColor: canvasMorph textColor;
-		fitContents.
+		textColor: canvasMorph textColor";
+		fitContents".
 	textBox contents isEmpty ifTrue: [textBox := nil].
 
 	(originalObject isPhratchStageMorph)

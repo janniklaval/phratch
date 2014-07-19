@@ -11,7 +11,7 @@ StrikeFont class >> fontName: aName size: aSize [
 StrikeFont class >> fontNames [
 	"StrikeFont fontNames"
 
-	^ (StrikeFont allInstances collect: [:f | f name]) asSet asArray sort
+	^ (StrikeFont allInstances collect: [:f | f familyName]) asSet asArray sort
 ]
 
 { #category : #'*Phratch-Extensions' }

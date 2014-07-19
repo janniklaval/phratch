@@ -37,7 +37,7 @@ Class {
 	#classVars : [
 		'CR'
 	],
-	#category : #'Phratch-UI-Watchers'
+	#category : #'Phratch-Paint'
 }
 
 { #category : #'class initialization' }
@@ -144,7 +144,8 @@ MultilineStringMorph >> contents [
 MultilineStringMorph >> contents: aStringOrText [
 	"Set my contents to the given String or Text. Break into lines, emove non-printing characters, and replace tabs with sequences of spaces."
 
-	lines := Array with: (self replaceTabs: aStringOrText).
+	lines := (self replaceTabs: aStringOrText) subStrings: String cr.
+	lines := lines copyWith: self emptyLine.
 	self lineWrapFrom: 1.
 
 ]
@@ -162,7 +163,9 @@ MultilineStringMorph >> contents: aString font: aStrikeFont [
 MultilineStringMorph >> copy [
 	"Return a copy with a copy of my lines array."
 
-	^ super copy setLines: lines copy
+	^ super copy 
+		setLines: lines copy; 
+		yourself
 
 ]
 
@@ -460,14 +463,6 @@ MultilineStringMorph >> emptyLine [
 
 ]
 
-{ #category : #accessing }
-MultilineStringMorph >> ensureOSFont [
-
-	font isOSFont ifFalse: [
-		self font: (StrikeFont osFontName: 'Helvetica Bold' size: font pointSize)].
-
-]
-
 { #category : #private }
 MultilineStringMorph >> ensureSelectionStartPrecedesEnd [
 	"If selectionEnd is before selectionStart, swap them."
@@ -721,7 +716,8 @@ MultilineStringMorph >> keyStroke: evt [
 
 	evt buttons = 0 ifTrue: [ "no modifier keys"
 		ch = 13 ifTrue:[self insertString: (String with: evt keyCharacter).
-			^lines := lines copyWith: self emptyLine].
+			^lines := lines copyWith: self emptyLine.
+			].
 		ch = 8 ifTrue: [^ self backspaceChar].						"backspace"
 		ch = 127 ifTrue: [^ self deleteNextChar].						"delete"
 		ch = 1 ifTrue: [^ self moveCursorHomeAndSelect: false].		"home"
@@ -897,7 +893,7 @@ MultilineStringMorph >> paste [
 	"Paste the last cut or copied text over the current selection."
 
 	| s |
-	s := PhratchTranslator unicodeClipboard..
+	s := PhratchTranslator unicodeClipboard.
 	s size = 0 ifTrue: [^ self].
 
 	self deleteSelection.

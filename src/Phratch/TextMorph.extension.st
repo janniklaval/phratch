@@ -4,3 +4,9 @@ Extension { #name : #TextMorph }
 TextMorph >> editView [
 	^ self
 ]
+
+{ #category : #'*Phratch-extension' }
+TextMorph >> isEmpty [
+
+	^ self contents isEmpty
+]

@@ -630,7 +630,7 @@ PaintCanvas >> drawTextOnBufferSrcRect: srcRect dstRect: dstRect [
 	(WarpBlt toForm: bufferForm)
 		sourceForm: textForm;
 		colorMap: cm;
-		cellSize: 1;
+		cellSize: 2;
 		combinationRule: Form paint;
 		copyQuad: srcRect innerCorners toRect: dstRect.
 
@@ -833,10 +833,20 @@ PaintCanvas >> initialize [
 	scrollX := scrollY := 0.
 	showSelection := false.
 	textColor := Color black.
+	"textBox := TextMorph new
+		color: Color white;
+		contents: '' localized, '...';
+		borderWidth: 0;
+		font: (StrikeFont osFontName: 'Helvetica Bold' size: 24);
+		autoFit: true;
+		wrapFlag: true;
+		vResizing: #shrinkWrap;
+		hResizing: #shrinkWrap;
+		yourself."
 	textBox := MultilineStringMorph new
 		font: (StrikeFont osFontName: 'Helvetica Bold' size: 24);
-		textColor: Color black;		"pixel value 1 at depth 2"
-		borderColor: Color white;		"pixel value 2 at depth 2"
+		textColor: Color black;	
+		borderColor: Color white;
 		borderWidth: 0; 
 		yourself.
 	textDragMode := #none.
@@ -1524,7 +1534,6 @@ PaintCanvas >> textMouseDown: evt [
 
 	((textBox bounds insetBy: 2) containsPoint: p) ifTrue: [  "click in textBox"
 		textDragMode := #select.
-		textBox ensureOSFont.
 		textBox mouseDown: (evt copy cursorPoint: p).
 		evt hand newKeyboardFocus: self.  "take focus back from textBox"
 		^ self].
