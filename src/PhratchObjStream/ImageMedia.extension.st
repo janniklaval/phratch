@@ -36,7 +36,7 @@ ImageMedia >> initFieldsFrom: anObjStream version: classVersion [
 	self initFieldsNamed: #(
 		jpegBytes
 	) from: anObjStream.
-	jpegBytes ifNotNil: [form := FastJPEG uncompress: jpegBytes].
+	jpegBytes ifNotNil: [form := JPEGReadWriter new on: jpegBytes].
 
 	classVersion = 3 ifTrue: [^ self].
 
@@ -44,37 +44,5 @@ ImageMedia >> initFieldsFrom: anObjStream version: classVersion [
 	self initFieldsNamed: #(
 		compositeForm
 	) from: anObjStream.
-
-]
-
-{ #category : #'*PhratchObjStream' }
-ImageMedia >> storeFieldsOn: anObjStream [
-
-	| oldForm f |
-	super storeFieldsOn: anObjStream.
-
-	oldForm := form.
-
-	compositeForm := nil.
-	self hasTextLayer ifTrue: [
-		compositeForm := self compositeForm hibernateForPhratch.
-		compositeForm couldBeColorReduced ifTrue: [
-			f := compositeForm colorReduced hibernateForPhratch.
-			(f bits size < compositeForm bits size) ifTrue: [compositeForm := f]]].
-
-	jpegBytes
-		ifNil: [form := form hibernateForPhratch]
-		ifNotNil: [form := JPEGPlaceholderForm].
-
-	self storeFieldsNamed: #(
-		form
-		rotationCenter
-		textBox
-		jpegBytes
-		compositeForm
-	) on: anObjStream.
-
-	form := oldForm.
-	compositeForm := nil.
 
 ]

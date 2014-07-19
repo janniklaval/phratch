@@ -81,21 +81,3 @@ CommandBlockMorph >> rcvr [
 		ifFalse: [ '' ].
 	^ rcvr
 ]
-
-{ #category : #'*PhratchObjStream' }
-CommandBlockMorph >> storeFieldsOn: anObjStream [
-
-	super storeFieldsOn: anObjStream.
-	self storeFieldsNamed: #(
-		commandSpec
-		argMorphs
-		titleMorph
-		receiver
-		selector
-		isReporter
-		isTimed
-		wantsName
-		wantsPossession
-	) on: anObjStream.
-
-]

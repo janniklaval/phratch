@@ -69,15 +69,3 @@ ChoiceArgMorph >> privateSetChoice: aSymbol [
 	block isReporter ifTrue: [palette updateWatcherButtonsForFrame: frame].
 
 ]
-
-{ #category : #'*PhratchObjStream' }
-ChoiceArgMorph >> storeFieldsOn: anObjStream [
-
-	super storeFieldsOn: anObjStream.
-	self storeFieldsNamed: #(
-		options
-		choice
-		getOptionsSelector
-	) on: anObjStream.
-
-]

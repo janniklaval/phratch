@@ -8,12 +8,3 @@ PhratchMedia >> initFieldsFrom: anObjStream version: classVersion [
 	) from: anObjStream.
 
 ]
-
-{ #category : #'*PhratchObjStream' }
-PhratchMedia >> storeFieldsOn: anObjStream [
-
-	self storeFieldsNamed: #(
-		mediaName
-	) on: anObjStream.
-
-]

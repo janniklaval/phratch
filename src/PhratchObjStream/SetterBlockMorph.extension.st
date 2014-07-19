@@ -93,14 +93,3 @@ SetterBlockMorph >> initFieldsFrom: anObjStream version: classVersion [
 	self variable: variable.
 
 ]
-
-{ #category : #'*PhratchObjStream' }
-SetterBlockMorph >> storeFieldsOn: anObjStream [
-
-	super storeFieldsOn: anObjStream.
-	variable := self variable.
-	self storeFieldsNamed: #(
-		variable
-	) on: anObjStream.
-
-]

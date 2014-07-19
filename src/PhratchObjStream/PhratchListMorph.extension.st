@@ -204,32 +204,3 @@ PhratchListMorph >> initFieldsFrom: anObjStream version: classVersion [
 	self updateContents.
 
 ]
-
-{ #category : #'*PhratchObjStream' }
-PhratchListMorph >> storeFieldsOn: anObjStream [
-	"Note: To simplify my representation in the project file, my submorphs are removed before saving and restored when I am read in from an object file."
-
-	| strings complex |
-
-	"self purge.	"
-
-	strings := cellMorphs asArray collect: [:m | m firstSubmorph contents asString].
-	complex := cellMorphs asArray collect: [:m | m complexObject].
-
-	self removeAllMorphs.
-	numberMorphs := #().
-
-	super storeFieldsOn: anObjStream.
-	anObjStream putField: listName.
-	anObjStream putField: strings.
-	anObjStream putField: target.
-	anObjStream putField: complex.
-
-	self addTitleAndControls; addScrollPane.
-	titleMorph contents: listName.
-	self newContents: strings.
-	self complexContents: complex.
-	self fixLayout.
-
-
-]

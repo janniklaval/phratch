@@ -18,16 +18,3 @@ SimpleButtonMorph >> initFieldsFrom: anObjStream version: classVersion [
 		actWhen
 	) from: anObjStream.
 ]
-
-{ #category : #'*PhratchObjStream' }
-SimpleButtonMorph >> storeFieldsOn: anObjStream [
-
-	super storeFieldsOn: anObjStream.
-	self storeFieldsNamed: #(
-		target
-		actionSelector
-		arguments
-		actWhen
-	) on: anObjStream.
-
-]

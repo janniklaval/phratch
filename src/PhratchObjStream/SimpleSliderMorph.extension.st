@@ -19,17 +19,3 @@ SimpleSliderMorph >> initFieldsFrom: anObjStream version: classVersion [
 		truncate
 	) from: anObjStream.
 ]
-
-{ #category : #'*PhratchObjStream' }
-SimpleSliderMorph >> storeFieldsOn: anObjStream [
-
-	super storeFieldsOn: anObjStream.
-	self storeFieldsNamed: #(
-		target
-		arguments
-		minVal
-		maxVal
-		truncate
-	) on: anObjStream.
-
-]

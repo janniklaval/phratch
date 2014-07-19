@@ -96,13 +96,3 @@ VariableFrame >> initFieldsFrom: anObjStream version: classVersion [
 	) from: anObjStream.
 
 ]
-
-{ #category : #'*PhratchObjStream' }
-VariableFrame >> storeFieldsOn: anObjStream [
-
-	self storeFieldsNamed: #(
-		vars
-	) on: anObjStream.
-
-
-]

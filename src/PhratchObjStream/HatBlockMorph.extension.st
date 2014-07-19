@@ -31,17 +31,3 @@ HatBlockMorph >> scriptOwner [
 	^ scriptOwner
 
 ]
-
-{ #category : #'*PhratchObjStream' }
-HatBlockMorph >> storeFieldsOn: anObjStream [
-
-	super storeFieldsOn: anObjStream.
-	self storeFieldsNamed: #(
-		scriptNameMorph
-		indicatorMorph
-		scriptOwner
-		parameters
-		isClickable
-	) on: anObjStream.
-
-]

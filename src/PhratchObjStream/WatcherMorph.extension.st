@@ -40,23 +40,3 @@ WatcherMorph >> initFieldsFrom: anObjStream version: classVersion [
 	) from: anObjStream.
 
 ]
-
-{ #category : #'*PhratchObjStream' }
-WatcherMorph >> storeFieldsOn: anObjStream [
-
-	super storeFieldsOn: anObjStream.
-	self storeFieldsNamed: #(
-		titleMorph
-		readout
-		readoutFrame
-		phratchSlider
-		watcher
-		isSpriteSpecific
-		sliderMin
-		sliderMax
-		isLarge
-		isColor
-	) on: anObjStream.
-	      
-
-]

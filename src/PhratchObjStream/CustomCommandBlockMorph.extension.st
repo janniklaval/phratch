@@ -54,13 +54,3 @@ CustomCommandBlockMorph >> initFieldsFrom: anObjStream version: classVersion [
 
 
 ]
-
-{ #category : #'*PhratchObjStream' }
-CustomCommandBlockMorph >> storeFieldsOn: anObjStream [
-
-	super storeFieldsOn: anObjStream.
-	self storeFieldsNamed: #(
-		userSpec
-	) on: anObjStream.
-
-]

@@ -19,18 +19,3 @@ UpdatingStringMorph >> initFieldsFrom: anObjStream version: classVersion [
 			#stepTime)
 		from: anObjStream
 ]
-
-{ #category : #'*PhratchObjStream' }
-UpdatingStringMorph >> storeFieldsOn: anObjStream [
-
-	super storeFieldsOn: anObjStream.
-	self storeFieldsNamed: #(
-		format
-		target
-		getSelector
-		putSelector
-		floatPrecision
-		growable
-		stepTime
-	) on: anObjStream.
-]

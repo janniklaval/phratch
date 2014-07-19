@@ -61,14 +61,3 @@ CBlockMorph >> initFieldsFrom: anObjStream version: classVersion [
 	) from: anObjStream.
 
 ]
-
-{ #category : #'*PhratchObjStream' }
-CBlockMorph >> storeFieldsOn: anObjStream [
-
-	super storeFieldsOn: anObjStream.
-	self storeFieldsNamed: #(
-		nestedBlock
-		nextBlock
-	) on: anObjStream.
-
-]

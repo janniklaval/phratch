@@ -21,18 +21,3 @@ Slider >> initFieldsFrom: anObjStream version: classVersion [
 			model
 		)from: anObjStream
 ]
-
-{ #category : #'*PhratchObjStream' }
-Slider >> storeFieldsOn: anObjStream [
-
-	super storeFieldsOn: anObjStream.
-	self storeFieldsNamed: #(
-		slider
-		value
-		setValueSelector
-		sliderShadow
-		sliderColor
-		descending
-		model
-	) on: anObjStream.
-]

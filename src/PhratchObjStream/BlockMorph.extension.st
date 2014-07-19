@@ -46,17 +46,6 @@ BlockMorph >> showTuples [
 ]
 
 { #category : #'*PhratchObjStream' }
-BlockMorph >> storeFieldsOn: anObjStream [
-
-	super storeFieldsOn: anObjStream.
-	self storeFieldsNamed: #(
-		isSpecialForm
-		oldColor
-	) on: anObjStream.
-
-]
-
-{ #category : #'*PhratchObjStream' }
 BlockMorph >> tupleSequence [
 	"Answer a sequence of tuples (Array) describing this stack of blocks."
 

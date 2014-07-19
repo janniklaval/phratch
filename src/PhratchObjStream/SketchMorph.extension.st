@@ -21,18 +21,3 @@ SketchMorph >> initFieldsFrom: anObjStream version: classVersion [
 	) from: anObjStream.
 
 ]
-
-{ #category : #'*PhratchObjStream' }
-SketchMorph >> storeFieldsOn: anObjStream [
-
-	super storeFieldsOn: anObjStream.
-	self storeFieldsNamed: #(
-		originalForm
-		rotationCenter
-		rotationDegrees
-		rotationStyle
-		scalePoint
-		offsetWhenRotated
-	) on: anObjStream.
-
-]

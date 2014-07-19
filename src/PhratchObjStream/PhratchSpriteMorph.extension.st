@@ -83,37 +83,3 @@ PhratchSpriteMorph >> refPos [
 PhratchSpriteMorph >> refPos: aPos [
 	refPos := aPos
 ]
-
-{ #category : #'*PhratchObjStream' }
-PhratchSpriteMorph >> storeFieldsOn: anObjStream [
-
-	| oldP |
-	self sayNothing.  "delete talk bubble before saving"
-
-	"for backward compatability, remove offsetWhenRotated and subtract costume rotationCenter when saving"
-	oldP := self position.
-	self position: self position + offsetWhenRotated - costume rotationCenter.
-
-	super storeFieldsOn: anObjStream.
-	self storeFieldsNamed: #(
-		visibility
-		scalePoint
-		rotationDegrees
-		rotationStyle
-		volume
-		tempoBPM
-		draggable
-		sceneStates
-		lists
-		virtualScale
-		ownerSprite
-		subsprites
-		rotateWithOwner
-		refPos
-		prototype
-		deletedAttributes
-	) on: anObjStream.
-
-	self position: oldP.  "restore position"
-
-]

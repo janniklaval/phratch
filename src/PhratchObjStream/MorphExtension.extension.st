@@ -14,11 +14,3 @@ MorphExtension >> initFieldsFrom: anObjStream version: classVersion [
 			
 		)from: anObjStream
 ]
-
-{ #category : #'*PhratchObjStream' }
-MorphExtension >> storeFieldsOn: anObjStream [
-
-	self storeFieldsNamed: #(
-		 
-	) on: anObjStream.
-]

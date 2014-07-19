@@ -36,24 +36,3 @@ SoundMedia >> initFieldsFrom: anObjStream version: classVersion [
 
 
 ]
-
-{ #category : #'*PhratchObjStream' }
-SoundMedia >> storeFieldsOn: anObjStream [
-
-	| oldSnd |
-	super storeFieldsOn: anObjStream.
-
-	oldSnd := originalSound.
-	compressedData ifNotNil: [originalSound := PlaceholderSound].  "for backward compatability"
-
-	self storeFieldsNamed: #(
-		originalSound
-		volume
-		compressedSampleRate
-		compressedBitsPerSample
-		compressedData
-	) on: anObjStream.
-
-	originalSound := oldSnd.
-
-]

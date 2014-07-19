@@ -15,13 +15,3 @@ PasteUpMorph >> initFieldsFrom: anObjStream version: classVersion [
 	) from: anObjStream.
 
 ]
-
-{ #category : #'*PhratchObjStream' }
-PasteUpMorph >> storeFieldsOn: anObjStream [
-
-	super storeFieldsOn: anObjStream.
-	self storeFieldsNamed: #(
-		backgroundMorph 
-	) on: anObjStream.
-
-]

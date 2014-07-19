@@ -61,18 +61,6 @@ IfElseBlockMorph >> initFieldsFrom: anObjStream version: classVersion [
 ]
 
 { #category : #'*PhratchObjStream' }
-IfElseBlockMorph >> storeFieldsOn: anObjStream [
-
-	super storeFieldsOn: anObjStream.
-	self storeFieldsNamed: #(
-		trueBlock
-		falseBlock
-		nextBlock
-	) on: anObjStream.
-
-]
-
-{ #category : #'*PhratchObjStream' }
 IfElseBlockMorph >> trueBlock: aBlockMorph [
 	"Add the given block as my true nested block sequence. Delete the old nested blocks, if any."
 

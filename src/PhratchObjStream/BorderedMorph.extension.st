@@ -16,14 +16,3 @@ BorderedMorph >> initFieldsFrom: anObjStream version: classVersion [
 	) from: anObjStream.
 
 ]
-
-{ #category : #'*PhratchObjStream' }
-BorderedMorph >> storeFieldsOn: anObjStream [
-
-	super storeFieldsOn: anObjStream.
-	self storeFieldsNamed: #(
-		borderWidth
-		borderColor
-	) on: anObjStream.
-
-]

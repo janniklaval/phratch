@@ -27,20 +27,3 @@ MultilineStringMorph >> initFieldsFrom: anObjStream version: classVersion [
 	lines := lines collect: [:s | s].
 
 ]
-
-{ #category : #'*PhratchObjStream' }
-MultilineStringMorph >> storeFieldsOn: anObjStream [
-
-	super storeFieldsOn: anObjStream.
-
-	lines := lines collect: [:s | s].
-	anObjStream putField: {font name. font pointSize. font isOSFont}.  "font spec"
-	self storeFieldsNamed: #(
-		textColor
-		selectionColor
-		lines
-	) on: anObjStream.
-	lines := lines collect: [:s | s].
-
-
-]

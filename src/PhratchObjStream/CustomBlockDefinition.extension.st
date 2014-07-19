@@ -66,22 +66,3 @@ CustomBlockDefinition >> isBoolean [
 CustomBlockDefinition >> ownerOrYourselfThatIsA: aClassName [
 	^nil
 ]
-
-{ #category : #'*PhratchObjStream' }
-CustomBlockDefinition >> storeFieldsOn: anObjStream [
-
-	self storeFieldsNamed: #(
-		userSpec
-		blockVars
-		isAtomic
-		isBoolean
-		body
-		answer
-		type
-		category
-		declarations
-		defaults
-		isGlobal
-	) on: anObjStream.
-
-]

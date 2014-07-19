@@ -24,15 +24,3 @@ ExpressionArgMorphWithMenu >> initFieldsFrom: anObjStream version: classVersion 
 	) from: anObjStream.
 
 ]
-
-{ #category : #'*PhratchObjStream' }
-ExpressionArgMorphWithMenu >> storeFieldsOn: anObjStream [
-
-	super storeFieldsOn: anObjStream.
-	self storeFieldsNamed: #(
-		menuMorph
-		getMenuSelector
-		specialValue
-	) on: anObjStream.
-
-]

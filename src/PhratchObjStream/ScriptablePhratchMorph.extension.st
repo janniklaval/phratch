@@ -165,7 +165,7 @@ ScriptablePhratchMorph >> blockFromOldFormTuple: tuple receiver: scriptOwner [
 				ifTrue: [ 
 					(tuple at: 3)
 						ifFalse: [ block toggleShowing ] ].
-			block color: (Color r: 0.8 g: 0 b: 0).	"obsolete"
+			block color: (Color r: 0.8 g: 0 b: 0).	
 			^ block ].
 	spec := self class blockSpecDict at: k ifAbsent: [ nil ].
 	spec ifNil: [ ^ scriptOwner blockFromSpec: #('obsolete!' #- #yourself) color: Color red ].
@@ -457,7 +457,7 @@ ScriptablePhratchMorph >> blockFromTuple: tuple receiver: scriptOwner [
 				ifTrue: [ 
 					(tuple at: 3)
 						ifFalse: [ block toggleShowing ] ].
-			block color: (Color r: 0.8 g: 0 b: 0).	"obsolete"
+			block color: (Color r: 0.8 g: 0 b: 0).	
 			^ block ].
 	spec := self class blockSpecDict at: k ifAbsent: [ nil ].
 	spec ifNil: [ ^ rcvr blockFromSpec: #('obsolete!' #- #yourself #()) color: Color red ].
@@ -999,31 +999,6 @@ ScriptablePhratchMorph >> stackFromTupleList: tupleList receiver: scriptOwner [
 		previousBlock := block].
 
 	^ stackTop
-
-]
-
-{ #category : #'*PhratchObjStream' }
-ScriptablePhratchMorph >> storeFieldsOn: anObjStream [
-
-	| oldBlockBinOwner |
-	super storeFieldsOn: anObjStream.
-	(blocksBin isKindOf: Morph) ifTrue: [
-		oldBlockBinOwner := blocksBin owner.
-		blocksBin delete].
-
-	self purgeVarsAndLists.
-
-	self storeFieldsNamed: #(
-		objName
-		vars
-		blocksBin
-		customBlocks
-		isClone
-		media
-		costume
-	) on: anObjStream.
-
-	oldBlockBinOwner ifNotNil: [oldBlockBinOwner addMorph: blocksBin].
 
 ]
 

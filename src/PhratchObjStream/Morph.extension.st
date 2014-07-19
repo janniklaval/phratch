@@ -60,21 +60,3 @@ Morph >> ownerOrYourselfThatIsA: aClass [
 			current := current owner ].
 	^ current
 ]
-
-{ #category : #'*PhratchObjStream' }
-Morph >> storeFieldsOn: anObjStream [
-	| flags |
-	self storeFieldsNamed: #(#bounds #owner #submorphs #color) on: anObjStream.
-	flags := 0.
-	{(self isHidden).
-	(self isSticky).
-	(self isLocked)	". self isPartsDonor"}
-		doWithIndex: [ :bool :i | 
-			| maskInteger |
-			maskInteger := 2 raisedTo: i - 1.
-			flags := bool
-				ifTrue: [ flags bitOr: maskInteger ]
-				ifFalse: [ flags bitAnd: maskInteger bitInvert ] ].
-	anObjStream putField: flags.
-	anObjStream putField: nil	"placeholder for properties"
-]

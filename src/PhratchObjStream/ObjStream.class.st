@@ -106,7 +106,7 @@ ObjStream class >> initialize [
 		NameToClassEntry at: entry second put: entry].
 
 	self userClasses do: [:pair | | entry |
-		entry := pair, #(unused putUserObj:id:).
+		entry := pair, #(unused "putUserObj:id:"nil).
 		(IDToClassEntry includesKey: entry first) ifTrue: [self error: 'duplicate user class ID'].
 		IDToClassEntry at: entry first put: entry.
 		NameToClassEntry at: entry second put: entry].
@@ -601,53 +601,6 @@ ObjStream >> oldReadObjFrom: aStream showProgress: showProgress [
 
 ]
 
-{ #category : #'entry points' }
-ObjStream >> oldStoreObj: anObject on: aStream [
-	"Write the given object and all the objects that can be reached from it on the given binary stream. Do not display a progress bar."
-
-	self oldStoreObj: anObject on: aStream showProgress: false.
-
-]
-
-{ #category : #'entry points' }
-ObjStream >> oldStoreObj: anObject on: aStream showProgress: showProgress [
-	"Write the given object and all the objects that can be reached from it on the given binary stream. If showProgress is true, display a progress bar."
-
-	| sortedObjEntries i obj |
-	objects := IdentityDictionary new.
-	objectIndex := 1.
-
-	"collect objects"
-	stream := nil.
-	firstPass := true.
-	toDo := OrderedCollection new.
-	self recordObject: anObject id: (self classEntryFor: anObject) first.
-	[toDo size > 0] whileTrue: [self recordFieldsOf: toDo removeFirst].
-
-	"write object table"
-	stream := aStream.
-	firstPass := false.
-	sortedObjEntries := objects asArray sort: [:e1 :e2 | e1 first < e2 first].
-	self writeFileHeader.
-	stream uint32: sortedObjEntries size.
-	showProgress
-		ifTrue: [
-			i := 0.  "object counter for progress bar"
-			'Saving...'
-				displayProgressAt: Sensor cursorPoint
-				from: 0 to: sortedObjEntries size
-				during:  [:progressBar |
-					sortedObjEntries do: [:objEntry |
-						progressBar value: (i := i + 1).
-						obj := objEntry at: 2.
-						self writeObject: obj objEntry: objEntry]]]
-		ifFalse: [
-			sortedObjEntries do: [:objEntry |
-				obj := objEntry at: 2.
-				self writeObject: obj objEntry: objEntry]].
-
-]
-
 { #category : #'fixed format-writing' }
 ObjStream >> putArray: anObject id: classID [
 
@@ -831,14 +784,6 @@ ObjStream >> putSoundBuf: anObject id: classID [
 
 ]
 
-{ #category : #'private-writing' }
-ObjStream >> putUserObj: anObject id: ignored [
-	"Ask the given user-defined object to write it's fields."
-
-	anObject storeFieldsOn: self.
-
-]
-
 { #category : #'private-reading' }
 ObjStream >> readField [
 	"Read a single object field. The result may be an object or an object reference."
@@ -1004,26 +949,5 @@ ObjStream >> writeObjRef: anObject [
 	objIndex := objEntry at: 1.
 	stream nextPut: ObjectReferenceID.
 	stream uint24: objIndex.
-
-]
-
-{ #category : #'private-writing' }
-ObjStream >> writeObject: anObject objEntry: objEntry [
-	"Write the object described by the given entry."
-
-	| entry classID putSelector |
-	entry := self classEntryFor: anObject.
-	classID := entry at: 1.
-	putSelector := entry at: 4.
-
-	fields := objEntry at: 4.
-	fieldIndex := 0.
-
-	putSelector = #putUserObj:id: ifTrue: [
-		stream nextPut: classID.
-		stream nextPut: anObject fieldsVersion.
-		stream nextPut: fields size].
-
-	self perform: putSelector with: anObject with: classID.
 
 ]

@@ -18,15 +18,3 @@ UpdatingColorMorph >> initFieldsFrom: anObjStream version: classVersion [
 	) from: anObjStream.
 
 ]
-
-{ #category : #'*PhratchObjStream' }
-UpdatingColorMorph >> storeFieldsOn: anObjStream [
-
-	super storeFieldsOn: anObjStream.
-	self storeFieldsNamed: #(
-		target
-		selector
-		parameter
-		stepTime
-	) on: anObjStream.
-]

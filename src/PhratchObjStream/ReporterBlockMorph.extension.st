@@ -20,13 +20,3 @@ ReporterBlockMorph >> initFieldsFrom: anObjStream version: classVersion [
 
 
 ]
-
-{ #category : #'*PhratchObjStream' }
-ReporterBlockMorph >> storeFieldsOn: anObjStream [
-
-	super storeFieldsOn: anObjStream.
-	self storeFieldsNamed: #(
-		isBoolean
-	) on: anObjStream.
-
-]

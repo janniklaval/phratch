@@ -26,19 +26,3 @@ SampledSound >> initFieldsFrom: anObjStream version: classVersion [
 		scaledInitialIndex 
 	) from: anObjStream.
 ]
-
-{ #category : #'*PhratchObjStream' }
-SampledSound >> storeFieldsOn: anObjStream [
-
-	self storeFieldsNamed: #(
-		envelopes
-		scaledVol
-		initialCount
-		samples
-		originalSamplingRate
-		samplesSize
-		scaledIncrement
-	"	scaledInitialIndex " "version 1"
-	) on: anObjStream.
-
-]
