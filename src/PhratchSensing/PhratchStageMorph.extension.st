@@ -16,7 +16,6 @@ PhratchStageMorph >> attribute: attr [
 	a := a localized.
 	'background #' localized = a ifTrue: [^ self backgroundIndex].
 	'costume #' localized = a ifTrue: [^ self backgroundIndex].
-	"'volume' localized = a ifTrue: [^ self volume]."
 	^ 0
 
 ]
