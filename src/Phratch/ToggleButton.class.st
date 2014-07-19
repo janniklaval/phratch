@@ -14,7 +14,6 @@ Class {
 		'onForm',
 		'offForm',
 		'overForm',
-		'disabledForm',
 		'isMomentary',
 		'toggleMode',
 		'isOn',
@@ -90,7 +89,7 @@ ToggleButton >> drawOn: aCanvas [
 	| form |
 	form := isOn ifTrue: [onForm] ifFalse: [offForm].
 	isOver & isOn not ifTrue: [form := overForm].
-	isDisabled ifTrue: [form := disabledForm].
+	isDisabled ifTrue: [form := nil].
 
 	form ifNil: [  "default drawing if nil form"
 		aCanvas frameRectangle: self bounds

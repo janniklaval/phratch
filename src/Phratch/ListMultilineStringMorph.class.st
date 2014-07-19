@@ -157,11 +157,11 @@ ListMultilineStringMorph >> mouseDown: evt [
 { #category : #'event handling' }
 ListMultilineStringMorph >> mouseEnter: evt [
 
-	| list p   |
+	| list |
 
 	self isInWorld ifFalse: [^ self].  "not editable in presentation mode"
 	super mouseEnter: evt.
-	p := evt cursorPoint.
+	evt cursorPoint.
 
 	(list := self ownerOrYourselfThatIsAPhratchListMorph)
 		ifNotNil: [list focusCell: owner].

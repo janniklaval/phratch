@@ -2754,25 +2754,6 @@ PhratchFrameMorph >> quitPhratch [
 
 ]
 
-{ #category : #byob }
-PhratchFrameMorph >> randomProjectName [
-	| dir projects |
-"	dir := PhratchFileChooserDialog getDefaultFolderForType: #project."
-
-	(FileSystem workingDirectory / 'Projects') exists 
-		ifTrue: [ dir := FileSystem workingDirectory / 'Projects']
-		ifFalse: [ Smalltalk quitPrimitive ].
-
-	projects := dir fileNames
-				select: [:fn | (fn asLowercase endsWith: '.sb')
-						or: [(fn asLowercase endsWith: '.scratch')
-						or: [(fn asLowercase endsWith: '.ypr')
-						or: [fn asLowercase endsWith: '.phr']	
-				]]].
-	projects size > 0 ifTrue: [^ dir fullNameFor: (projects asArray at: Random new next * projects size + 1)].
-	^ nil
-]
-
 { #category : #startup }
 PhratchFrameMorph >> readDefaultNotes [
 	"If there is a file named 'defaultNotes.txt' in the Phratch folder, read it in."
@@ -3068,8 +3049,6 @@ PhratchFrameMorph >> showWatcher: watcher [
 
 { #category : #startup }
 PhratchFrameMorph >> startup [
-
-	|    presentationMode |
 
 	ScriptablePhratchMorph randomInit.
 	PhratchTranslator importLanguagesList.
@@ -3474,12 +3453,11 @@ PhratchFrameMorph >> updatePenPositions [
 PhratchFrameMorph >> updateProjectName [
 	"Update the project name display in the Phratch title bar."
 
-	| s |
 	projectName ifNil: [ projectName := '' ].
 	projectName := self nameFromFileName: projectName.
 	projectName := projectName , '.phr'.
 	projectTitleMorph contents: projectName.
-	s := projectTitleMorph contents size > 0
+	projectTitleMorph contents size > 0
 		ifTrue: [ projectTitleMorph contents , '- PHR' ]
 		ifFalse: [ 'PHR ' , Version asString ].
 	self fixLayout

@@ -24,7 +24,6 @@ Class {
 		'filterPack',
 		'visibility',
 		'volume',
-		'tempoBPM',
 		'sceneStates',
 		'customBlocks',
 		'deletedAttributes',
@@ -2706,7 +2705,6 @@ ScriptablePhratchMorph >> initialize [
 	costumeChangeMSecs := 0.
 	visibility := 100.
 	volume := 100.
-	tempoBPM := 60.
 	sceneStates := Dictionary new.
 
 ]
