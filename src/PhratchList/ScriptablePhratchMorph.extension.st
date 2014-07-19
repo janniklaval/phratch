@@ -227,7 +227,7 @@ ScriptablePhratchMorph >> deleteList [
 { #category : #'*PhratchList' }
 ScriptablePhratchMorph >> deleteList: listName [
 	"Delete the list variable with the given name. Do nothing if the variable doesn't exist."
-	<phratchItem: 'delete list $String$' kind: #- category: 'list' defaultValues: #('a list') subCategory: #a2 special: #()>
+	<phratchItem: 'delete locale list $String$' kind: #- category: 'list' defaultValues: #('a list') subCategory: #a2 special: #()>
 	| stage sFrame |
 	(sFrame := self ownerOrYourselfThatIsAPhratchFrameMorph) ifNil: [^ PhratchError error: 'beep'.].
 	stage := self ownerOrYourselfThatIsAPhratchStageMorph.
@@ -378,8 +378,8 @@ ScriptablePhratchMorph >> numberSort: t1 [
 { #category : #'*PhratchList' }
 ScriptablePhratchMorph >> quietCreateListNamed: listName [
 	"Create the given list silently"
-	<phratchItem: 'make list $String$' kind: #- category: 'list' defaultValues: #('a list') subCategory: #a2 special: #()>
-	| list stage n |
+	<phratchItem: 'make locale list $String$' kind: #- category: 'list' defaultValues: #('a list') subCategory: #a2 special: #()>
+	| list stage n sFrame |
 	(self variableNameInUse: listName) ifTrue: [^ self].
 
 	lists at: listName put: (list := PhratchListMorph new listName: listName target: self).
@@ -388,6 +388,9 @@ ScriptablePhratchMorph >> quietCreateListNamed: listName [
 		stage addMorph: (list position: stage topRight - ((list width + 10)@0) + (0@(10+(20*n)))).
 		list startStepping].
 	self showOrHideList: listName show: false.
+	(sFrame := self ownerOrYourselfThatIsAPhratchFrameMorph) ifNil: [^ PhratchError error: 'beep'.].
+	sFrame viewerPane categoryChanged: 'list'.
+
 ]
 
 { #category : #'*PhratchList' }
