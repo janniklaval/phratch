@@ -83,7 +83,7 @@ VariableBlockMorph >> click: evt [
 		ifTrue: [^ super click: evt].
 
 	((owner isBlockMorph) and: [owner isCustomBlock and: [owner isTemplate]])
-		ifFalse: [^self editName].
+		ifFalse: [^self "editName"].
 	owner hideArgumentPlaceHolders.
 
 	owner isFrozen 
@@ -374,8 +374,8 @@ VariableBlockMorph >> rightButtonMenu [
 	menu addLine.
 	menu add: 'delete' value: #deleteTemplate.
 	menu add: 'duplicate' value: #duplicate.
-	(choice := menu localize; invokeModal;
-		yourself) selectedValue ifNil: [^ self].
+	menu localize; invokeModal.
+	choice := menu selectedValue ifNil: [^ self].
 	self perform: choice.
 
 ]
