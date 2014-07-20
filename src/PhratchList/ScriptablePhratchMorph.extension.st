@@ -321,7 +321,7 @@ ScriptablePhratchMorph >> list: listName contains: anObject [
 	<phratchItem: '$List$ contains $String$' kind: #BooleanBlockMorph category: 'list' defaultValues: #('list' 'thing') subCategory: #a5 special: #()>
 	| list |
 	list := self listNamed: listName ifNone: [^ false].
-	^ list includes: anObject
+	^ list contains: anObject
 
 ]
 
