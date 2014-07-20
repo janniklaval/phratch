@@ -25,7 +25,7 @@ PhratchInstaller class >> beginInstall [
 	SampledSound initialize.
 	
 	InputEventSensor addInstVarNamed: #keyPressed.
-	UpdatingStringMorph addInstVarNamed: #isUpdating.
+	PhratchUpdatingStringMorph addInstVarNamed: #isUpdating.
 
 	SoundSystem soundEnabled: true.
 

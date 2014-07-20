@@ -30,7 +30,7 @@ CreationEventHatMorph >> initialize [
 	self addMorphBack: s.
 
 	self addMorphBack:
-		(UpdatingStringMorph new useStringFormat
+		(PhratchUpdatingStringMorph new useStringFormat
 			font: (PhratchFrameMorph getFont: #Label);
 			color: Color white;
 			target: self;

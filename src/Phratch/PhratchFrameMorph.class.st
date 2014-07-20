@@ -2238,7 +2238,7 @@ PhratchFrameMorph >> makeXYReadout [
 	labelX := StringMorph new
 				font: normalFont;
 				contents: 'x:' .
-	readoutX := UpdatingStringMorph new
+	readoutX := PhratchUpdatingStringMorph new
 		target: self;
 		getSelector: #mouseX;
 		forceUnicodeRendering: true;

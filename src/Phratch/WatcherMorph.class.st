@@ -28,7 +28,7 @@ WatcherMorph >> buildReadout [
 	"Build my readout component morphs."
 
 	isColor ifFalse: [
-		readout := UpdatingStringMorph new
+		readout := PhratchUpdatingStringMorph new
 		contents: '';
 		floatPrecision: 0.1;
 		stepTime: self stepTime;
