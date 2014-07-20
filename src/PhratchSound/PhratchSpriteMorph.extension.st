@@ -29,3 +29,29 @@ PhratchSpriteMorph >> attribute: attr [
 	^ 0
 
 ]
+
+{ #category : #'*PhratchSound' }
+PhratchSpriteMorph >> spawn [
+	"Duplicate me: My duplication is registered in the environment"
+	<phratchItem: 'duplicate' kind: #ReporterBlockMorph category: 'control' defaultValues: #() subCategory: #self special: #()>
+	| stage child |
+"
+	(frame := self ownerOrYourselfThatIsAPhratchFrameMorph) ifNil: [^ nil].
+"
+	stage := self ownerOrYourselfThatIsAPhratchStageMorph.
+	stage ifNil: [^ self].
+	child := self fullCopy.
+	child blocksBin allMorphsDo: [:m |
+		(m isBlockMorph) ifTrue: [m stop]].
+	child unhinge; unhingeAll; initializeNodes.
+	child prototype: self.
+	child initializeVarsAndLists.
+	child removeLocalBlockDefinitions.
+	"frame workPane" stage addMorphFront: child.
+	stage sprites addLast: child.
+	child deleteAttributes: self deletedAttributes.
+	child deleteAttribute: #costumes.
+	child deleteAttribute: #sounds.
+
+	^ child	
+]
