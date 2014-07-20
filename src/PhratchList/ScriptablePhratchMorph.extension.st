@@ -147,7 +147,7 @@ ScriptablePhratchMorph >> contentsOfList: listName [
 	<phratchItem: '$List$' kind: #ReporterBlockMorph category: 'list' defaultValues: #('a list') subCategory: #a1 special: #()>
 	| list |
 	list := self listNamed: listName ifNone: [^ ''].
-	^ list concatenatedLines
+	^ list
 
 ]
 
@@ -155,8 +155,8 @@ ScriptablePhratchMorph >> contentsOfList: listName [
 ScriptablePhratchMorph >> copyOfList: aList [
 	"Return a copy of the given list"
 	<phratchItem: 'copy of $SAList$' kind: #ReporterBlockMorph category: 'list' defaultValues: #() subCategory: #a7 special: #()>
-	aList ifNil: [^ PhratchListMorph on: #()].
-	^ PhratchListMorph on: aList asArray
+	aList ifNil: [^ PhratchListMorph on: PhratchList new].
+	^ PhratchListMorph on: (PhratchList new contents: (aList list))
 
 ]
 
@@ -188,6 +188,15 @@ ScriptablePhratchMorph >> defaultListName [
 
 	^ ''
 
+]
+
+{ #category : #'*PhratchList' }
+ScriptablePhratchMorph >> deleteAnyList: listName [
+	"Delete the list variable with the given name. Do nothing if the list doesn't exist."
+	<phratchItem: 'delete list $String$' kind: #- category: 'list' defaultValues: #('a list') subCategory: #a2 special: #()>
+	|   |
+	self deleteList: listName.
+	self ownerOrYourselfThatIsAPhratchStageMorph ifNotNil: [:e | e deleteList: listName ]
 ]
 
 { #category : #'*PhratchList' }
@@ -227,7 +236,6 @@ ScriptablePhratchMorph >> deleteList [
 { #category : #'*PhratchList' }
 ScriptablePhratchMorph >> deleteList: listName [
 	"Delete the list variable with the given name. Do nothing if the variable doesn't exist."
-	<phratchItem: 'delete locale list $String$' kind: #- category: 'list' defaultValues: #('a list') subCategory: #a2 special: #()>
 	| stage sFrame |
 	(sFrame := self ownerOrYourselfThatIsAPhratchFrameMorph) ifNil: [^ PhratchError error: 'beep'.].
 	stage := self ownerOrYourselfThatIsAPhratchStageMorph.
