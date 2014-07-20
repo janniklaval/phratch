@@ -1412,6 +1412,15 @@ ScriptablePhratchMorph >> definitionFor: anId [
 	^ def
 ]
 
+{ #category : #variables }
+ScriptablePhratchMorph >> deleteAnyVariable: varName [
+	"Delete the variable with the given name. It can remove a global or local variable. Do nothing if the variable doesn't exist."
+	<phratchItem: 'delete variable $String$' kind: #- category: 'variables' defaultValues: #() subCategory: #a2 special: #()>
+	self deleteVariable: varName.
+	self ownerOrYourselfThatIsAPhratchStageMorph ifNotNil:[:e | e deleteVariable: varName.]
+
+]
+
 { #category : #'BYOB object interface' }
 ScriptablePhratchMorph >> deleteAttribute: aSymbol [
 
@@ -1532,7 +1541,7 @@ ScriptablePhratchMorph >> deleteMedia: itemToDelete [
 { #category : #'BYOB object interface' }
 ScriptablePhratchMorph >> deleteObject: anObject [
 	"Delete the given object"
-	<phratchItem: 'delete $OSReporter$' kind: #- category: 'variables' defaultValues: #() subCategory: #a2 special: #()>
+	"<phratchItem: 'delete $OSReporter$' kind: #- category: 'variables' defaultValues: #() subCategory: #a2 special: #()>"
 	| oi obj att block sel rcv |
 	(anObject isPhratchSpriteMorph)
 		ifTrue: [ ^ self deleteSprite: anObject ].
@@ -1669,7 +1678,6 @@ ScriptablePhratchMorph >> deleteVariable [
 { #category : #variables }
 ScriptablePhratchMorph >> deleteVariable: varName [
 	"Delete the variable with the given name. Do nothing if the variable doesn't exist."
-
 	| frame w |
 	frame := self phratchFrame.
 	frame ifNotNil: [

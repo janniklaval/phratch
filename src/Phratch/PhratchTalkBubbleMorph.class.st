@@ -61,6 +61,7 @@ PhratchTalkBubbleMorph >> initialize [
 
 	contentsMorph := "Multiline"StringMorph new
 		"centerText: true;"
+		contents: '';
 		font: (PhratchFrameMorph getFont: #TalkBubble);
 		yourself.
 	contentsMorph

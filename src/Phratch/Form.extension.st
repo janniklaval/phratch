@@ -441,7 +441,7 @@ Form >> toThumbnail: extent borderWidth: borderWidth borderColor: backgroundColo
 	"Answer a thumbnail with the specified extent, border width, and background color."
 
 	| result e r p |
-	result := Form extent: extent depth: 16.
+	result := self class extent: extent depth: self depth.
 	result fillColor: backgroundColor.
 	result border: result boundingBox width: borderWidth.	"calculate the rectangle to be used by the thumbnail image"
 	e := self width > self height

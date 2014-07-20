@@ -108,7 +108,6 @@ PhratchSpriteMorph >> bubble: obj thinkFlag: thinkFlag promptFlag: promptFlag [
 			s := (objToShow respondsTo: #thumbnailImageForm)
 				ifTrue: [ ImageMorph new form: objToShow thumbnailImageForm ]
 				ifFalse: [ ImageMorph new form: objToShow imageForm ] ].
-			
 	talkBubble := PhratchTalkBubbleMorph new message: s.
 	thinkFlag
 		ifTrue: [ talkBubble beThoughtBubble: true ].
@@ -120,7 +119,7 @@ PhratchSpriteMorph >> bubble: obj thinkFlag: thinkFlag promptFlag: promptFlag [
 	self setProperty: #talkBubble toValue: talkBubble.
 	self addMorphFront: talkBubble.
 	self positionTalkBubble.
-	World displayWorldSafely.
+	"World displayWorldSafely."
 	^ talkBubble
 ]
 
