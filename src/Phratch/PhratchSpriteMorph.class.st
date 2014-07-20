@@ -1333,7 +1333,7 @@ PhratchSpriteMorph >> spawn [
 	stage sprites addLast: child.
 	child deleteAttributes: self deletedAttributes.
 	child deleteAttribute: #costumes.
-	child deleteAttribute: #sounds.
+	"child deleteAttribute: #sounds."
 
 	^ child	
 ]

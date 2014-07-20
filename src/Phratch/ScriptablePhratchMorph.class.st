@@ -2795,9 +2795,9 @@ ScriptablePhratchMorph >> instancesOf: aCustomBlockId [
 
 	| sf ans visible invisible blx |
 	invisible := self invisibleInstancesOf: aCustomBlockId.
-	visible := blocksBin allMorphs select: [ :m|
+	visible := (blocksBin allMorphs select: [ :m|
 		((m isCustomCommandBlockMorph) or:[
-			m isCustomReporterBlockMorph]) and: [m id = aCustomBlockId]].
+			m isCustomReporterBlockMorph]) and: [m id = aCustomBlockId]]) asOrderedCollection.
 	sf := self ownerOrYourselfThatIsAPhratchFrameMorph.
 	sf ifNotNil: [
 		sf blockEditors do: [:be |
