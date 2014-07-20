@@ -26,5 +26,5 @@ SayDurationElapsedFrom >> defaultArguments [
 { #category : #protocol }
 SayDurationElapsedFrom >> stopTalkThinkAsk [
 
-	self model receiver sayNothing
+	self model expression receiver sayNothing
 ]
