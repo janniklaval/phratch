@@ -237,7 +237,7 @@ PhratchSpriteMorph >> directionMenu [
 	"Provides a drop-down menu for setting the sprite direction."
 
 	| menu |
-	menu := MenuMorphNG new defaultTarget: self.
+	menu := MenuMorph new defaultTarget: self.
 	#(	('right' 90)
 		('left' -90)
 		('up' 0)

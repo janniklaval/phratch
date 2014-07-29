@@ -1114,7 +1114,7 @@ CommandBlockMorph >> replaceArgMorph: oldMorph by: newMorph [
 CommandBlockMorph >> rightButtonMenu [
 
 	| menu choice spec |
-	menu := MenuMorphNG new defaultTarget: self.
+	menu := MenuMorph new defaultTarget: self.
 	menu add: 'help' value: #presentHelpScreen.
 
 	(owner isPhratchBlockPaletteMorph) ifFalse: [

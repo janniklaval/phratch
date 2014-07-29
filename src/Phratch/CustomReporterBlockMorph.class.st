@@ -477,7 +477,7 @@ CustomReporterBlockMorph >> rightButtonMenu [
 
 	| menu choice |
 	self isTemplate ifTrue: [^ self].
-	menu := MenuMorphNG new defaultTarget: self.
+	menu := MenuMorph new defaultTarget: self.
 	menu add: 'help' value: #presentHelpScreen.
 	menu addLine.
 	menu add: 'edit' value: #editScript.

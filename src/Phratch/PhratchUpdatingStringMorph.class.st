@@ -21,6 +21,7 @@ Class {
 		'autoAcceptOnFocusLoss',
 		'minimumWidth',
 		'maximumWidth',
+		'isUpdating',
 		'isUpdating'
 	],
 	#pools : [

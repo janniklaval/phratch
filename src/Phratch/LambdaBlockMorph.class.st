@@ -306,7 +306,7 @@ LambdaBlockMorph >> rightButtonMenu [
 
 	| menu choice block vn atomic |
 	atomic := self checkBoxLabelled: 'atomic' marked: self isAtomic width: 0.
-	menu := MenuMorphNG new defaultTarget: self.
+	menu := MenuMorph new defaultTarget: self.
 	menu add: 'help' value: #presentHelpScreen.
 	menu addLine.
 	menu add: 'duplicate' value: #duplicate.

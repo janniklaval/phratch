@@ -9,10 +9,6 @@ StringMorph >> contents: aString font: aFont [
 ]
 
 { #category : #'*Phratch-Extensions' }
-StringMorph >> forceUnicodeRendering: ignored [
-]
-
-{ #category : #'*Phratch-Extensions' }
 StringMorph >> isStringMorph [
 	^ true
 ]

@@ -49,15 +49,6 @@ ResizableToggleButton >> extent: aPoint [
 
 ]
 
-{ #category : #initialization }
-ResizableToggleButton >> forceUnicodeRendering: aBoolean [
-
-	label forceUnicodeRendering: aBoolean.
-	self updateSize.
-
-
-]
-
 { #category : #'event handling' }
 ResizableToggleButton >> handlesMouseOver: evt [
 	

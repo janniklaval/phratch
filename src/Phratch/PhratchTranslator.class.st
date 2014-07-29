@@ -21,7 +21,6 @@ Class {
 		'RenderScale',
 		'RenderSuppressBold',
 		'RenderVerticalTrimCache',
-		'RenderWithSqueak',
 		'TranslationDict',
 		'UITranslationSet'
 	],
@@ -389,8 +388,6 @@ PhratchTranslator class >> renderHintString [
 		srcs do: [: s |
 			result := result, (self translationFor: s)]].
 
-	RenderWithSqueak ifTrue: [result := String withAll: result].
-
 	^ result
 
 ]
@@ -402,13 +399,6 @@ PhratchTranslator class >> renderScale [
 
 ]
 
-{ #category : #'Unicode rendering' }
-PhratchTranslator class >> renderWithSqueak [
-
-	^ RenderWithSqueak
-
-]
-
 { #category : #'rendering menu' }
 PhratchTranslator class >> renderingMenu [
 	"Present a menu for experimenting with rendering settings."
@@ -417,8 +407,7 @@ PhratchTranslator class >> renderingMenu [
 	| menu |
 	World activeHand toolType: nil.
 	Cursor normal show.
-	RenderWithSqueak
-		ifTrue: [ ^ PhratchError error: 'beep'. ].
+	
 
 	menu := MenuMorph new defaultTarget: self.
 	menu add: 'set font scale...' translated action: #fontScaleMenu.
@@ -450,7 +439,6 @@ PhratchTranslator class >> setLanguage: aString [
 		HeaderString := dict at: '' ifAbsent: [''].
 		dict removeKey: '' ifAbsent: [].
 		self setRenderingHints.
-		RenderWithSqueak ifTrue: [self convertToMacRoman].
 		self addSensorTranslations].
 
 ]
@@ -470,7 +458,6 @@ PhratchTranslator class >> setRenderingHints [
 	RenderSuppressBold := false.
 	RenderCenterOffsetCache := IdentityDictionary new.
 	RenderVerticalTrimCache := IdentityDictionary new.
-	RenderWithSqueak := true.
 
 	TranslationDict isEmpty
 		ifTrue: [ ^ self ].
@@ -507,7 +494,6 @@ PhratchTranslator class >> setRenderingHints [
 	s := TranslationDict at: 'Layout-Hint' ifAbsent: [ '' ].
 	s size > 0
 		ifTrue: [ RenderHintString := s ].
-	RenderWithSqueak := self useSqueakRendering
 
 ]
 
@@ -581,12 +567,6 @@ PhratchTranslator class >> updatePhratchUI [
 	RenderVerticalTrimCache := RenderVerticalTrimCache species new.
 	PhratchFrameMorph allInstancesDo: [:m | m rebuildUIForNewLanguage].
 
-]
-
-{ #category : #'Unicode rendering' }
-PhratchTranslator class >> useSqueakRendering [
-	"Answer true if the current langauge can (or must) be rendered using Squeak,based on the availablility of a rendering plugin, the settings in the .po file and the contents of the translations. Assume that the header has already been processed to initialize HeaderDict."
-	^ true
 ]
 
 { #category : #'Unicode rendering' }

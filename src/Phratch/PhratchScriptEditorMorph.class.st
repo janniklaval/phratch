@@ -91,7 +91,6 @@ PhratchScriptEditorMorph >> addReadouts [
 		yourself.
 			readout := (PhratchUpdatingStringMorph on: self target selector: spec second)
 				font: (PhratchFrameMorph getFont: #XYReadoutBold);
-				forceUnicodeRendering: true;
 				color: (Color gray: 0.2);
 				contents: '-000';
 				growable: false;

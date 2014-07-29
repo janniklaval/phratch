@@ -667,7 +667,6 @@ PaintCanvas >> editForm: aForm regPoint: regPoint textBox: savedTextBox isStage:
 		textColor := textBox textColor.
 		textBox
 			"suppressAntiAliasing: true;"
-			"renderWithSqueak: true;"
 			textColor: Color black;
 			borderWidth: 0].
 

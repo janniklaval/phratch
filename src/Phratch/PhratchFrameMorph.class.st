@@ -529,7 +529,7 @@ PhratchFrameMorph >> addShortcutButtonsTo: rowMorph [
 PhratchFrameMorph >> addSpecialSprite [
 
 	|menu m newSprite frame |
-	menu := MenuMorphNG new defaultTarget: self.
+	menu := MenuMorph new defaultTarget: self.
 	
 	PhratchSpriteMorph withAllSubclasses size = 1 ifTrue:[^ self paintSpriteMorph].
 	
@@ -948,7 +948,6 @@ PhratchFrameMorph >> createStageButtonsPanel [
 		yourself.
 
 	projectTitleMorph := StringMorph new
-		forceUnicodeRendering: true;
 		contents: '';
 		font: (PhratchFrameMorph getFont: #FrameMorphProjectTitle);
 		yourself.
@@ -2241,7 +2240,6 @@ PhratchFrameMorph >> makeXYReadout [
 	readoutX := PhratchUpdatingStringMorph new
 		target: self;
 		getSelector: #mouseX;
-		forceUnicodeRendering: true;
 		font: boldFont;
 		stepTime: 150;
 		growable: false;
@@ -2823,13 +2821,6 @@ PhratchFrameMorph >> refreshBlocks [
 				view: scriptsPane target
 				tab: scriptsPane tabPane currentTab
 				category: viewerPane currentCategory].
-
-]
-
-{ #category : #'menu/button actions' }
-PhratchFrameMorph >> renderingMenu [
-
-	PhratchTranslator renderingMenu.
 
 ]
 

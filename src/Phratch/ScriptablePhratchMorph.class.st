@@ -1275,7 +1275,7 @@ ScriptablePhratchMorph >> costumesPage: xOffset [
 	recBut position: (m right + 4) @ (yMargin + ((maxHeight - recBut height) / 2)).
 	impBut position: (recBut right + 4) @ (yMargin + ((maxHeight - impBut height) / 2)).
 	photoBut position: (impBut right + 4) @ (yMargin + ((maxHeight - impBut height) / 2)) .
-	separator := TiledImageMorph new tileForm: (PhratchFrameMorph skinAt: #costumeSeparatorTile).
+	separator := ImageMorph new form: (PhratchFrameMorph skinAt: #costumeSeparatorTile).
 	bin addMorph: (separator position: (xOffset + 17) @ (yMargin + maxHeight + 5)).
 	y := yMargin + maxHeight + 9.
 	n := 0.
@@ -3188,7 +3188,7 @@ ScriptablePhratchMorph >> letters: start through: end of: aString [
 ScriptablePhratchMorph >> listIndexForDeleteMenu [
 
 	| menu |
-	menu := MenuMorphNG new defaultTarget: self.
+	menu := MenuMorph new defaultTarget: self.
 	#('1' last) do: [:s | menu add: s value: s].
 	menu addLine.
 	menu add: #all value: #all.

@@ -30,7 +30,6 @@ Class {
 		'growWithText',
 		'renderer',
 		'suppressAntiAliasing',
-		'renderWithSqueak',
 		'inset',
 		'lineHeight'
 	],
@@ -430,9 +429,6 @@ MultilineStringMorph >> drawString: aString at: aPoint on: aCanvas [
 	| s |
 	s := aString.
 	suppressAntiAliasing ifNil: [ suppressAntiAliasing := false ].
-	renderWithSqueak ifNil: [ renderWithSqueak := false ].	"allows costume textboxes using old fonts to be rendered:"
-	(renderWithSqueak and: [ font isOSFont not ])
-		ifTrue: [  ].
 	aCanvas
 		text: s
 		bounds: (aPoint extent: 10000 @ 10000)
@@ -618,7 +614,6 @@ MultilineStringMorph >> initialize [
 	growWithText := false.
 	inset := 5@3.
 	suppressAntiAliasing := false.
-	renderWithSqueak := false.
 	self font: TextStyle defaultFont.
 	super extent: 90@25.
 

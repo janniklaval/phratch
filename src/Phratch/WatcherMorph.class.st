@@ -35,7 +35,6 @@ WatcherMorph >> buildReadout [
 		yourself.
 	readout
 		font: (PhratchFrameMorph getFont: #Watcher);
-		forceUnicodeRendering: true;
 		target: self target;
 		color: Color white.]
 	ifTrue: [

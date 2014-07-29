@@ -98,7 +98,7 @@ LibraryItemMorph >> childrenMenu [
 	frame := self ownerOrYourselfThatIsAPhratchFrameMorph.
 	frame ifNil: [^ self].
 
-	menu := MenuMorphNG new defaultTarget: self.
+	menu := MenuMorph new defaultTarget: self.
 	library spriteThumbnails do: [:tn |
 		(tn target prototype == self target) ifTrue: [
 			menu addIcon: tn imageForm 
@@ -347,7 +347,7 @@ LibraryItemMorph >> rightButtonMenu [
 	"Present the right button menu."
 
 	| menu |
-	menu := MenuMorphNG new defaultTarget: self target.
+	menu := MenuMorph new defaultTarget: self target.
 	menu add: 'show' translated action: #makeVisible.
 	menu add: 'export this sprite' translated action: #exportObject.
 
@@ -360,7 +360,7 @@ LibraryItemMorph >> rightButtonMenu [
 			menu add: 'clone' translated action: #spawn.
 			menu add: 'parent...' translated action: #choosePrototype.
 			self target instances size > 0
-				ifTrue: [ menu add: 'children...' action: [ self childrenMenu ] ].
+				ifTrue: [ menu add: 'children...' target: [self childrenMenu] selector: #value argumentList: #() ].
 			self target isNested
 				ifTrue: [ menu addLine ].
 			self target hasSubsprites
@@ -390,7 +390,7 @@ LibraryItemMorph >> stageMenu [
 	frame := self ownerOrYourselfThatIsAPhratchFrameMorph.
 	frame ifNil: [^ self].
 
-	menu := MenuMorphNG  new defaultTarget: self.
+	menu := MenuMorph  new defaultTarget: self.
 	"menu beHorizontal."
 	library spriteThumbnails do: [:tn |
 		tn target prototype ifNil: [

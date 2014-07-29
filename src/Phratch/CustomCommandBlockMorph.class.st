@@ -495,7 +495,7 @@ CustomCommandBlockMorph >> replaceArgMorph: argMorph by: newMorph [
 CustomCommandBlockMorph >> rightButtonMenu [
 
 	| menu choice |
-	menu := MenuMorphNG new defaultTarget: self.
+	menu := MenuMorph new defaultTarget: self.
 	menu add: 'help' value: #presentHelpScreen.
 	menu addLine.
 	isTemplate 

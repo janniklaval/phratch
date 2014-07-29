@@ -367,7 +367,7 @@ VariableBlockMorph >> rightButtonMenu [
 	(((owner isKindOf: MultiArgReporterBlockMorph) and: [owner isLambdaForm])
 		or: [owner isVariableDeclarationBlockMorph])
 		ifFalse: [ ^super rightButtonMenu ].
-	menu := MenuMorphNG new defaultTarget: self.
+	menu := MenuMorph new defaultTarget: self.
 	menu add: 'help' value: #presentHelpScreen.
 	menu addLine.
 	menu add: 'edit...' value: #editName.

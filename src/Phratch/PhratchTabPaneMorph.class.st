@@ -129,8 +129,7 @@ PhratchTabPaneMorph >> tab: aResizableToggleButton2 label: aString [
 	aResizableToggleButton2
 		label: aString font: (PhratchFrameMorph getFont: #Tab).
 
-	PhratchTranslator renderWithSqueak ifFalse: [
-		aResizableToggleButton2 forceUnicodeRendering: true].
+	aResizableToggleButton2 updateSize.
 
 	"account for the size of the tab skin."
 	aResizableToggleButton2 extent: (aResizableToggleButton2 extent - (0@10)).

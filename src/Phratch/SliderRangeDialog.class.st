@@ -83,7 +83,6 @@ SliderRangeDialog >> initialize [
 	self message: 'Slider range:'.
 	minLabel := StringMorph new
 		contents: 'Min:' localized;
-		forceUnicodeRendering: true;
 		font: (PhratchFrameMorph getFont: #StringDialogTypeIn);
 		yourself.
 	maxLabel := minLabel fullCopy contents: 'Max:' localized.

@@ -101,7 +101,7 @@ ExpressionArgMorphWithMenu >> isEmptySlot [
 ExpressionArgMorphWithMenu >> listIndexForDeleteMenu [
 
 	| menu |
-	menu := MenuMorphNG new .
+	menu := MenuMorph new .
 	#('1' last) do: [:s | menu add: s  printString 
 			value: s  asString].
 	menu addLine.

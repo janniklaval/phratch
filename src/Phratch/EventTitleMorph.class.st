@@ -97,7 +97,6 @@ EventTitleMorph >> initialize [
 
 	labelMorph := StringMorph new
 		font: (PhratchFrameMorph getFont: #Arg);
-		forceUnicodeRendering: true;
 		color: Color white;
 		yourself.
 	self addMorph: labelMorph.

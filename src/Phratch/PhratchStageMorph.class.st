@@ -1187,7 +1187,7 @@ PhratchStageMorph >> updateTrailsForm [
 { #category : #byob }
 PhratchStageMorph >> userSelectSpriteDefault: defaultSprite butNotAnyOf: excludeArray [
 	| menu current |
-	menu := MenuMorphNG new defaultTarget: self.
+	menu := MenuMorph new defaultTarget: self.
 	current := (defaultSprite isPhratchSpriteMorph)
 		ifTrue: [ defaultSprite objName ]
 		ifFalse: [ 'none' ].

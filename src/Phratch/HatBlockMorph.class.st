@@ -151,7 +151,6 @@ HatBlockMorph >> initialize [
 	scriptNameMorph := StringMorph new
 		contents: 'script';
 		font: (PhratchFrameMorph getFont: #Label);
-		forceUnicodeRendering: true;
 		color: Color white;
 		yourself.
 	self addMorph: scriptNameMorph.

@@ -401,7 +401,6 @@ StringFieldMorph >> initialize [
 
 	stringMorph := StringMorph new
 		contents: String new font: (StrikeFont fontName: 'Verdana' size: 12);
-		forceUnicodeRendering: true;
 		yourself.
 	self addMorph: stringMorph.
 
