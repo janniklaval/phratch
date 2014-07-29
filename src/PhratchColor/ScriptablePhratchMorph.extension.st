@@ -162,7 +162,7 @@ ScriptablePhratchMorph >> colorsMenu [
 
 	stage := sFrame workPane.
 
-	menu := MenuMorphNG new.
+	menu := MenuMorph new.
 	stage colorNames do: [:v | menu add: v value: v].
 	self = stage ifFalse: [
 		stage colorNames isEmpty ifFalse: [menu addLine].
@@ -183,7 +183,7 @@ ScriptablePhratchMorph >> deleteColor [
 	(stage colorNames isEmpty) & (self colorNames isEmpty)
 		ifTrue: [^ self inform: 'No colors.' localized].
 
-	menu := MenuMorphNG new.
+	menu := MenuMorph new.
 	stage colorNames do: [:v | menu add: v value: (Array with: v with: #global)].
 	self = stage ifFalse: [
 		stage colorNames isEmpty ifFalse: [menu addLine].
@@ -246,7 +246,7 @@ ScriptablePhratchMorph >> hideColor [
 	(stage colorNames isEmpty) & (self colorNames isEmpty)
 		ifTrue: [^ self inform: 'No colors.' localized].
 
-	menu := MenuMorphNG new.
+	menu := MenuMorph new.
 	stage colorNames do: [:v | menu add: v value: (Array with: v with: #global)].
 	self = stage ifFalse: [
 		stage colorNames isEmpty ifFalse: [menu addLine].
@@ -330,7 +330,7 @@ ScriptablePhratchMorph >> showColor [
 	(stage colorNames isEmpty) & (self colorNames isEmpty)
 		ifTrue: [^ self inform: 'No colors.' localized].
 
-	menu := MenuMorphNG new.
+	menu := MenuMorph new.
 	stage colorNames do: [:v | menu add: v value: (Array with: v with: #global)].
 	self = stage ifFalse: [
 		stage colorNames isEmpty ifFalse: [menu addLine].
