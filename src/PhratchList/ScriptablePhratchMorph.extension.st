@@ -337,7 +337,7 @@ ScriptablePhratchMorph >> list: listName contains: anObject [
 ScriptablePhratchMorph >> listIndexMenu [
 
 	| menu |
-	menu := MenuMorphNG new defaultTarget: self.
+	menu := MenuMorph new defaultTarget: self.
 	#('1' last any) do: [:s | menu add: s value: s].
 	menu localize invokeModal.
 	^ menu
