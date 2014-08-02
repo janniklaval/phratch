@@ -41,6 +41,18 @@ String >> asNumberNoError [
 ]
 
 { #category : #'*Phratch-Extensions' }
+String >> blockVisible [
+
+	^ ScriptablePhratchMorph isBlockVisible: self
+]
+
+{ #category : #'*Phratch-Extensions' }
+String >> blockVisible: aBlock [
+
+	^ ScriptablePhratchMorph blockVisible: self
+]
+
+{ #category : #'*Phratch-Extensions' }
 String >> caseInsensitiveEqual: aString [ 
 	"Answer whether the receiver is equal to aString ignoring case differences."
 

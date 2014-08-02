@@ -32,6 +32,7 @@ Class {
 	#classVars : [
 		'BlockColorDict',
 		'BlockSpecDict',
+		'BlockVisible',
 		'CameraOpenings',
 		'DefaultBackgroundForm',
 		'DoubleSize',
@@ -90,7 +91,7 @@ ScriptablePhratchMorph class >> blockSpecs [
 		|previousSC|
 		previousSC := nil.
 		blocks := blocks, {c label}.
-		allPragmas select:[:pragma | (pragma arguments at: 3) = c label] 
+		allPragmas select:[:pragma | ((pragma arguments at: 3) = c label) and:[(BlockVisible includes: (pragma arguments at: 1))not]] 
 			thenDo:[:aP |
 				|prov|
 				(previousSC notNil and: [previousSC ~~( aP arguments at: 5)]) ifTrue:[blocks := blocks, #(-) ].
@@ -101,6 +102,16 @@ ScriptablePhratchMorph class >> blockSpecs [
 	].
 
 	^ blocks
+]
+
+{ #category : #'panther-actions' }
+ScriptablePhratchMorph class >> blockVisible: aBlock [
+
+	(self isBlockVisible: aBlock) ifTrue:[ 
+		BlockVisible add: aBlock]
+	ifFalse:[
+		BlockVisible remove: aBlock ifAbsent:[]
+		]
 ]
 
 { #category : #'block specs' }
@@ -219,6 +230,13 @@ ScriptablePhratchMorph class >> initialize [
 	ListBlockColor := Color h: 18 s: 0.92 v: 0.85.
 
 	DoubleSize := false
+]
+
+{ #category : #'panther-actions' }
+ScriptablePhratchMorph class >> isBlockVisible: aBlock [
+
+	^ (BlockVisible includes: aBlock) not.
+	
 ]
 
 { #category : #other }

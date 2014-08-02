@@ -219,6 +219,32 @@ PhratchInstaller class >> phratchSettingsOn: aBuilder [
 		 					description: 'Do you want to see this category ?' translated.
 					].
 				].
+			(aBuilder group: #blockVisibility)
+				label: 'Block Visibility' translated;
+				description: 'Block Visibility' translated;
+				with: [ |allPragmas|
+					allPragmas := (Pragma
+						allNamed: #phratchItem:kind:category:defaultValues:subCategory:special:
+						in: ScriptablePhratchMorph) asOrderedCollection.
+					ScriptablePhratchMorph allSubclasses
+						do: [ :aSC | allPragmas addAll: (Pragma allNamed: #phratchItem:kind:category:defaultValues:subCategory:special: in: aSC) ].
+					allPragmas sort: [ :a :b | (a argumentAt: 3) < (b argumentAt: 3) ].
+					allPragmas do:[:e | 
+						|prov|
+						prov := {(e arguments at: 1).
+							(e arguments at: 2).
+							(e method selector).
+							(e arguments at: 6)} , (e arguments at: 4).
+							
+						(aBuilder setting: #blockVisible) 
+							icon: ((e methodClass new blockFromSpec: prov color: (PhratchCategory blockColorFor: (e arguments at: 3))) imageForm);
+							label: "(e arguments at: 1), "' visible' translated;
+		 					target: (e arguments at: 1);
+							getSelector: #blockVisible;
+							setSelector: #blockVisible:;
+		 					description: 'Do you want to see this block ?' translated.
+					].
+				].
 			(aBuilder launcher: #updatePhratchView)
 				target: PhratchFrameMorph "; targetSelector: #closeAndOpen";
 				script: #rebuildUI;
