@@ -228,6 +228,7 @@ ScriptablePhratchMorph class >> initialize [
 	RandomGen := Random new.
 	TimerStartMSecs := Time millisecondClockValue.
 	ListBlockColor := Color h: 18 s: 0.92 v: 0.85.
+	BlockVisible := Set new.
 
 	DoubleSize := false
 ]
