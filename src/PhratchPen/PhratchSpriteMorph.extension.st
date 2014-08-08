@@ -3,7 +3,7 @@ Extension { #name : #PhratchSpriteMorph }
 { #category : #'*PhratchPen' }
 PhratchSpriteMorph >> changePenHueBy: aNumber [
 	"Change the pen hue by given number."
-	<phratchItem: 'change pen color by $Number$' kind: #- category: 'pen' defaultValues: #() subCategory: #a3 special: #()>
+	<phratchItem: 'change pen hue by $Number$' kind: #- category: 'pen' defaultValues: #() subCategory: #a3 special: #()>
 	self setPenHueTo: penHue + aNumber.
 
 
@@ -146,7 +146,7 @@ PhratchSpriteMorph >> putPenUp [
 { #category : #'*PhratchPen' }
 PhratchSpriteMorph >> setPenHueTo: aNumber [
 	"Set the pen hue to given number between 0 and 200. (That makes 100 the 'maximum' distance away from the original color on the color wheel.)"
-	<phratchItem: 'set pen color to $Number$' kind: #- category: 'pen' defaultValues: #(0) subCategory: #a3 special: #()>
+	<phratchItem: 'set pen hue to $Number$' kind: #- category: 'pen' defaultValues: #(0) subCategory: #a3 special: #()>
 	self undeleteAttribute: #penColor.
 	self passiveSetPenHueTo: aNumber
 ]
