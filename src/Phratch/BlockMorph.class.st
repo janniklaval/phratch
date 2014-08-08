@@ -1419,13 +1419,16 @@ BlockMorph >> shouldDropOnMouseUp [
 BlockMorph >> showCodeString [
 	"Answer a human-readable string representing the code for this block sequence."
 
-	(Workspace
+	AlgorithmMorph new algorithm: self codeString; withButtonsForYes: false no: false okay: true cancel: false;
+		getUserResponse.
+	
+	"(Workspace
 		openContents:
-			'"Generated code from your blocks"'
+			'Generated code from your blocks'
 			, String cr ,
 			self codeString
 			)
-		label: 'Generated from Phratch!'.
+		label: 'Generated from Phratch!'."
 		
 	
 ]
