@@ -91,21 +91,21 @@ ScriptablePhratchMorph >> colorAtX: x y: y [
 
 { #category : #'*PhratchColor' }
 ScriptablePhratchMorph >> colorB: aColor [
-	"give the value of the blue in the RGB representation of the color"
+	"Give the value of the blue in the RGB representation of the color"
 	<phratchItem: '$Color$ blue' kind: #ReporterWatcherBlockMorph category: 'colors' defaultValues: #() subCategory: #a4 special: #()>
 	^ aColor blue.
 ]
 
 { #category : #'*PhratchColor' }
 ScriptablePhratchMorph >> colorG: aColor [
-	"give the value of the green in the RGB representation of the color"
+	"Give the value of the green in the RGB representation of the color"
 	<phratchItem: '$Color$ green' kind: #ReporterWatcherBlockMorph category: 'colors' defaultValues: #() subCategory: #a4 special: #()>
 	^ aColor green.
 ]
 
 { #category : #'*PhratchColor' }
 ScriptablePhratchMorph >> colorH: aColor [
-	"give the value of the hue of the given color"
+	"Give the value of the hue of the given color"
 	<phratchItem: '$Color$ hue' kind: #ReporterWatcherBlockMorph category: 'colors' defaultValues: #() subCategory: #a5 special: #()>
 	^ aColor hue.
 ]
@@ -125,7 +125,7 @@ ScriptablePhratchMorph >> colorNames [
 
 { #category : #'*PhratchColor' }
 ScriptablePhratchMorph >> colorR: aColor [
-	"give the value of the red in the RGB representation of the color"
+	"Give the value of the red in the RGB representation of the color"
 	<phratchItem: '$Color$ red' kind: #ReporterWatcherBlockMorph category: 'colors' defaultValues: #() subCategory: #a4 special: #()>
 	^ aColor red.
 ]
@@ -140,14 +140,14 @@ ScriptablePhratchMorph >> colorR: r g: g b: b [
 
 { #category : #'*PhratchColor' }
 ScriptablePhratchMorph >> colorS: aColor [
-	"give the value of the saturation of the given color"
+	"Give the value of the saturation of the given color"
 	<phratchItem: '$Color$ saturation' kind: #ReporterWatcherBlockMorph category: 'colors' defaultValues: #() subCategory: #a5 special: #()>
 	^ aColor saturation.
 ]
 
 { #category : #'*PhratchColor' }
 ScriptablePhratchMorph >> colorV: aColor [
-	"give the value of the brightness of the given color"
+	"Give the value of the brightness of the given color"
 	<phratchItem: '$Color$ brightness' kind: #ReporterWatcherBlockMorph category: 'colors' defaultValues: #() subCategory: #a5 special: #()>
 	^ aColor brightness.
 ]
@@ -294,7 +294,7 @@ ScriptablePhratchMorph >> namedColors [
 
 { #category : #'*PhratchColor' }
 ScriptablePhratchMorph >> reportColor: colorName [
-	"Answer the value of the given user color variable of this object or its parent."
+	"Answer the value of the given color variable of this object or its parent."
 	<phratchItem: '$ColorVar$' kind: #ColorBlockMorph category: 'colors' defaultValues: #('') subCategory: #a1 special: #()>
 	| stage |
 	(self colorNames includes: colorName)
