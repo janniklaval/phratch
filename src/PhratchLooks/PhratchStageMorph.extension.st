@@ -69,7 +69,7 @@ PhratchStageMorph >> setVPanTo: aNumber [
 
 { #category : #'*PhratchLooks' }
 PhratchStageMorph >> showBackground: costumeNameOrIndex [
-	"This is lookLike: for the stage..."
+	"Change my background."
 	<phratchItem: 'switch to background $Costumes$' kind: #- category: 'looks' defaultValues: #('background1') subCategory: #a1 special: #()>
 	self lookLike: costumeNameOrIndex.
 

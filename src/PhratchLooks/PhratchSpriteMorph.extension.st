@@ -49,7 +49,7 @@ PhratchSpriteMorph >> goBackByLayers: aNumber [
 
 { #category : #'*PhratchLooks' }
 PhratchSpriteMorph >> goUpByLayers: aNumber [
-	"Decrease my layer by (i.e., move me towards the back by) the given number of layers."
+	"Increase my layer by (i.e., move me towards the back by) the given number of layers."
 	<phratchItem: 'come up $Number$ layers' kind: #- category: 'looks' defaultValues: #(1) subCategory: #a7 special: #()>
 	self setLayerTo: self layer - aNumber truncated
 ]
