@@ -385,7 +385,7 @@ ScriptablePhratchMorph >> numberSort: t1 [
 
 { #category : #'*PhratchList' }
 ScriptablePhratchMorph >> quietCreateListNamed: listName [
-	"Create the given list silently"
+	"Create the given list."
 	<phratchItem: 'make locale list $String$' kind: #- category: 'list' defaultValues: #('a list') subCategory: #a2 special: #()>
 	| list stage n sFrame |
 	(self variableNameInUse: listName) ifTrue: [^ self].
