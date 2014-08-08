@@ -628,7 +628,7 @@ ScriptablePhratchMorph >> addVariable [
 
 { #category : #variables }
 ScriptablePhratchMorph >> addVariable: varName [
-	"Add a new user variable with the given name to this object. Do nothing if the variable already exists or is built in."
+	"Add a new variable with the given name locale to the object. Do nothing if the variable already exists or is built in."
 	<phratchItem: 'make $String$' kind: #- category: 'variables' defaultValues: #('a variable') subCategory: #a1 special: #()>
 	| sFrame |
 	(sFrame := self ownerOrYourselfThatIsAPhratchFrameMorph) ifNil: [^ PhratchError error: 'beep'.].
@@ -970,7 +970,7 @@ ScriptablePhratchMorph >> blocksFor: aCategory [
 
 { #category : #'other ops' }
 ScriptablePhratchMorph >> broadcast: name [
-	"Broadcast the given event name with zero as its argument."
+	"Broadcast the given event name."
 	<phratchItem: 'broadcast $Event$' kind: #- category: 'control' defaultValues: #() subCategory: #broadcast special: #()>
 	self broadcast: name withArgument: 0.
 
@@ -1734,7 +1734,7 @@ ScriptablePhratchMorph >> desparatelyGetVar: varName from: aVarBlockMorph [
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> doAnswer [
-	"Answer the given string."
+	"Answer the given result."
 	<phratchItem: 'report $String$' kind: #SpecialBlockMorph category: 'control' defaultValues: #() subCategory: #process special: #()>
 
 ]
@@ -1822,7 +1822,7 @@ ScriptablePhratchMorph >> doReport [
 
 { #category : #byob }
 ScriptablePhratchMorph >> doReturn [
-	"Wait for the return value of the given block"
+	"Stop the current script"
 	<phratchItem: 'stop script' kind: #SpecialBlockMorph category: 'control' defaultValues: #() subCategory: #loop special: #()>
 ]
 
@@ -1849,7 +1849,7 @@ ScriptablePhratchMorph >> doRunBlockWithArgs [
 
 { #category : #'other ops' }
 ScriptablePhratchMorph >> doStopBlock [
-	"Stop everything!"
+	"Stop the current block!"
 	<phratchItem: 'stop block' kind: #SpecialBlockMorph category: 'control' defaultValues: #() subCategory: #startstop special: #()>
 	
 ]
@@ -2218,7 +2218,7 @@ ScriptablePhratchMorph >> eventReceived: event [
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> eventReceivedNamed: eventName [
-	"Collect an array of all stacks that respond to the given event and keep only the ones that are running. Answer true if the final list has any items."
+	"Answer true if the given event is received."
 	<phratchItem: '$Event$ received?' kind: #BooleanWatcherBlockMorph category: 'control' defaultValues: #() subCategory: #broadcast special: #()>
 	| targetScripts procs |
 	self isSprite ifTrue: [^ (self ownerThatIsAPhratchStageMorph) eventReceivedNamed: eventName].
@@ -2453,7 +2453,7 @@ ScriptablePhratchMorph >> getVar: varName block: aVariableBlockMorph [
 { #category : #'BYOB OOP message passing' }
 ScriptablePhratchMorph >> getVarOrListNamed: varName [
 	"Get the variable or list with the given name"
-	<phratchItem: 'variable named $String$' kind: #ReporterBlockMorph category: 'variables' defaultValues: #() subCategory: #a3 special: #()>
+	<phratchItem: 'variable or list named $String$' kind: #ReporterBlockMorph category: 'variables' defaultValues: #() subCategory: #a3 special: #()>
 	| value |
 	"first let's try to find a variable"
 	value := (vars includesKey: varName)
@@ -2552,7 +2552,7 @@ ScriptablePhratchMorph >> if: aCondition then: trueString else: falseString [
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> ifB: aCondition then: trueString else: falseString [
-"Answer the first string if the given condition is true, otherwise answer the second."
+"Answer the first boolean if the given condition is true, otherwise answer the second."
 	<phratchItem: 'if $Boolean$ then $Boolean$ else $Boolean$' kind: #BooleanBlockMorph category: 'control' defaultValues: #() subCategory: #if special: #()>
 	aCondition
 		ifTrue: [^ trueString = true].
@@ -3616,7 +3616,7 @@ ScriptablePhratchMorph >> passiveSetLayerTo: aNumber [
 ScriptablePhratchMorph >> pause [
 	"Pause the main process and wait the user click on the OK button"
 	<phratchItem: 'pause' kind: #- category: 'control' defaultValues: #() subCategory: #startstop special: #()>
-    DialogBoxMorph warn: 'Paused: Click OK to continue'.
+    DialogBoxMorph inform: 'Paused: Click OK to continue'.
 	self updateAfterPopUp.
 ]
 
@@ -3843,7 +3843,7 @@ ScriptablePhratchMorph >> rejectDropEvent: evt [
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> reportVar: varName [
-	"Answer the value of the given user variable of this object or its parent."
+	"Answer the value of the given variable."
 	<phratchItem: '$Variable$' kind: #ReporterBlockMorph category: 'variables' defaultValues: #('') subCategory: #a3 special: #()>
 	| stage |
 	(self varNames includes: varName)
@@ -4032,7 +4032,7 @@ ScriptablePhratchMorph >> setLayerTo: aNumber [
 
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> setLayoutOfVar: varName to: aString [
-	"Set the given layout of the variable to the given style"
+	"Set the given watcher layout of the variable to the given style"
 	<phratchItem: 'set layout of $Variable$ to $LayoutStyles$' kind: #- category: 'variables' defaultValues: #('' '') subCategory: #a5 special: #()>
 	| symbol b w frame stage |
 	symbol := aString asSymbol.
@@ -4201,7 +4201,7 @@ ScriptablePhratchMorph >> stopAll [
 
 { #category : #byob }
 ScriptablePhratchMorph >> stopAllScriptsFor: eventName [
-	"Stop all the scripts for the given object"
+	"Stop all the scripts for the given event"
 	<phratchItem: 'stop all scripts for $Event$' kind: #- category: 'control' defaultValues: #() subCategory: #startstop special: #()>
 	| stage |
 	(stage := self ownerOrYourselfThatIsAPhratchStageMorph) ifNotNil: [
@@ -4612,25 +4612,25 @@ ScriptablePhratchMorph >> wait: duration elapsed: elapsed from: ignored [
 
 { #category : #'other ops' }
 ScriptablePhratchMorph >> whenEventReceived [
-	"Wait for the given event"
+	"Following blocks are executed when the given event is received"
 	<phratchItem: 'when I receive $Event$' kind: #EventHatMorph category: 'control' defaultValues: #() subCategory: #ahat special: #()>
 ]
 
 { #category : #'other ops' }
 ScriptablePhratchMorph >> whenFlagClicked [
-	"Wait for the green flag is pressed"
+	"Following blocks are executed when the green flag is pressed"
 	<phratchItem: 'when $Sprite$ clicked' kind: #StartEventHatMorph category: 'control' defaultValues: #() subCategory: #ahat special: #()>
 ]
 
 { #category : #'other ops' }
 ScriptablePhratchMorph >> whenKeyPressed [
-	"Wait for the given key is pressed"
+	"Following blocks are executed when the given key is pressed"
 	<phratchItem: 'when $Keys$ key pressed' kind: #KeyEventHatMorph category: 'control' defaultValues: #() subCategory: #ahat special: #()>
 ]
 
 { #category : #'other ops' }
 ScriptablePhratchMorph >> whenSpriteClicked [
-	"Wait for the given srite is clicked"
+	"Following blocks are executed when the given sprite is clicked"
 	<phratchItem: 'when $Sprite$ clicked' kind: #MouseClickEventHatMorph category: 'control' defaultValues: #() subCategory: #ahat special: #()>
 ]
 

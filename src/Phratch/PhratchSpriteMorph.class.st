@@ -167,7 +167,7 @@ PhratchSpriteMorph >> clearPenTrails [
 { #category : #'panther actions' }
 PhratchSpriteMorph >> cloneMe [
 	"Clone me without registering me in the environemnt"
-	<phratchItem: 'clone me' kind: #- category: 'control' defaultValues: #() subCategory: #self special: #()>
+	<phratchItem: 'clone me' kind: #ReporterBlockMorph category: 'control' defaultValues: #() subCategory: #self special: #()>
 	| stage clone |
 	(self ownerThatIsAOffscreenWorldMorph) ifNotNil: [
 		stage := (self ownerThatIsAOffscreenWorldMorph) frame workPane.
@@ -1244,7 +1244,7 @@ PhratchSpriteMorph >> sayNothing [
 
 { #category : #accessing }
 PhratchSpriteMorph >> scale [
-	"Return the size"
+	"Return the size percentage of the costume"
 	<phratchItem: 'size' kind: #ReporterWatcherBlockMorph category: 'looks' defaultValues: #() subCategory: #a4 special: #()>
 	| att |
 	att := #size.
@@ -1544,7 +1544,7 @@ PhratchSpriteMorph >> virtualScale [
 
 { #category : #'motion ops' }
 PhratchSpriteMorph >> whenSpriteCreated [
-	"Wait until the given sprite is created"
+	"Following blocks are executed when the given sprite is created"
 	<phratchItem: 'when $Sprite$ created' kind: #CreationEventHatMorph category: 'control' defaultValues: #() subCategory: #ahat special: #()>
 
 
