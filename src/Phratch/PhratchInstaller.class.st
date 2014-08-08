@@ -304,7 +304,7 @@ image in end-user (fillScreen) mode?') ifFalse: [^ self].
 	aFrameMorph clearStage.
 
 	Display newDepth: 32.
-	aFrameMorph fillScreenOn.
+	aFrameMorph enterUserMode.
 	World doOneCycleNow.
 	aFrameMorph newPhratchProject.
 	ImageCleaner cleanUpForProduction.
