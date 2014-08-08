@@ -83,7 +83,7 @@ PhratchSpriteMorph >> bounceOffEdge [
 
 { #category : #'*PhratchMotion' }
 PhratchSpriteMorph >> changeXposBy: aNumber [
-	"Move right by the given amount."
+	"Move left or right by the given amount."
 	<phratchItem: 'change x by $Number$' kind: #- category: 'motion' defaultValues: #(10) subCategory: #a4 special: #()>
 	self xpos: self xpos + aNumber
 
@@ -95,7 +95,7 @@ PhratchSpriteMorph >> changeXposBy: aNumber [
 
 { #category : #'*PhratchMotion' }
 PhratchSpriteMorph >> changeYposBy: aNumber [
-	"Move up by the given amount."
+	"Move up or down by the given amount."
 	<phratchItem: 'change y by $Number$' kind: #- category: 'motion' defaultValues: #(10) subCategory: #a4 special: #()>
 	self ypos: self ypos + aNumber
 
@@ -117,8 +117,7 @@ PhratchSpriteMorph >> distance: t1 X: t2 Y: t3 [
 
 { #category : #'*PhratchMotion' }
 PhratchSpriteMorph >> forward: distance [
-	"Move the object forward (i.e., the direction of its heading) by the given distance.
-	Avoid infinite or NaN coordinates"
+	"Move the object forward (i.e., the direction of its heading) by the given distance."
 	<phratchItem: 'move $Number$ steps' kind: #- category: 'motion' defaultValues: #() subCategory: #a1 special: #()>
 	| radians deltaP newPos newX newY |
 	
@@ -143,7 +142,7 @@ PhratchSpriteMorph >> forward: distance [
 
 { #category : #'*PhratchMotion' }
 PhratchSpriteMorph >> glideSecs: duration toX: endX y: endY elapsed: elapsed from: startPoint [
-	"Interpolate my position from my current postion to the given x and y over the given duration. If startPoint is nil, just answer my current position; this sets the starting point for the interpolation."
+	"Interpolate my position from my current postion to the given x and y over the given duration."
 
 	<phratchItem: 'glide $Number$ secs to x:$Number$ y:$Number$' kind: #TimeBlockMorph category: 'motion' defaultValues: #(1 50 50)
 	subCategory: #a3 special: #()>
