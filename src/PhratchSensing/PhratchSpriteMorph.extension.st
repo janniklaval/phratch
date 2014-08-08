@@ -46,7 +46,7 @@ PhratchSpriteMorph >> bounceOffSprite: aName [
 
 { #category : #'*PhratchSensing' }
 PhratchSpriteMorph >> dist: t1 and: t2 [ 
-	"Compute the distance between two points"
+	"Compute the distance between the sprite and a point."
 	<phratchItem: 'distance to x $Number$ y $Number$' kind: #ReporterBlockMorph category: 'sensing' defaultValues: #(0 0) subCategory: #sensor special: #()>
     ^ ((self xpos - t1) * (self xpos - t1) + ((self ypos - t2) * (self ypos - t2))) abs sqrt
 ]
