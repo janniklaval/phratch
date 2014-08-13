@@ -24,11 +24,11 @@ PhratchCategoryPure class >> viewerPageFor: aScriptablePhratchMorph [
 
 		"Answer a morph containing my variables."
 
-	| page addButton x y maxX addButton2 |
+	| page "addButton" x y maxX "addButton2" |
 	page := PhratchBlockPaletteMorph new
 		color: (Color r: 0.8 g: 0.8 b: 1.0);
 		borderWidth: 0.
-
+"
 	addButton := PhratchFrameMorph
 		buttonLabel: 'Make kompai1' localized
 		selector: #addKompai1.
@@ -36,15 +36,15 @@ PhratchCategoryPure class >> viewerPageFor: aScriptablePhratchMorph [
 	addButton2 := PhratchFrameMorph
 		buttonLabel: 'Make kompai2' localized
 		selector: #addKompai2.
-	
+	"
 	x := 13.
-	page addMorph: (addButton target: aScriptablePhratchMorph; position: x@7).
+	"page addMorph: (addButton target: aScriptablePhratchMorph; position: x@7).
 	y := addButton bottom + 3.
 	
 	y := y + 0.
 	page addMorph: (addButton2 target: aScriptablePhratchMorph; position: x@30).
-	y := addButton2 bottom + 3.
-
+	y := addButton2 bottom + 3."
+	y:= 3.
 	aScriptablePhratchMorph addGenericPureBlocksTo: page x: x y: y.
 	maxX := page submorphs inject: 0 into: [:t :m | t max: m right].
 	page extent: (maxX + 10) @ y.
