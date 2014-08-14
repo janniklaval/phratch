@@ -7,6 +7,12 @@ Class {
 	#category : #PhratchPure
 }
 
+{ #category : #'as yet unclassified' }
+PhratchSpritePureMorph class >> stepTimeValue [
+
+	^500
+]
+
 { #category : #'motion ops' }
 PhratchSpritePureMorph >> cleanNotif [
 
@@ -41,7 +47,7 @@ PhratchSpritePureMorph >> closeConnection [
 { #category : #'motion ops' }
 PhratchSpritePureMorph >> dir [
 
-	<phratchItem: 'direction' kind: #ReporterWatcherBlockMorph category: 'pure' defaultValues: #() subCategory: #localization special: #()>
+	<phratchItem: 'direction' kind: #ReporterWatcherBlockMorph category: 'pure' defaultValues: #() subCategory: #localization special: #(stepTimeForPure)>
 	
 	"super heading."
 	[^ connectedRobot localizationService currentPose orientation.
@@ -168,7 +174,7 @@ PhratchSpritePureMorph >> isConnected [
 { #category : #'motion ops' }
 PhratchSpritePureMorph >> minInfraredpos [
 
-	<phratchItem: 'min infrared position' kind: #ReporterWatcherBlockMorph category: 'pure' defaultValues: #() subCategory: #sensor special: #()>
+	<phratchItem: 'min infrared position' kind: #ReporterWatcherBlockMorph category: 'pure' defaultValues: #() subCategory: #sensor special: #(stepTimeForPure)>
 	| laser notification |
 	laser := connectedRobot irTelemeterService.
 	[laser enableNotificationsEvery: 100.]on: Exception do:[].
@@ -180,7 +186,7 @@ PhratchSpritePureMorph >> minInfraredpos [
 { #category : #'motion ops' }
 PhratchSpritePureMorph >> minLaserpos [
 
-	<phratchItem: 'min laser position' kind: #ReporterWatcherBlockMorph category: 'pure' defaultValues: #() subCategory: #sensor special: #()>
+	<phratchItem: 'min laser position' kind: #ReporterWatcherBlockMorph category: 'pure' defaultValues: #() subCategory: #sensor special: #(stepTimeForPure)>
 	| laser notification |
 	laser := connectedRobot laserService.
 	[laser enableNotificationsEvery: 100.]on: Exception do:[].
@@ -191,7 +197,7 @@ PhratchSpritePureMorph >> minLaserpos [
 { #category : #'motion ops' }
 PhratchSpritePureMorph >> minTelemeterpos [
 	
-	<phratchItem: 'min telemeter position' kind: #ReporterWatcherBlockMorph category: 'pure' defaultValues: #() subCategory: #sensor special: #()>
+	<phratchItem: 'min telemeter position' kind: #ReporterWatcherBlockMorph category: 'pure' defaultValues: #() subCategory: #sensor special: #(stepTimeForPure)>
 	| laser notification |
 	laser := connectedRobot sonarTelemeterService.
 	[laser enableNotificationsEvery: 100.]on: Exception do:[].
@@ -308,7 +314,7 @@ PhratchSpritePureMorph >> stopRobot [
 { #category : #'motion ops' }
 PhratchSpritePureMorph >> xposition [
 
-	<phratchItem: 'x position' kind: #ReporterWatcherBlockMorph category: 'pure' defaultValues: #() subCategory: #localization special: #()>
+	<phratchItem: 'x position' kind: #ReporterWatcherBlockMorph category: 'pure' defaultValues: #() subCategory: #localization special: #(stepTimeForPure)>
 	"super xpos."
 	[^ connectedRobot localizationService currentPosition x * 100.
 	] on: Exception do: [ Transcript show: 'xpos'; cr ]
@@ -326,7 +332,7 @@ PhratchSpritePureMorph >> xposition: aNumber [
 { #category : #'motion ops' }
 PhratchSpritePureMorph >> yposition [
 
-	<phratchItem: 'y position' kind: #ReporterWatcherBlockMorph category: 'pure' defaultValues: #() subCategory: #localization special: #()>
+	<phratchItem: 'y position' kind: #ReporterWatcherBlockMorph category: 'pure' defaultValues: #() subCategory: #localization special: #(stepTimeForPure)>
 	"super ypos."
 	[^ connectedRobot localizationService currentPosition x * 100.
 	] on: Exception do: [ Transcript show: 'ypos'; cr ]
