@@ -115,6 +115,18 @@ PhratchSpritePureMorph >> goX: x y: y [
 	] on: Exception do: [ Transcript show: 'gotox:y:'; cr ]
 ]
 
+{ #category : #'motion ops' }
+PhratchSpritePureMorph >> infraredposAt: anInfrared [
+
+	<phratchItem: 'value for infrared $Number$' kind: #ReporterWatcherBlockMorph category: 'pure' defaultValues: #() subCategory: #sensor special: #(stepTimeForPure)>
+	| laser notification |
+	laser := connectedRobot irTelemeterService.
+	[laser enableNotificationsEvery: 100.]on: Exception do:[].
+	notification := self notificationOrNilFrom: laser.
+	
+	[^ notification distances at: anInfrared] on: Error do: [ ^'NaN' ]
+]
+
 { #category : #'as yet unclassified' }
 PhratchSpritePureMorph >> initializeSkin [
 	| botSkin botImage |
@@ -166,9 +178,21 @@ PhratchSpritePureMorph >> ip: aString port: portNumber [
 { #category : #'motion ops' }
 PhratchSpritePureMorph >> isConnected [
 
-	<phratchItem: 'is connected' kind: #ReporterWatcherBlockMorph category: 'pure' defaultValues: #() subCategory: #brick special: #()>
+	<phratchItem: 'is connected' kind: #BooleanWatcherBlockMorph category: 'pure' defaultValues: #() subCategory: #brick special: #()>
 	
 	[^ connectedRobot bridge socket isConnected] on: Error do:[^false]
+]
+
+{ #category : #'motion ops' }
+PhratchSpritePureMorph >> laserposAt: aPos [
+
+	<phratchItem: 'value $Number$ of laser' kind: #ReporterWatcherBlockMorph category: 'pure' defaultValues: #() subCategory: #sensor special: #(stepTimeForPure)>
+	| laser notification |
+	laser := connectedRobot laserService.
+	[laser enableNotificationsEvery: 100.]on: Exception do:[].
+	notification := self notificationOrNilFrom: laser.
+	[^ notification distances at: (aPos min: 270)] on: Error do: [ ^'NaN' ]
+
 ]
 
 { #category : #'motion ops' }
@@ -254,10 +278,11 @@ PhratchSpritePureMorph >> resetPosition [
 PhratchSpritePureMorph >> rotate: aDist at: aSpeed [
 
 	<phratchItem: 'rotate steps value $Number$ speed $Number$' kind: #- category: 'pure' defaultValues: #(0 0) subCategory: #step special: #()>
-	
+	| radian |
+	radian := aDist * Float pi / 180.
 	[
 	connectedRobot stepService
-		rotate:  aDist at: aSpeed.
+		rotate:  radian at: aSpeed.
 	] on: Exception do: [ Transcript show: 'movestep'; cr ]
 ]
 
@@ -309,6 +334,18 @@ PhratchSpritePureMorph >> stopRobot [
 	connectedRobot trajectoryService emergencyStop.
 
 
+]
+
+{ #category : #'motion ops' }
+PhratchSpritePureMorph >> telemeterposAt: aTelemeter [
+	
+	<phratchItem: 'value for telemeter $Number$' kind: #ReporterWatcherBlockMorph category: 'pure' defaultValues: #() subCategory: #sensor special: #(stepTimeForPure)>
+	| laser notification |
+	laser := connectedRobot sonarTelemeterService.
+	[laser enableNotificationsEvery: 100.]on: Exception do:[].
+	notification := self notificationOrNilFrom: laser.
+	
+	[^ notification distances at: aTelemeter] on: Error do: [ ^'NaN' ]
 ]
 
 { #category : #'motion ops' }
