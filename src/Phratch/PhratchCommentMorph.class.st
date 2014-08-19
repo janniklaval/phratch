@@ -3,7 +3,6 @@ Class {
 	#superclass : #AlignmentMorph,
 	#instVars : [
 		'labelMorph',
-		'resizeMorph',
 		'commentMorph',
 		'showHideMorph',
 		'isShowing',
@@ -230,8 +229,7 @@ PhratchCommentMorph >> initialize [
 		yourself.
 	
 	bottomBar addMorphBack: commentMorph.
-	"bottomBar addMorphBack: resizeMorph.
-"
+
 	self addMorphBack: bottomBar.
 	isResizing := false.
 	resizeOffset := 0@0.
@@ -339,7 +337,7 @@ PhratchCommentMorph >> mouseMove: evt [
 	isResizing
 		ifFalse: [ ^ self ].
 	self width: (self defaultWidth max: (p - self topLeft + resizeOffset) x).
-	commentMorph width: self width "- resizeMorph width"
+	commentMorph width: self width
 ]
 
 { #category : #private }
@@ -468,7 +466,6 @@ PhratchCommentMorph >> toggleShowing [
 			showHideMorph form: (PhratchFrameMorph skinAt: #arrowOpenComment).
 			showHideMorph form colors: colors.
 			(self submorphs at: 2) addMorphBack: commentMorph.
-			"(self submorphs at: 2) addMorphBack: resizeMorph."
 			commentMorph startStepping.
 			labelMorph contents: ''.
 			self comeToFront.
@@ -477,7 +474,6 @@ PhratchCommentMorph >> toggleShowing [
 			showHideMorph form: (PhratchFrameMorph skinAt: #arrowClosedComment).
 			showHideMorph form colors: colors.
 			commentMorph delete.
-			"resizeMorph delete."
 			labelMorph contents: self labelWhenClosed.
 			self color: self topBarColor].
 
@@ -542,7 +538,7 @@ PhratchCommentMorph >> updatePosition [
 PhratchCommentMorph >> width: aNumber [
 
 	super width: (self defaultWidth max: aNumber).
-	commentMorph notNil "& resizeMorph notNil" ifTrue: [
-		commentMorph width: self width "- resizeMorph width"].
+	commentMorph notNil ifTrue: [
+		commentMorph width: self width].
 
 ]

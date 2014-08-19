@@ -343,7 +343,7 @@ PhratchFrameMorph >> aboutPhratch [
 		yourself.
 	dialogBox
 		message:
-			'Phratch 4.0 alpha
+			'Phratch ', PhratchInstaller version, '
 Copyright (c) 2014 Jannik Laval.
 All rights reserved.
 

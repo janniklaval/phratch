@@ -6,7 +6,6 @@ Class {
 		'blockVars',
 		'body',
 		'isAtomic',
-		'isBoolean',
 		'answer',
 		'category',
 		'type',
@@ -223,7 +222,6 @@ CustomBlockDefinition >> initialize [
 	declarations := Dictionary new.
 	defaults := Dictionary new.
 	isAtomic := true.
-	isBoolean := false.
 	blockVars := Set new.
 	isGlobal := true
 ]
@@ -236,13 +234,6 @@ CustomBlockDefinition >> isAtomic [
 { #category : #accessing }
 CustomBlockDefinition >> isAtomic: aBoolean [
 	isAtomic := aBoolean.
-]
-
-{ #category : #deprecated }
-CustomBlockDefinition >> isBoolean: aBoolean [
-	"deprecated, kept for legacy support"
-
-	isBoolean := aBoolean
 ]
 
 { #category : #accessing }

@@ -18,7 +18,8 @@ Class {
 		'sprites',
 		'isQuarterSize',
 		'cachedForm',
-		'feedbackMorph'
+		'feedbackMorph',
+		'tempoBPM'
 	],
 	#category : #'Phratch-Objects'
 }

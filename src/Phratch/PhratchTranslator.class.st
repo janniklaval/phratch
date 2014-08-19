@@ -128,22 +128,6 @@ PhratchTranslator class >> extractQuotedStringFrom: aString [
 
 ]
 
-{ #category : #'rendering menu' }
-PhratchTranslator class >> fontScaleMenu [
-	"Present a menu of font scales."
-
-	| menu s |
-	menu := MenuMorph new defaultTarget: self.
-	(0.8 to: 2.01 by: 0.1) do: [:n |
-		s := n printString, 'x'.
-		n = RenderScale ifTrue: [s := s, ' *'].
-		menu add: s
-			target: self 
-			selector: #renderFontScale:
-			argument: n].
-	menu popUpInWorld.
-]
-
 { #category : #'language translation' }
 PhratchTranslator class >> importLanguagesList [
 	"Import the list of languages and language codes translated for Phratch by file names from 'Help/Translations'"
@@ -329,14 +313,6 @@ PhratchTranslator class >> parseTranslationLines: lineStream [
 
 ]
 
-{ #category : #'rendering menu' }
-PhratchTranslator class >> renderFontScale: choice [
-
-		choice ifNotNil: [
-			RenderScale := choice.
-			self updatePhratchUI].
-]
-
 { #category : #'Unicode rendering' }
 PhratchTranslator class >> renderHintString [
 	"Answer a string to be used as an example button lable to adjust button size and label centering."
@@ -448,14 +424,6 @@ PhratchTranslator class >> stringExtent: aString font: aStrikeFont [
 	^ (aStrikeFont widthOfString: aString asString) @ aStrikeFont height
 ]
 
-{ #category : #'rendering menu' }
-PhratchTranslator class >> toggleSuppressBold [
-
-	RenderSuppressBold := RenderSuppressBold not.
-	self updatePhratchUI.
-
-]
-
 { #category : #'import/export' }
 PhratchTranslator class >> translationDir [
 	"Returns the directory which contains the translation files and creates it if it doesn't exist."
@@ -500,16 +468,6 @@ PhratchTranslator class >> unicodeClipboardPut: unicodeOrString [
 
 	Clipboard clipboardText: unicodeOrString.
 	^ self
-]
-
-{ #category : #'rendering menu' }
-PhratchTranslator class >> updatePhratchUI [
-	"Update the UI of all PhratchFrameMorphs after changing the font or font scale."
-
-	RenderCenterOffsetCache := RenderCenterOffsetCache species new.
-	RenderVerticalTrimCache := RenderVerticalTrimCache species new.
-	PhratchFrameMorph allInstancesDo: [:m | m rebuildUIForNewLanguage].
-
 ]
 
 { #category : #'Unicode rendering' }

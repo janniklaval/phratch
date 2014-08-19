@@ -20,10 +20,7 @@ Class {
 		'stepTime',
 		'autoAcceptOnFocusLoss',
 		'minimumWidth',
-		'maximumWidth',
-		'isUpdating',
-		'isUpdating',
-		'isUpdating'
+		'maximumWidth'
 	],
 	#pools : [
 		'TextConstants'
@@ -316,7 +313,6 @@ PhratchUpdatingStringMorph >> initialize [
 	autoAcceptOnFocusLoss := true.
 	minimumWidth := 8.
 	maximumWidth := 300.
-	isUpdating:= false.
 ]
 
 { #category : #'as yet unclassified' }
@@ -470,11 +466,7 @@ PhratchUpdatingStringMorph >> step [
 	super step.
 	hasFocus ifFalse:
 		[
-		isUpdating ifFalse:[
-				[isUpdating := true.
-				self updateContentsFrom: self readFromTarget.
-				isUpdating := false] fork.
-			]
+		self updateContentsFrom: self readFromTarget.
 		]
 	
 
