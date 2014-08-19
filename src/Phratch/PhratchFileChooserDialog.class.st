@@ -526,10 +526,8 @@ PhratchFileChooserDialog >> createPhratchFileChooserFor: aPhratchFrameMorph savi
 	savingFlag
 		ifFalse: [ ^ self ].
 	self phratchInfo: phratchFrame projectInfo.
-	thumbnailMorph form: phratchFrame workPane thumbnailForm.	"default author field to login name if known; else author"
-	aPhratchFrameMorph loginName size > 0
-		ifTrue: [ authorMorph contents: aPhratchFrameMorph loginName ]
-		ifFalse: [ authorMorph contents: aPhratchFrameMorph author ]
+	thumbnailMorph form: phratchFrame workPane thumbnailForm.
+	authorMorph contents: aPhratchFrameMorph author
 ]
 
 { #category : #accessing }

@@ -59,7 +59,7 @@ LambdaBlockMorph >> checkBoxLabelled: aString marked: aBool width: anInt [
 		ifFalse: [ PhratchFrameMorph skinAt: #watcherButton ].
 	box := ImageMorph new form: pic.
 	cnts := ' ' , aString localized.
-	label := StringMorph contents: cnts font: PhratchFrameMorph standardMenuFont.
+	label := StringMorph contents: cnts font: StandardFonts defaultFont.
 	line := Morph new color: Color transparent.
 	line height: (box height max: label height).
 	line width: (box width + label width max: anInt).

@@ -943,12 +943,8 @@ PhratchStageMorph >> stepProcesses [
 
 	inProcessStep ifTrue: [^ self].
 	inProcessStep := true.
-	PhratchFrameMorph useErrorCatcher
-		ifTrue: [
-			[self processesToRun do: [:p | (proc := p) runStepFor: self]]
-				ifError: [proc errorFlag: true]]
-		ifFalse: [
-			self processesToRun do: [:p | p runStepFor: self]].
+	[self processesToRun do: [:p | (proc := p) runStepFor: self]]
+				ifError: [proc errorFlag: true].
 
 	self removeTerminatedProcesses.
 "	self deleteTerminatedClones."

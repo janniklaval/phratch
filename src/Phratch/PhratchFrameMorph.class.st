@@ -29,7 +29,6 @@ Class {
 		'projectName',
 		'projectInfo',
 		'author',
-		'loginName',
 		'watcherPositions',
 		'shuffledCostumeNames',
 		'justSaved',
@@ -43,18 +42,10 @@ Class {
 		'previousProcessToRun'
 	],
 	#classVars : [
-		'AllowSharing',
 		'Clipboard',
-		'DefaultNotes',
 		'DefaultSprite',
 		'PhratchSkin',
-		'PhratchSkinXO',
-		'StandardButtonFont',
-		'StandardMenuFont',
 		'TakeOverScreen',
-		'UseErrorCatcher',
-		'Version',
-		'VersionDate',
 		'VisibleDrives',
 		'WorkpaneExtent'
 	],
@@ -114,11 +105,6 @@ PhratchFrameMorph class >> defaultSprite [
 			lookLike: ('costume' localized, '1');
 		yourself].
 
-]
-
-{ #category : #byob }
-PhratchFrameMorph class >> disableSharing [
-	AllowSharing := false
 ]
 
 { #category : #'scratch skin' }
@@ -186,10 +172,6 @@ PhratchFrameMorph class >> initialize [
 
 	Clipboard := nil.
 	WorkpaneExtent := 480@360.
-	UseErrorCatcher := true.
-	AllowSharing := true.
-	DefaultNotes := ''.
-	Version := '0.1'.
 
 
 ]
@@ -247,9 +229,8 @@ PhratchFrameMorph class >> readSkinFrom: aDirectory [
 	"When in XO mode, entries in ScratchSkinXO override the corresponding entries in ScratchSkin."
 	"self readSkinFrom: (FileDirectory default directoryNamed: 'ScratchSkin')"
 "Corregido error sintaxsis"
-	| dict img i xoDict fn1|
+	| dict img i  fn1|
 	dict := Dictionary new.
-	xoDict := Dictionary new.
 	aDirectory fileNames do:  [:fn |
 		fn1 := fn.
 		Cursor read showWhile: [
@@ -258,12 +239,9 @@ PhratchFrameMorph class >> readSkinFrom: aDirectory [
 		img ifNotNil: [
 			i := fn findLast: [:c | c = $.].
 			i = 0 ifFalse: [fn1 := fn copyFrom: 1 to: i - 1].
-			(fn1 asLowercase endsWith: '_xo')
-				ifTrue: [xoDict at: (fn1 copyFrom: 1 to: fn1 size - 3) asSymbol put: img]
-				ifFalse: [dict at: fn1 asSymbol put: img]].
+			dict at: fn1 asSymbol put: img].
 			].
 	PhratchSkin := dict.
-	PhratchSkinXO := xoDict.
 
 	img := PhratchSkin at: #scriptsPaneTexture ifAbsent: [nil].
 	(img notNil and: [img depth ~= 32]) ifTrue: [
@@ -304,28 +282,6 @@ PhratchFrameMorph class >> scriptsPaneColor [
 
 ]
 
-{ #category : #utilities }
-PhratchFrameMorph class >> setVisibleDrives: driveListString [
-	"Set my set of visible drives. If the argument is nil, then all drives are made visible."
-
-	| in drive |
-	VisibleDrives := nil.
-	driveListString ifNil: [ ^ self ].
-
-	VisibleDrives := OrderedCollection new.
-	in := ReadStream on: driveListString.
-	[ in atEnd ]
-		whileFalse: [ 
-			in skipSeparators.
-			drive := (in upTo: $,) trimBoth.
-			drive size > 0
-				ifTrue: [ VisibleDrives addLast: drive asUppercase ] ].
-	VisibleDrives := VisibleDrives size > 0
-		ifTrue: [ VisibleDrives asArray ]
-		ifFalse: [ nil ]
-
-]
-
 { #category : #'scratch skin' }
 PhratchFrameMorph class >> skin [
 	^PhratchSkin ifNil: [self readSkin]
@@ -349,16 +305,6 @@ PhratchFrameMorph class >> skinAt: aSymbolOrString ifAbsent: aBlock [
 
 ]
 
-{ #category : #font }
-PhratchFrameMorph class >> standardButtonFont [
-	^ StandardButtonFont   ifNil: [ StandardButtonFont := StandardFonts defaultFont ] 
-]
-
-{ #category : #accessing }
-PhratchFrameMorph class >> standardMenuFont [
-	^ StandardMenuFont ifNil: [ StandardMenuFont := StandardFonts defaultFont ]
-]
-
 { #category : #accessing }
 PhratchFrameMorph class >> takeOverScreen [
 	^ TakeOverScreen ifNil: [ TakeOverScreen := false ] 
@@ -367,30 +313,6 @@ PhratchFrameMorph class >> takeOverScreen [
 { #category : #accessing }
 PhratchFrameMorph class >> takeOverScreen: anObject [
 	TakeOverScreen := anObject
-]
-
-{ #category : #utilities }
-PhratchFrameMorph class >> useErrorCatcher [
-
-	^ UseErrorCatcher
-
-]
-
-{ #category : #utilities }
-PhratchFrameMorph class >> version [
-
-	^ Version
-
-]
-
-{ #category : #utilities }
-PhratchFrameMorph class >> version: aString [
-	"self version: '3.1.1 (', (Date today printFormat: #(1 2 3 $- 2 2)), ')'"
-	"self version: '3.0'"
-
-	Version := aString.
-	VersionDate := Date today printFormat: #(3 2 1 $- 1 1).
-
 ]
 
 { #category : #utilities }
@@ -485,16 +407,12 @@ PhratchFrameMorph >> addShortcutButtonsTo: rowMorph [
 
 	| buttonSpecs b |
 
-	self class disableSharing.
-
 	buttonSpecs := #(
 		"name		tool tip				selector"
 		(language	'Set language'		languageMenu:)
 		(save		'Save this project'	#savePhratchProjectNoDialog)
 "		(share		'Share this project'	share)"
 	).
-	AllowSharing ifFalse: [
-		buttonSpecs := buttonSpecs select: [:spec | spec first ~= #share]].
 
 	buttonSpecs do: [:spec |
 		b := ToggleButton
@@ -690,7 +608,7 @@ PhratchFrameMorph >> checkBoxLabelled: aString marked: aBool width: anInt [
 		ifFalse: [ PhratchFrameMorph skinAt: #watcherButton ].
 	box := ImageMorph new form: pic.
 	cnts := ' ' , aString localized.
-	label := StringMorph contents: cnts font: PhratchFrameMorph standardMenuFont.
+	label := StringMorph contents: cnts font: StandardFonts defaultFont.
 	line := Morph new color: Color transparent.
 	line height: (box height max: label height).
 	line width: (box width + label width max: anInt).
@@ -1194,11 +1112,7 @@ PhratchFrameMorph >> editMenu: aMenuTitleMorph [
 			menu addLine.
 		fillScreenFlag
 			ifTrue: [menu add: 'turn fill screen off' localized action: #fillScreenOff]
-			ifFalse: [menu add: 'turn fill screen on' localized action: #fillScreenOn].
-		UseErrorCatcher
-			ifTrue: [menu add: 'turn error catching off' localized action: #toggleErrorCatcher]
-			ifFalse: [menu add: 'turn error catching on' localized action: #toggleErrorCatcher].
-		
+			ifFalse: [menu add: 'turn fill screen on' localized action: #fillScreenOn].		
 		]].
  
 	menu localize.
@@ -1310,7 +1224,6 @@ PhratchFrameMorph >> enterUserMode [
 	self isSticky: true.
 	self extent: Display extent.
 	self comeToFront.
-	UseErrorCatcher := true.
 	ScriptablePhratchMorph noviceMode: true.
 	Paragraph insertionPointColor: (Color r: 0.353 g: 0.607 b: 0.788).
 	self updateProjectName.
@@ -1489,7 +1402,6 @@ PhratchFrameMorph >> fillScreenOff [
 	
 	self isSticky: false.
 	self extent: 1000@600"Display extent - 50".
-	UseErrorCatcher := false.
 	ScriptablePhratchMorph noviceMode: false.
 	Paragraph insertionPointColor: (Color r: 0.4 g: 1.0 b: 0.0).
 	self fixLayout.
@@ -1511,7 +1423,6 @@ PhratchFrameMorph >> fillScreenOn [
 	self isSticky: true.
 	self extent: Display extent.
 	self comeToFront.
-	UseErrorCatcher := true.
 	ScriptablePhratchMorph noviceMode: false.
 	Paragraph insertionPointColor: (Color r: 0.353 g: 0.607 b: 0.788).
 	self updateProjectName.
@@ -1735,7 +1646,9 @@ PhratchFrameMorph >> htmlDoc [
 					b leftJustifyInset: 10.
 					PNGReadWriter putForm: b imageForm onFileNamed: (imgDir / (c label , '.png')) fullName.
 					html
-						nextPutAll: '<li  style="display: inline; padding-right: 10px;"><a href="#' , c label , '"><img src="./doc-img/';
+						nextPutAll: '<li  style="display: inline; padding-right: 10px;"><a href="#';
+						nextPutAll: c label;
+						nextPutAll: '"><img src="./doc-img/';
 						nextPutAll: c label;
 						nextPutAll: '.png"/></a></li>' ] ].
 	html nextPutAll: '</ul>'.
@@ -1744,7 +1657,9 @@ PhratchFrameMorph >> htmlDoc [
 			(c label = 'none' or: [ c label = 'other' or: [ c label = 'custom' ] ])
 				ifFalse: [ 
 					html
-						nextPutAll: '<h2 id="' , c label , '">';
+						nextPutAll: '<h2 id="';
+						nextPutAll: c label;
+						nextPutAll: '">';
 						nextPutAll: c label;
 						nextPutAll: '</h2><table border="0">'.
 					allPragmas
@@ -1764,7 +1679,9 @@ PhratchFrameMorph >> htmlDoc [
 									(aP methodClass new blockFromSpec: prov color: (PhratchCategory blockColorFor: (aP arguments at: 3))) imageForm
 								onFileNamed: (imgDir / (pngName , '.png')) fullName.
 							html
-								nextPutAll: '<tr><td WIDTH=300><img src="./doc-img/' , pngName , '.png"/></td><td>';
+								nextPutAll: '<tr><td WIDTH=300><img src="./doc-img/';
+								nextPutAll: pngName;
+								nextPutAll: '.png"/></td><td>';
 								nextPutAll: comment;
 								nextPutAll: '</td></tr>' ].
 					html nextPutAll: '</table>' ] ]
@@ -1803,9 +1720,10 @@ PhratchFrameMorph >> htmlDocForWebsite [
 					b leftJustifyInset: 10.
 					PNGReadWriter putForm: b imageForm onFileNamed: (imgDir / (c label , '.png')) fullName.
 					html
-						nextPutAll:
-								'<li  style="display: inline; padding-right: 10px;"><a href="#' , c label
-										, '"><img src="http://www.phratch.com/wp-content/uploads/doc-img/' , c label;
+						nextPutAll: '<li  style="display: inline; padding-right: 10px;"><a href="#';
+						nextPutAll: c label;
+						nextPutAll: '"><img src="http://www.phratch.com/wp-content/uploads/doc-img/';
+						nextPutAll: c label;
 						nextPutAll: '.png"/></a></li>' ] ].
 	html nextPutAll: '</ul>'.
 	PhratchCategory
@@ -1813,7 +1731,10 @@ PhratchFrameMorph >> htmlDocForWebsite [
 			(c label = 'none' or: [ c label = 'other' or: [ c label = 'custom' ] ])
 				ifFalse: [ 
 					html
-						nextPutAll: '<h2 id="' , c label , '">' , c label;
+						nextPutAll: '<h2 id="';
+						nextPutAll: c label;
+						nextPutAll: '">';
+						nextPutAll: c label;
 						nextPutAll: '</h2><table border="0">'.
 					allPragmas
 						select: [ :pragma | (pragma arguments at: 3) = c label ]
@@ -1832,9 +1753,10 @@ PhratchFrameMorph >> htmlDocForWebsite [
 									(aP methodClass new blockFromSpec: prov color: (PhratchCategory blockColorFor: (aP arguments at: 3))) imageForm
 								onFileNamed: (imgDir / (pngName , '.png')) fullName.
 							html
-								nextPutAll:
-										'<tr><td WIDTH=300><img src="http://www.phratch.com/wp-content/uploads/doc-img/' , pngName , '.png"/></td><td>'
-												, comment;
+								nextPutAll: '<tr><td WIDTH=300><img src="http://www.phratch.com/wp-content/uploads/doc-img/';
+								nextPutAll: pngName;
+								nextPutAll: '.png"/></td><td>';
+								nextPutAll: comment;
 								nextPutAll: '</td></tr>' ].
 					html nextPutAll: '</table>' ] ]
 ]
@@ -1944,7 +1866,6 @@ PhratchFrameMorph >> initialize [
 	quitFlag := false.
 	blockEditors := Set new.
 	author := ''.
-	loginName := ''.
 	viewMode := #normal.
 
 	self createBasicPanes.
@@ -2210,13 +2131,6 @@ PhratchFrameMorph >> listWatchers [
 	"Answer a collection of all the list watchers in the work pane."
 
 	^ self workPane submorphs select: [:m | m isPhratchListMorph]
-
-]
-
-{ #category : #accessing }
-PhratchFrameMorph >> loginName [
-
-	^ loginName
 
 ]
 
@@ -2647,27 +2561,8 @@ PhratchFrameMorph >> printTupleList: anArray on: s [
 
 ]
 
-{ #category : #startup }
-PhratchFrameMorph >> processSettingsFile [
-	"Process settings from the ini file."
-
-	| lang |
-	self class setVisibleDrives: nil.
-	lang := nil.
-	AllowSharing := true.
-	PhratchFileChooserDialog clearFolderCache. "clear homeDir and last folder cache"
-	
-	lang ifNil: [lang := PhratchTranslator guessLanguage].
-	self setLanguage: lang.
-
-]
-
 { #category : #'view mode' }
 PhratchFrameMorph >> projectComment: aString [
-
-	aString = DefaultNotes ifTrue: [
-		projectInfo removeKey: 'comment' ifAbsent: [].
-		^ self].
 
 	projectInfo at: 'comment' put: aString asString.
 
@@ -2678,7 +2573,6 @@ PhratchFrameMorph >> projectCommentOrTemplate [
 
 	| s |
 	s := projectInfo at: 'comment' ifAbsent: [''].
-	s size = 0 ifTrue: [s := DefaultNotes].
 	^ s
 
 ]
@@ -2779,18 +2673,6 @@ PhratchFrameMorph >> quitPhratch [
 			justSaved ifFalse: [^ self]]].
 
 	Smalltalk snapshot: true andQuit: true.
-
-]
-
-{ #category : #startup }
-PhratchFrameMorph >> readDefaultNotes [
-	"If there is a file named 'defaultNotes.txt' in the Phratch folder, read it in."
-
-	| dir |
-	DefaultNotes := ''.
-	dir := FileSystem workingDirectory.
-	(dir fileSystem exists: 'defaultNotes.txt') ifTrue: [
-		DefaultNotes := (FileStream oldFileNamed: 'defaultNotes.txt') contentsOfEntireFile].
 
 ]
 
@@ -3079,7 +2961,6 @@ PhratchFrameMorph >> startup [
 	EventHatMorph threadSafeMode: false.
 	HandMorph translucentWhenDragging: true.
 	VariableFrame scopeContrast: false.
-	self readDefaultNotes.
 
 	BlockEditorFrameMorph resetDimensions.
 	ElementsEditorFrameMorph resetDimensions.
@@ -3087,9 +2968,7 @@ PhratchFrameMorph >> startup [
 	DebuggerFrameMorph resetDimensions.
 
 	self updateProjectName.
-	shuffledCostumeNames := nil.
 	author := ''.
-	loginName := ''.
 	justSaved := true.
 	quitFlag := false.
 
@@ -3197,13 +3076,6 @@ PhratchFrameMorph >> surpriseSpriteMorph [
 
 	e := (workPane extent - m extent) abs // 2.
 	m referencePosition: ((e x negated) to: e x) atRandom @ ((e y negated) to: e y) atRandom.
-
-]
-
-{ #category : #'menu/button actions' }
-PhratchFrameMorph >> toggleErrorCatcher [
-
-	UseErrorCatcher := UseErrorCatcher not.
 
 ]
 
@@ -3356,20 +3228,20 @@ PhratchFrameMorph >> updateHistoryProjectName: projName op: operation [
 	"The given user is about to save or upload a project with the given name. Update the project history. operation is a string specifying the operation."
 
 	| timestamp tab history platform osVersion |
-	projectInfo removeKey: 'organization' ifAbsent: [].	"obsolete"
-	projectInfo at: 'phratch-version' put: Version.
+	projectInfo removeKey: 'organization' ifAbsent: [].
+	projectInfo at: 'phratch-version' put: PhratchInstaller version.
 
 	timestamp := (Date today printFormat: #(3 2 1 $- 1 1)), ' ', Time now print24.
 	tab := String tab.
 
 	history := projectInfo at: 'history' ifAbsent: [''].
 	history := history, timestamp, tab.
-	history := history, operation, tab, (self nameFromFileName: projName), tab, loginName, tab, author.
+	history := history, operation, tab, (self nameFromFileName: projName), tab, author.
 	history := history, String cr.
 	projectInfo at: 'history' put: history.
 
 	"record other data"
-	projectInfo at: 'phratch-version' put: Version.
+	projectInfo at: 'phratch-version' put: PhratchInstaller version.
 	projectInfo at: 'language' put: PhratchTranslator currentLanguage.
 
 	platform :=  Smalltalk os name.
@@ -3477,7 +3349,7 @@ PhratchFrameMorph >> updateProjectName [
 	projectTitleMorph contents: projectName.
 	projectTitleMorph contents size > 0
 		ifTrue: [ projectTitleMorph contents , '- PHR' ]
-		ifFalse: [ 'PHR ' , Version asString ].
+		ifFalse: [ 'PHR ' , PhratchInstaller version].
 	self fixLayout
 ]
 

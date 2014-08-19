@@ -22,6 +22,7 @@ Class {
 		'minimumWidth',
 		'maximumWidth',
 		'isUpdating',
+		'isUpdating',
 		'isUpdating'
 	],
 	#pools : [
@@ -44,13 +45,6 @@ PhratchUpdatingStringMorph class >> on: targetObject selector: aSymbol [
 PhratchUpdatingStringMorph >> acceptContents [
 
 	self informTarget.
-
-]
-
-{ #category : #editing }
-PhratchUpdatingStringMorph >> acceptValue: aValue [
-
-	self updateContentsFrom: (self acceptValueFromTarget: aValue).
 
 ]
 
@@ -82,11 +76,6 @@ PhratchUpdatingStringMorph >> addCustomMenuItems: menu hand: aHandMorph [
 { #category : #accessing }
 PhratchUpdatingStringMorph >> autoAcceptOnFocusLoss [
 	^ autoAcceptOnFocusLoss ~~ false
-]
-
-{ #category : #accessing }
-PhratchUpdatingStringMorph >> autoAcceptOnFocusLoss: aBoolean [
-	autoAcceptOnFocusLoss := aBoolean
 ]
 
 { #category : #'target access' }
@@ -157,14 +146,13 @@ PhratchUpdatingStringMorph >> doneWithEdits [
 
 { #category : #accessing }
 PhratchUpdatingStringMorph >> fitContents [
-
 	| newExtent f |
 	f := self fontToUse.
-	newExtent := (((f widthOfString: contents) max: self minimumWidth) min: self maximumWidth)  @ f height.
-	(self extent = newExtent) ifFalse:
-		[self extent: newExtent.
-		self changed]
-
+	newExtent := (((f widthOfString: contents) max: self minimumWidth) min: self maximumWidth) @ f height.
+	self extent = newExtent
+		ifTrue: [ ^ self ].
+	self extent: newExtent.
+	self changed
 ]
 
 { #category : #accessing }
@@ -297,23 +285,21 @@ PhratchUpdatingStringMorph >> informTarget [
 	"Obtain a value from my contents, and tell my target about it.  The putSelector can take one argument (traditional) or two (as used by Croquet)"
 
 	| newValue typeIn |
-	(target notNil and: [putSelector notNil]) 
-		ifTrue: 
-			[typeIn := contents.
-			(newValue := self valueFromContents) ifNotNil: 
-					[self checkTarget.
-					putSelector numArgs = 1 
-						ifTrue: [target perform: putSelector with: newValue].
-					putSelector numArgs = 2 
-						ifTrue: 
-							[target 
-								perform: putSelector
-								with: newValue
-								with: self].
-					target isMorph ifTrue: [target changed]].
-			self fitContents.
-			(format == #default and: [newValue isNumber]) 
-				ifTrue: [self setDecimalPlacesFromTypeIn: typeIn]]
+	(target notNil and: [ putSelector notNil ])
+		ifFalse: [ ^ self ].
+	typeIn := contents.
+	(newValue := self valueFromContents)
+		ifNotNil: [ 
+			self checkTarget.
+			putSelector numArgs = 1
+				ifTrue: [ target perform: putSelector with: newValue ].
+			putSelector numArgs = 2
+				ifTrue: [ target perform: putSelector with: newValue with: self ].
+			target isMorph
+				ifTrue: [ target changed ] ].
+	self fitContents.
+	(format == #default and: [ newValue isNumber ])
+		ifTrue: [ self setDecimalPlacesFromTypeIn: typeIn ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -351,27 +337,11 @@ PhratchUpdatingStringMorph >> maximumWidth [
 	^ maximumWidth ifNil: [99999]
 ]
 
-{ #category : #watchIt }
-PhratchUpdatingStringMorph >> maximumWidth: aNumber [
-	" Set the maximum width that the receiver can have.   
-	A nil value means no maximum, and for practical purposes 
-	results in a value of 99999 here temporarily, for help in future debugging"
-
-	maximumWidth := aNumber
-]
-
 { #category : #accessing }
 PhratchUpdatingStringMorph >> minimumWidth [
 	"Answer the minimum width that the receiver can have.  A nonzero value here keeps the receiver from degenerating into something that cannot ever be seen or touched again!  Obeyed by fitContents."
 
 	^ minimumWidth ifNil: [minimumWidth := 8]
-]
-
-{ #category : #accessing }
-PhratchUpdatingStringMorph >> minimumWidth: aWidth [
-	"Set the minimum width that the receiver can have.  A nonzero value here keeps the receiver from degenerating into something that cannot ever be seen or touched again!  Obeyed by fitContents."
-
-	minimumWidth := aWidth
 ]
 
 { #category : #'event handling' }
@@ -396,13 +366,6 @@ PhratchUpdatingStringMorph >> parameter [
 PhratchUpdatingStringMorph >> parameter: anObject [
 
 	self setProperty: #scratchParameter toValue: anObject
-]
-
-{ #category : #accessing }
-PhratchUpdatingStringMorph >> putSelector [
-
-	^ putSelector
-
 ]
 
 { #category : #accessing }
@@ -501,13 +464,6 @@ PhratchUpdatingStringMorph >> setPrecision [
 	aMenu popUpInWorld
 ]
 
-{ #category : #editing }
-PhratchUpdatingStringMorph >> setToAllowTextEdit [
-	"Set up the receiver so that it will be receptive to text editing, even if there is no putSelector provided"
-
-	self setProperty: #okToTextEdit toValue: true
-]
-
 { #category : #'as yet unclassified' }
 PhratchUpdatingStringMorph >> step [
 
@@ -577,23 +533,9 @@ PhratchUpdatingStringMorph >> updateContentsFrom: aValue [
 ]
 
 { #category : #formats }
-PhratchUpdatingStringMorph >> useDefaultFormat [
-	"Use the object's own printString format."
-
-	format := #default.
-
-]
-
-{ #category : #formats }
 PhratchUpdatingStringMorph >> useStringFormat [
 
 	format := #string.
-]
-
-{ #category : #formats }
-PhratchUpdatingStringMorph >> useSymbolFormat [
-
-	format := #symbol.
 ]
 
 { #category : #editing }

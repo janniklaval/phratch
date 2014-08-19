@@ -708,7 +708,7 @@ BlockMorph >> handleReporterDrop [
 	argM := owner topArgMorphAt: self bounds exclude: self.
 	(argM notNil and: [argM acceptsTypeOf: self]) ifFalse: [
 		scriptsMorph ifNotNil: [
-			scriptsMorph recordDroppedBlock: self bottom: nil kickedOut: nil ].
+			scriptsMorph recordDroppedBlock: self bottom: nil kickedOut: nil].
 		^ self].
 
 	"tp := argM owner typeOfArg: argM."

@@ -185,7 +185,7 @@ ToggleButton >> label: aString font: aFont [
 
 	| oldLabel m |
 	(oldLabel := self findA: StringMorph) ifNotNil: [oldLabel delete].
-	m := StringMorph contents: aString font: (aFont ifNil: [PhratchFrameMorph standardButtonFont]).
+	m := StringMorph contents: aString font: (aFont ifNil: [StandardFonts defaultFont]).
 	m position: self center - (m extent // 2).
 	self addMorph: m.
 	m lock.

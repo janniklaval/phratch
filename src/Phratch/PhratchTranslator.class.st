@@ -73,17 +73,6 @@ PhratchTranslator class >> centerOffsetForButtonWithFont: aStrikeFont [
 
 ]
 
-{ #category : #'Unicode rendering' }
-PhratchTranslator class >> convertToMacRoman [
-	"Convert my translations from UTF8 to MacRoman."
-
-	| s |
-	TranslationDict associationsDo: [:assoc |
-		(assoc key asLowercase ~= 'language-name') ifTrue: [
-			s := assoc value]].
-
-]
-
 { #category : #'language translation' }
 PhratchTranslator class >> currentLanguage [
 
@@ -153,32 +142,6 @@ PhratchTranslator class >> fontScaleMenu [
 			selector: #renderFontScale:
 			argument: n].
 	menu popUpInWorld.
-]
-
-{ #category : #locale }
-PhratchTranslator class >> guessLanguage [
-	"Try to guess a language setting based on the local."
-
-	"PhratchTranslator guessLanguage"
-
-	| lang country myLocale |
-	(lang := Locale current primLanguage) ifNil: [ ^ 'en' ].
-	lang size > 2
-		ifTrue: [ lang := lang copyFrom: 1 to: 2 ].
-	country := Locale current primCountry ifNil: [ ^ lang ].
-	country size > 2
-		ifTrue: [ country := country copyFrom: 1 to: 2 ].	"first try lang + country:"
-	myLocale := lang asLowercase , '_' , country asLowercase.
-	ISODict
-		keysDo: [ :code | 
-			code asLowercase = myLocale
-				ifTrue: [ ^ code ] ].	"then try just lang:"
-	myLocale := lang asLowercase.
-	ISODict
-		keysDo: [ :code | 
-			code asLowercase = myLocale
-				ifTrue: [ ^ code ] ].
-	^ 'en'	"if no match, use English"
 ]
 
 { #category : #'language translation' }
@@ -397,26 +360,6 @@ PhratchTranslator class >> renderScale [
 
 	^ RenderScale
 
-]
-
-{ #category : #'rendering menu' }
-PhratchTranslator class >> renderingMenu [
-	"Present a menu for experimenting with rendering settings."
-	"self renderingMenu"
-
-	| menu |
-	World activeHand toolType: nil.
-	Cursor normal show.
-	
-
-	menu := MenuMorph new defaultTarget: self.
-	menu add: 'set font scale...' translated action: #fontScaleMenu.
-	RenderSuppressBold
-		ifTrue: [ menu add: 'allow bold' translated action: #toggleSuppressBold ]
-		ifFalse: [ menu add: 'suppress bold' translated action: #toggleSuppressBold ].
-	menu
-		localize;
-		popUpInWorld
 ]
 
 { #category : #'language translation' }

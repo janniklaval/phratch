@@ -345,3 +345,9 @@ PhratchInstaller class >> saveImageForEndUserSilently [
 	frame startup.
 
 ]
+
+{ #category : #'class initialization' }
+PhratchInstaller class >> version [
+
+	^ '4.0'
+]

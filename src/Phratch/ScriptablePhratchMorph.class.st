@@ -2327,10 +2327,8 @@ ScriptablePhratchMorph >> filteredForm [
 	filterPack ifNil: [^ self rotatedForm].
 
 	filterPack filtersActive ifTrue: [  "filter parameters have changed; apply filters"
-		PhratchFrameMorph useErrorCatcher
-			ifTrue: [[filterPack applyFiltersTo: self rotatedForm]
-						ifError: [PhratchError error:  'There is a problem with FilterPack'. filterPack := nil. ^ self rotatedForm]]
-			ifFalse: [filterPack applyFiltersTo: self rotatedForm]].
+		[filterPack applyFiltersTo: self rotatedForm]
+						ifError: [PhratchError error:  'There is a problem with FilterPack'. filterPack := nil. ^ self rotatedForm]].
 
 	^ filterPack resultForm as8BitColorForm
 
