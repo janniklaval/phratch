@@ -5,7 +5,7 @@ ExpressionArgMorphWithMenu >> midiDrumMenu [
 	"Provides a drop-down menu for setting the drum number."
 
 	| menu |
-	menu := MenuMorphNG new defaultTarget: self.
+	menu := MenuMorph new defaultTarget: self.
 	#(	('Acoustic Bass Drum' 35)
 		('Bass Drum 1' 36)
 		('Side Stick' 37)
@@ -68,7 +68,7 @@ ExpressionArgMorphWithMenu >> midiInstrumentMenu [
 	"Provides a drop-down menu for setting the instrument number."
 
 	| menu |
-	menu := MenuMorphNG  new.
+	menu := MenuMorph  new.
 	#(	('Acoustic Grand' 1)
 		('Bright Acoustic' 2)
 		('Electric Grand' 3)

@@ -75,7 +75,7 @@ PhratchFrameMorph >> compressSounds [
 	menu addLine.
 	menu add: 'cancel' action: nil.
 	count := menu localize; invokeModal."
-	menu := MenuMorphNG new
+	menu := MenuMorph new
 		title: 'Sound quality:' translated;
 		defaultTarget: self;
 		yourself.

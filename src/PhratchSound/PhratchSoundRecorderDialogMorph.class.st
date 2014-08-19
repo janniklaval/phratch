@@ -46,7 +46,7 @@ PhratchSoundRecorderDialogMorph >> buttonType: type action: actionSelector [
 
 	^ ToggleButton new
 		isMomentary: false;
-		onForm: onForm offForm: offForm overForm: overForm disabledForm: disabledForm;
+		onForm: onForm offForm: offForm overForm: overForm;
 		label: '' font: (PhratchFrameMorph getFont: #SoundRecorderButton);
 		target: self;
 		actionSelector: actionSelector;

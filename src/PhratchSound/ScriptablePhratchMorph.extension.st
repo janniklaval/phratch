@@ -124,7 +124,7 @@ ScriptablePhratchMorph >> midiDrumMenu [
 	"Provides a drop-down menu for setting the drum number."
 
 	| menu |
-	menu := MenuMorphNG new defaultTarget: self.
+	menu := MenuMorph new defaultTarget: self.
 	#(	('Acoustic Bass Drum' 35)
 		('Bass Drum 1' 36)
 		('Side Stick' 37)
@@ -197,7 +197,7 @@ ScriptablePhratchMorph >> midiInstrumentMenu [
 	"Provides a drop-down menu for setting the instrument number."
 
 	| menu |
-	menu := MenuMorphNG  new.
+	menu := MenuMorph  new.
 	#(	('Acoustic Grand' 1)
 		('Bright Acoustic' 2)
 		('Electric Grand' 3)
@@ -340,7 +340,7 @@ ScriptablePhratchMorph >> midiNoteMenu [
 	"Provides a drop-down menu for setting the note number."
 
 	| menu midiKey noteName |
-	menu := MenuMorphNG new defaultTarget: self.
+	menu := MenuMorph new defaultTarget: self.
 	midiKey := 48.
 	#(#low #middle)
 		do: [ :oct | 
