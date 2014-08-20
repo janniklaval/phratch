@@ -334,13 +334,6 @@ MultiArgMorph >> newSlot [
 		at: #unevaluatedBoolean put: '$UnEBool$';
 		at: #objSlot put: '$SAObjS$'.
 
-" +++ deprecated experimental slots    -jens ++++++
-
-		at: #reporterSlot put: '$MAUnEBool$';
-		at: #typeInReporter put: '$UnEExp$'.
-
-+++++++++++++++++++++++++++++++++++++++++++++++"
-
 	slot := CommandBlockMorph new uncoloredArgMorphFor: (specs at: type ifAbsent: [ '$String$']).
 	slot defaultValue: ''.
 	^slot

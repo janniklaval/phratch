@@ -36,13 +36,11 @@ Class {
 		'CameraOpenings',
 		'DefaultBackgroundForm',
 		'DoubleSize',
-		'Experimental',
 		'FileIOPreference',
 		'KeepOnStage',
 		'ListBlockColor',
 		'MeowSound',
 		'NoviceMode',
-		'ObjEncoding',
 		'PhratchOrigin',
 		'PopSound',
 		'RandomGen',
@@ -149,21 +147,6 @@ ScriptablePhratchMorph class >> closeCamera [
 	CameraOpenings = 0 ifTrue: [CameraPlugin closeCamera: 1].
 ]
 
-{ #category : #'byob legacy support' }
-ScriptablePhratchMorph class >> decodeAsByob [
-		ObjEncoding := #byob 
-]
-
-{ #category : #'byob legacy support' }
-ScriptablePhratchMorph class >> decodeAsPhratch [
-		ObjEncoding := #phratch 
-]
-
-{ #category : #'byob legacy support' }
-ScriptablePhratchMorph class >> decodeAsScratch [
-		ObjEncoding := #scratch 
-]
-
 { #category : #'forms/sounds/icons' }
 ScriptablePhratchMorph class >> defaultBackgroundForm [
 
@@ -223,9 +206,7 @@ ScriptablePhratchMorph class >> fromUser [
 ScriptablePhratchMorph class >> initialize [
 	"self initialize"
 
-	Experimental := false.
 	PhratchOrigin := 0@0.
-	RandomGen := Random new.
 	TimerStartMSecs := Time millisecondClockValue.
 	ListBlockColor := Color h: 18 s: 0.92 v: 0.85.
 	BlockVisible := Set new.
@@ -302,13 +283,6 @@ ScriptablePhratchMorph class >> phratchOrigin: aPoint [
 ScriptablePhratchMorph class >> popSound [
 
 	^ PopSound ifNil: [PopSound := SampledSound fromFileNamed: ((FileSystem workingDirectory / 'ScratchSkin'/ 'Pop.wav') fullName)]
-
-]
-
-{ #category : #other }
-ScriptablePhratchMorph class >> randomInit [
-
-	RandomGen initialize.
 
 ]
 
@@ -3820,13 +3794,14 @@ ScriptablePhratchMorph >> randomFrom: start to: stop [
 	"Answer a random number within the given range. If both min and max are integers, the result is rounded to the nearest integer."
 
 	<phratchItem: 'pick random $Number$ to $Number$' kind: #ReporterBlockMorph category: 'operators' defaultValues: #(1 10) subCategory: #a2 special: #()>
-	| min max result |
+	| min max result random |
+	random := Random new.
 	min := start min: stop.
 	max := start max: stop.
-	result := RandomGen next * (max - min) + min.
+	result := random next * (max - min) + min.
 	result := min isInteger & max isInteger
-		ifTrue: [ (RandomGen next * (max + 1 - min)) truncated + min ]
-		ifFalse: [ RandomGen next * (max - min) + min ].
+		ifTrue: [ (random next * (max + 1 - min)) truncated + min ]
+		ifFalse: [ random next * (max - min) + min ].
 	^ result
 ]
 

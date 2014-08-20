@@ -318,15 +318,6 @@ CustomBlockDefinition >> specFor: typeSym [
 		at: #reporter put: '$OSReporter$';
 		at: #reporterList put: '$MAReporter$';
 
-"+++++++ deprecated experimental slots    -jens +++++++++++++
-
-		at: #reporterSlot put: '$MAUnEBool$';
-		at: #reporterSlotList put: '$UnEBool$';
-		at: #typeInReporter put: '$UnEExp$';
-		at: #typeInReporterList put: '$MAUneval$';
-
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-
 		at: #unevaluated put: '$UnEExp$';
 		at: #unevaluatedList put: '$MAUneval$';
 		at: #unevaluatedBoolean put: '$UnEBool$';

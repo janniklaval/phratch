@@ -1301,7 +1301,6 @@ Note: this is a compatibility force method"
 	s := ReadStream on: aByteArray.
 	version := FuelObjStream phratchFileVersionFrom: (s next: 10) asString.
 	version = 0 ifTrue: [
-		ScriptablePhratchMorph decodeAsScratch.	"this is the forcing part. -Jens"
 		s position: 0.
 		proj := FuelObjStream new readObjFrom: s showProgress: true].
 	({1 . 2} includes: version) ifTrue: [
@@ -1336,7 +1335,6 @@ PhratchFrameMorph >> extractProjectFrom: aByteArray [
 	s := ReadStream on: aByteArray.
 	version := FuelObjStream phratchFileVersionFrom: (s next: 10) asString.
 	version = 0 ifTrue: [
-		ScriptablePhratchMorph decodeAsByob.	"make sure we initialize every field - this breaks compatibility with Phratch-sprites. -Jens"
 		s position: 0.
 		[proj := FuelObjStream new readObjFrom: s showProgress: true] ifError: [
 		^ self extractPhratchProjectFrom: aByteArray]].
@@ -2027,8 +2025,6 @@ PhratchFrameMorph >> newPhratchProject [
 	self installNewProject: newProject.
 	sprite installGlobalBlocks.
 
-	ScriptablePhratchMorph decodeAsPhratch. 
-
 	self initializeWatcherPositions.
 	blockEditors := Set new.
 	justSaved := true.
@@ -2714,7 +2710,6 @@ PhratchFrameMorph >> showWatcher: watcher [
 { #category : #startup }
 PhratchFrameMorph >> startup [
 
-	ScriptablePhratchMorph randomInit.
 	PhratchTranslator importLanguagesList.
 
 	BlockMorph contrastStrong.
@@ -3294,7 +3289,6 @@ PhratchFrameMorph >> writePhratchProject [
 	scriptsPane tabPane currentTab: oldTab.
 	viewerPane currentCategory: oldViewerCategory.
 	self updatePenPositions.
-	ScriptablePhratchMorph decodeAsPhratch.
 
 	saveError
 		ifNil: [

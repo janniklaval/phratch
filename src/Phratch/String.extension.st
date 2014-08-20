@@ -75,7 +75,6 @@ String >> localized [
 
 	| selfAsString |
 	selfAsString := self asString.
-	PhratchTranslator addUITranslation: selfAsString.
 	^( PhratchTranslator translationFor: selfAsString).
 
 ]
