@@ -37,7 +37,6 @@ Class {
 		'lastViewMode',
 		'viewModeButtonsPanel',
 		'toolbarPanel',
-		'quitFlag',
 		'currentProcessToRun',
 		'previousProcessToRun'
 	],
@@ -1237,8 +1236,6 @@ PhratchFrameMorph >> exitPresentationMode [
 	"Exit presentation mode."
 
 	TaskbarMorph allInstances do: [: e | e show ].
-	
-	quitFlag ifTrue: [^Smalltalk quitPrimitive].
 
 	PhratchFrameMorph takeOverScreen ifFalse: [
 		Display fullScreenMode: false.
@@ -1595,170 +1592,19 @@ PhratchFrameMorph >> helpMenu: aMenuTitleMorph [
 	].
 
 	
-	menu add: 'Phratch Website' translated action: #launchWebsite.
+	menu add: 'Phratch Website' translated target: PhratchHelp action: #launchWebsite.
 	menu addLine.
-	menu add: 'Scratch Help Page' translated action: #launchHelpPage.
-	menu add: 'Generated Block Doc' translated action: #launchBlockDoc.
-	menu add: 'Help Screens' translated action: #launchAllHelpScreens.
+	menu add: 'Scratch Help Page' translated target: PhratchHelp action: #launchHelpPage.
+	menu add: 'Generated Block Doc' translated target: PhratchHelp action: #launchBlockDoc.
+	menu add: 'Help Screens' translated target: PhratchHelp action: #launchAllHelpScreens.
 	menu addLine.
-	menu add: 'BYOB Reference Manual' translated action: #openBYOBManual.
-	menu add: 'Panther Tutorials' translated action: #openPantherTutorials.
+	menu add: 'BYOB Reference Manual' translated target: PhratchHelp action: #openBYOBManual.
+	menu add: 'Panther Tutorials' translated target: PhratchHelp action: #openPantherTutorials.
 	menu addLine.
-	menu add: 'About Phratch' translated action: #aboutPhratch.
+	menu add: 'About Phratch' translated target: PhratchHelp action: #aboutPhratch.
 	menu localize.
 	"menu popUpAt: aMenuTitleMorph bottomLeft + (0 @ 10) inWorld: World"
 	menu popUpInWorld 
-]
-
-{ #category : #'as yet unclassified' }
-PhratchFrameMorph >> htmlDoc [
-	<phratchMenu: 'Generate HTML documentation' category: 'file' position: 12 sub: 5 shift: true>
-	| allPragmas dir imgDir html |
-	(FileSystem workingDirectory / 'htmlDoc') exists
-		ifTrue: [ (FileSystem workingDirectory / 'htmlDoc') deleteAll ].
-	dir := (FileSystem workingDirectory / 'htmlDoc') ensureCreateDirectory.
-	imgDir := (dir / 'doc-img') ensureCreateDirectory.
-	allPragmas := (Pragma
-		allNamed: #phratchItem:kind:category:defaultValues:subCategory:special:
-		in: ScriptablePhratchMorph) asOrderedCollection.
-	ScriptablePhratchMorph allSubclasses
-		do: [ :aSC | allPragmas addAll: (Pragma allNamed: #phratchItem:kind:category:defaultValues:subCategory:special: in: aSC) ].
-	html := FileStream forceNewFileNamed: (dir / 'index.html') fullName.
-	html nextPutAll: '<h2>Categories</h2><ul style="list-style-type: none;">'.
-	PhratchCategory
-		allSubclassesDo: [ :c | 
-			(c label = 'none' or: [ c label = 'other' or: [ c label = 'custom' ] ])
-				ifFalse: [ 
-					| label offForm b |
-					label := (PhratchTranslator translationFor: c label) capitalized.
-					offForm := c label = 'list'
-						ifTrue: [ PhratchFrameMorph skinAt: 'variables' ]
-						ifFalse: [ PhratchFrameMorph skinAt: c label ].
-					b := ResizableToggleButton new offForm: offForm onForm: offForm overForm: offForm.
-					b
-						label: label font: (PhratchFrameMorph getFont: #Category);
-						setLabelColor: Color white;
-						target: self;
-						actionSelector: #currentCategory:;
-						arguments: (Array with: c label);
-						toggleButtonMode: true;
-						toggleMode: false.
-					b leftJustifyInset: 10.
-					PNGReadWriter putForm: b imageForm onFileNamed: (imgDir / (c label , '.png')) fullName.
-					html
-						nextPutAll: '<li  style="display: inline; padding-right: 10px;"><a href="#';
-						nextPutAll: c label;
-						nextPutAll: '"><img src="./doc-img/';
-						nextPutAll: c label;
-						nextPutAll: '.png"/></a></li>' ] ].
-	html nextPutAll: '</ul>'.
-	PhratchCategory
-		allSubclassesDo: [ :c | 
-			(c label = 'none' or: [ c label = 'other' or: [ c label = 'custom' ] ])
-				ifFalse: [ 
-					html
-						nextPutAll: '<h2 id="';
-						nextPutAll: c label;
-						nextPutAll: '">';
-						nextPutAll: c label;
-						nextPutAll: '</h2><table border="0">'.
-					allPragmas
-						select: [ :pragma | (pragma arguments at: 3) = c label ]
-						thenDo: [ :aP | 
-							| prov pngName comment |
-							prov := {(aP arguments at: 1).
-							(aP arguments at: 2).
-							(aP method selector).
-							(aP arguments at: 6)} , (aP arguments at: 4).
-							pngName := (prov at: 1) asLegalSelector asString , (prov at: 3) asLegalSelector asString.
-							[ (imgDir / (pngName , '.png')) exists ] whileTrue: [ pngName := pngName , '0' ].
-							comment := aP method comment.
-							comment ifNil: [ comment := '' ] ifNotNil: [ comment := comment copyFrom: 2 to: comment size - 1 ].
-							PNGReadWriter
-								putForm:
-									(aP methodClass new blockFromSpec: prov color: (PhratchCategory blockColorFor: (aP arguments at: 3))) imageForm
-								onFileNamed: (imgDir / (pngName , '.png')) fullName.
-							html
-								nextPutAll: '<tr><td WIDTH=300><img src="./doc-img/';
-								nextPutAll: pngName;
-								nextPutAll: '.png"/></td><td>';
-								nextPutAll: comment;
-								nextPutAll: '</td></tr>' ].
-					html nextPutAll: '</table>' ] ]
-]
-
-{ #category : #'as yet unclassified' }
-PhratchFrameMorph >> htmlDocForWebsite [
-	| allPragmas dir imgDir html |
-	dir := (FileSystem workingDirectory / 'htmlDoc') ensureCreateDirectory.
-	imgDir := (dir / 'doc-img') ensureCreateDirectory.
-	allPragmas := (Pragma
-		allNamed: #phratchItem:kind:category:defaultValues:subCategory:special:
-		in: ScriptablePhratchMorph) asOrderedCollection.
-	ScriptablePhratchMorph allSubclasses
-		do: [ :aSC | allPragmas addAll: (Pragma allNamed: #phratchItem:kind:category:defaultValues:subCategory:special: in: aSC) ].
-	html := FileStream forceNewFileNamed: (dir / 'index.html') fullName.
-	html nextPutAll: '<h2>Categories</h2><ul style="list-style-type: none;">'.
-	PhratchCategory
-		allSubclassesDo: [ :c | 
-			(c label = 'none' or: [ c label = 'other' or: [ c label = 'custom' ] ])
-				ifFalse: [ 
-					| label offForm b |
-					label := (PhratchTranslator translationFor: c label) capitalized.
-					offForm := c label = 'list'
-						ifTrue: [ PhratchFrameMorph skinAt: 'variables' ]
-						ifFalse: [ PhratchFrameMorph skinAt: c label ].
-					b := ResizableToggleButton new offForm: offForm onForm: offForm overForm: offForm.
-					b
-						label: label font: (PhratchFrameMorph getFont: #Category);
-						setLabelColor: Color white;
-						target: self;
-						actionSelector: #currentCategory:;
-						arguments: (Array with: c label);
-						toggleButtonMode: true;
-						toggleMode: false.
-					b leftJustifyInset: 10.
-					PNGReadWriter putForm: b imageForm onFileNamed: (imgDir / (c label , '.png')) fullName.
-					html
-						nextPutAll: '<li  style="display: inline; padding-right: 10px;"><a href="#';
-						nextPutAll: c label;
-						nextPutAll: '"><img src="http://www.phratch.com/wp-content/uploads/doc-img/';
-						nextPutAll: c label;
-						nextPutAll: '.png"/></a></li>' ] ].
-	html nextPutAll: '</ul>'.
-	PhratchCategory
-		allSubclassesDo: [ :c | 
-			(c label = 'none' or: [ c label = 'other' or: [ c label = 'custom' ] ])
-				ifFalse: [ 
-					html
-						nextPutAll: '<h2 id="';
-						nextPutAll: c label;
-						nextPutAll: '">';
-						nextPutAll: c label;
-						nextPutAll: '</h2><table border="0">'.
-					allPragmas
-						select: [ :pragma | (pragma arguments at: 3) = c label ]
-						thenDo: [ :aP | 
-							| prov pngName comment |
-							prov := {(aP arguments at: 1).
-							(aP arguments at: 2).
-							(aP method selector).
-							(aP arguments at: 6)} , (aP arguments at: 4).
-							pngName := (prov at: 1) asLegalSelector asString , (prov at: 3) asLegalSelector asString.
-							[ (imgDir / (pngName , '.png')) exists ] whileTrue: [ pngName := pngName , '0' ].
-							comment := aP method comment.
-							comment ifNil: [ comment := '' ] ifNotNil: [ comment := comment copyFrom: 2 to: comment size - 1 ].
-							PNGReadWriter
-								putForm:
-									(aP methodClass new blockFromSpec: prov color: (PhratchCategory blockColorFor: (aP arguments at: 3))) imageForm
-								onFileNamed: (imgDir / (pngName , '.png')) fullName.
-							html
-								nextPutAll: '<tr><td WIDTH=300><img src="http://www.phratch.com/wp-content/uploads/doc-img/';
-								nextPutAll: pngName;
-								nextPutAll: '.png"/></td><td>';
-								nextPutAll: comment;
-								nextPutAll: '</td></tr>' ].
-					html nextPutAll: '</table>' ] ]
 ]
 
 { #category : #'file read/write' }
@@ -1863,7 +1709,6 @@ PhratchFrameMorph >> initialize [
 	projectInfo := Dictionary new.
 	watcherPositions := Dictionary new.
 	justSaved := false.
-	quitFlag := false.
 	blockEditors := Set new.
 	author := ''.
 	viewMode := #normal.
@@ -2046,76 +1891,6 @@ PhratchFrameMorph >> languageMenu: aToggleButtonMorph [
 	menu invokeModalAt: aToggleButtonMorph bottomLeft + (0@10) in: World allowKeyboard: true. 
 
 	self stopAll.
-
-]
-
-{ #category : #'menu/button actions' }
-PhratchFrameMorph >> launchAllHelpScreens [
-
-	self launchHelpFile: 'allscreens.html'
-
-]
-
-{ #category : #'menu/button actions' }
-PhratchFrameMorph >> launchBlockDoc [
-
-	[self htmlDoc] on: Error do: [ PhratchError error: 'files already exist'].
-	self launchDocFile: 'index.html'.
-
-]
-
-{ #category : #'menu/button actions' }
-PhratchFrameMorph >> launchDocFile: aFilename [
-
-	| helpDir  |
-	
-	helpDir := FileSystem workingDirectory / 'htmlDoc'.
-	self stopAll.
-	0.5 second wait.
-	(helpDir / aFilename) exists
-		ifTrue: [ 
-			self open: (((helpDir / aFilename) fullName))]
-		ifFalse: [
-			DialogBoxMorph inform: 'Doc file not found.' localized].
-
-]
-
-{ #category : #'menu/button actions' }
-PhratchFrameMorph >> launchHelpFile: aFilename [
-
-	| helpDir subDir |
-	
-	helpDir := FileSystem workingDirectory / 'Help'.
-	helpDir exists ifFalse: [^ PhratchError error: 'beep'.].  "no help folder"
-	self stopAll.
-	
-
-	"use the English subfolder by default if it exists"
-	(helpDir directoryNames includes: 'en') ifTrue: [subDir := helpDir / 'en'].
-	"use subfolder for the current language if it exists"
-	(helpDir directoryNames includes: PhratchTranslator currentLanguage) ifTrue: [
-		subDir := helpDir / PhratchTranslator currentLanguage].
-	subDir ifNotNil: [helpDir := subDir].
-	(helpDir / aFilename) exists
-		ifTrue: [ 
-			self open: (((helpDir / aFilename) fullName))]
-		ifFalse: [
-			DialogBoxMorph inform: 'Help file not found.' localized].
-
-]
-
-{ #category : #'menu/button actions' }
-PhratchFrameMorph >> launchHelpPage [
-
-	self launchHelpFile: 'index.html'.
-
-]
-
-{ #category : #'menu/button actions' }
-PhratchFrameMorph >> launchWebsite [
-
-	self world displayWorldSafely.
-	Cursor wait showWhile: ["PhratchPlugin primOpenURL:"self open:  'http://www.phratch.com/'].
 
 ]
 
@@ -2321,25 +2096,11 @@ PhratchFrameMorph >> open: aFileName [
 	]
 ]
 
-{ #category : #byob }
-PhratchFrameMorph >> openBYOBManual [
-
-	self open: (((FileSystem workingDirectory / 'Manual' / 'BYOBManual.pdf') fullName))
-]
-
 { #category : #other }
 PhratchFrameMorph >> openMIDI [
 	"Prompt the user to select a MIDI port number, then open it."
 
 	workPane openMIDI.
-
-]
-
-{ #category : #'menu/button actions' }
-PhratchFrameMorph >> openPantherTutorials [
-
-	self world displayWorldSafely.
-	Cursor wait showWhile: ["PhratchPlugin primOpenURL:" self open: 'http://pantherprogramming.weebly.com/panther-tutorials.html'].
 
 ]
 
@@ -2970,7 +2731,6 @@ PhratchFrameMorph >> startup [
 	self updateProjectName.
 	author := ''.
 	justSaved := true.
-	quitFlag := false.
 
 	PhratchFrameMorph takeOverScreen: false.
 
