@@ -21,7 +21,6 @@ Class {
 		'selectionColor',
 		'lines',
 		'isEditable',
-		'centerText',
 		'hasFocus',
 		'selectionStart',
 		'selectionEnd',
@@ -29,7 +28,6 @@ Class {
 		'blinkState',
 		'growWithText',
 		'renderer',
-		'suppressAntiAliasing',
 		'inset',
 		'lineHeight'
 	],
@@ -428,7 +426,6 @@ MultilineStringMorph >> drawSelectionOn: aCanvas [
 MultilineStringMorph >> drawString: aString at: aPoint on: aCanvas [
 	| s |
 	s := aString.
-	suppressAntiAliasing ifNil: [ suppressAntiAliasing := false ].
 	aCanvas
 		text: s
 		bounds: (aPoint extent: 10000 @ 10000)
@@ -442,12 +439,9 @@ MultilineStringMorph >> drawTextOn: aCanvas [
 	| hInset x y |
 	hInset := self insetX.
 	y := self insetY.
-	centerText ifNil: [ centerText := false ].
 	lines
 		do: [ :s | 
-			x :=  hInset .
-			centerText
-				ifTrue: [ x := (self width - hInset - (renderer stringWidth: s)) // 2 ].
+			x :=  hInset.
 			self drawString: s at: x @ y on: aCanvas.
 			y := y + lineHeight ]
 ]
@@ -607,13 +601,11 @@ MultilineStringMorph >> initialize [
 	selectionColor := Color r: 0.353 g: 0.607 b: 0.788.
 	lines := Array with: self emptyLine.
 	isEditable := true.
-	centerText := false.
 	hasFocus := false.
 	selectionStart := selectionEnd := 1.
 	blinkState := true.
 	growWithText := false.
 	inset := 5@3.
-	suppressAntiAliasing := false.
 	self font: TextStyle defaultFont.
 	super extent: 90@25.
 

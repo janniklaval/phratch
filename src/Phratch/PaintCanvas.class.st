@@ -63,8 +63,7 @@ Class {
 	#classVars : [
 		'BrushDict',
 		'CanvasExtent',
-		'EnlargeFactor',
-		'MaxUndo'
+		'EnlargeFactor'
 	],
 	#category : #'Phratch-Paint'
 }
@@ -116,7 +115,6 @@ PaintCanvas class >> canvasExtent [
 PaintCanvas class >> initialize [
 	"self initialize"
 
-	MaxUndo := 10.
 	EnlargeFactor := 1.2.
 	BrushDict := Dictionary new.
 	CanvasExtent := 480@360.
@@ -666,7 +664,6 @@ PaintCanvas >> editForm: aForm regPoint: regPoint textBox: savedTextBox isStage:
 		textBox extent: (self extent - textBox topLeft).
 		textColor := textBox textColor.
 		textBox
-			"suppressAntiAliasing: true;"
 			textColor: Color black;
 			borderWidth: 0].
 
@@ -1240,7 +1237,7 @@ entry is removed and, if possible, recycled."
 	| f |
 	undoIndex > 0 ifTrue: [undoList := undoList copyFrom: undoIndex + 1 to: undoList size].
 
-	((undoList size >= MaxUndo) and:
+	((undoList size >= 10) and:
 	 [undoList last extent = canvasForm extent])
 		ifTrue: [f := undoList removeLast. f unhibernate]
 		ifFalse: [f := Form extent: canvasForm extent depth: canvasForm depth].

@@ -59,8 +59,7 @@ PhratchTalkBubbleMorph >> initialize [
 	self beThoughtBubble: false.
 	pointLeft := false.
 
-	contentsMorph := "Multiline"StringMorph new
-		"centerText: true;"
+	contentsMorph := StringMorph new
 		contents: '';
 		font: (PhratchFrameMorph getFont: #TalkBubble);
 		yourself.

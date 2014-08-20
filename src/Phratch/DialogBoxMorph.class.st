@@ -20,14 +20,6 @@ Class {
 		'messageLineMorphs',
 		'done',
 		'response',
-		'topLeftForms',
-		'topRightForms',
-		'bottomLeftForms',
-		'bottomRightForms',
-		'topEdgeForms',
-		'leftEdgeForms',
-		'rightEdgeForms',
-		'bottomEdgeForms',
 		'mainColumn',
 		'shortcutColumn',
 		'fileInfoColumn',
@@ -133,40 +125,15 @@ DialogBoxMorph >> addNoShadowFrameFromForm: aForm [
 	cornerExtent := (aForm extent - 1) // 2.
 	center := aForm extent // 2.
 
-	topLeftForms := Array new: 2.
-	bottomLeftForms := Array new: 2.
-	topRightForms := Array new: 2.
-	bottomRightForms := Array new: 2.
-	topEdgeForms := Array new: 2.
-	leftEdgeForms := Array new: 2.
-	rightEdgeForms := Array new: 2.
-	bottomEdgeForms := Array new: 2.
+	topLeftForm :=  (aForm copy: (0@0 extent: cornerExtent)).
+	topRightForm := (aForm copy: ((aForm width - cornerExtent x) @ 0 extent: cornerExtent)).
+	bottomLeftForm :=  (aForm copy: (0 @ (aForm height - cornerExtent y) extent: cornerExtent)).
+	bottomRightForm := (aForm copy: ((aForm extent - cornerExtent) extent: cornerExtent)).
 
-	topLeftForms
-		at: 1 put: topLeftForm deepCopy;
-		at: 2 put: (aForm copy: (0@0 extent: cornerExtent)).
-	topRightForms
-		at: 1 put: topRightForm copy;
-		at: 2 put: (aForm copy: ((aForm width - cornerExtent x) @ 0 extent: cornerExtent)).
-	bottomLeftForms
-		at: 1 put: bottomLeftForm copy;
-		at: 2 put: (aForm copy: (0 @ (aForm height - cornerExtent y) extent: cornerExtent)).
-	bottomRightForms
-		at: 1 put: bottomRightForm copy;
-		at: 2 put: (aForm copy: ((aForm extent - cornerExtent) extent: cornerExtent)).
-
-	topEdgeForms
-		at: 1 put: topEdgeForm copy;
-		at: 2 put: (aForm copy: ((center x@0) extent: (1 @ cornerExtent y))).
-	leftEdgeForms
-		at: 1 put: leftEdgeForm copy;
-		at: 2 put: (aForm copy: ((0 @ center y) extent: (cornerExtent x @ 1))).
-	rightEdgeForms
-		at: 1 put: rightEdgeForm copy;
-		at: 2 put: (aForm copy: (((aForm width - cornerExtent x) @ center y) extent: (cornerExtent x @ 1))).
-	bottomEdgeForms
-		at: 1 put: bottomEdgeForm copy;
-		at: 2 put: (aForm copy: ((center x@(aForm height - cornerExtent y)) extent: (1 @ cornerExtent y))).
+	topEdgeForm := (aForm copy: ((center x@0) extent: (1 @ cornerExtent y))).
+	leftEdgeForm :=  (aForm copy: ((0 @ center y) extent: (cornerExtent x @ 1))).
+	rightEdgeForm := (aForm copy: (((aForm width - cornerExtent x) @ center y) extent: (cornerExtent x @ 1))).
+	bottomEdgeForm := (aForm copy: ((center x@(aForm height - cornerExtent y)) extent: (1 @ cornerExtent y))).
 
 
 ]
@@ -255,17 +222,6 @@ DialogBoxMorph >> deleteItem [
 { #category : #drawing }
 DialogBoxMorph >> drawOn: aCanvas [
 
-	| i |
-	i := (owner isHandMorph) ifTrue: [2] ifFalse: [1].
-
-	topLeftForm := topLeftForms at: i.
-	bottomLeftForm := bottomLeftForms at: i.
-	topRightForm := topRightForms at: i.
-	bottomRightForm := bottomRightForms at: i.
-	topEdgeForm := topEdgeForms at: i.
-	leftEdgeForm := leftEdgeForms at: i.
-	rightEdgeForm := rightEdgeForms at: i.
-	bottomEdgeForm := bottomEdgeForms at: i.
 	edgeCache := Array new: edgeCache size.
 
 	super drawOn: aCanvas.
