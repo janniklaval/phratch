@@ -157,23 +157,7 @@ PhratchSpriteMorph >> glideSecs: duration toX: endX y: endY elapsed: elapsed fro
 	fraction < 0.0
 		ifTrue: [ fraction := 0 ].
 	rPos := startPoint + (fraction * (endPoint - startPoint)) truncated.
-	self gotoX: rPos x y: rPos y	"
-	| fraction endPoint |
-	startPoint ifNil: [
-		self holdSubsprites. 
-		^ self referencePosition].
-	endPoint := endX@endY.
-	duration < 0.001
-		ifTrue: [fraction := 1]
-		ifFalse: [fraction := elapsed asFloat / (1000.0 * duration)].
-	fraction > 1.0 ifTrue: [fraction := 1].
-	fraction < 0.0 ifTrue: [fraction := 0].
-	self referencePosition: startPoint + (fraction * (endPoint - startPoint)) truncated.
-
-	(self referencePosition = endPoint) ifTrue: [
-		self releaseSubsprites]
-
-"
+	self gotoX: rPos x y: rPos y
 ]
 
 { #category : #'*PhratchMotion' }
