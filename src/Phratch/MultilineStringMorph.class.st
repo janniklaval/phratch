@@ -427,10 +427,9 @@ MultilineStringMorph >> drawString: aString at: aPoint on: aCanvas [
 	| s |
 	s := aString.
 	aCanvas
-		text: s
-		bounds: (aPoint extent: 10000 @ 10000)
+		drawString: s
+		in: (aPoint extent: 10000 @ 10000)
 		font: font
-		kern: 0
 		color: textColor
 ]
 

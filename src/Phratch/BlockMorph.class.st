@@ -22,7 +22,6 @@ Class {
 	#classVars : [
 		'CBlockBracketThickness',
 		'Contrast',
-		'DebugMenu',
 		'LabelColor',
 		'PuzzleInset',
 		'PuzzleWidth'
@@ -67,7 +66,6 @@ BlockMorph class >> initialize [
 	PuzzleInset := 11.
 	PuzzleWidth := 14.
 	CBlockBracketThickness := 12.
-	DebugMenu := true.
 ]
 
 { #category : #'dropping/grabbing' }
@@ -1379,10 +1377,6 @@ BlockMorph >> rightButtonMenu [
 			menu add: 'delete' value: #delete].
 		menu add: 'show algorithm' value: #showCodeString.	
 		].
-	
-	"DebugMenu ifTrue: [
-		menu addLine.
-		menu add: 'show tuples' value: #showTuples]."
 	
 	menu localize; invokeModal.
 	choice := menu selectedValue ifNil: [^ self].
