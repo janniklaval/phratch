@@ -86,7 +86,7 @@ PhratchToolTipMorph >> step [
 { #category : #stepping }
 PhratchToolTipMorph >> stepTime [
 
-	^ 20
+	^ 100
 
 ]
 

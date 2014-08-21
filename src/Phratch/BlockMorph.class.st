@@ -179,6 +179,22 @@ BlockMorph >> bottomBlock [
 ]
 
 { #category : #accessing }
+BlockMorph >> cachedFeedbackForm [
+
+	cachedFeedbackForm ifNil: [self updateCachedFeedbackForm].
+	^ cachedFeedbackForm
+
+]
+
+{ #category : #accessing }
+BlockMorph >> cachedForm [
+
+	cachedForm ifNil: [self updateCachedForm].
+	^ cachedForm
+
+]
+
+{ #category : #accessing }
 BlockMorph >> canBecomeWatcher [
 	"Answer true if this block can become a watcher when dropped onto the stage. False by default."
 
@@ -671,19 +687,25 @@ BlockMorph >> fullDrawOn: aCanvas [
 	| offset |
 	self isHidden ifTrue: [^ self].
 	(self hasProperty: #errorOnDraw) ifTrue:[^ self drawErrorOn: aCanvas].
-	(owner isBlockMorph) ifTrue: [^ super fullDrawOn: aCanvas].  "only cache at top level"
+"	(owner isBlockMorph) ifTrue: [^ super fullDrawOn: aCanvas]. " "only cache at top level"
 
 	cachedForm ifNil: [self updateCachedForm].
-
+	cachedForm ifNil: [^ super fullDrawOn: aCanvas].
 	offset := 0@0.
 	phratchProc ifNotNil: [
 		offset := 3@3.
 		cachedFeedbackForm ifNil: [self updateCachedFeedbackForm].
 		cachedFeedbackForm ifNotNil: [
-			aCanvas paintImage: cachedFeedbackForm at: self fullBounds topLeft]].
-
-	cachedForm ifNil: [^ self].
-	aCanvas paintImage: cachedForm at: self fullBounds topLeft + offset.
+			
+			aCanvas paintImage: self cachedFeedbackForm at: (self fullBounds topLeft).
+			
+			self allMorphs allButLast do:[:e |[ aCanvas paintImage: e cachedFeedbackForm at: (e fullBounds topLeft - offset)] on: Error do:[]]
+			
+			]].
+	
+	aCanvas paintImage: self cachedForm at: (self fullBounds topLeft + offset).
+	"self allMorphs allButLast do:[:e |[ aCanvas paintImage: e cachedForm at: (e fullBounds topLeft)] on: Error do:[]]."
+self submorphs do:[:e | e fullDrawOn: aCanvas]
 
 ]
 
@@ -1554,7 +1576,7 @@ BlockMorph >> updateCachedFeedbackForm [
 	"Create a cached feedback Form to show this stack's running (or error) status."
 
 	| outlineColor |
-	cachedForm ifNil: [^ self].
+	cachedForm ifNil: [self updateCachedForm].
 	outlineColor := (phratchProc notNil and: [phratchProc errorFlag])
 		ifTrue: [Color r: 0.831 g: 0.156 b: 0.156]
 		ifFalse: [Color gray: 0.953].
@@ -1575,7 +1597,6 @@ BlockMorph >> updateCachedForm [
 	c := FormCanvas extent: self fullBounds extent depth: 32.
 	c := c copyOffset: self topLeft negated.
 	self drawOn: c.
-	self drawSubmorphsOn: c.
 	cachedForm := c form.
 	lastLayoutTime := Time millisecondClockValue.
 

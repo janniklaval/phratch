@@ -333,7 +333,7 @@ PhratchScriptsMorph >> step [
 { #category : #stepping }
 PhratchScriptsMorph >> stepTime [
 
-	^ 0
+	^ 50
 
 ]
 
