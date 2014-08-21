@@ -258,29 +258,6 @@ PhratchScriptsMorph >> showCommentDropFeedback [
 
 ]
 
-{ #category : #drawing }
-PhratchScriptsMorph >> showDeleteFeedback [
-	"Display feedback for the scissors tool."
-
-	| h cutBlock r |
-	h := World activeHand.
-	(cutBlock := self topBlockMorphAt: h cursorPoint exclude: nil) ifNil: [^ self].
-	((cutBlock isCSlotMorph) or: [cutBlock isOSlotMorph])
-		ifTrue: [cutBlock := cutBlock owner].
-	r := cutBlock bounds.
-	((cutBlock isCBlockMorph) and: [cutBlock firstBlockList size > 0])
-		ifTrue: [r := r merge: cutBlock firstBlockList first fullBounds].
-	(cutBlock isHatBlockMorph)
-		ifTrue: [r := cutBlock fullBounds].
-	feedbackMorph
-		bounds: (r expandBy: 3);
-		color: Color transparent;
-		borderColor: (Color r: 212/255 g: 40/255 b: 40/255).
-	feedbackMorph on: #mouseDown send: #click: to: cutBlock.
-	self addMorphFront: feedbackMorph.
-
-]
-
 { #category : #stepping }
 PhratchScriptsMorph >> step [
 	"Give feedback about possible drop targets."
@@ -297,7 +274,6 @@ PhratchScriptsMorph >> step [
 		ifNotNil: [lambdaMorph delete. lambdaMorph := nil].  "remove old lambda feedback"
 
 	h := World activeHand.
-	h toolType = 'CutTool' ifTrue: [^ self showDeleteFeedback].
 
 	(self bounds containsPoint: h position) ifFalse: [^ self].
 	h submorphCount = 1 ifFalse: [^ self].
@@ -357,7 +333,7 @@ PhratchScriptsMorph >> step [
 { #category : #stepping }
 PhratchScriptsMorph >> stepTime [
 
-	^ 50
+	^ 0
 
 ]
 

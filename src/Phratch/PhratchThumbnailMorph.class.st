@@ -130,7 +130,7 @@ PhratchThumbnailMorph >> step [
 { #category : #stepping }
 PhratchThumbnailMorph >> stepTime [
 
-	^ 100
+	^ 10
 
 ]
 

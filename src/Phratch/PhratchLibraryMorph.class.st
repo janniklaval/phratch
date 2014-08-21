@@ -314,7 +314,7 @@ PhratchLibraryMorph >> step [
 { #category : #stepping }
 PhratchLibraryMorph >> stepTime [
 
-	^ 500
+	^ 50
 
 ]
 
