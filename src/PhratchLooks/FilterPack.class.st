@@ -135,14 +135,14 @@ FilterPack >> applyStaticFiltersTo: srcForm [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 FilterPack >> brightnessShift [
 
 	^ brightnessShift
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 FilterPack >> brightnessShift: aNumber [
 
 	brightnessShift := aNumber within: -100 and: 100.
@@ -166,14 +166,14 @@ FilterPack >> filtersActive [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 FilterPack >> fisheye [
 
 	^ fisheye
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 FilterPack >> fisheye: aNumber [
 
 	fisheye := aNumber.
@@ -181,14 +181,14 @@ FilterPack >> fisheye: aNumber [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 FilterPack >> hueShift [
 
 	^ hueShift
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 FilterPack >> hueShift: aNumber [
 
 	hueShift := aNumber \\ 200.
@@ -205,14 +205,14 @@ FilterPack >> initialize [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 FilterPack >> mosaicCount [
 
 	^ mosaicCount
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 FilterPack >> mosaicCount: aNumber [
 
 	mosaicCount := aNumber.
@@ -220,14 +220,14 @@ FilterPack >> mosaicCount: aNumber [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 FilterPack >> pixelateCount [
 
 	^ pixelateCount
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 FilterPack >> pixelateCount: aNumber [
 
 	pixelateCount := aNumber.
@@ -255,14 +255,14 @@ FilterPack >> resultForm [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 FilterPack >> whirl [
 
 	^ whirl
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 FilterPack >> whirl: aNumber [
 
 	whirl := aNumber.
