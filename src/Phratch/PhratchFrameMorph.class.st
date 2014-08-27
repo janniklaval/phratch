@@ -450,11 +450,13 @@ PhratchFrameMorph >> addSpecialSprite [
 	m := (menu
 		localize;
 		invokeModal; yourself) selectedValue.
-	
+
 	m ifNotNil:[
-		m isScriptable ifTrue:[newSprite := m new]
+		|obj|
+		obj := m new.
+		obj isScriptable ifTrue:[newSprite := obj]
 			ifFalse:[newSprite := PhratchSpriteMorph new.
-				newSprite phratchModel: m new.
+				newSprite phratchModel: obj.
 				newSprite objName: m asString].
 	
 		frame := self ownerOrYourselfThatIsAPhratchFrameMorph.
