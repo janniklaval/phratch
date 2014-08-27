@@ -91,7 +91,7 @@ LambdaBlockMorph >> displayBlock [
 			(ans isArgMorph) ifTrue: [^self].
 			(ans isCommandScriptBlockMorph) ifFalse: [
 				ans allMorphs do: [:m | (m isBlockMorph) ifTrue: [
-						m isContrasted: false; addLabel]].
+						m addLabel]].
 					^ ans]].
 			^b].
 

@@ -10,7 +10,7 @@ Class {
 	#category : #'Phratch-Blocks'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #utilities }
 MultiArgReporterBlockMorph class >> blockTypeOn: aScriptablePhratchMorph spec: spec color: blockColor [
 	
 	|block selector|

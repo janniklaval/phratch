@@ -14,7 +14,7 @@ Class {
 	#category : #'Phratch-Blocks'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #'class initialization' }
 HatBlockMorph class >> initBlock: aBlock on: aScriptablePhratchMorph withSpec: spec color: blockColor [
 
 	^ aBlock 

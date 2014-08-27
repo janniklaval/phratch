@@ -89,7 +89,7 @@ ArgMorph >> evaluate [
 	self subclassResponsibility
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #processes }
 ArgMorph >> evaluatePhratchProcess: aProcess stage: aStageMorph [
 
 	^ aProcess evaluateSelfEvaluating

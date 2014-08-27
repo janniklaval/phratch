@@ -16,7 +16,7 @@ Class {
 	#category : #'Phratch-Blocks'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #utilities }
 CBlockMorph class >> blockTypeOn: aScriptablePhratchMorph spec: spec color: blockColor [
 	
 	|block|
@@ -83,7 +83,7 @@ CBlockMorph >> bracketThickness [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 CBlockMorph >> closestAttachTargetIn: newOwner [
 	"Answer the closest block attachment point among the blocks and stack submorphs of the given morph. Answer nil if there are no blocks close enough to attach myself to."
 

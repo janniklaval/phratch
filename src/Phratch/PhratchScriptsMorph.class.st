@@ -67,6 +67,7 @@ PhratchScriptsMorph >> drawOn: aCanvas [
 PhratchScriptsMorph >> initialize [
 
 	super initialize.
+	self hasDropShadow: false.
 	color := Color white.
 	borderWidth := 0.
 	self enableDragNDrop: true.

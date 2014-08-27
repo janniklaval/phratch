@@ -44,7 +44,6 @@ Class {
 		'Clipboard',
 		'DefaultSprite',
 		'PhratchSkin',
-		'TakeOverScreen',
 		'VisibleDrives',
 		'WorkpaneExtent'
 	],
@@ -193,7 +192,7 @@ PhratchFrameMorph class >> open [
 	^ self new startup openInWorld
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'initialize-release' }
 PhratchFrameMorph class >> openOneInstance [
 
 	PhratchFrameMorph allInstances size > 1 ifFalse: [ ^ self new startup openInWorld].
@@ -302,16 +301,6 @@ PhratchFrameMorph class >> skinAt: aSymbolOrString ifAbsent: aBlock [
 
 	^ self skin at: aSymbolOrString asSymbol ifAbsent: aBlock
 
-]
-
-{ #category : #accessing }
-PhratchFrameMorph class >> takeOverScreen [
-	^ TakeOverScreen ifNil: [ TakeOverScreen := false ] 
-]
-
-{ #category : #accessing }
-PhratchFrameMorph class >> takeOverScreen: anObject [
-	TakeOverScreen := anObject
 ]
 
 { #category : #utilities }
@@ -448,9 +437,13 @@ PhratchFrameMorph >> addSpecialSprite [
 	|menu m newSprite frame |
 	menu := MenuMorph new defaultTarget: self.
 	
-	PhratchSpriteMorph withAllSubclasses size = 1 ifTrue:[^ self paintSpriteMorph].
+	(PhratchSpriteMorph withAllSubclasses size = 1 and:[PhratchInstaller declaredSprite isEmpty]) ifTrue:[^ self paintSpriteMorph].
 	
 	PhratchSpriteMorph withAllSubclassesDo: [ :e |
+		menu add: ('create ',e name) translated value: e.
+	].
+
+	PhratchInstaller declaredSprite do:[:e |
 		menu add: ('create ',e name) translated value: e.
 	].
 	
@@ -459,7 +452,10 @@ PhratchFrameMorph >> addSpecialSprite [
 		invokeModal; yourself) selectedValue.
 	
 	m ifNotNil:[
-		newSprite := m new.
+		m isScriptable ifTrue:[newSprite := m new]
+			ifFalse:[newSprite := PhratchSpriteMorph new.
+				newSprite phratchModel: m new.
+				newSprite objName: m asString].
 	
 		frame := self ownerOrYourselfThatIsAPhratchFrameMorph.
 		frame ifNotNil: [
@@ -536,13 +532,6 @@ PhratchFrameMorph >> author: aString [
 	author := aString.
 
 
-]
-
-{ #category : #byob }
-PhratchFrameMorph >> blockContrastStrong [
-
-	BlockMorph contrastStrong.
-	self refreshBlocks.
 ]
 
 { #category : #byob }
@@ -641,7 +630,7 @@ PhratchFrameMorph >> clearStage [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'initialize-release' }
 PhratchFrameMorph >> close [
 	<phratchMenu: 'Close' category: 'file' position: 15 sub:6 shift: true>
 	| response |
@@ -769,6 +758,14 @@ PhratchFrameMorph >> createBasicPanes [
 	workPane := PhratchStageMorph new extent: WorkpaneExtent.
 	
 	libraryPane := PhratchLibraryMorph new.
+	
+	topPane hasDropShadow: false.
+	viewerPane hasDropShadow: false.
+	scriptsPane hasDropShadow: false.
+	stageFrame hasDropShadow: false.
+	titlePane hasDropShadow: false.
+	workPane hasDropShadow: false.
+	libraryPane hasDropShadow: false.
 
 	"make panes sticky so clicking on them doesn't pick up entire frame"
 	self
@@ -1207,14 +1204,11 @@ PhratchFrameMorph >> enterQuarterMode [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'menu/button actions' }
 PhratchFrameMorph >> enterUserMode [
 	"Start filling the entire screen and being sticky. Also configure a few other things for the end user such as turning off halos and the control menu (noviceMode) and making sure that error catching is enabled."
 
 	<phratchMenu: 'Enter user mode' category: 'file' position: 13 sub:5 shift: true>
-	PhratchFrameMorph takeOverScreen ifTrue: [
-		Display fullScreenMode: true.
-		World restoreDisplay].
 
 	fillScreenFlag := true.
 	TaskbarMorph allInstances do: [: e | e hide ].
@@ -1237,9 +1231,8 @@ PhratchFrameMorph >> exitPresentationMode [
 
 	TaskbarMorph allInstances do: [: e | e show ].
 
-	PhratchFrameMorph takeOverScreen ifFalse: [
 		Display fullScreenMode: false.
-		World restoreDisplay].
+		World restoreDisplay.
 
 
 	ScriptablePhratchMorph doubleSize: false.
@@ -1265,7 +1258,7 @@ PhratchFrameMorph >> exportSprite [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #geometry }
 PhratchFrameMorph >> extent: aPoint [
 
 	super extent: aPoint.
@@ -1406,10 +1399,6 @@ PhratchFrameMorph >> fillScreenOff [
 { #category : #'menu/button actions' }
 PhratchFrameMorph >> fillScreenOn [
 	"Start filling the entire screen and being sticky. Also configure a few other things for the end user such as turning off halos and the control menu (noviceMode) and making sure that error catching is enabled."
-
-	PhratchFrameMorph takeOverScreen ifTrue: [
-		Display fullScreenMode: true.
-		World restoreDisplay].
 
 	fillScreenFlag := true.
 	TaskbarMorph allInstances do: [: e | e hide ].
@@ -1702,6 +1691,7 @@ PhratchFrameMorph >> importSpriteOrProject: fileNameOrData [
 PhratchFrameMorph >> initialize [
 
 	super initialize.
+	self hasDropShadow: false.
 	fillScreenFlag := false.
 	paintingInProgress := false.
 	projectInfo := Dictionary new.
@@ -1840,30 +1830,8 @@ PhratchFrameMorph >> isTurbo [
 	^ PhratchProcess blockHighlightMSecs < 1
 ]
 
-{ #category : #byob }
-PhratchFrameMorph >> keepSpritesOnStage: anInt [
-	| bool |
-
-	bool := {false. true} at: anInt + 1.
-	ScriptablePhratchMorph keepOnStage: bool
-]
-
 { #category : #'event handling' }
 PhratchFrameMorph >> keyStroke: evt [
-	"|ch|
-	ch := evt keyValue."
-			"evt commandKeyPressed ifTrue: [ch := ch \\ 32]."	"map cmd/alt keys to control keys"
-			"({3 . 13} includes: ch) ifTrue: [^ self pressGreenFlagButton]."
-			"ch = 14 ifTrue: [^ self newPhratchProject].
-			ch = 15 ifTrue: [^ self openPhratchProject].
-			ch = 17 ifTrue: [^ self quitPhratch].
-			ch = 19 ifTrue: [^ self savePhratchProjectNoDialog]."
-			"ch = 27 ifTrue: [
-				PhratchFrameMorph takeOverScreen ifTrue: [
-					Display fullScreenMode: false.
-					Display fullScreenMode: true.
-					World restoreDisplay].
-				^ self]."
 			workPane broadcastEventNamed: 'Phratch-KeyPressedEvent' with: evt.
 ]
 
@@ -1998,7 +1966,7 @@ PhratchFrameMorph >> nameFromFileName: fileName [
 
 ]
 
-{ #category : #buttonActions }
+{ #category : #'menu/button actions' }
 PhratchFrameMorph >> newPhratchProject [
 	"Make a new, blank Phratch project."
 
@@ -2475,7 +2443,6 @@ image in end-user (fillScreen) mode?') ifFalse: [^ self].
 	self setLanguage: 'en'.
 
 	self enterNormalMode.
-	self blockContrastStrong.
 	ScriptablePhratchMorph keepOnStage: true.
 	
 	EventHatMorph threadSafeMode: false.
@@ -2711,12 +2678,9 @@ PhratchFrameMorph >> showWatcher: watcher [
 PhratchFrameMorph >> startup [
 
 	PhratchTranslator importLanguagesList.
-
-	BlockMorph contrastStrong.
-	self keepSpritesOnStage: 1.
+	
+	ScriptablePhratchMorph keepOnStage: true.
 	EventHatMorph threadSafeMode: false.
-	HandMorph translucentWhenDragging: true.
-	VariableFrame scopeContrast: false.
 
 	BlockEditorFrameMorph resetDimensions.
 	ElementsEditorFrameMorph resetDimensions.
@@ -2726,8 +2690,6 @@ PhratchFrameMorph >> startup [
 	self updateProjectName.
 	author := ''.
 	justSaved := true.
-
-	PhratchFrameMorph takeOverScreen: false.
 
 	viewerPane currentCategory: 'motion'.
 	
@@ -3037,7 +2999,7 @@ PhratchFrameMorph >> updateLastHistoryEntryIfNeeded [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #stepping }
 PhratchFrameMorph >> updateMediaCategoryFor: anObject [
 	"Update the media viewer for the given object's media category. Do nothing if the media category of the given object is not being viewed."
 

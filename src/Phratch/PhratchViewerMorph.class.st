@@ -71,6 +71,7 @@ PhratchViewerMorph >> extent: aPoint [
 PhratchViewerMorph >> initialize [
 
 	super initialize.
+	self hasDropShadow: false.
 	self
 		initFrontFromForm: (PhratchFrameMorph skinAt: #blocksPaletteFrameTransparent2)
 		topSectionHeight: 120.

@@ -487,7 +487,7 @@ CommandBlockMorph >> drawInlinePaletteOn: aCanvas [
 CommandBlockMorph >> editElements [
 	| cls sel |
 	sel := selector.
-	cls := receiver class classThatUnderstands: sel.
+	cls := receiver phratchModel class classThatUnderstands: sel.
 
 	cls ifNil: [cls := PhratchProcess].
 	(cls canUnderstand: sel)

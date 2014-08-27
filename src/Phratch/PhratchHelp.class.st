@@ -7,7 +7,7 @@ Class {
 	#category : #'Phratch-Installation'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #'menu/button actions' }
 PhratchHelp class >> aboutPhratch [
 	| dialogBox |
 	dialogBox := DialogBoxMorph new
@@ -52,7 +52,7 @@ Please report bugs to https://code.google.com/p/phratch/issues/list.
 	dialogBox getUserResponse
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #externalCall }
 PhratchHelp class >> htmlDoc [
 	<phratchMenu: 'Generate HTML documentation' category: 'file' position: 12 sub: 5 shift: true>
 	| allPragmas dir imgDir html |
@@ -129,7 +129,7 @@ PhratchHelp class >> htmlDoc [
 					html nextPutAll: '</table>' ] ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #externalCall }
 PhratchHelp class >> htmlDocForWebsite [
 	| allPragmas dir imgDir html |
 	dir := (FileSystem workingDirectory / 'htmlDoc') ensureCreateDirectory.
@@ -203,14 +203,14 @@ PhratchHelp class >> htmlDocForWebsite [
 					html nextPutAll: '</table>' ] ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #externalCall }
 PhratchHelp class >> launchAllHelpScreens [
 
 	self launchHelpFile: 'allscreens.html'
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #externalCall }
 PhratchHelp class >> launchBlockDoc [
 
 	[self htmlDoc] on: Error do: [ PhratchError error: 'files already exist'].
@@ -218,7 +218,7 @@ PhratchHelp class >> launchBlockDoc [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #externalCall }
 PhratchHelp class >> launchDocFile: aFilename [
 
 	| helpDir  |
@@ -233,7 +233,7 @@ PhratchHelp class >> launchDocFile: aFilename [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #externalCall }
 PhratchHelp class >> launchHelpFile: aFilename [
 
 	| helpDir subDir |
@@ -256,14 +256,14 @@ PhratchHelp class >> launchHelpFile: aFilename [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #externalCall }
 PhratchHelp class >> launchHelpPage [
 
 	self launchHelpFile: 'index.html'.
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #externalCall }
 PhratchHelp class >> launchWebsite [
 
 	"self world displayWorldSafely."
@@ -271,7 +271,7 @@ PhratchHelp class >> launchWebsite [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #generating }
 PhratchHelp class >> open: aFileName [ 
 	Smalltalk os isMacOSX ifTrue: [  
 		^ OSProcess command: ('open "', aFileName, '"').
@@ -285,13 +285,13 @@ PhratchHelp class >> open: aFileName [
 	]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #externalCall }
 PhratchHelp class >> openBYOBManual [
 
 	self open: (((FileSystem workingDirectory / 'Manual' / 'BYOBManual.pdf') fullName))
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #externalCall }
 PhratchHelp class >> openPantherTutorials [
 
 	Cursor wait showWhile: ["PhratchPlugin primOpenURL:" self open: 'http://pantherprogramming.weebly.com/panther-tutorials.html'].

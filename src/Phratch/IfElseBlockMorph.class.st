@@ -17,7 +17,7 @@ Class {
 	#category : #'Phratch-Blocks'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #utilities }
 IfElseBlockMorph class >> blockTypeOn: aScriptablePhratchMorph spec: spec color: blockColor [
 	
 	|block|

@@ -8,7 +8,7 @@ Class {
 	#category : #'Phratch-Blocks'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #settings }
 MouseClickEventHatMorph class >> blockTypeOn: aScriptablePhratchMorph spec: spec color: blockColor [
 	
 	^ (self new scriptOwner: aScriptablePhratchMorph) color: blockColor

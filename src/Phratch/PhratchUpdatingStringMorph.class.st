@@ -165,7 +165,7 @@ PhratchUpdatingStringMorph >> floatPrecision [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PhratchUpdatingStringMorph >> floatPrecision: aNumber [
 	"to be migrated to Morphic"
 	floatPrecision := aNumber
@@ -202,7 +202,7 @@ PhratchUpdatingStringMorph >> format [
 	^ format ifNil: [format := #default]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 PhratchUpdatingStringMorph >> formatValue: v [
 
 	format = #string ifTrue: [
@@ -299,7 +299,7 @@ PhratchUpdatingStringMorph >> informTarget [
 		ifTrue: [ self setDecimalPlacesFromTypeIn: typeIn ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 PhratchUpdatingStringMorph >> initialize [
 	"Initialie the receiver to have default values in its instance variables "
 	super initialize.
@@ -315,7 +315,7 @@ PhratchUpdatingStringMorph >> initialize [
 	maximumWidth := 300.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PhratchUpdatingStringMorph >> kern: ignored [
 ]
 
@@ -352,13 +352,13 @@ PhratchUpdatingStringMorph >> mouseDown: evt [
 			self launchMiniEditor: evt]]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PhratchUpdatingStringMorph >> parameter [
 
 	^ self valueOfProperty: #scratchParameter
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PhratchUpdatingStringMorph >> parameter: anObject [
 
 	self setProperty: #scratchParameter toValue: anObject
@@ -371,7 +371,7 @@ PhratchUpdatingStringMorph >> putSelector: aSymbol [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'target access' }
 PhratchUpdatingStringMorph >> readFromTarget [
 	"Answer the formatted string for the value read from my target. If the target or selector are nil, or if the value is the same as the last value read, answer my current contents."
 
@@ -460,7 +460,7 @@ PhratchUpdatingStringMorph >> setPrecision [
 	aMenu popUpInWorld
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'stepping and presenter' }
 PhratchUpdatingStringMorph >> step [
 
 	super step.
@@ -547,7 +547,7 @@ PhratchUpdatingStringMorph >> valueFromContents [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'target access' }
 PhratchUpdatingStringMorph >> valueFromTargetOrNil [
 	"Answer the value read from my target. Answer nil if my target or selector is nil.."
 

@@ -27,7 +27,8 @@ Class {
 		'sceneStates',
 		'customBlocks',
 		'deletedAttributes',
-		'colors'
+		'colors',
+		'phratchModel'
 	],
 	#classVars : [
 		'BlockColorDict',
@@ -75,31 +76,10 @@ ScriptablePhratchMorph class >> blockSpecDict [
 
 ]
 
-{ #category : #'block specs' }
-ScriptablePhratchMorph class >> blockSpecs [
-	"To obtain all the items of the menu, execute:
-	SystemNavigation default allCallsOn: #phratchItem:kind:category:defaultValues:subCategory:special:
-	"
-	| blocks allPragmas |
-	blocks := #().
-	
-	allPragmas := Pragma allNamed: #phratchItem:kind:category:defaultValues:subCategory:special: from: self to:  ScriptablePhratchMorph  sortedByArgument: 5.
+{ #category : #'panther-actions' }
+ScriptablePhratchMorph class >> blockVisible [
 
-	PhratchCategory allSubclassesDo: [ :c |
-		|previousSC|
-		previousSC := nil.
-		blocks := blocks, {c label}.
-		allPragmas select:[:pragma | ((pragma arguments at: 3) = c label) and:[(BlockVisible includes: (pragma arguments at: 1))not]] 
-			thenDo:[:aP |
-				|prov|
-				(previousSC notNil and: [previousSC ~~( aP arguments at: 5)]) ifTrue:[blocks := blocks, #(-) ].
-				prov := { aP arguments at: 1 . aP arguments at: 2 . aP method selector . aP arguments at: 6},  (aP arguments at: 4).
-				blocks := blocks, {prov}.
-				previousSC := aP arguments at: 5.
-			].
-	].
-
-	^ blocks
+	^ BlockVisible
 ]
 
 { #category : #'panther-actions' }
@@ -120,7 +100,7 @@ ScriptablePhratchMorph class >> buildBlockSpecDictionary [
 	BlockSpecDict := IdentityDictionary new: 250.
 	BlockColorDict := IdentityDictionary new: 250.
 
-	self withAllSubclassesDo: [:cl |
+	Object withAllSubclassesDo: [:cl |
 		blockColor := Color blue.
 		cl blockSpecs do: [:spec |
 			((spec isString) and: [spec size > 1]) ifTrue: [
@@ -824,7 +804,7 @@ ScriptablePhratchMorph >> attributeNames [
 ScriptablePhratchMorph >> blockCategories [
 	"Answer a list of block categories."
 
-	^ (self class blockSpecs select: [:el |
+	^ (phratchModel class blockSpecs select: [:el |
 		(el isString) and: [el ~= '-' and: [el ~= '~']]]) asArray
 
 ]
@@ -835,7 +815,7 @@ ScriptablePhratchMorph >> blockForSelector: aSymbol [
 
 	| cat |
 
-	self class blockSpecs do: [:spec |
+	phratchModel class blockSpecs do: [:spec |
 		((spec isSymbol) not and: [spec isString])
 			ifTrue: [cat := spec].
 
@@ -848,7 +828,7 @@ ScriptablePhratchMorph >> blockForSelector: aSymbol [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #utilities }
 ScriptablePhratchMorph >> blockFromSpec: spec color: blockColor [
 	"Create a block from the given block specification. Answer nil if I don't implement the block spec selector."
 
@@ -888,7 +868,7 @@ ScriptablePhratchMorph >> blockReceiver [
 ScriptablePhratchMorph >> blockSpecForSelector: aSymbol [
 	"Answer a block specification string (in English) for the give selector or nil if there is no spec that has the given selector."
 
-	self class blockSpecs do: [:spec |
+	phratchModel class blockSpecs do: [:spec |
 		((spec isArray) and: [(spec at: 3) = aSymbol])
 			ifTrue: [^ spec first]].
 
@@ -911,7 +891,7 @@ ScriptablePhratchMorph >> blocksFor: aCategory [
 	blockColor := PhratchCategory blockColorFor: aCategory.
 	blocksList := OrderedCollection new.
 	category := nil.
-	self class blockSpecs do: [:spec |
+	phratchModel class blockSpecs do: [:spec |
 		((spec isString) and: [spec ~= #- and: [spec ~= #~ and: [spec ~= #=]]])
 			ifTrue: [category := spec]
 			ifFalse: [
@@ -2705,6 +2685,7 @@ ScriptablePhratchMorph >> initialize [
 	visibility := 100.
 	volume := 100.
 	sceneStates := Dictionary new.
+	phratchModel := self.
 
 ]
 
@@ -3600,6 +3581,13 @@ ScriptablePhratchMorph >> penDown [
 
 ]
 
+{ #category : #'message performing' }
+ScriptablePhratchMorph >> perform: selector withArguments: argArray [ 
+
+	^ [super perform: selector withArguments: argArray] on: Error do:
+		[ phratchModel perform: selector withArguments: argArray ]
+]
+
 { #category : #scripts }
 ScriptablePhratchMorph >> phratchFrame [
 
@@ -3611,6 +3599,20 @@ ScriptablePhratchMorph >> phratchFrame [
 	^ frame
 
 
+]
+
+{ #category : #accessing }
+ScriptablePhratchMorph >> phratchModel [
+	"Answer my current costume form, without filtering, rotation, or scaling."
+
+	^ phratchModel
+
+]
+
+{ #category : #accessing }
+ScriptablePhratchMorph >> phratchModel: anObject [
+
+	phratchModel := anObject
 ]
 
 { #category : #'panther actions' }
@@ -3932,13 +3934,13 @@ ScriptablePhratchMorph >> sayNothing [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ScriptablePhratchMorph >> scale [
 
 	^0
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ScriptablePhratchMorph >> scalePoint [
 
 	^0@0
@@ -4023,7 +4025,7 @@ ScriptablePhratchMorph >> setLayoutOfVar: varName to: aString [
 	w ifNotNil: [w layoutStyle: symbol].
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'looks ops' }
 ScriptablePhratchMorph >> setSizeTo: percent [
 
 	^ self
@@ -4611,7 +4613,7 @@ ScriptablePhratchMorph >> whenSpriteClicked [
 ScriptablePhratchMorph >> wholeBlockSpecForSelector: aSymbol [
 	"Answer a block specification string (in English) for the give selector or nil if there is no spec that has the given selector."
 
-	self class blockSpecs do: [:spec |
+	phratchModel class blockSpecs do: [:spec |
 		((spec isArray) and: [(spec at: 3) = aSymbol])
 			ifTrue: [^ spec]].
 

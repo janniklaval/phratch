@@ -4,7 +4,7 @@ Class {
 	#category : #'Phratch-Addons'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #projects }
 MetaRepoSearcher class >> listOfProjects [
 
 	| lst res conf proj |
@@ -18,7 +18,7 @@ MetaRepoSearcher class >> listOfProjects [
 	^res
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #projects }
 MetaRepoSearcher class >> loadProject: aConfigurationString [
 
 	[Gofer it

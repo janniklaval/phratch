@@ -21,19 +21,12 @@ Class {
 	],
 	#classVars : [
 		'CBlockBracketThickness',
-		'Contrast',
 		'LabelColor',
 		'PuzzleInset',
 		'PuzzleWidth'
 	],
 	#category : #'Phratch-Blocks'
 }
-
-{ #category : #'class initialization' }
-BlockMorph class >> contrastStrong [
-	Contrast := #strong.
-	ReporterBlockMorph allInstancesDo: [:b | b changed ].
-]
 
 { #category : #'class initialization' }
 BlockMorph class >> initBlock: aBlock on: aScriptablePhratchMorph withSpec: spec color: blockColor [
@@ -337,10 +330,6 @@ BlockMorph >> computeHighlightColors [
 BlockMorph >> contrastColor [
 	| ob |
 	originalColor ifNotNil: [ color := originalColor ].
-	Contrast = #off
-		ifTrue: [ 
-			self isDeletedAttribute
-				ifFalse: [ ^ self ] ].
 	self isDeletedAttribute
 		ifTrue: [ ^ color := color twiceLighter ]
 		ifFalse: [ 
@@ -359,13 +348,7 @@ BlockMorph >> contrastColor [
 	ob color = color
 		ifTrue: [ 
 			originalColor := color.
-			#slight = Contrast
-				ifTrue: [ ^ color := color slightlyLighter ].
-			#normal = Contrast
-				ifTrue: [ ^ color := color lighter ].
-			#strong = Contrast
-				ifTrue: [ 
-					color := color twiceLighter	" lighter slightlyLighter " ] ].
+			color := color twiceLighter].
 	submorphs
 		do: [ :m | 
 			(m isStringMorph)
@@ -619,7 +602,7 @@ BlockMorph >> duplicate [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #processes }
 BlockMorph >> evaluatePhratchProcess: aProcess stage: aStageMorph [
 
 	^ aProcess evaluateCommandFor: aStageMorph
@@ -928,10 +911,6 @@ BlockMorph >> isBooleanReporter [
 BlockMorph >> isCShape [
 
 	^ false
-]
-
-{ #category : #byob }
-BlockMorph >> isContrasted: bool [
 ]
 
 { #category : #byob }

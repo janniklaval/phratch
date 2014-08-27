@@ -7,14 +7,14 @@ Class {
 	#category : #'Phratch-Type'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PhratchType >> attributes [
 	
 	<phratchType: #'Attributes'>
 	^ AttributeArgMorph new choice: ''
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #types }
 PhratchType >> blockId [
 	
 	<phratchType: #'BlockId'>
@@ -22,35 +22,35 @@ PhratchType >> blockId [
 		yourself
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #acessing }
 PhratchType >> boolean [
 	
 	<phratchType: #'Boolean'>
 	^ BooleanArgMorph new
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #types }
 PhratchType >> cArgSlot [
 	
 	<phratchType: #'CArgSlot'>
 	 ^ CArgSlotMorph new
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #types }
 PhratchType >> cSlot [
 	
 	<phratchType: #'CSlot'>
 	^ CSlotMorph new "SpecialArgMorph new type: #command"
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'instance creation' }
 PhratchType >> checkBox [
 	
 	<phratchType: #'CheckBox'>
 	^ CheckBoxArgMorph new
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #types }
 PhratchType >> constants [
 	
 	<phratchType: #'Constants'>
@@ -59,7 +59,7 @@ PhratchType >> constants [
 		yourself
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'BYOB attributes' }
 PhratchType >> costumes [
 	
 	<phratchType: #'Costumes'>
@@ -69,7 +69,7 @@ PhratchType >> costumes [
 		yourself
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #types }
 PhratchType >> directions [
 	
 	<phratchType: #'Directions'>
@@ -79,7 +79,7 @@ PhratchType >> directions [
 		yourself
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #types }
 PhratchType >> effects [
 	
 	<phratchType: #'Effects'>
@@ -89,14 +89,14 @@ PhratchType >> effects [
 		yourself
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PhratchType >> event [
 	
 	<phratchType: #'Event'>
 	^ EventTitleMorph new
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PhratchType >> input [
 	
 	<phratchType: #'Input'>
@@ -104,7 +104,7 @@ PhratchType >> input [
 		yourself
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PhratchType >> keys [
 	
 	<phratchType: #'Keys'>
@@ -114,7 +114,7 @@ PhratchType >> keys [
 		yourself
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'panther actions' }
 PhratchType >> layoutStyles [
 	
 	<phratchType: #'LayoutStyles'>
@@ -124,7 +124,7 @@ PhratchType >> layoutStyles [
 		yourself
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PhratchType >> list [
 	
 	<phratchType: #'List'>
@@ -133,7 +133,7 @@ PhratchType >> list [
 		yourself
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #types }
 PhratchType >> listDelete [
 	
 	<phratchType: #'ListDelete'>
@@ -143,91 +143,91 @@ PhratchType >> listDelete [
 		yourself
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #types }
 PhratchType >> loop [
 	
 	<phratchType: #'Loop'>
 	^ MultiArgMorph type: #loop
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #types }
 PhratchType >> mAAny [
 	
 	<phratchType: #'MAAny'>
 	^ MultiArgMorph type: #any
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #types }
 PhratchType >> mABoolean [
 	
 	<phratchType: #'MABoolean'>
 	^ MultiArgMorph type: #boolean
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #types }
 PhratchType >> mACommand [
 	
 	<phratchType: #'MACommand'>
 	^ MultiArgMorph type: #command
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #types }
 PhratchType >> mAList [
 	
 	<phratchType: #'MAList'>
 	^ MultiArgMorph type: #list
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #types }
 PhratchType >> mANumber [
 	
 	<phratchType: #'MANumber'>
 	^ MultiArgMorph type: #number
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #types }
 PhratchType >> mAObjS [
 	
 	<phratchType: #'MAObjS'>
 	^ MultiArgMorph type: #objSlot
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #types }
 PhratchType >> mAPredicate [
 	
 	<phratchType: #'MAPredicate'>
 	^ MultiArgMorph type: #predicate
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #types }
 PhratchType >> mAReporter [
 	
 	<phratchType: #'MAReporter'>
 	^ MultiArgMorph type: #reporter
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #types }
 PhratchType >> mAText [
 	
 	<phratchType: #'MAText'>
 	^ MultiArgMorph type: #text
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #types }
 PhratchType >> mAUnEBool [
 	
 	<phratchType: #'MAUnEBool'>
 	^ MultiArgMorph type: #unevaluatedBoolean
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #types }
 PhratchType >> mAUneval [
 	
 	<phratchType: #'MAUneval'>
 	^ MultiArgMorph type: #unevaluated
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #types }
 PhratchType >> mathFunctions [
 	
 	<phratchType: #'MathFunctions'>
@@ -237,7 +237,7 @@ PhratchType >> mathFunctions [
 		yourself
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'instance creation' }
 PhratchType >> newCostume [
 	
 	<phratchType: #'NewCostume'>
@@ -247,21 +247,21 @@ PhratchType >> newCostume [
 		yourself
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PhratchType >> number [
 	
 	<phratchType: #'Number'>
 	^ ExpressionArgMorph new numExpression: '10'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #types }
 PhratchType >> oSBoolean [
 	
 	<phratchType: #'OSBoolean'>
 	^ OSlotMorph new receiver: receiver; type: #booleanslot; yourself "SpecialArgMorph new type: #predicate"
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #types }
 PhratchType >> oSReporter [
 	
 	<phratchType: #'OSReporter'>
@@ -278,7 +278,7 @@ PhratchType >> receiver: anObject [
 	receiver := anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #types }
 PhratchType >> rotation [
 	
 	<phratchType: #'Rotation'>
@@ -286,7 +286,7 @@ PhratchType >> rotation [
 		yourself
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #types }
 PhratchType >> sABoolean [
 	
 	<phratchType: #'SABoolean'>
@@ -294,7 +294,7 @@ PhratchType >> sABoolean [
 		yourself
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #types }
 PhratchType >> sAList [
 	
 	<phratchType: #'SAList'>
@@ -302,14 +302,14 @@ PhratchType >> sAList [
 		yourself
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #types }
 PhratchType >> sAObjS [
 	
 	<phratchType: #'SAObjS'>
 	^ SpecialArgMorph new type: #objSlot
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #types }
 PhratchType >> sAReporter [
 	
 	<phratchType: #'SAReporter'>
@@ -317,7 +317,7 @@ PhratchType >> sAReporter [
 		yourself
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'looks ops' }
 PhratchType >> sceneNames [
 	
 	<phratchType: #'SceneNames'>
@@ -327,7 +327,7 @@ PhratchType >> sceneNames [
 		yourself
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #types }
 PhratchType >> specialVar [
 	
 	<phratchType: #'SpecialVar'>
@@ -338,14 +338,14 @@ PhratchType >> specialVar [
 		yourself
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #public }
 PhratchType >> sprite [
 	
 	<phratchType: #'Sprite'>
 	^ SpriteArgMorph new
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PhratchType >> string [
 	
 	<phratchType: #'String'>
@@ -354,7 +354,7 @@ PhratchType >> string [
 		yourself
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PhratchType >> text [
 	
 	<phratchType: #'Text'>
@@ -362,7 +362,7 @@ PhratchType >> text [
 		yourself.  "SpecialArgMorph new type: #text"
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'panther actions' }
 PhratchType >> timeDates [
 	
 	<phratchType: #'TimeDates'>
@@ -372,7 +372,7 @@ PhratchType >> timeDates [
 		yourself
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PhratchType >> type [
 	
 	<phratchType: #'Type'>
@@ -380,21 +380,21 @@ PhratchType >> type [
 		yourself
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #types }
 PhratchType >> unEBool [
 	
 	<phratchType: #'UnEBool'>
 	^ UnevaluatedBooleanArgMorph new
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #types }
 PhratchType >> unEExp [
 	
 	<phratchType: #'UnEExp'>
 	^ UnevaluatedExpressionArgMorph new stringExpression: ''
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PhratchType >> variable [
 	
 	<phratchType: #'Variable'>

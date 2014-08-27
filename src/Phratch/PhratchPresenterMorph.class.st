@@ -125,6 +125,7 @@ PhratchPresenterMorph >> initialize [
 
 	| button |
 	super initialize.
+	self hasDropShadow: false.
 	self color: Color black.
 	doubleSize := false.
 	lastStepTime := IdentityDictionary new.

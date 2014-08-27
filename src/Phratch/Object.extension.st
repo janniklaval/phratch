@@ -13,6 +13,33 @@ Object >> asNumberNoError [
 
 ]
 
+{ #category : #'*Phratch-Core' }
+Object class >> blockSpecs [
+	"To obtain all the items of the menu, execute:
+	SystemNavigation default allCallsOn: #phratchItem:kind:category:defaultValues:subCategory:special:
+	"
+	| blocks allPragmas |
+	blocks := #().
+	
+	allPragmas := Pragma allNamed: #phratchItem:kind:category:defaultValues:subCategory:special: from: self to:  Object  sortedByArgument: 5.
+
+	PhratchCategory allSubclassesDo: [ :c |
+		|previousSC|
+		previousSC := nil.
+		blocks := blocks, {c label}.
+		allPragmas select:[:pragma | ((pragma arguments at: 3) = c label) and:[(ScriptablePhratchMorph blockVisible includes: (pragma arguments at: 1))not]] 
+			thenDo:[:aP |
+				|prov|
+				(previousSC notNil and: [previousSC ~~( aP arguments at: 5)]) ifTrue:[blocks := blocks, #(-) ].
+				prov := { aP arguments at: 1 . aP arguments at: 2 . aP method selector . aP arguments at: 6},  (aP arguments at: 4).
+				blocks := blocks, {prov}.
+				previousSC := aP arguments at: 5.
+			].
+	].
+
+	^ blocks
+]
+
 { #category : #'*Phratch-Extensions' }
 Object >> inform: informationString withDetails: detailsString [
 	"Put up a DialogBox to give the user an informational message and wait until they click the 'ok' button before proceeding."
@@ -352,6 +379,14 @@ Object >> isReporterScriptBlockMorph [
 Object >> isResizableToggleButton [
 
 	^ false
+]
+
+{ #category : #'*Phratch-Extensions' }
+Object >> isScriptable [
+	"I am not scriptable Phratch object."
+
+	^ false
+
 ]
 
 { #category : #'*Phratch-Extensions' }

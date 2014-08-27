@@ -204,6 +204,7 @@ PhratchLibraryMorph >> fixLayout [
 PhratchLibraryMorph >> initialize [
 
 	super initialize.
+	self hasDropShadow: false.
 	self buildPanes.
 	self
 		initFrontFromForm: (PhratchFrameMorph skinAt: 'spriteLibraryPaneFrameTransparent2')

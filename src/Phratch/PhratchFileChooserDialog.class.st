@@ -663,7 +663,7 @@ PhratchFileChooserDialog >> initialize [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'*Phratch-Extensions' }
 PhratchFileChooserDialog >> isPhratchFileChooserDialog [
 
 	^true

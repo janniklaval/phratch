@@ -4,7 +4,7 @@ Class {
 	#category : #'Phratch-Blocks'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 BooleanWatcherBlockMorph >> canBecomeWatcher [
 
 	^ true

@@ -181,7 +181,7 @@ PhratchSpriteMorph >> cloneMe [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'BYOB attributes' }
 PhratchSpriteMorph >> comeToFront [
 	"Put me on front of the display"
 	<phratchItem: 'go to front' kind: #- category: 'looks' defaultValues: #() subCategory: #a7 special: #()>
@@ -967,7 +967,7 @@ PhratchSpriteMorph >> positionTalkBubble [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #scripts }
 PhratchSpriteMorph >> prepareForExport [
 	super prepareForExport.
 

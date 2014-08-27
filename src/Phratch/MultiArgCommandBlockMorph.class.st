@@ -10,7 +10,7 @@ Class {
 	#category : #'Phratch-Blocks'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #utilities }
 MultiArgCommandBlockMorph class >> blockTypeOn: aScriptablePhratchMorph spec: spec color: blockColor [
 	
 	|block|

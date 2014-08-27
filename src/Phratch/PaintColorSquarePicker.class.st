@@ -9,7 +9,7 @@ PaintColorSquarePicker >> createColorPickers [
 	"Overridden to do nothing"
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 PaintColorSquarePicker >> createColorSwatches [
 
 	| baseColors emptyRow swatchCol row thisColor b swatch spacer spacerRow c transparentSwatch |

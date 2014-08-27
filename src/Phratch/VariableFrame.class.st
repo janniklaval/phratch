@@ -4,24 +4,12 @@ Class {
 	#instVars : [
 		'vars'
 	],
-	#classVars : [
-		'ScopeContrast'
-	],
 	#category : #'Phratch-UI-Support'
 }
 
 { #category : #private }
 VariableFrame class >> forNames: aCollection [
 	^self new forNames: aCollection
-]
-
-{ #category : #'class initialization' }
-VariableFrame class >> initialize [
-
-	"VariableFrame initialize"
-
-	super initialize.
-	ScopeContrast := false.
 ]
 
 { #category : #private }
@@ -31,18 +19,10 @@ VariableFrame class >> maxNestingDepth [
 	^ 100
 ]
 
-{ #category : #'class initialization' }
-VariableFrame class >> scopeContrast: bool [
-
-	ScopeContrast := bool
-]
-
 { #category : #variables }
 VariableFrame class >> variableBlockColor [
 
-	ScopeContrast
-		ifTrue: [^ (Color brown darker mixed: 0.8 with: Color orange) lighter]
-		ifFalse: [^ PhratchCategory blockColorFor: 'variables']
+	^ PhratchCategory blockColorFor: 'variables'
 	
 
 ]

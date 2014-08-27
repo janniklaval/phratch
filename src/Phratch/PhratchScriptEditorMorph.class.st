@@ -417,6 +417,7 @@ PhratchScriptEditorMorph >> handlesMouseOverDragging: evt [
 PhratchScriptEditorMorph >> initialize [
 
 	super initialize.
+	self hasDropShadow: false.
 	self
 		initFrontFromForm: (PhratchFrameMorph skinAt: #scriptPaneFrameTransparent2)
 		topSectionHeight: 90.
@@ -442,7 +443,7 @@ PhratchScriptEditorMorph >> initialize [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'*Phratch-Extensions' }
 PhratchScriptEditorMorph >> isPhratchScriptEditorMorph [
 
 	^ true

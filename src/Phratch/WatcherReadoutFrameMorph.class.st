@@ -178,7 +178,7 @@ WatcherReadoutFrameMorph >> isLarge [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'*Phratch-Extensions' }
 WatcherReadoutFrameMorph >> isWatcherReadoutFrameMorph [
 
 	^ true

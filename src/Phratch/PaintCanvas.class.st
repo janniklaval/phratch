@@ -71,7 +71,6 @@ Class {
 { #category : #'brush creation' }
 PaintCanvas class >> brushCursorSize: brushSize color: brushColor scale: scale [
 	"Answer a round brush cursor of the given size and color."
-	"BrushDict := Dictionary new. (PaintCanvas new brushCursorSize: 21 color: Color yellow) display"
 
 	| outline f cm hole c |
 	(BrushDict includesKey: brushSize) ifFalse: [
@@ -767,7 +766,7 @@ PaintCanvas >> handlesKeyboard: evt [
 ^true  
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'event handling' }
 PaintCanvas >> handlesMouseDown: evt [
 
 	^ true

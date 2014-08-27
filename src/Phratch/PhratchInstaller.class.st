@@ -4,6 +4,9 @@ I am a class that, when loaded, downloads all necessary files and unpacks them w
 Class {
 	#name : #PhratchInstaller,
 	#superclass : #Object,
+	#classVars : [
+		'DeclaredSprites'
+	],
 	#category : #'Phratch-Installation'
 }
 
@@ -37,6 +40,13 @@ PhratchInstaller class >> beginInstall [
 			'PhratchFrameMorph open.'
 			)
 		label: 'Welcome to Phratch!'.
+]
+
+{ #category : #'class initialization' }
+PhratchInstaller class >> declaredSprite [
+
+	DeclaredSprites ifEmpty:[DeclaredSprites := Smalltalk allClasses select: [:e | (Pragma allNamed: #phratchObject in:  e class) notEmpty ]].
+	^ DeclaredSprites
 ]
 
 { #category : #installation }
@@ -182,6 +192,7 @@ PhratchInstaller class >> gotPhratchSkins [
 PhratchInstaller class >> initialize [
 "	InputEventSensor startUp."
 	SoundPlayer initialize; shutDown; startUp.
+	DeclaredSprites := OrderedCollection new.
 ]
 
 { #category : #installation }
@@ -191,18 +202,10 @@ PhratchInstaller class >> phratchSettingsOn: aBuilder [
 		label: 'Phratch' translated;
 		description: 'All Phratch settings' translated;
 		with: [ 
-			"(aBuilder setting: #insertionPointColor) 
-				label: 'insertionPointColor' translated;
-		 		target: Paragraph;
-		 		description: '...' translated.	"
 			(aBuilder setting: #noviceMode) 
 				label: 'noviceMode' translated;
 		 		target: ScriptablePhratchMorph;
 		 		description: '...' translated.	
-			(aBuilder setting: #takeOverScreen) 
-				label: 'takeOverScreen' translated;
-		 		target: PhratchFrameMorph;
-		 		description: 'Do you allow Phratch to display on all screen' translated.	
 			(aBuilder setting: #fileIOPreference) 
 				label: 'fileIOPreference' translated;
 		 		target: ScriptablePhratchMorph;
@@ -291,7 +294,6 @@ image in end-user (fillScreen) mode?') ifFalse: [^ self].
 	aFrameMorph setLanguage: 'en'.
 
 	aFrameMorph enterNormalMode.
-	aFrameMorph blockContrastStrong.
 	ScriptablePhratchMorph keepOnStage: true.
 	
 	EventHatMorph threadSafeMode: false.
@@ -343,6 +345,12 @@ PhratchInstaller class >> saveImageForEndUserSilently [
 	Smalltalk snapshot: true andQuit: true.
 	frame startup.
 
+]
+
+{ #category : #'class initialization' }
+PhratchInstaller class >> updateDeclaredSprite [
+
+	DeclaredSprites := Smalltalk allClasses select: [:e | (Pragma allNamed: #phratchObject in:  e class) notEmpty ]
 ]
 
 { #category : #'class initialization' }

@@ -8,7 +8,7 @@ Class {
 	#category : #'Phratch-Blocks'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #settings }
 KeyEventHatMorph class >> blockTypeOn: aScriptablePhratchMorph spec: spec color: blockColor [
 	
 	^ (self new scriptOwner: aScriptablePhratchMorph) color: blockColor
