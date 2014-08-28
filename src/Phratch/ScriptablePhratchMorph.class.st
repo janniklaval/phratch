@@ -743,7 +743,7 @@ ScriptablePhratchMorph >> asListElement: anObject [
 		^ anObject ifTrue: ['1'] ifFalse: ['0']].
 "
 
-	^ anObject printString
+	^ anObject "printString"
 
 
 ]

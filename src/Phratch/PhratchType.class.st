@@ -8,6 +8,22 @@ Class {
 }
 
 { #category : #accessing }
+PhratchType >> any [
+	
+	<phratchType: #'Any'>
+		 ^ SpecialArgMorph new type: #any;
+		yourself
+]
+
+{ #category : #accessing }
+PhratchType >> array [
+	
+	<phratchType: #'Array'>
+		 ^ SpecialArgMorph new type: #any;
+		yourself
+]
+
+{ #category : #accessing }
 PhratchType >> attributes [
 	
 	<phratchType: #'Attributes'>
