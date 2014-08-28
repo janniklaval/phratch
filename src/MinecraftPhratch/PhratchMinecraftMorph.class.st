@@ -124,7 +124,8 @@ PhratchMinecraftMorph >> playerPositionz [
 
 { #category : #'as yet unclassified' }
 PhratchMinecraftMorph >> put: aBlock atX: aX y: aY z: aZ [
-	<phratchItem: 'put $Number$ at x $Number$ y $Number$ z $Number$' kind: #- category: 'minecraft' defaultValues: #(0 0 0 0) subCategory: #a special: #()>
+	<phratchItem: 'put $Array$ at x $Number$ y $Number$ z $Number$' kind: #- category: 'minecraft' defaultValues: #(0 0 0 0) subCategory: #a special: #()>
+
 	^ minecraftObj blockAt: {aX. aY. aZ} put: aBlock
 ]
 
@@ -145,8 +146,8 @@ PhratchMinecraftMorph >> rainbow [
 
 { #category : #'as yet unclassified' }
 PhratchMinecraftMorph >> safePut: aBlock atX: aX y: aY z: aZ [
-	<phratchItem: 'empty put $Number$ at x $Number$ y $Number$ z $Number$' kind: #- category: 'minecraft' defaultValues: #('' 0 0 0) subCategory: #a special: #()>
-	(minecraftObj blockAt: {aX. aY. aZ}) = Minecraft air ifTrue: [
+	<phratchItem: 'empty put $Array$ at x $Number$ y $Number$ z $Number$' kind: #- category: 'minecraft' defaultValues: #('' 0 0 0) subCategory: #a special: #()>
+	(minecraftObj blockAt: {aX. aY. aZ}) = minecraftObj air ifTrue: [
 	^ minecraftObj blockAt: {aX. aY. aZ} put: aBlock]
 ]
 
