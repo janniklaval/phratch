@@ -259,6 +259,7 @@ ScriptablePhratchMorph >> getLine: lineNum ofList: listName [
 		ifTrue: [ listName ]
 		ifFalse: [ self listNamed: listName ifNone: [ ^ '' ] ].
 	^ list lineAt: (self lineNum: lineNum forList: list)
+	
 ]
 
 { #category : #'*PhratchList' }
