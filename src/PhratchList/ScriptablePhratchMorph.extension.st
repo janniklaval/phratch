@@ -43,7 +43,7 @@ ScriptablePhratchMorph >> addGenericListBlocksTo: page y: startY [
 					y := y + 20]]  "insert a line"
 			ifFalse: [
 				y := self createBlock: blockOrSym atPosition: x@y onPage: page.
-				page submorphs last color: ScriptablePhratchMorph listBlockColor]].
+				page submorphs last color: PhratchListMorph listColor]].
 	^y
 
 ]
@@ -87,7 +87,7 @@ ScriptablePhratchMorph >> addListReportersTo: page x: x y: startY [
 	(stage notNil and: [stage ~= self]) ifTrue: [
 		stage listVarNames do: [:listVarName |
 			b := ListContentsBlockMorph new
-				color: ScriptablePhratchMorph listBlockColor;
+				color: PhratchListMorph listColor;
 				receiver: stage blockReceiver;
 				commandSpec: listVarName;
 				selector: #listNamed:;
@@ -115,7 +115,7 @@ ScriptablePhratchMorph >> addListReportersTo: page x: x y: startY [
 
 	self listVarNames do: [:listVarName |
 		b := ListContentsBlockMorph new
-			color: ScriptablePhratchMorph listBlockColor;
+			color: PhratchListMorph listColor;
 			receiver: self blockReceiver;
 			commandSpec: listVarName;
 			selector: #listNamed:;
