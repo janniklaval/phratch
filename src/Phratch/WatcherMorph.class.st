@@ -30,7 +30,7 @@ WatcherMorph >> buildReadout [
 	isColor ifFalse: [
 		readout := PhratchUpdatingStringMorph new
 		contents: '';
-		floatPrecision: 0.1;
+		floatPrecision: 1;
 		stepTime: self stepTime;
 		yourself.
 	readout
@@ -373,7 +373,11 @@ WatcherMorph >> rightButtonMenu [
 	hasSlider not & isLarge
 		ifTrue: [menu add: '* ', 'large readout' localized, ' *'		action: #showLargeReadout]
 		ifFalse: [menu add: '  ', 'large readout' localized			action: #showLargeReadout].
-
+	
+	menu addLine.
+	readout addCustomMenuItems: menu.
+	menu addLine.
+	
 	self isVariableWatcher ifTrue: [
 		phratchSlider
 			ifNil: [menu add: '  ', 'slider' localized action: #showSlider]

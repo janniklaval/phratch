@@ -58,16 +58,9 @@ PhratchUpdatingStringMorph >> acceptValueFromTarget: v [
 ]
 
 { #category : #editing }
-PhratchUpdatingStringMorph >> addCustomMenuItems: menu hand: aHandMorph [ 
-	| prefix |
-	super addCustomMenuItems: menu hand: aHandMorph.
-	prefix := (self growable
-				ifTrue: ['stop being growable']
-				ifFalse: ['start being growable']) translated.
-	menu add: prefix action: #toggleGrowability.
-	menu add: 'decimal places...' translated action: #setPrecision.
-	menu add: 'font size...' translated action: #setFontSize.
-	menu add: 'font style...' translated action: #setFontStyle
+PhratchUpdatingStringMorph >> addCustomMenuItems: menu [
+
+	menu add: 'decimal places...' translated target: self action: #setPrecision.
 ]
 
 { #category : #accessing }
@@ -97,39 +90,6 @@ PhratchUpdatingStringMorph >> contents: newContents [
 	self changed
 ]
 
-{ #category : #accessing }
-PhratchUpdatingStringMorph >> decimalPlaces [
-	"Answer the number of decimal places to show."
-
-	| places |
-	(places := self valueOfProperty: #decimalPlaces) ifNotNil: [^ places].
-	self 
-		setProperty: #decimalPlaces 
-		toValue: (places := self decimalPlacesForFloatPrecision: self floatPrecision).
-	^ places
-]
-
-{ #category : #accessing }
-PhratchUpdatingStringMorph >> decimalPlaces: aNumber [ 
-	"Set the receiver's number of decimal places to be shown. If my
-	target is a morph or a player, tell it about the change, in case it wants
-	to remember it."
-	| constrained |
-	self setProperty: #decimalPlaces toValue: (constrained := aNumber min: 11).
-	floatPrecision := self floatPrecisionForDecimalPlaces: constrained
-]
-
-{ #category : #private }
-PhratchUpdatingStringMorph >> decimalPlacesForFloatPrecision: precision [
-	"Answer the number of decimal places that correspond to the given floatPrecision"
-
-	^ (#(1 0.1 0.01 0.001 0.0001 0.00001 0.000001 0.0000001 0.00000001 0.000000001) indexOf: precision ifAbsent: [ ^precision log negated floor ]) - 1
-
-"
-#(1 0.1 0.01 0.001 0.0001 0.00001 0.000001 0.0000001 0.00000001 0.000000001) collect: [:prec | Utilities decimalPlacesForFloatPrecision: prec]
-"
-]
-
 { #category : #editing }
 PhratchUpdatingStringMorph >> doneWithEdits [
 	"If in a SyntaxMorph, shrink min width after editing"
@@ -155,44 +115,19 @@ PhratchUpdatingStringMorph >> fitContents [
 { #category : #accessing }
 PhratchUpdatingStringMorph >> floatPrecision [
 	"Answer the floatPrecision to use:
-		1.0 ->	show whole number
-		0.1	->	show one digit of precision
-		.01 ->	show two digits of precision
+		-1 ->	show whole number
+		1	->	show one digit of precision
+		2 ->	show two digits of precision
 		etc.
 	Initialize the floatPrecision to 1 if it is not already defined"
 
-	^ floatPrecision ifNil: [floatPrecision := 1.0]
-
+	^ floatPrecision ifNil: [floatPrecision := -1]
 ]
 
 { #category : #accessing }
 PhratchUpdatingStringMorph >> floatPrecision: aNumber [
 	"to be migrated to Morphic"
 	floatPrecision := aNumber
-]
-
-{ #category : #private }
-PhratchUpdatingStringMorph >> floatPrecisionForDecimalPlaces: places [
-	"Answer the floatPrecision that corresponds to the given number of decimal places"
-
-	^ places caseOf:
-			{[0]->[1] .
-			[1]->[0.1] . 
-			[2]->[0.01] .
-			[3]->[0.001] .
-			[4]->[0.0001] .
-			[5]->[0.00001] .
-			[6]->[0.000001] .
-			[7]->[0.0000001] .
-			[8]->[0.00000001] .
-			[9]->[0.000000001]}
-		otherwise:
-			[(10.0 raisedTo: places negated) asFloat]
-
-"
-(0 to: 6) collect: [:i | Utilities floatPrecisionForDecimalPlaces: i]
-(-10 to: 20) collect: [:i | Utilities floatPrecisionForDecimalPlaces: i]
-"
 ]
 
 { #category : #accessing }
@@ -220,7 +155,7 @@ PhratchUpdatingStringMorph >> formatValue: v [
 				v isInf ifTrue: [
 					^ v > 0 ifTrue: ['Infinity'] ifFalse: ['-Infinity']].
 				v isNaN ifTrue: [^ 'Error!'].
-				^ (v asFloat roundTo: floatPrecision) printString]].
+				^ floatPrecision = -1 ifTrue:[v asFloat printString] ifFalse:[(v asFloat round: floatPrecision) printString]]].
 
 	(v isBoolean) ifTrue: [^ v printString localized].
 	(v isString) ifTrue: [^ v].
@@ -349,7 +284,7 @@ PhratchUpdatingStringMorph >> mouseDown: evt [
 			[(owner respondsTo: #parseNode)
 					ifTrue: 	"leave space for editing"
 						[minimumWidth := (49 max: minimumWidth)].
-			self launchMiniEditor: evt]]
+			self launchMiniEditor: evt]].
 ]
 
 { #category : #accessing }
@@ -387,7 +322,7 @@ PhratchUpdatingStringMorph >> readFromTarget [
 PhratchUpdatingStringMorph >> setDecimalPlaces: places [
 	"Set the number of decimal places, and update the display."
 
-	self decimalPlaces: places.
+	self floatPrecision: places.
 	self acceptValueFromTarget: lastValue
 ]
 
@@ -406,7 +341,7 @@ PhratchUpdatingStringMorph >> setDecimalPlacesFromTypeIn: typeIn [
 				whileTrue:
 					[places := places + 1]].
 		
-	self decimalPlaces: places
+	self floatPrecision: places
 ]
 
 { #category : #editing }
@@ -449,8 +384,8 @@ PhratchUpdatingStringMorph >> setPrecision [
 	aMenu := UIManager default 
 				 newMenuIn: self for: self.
 	aMenu
-		addTitle: ('How many decimal places? (currently {1})' translated format: {self decimalPlaces}).
-	0
+		addTitle: ('How many decimal places? (currently {1})' translated format: {self floatPrecision}).
+	-1
 		to: 5 
 		do: [:places | aMenu
 				add: places asString
@@ -492,7 +427,8 @@ PhratchUpdatingStringMorph >> stringForNumericValue: aValue [
 
 	| barePrintString |
 	((barePrintString := aValue printString) includes: $e)  ifTrue: [^ barePrintString].
-	^ aValue printShowingDecimalPlaces: self decimalPlaces
+	
+	^ aValue printShowingDecimalPlaces: self floatPrecision
 ]
 
 { #category : #accessing }

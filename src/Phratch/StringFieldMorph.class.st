@@ -158,7 +158,7 @@ StringFieldMorph >> color [
 
 	frame ifNotNil: [^ frame color].
 	^ color = Color transparent
-		ifTrue: [owner color]
+		ifTrue: [Color black]
 		ifFalse: [color]
 
 
