@@ -136,10 +136,8 @@ ColorArgMorph >> mouseUp: evt [
 	Cursor eyeDropper showWhile: [
 		"Listen for two events here: the first click, then any further ones if the button held down"
 		self color: (Display colorAt: Sensor waitButton).
-		self updateOwnerBlock.
 		[Sensor anyButtonPressed] whileTrue: [
-			self color: (Display colorAt: Sensor cursorPoint).
-			self updateOwnerBlock ].
+			self color: (Display colorAt: Sensor cursorPoint) ].
 		w displayWorldSafely ].
 
 	palette ifNotNil: [palette delete].
@@ -171,11 +169,4 @@ ColorArgMorph >> showPalette: aBoolean [
 
 	showPalette := aBoolean.
 
-]
-
-{ #category : #'event handling' }
-ColorArgMorph >> updateOwnerBlock [
-
-	((self outermostMorphThat: [:m | m isBlockMorph]) ifNil: [^ self]) 
-		updateCachedForm; changed.
 ]
