@@ -215,8 +215,6 @@ ReporterBlockMorph >> fixBlockLayout [
 
 	| mList maxH h x y |
 	blockLayoutNeeded ifFalse: [^ self].
-	cachedForm := nil.
-	cachedFeedbackForm := nil.
 
 	mList := self nonControlFlowSubmorphs.
 	maxH := 0.
@@ -252,8 +250,6 @@ ReporterBlockMorph >> fixBlockLayoutNoWrap [
 		self updateIsBoolean; layoutChanged].
 
 	blockLayoutNeeded ifFalse: [^ self].
-	cachedForm := nil.
-	cachedFeedbackForm := nil.
 
 	mList := self nonControlFlowSubmorphs.
 	maxH := 0.
@@ -306,8 +302,6 @@ ReporterBlockMorph >> fixBlockLayoutWrap [
 		ifTrue: [ ^ self fixBlockLayoutNoWrap ].
 	blockLayoutNeeded
 		ifFalse: [ ^ self ].
-	cachedForm := nil.
-	cachedFeedbackForm := nil.
 	parts := self nonControlFlowSubmorphs.
 	parts isEmpty
 		ifTrue: [ ^ self ].

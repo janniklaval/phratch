@@ -31,15 +31,12 @@ Class {
 		'phratchModel'
 	],
 	#classVars : [
-		'BlockColorDict',
-		'BlockSpecDict',
 		'BlockVisible',
 		'CameraOpenings',
 		'DefaultBackgroundForm',
 		'DoubleSize',
 		'FileIOPreference',
 		'KeepOnStage',
-		'ListBlockColor',
 		'MeowSound',
 		'NoviceMode',
 		'PhratchOrigin',
@@ -51,28 +48,11 @@ Class {
 	#category : #'Phratch-Objects'
 }
 
-{ #category : #'block specs' }
-ScriptablePhratchMorph class >> blockColorDict [
-
-	^ BlockColorDict
-
-]
-
 { #category : #deprecated }
 ScriptablePhratchMorph class >> blockColorFor: aCategory [
 	"Answer the block color for the given category."
 	self deprecated: 'use PhratchCategory blockColorFor:'.
 	^(PhratchCategory allSubclasses detect:[:e | e label = aCategory] ifNone: [PhratchCategory]) color.
-
-]
-
-{ #category : #'block specs' }
-ScriptablePhratchMorph class >> blockSpecDict [
-	"Answer my block specification dictionary."
-
-	BlockSpecDict ifNil: [self buildBlockSpecDictionary].
-	^ BlockSpecDict
-
 
 ]
 
@@ -90,29 +70,6 @@ ScriptablePhratchMorph class >> blockVisible: aBlock [
 	ifFalse:[
 		BlockVisible remove: aBlock ifAbsent:[]
 		]
-]
-
-{ #category : #'block specs' }
-ScriptablePhratchMorph class >> buildBlockSpecDictionary [
-	"self buildBlockSpecDictionary"
-
-	| blockColor sel |
-	BlockSpecDict := IdentityDictionary new: 250.
-	BlockColorDict := IdentityDictionary new: 250.
-
-	Object withAllSubclassesDo: [:cl |
-		blockColor := Color blue.
-		cl blockSpecs do: [:spec |
-			((spec isString) and: [spec size > 1]) ifTrue: [
-				"set color  for this category"
-				blockColor := PhratchCategory blockColorFor: spec].
-			(spec isMemberOf: Array) ifTrue: [
-				sel := spec at: 3.
-				BlockSpecDict at: sel put: spec.
-				BlockColorDict at: sel put: blockColor]]].
-
-	BlockSpecDict at: #/ put: (BlockSpecDict at: #/\/).
-	BlockColorDict at: #/ put: (BlockColorDict at: #/\/).
 ]
 
 { #category : #'panther-actions' }
@@ -188,7 +145,6 @@ ScriptablePhratchMorph class >> initialize [
 
 	PhratchOrigin := 0@0.
 	TimerStartMSecs := Time millisecondClockValue.
-	ListBlockColor := Color h: 18 s: 0.92 v: 0.85.
 	BlockVisible := Set new.
 
 	DoubleSize := false
@@ -225,13 +181,6 @@ ScriptablePhratchMorph class >> keepOnStage [
 { #category : #byob }
 ScriptablePhratchMorph class >> keepOnStage: aBool [
 	KeepOnStage := aBool
-]
-
-{ #category : #'block specs' }
-ScriptablePhratchMorph class >> listBlockColor [
-
-	^ ListBlockColor
-
 ]
 
 { #category : #'forms/sounds/icons' }

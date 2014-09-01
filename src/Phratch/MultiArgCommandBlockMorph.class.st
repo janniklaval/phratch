@@ -124,8 +124,6 @@ MultiArgCommandBlockMorph >> fixBlockLayoutWrap [
 	| parts lines line h x y minXForArgs nextB w space left maxX maxHeight mh |
 	blockLayoutNeeded
 		ifFalse: [ ^ self ].
-	cachedForm := nil.
-	cachedFeedbackForm := nil.
 	parts := self nonControlFlowSubmorphs.
 	lines := OrderedCollection new.	"distribute parts horizontally and cut up into lines"
 	line := OrderedCollection new.

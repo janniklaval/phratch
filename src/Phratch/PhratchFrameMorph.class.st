@@ -1308,8 +1308,6 @@ Note: this is a compatibility force method"
 			ifFalse: [self error: 'Problem reading project.'].
 		^ nil].
 
-	ScriptablePhratchMorph buildBlockSpecDictionary.
-
 	'initializing...' 
 		displayProgressAt: self center - (32@5)  "Sensor cursorPoint"
 		from: 0 to: ((proj allMorphs) select: [:m| m isScriptablePhratchMorph]) size * 2
@@ -1342,8 +1340,6 @@ PhratchFrameMorph >> extractProjectFrom: aByteArray [
 			ifTrue: [self error: 'Project created by a later version of Phratch']
 			ifFalse: [self error: 'Problem reading project.'].
 		^ nil].
-
-	ScriptablePhratchMorph buildBlockSpecDictionary.
 
 	'initializing...' 
 		displayProgressAt: self center - (32@5)  "Sensor cursorPoint"
@@ -3209,9 +3205,6 @@ PhratchFrameMorph >> writePhratchProject [
 	oldPosition := workPane position.
 	workPane delete; position: 0@0.
 	self updatePenPositions.
-
-	ScriptablePhratchMorph buildBlockSpecDictionary.
-
 
 
 	'saving...' 

@@ -82,7 +82,7 @@ WatcherMorph >> convertFromOldWatcher [
 	selector = #getVar:
 		ifTrue: [self setCategoryColor: target variableBlockColor]
 		ifFalse: [
-			c := ScriptablePhratchMorph blockColorDict at: selector ifAbsent: [nil].
+			c := nil.
 			c ifNotNil: [self setCategoryColor: c]].
 
 	o addMorph: self.

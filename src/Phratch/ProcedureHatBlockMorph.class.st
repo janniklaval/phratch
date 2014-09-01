@@ -39,8 +39,6 @@ ProcedureHatBlockMorph >> fixBlockLayout [
 	argMorph ifNil: [^ self].  "happens during initialization"
 
 	blockLayoutNeeded ifFalse: [^ self].
-	cachedForm := nil.
-	cachedFeedbackForm := nil.
 
 	((argMorph isArgMorph) and: [argMorph owner = self])
 		ifTrue: [argMorph fixArgLayout].

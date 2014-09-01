@@ -17,7 +17,6 @@ Class {
 		'notePlayerDict',
 		'sprites',
 		'isQuarterSize',
-		'cachedForm',
 		'feedbackMorph',
 		'tempoBPM'
 	],
@@ -295,17 +294,17 @@ PhratchStageMorph >> drawPenTrailFor: aMorph from: oldPoint to: newPoint [
 PhratchStageMorph >> drawQuarterSizeOn: aCanvas [
 	"Draw myself and my submorphs to an offscreen canvas, then scale down to quarter size and draw that on the given canvas."
 
-	| r c|
+	| r c cache|
 
-	cachedForm ifNil: [cachedForm := Form extent: self extent depth: 32].	
 	r := aCanvas clipRect intersect: (bounds origin extent: bounds extent // 2).
 
-	c := (FormCanvas on: cachedForm)
+	cache := Form extent: self extent depth: 32.
+	c := (FormCanvas on: cache)
 		copyOrigin: self position negated
 		clipRect: ((((r origin - bounds origin) * 2.0)) truncated extent: self extent).
 	super fullDrawOn: c.
 	
-	(cachedForm magnifyBy: 0.5) displayOn: Display at: r origin.
+	(cache magnifyBy: 0.5) displayOn: Display at: r origin.
 	self updateAfterPopUp.
 ]
 

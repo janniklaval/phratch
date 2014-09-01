@@ -98,10 +98,7 @@ CBlockMorph >> closestAttachTargetIn: newOwner [
 { #category : #geometry }
 CBlockMorph >> containsPoint: aPoint [
 
-	cachedForm ifNil: [self updateCachedForm].
-	^ (self fullBounds containsPoint: aPoint) and:
-	  [cachedForm notNil and: [(cachedForm isTransparentAt: aPoint - self fullBounds origin) not]]
-
+	^ (self fullBounds containsPoint: aPoint)
 ]
 
 { #category : #drawing }

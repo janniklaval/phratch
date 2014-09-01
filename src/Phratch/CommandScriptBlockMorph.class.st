@@ -122,10 +122,7 @@ CommandScriptBlockMorph >> bracketThickness [
 { #category : #'geometry testing' }
 CommandScriptBlockMorph >> containsPoint: aPoint [
 
-	cachedForm ifNil: [self updateCachedForm].
-	^ (cachedForm isTransparentAt: aPoint - self fullBounds origin) not 
-		and: [self fullBounds containsPoint: aPoint]
-
+	^self fullBounds containsPoint: aPoint
 ]
 
 { #category : #deleting }

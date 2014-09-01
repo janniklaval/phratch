@@ -86,10 +86,7 @@ IfElseBlockMorph >> blockWidth [
 { #category : #geometry }
 IfElseBlockMorph >> containsPoint: aPoint [
 
-	cachedForm ifNil: [self updateCachedForm].
-	^ (self fullBounds containsPoint: aPoint) and:
-	  [(cachedForm isTransparentAt: aPoint - self fullBounds origin) not]
-
+	^ (self fullBounds containsPoint: aPoint)
 ]
 
 { #category : #drawing }

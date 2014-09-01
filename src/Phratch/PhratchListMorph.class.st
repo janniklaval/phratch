@@ -68,6 +68,13 @@ PhratchListMorph class >> deepCopyFrom: anArray from: start to: stop [
 ]
 
 { #category : #'instance creation' }
+PhratchListMorph class >> listColor [
+
+	^ Color h: 18 s: 0.92 v: 0.85.
+
+]
+
+{ #category : #'instance creation' }
 PhratchListMorph class >> on: aList [
 
 	^ self new list: aList
@@ -228,7 +235,7 @@ PhratchListMorph >> createCell: anObject [
 	numberRight :=  self left + self largestIndexWidth + 6 .
 	 readout width: self right - numberRight - 25.
 	cell := WatcherReadoutFrameMorph new
-		color: ScriptablePhratchMorph listBlockColor;
+		color: PhratchListMorph listColor;
 		extent: readout extent + 3;
 		addMorphBack: readout;
 		yourself.

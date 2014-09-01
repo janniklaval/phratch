@@ -710,8 +710,6 @@ PaintCanvas >> extractProjectFrom: aByteArray [
 			ifFalse: [self error: 'Problem reading project.'].
 		^ nil].
 
-	ScriptablePhratchMorph buildBlockSpecDictionary.
-
 	^ proj
 
 ]

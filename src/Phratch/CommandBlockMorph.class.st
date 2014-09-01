@@ -237,7 +237,7 @@ CommandBlockMorph >> argMorphFor: specString [
 CommandBlockMorph >> argMorphToReplace: aMorph [
 	"Answer a new argument morph to be used to replace the given morph. Answer nil if the given morph is not one of my argMorphs."
 
-	| i argSpecs spec argM defaults v |
+	| i argSpecs  argM   |
 	i := argMorphs indexOf: aMorph ifAbsent: [^ nil].
 	argSpecs := (CommandBlockMorph parseCommandSpec: commandSpec) select: [:s | CommandBlockMorph isArgSpec: s].
 	i > argSpecs size ifTrue: [^ nil].
@@ -245,17 +245,6 @@ CommandBlockMorph >> argMorphToReplace: aMorph [
 
 	(#setVar:to: = selector and: [(argSpecs at: i) = '$Number$']) ifTrue: [
 		^ argM stringExpression: '0'].
-	spec := ScriptablePhratchMorph blockSpecDict at: selector ifAbsent: [^ argM].
-
-	defaults := receiver defaultArgsFor: spec.
-	i <= defaults size ifTrue: [
-		v := defaults at: (argPermutation indexOf: i).
-		(v isString)
-			ifTrue: [
-				(argM isExpressionArgMorph)
-					ifTrue: [argM defaultValueFromSpec: v localized]
-					ifFalse: [argM defaultValue: v localized]]
-			ifFalse: [argM defaultValue: v]].
 
 	^ argM
 
@@ -666,8 +655,6 @@ CommandBlockMorph >> fixBlockLayoutWrap [
 		ifTrue: [ ^ self fixBlockLayoutNoWrap ].
 	blockLayoutNeeded
 		ifFalse: [ ^ self ].
-	cachedForm := nil.
-	cachedFeedbackForm := nil.
 	parts := self nonControlFlowSubmorphs.
 	lines := OrderedCollection new.	"distribute parts horizontally and cut up into lines"
 	line := OrderedCollection new.

@@ -106,12 +106,12 @@ ListMultilineStringMorph >> keyboardFocusChange: aBoolean [
 	hasFocus
 		ifTrue: [
 			self textColor: (Color gray: 0.15).
-			self owner color: (ScriptablePhratchMorph listBlockColor mixed: 0.4 with: Color white).
+			self owner color: (PhratchListMorph listColor mixed: 0.4 with: Color white).
 			self addMorphBack: deleteMorph.
 			self fixLayout]
 		ifFalse: [
 			self textColor: Color white.
-			self owner color: ScriptablePhratchMorph listBlockColor.
+			self owner color: PhratchListMorph listColor.
 			deleteMorph delete].
 
 ]

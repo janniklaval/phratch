@@ -13,8 +13,6 @@ Class {
 		'shadowColor',
 		'hadError',
 		'blockLayoutNeeded',
-		'cachedForm',
-		'cachedFeedbackForm',
 		'lastLayoutTime',
 		'originalColor',
 		'phratchProc'
@@ -168,22 +166,6 @@ BlockMorph >> bottomBlock [
 	m := self.
 	[m nextBlock isBlockMorph] whileTrue: [m := m nextBlock].
 	^ m
-
-]
-
-{ #category : #accessing }
-BlockMorph >> cachedFeedbackForm [
-
-	cachedFeedbackForm ifNil: [self updateCachedFeedbackForm].
-	^ cachedFeedbackForm
-
-]
-
-{ #category : #accessing }
-BlockMorph >> cachedForm [
-
-	cachedForm ifNil: [self updateCachedForm].
-	^ cachedForm
 
 ]
 
@@ -621,17 +603,6 @@ BlockMorph >> fixBlockLayout [
 	"This default implementation just clears my cached forms."
 
 	blockLayoutNeeded ifFalse: [^ self].
-	cachedForm := nil.
-	cachedFeedbackForm := nil.
-
-]
-
-{ #category : #private }
-BlockMorph >> flushCachedForm [
-
-	cachedForm := nil.
-	cachedFeedbackForm := nil.
-
 ]
 
 { #category : #'dropping/grabbing' }
@@ -667,29 +638,21 @@ BlockMorph >> fullBounds [
 BlockMorph >> fullDrawOn: aCanvas [
 	"Optimization: To speed up redisplay, especially when giving feedback that a stack is running, we create a cached form of the stack in the top block of the stack and simply display that. We also keep a cached image of the running/error feedback outline. This allows the running feedback to be turned on and off quickly. The caches are flushed whenever the layout of the stack changes."
 
-	| offset |
+	| offset cacheFeedbackForm|
 	self isHidden ifTrue: [^ self].
 	(self hasProperty: #errorOnDraw) ifTrue:[^ self drawErrorOn: aCanvas].
-"	(owner isBlockMorph) ifTrue: [^ super fullDrawOn: aCanvas]. " "only cache at top level"
 
-	cachedForm ifNil: [self updateCachedForm].
-	cachedForm ifNil: [^ super fullDrawOn: aCanvas].
 	offset := 0@0.
 	phratchProc ifNotNil: [
 		offset := 3@3.
-		cachedFeedbackForm ifNil: [self updateCachedFeedbackForm].
-		cachedFeedbackForm ifNotNil: [
+		cacheFeedbackForm := self updateCacheFeedbackForm.
+		aCanvas paintImage: cacheFeedbackForm at: (self fullBounds topLeft).
 			
-			aCanvas paintImage: self cachedFeedbackForm at: (self fullBounds topLeft).
+			self allMorphs allButLast do:[:e |[ aCanvas paintImage: e updateCacheFeedbackForm at: (e fullBounds topLeft - offset)] on: Error do:[]]
 			
-			self allMorphs allButLast do:[:e |[ aCanvas paintImage: e cachedFeedbackForm at: (e fullBounds topLeft - offset)] on: Error do:[]]
-			
-			]].
-	
-	aCanvas paintImage: self cachedForm at: (self fullBounds topLeft + offset).
-	"self allMorphs allButLast do:[:e |[ aCanvas paintImage: e cachedForm at: (e fullBounds topLeft)] on: Error do:[]]."
-self submorphs do:[:e | e fullDrawOn: aCanvas]
+			].
 
+	super fullDrawOn: aCanvas
 ]
 
 { #category : #'dropping/grabbing' }
@@ -878,10 +841,9 @@ BlockMorph >> initialize [
 
 { #category : #'drawing-optimization' }
 BlockMorph >> invalidRect: damageRect [
-	"Flush my cachedForm if some submorph reports a change."
 
 	super invalidRect: (damageRect expandBy: 3).  "allows for running feedback"
-	cachedForm := nil.
+	
 
 ]
 
@@ -1278,7 +1240,6 @@ BlockMorph >> phratchProc [
 BlockMorph >> phratchProc: aPhratchProcess [
 
 	hadError ifNil:[hadError := false].
-	hadError ifTrue: [cachedFeedbackForm := nil].
 	hadError := false.
 	phratchProc := aPhratchProcess.
 	self changed.
@@ -1440,7 +1401,6 @@ BlockMorph >> showErrorFeedback [
 	"Show that this stack encountered an error."
 
 	hadError := true.
-	cachedFeedbackForm := nil.
 	self changed.
 
 ]
@@ -1551,16 +1511,15 @@ BlockMorph >> topBlock [
 ]
 
 { #category : #'drawing-optimization' }
-BlockMorph >> updateCachedFeedbackForm [
+BlockMorph >> updateCacheFeedbackForm [
 	"Create a cached feedback Form to show this stack's running (or error) status."
 
 	| outlineColor |
-	cachedForm ifNil: [self updateCachedForm].
 	outlineColor := (phratchProc notNil and: [phratchProc errorFlag])
 		ifTrue: [Color r: 0.831 g: 0.156 b: 0.156]
 		ifFalse: [Color gray: 0.953].
 
-	cachedFeedbackForm := cachedForm
+	^ (self updateCacheForm)
 		outlineWidth: 3
 		color: outlineColor
 		depth: 8.
@@ -1568,17 +1527,18 @@ BlockMorph >> updateCachedFeedbackForm [
 ]
 
 { #category : #'drawing-optimization' }
-BlockMorph >> updateCachedForm [
+BlockMorph >> updateCacheForm [
 	"Create a cached Form of this stack's appearance."
 
-	| c  |
+	| c  cacheForm |
 	oldColor ifNotNil: [color := oldColor].
 	c := FormCanvas extent: self fullBounds extent depth: 32.
 	c := c copyOffset: self topLeft negated.
 	self drawOn: c.
-	cachedForm := c form.
+	cacheForm := c form.
 	lastLayoutTime := Time millisecondClockValue.
 
+	^cacheForm
 ]
 
 { #category : #accessing }

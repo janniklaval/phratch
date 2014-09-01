@@ -146,8 +146,6 @@ MultiArgReporterBlockMorph >> fixBlockLayoutWrap [
 				layoutChanged ].
 	blockLayoutNeeded
 		ifFalse: [ ^ self ].
-	cachedForm := nil.
-	cachedFeedbackForm := nil.
 	parts := self nonControlFlowSubmorphs.
 	parts isEmpty
 		ifTrue: [ ^ self ].

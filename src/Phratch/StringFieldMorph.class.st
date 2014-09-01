@@ -91,7 +91,6 @@ StringFieldMorph >> borderWidth: aNumber [
 StringFieldMorph >> changed [
 
 	super changed.
-	((self outermostMorphThat: [:m | m isBlockMorph]) ifNil: [^ self]) flushCachedForm
 ]
 
 { #category : #private }
