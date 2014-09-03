@@ -22,9 +22,6 @@ Class {
 		'minimumWidth',
 		'maximumWidth'
 	],
-	#pools : [
-		'TextConstants'
-	],
 	#category : #'Phratch-UI-Support'
 }
 
@@ -403,7 +400,6 @@ PhratchUpdatingStringMorph >> step [
 		[
 		self updateContentsFrom: self readFromTarget.
 		]
-	
 
 ]
 
@@ -453,6 +449,7 @@ PhratchUpdatingStringMorph >> toggleGrowability [
 
 { #category : #stepping }
 PhratchUpdatingStringMorph >> updateContentsFrom: aValue [
+	contents = aValue ifTrue: [^ self].  "No substantive change"
 	self growable
 		ifTrue:
 			[self contents: aValue]

@@ -8,7 +8,6 @@ Class {
 	#instVars : [
 		'directoryBarMorph',
 		'contentsPaneMorph',
-		'feedbackMorph',
 		'currentDir',
 		'extensions',
 		'showThumbnails',
@@ -265,8 +264,6 @@ PhratchFilePicker >> extent: aPoint [
 PhratchFilePicker >> getDirectoryContents [
 	"Generate and layout the morphs in my contents pane from the files and folder in the current directory."
 
-	feedbackMorph delete.
-
 	^ self getLocalDirectoryContents
 ]
 
@@ -388,7 +385,6 @@ PhratchFilePicker >> initialize [
 	"fetchInProgress := false."
 	showThumbnails := false.
 	finalSelection := false.
-	feedbackMorph := StringMorph new.  "used to show a remote directory fetch in progress"
 	freezeFocus := false.
 
 	self buildButtons.
