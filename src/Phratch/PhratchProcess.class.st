@@ -1170,20 +1170,20 @@ PhratchProcess >> popStackFrame [
 
 	"this effectively disables Scratch's so called single stepping mechanism, a sacrifice that let's us catch up with Scratch speed again,
 	-jens"
-	"^self."
+	^self.
 
 	"and this is the old code"
 
-	self isAtomic ifTrue: [^self ].
+"	self isAtomic ifTrue: [^self ].
 
 	BlockHighlightMSecs > 0 ifTrue: [
 		(frame shouldUnlight not and: [command isBlockMorph]) ifTrue: [
-			|unlightFrame|
+			|unlightFrame|"
 			"We push a new frame for unlighting this command."
-			unlightFrame := PhratchStackFrame new
+"			unlightFrame := PhratchStackFrame new
 				expression: command;
 				shouldUnlight: true.
-			self pushStackFrame: unlightFrame]].
+			self pushStackFrame: unlightFrame]]."
 ]
 
 { #category : #'private-stack' }
