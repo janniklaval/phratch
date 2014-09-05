@@ -2478,14 +2478,13 @@ PhratchFrameMorph >> savePhratchProject [
 
 	self updateLastHistoryEntryIfNeeded.
 
-"	fName := (self nameFromFileName: fName), '.sb'."
-
 	projectDirectory := fName asFileReference parent.
 	fName := (self nameFromFileName: fName), '.phr'.
 	projectName :=fName asFileReference basename.
 
 	projectInfo at: 'author' put: author.
 	self updateHistoryProjectName: projectName op: 'save'.
+
 	self writePhratchProject.
 
 ]
@@ -3185,7 +3184,7 @@ PhratchFrameMorph >> writeMultipleSummaries [
 PhratchFrameMorph >> writePhratchProject [
 	"Write this Phratch project to the file named projectFile in the project directory. Called by savePhratchProject."
 
-	| oldScriptsTarget oldTab oldViewerCategory oldPosition saveError out |
+	|     saveError out |
 	workPane submorphsDo: [:m |
 		(m isWatcherMorph) ifTrue: [m delete]].
 	
@@ -3196,15 +3195,15 @@ PhratchFrameMorph >> writePhratchProject [
 	self canonicalizeSoundsBits: nil saveOriginal: false.
 	self canonicalizeImagesQuality: nil saveOriginal: false.
 
-	oldScriptsTarget := scriptsPane target.
+"	oldScriptsTarget := scriptsPane target.
 	oldTab := scriptsPane tabPane currentTab.
 	oldViewerCategory := viewerPane currentCategory.
-	scriptsPane target: nil.
+	scriptsPane target: nil."
 
 	workPane updateSpritesList.
-	oldPosition := workPane position.
+"	oldPosition := workPane position.
 	workPane delete; position: 0@0.
-	self updatePenPositions.
+"	self updatePenPositions.
 
 
 	'saving...' 
@@ -3240,11 +3239,11 @@ PhratchFrameMorph >> writePhratchProject [
 		saveError := err].
 ].
 
-	self addMorph: (workPane position: oldPosition).
+	"self addMorph: (workPane position: oldPosition).
 	oldScriptsTarget ifNil: [oldScriptsTarget := workPane].
 	oldScriptsTarget viewBlocksAndScripts.
 	scriptsPane tabPane currentTab: oldTab.
-	viewerPane currentCategory: oldViewerCategory.
+	viewerPane currentCategory: oldViewerCategory."
 	self updatePenPositions.
 
 	saveError
@@ -3258,6 +3257,7 @@ PhratchFrameMorph >> writePhratchProject [
 		ifNotNil: [
 			projectName := ''.
 			self inform: 'Save failed' withDetails: saveError].
+		
 
 ]
 

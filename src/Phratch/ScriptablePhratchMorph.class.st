@@ -264,7 +264,6 @@ ScriptablePhratchMorph >> - aNumber [
 ScriptablePhratchMorph >> /\/ aNumber [
 	"Divider operator. It combines two numbers and returns a number"
 	<phratchItem: '$Number$ / $Number$' kind: #ReporterBlockMorph category: 'operators' defaultValues: #(- -) subCategory: #a0 special: #()>
-
 ]
 
 { #category : #byob }
@@ -272,6 +271,13 @@ ScriptablePhratchMorph >> < aString [
 	"Comparator. It returns true if the first element is smaller than the second"
 	<phratchItem: '$String$ < $String$' kind: #BooleanBlockMorph category: 'operators' defaultValues: #('' '') subCategory: #a3 special: #()>
 
+]
+
+{ #category : #byob }
+ScriptablePhratchMorph >> <= aNumber [
+	"Divider operator. It combines two numbers and returns a number"
+	<phratchItem: '$Number$ <= $Number$' kind: #ReporterBlockMorph category: 'operators' defaultValues: #(- -) subCategory: #a0 special: #()>
+	^ self <= aNumber
 ]
 
 { #category : #byob }
@@ -286,6 +292,13 @@ ScriptablePhratchMorph >> > aString [
 	"Comparator. It returns true if the first element is greater than the second"
 	<phratchItem: '$String$ > $String$' kind: #BooleanBlockMorph category: 'operators' defaultValues: #('' '') subCategory: #a3 special: #()>
 
+]
+
+{ #category : #byob }
+ScriptablePhratchMorph >> >= aNumber [
+	"Divider operator. It combines two numbers and returns a number"
+	<phratchItem: '$Number$ >= $Number$' kind: #ReporterBlockMorph category: 'operators' defaultValues: #(- -) subCategory: #a0 special: #()>
+	^ self >= aNumber
 ]
 
 { #category : #'panther actions' }
@@ -2207,7 +2220,7 @@ ScriptablePhratchMorph >> exportObject [
 { #category : #'block API' }
 ScriptablePhratchMorph >> factorial: t1 [ 
 	"Compute the factorial of the given number"
-	<phratchItem: 'factorial of $Number$' kind: #ReporterWatcherBlockMorph category: 'operators' defaultValues: #() subCategory: #a1 special: #()>
+	<phratchItem: 'factorial of $Number$' kind: #ReporterBlockMorph category: 'operators' defaultValues: #() subCategory: #a1 special: #()>
     | answer t1store |
     t1 isInf ifTrue:[^0].
     t1 isNaN ifTrue:[^0].

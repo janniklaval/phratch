@@ -699,6 +699,38 @@ PhratchSpriteMorph >> lookLike: costumeName [
 		self lookLike: self costumeIndex ].
 ]
 
+{ #category : #accessing }
+PhratchSpriteMorph >> maxXStage [
+	"Answer true if any of my non-transparent pixels touch pixels of the given color in the world."
+	<phratchItem: 'stage maximum x' kind: #ReporterBlockMorph category: 'sensing' defaultValues: #() subCategory: #sensorStage special: #()>
+	
+	^ self ownerThatIsAPhratchStageMorph extent x // 2
+]
+
+{ #category : #accessing }
+PhratchSpriteMorph >> maxYStage [
+	"Answer true if any of my non-transparent pixels touch pixels of the given color in the world."
+	<phratchItem: 'stage maximum y' kind: #ReporterBlockMorph category: 'sensing' defaultValues: #() subCategory: #sensorStage special: #()>
+	
+	^ self ownerThatIsAPhratchStageMorph extent y // 2
+]
+
+{ #category : #accessing }
+PhratchSpriteMorph >> minXStage [
+	"Answer true if any of my non-transparent pixels touch pixels of the given color in the world."
+	<phratchItem: 'stage minimum x' kind: #ReporterBlockMorph category: 'sensing' defaultValues: #() subCategory: #sensorStage special: #()>
+	
+	^ (self ownerThatIsAPhratchStageMorph extent x // 2) * (-1)
+]
+
+{ #category : #accessing }
+PhratchSpriteMorph >> minYStage [
+	"Answer true if any of my non-transparent pixels touch pixels of the given color in the world."
+	<phratchItem: 'stage minimum y' kind: #ReporterBlockMorph category: 'sensing' defaultValues: #() subCategory: #sensorStage special: #()>
+	
+	^ (self ownerThatIsAPhratchStageMorph extent y // 2) * (-1)
+]
+
 { #category : #'looks ops' }
 PhratchSpriteMorph >> multiplySizeBy: factor [
 	"Used by the magnifying glass tool. Multiply my scale by the given factor."
