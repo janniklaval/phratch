@@ -239,68 +239,6 @@ ScriptablePhratchMorph >> & aBoolean [
 
 ]
 
-{ #category : #byob }
-ScriptablePhratchMorph >> * aNumber [
-	"Multiplication operator. It returns the multiplication of two numbers"
-	<phratchItem: '$Number$ * $Number$' kind: #ReporterBlockMorph category: 'operators' defaultValues: #(- -) subCategory: #a0 special: #()>
-
-]
-
-{ #category : #byob }
-ScriptablePhratchMorph >> + aNumber [
-	"Addition operator. It returns the addition of two numbers"
-	<phratchItem: '$Number$ + $Number$' kind: #ReporterBlockMorph category: 'operators' defaultValues: #(- -) subCategory: #a0 special: #()>
-
-]
-
-{ #category : #byob }
-ScriptablePhratchMorph >> - aNumber [
-	"Substraction operator. It returns the substraction of two numbers"
-	<phratchItem: '$Number$ - $Number$' kind: #ReporterBlockMorph category: 'operators' defaultValues: #(- -) subCategory: #a0 special: #()>
-
-]
-
-{ #category : #byob }
-ScriptablePhratchMorph >> /\/ aNumber [
-	"Divider operator. It combines two numbers and returns a number"
-	<phratchItem: '$Number$ / $Number$' kind: #ReporterBlockMorph category: 'operators' defaultValues: #(- -) subCategory: #a0 special: #()>
-]
-
-{ #category : #byob }
-ScriptablePhratchMorph >> < aString [
-	"Comparator. It returns true if the first element is smaller than the second"
-	<phratchItem: '$String$ < $String$' kind: #BooleanBlockMorph category: 'operators' defaultValues: #('' '') subCategory: #a3 special: #()>
-
-]
-
-{ #category : #byob }
-ScriptablePhratchMorph >> <= aNumber [
-	"Divider operator. It combines two numbers and returns a number"
-	<phratchItem: '$Number$ <= $Number$' kind: #ReporterBlockMorph category: 'operators' defaultValues: #(- -) subCategory: #a0 special: #()>
-	^ self <= aNumber
-]
-
-{ #category : #byob }
-ScriptablePhratchMorph >> = anObject [ 
-	"Comparator. It returns true if the first element is equals to the second"
-	<phratchItem: '$String$ = $String$' kind: #BooleanBlockMorph category: 'operators' defaultValues: #('' '') subCategory: #a3 special: #()>
-	^super = anObject
-]
-
-{ #category : #byob }
-ScriptablePhratchMorph >> > aString [
-	"Comparator. It returns true if the first element is greater than the second"
-	<phratchItem: '$String$ > $String$' kind: #BooleanBlockMorph category: 'operators' defaultValues: #('' '') subCategory: #a3 special: #()>
-
-]
-
-{ #category : #byob }
-ScriptablePhratchMorph >> >= aNumber [
-	"Divider operator. It combines two numbers and returns a number"
-	<phratchItem: '$Number$ >= $Number$' kind: #ReporterBlockMorph category: 'operators' defaultValues: #(- -) subCategory: #a0 special: #()>
-	^ self >= aNumber
-]
-
 { #category : #'panther actions' }
 ScriptablePhratchMorph >> \\ aNumber [
 	"Modulo operator. It returns the modulo of two numbers"
@@ -3438,6 +3376,20 @@ ScriptablePhratchMorph >> notEditingBlock [
 	sf := self ownerOrYourselfThatIsAPhratchFrameMorph.
 	sf ifNil: [^true].
 	^sf notEditingBlock
+]
+
+{ #category : #byob }
+ScriptablePhratchMorph >> number: n1 compare: anOp on: n2 [
+	"Divider operator. It combines two numbers and returns a number"
+	<phratchItem: '$Number$ $Comparator$ $Number$' kind: #BooleanBlockMorph category: 'operators' defaultValues: #(10 '=' 10) subCategory: #a0 special: #()>
+	^ n1 perform: anOp asSymbol with: n2
+]
+
+{ #category : #byob }
+ScriptablePhratchMorph >> number: n1 operator: anOp on: n2 [
+	"Divider operator. It combines two numbers and returns a number"
+	<phratchItem: '$Number$ $Operator$ $Number$' kind: #ReporterBlockMorph category: 'operators' defaultValues: #(10 '+' 10) subCategory: #a0 special: #()>
+	^ n1 perform: anOp asSymbol with: n2
 ]
 
 { #category : #'panther actions' }

@@ -222,12 +222,19 @@ ChoiceArgMorph >> presentMenu [
 		'-' = sym
 			ifTrue: [menu addLine]
 			ifFalse: [
-				option := sym localized.
-				menu
+				'--' = sym 
+					ifTrue: [option := '-' localized.
+						menu
+							add: option
+							target: self 
+							selector: #choice:
+							argument: '-']
+					ifFalse: [option := sym localized.
+						menu
 							add: (option)
 							target: self 
 							selector: #choice:
-							argument: (sym)]].
+							argument: (sym)]]].
 
 
 	menu invokeModal

@@ -66,6 +66,14 @@ PhratchType >> checkBox [
 	^ CheckBoxArgMorph new
 ]
 
+{ #category : #'as yet unclassified' }
+PhratchType >> comparator [
+	
+	<phratchType: #'Comparator'>
+	^ ChoiceArgMorph new options: {'=' . '<'. '>' . '<='. '>='}; choice: '=';
+		yourself
+]
+
 { #category : #types }
 PhratchType >> constants [
 	
@@ -282,6 +290,14 @@ PhratchType >> oSReporter [
 	
 	<phratchType: #'OSReporter'>
 	^ OSlotMorph new receiver: receiver; type: #reporterslot; yourself "SpecialArgMorph new type: #reporter"
+]
+
+{ #category : #'as yet unclassified' }
+PhratchType >> operator [
+	
+	<phratchType: #'Operator'>
+	^ ChoiceArgMorph new options: {'+' . '--'. '*' . '/'}; choice: '+';
+		yourself
 ]
 
 { #category : #accessing }
