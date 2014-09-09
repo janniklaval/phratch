@@ -361,7 +361,7 @@ msgid "check to contrast the color of lexically scoped blocks"
 msgstr "kennzeichnet den Gültigkeitkeitsbereich temporärer Variablen mit einer anderen Bausteinfarbe"
 
 msgid "Unload unused blocks"
-msgstr "Unbenützte Blöcke entfernen"
+msgstr "Ungenutzte Blöcke entfernen"
 
 ############################################
 # BLOCKS
@@ -445,6 +445,9 @@ msgstr "schalte Grafikeffekte aus"
 msgid "color $ScreenColor$ is touching $ScreenColor$?"
 msgstr "Farbe $ScreenColor$ berührt $ScreenColor$?"
 
+msgid "come up $Number$ layers"
+msgstr "gehe $Number$ Ebenen nach hinten"
+
 msgid "control"
 msgstr "Steuerung"
 
@@ -459,6 +462,9 @@ msgstr "Richtung"
 
 msgid "distance to $Sprite$"
 msgstr "Entfernung von $Sprite$"
+
+msgid "distance to x $Number$ y $Number$"
+msgstr "Entfernung zu x $Number$ y $Number$"
 
 msgid "else"
 msgstr "sonst"
@@ -492,6 +498,9 @@ msgstr "verstecke Variable $Variable$"
 
 msgid "if $Boolean$"
 msgstr "falls $Boolean$"
+
+msgid "if $Boolean$ then $String$ else $String$"
+msgstr "falls $Boolean$ dann $String$ sonst $String$"
 
 msgid "if on edge, bounce"
 msgstr "pralle vom Rand ab"
@@ -574,6 +583,10 @@ msgstr "nächstes Kostüm"
 msgid "not $Boolean$"
 msgstr "nicht $Boolean$"
 
+# Pass $Sprite$ hier? Beinhaltet möglicherweise nicht "all sprites"
+msgid "object $Sprite$"
+msgstr "Objekt $Sprite$"
+
 # (Jens): "Operatoren" gefällt mir eigentlich nicht so sehr, wie wäre es mit "Rechnen" (auch wenn's nicht wirklich passt), oder noch besser: "Formeln"?
 # (Jens): "Operatoren" gefällt mir eigentlich nicht so sehr, wie wäre es mit "Rechnen" (auch wenn's nicht wirklich passt), oder noch besser: "Formeln"?
 msgid "operators"
@@ -589,6 +602,9 @@ msgstr "Malstift"
 # (Jens) Tut mir leid, aber mit "senke Stift ab" und "hebe Stift an" werde mich wohl niemals anfreunden können.
 msgid "pen down"
 msgstr "Stift runter"
+
+msgid "pen down?"
+msgstr "Stift unten?"
 
 # (Markus S.) war 'Stift hoch', das aber bitte nicht. Darüber gab es bei uns an der Schule längere Diskussionen; aus Konsistenzgründen bitte immer Imperative auf den Kacheln.
 # (Markus S.) war 'Stift hoch', das aber bitte nicht. Darüber gab es bei uns an der Schule längere Diskussionen; aus Konsistenzgründen bitte immer Imperative auf den Kacheln.
@@ -640,6 +656,9 @@ msgstr "sage $String$"
 
 msgid "say $String$ for $Number$ secs"
 msgstr "sage $String$ für $Number$ Sek."
+
+msgid "self"
+msgstr "ich"
 
 msgid "sensing"
 msgstr "Fühlen"
@@ -695,6 +714,9 @@ msgstr "Größe"
 msgid "sound"
 msgstr "Klang"
 
+msgid "sounds"
+msgstr "Klänge"
+
 msgid "stamp"
 msgstr "hinterlasse Abdruck"
 
@@ -742,6 +764,9 @@ msgstr "drehe $Number$ Grad"
 
 msgid "variables"
 msgstr "Variablen"
+
+msgid "visible?"
+msgstr "sichtbar?"
 
 msgid "volume"
 msgstr "Lautstärke"
@@ -804,6 +829,12 @@ msgstr "Anmerkung hier hinzufügen"
 msgid "all"
 msgstr "alles"
 
+msgid "all sprites"
+msgstr "alle Sprites"
+
+msgid "anchor"
+msgstr "Anker"
+
 msgid "and"
 msgstr "und"
 
@@ -844,6 +875,9 @@ msgstr "Schaltfläche gedrückt"
 msgid "Camera"
 msgstr "Kamera"
 
+msgid "camera"
+msgstr "Kamera"
+
 msgid "can rotate"
 msgstr "Frei drehbar"
 
@@ -852,6 +886,9 @@ msgstr "Abbrechen"
 
 msgid "Cancel"
 msgstr "Abbrechen"
+
+msgid "children"
+msgstr "Kind"
 
 msgid "Choose a folder"
 msgstr "Wähle einen Ordner"
@@ -867,6 +904,9 @@ msgstr "Löschen"
 
 msgid "Clear canvas"
 msgstr "Alles löschen"
+
+msgid "Close"
+msgstr "Schließen"
 
 msgid "Close and continue"
 msgstr "Schließen und weitermachen"
@@ -887,6 +927,9 @@ msgstr "Klangaufnahme schließen?"
 
 msgid "color"
 msgstr "Farbe"
+
+msgid "color effect"
+msgstr "Farbeffekt"
 
 msgid "Compress Images"
 msgstr "Bilder komprimieren"
@@ -1028,6 +1071,9 @@ msgstr "Unterstützung für Netzwerksensoren einschalten"
 msgid "Enter presentation mode"
 msgstr "Präsentationsmodus"
 
+msgid "Enter user mode"
+msgstr "Benutzermodus"
+
 msgid "Eraser"
 msgstr "Radiergummi"
 
@@ -1046,6 +1092,9 @@ msgstr "Präsentation verlassen"
 msgid "Exit presentation mode"
 msgstr "Präsentationsmodus verlassen"
 
+msgid "Exit user mode"
+msgstr "Benutzermodus verlassen"
+
 msgid "export"
 msgstr "Exportieren"
 
@@ -1057,6 +1106,9 @@ msgstr "Kostüm exportieren"
 
 msgid "Export failed"
 msgstr "Der Export ist fehlgeschlagen."
+
+msgid "Export project"
+msgstr "Projekt exportieren"
 
 msgid "Export Sound"
 msgstr "Klang exportieren"
@@ -1097,6 +1149,9 @@ msgstr "erstes"
 msgid "fisheye"
 msgstr "Fischauge"
 
+msgid "fisheye effect"
+msgstr "Fischaugeneffekt"
+
 # war: Bausteinumrandung (schnell)
 # war: Bausteinumrandung (schnell)
 msgid "Flash blocks (fast)"
@@ -1122,6 +1177,9 @@ msgstr "Nur für dieses Objekt"
 msgid "Game"
 msgstr "Spiel"
 
+msgid "Generated Block Doc"
+msgstr "Generierte Blockdoku"
+
 msgid "Get surprise sprite"
 msgstr "Überraschungsobjekt"
 
@@ -1133,6 +1191,9 @@ msgstr "Erste Schritte"
 
 msgid "ghost"
 msgstr "Durchsichtigkeit"
+
+msgid "ghost effect"
+msgstr "Durchsichtigkeitseffekt"
 
 msgid "Go To Scratch Website"
 msgstr "Die Scratch-Webseite besuchen"
@@ -1166,6 +1227,9 @@ msgstr "Hilfe-Seite"
 
 msgid "Help Screens"
 msgstr "Hilfe-Seiten"
+
+msgid "hidden?"
+msgstr "versteckt?"
 
 msgid "Hide Motor Blocks"
 msgstr "Bausteine für Motorsteuerung verbergen"
@@ -1211,6 +1275,9 @@ msgstr "Liste importieren"
 msgid "Import Project"
 msgstr "Projekt importieren"
 
+msgid "Import project"
+msgstr "Projekt importieren"
+
 msgid "import project"
 msgstr "Projekt importieren"
 
@@ -1237,6 +1304,9 @@ msgstr "Großanzeige"
 
 msgid "last"
 msgstr "letztes"
+
+msgid "layer"
+msgstr "Ebene"
 
 msgid "left"
 msgstr "links"
@@ -1292,6 +1362,9 @@ msgstr "Andere Stichwörter:"
 msgid "mosaic"
 msgstr "Mosaik"
 
+msgid "mosaic effect"
+msgstr "Mosaikeffekt"
+
 msgid "mouse x:"
 msgstr "Maus x:"
 
@@ -1310,11 +1383,21 @@ msgstr "Musik"
 msgid "My Projects"
 msgstr "Meine Projekte"
 
+# myself = mir|mich|ich?
+msgid "myself"
+msgstr "ich (mich, mir)"
+
+msgid "name"
+msgstr "Name"
+
 msgid "new"
 msgstr "Neu"
 
 msgid "New"
 msgstr "Neu"
+
+msgid "newline"
+msgstr "Neuzeile"
 
 msgid "New background:"
 msgstr "Neuer Hintergrund:"
@@ -1370,6 +1453,9 @@ msgstr "OK"
 msgid "On"
 msgstr "An"
 
+msgid "object"
+msgstr "Objekt"
+
 msgid "only face left-right"
 msgstr "Kann sich nur nach links/rechts richten"
 
@@ -1385,6 +1471,9 @@ msgstr "Projekt öffnen"
 msgid "or"
 msgstr "oder"
 
+msgid "owner"
+msgstr "Besitzer"
+
 msgid "Paint"
 msgstr "Malen"
 
@@ -1397,6 +1486,14 @@ msgstr "Neues Objekt malen"
 msgid "Paintbrush"
 msgstr "Pinsel"
 
+# Nur Eltern?
+msgid "parent"
+msgstr "Elternteil"
+
+# Was ist das hier? TODO: Stimmt das so?
+msgid "parts"
+msgstr "Teile"
+
 msgid "Password:"
 msgstr "Passwort:"
 
@@ -1406,8 +1503,14 @@ msgstr "Prozent? (100 entspricht der Originalgröße)"
 msgid "Pictures"
 msgstr "Bilder"
 
+msgid "pi"
+msgstr "Pi"
+
 msgid "pixelate"
 msgstr "Pixel"
+
+msgid "pixelate effect"
+msgstr "Pixeleffekt"
 
 msgid "play"
 msgstr "Abspielen"
@@ -1441,6 +1544,9 @@ msgstr "Projekt hochgeladen"
 
 msgid "Projects"
 msgstr "Projekte"
+
+msgid "prototype"
+msgstr "Prototyp"
 
 msgid "Quit"
 msgstr "Beenden"
@@ -1512,11 +1618,17 @@ msgstr "Eine Kopie des aktuellen Projekts speichern"
 msgid "Save As"
 msgstr "Speichern als"
 
+msgid "Save as"
+msgstr "Speichern als"
+
 msgid "Save changes before quitting?"
 msgstr "Vor dem Verlassen die Änderungen speichern?"
 
 msgid "Save failed"
 msgstr "Speichern fehlgeschlagen"
+
+msgid "Save image in user mode"
+msgstr "Speichere Bild im Benutzermodus"
 
 msgid "save picture of scripts"
 msgstr "Skripte als Bild speichern"
@@ -1532,6 +1644,9 @@ msgstr "Skripte als Bild speichern"
 
 msgid "Save Stage Shot"
 msgstr "Bühnenbild speichern"
+
+msgid "Save state"
+msgstr "Speichere Status"
 
 msgid "Save the current project"
 msgstr "Aktuelles Projekt speichern"
@@ -1633,6 +1748,9 @@ msgstr "Wurzel"
 msgid "Stage"
 msgstr "Bühne"
 
+msgid "stage"
+msgstr "Bühne"
+
 msgid "Stage selected:"
 msgstr "Bühne ausgewählt:"
 
@@ -1676,6 +1794,12 @@ msgstr "Präsentationsmodus"
 msgid "Switch to small stage"
 msgstr "Kleine Bühnengröße"
 
+msgid "synchronous?"
+msgstr "synchron?"
+
+msgid "tab"
+msgstr "Tab"
+
 msgid "Tags:"
 msgstr "Stichwörter:"
 
@@ -1709,6 +1833,13 @@ msgstr "Turbo"
 
 msgid "turn into new sprite"
 msgstr "In ein neues Objekt umwandeln"
+
+msgid "turn fill screen off"
+msgstr "Schalte Vollbild aus"
+
+# error catching = ?
+msgid "turn error catching off"
+msgstr "Schalte das Fehler-Catching aus"
 
 msgid "Undelete"
 msgstr "Löschen rückgängig machen"
@@ -1746,13 +1877,22 @@ msgstr "Wie heißt Du?"
 msgid "whirl"
 msgstr "Wirbel"
 
+msgid "whirl effect"
+msgstr "Wirbeleffekt"
+
 msgid "world"
 msgstr "Welt"
 
 msgid "Write Multiple Project Summaries"
 msgstr "Mehrere Projektzusammenfassungen schreiben"
 
+msgid "Write multiple project summaries"
+msgstr "Mehrere Projektzusammenfassungen schreiben"
+
 msgid "Write Project Summary"
+msgstr "Projektzusammenfassung schreiben"
+
+msgid "Write project summary"
 msgstr "Projektzusammenfassung schreiben"
 
 msgid "Yes"
@@ -2379,6 +2519,9 @@ msgstr "Klicke auf den grünen Haken"
 msgid "pause" 
 msgstr "Pause"
 
+msgid "paint new"
+msgstr "zeichne Neu"
+
 msgid "replace costume $Number$ with $NewCostume$" 
 msgstr "Ersetze Kostüm $Number$ durch $NewCostume$"
 
@@ -2440,7 +2583,7 @@ msgid "open camera"
 msgstr "Kamera öffnen"
 
 msgid "show dialog $String$ with text $String$" 
-msgstr "Zeige Dialog $String$ mit text $String$"
+msgstr "Zeige Dialog $String$ mit Text $String$"
 
 msgid "ask $String$ in dialog" 
 msgstr "Frage $String% in Dialog"
@@ -2489,6 +2632,9 @@ msgstr "Ist $Numnber$ ein Integer?"
 
 msgid "is $String$ nil?" 
 msgstr "Ist $String% nil?"
+
+msgid "$Number$ as integer"
+msgstr "$Number$ als Integer"
 
 msgid "$String$ as boolean" 
 msgstr "$String$ als boolscher Ausdruck"
