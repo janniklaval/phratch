@@ -136,9 +136,9 @@ PhratchInstaller class >> getPhratchPlugins [
 
 { #category : #installation }
 PhratchInstaller class >> getPhratchSkins [
-	UIManager inform: 'Downloading ScratchSkin'.
+	UIManager inform: 'Downloading ', self skinFolder.
 	self
-		downloadFileFromUrl: 'https://github.com/janniklaval/phratch/raw/master/ScratchSkin.zip'
+		downloadFileFromUrl: 'https://github.com/janniklaval/phratch/raw/master/', self skinFolder, '.zip'
 		andUnzipIntoDirectory: (FileSystem workingDirectory)
 ]
 
@@ -185,7 +185,7 @@ PhratchInstaller class >> gotPhratchPlugins [
 
 { #category : #installation }
 PhratchInstaller class >> gotPhratchSkins [
-	^ (FileSystem workingDirectory / 'ScratchSkin') exists
+	^ (FileSystem workingDirectory / self skinFolder) exists
 ]
 
 { #category : #'class initialization' }
@@ -322,6 +322,12 @@ PhratchInstaller class >> saveImageForEndUserSilently [
 	Smalltalk snapshot: true andQuit: true.
 	frame startup.
 
+]
+
+{ #category : #installation }
+PhratchInstaller class >> skinFolder [
+
+	^ 'ScratchSkin'
 ]
 
 { #category : #'class initialization' }

@@ -32,7 +32,7 @@ MediaItemMorph class >> initialize [
 	"Should run the Phratch installation first"
 	PhratchInstaller beginInstall.
 
-	PhratchFrameMorph readSkinFrom: (FileSystem workingDirectory /  'ScratchSkin').
+	PhratchFrameMorph readSkin.
 	SoundIcon := (PhratchFrameMorph skinAt: #scratchSound).
 	SoundIconOn := (PhratchFrameMorph skinAt: #scratchSoundOn).
 

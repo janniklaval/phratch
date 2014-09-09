@@ -44,11 +44,8 @@ BlockDialog class >> isOpen [
 
 { #category : #initialization }
 BlockDialog >> buildCategoryChooser [
-	| catList maxExtent buttons label offForm onForm overForm b pad leftColumnX rightColumnX x y catButtonsExtent |
-	"catList := #(#motion #control #looks #sensing #sound #operators #pen #variables #other #list)."
-	
-	catList := (((PhratchCategory allSubclasses" select: [ :e | e visible ]") sort: [ :e :f | e order < f order ])
-		collect: [ :c | c label asSymbol ]) asArray.
+	| catList maxExtent buttons label offForm onForm overForm b pad leftColumnX rightColumnX x y catButtonsExtent |	
+	catList := ((PhratchCategory allSubclasses select: [ :e | e visible ]) sort: [ :e :f | e order < f order ]) asArray.
 		
 	categoryChooser := ImageFrameMorph new.
 	categoryChooser initFromForm: (PhratchFrameMorph skinAt: #paintOptionsBackground).	"Create new buttons, keeping End of statement list encounted -> track of the maximum extent."
@@ -56,15 +53,11 @@ BlockDialog >> buildCategoryChooser [
 	buttons := catList
 		collect: [ :cat | 
 			label := (PhratchTranslator translationFor: cat asString) capitalized.
-			(#(#other #list) includes: cat)
-				ifTrue: [ 
-					offForm := PhratchFrameMorph skinAt: #variables.
-					onForm := PhratchFrameMorph skinAt: #variablesPressed.
-					overForm := PhratchFrameMorph skinAt: #variablesOver ]
-				ifFalse: [ 
-					offForm := PhratchFrameMorph skinAt: cat.
-					onForm := PhratchFrameMorph skinAt: cat , 'Pressed'.
-					overForm := PhratchFrameMorph skinAt: cat , 'Over' ].
+			
+			offForm := PhratchFrameMorph offFormBasicColor: cat color.
+			onForm := PhratchFrameMorph onFormBasicColor: cat color.
+			overForm := PhratchFrameMorph overFormBasicColor: cat color.
+			
 			b :=  ResizableToggleButton new offForm: offForm onForm: onForm overForm: overForm .
 			b
 				label: label font: (PhratchFrameMorph getFont: #Category);

@@ -186,7 +186,7 @@ ScriptablePhratchMorph class >> keepOnStage: aBool [
 { #category : #'forms/sounds/icons' }
 ScriptablePhratchMorph class >> meowSound [
 
-	^ MeowSound ifNil: [MeowSound := SampledSound fromFileNamed: (((FileSystem workingDirectory / 'ScratchSkin') / 'Kitten.wav') fullName)]
+	^ MeowSound ifNil: [MeowSound := SampledSound fromFileNamed: (((FileSystem workingDirectory / PhratchInstaller skinFolder) / 'Kitten.wav') fullName)]
 
 ]
 
@@ -211,7 +211,7 @@ ScriptablePhratchMorph class >> phratchOrigin: aPoint [
 { #category : #'forms/sounds/icons' }
 ScriptablePhratchMorph class >> popSound [
 
-	^ PopSound ifNil: [PopSound := SampledSound fromFileNamed: ((FileSystem workingDirectory / 'ScratchSkin'/ 'Pop.wav') fullName)]
+	^ PopSound ifNil: [PopSound := SampledSound fromFileNamed: ((FileSystem workingDirectory / PhratchInstaller skinFolder/ 'Pop.wav') fullName)]
 
 ]
 

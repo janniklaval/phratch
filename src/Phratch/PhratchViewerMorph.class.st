@@ -111,8 +111,7 @@ PhratchViewerMorph >> pageViewer [
 { #category : #initialization }
 PhratchViewerMorph >> rebuildCategorySelectors [
 	| catList maxExtent buttons label offForm onForm overForm b pad leftColumnX rightColumnX x y |
-	catList := (((PhratchCategory allSubclasses select: [ :e | e visible ]) sort: [ :e :f | e order < f order ])
-		collect: [ :c | c label ]) asArray.	"First, delete the old category buttons"
+	catList := ((PhratchCategory allSubclasses select: [ :e | e visible ]) sort: [ :e :f | e order < f order ]) asArray.	"First, delete the old category buttons"
 	submorphs
 		do: [ :m | 
 			(m isResizableToggleButton)
@@ -120,17 +119,19 @@ PhratchViewerMorph >> rebuildCategorySelectors [
 	maxExtent := 75 @ 0.
 	buttons := catList
 		collect: [ :cat | 
-			label := (PhratchTranslator translationFor: cat asString) capitalized.
-			offForm := PhratchFrameMorph skinAt: cat.
-			onForm := PhratchFrameMorph skinAt: cat , 'Pressed'.
-			overForm := PhratchFrameMorph skinAt: cat , 'Over'.
+			label := (PhratchTranslator translationFor: cat label asString) capitalized.
+			
+			offForm := PhratchFrameMorph offFormBasicColor: cat color.
+			onForm := PhratchFrameMorph onFormBasicColor: cat color.
+			overForm := PhratchFrameMorph overFormBasicColor: cat color.
+			
 			b :=  ResizableToggleButton new offForm: offForm onForm: onForm overForm: overForm .
 			b
 				label: label font: (PhratchFrameMorph getFont: #Category);
 				setLabelColor: Color white;
 				target: self;
 				actionSelector: #currentCategory:;
-				arguments: (Array with: cat);
+				arguments: (Array with: cat label);
 				toggleButtonMode: true;
 				toggleMode: false.
 			b leftJustifyInset: 10 .

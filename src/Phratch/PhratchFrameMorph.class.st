@@ -74,6 +74,17 @@ PhratchFrameMorph class >> cameraMode [
 ]
 
 { #category : #'initialize-release' }
+PhratchFrameMorph class >> categoryButton [
+
+	^ (ColorForm
+	extent: 13@17
+	depth: 8
+	fromArray: #(1600085848 1279995163 456679263 1593835520 1600074823 928454181 520569183 1593835520 1595954504 1227360007 117445910 1593835520 1596202002 1362886656 203019 1593835520 725292045 838926336 665374 520093696 1331316230 33619968 203032 318767104 911346958 33619968 203280 1442840576 856951822 33619968 208656 1526726656 470943237 33619968 203317 285212672 1041040901 33619968 199433 251658240 1128269317 33619968 657452 150994944 1108102405 33619968 51715613 1493172224 772541957 33619968 168495364 1577058304 1597850672 1546256387 320359951 1593835520 1599298854 1161441544 387777610 1593835520 1600082979 958533393 67376991 1593835520 1600085793 1059652612 1342725983 1593835520)
+	offset: 0@0)
+	colors: {Color gray. Color black. Color black. Color gray. Color gray. Color black. Color black. Color gray. Color gray. Color gray. Color gray. Color gray. Color black. Color black. Color black. Color gray. Color gray. Color gray. Color black. Color gray. Color black. Color gray. Color gray. Color gray. Color gray. Color gray. Color gray. Color gray. Color black. Color gray. Color gray. Color gray. Color black. Color gray. Color gray. Color black. Color black. Color gray. Color black. Color gray. Color black. Color gray. Color black. Color black. Color gray. Color gray. Color black. Color gray. Color black. Color gray. Color black. Color black. Color black. Color gray. Color black. Color black. Color gray. Color black. Color black. Color black. Color black. Color black. Color black. Color gray. Color black. Color gray. Color black. Color black. Color black. Color black. Color black. Color black. Color black. Color black. Color gray. Color black. Color black. Color black. Color gray. Color black. Color gray. Color black. Color black. Color black. Color black. Color black. Color gray. Color black. Color black. Color gray. Color black. Color gray. Color black. Color black. Color gray. Color transparent. Color gray. Color gray. Color gray. Color gray. Color gray. Color gray. Color gray. Color gray. Color gray. Color gray. Color gray. Color gray. Color gray. Color gray. Color gray. Color gray. Color gray. Color gray. Color gray. Color gray. Color gray. Color gray. Color gray. Color gray. Color gray. Color gray. Color gray. Color gray. Color gray. Color gray. Color gray. Color gray. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent. Color transparent}
+]
+
+{ #category : #'initialize-release' }
 PhratchFrameMorph class >> close [
 	"Close Phratch window but don't quit Pharo"
 
@@ -180,8 +191,29 @@ PhratchFrameMorph class >> menuCommandOn: aBuilder [
 	<worldMenu>  
 	(aBuilder item: #Phratch)
 		order: 0.1;
-		icon: ((ImageMorph fromStream: (FileStream fileNamed: (FileSystem workingDirectory /  'ScratchSkin' / 'phratchicon.png'))) form magnifyBy: 0.35);
+		icon: ((ImageMorph withForm: (PhratchFrameMorph skinAt: 'phratchicon')) form magnifyBy: 0.38);
 		action:[self openOneInstance].
+]
+
+{ #category : #'initialize-release' }
+PhratchFrameMorph class >> offFormBasicColor: aColor [
+	|offForm|
+	offForm := self categoryButton.
+	offForm colors do:[:c | 
+		c = Color black ifTrue: [ offForm  replaceColor: c with: aColor	]
+	].
+	^ offForm.
+]
+
+{ #category : #'initialize-release' }
+PhratchFrameMorph class >> onFormBasicColor: aColor [
+	|onForm|
+	onForm := self categoryButton.
+	onForm colors do:[:c | 
+		c = Color black ifTrue: [ onForm  replaceColor: c with: aColor	].
+		c = Color gray ifTrue: [ onForm  replaceColor: c with: aColor lighter	]
+	].
+	^ onForm.
 ]
 
 { #category : #utilities }
@@ -196,6 +228,17 @@ PhratchFrameMorph class >> open [
 PhratchFrameMorph class >> openOneInstance [
 
 	PhratchFrameMorph allInstances size > 1 ifFalse: [ ^ self new startup openInWorld].
+]
+
+{ #category : #'initialize-release' }
+PhratchFrameMorph class >> overFormBasicColor: aColor [
+	|onForm|
+	onForm := self categoryButton.
+	onForm colors do:[:c | 
+		c = Color black ifTrue: [ onForm  replaceColor: c with: aColor	].
+		c = Color gray ifTrue: [ onForm  replaceColor: c with: Color gray darker]
+	].
+	^ onForm.
 ]
 
 { #category : #utilities }
@@ -218,15 +261,12 @@ PhratchFrameMorph class >> readSkin [
 	
 	^ PhratchSkin := 
 		PhratchFrameMorph readSkinFrom: 
-			(FileSystem workingDirectory / 'ScratchSkin')
+			(FileSystem workingDirectory / PhratchInstaller skinFolder)
 ]
 
 { #category : #'scratch skin' }
 PhratchFrameMorph class >> readSkinFrom: aDirectory [
 	"Read the Forms for my skin from the given directory and store them in myskin dictionary."
-	"When in XO mode, entries in ScratchSkinXO override the corresponding entries in ScratchSkin."
-	"self readSkinFrom: (FileDirectory default directoryNamed: 'ScratchSkin')"
-"Corregido error sintaxsis"
 	| dict img i  fn1|
 	dict := Dictionary new.
 	aDirectory fileNames do:  [:fn |
@@ -297,7 +337,7 @@ PhratchFrameMorph class >> skinAt: aSymbolOrString [
 
 { #category : #'scratch skin' }
 PhratchFrameMorph class >> skinAt: aSymbolOrString ifAbsent: aBlock [
-	"Answer the skin image with the given name. In XO mode, first check to see if an entry appears in ScratchSkinXO. If so, use it. Otherwise, use the image from the normal skin dictionary."
+	"Answer the skin image with the given name."
 
 	^ self skin at: aSymbolOrString asSymbol ifAbsent: aBlock
 

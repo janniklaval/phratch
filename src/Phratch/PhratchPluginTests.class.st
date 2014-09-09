@@ -1,16 +1,8 @@
 Class {
 	#name : #PhratchPluginTests,
 	#superclass : #TestCase,
-	#classVars : [
-		'TestFileName'
-	],
 	#category : #'Phratch-Tests'
 }
-
-{ #category : #tests }
-PhratchPluginTests >> setUp [
-	TestFileName :=  (FileSystem workingDirectory / 'ScratchSkin' / 'defaultSpriteCostume.png') fullName
-]
 
 { #category : #tests }
 PhratchPluginTests >> testVideo [
