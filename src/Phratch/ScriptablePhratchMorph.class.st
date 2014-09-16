@@ -43,7 +43,8 @@ Class {
 		'PopSound',
 		'RandomGen',
 		'Recorder',
-		'TimerStartMSecs'
+		'TimerStartMSecs',
+		'TraceMode'
 	],
 	#category : #'Phratch-Objects'
 }
@@ -230,6 +231,16 @@ ScriptablePhratchMorph class >> stopSoundRecorder [
 	Recorder ifNotNil: [Recorder stopRecording; clearRecordedSound].
 
 
+]
+
+{ #category : #accessing }
+ScriptablePhratchMorph class >> traceMode [
+	^ TraceMode  ifNil: [ TraceMode := false ]
+]
+
+{ #category : #accessing }
+ScriptablePhratchMorph class >> traceMode: anObject [
+	TraceMode := anObject
 ]
 
 { #category : #byob }

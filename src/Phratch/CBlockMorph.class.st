@@ -339,6 +339,7 @@ CBlockMorph >> isCShape [
 { #category : #private }
 CBlockMorph >> litUp: aBoolean [
 	"Overridden to suppress highlighting of control structures. Do nothing."
+	
 ]
 
 { #category : #accessing }

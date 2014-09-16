@@ -206,6 +206,10 @@ PhratchInstaller class >> phratchSettingsOn: aBuilder [
 				label: 'noviceMode' translated;
 		 		target: ScriptablePhratchMorph;
 		 		description: '...' translated.	
+			(aBuilder setting: #traceMode) 
+				label: 'traceMode' translated;
+		 		target: ScriptablePhratchMorph;
+		 		description: '...' translated.	
 			(aBuilder setting: #fileIOPreference) 
 				label: 'fileIOPreference' translated;
 		 		target: ScriptablePhratchMorph;

@@ -878,26 +878,29 @@ PhratchProcess >> evaluateCommandFor: aStageMorph [
 			((PhratchFrameMorph someInstance viewMode = #presentation) | doneWithDebugging) ifFalse: [
 				self pause.
 				DebuggerFrameMorph new on: self]].
-		
-	expression isSpecialForm ifTrue: [^ self evaluateSpecialForm].
+	
+	expression isSpecialForm ifTrue: [self evaluateSpecialForm. 
+		^expression litUp: false.].
 
 	stackFrame ifNil: [
-		answer isNil ifFalse: [ ^self]].
+		answer isNil ifFalse: [ ^expression litUp: false.]].
 
 
 	"evaluate arguments, if necessary"
 	stackFrame arguments size < expression argumentCount
-		ifTrue: [^ self evaluateNextArgument].
+		ifTrue: [self evaluateNextArgument.
+			^expression litUp: false.].
 
-	expression isTimed ifTrue: [^ self applyTimedCommand].
+	expression isTimed ifTrue: [ self applyTimedCommand.
+		^expression litUp: false.].
 
 	self applyPrimitive.
 
 	aStageMorph ifNotNil: [
 		aStageMorph updateTrailsForm.
-		self isAtomic ifTrue: [^self].
+		self isAtomic ifTrue: [^expression litUp: false.].
 		World displayWorldSafely].
-
+	expression litUp: false.
 ]
 
 { #category : #'private-evaluation' }
@@ -1143,9 +1146,8 @@ PhratchProcess >> popStackFrame [
 
 	command := frame expression.
 
-	"this effectively disables Scratch's so called single stepping mechanism, a sacrifice that let's us catch up with Scratch speed again,
-	-jens"
 	^self.
+
 ]
 
 { #category : #'private-stack' }

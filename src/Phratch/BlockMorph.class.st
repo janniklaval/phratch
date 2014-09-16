@@ -634,11 +634,11 @@ BlockMorph >> fullBounds [
 
 ]
 
-{ #category : #'drawing-optimization' }
+{ #category : #drawing }
 BlockMorph >> fullDrawOn: aCanvas [
 	"Optimization: To speed up redisplay, especially when giving feedback that a stack is running, we create a cached form of the stack in the top block of the stack and simply display that. We also keep a cached image of the running/error feedback outline. This allows the running feedback to be turned on and off quickly. The caches are flushed whenever the layout of the stack changes."
 
-	| offset cacheFeedbackForm|
+	| offset cacheFeedbackForm |
 	self isHidden ifTrue: [^ self].
 	(self hasProperty: #errorOnDraw) ifTrue:[^ self drawErrorOn: aCanvas].
 
@@ -1088,7 +1088,7 @@ BlockMorph >> layoutChanged [
 BlockMorph >> litUp: aBoolean [
 	"If the argument true, light up this block. Otherwise, revert to it's old color."
 	"Note: We use super color: so we don't overwrite oldColor. We also force a world update to ensure that the highlighting is seen by the user."
-
+ScriptablePhratchMorph traceMode ifTrue:[
 	aBoolean
 		ifTrue:	[super color: (Color h: 60 s: 0.9 v: 0.89)]
 		ifFalse:	[oldColor ifNotNil: [super color: oldColor]].
@@ -1098,7 +1098,7 @@ BlockMorph >> litUp: aBoolean [
 			cycleWhileWaitingMSecs: 1
 			doInput: true
 			doSteps: false].
-
+]
 ]
 
 { #category : #'event handling' }
@@ -1510,7 +1510,7 @@ BlockMorph >> topBlock [
 
 ]
 
-{ #category : #'drawing-optimization' }
+{ #category : #drawing }
 BlockMorph >> updateCacheFeedbackForm [
 	"Create a cached feedback Form to show this stack's running (or error) status."
 
@@ -1526,7 +1526,7 @@ BlockMorph >> updateCacheFeedbackForm [
 
 ]
 
-{ #category : #'drawing-optimization' }
+{ #category : #drawing }
 BlockMorph >> updateCacheForm [
 	"Create a cached Form of this stack's appearance."
 
