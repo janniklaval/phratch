@@ -648,7 +648,7 @@ BlockMorph >> fullDrawOn: aCanvas [
 		cacheFeedbackForm := self updateCacheFeedbackForm.
 		aCanvas paintImage: cacheFeedbackForm at: (self fullBounds topLeft).
 			
-			self allMorphs allButLast do:[:e |[ aCanvas paintImage: e updateCacheFeedbackForm at: (e fullBounds topLeft - offset)] on: Error do:[PhratchError error: 'an error occured when drawing the block morph']]
+			self allMorphs allButLast do:[:e |[ aCanvas paintImage: e updateCacheFeedbackForm at: (e fullBounds topLeft - offset)] on: Error do:[]]
 			
 			].
 
