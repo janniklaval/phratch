@@ -38,7 +38,7 @@ PhratchType >> blockId [
 		yourself
 ]
 
-{ #category : #acessing }
+{ #category : #accessing }
 PhratchType >> boolean [
 	
 	<phratchType: #'Boolean'>
@@ -66,7 +66,7 @@ PhratchType >> checkBox [
 	^ CheckBoxArgMorph new
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PhratchType >> comparator [
 	
 	<phratchType: #'Comparator'>
@@ -292,7 +292,7 @@ PhratchType >> oSReporter [
 	^ OSlotMorph new receiver: receiver; type: #reporterslot; yourself "SpecialArgMorph new type: #reporter"
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 PhratchType >> operator [
 	
 	<phratchType: #'Operator'>

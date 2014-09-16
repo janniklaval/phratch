@@ -342,36 +342,6 @@ PhratchUpdatingStringMorph >> setDecimalPlacesFromTypeIn: typeIn [
 ]
 
 { #category : #editing }
-PhratchUpdatingStringMorph >> setFontSize [
-	| sizes reply family |
-	family := font 
-				ifNil: [TextStyle default]
-				ifNotNil: [font textStyle].
-	family
-		ifNil: [family := TextStyle default].
-	"safety net -- this line SHOULD be unnecessary now "
-	sizes := family fontNamesWithPointSizes.
-	reply := UIManager default chooseFrom: sizes values: sizes.
-	reply
-		ifNotNil: [self
-				font: (family
-						fontAt: (sizes indexOf: reply))]
-]
-
-{ #category : #editing }
-PhratchUpdatingStringMorph >> setFontStyle [
-	| aList reply style |
-	aList := (TextSharedInformation select: [:anItem | anItem isKindOf: TextStyle]) 
-				keys asOrderedCollection.
-	reply := UIManager default chooseFrom: aList values: aList.
-	reply ifNotNil: 
-			[(style := TextStyle named: reply) ifNil: 
-					[Beeper beep.
-					^true].
-			self font: style defaultFont]
-]
-
-{ #category : #editing }
 PhratchUpdatingStringMorph >> setPrecision [
 	"Allow the user to specify a number of decimal places. This UI is
 	invoked from a menu. Nowadays the precision can be set by simple

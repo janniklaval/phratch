@@ -1,12 +1,6 @@
 Extension { #name : #Number }
 
 { #category : #'*Phratch-Extensions' }
-Number >> /\/ aNumber [
-
-	^ self / aNumber
-]
-
-{ #category : #'*Phratch-Extensions' }
 Number >> asNumberNoError [
 
 	^ self

@@ -87,12 +87,6 @@ StringFieldMorph >> borderWidth: aNumber [
 
 ]
 
-{ #category : #stepping }
-StringFieldMorph >> changed [
-
-	super changed.
-]
-
 { #category : #private }
 StringFieldMorph >> characterOffsetForXOffset: screenX [
 	"Answer the character offset at the given width into the string."

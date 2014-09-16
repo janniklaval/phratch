@@ -117,13 +117,6 @@ PhratchStackFrame >> shouldUnlight [
 ]
 
 { #category : #accessing }
-PhratchStackFrame >> shouldUnlight: aBoolean [
-
-	shouldUnlight := aBoolean.
-
-]
-
-{ #category : #accessing }
 PhratchStackFrame >> shouldYield [
 	"Answers true iff this is a dummy frame simply indicating that the process should yield control."
 

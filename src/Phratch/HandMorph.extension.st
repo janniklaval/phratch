@@ -70,18 +70,6 @@ HandMorph >> toolType: aStringOrNil [
 ]
 
 { #category : #'*Phratch-Extensions' }
-HandMorph class >> translucentWhenDragging [
-
-	^ (World activeHand valueOfProperty: #translucentWhenDragging) ifNil: [false]
-]
-
-{ #category : #'*Phratch-Extensions' }
-HandMorph class >> translucentWhenDragging: aBoolean [
-
-	World activeHand setProperty: #translucentWhenDragging toValue: aBoolean
-]
-
-{ #category : #'*Phratch-Extensions' }
 HandMorph >> turnOffGridding [
 	"Turn off gridding."
 

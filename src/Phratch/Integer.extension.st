@@ -1,12 +1,6 @@
 Extension { #name : #Integer }
 
 { #category : #'*Phratch-extension' }
-Integer >> /\/ aNumber [
-
-	^ self asFloat / aNumber
-]
-
-{ #category : #'*Phratch-extension' }
 Integer >> asciiValue [ 
 
 	^self 
