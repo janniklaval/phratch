@@ -69,6 +69,42 @@ PhratchMinecraftMorph class >> methodTemplate [
 ]
 
 { #category : #'as yet unclassified' }
+PhratchMinecraftMorph >> blockAtX: aX y: aY z: aZ [
+	<phratchItem: 'block at x $Number$ y $Number$ z $Number$' kind: #ReporterWatcherBlockMorph category: 'minecraft' defaultValues: #(0 0 0) subCategory: #a special: #()>
+	^ minecraftObj blockAt: ('', aX, ',', aY, ',', aZ)
+]
+
+{ #category : #'as yet unclassified' }
+PhratchMinecraftMorph >> cameraModeFixed [
+	<phratchItem: 'set camera fixed' kind: #CommandBlockMorph category: 'minecraft' defaultValues: #() subCategory: #a special: #()>
+	^ minecraftObj cameraModeFixed
+]
+
+{ #category : #'as yet unclassified' }
+PhratchMinecraftMorph >> cameraModeFollow [
+	<phratchItem: 'set camera follow' kind: #CommandBlockMorph category: 'minecraft' defaultValues: #() subCategory: #a special: #()>
+	^ minecraftObj cameraModeFollow
+]
+
+{ #category : #'as yet unclassified' }
+PhratchMinecraftMorph >> cameraModeNormal [
+	<phratchItem: 'set camera normal' kind: #CommandBlockMorph category: 'minecraft' defaultValues: #() subCategory: #a special: #()>
+	^ minecraftObj cameraModeNormal
+]
+
+{ #category : #'as yet unclassified' }
+PhratchMinecraftMorph >> cameraPosX: aX y: aY z: aZ [
+	<phratchItem: 'set camera position x $Number$ y $Number$ z $Number$' kind: #CommandBlockMorph category: 'minecraft' defaultValues: #(0 0 0) subCategory: #a special: #()>
+	^ minecraftObj cameraPos: ('', aX, ',', aY, ',', aZ)
+]
+
+{ #category : #'as yet unclassified' }
+PhratchMinecraftMorph >> chatPost: aString [
+	<phratchItem: 'message $String$' kind: #CommandBlockMorph category: 'minecraft' defaultValues: #('Hello Minecrafters !') subCategory: #a special: #()>
+	^ minecraftObj chatPost: aString
+]
+
+{ #category : #'as yet unclassified' }
 PhratchMinecraftMorph >> closeConnection [
 	<phratchItem: 'disconnect' kind: #- category: 'minecraft' defaultValues: #() subCategory: #a special: #()>
 	minecraftObj connection close.
@@ -108,6 +144,12 @@ PhratchMinecraftMorph >> playerPosition [
 PhratchMinecraftMorph >> playerPositionX [
 	<phratchItem: 'player x position' kind: #ReporterWatcherBlockMorph category: 'minecraft' defaultValues: #() subCategory: #a special: #()>
 	^ minecraftObj playerTile at: 1
+]
+
+{ #category : #'as yet unclassified' }
+PhratchMinecraftMorph >> playerPositionX: aX y: aY z: aZ [
+	<phratchItem: 'set player position x $Number$ y $Number$ z $Number$' kind: #CommandBlockMorph category: 'minecraft' defaultValues: #(0 0 0) subCategory: #a special: #()>
+	^ minecraftObj playerTile: ('', aX, ',', aY, ',', aZ)
 ]
 
 { #category : #'as yet unclassified' }
