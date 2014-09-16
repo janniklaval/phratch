@@ -1137,8 +1137,6 @@ PhratchFrameMorph >> editMenu: aMenuTitleMorph [
 	].
 
 	menu addLine.
-	menu add: self isTurbo checkBoxString, 'Turbo' localized
-			action: #toggleTurboMode.
 
 	menu add: ScriptablePhratchMorph keepOnStage not checkBoxString, 'Allow Sprites offstage' localized
 			action: #toggleKeepSpritesOnStage.
@@ -1817,12 +1815,8 @@ PhratchFrameMorph >> installNewProject: newWorkpane [
 	libraryPane clearLibrary.
 	
 	workPane clearPenTrails.
-	"self updateProjectName".
-	PhratchProcess blockHighlightMSecs: 1.
 	PhratchPrompterMorph clearLastAnswer.
 
-	"(projectInfo at: 'isHosting' ifAbsent: [false]) ifTrue: [
-		self enableRemoteSensors]."
 	(projectInfo includesKey: 'penTrails') ifTrue: [
 		workPane penTrailsForm: (projectInfo at: 'penTrails')].
 
@@ -1861,11 +1855,6 @@ PhratchFrameMorph >> isLoaded: value [
 PhratchFrameMorph >> isPhratchFrameMorph [
 
 	^ true
-]
-
-{ #category : #byob }
-PhratchFrameMorph >> isTurbo [
-	^ PhratchProcess blockHighlightMSecs < 1
 ]
 
 { #category : #'event handling' }
@@ -2854,14 +2843,6 @@ PhratchFrameMorph >> toggleThreadSafeMode [
 
 	EventHatMorph threadSafeMode: EventHatMorph threadSafeMode not.
 
-]
-
-{ #category : #byob }
-PhratchFrameMorph >> toggleTurboMode [
-
-	self isTurbo ifTrue: [
-		^ PhratchProcess blockHighlightMSecs: 1].
-	PhratchProcess blockHighlightMSecs: 0
 ]
 
 { #category : #byob }

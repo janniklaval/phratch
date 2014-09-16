@@ -1095,7 +1095,7 @@ BlockMorph >> litUp: aBoolean [
 
 	aBoolean ifTrue: [
 		World
-			cycleWhileWaitingMSecs: PhratchProcess blockHighlightMSecs
+			cycleWhileWaitingMSecs: 1
 			doInput: true
 			doSteps: false].
 

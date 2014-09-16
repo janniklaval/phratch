@@ -30,32 +30,8 @@ Class {
 		'nextBlockToDebug',
 		'doneWithDebugging'
 	],
-	#classVars : [
-		'BlockHighlightMSecs'
-	],
 	#category : #'Phratch-Execution Engine'
 }
-
-{ #category : #'class variables' }
-PhratchProcess class >> blockHighlightMSecs [
-
-	^ BlockHighlightMSecs
-
-]
-
-{ #category : #'class variables' }
-PhratchProcess class >> blockHighlightMSecs: aNumber [
-
-	BlockHighlightMSecs := aNumber.
-
-]
-
-{ #category : #'class initialization' }
-PhratchProcess class >> initialize [
-"self initialize"
-	BlockHighlightMSecs := 1.
-
-]
 
 { #category : #accessing }
 PhratchProcess >> answer [
@@ -895,7 +871,7 @@ PhratchProcess >> evaluateCommandFor: aStageMorph [
 
 	| expression |
 	expression := stackFrame expression.
-	BlockHighlightMSecs > 1 ifTrue: [expression litUp: true].
+	expression litUp: true.
 
 	((blockToDebug notNil and: [blockToDebug ~= self currentBlock]) or: [
 		self currentBlock = nextBlockToDebug]) ifTrue: [
@@ -920,8 +896,7 @@ PhratchProcess >> evaluateCommandFor: aStageMorph [
 	aStageMorph ifNotNil: [
 		aStageMorph updateTrailsForm.
 		self isAtomic ifTrue: [^self].
-		BlockHighlightMSecs = 1 ifTrue: [  "normal (non-turbo) mode; redraw after each cmd"
-			World displayWorldSafely]].
+		World displayWorldSafely].
 
 ]
 
@@ -1171,19 +1146,6 @@ PhratchProcess >> popStackFrame [
 	"this effectively disables Scratch's so called single stepping mechanism, a sacrifice that let's us catch up with Scratch speed again,
 	-jens"
 	^self.
-
-	"and this is the old code"
-
-"	self isAtomic ifTrue: [^self ].
-
-	BlockHighlightMSecs > 0 ifTrue: [
-		(frame shouldUnlight not and: [command isBlockMorph]) ifTrue: [
-			|unlightFrame|"
-			"We push a new frame for unlighting this command."
-"			unlightFrame := PhratchStackFrame new
-				expression: command;
-				shouldUnlight: true.
-			self pushStackFrame: unlightFrame]]."
 ]
 
 { #category : #'private-stack' }
