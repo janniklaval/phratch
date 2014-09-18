@@ -134,7 +134,7 @@ ElementsEditorFrameMorph >> handlesMouseDown: evt [
 { #category : #initialization }
 ElementsEditorFrameMorph >> initialize [
 	super initialize.
-	self title: 'Elements Editor' translated.
+	self title: 'Elements Editor' localized.
 	resizeMorph := PhratchResizeMorph ofType: #corner.
 	editor := PluggableTextMorph new.
 	mainColumn addMorph: editor.

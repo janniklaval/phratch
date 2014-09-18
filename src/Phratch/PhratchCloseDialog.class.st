@@ -22,7 +22,7 @@ PhratchCloseDialog >> getUserResponse [
 PhratchCloseDialog >> initialize [
 	| spacer |
 	super initialize.
-	self title: 'Quit' translated.
+	self title: 'Quit' localized.
 	self message: 'Save changes before quitting?'.	"Note: The button row morph was created by initialize; I just replace its contents with a new collection of buttons."
 	spacer := Morph new
 		extent: 10 @ 5;

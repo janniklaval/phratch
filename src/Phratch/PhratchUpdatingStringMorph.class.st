@@ -48,16 +48,16 @@ PhratchUpdatingStringMorph >> acceptValueFromTarget: v [
 
 	lastValue := v.
 	self format == #string ifTrue: [^ v asString].
-	self format == #symbol ifTrue: [^ v asString translated].
+	self format == #symbol ifTrue: [^ v asString localized].
 	(format == #default and: [v isNumber]) ifTrue:
 		[^ self stringForNumericValue: v].
-	^ v printString translated
+	^ v printString localized
 ]
 
 { #category : #editing }
 PhratchUpdatingStringMorph >> addCustomMenuItems: menu [
 
-	menu add: 'decimal places...' translated target: self action: #setPrecision.
+	menu add: 'decimal places...' localized target: self action: #setPrecision.
 ]
 
 { #category : #accessing }
@@ -351,7 +351,7 @@ PhratchUpdatingStringMorph >> setPrecision [
 	aMenu := UIManager default 
 				 newMenuIn: self for: self.
 	aMenu
-		addTitle: ('How many decimal places? (currently {1})' translated format: {self floatPrecision}).
+		addTitle: ('How many decimal places? (currently {1})' localized format: {self floatPrecision}).
 	-1
 		to: 5 
 		do: [:places | aMenu

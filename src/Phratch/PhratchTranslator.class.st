@@ -114,7 +114,7 @@ PhratchTranslator class >> extractQuotedStringFrom: aString [
 
 { #category : #'language translation' }
 PhratchTranslator class >> importLanguagesList [
-	"Import the list of languages and language codes translated for Phratch by file names from 'Help/Translations'"
+	"Import the list of languages and language codes for Phratch by file names from 'Help/Translations'"
 
 	| dir code lang |
 	ISODict := Dictionary new.
@@ -319,7 +319,7 @@ PhratchTranslator class >> renderScale [
 PhratchTranslator class >> setLanguage: aString [
 	"Set the current language. If the language is not supported, use English (i.e. an empty translation dictionary)."
 
-	| dict |
+	| dict allPragmas |
 	"default to English"
 	Language := 'en'. 
 	TranslationDict := Dictionary new.
@@ -328,6 +328,11 @@ PhratchTranslator class >> setLanguage: aString [
 	aString = 'en' ifTrue: [^ self].
 
 	dict := self importTranslation: aString, '.po'.
+	
+	allPragmas := Pragma allNamed: #phratchTranslation: in: self class.
+
+	allPragmas select:[:aP | (aP arguments at: 1) = aString] thenDo:[:aP | dict addAll: (self perform: aP method selector)asDictionary].
+	
 	dict ifNotNil: [
 		Language := aString.
 		TranslationDict := dict.
@@ -383,6 +388,14 @@ PhratchTranslator class >> stringExtent: aString font: aStrikeFont [
 	"self stringExtent: 'Hello, Phratch!' font: (StrikeFont fontName: 'Verdana' size: 18)"
 
 	^ (aStrikeFont widthOfString: aString asString) @ aStrikeFont height
+]
+
+{ #category : #'as yet unclassified' }
+PhratchTranslator class >> toIncludeInPoLanguage [
+
+	<phratchTranslation: 'fr'>
+	^ { 
+	}
 ]
 
 { #category : #'import/export' }

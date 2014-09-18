@@ -37,7 +37,7 @@ DialogBoxMorph class >> ask: questionString [
 
 	| dialogBox |
 	dialogBox := self new
-		title: '?' translated;
+		title: '?' localized;
 		withButtonsForYes: true
 			no: true
 			okay: false
@@ -55,7 +55,7 @@ DialogBoxMorph class >> askWithCancel: questionString [
 
 	| dialogBox |
 	dialogBox := self new
-		title: '?' translated;
+		title: '?' localized;
 		withButtonsForYes: true
 			no: true
 			okay: false
@@ -107,7 +107,7 @@ DialogBoxMorph class >> warn: informationString [
 	| dialogBox |
 	 PhratchError error: informationString.
 	dialogBox := self new
-		title: '!' translated;
+		title: '!' localized;
 		withButtonsForYes: false
 			no: false
 			okay: true

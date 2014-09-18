@@ -39,7 +39,7 @@ PhratchNotesDialog >> createNotesDialogFor: aPhratchFrameMorph [
 		backForm: (PhratchFrameMorph skinAt: #stringFieldFrame);
 		width: 300;
 		yourself.
-	self title: 'Project Notes' translated.
+	self title: 'Project Notes' localized.
 	mainColumn addMorphBack: commentMorph.
 	mainColumn addMorphBack: buttonRow.
 	phratchFrame := aPhratchFrameMorph.

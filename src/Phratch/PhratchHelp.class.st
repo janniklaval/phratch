@@ -11,7 +11,7 @@ Class {
 PhratchHelp class >> aboutPhratch [
 	| dialogBox |
 	dialogBox := DialogBoxMorph new
-		title: 'About Phratch' translated;
+		title: 'About Phratch' localized;
 		withButtonsForYes: false
 			no: false
 			okay: true

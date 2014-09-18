@@ -363,7 +363,7 @@ PhratchFrameMorph class >> workpaneExtent [
 PhratchFrameMorph >> aboutPhratch [
 	| dialogBox |
 	dialogBox := DialogBoxMorph new
-		title: 'About Phratch' translated;
+		title: 'About Phratch' localized;
 		withButtonsForYes: false
 			no: false
 			okay: true
@@ -480,11 +480,11 @@ PhratchFrameMorph >> addSpecialSprite [
 	(PhratchSpriteMorph withAllSubclasses size = 1 and:[PhratchInstaller declaredSprite isEmpty]) ifTrue:[^ self paintSpriteMorph].
 	
 	PhratchSpriteMorph withAllSubclassesDo: [ :e |
-		menu add: ('create ',e name) translated value: e.
+		menu add: ('create ',e name) localized value: e.
 	].
 
 	PhratchInstaller declaredSprite do:[:e |
-		menu add: ('create ',e name) translated value: e.
+		menu add: ('create ',e name) localized value: e.
 	].
 	
 	m := (menu
@@ -1615,16 +1615,16 @@ PhratchFrameMorph >> helpMenu: aMenuTitleMorph [
 	].
 
 	
-	menu add: 'Phratch Website' translated target: PhratchHelp action: #launchWebsite.
+	menu add: 'Phratch Website' localized target: PhratchHelp action: #launchWebsite.
 	menu addLine.
-	menu add: 'Scratch Help Page' translated target: PhratchHelp action: #launchHelpPage.
-	menu add: 'Generated Block Doc' translated target: PhratchHelp action: #launchBlockDoc.
-	menu add: 'Help Screens' translated target: PhratchHelp action: #launchAllHelpScreens.
+	menu add: 'Scratch Help Page' localized target: PhratchHelp action: #launchHelpPage.
+	menu add: 'Generated Block Doc' localized target: PhratchHelp action: #launchBlockDoc.
+	menu add: 'Help Screens' localized target: PhratchHelp action: #launchAllHelpScreens.
 	menu addLine.
-	menu add: 'BYOB Reference Manual' translated target: PhratchHelp action: #openBYOBManual.
-	menu add: 'Panther Tutorials' translated target: PhratchHelp action: #openPantherTutorials.
+	menu add: 'BYOB Reference Manual' localized target: PhratchHelp action: #openBYOBManual.
+	menu add: 'Panther Tutorials' localized target: PhratchHelp action: #openPantherTutorials.
 	menu addLine.
-	menu add: 'About Phratch' translated target: PhratchHelp action: #aboutPhratch.
+	menu add: 'About Phratch' localized target: PhratchHelp action: #aboutPhratch.
 	menu localize.
 	"menu popUpAt: aMenuTitleMorph bottomLeft + (0 @ 10) inWorld: World"
 	menu popUpInWorld 
@@ -2905,12 +2905,6 @@ PhratchFrameMorph >> uniqueSummaryFileName [
 	^ fileName
 
 
-]
-
-{ #category : #byob }
-PhratchFrameMorph >> unloadAllUnusedCustomBlocks [
-	<phratchMenu: 'Unload unused blocks' category: 'edit' position: 5 sub:2 shift: false>
-	workPane unloadAllUnusedCustomBlocks
 ]
 
 { #category : #'falta adaptar' }

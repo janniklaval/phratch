@@ -79,7 +79,7 @@ SliderRangeDialog >> initialize [
 
 	| minLabel maxLabel radioButtons |
 	super initialize.
-	self title: '?' translated.
+	self title: '?' localized.
 	self message: 'Slider range:'.
 	minLabel := StringMorph new
 		contents: 'Min:' localized;

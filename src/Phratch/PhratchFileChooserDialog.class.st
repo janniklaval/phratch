@@ -56,7 +56,7 @@ PhratchFileChooserDialog class >> chooseFolder: aDirectory [
 		choosingFolder: true;
 		setDirectory: aDirectory;
 		extensions: '!';
-		title: 'Choose a folder' translated;
+		title: 'Choose a folder' localized;
 		yourself.	"initial directory"	"do not show files in the directories"
 
 	^ m getUserResponseForFolder
@@ -111,7 +111,7 @@ PhratchFileChooserDialog class >> chooseSpriteCostumeFor: aPhratchFrameMorph [
 	self deleteDuplicates.
 	m := self new
 		createFileChooserLayout: false;
-		title: 'New Sprite' translated;
+		title: 'New Sprite' localized;
 		showThumbnails: true;
 		type: #costume;
 		extensions: #(#gif #jpeg #jpg #bmp #png #sprite #ysp #phsp);
@@ -367,10 +367,10 @@ PhratchFileChooserDialog >> createFileChooserLayout: allowNewFile [
 	bottomSpacer delete.
 	bottomSpacer := nil.
 	mainColumn addMorphBack: list.
-	self title: 'Open' translated.
+	self title: 'Open' localized.
 	allowNewFile
 		ifTrue: [ 
-			self title: 'Save As' translated.
+			self title: 'Save As' localized.
 			newFileTitle := StringMorph new
 				contents: 'New Filename:' localized , ' ';
 				color: (Color gray: 0.3);
@@ -414,14 +414,14 @@ PhratchFileChooserDialog >> createPhratchFileChooserFor: aPhratchFrameMorph savi
 	mainColumn addMorphBack: list.
 	savingFlag
 		ifFalse: [ 
-			self title: 'Open Project' translated.
+			self title: 'Open Project' localized.
 			list phratchInfoClient: self ].
 	labelFont := PhratchFrameMorph getFont: #FileChooserLabel.
 	contentsFont := PhratchFrameMorph getFont: #FileChooserContents.
 	commentFont := PhratchFrameMorph getFont: #FileChooserComment.
 	savingFlag
 		ifTrue: [ 
-			self title: 'Save Project' translated.
+			self title: 'Save Project' localized.
 			newFileTitle := StringMorph contents: 'New Filename:' localized , ' ' font: labelFont.
 			newFileTitle color: (Color gray: 0.3).
 			newFileName := StringFieldMorph new

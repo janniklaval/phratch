@@ -463,10 +463,10 @@ MediaItemMorph >> rightButtonMenu [
 	menu := MenuMorph new defaultTarget: self.
 	media isImage
 		ifTrue: [ 
-			menu add: 'turn into new sprite' translated action: #turnIntoNewSprite.
-			menu add: 'export this costume' translated action: #exportMedia ].
+			menu add: 'turn into new sprite' localized action: #turnIntoNewSprite.
+			menu add: 'export this costume' localized action: #exportMedia ].
 	media isSound
-		ifTrue: [ menu add: 'export this sound' translated action: #exportMedia ].
+		ifTrue: [ menu add: 'export this sound' localized action: #exportMedia ].
 	menu
 		localize;
 		invokeModal

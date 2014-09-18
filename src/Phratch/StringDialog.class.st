@@ -110,7 +110,7 @@ StringDialog >> initialize [
 	"Similar to my superclass, but with a string field for the user's response."
 
 	super initialize.
-	self title: '?' translated.	"create and position typeinMorph"
+	self title: '?' localized.	"create and position typeinMorph"
 	mainColumn
 		addMorph:
 				(Morph new

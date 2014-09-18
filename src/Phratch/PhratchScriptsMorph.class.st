@@ -168,16 +168,16 @@ PhratchScriptsMorph >> recordDroppedBlock: aBlockMorph bottom: stackBottom kicke
 PhratchScriptsMorph >> rightButtonMenu [
 	| menu be |
 	menu := MenuMorph new defaultTarget: self.
-	menu add: 'clean up' translated action: #cleanUp.
-	menu add: 'save picture of scripts' translated action: #saveScriptsToImage.
+	menu add: 'clean up' localized action: #cleanUp.
+	menu add: 'save picture of scripts' localized action: #saveScriptsToImage.
 	be := self ownerOrYourselfThatIsABlockEditorFrameMorph.
 	be
 		ifNotNil: [ 
 			be definition varNames size > 0
-				ifTrue: [ menu add: 'turn block variables into script variables' translated action: #migrateBlockVars ] ].
-	menu add: 'undo last drop' translated action: #undoLastDrop.
+				ifTrue: [ menu add: 'turn block variables into script variables' localized action: #migrateBlockVars ] ].
+	menu add: 'undo last drop' localized action: #undoLastDrop.
 	menu addLine.
-	menu add: 'make a block' translated action: #makeNewBlock.
+	menu add: 'make a block' localized action: #makeNewBlock.
 	menu
 		localize;
 		invokeModal
@@ -271,6 +271,7 @@ PhratchScriptsMorph >> step [
 	feedbackColor := Color white.
 	feedbackMorph useSquareCorners.
 
+	
 	lambdaMorph
 		ifNotNil: [lambdaMorph delete. lambdaMorph := nil].  "remove old lambda feedback"
 
@@ -328,7 +329,6 @@ PhratchScriptsMorph >> step [
 	"subtract the attachment point x from the width so that the feedback in CBlock won't stick out"
 	feedbackMorph extent: (targetBlock right - targetP x)@5.
 	self addMorphFront: (feedbackMorph position: targetP).
-
 ]
 
 { #category : #stepping }

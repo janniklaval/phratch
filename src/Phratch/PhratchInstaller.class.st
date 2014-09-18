@@ -199,35 +199,35 @@ PhratchInstaller class >> initialize [
 PhratchInstaller class >> phratchSettingsOn: aBuilder [  
 	<systemsettings>  
 	(aBuilder group: #phratch)
-		label: 'Phratch' translated;
-		description: 'All Phratch settings' translated;
+		label: 'Phratch' localized;
+		description: 'All Phratch settings' localized;
 		with: [ 
 			(aBuilder setting: #noviceMode) 
-				label: 'noviceMode' translated;
+				label: 'noviceMode' localized;
 		 		target: ScriptablePhratchMorph;
-		 		description: '...' translated.	
+		 		description: '...' localized.	
 			(aBuilder setting: #traceMode) 
-				label: 'traceMode' translated;
+				label: 'traceMode' localized;
 		 		target: ScriptablePhratchMorph;
-		 		description: '...' translated.	
+		 		description: '...' localized.	
 			(aBuilder setting: #fileIOPreference) 
-				label: 'fileIOPreference' translated;
+				label: 'fileIOPreference' localized;
 		 		target: ScriptablePhratchMorph;
-		 		description: 'Do you allow Phratch to write files' translated.	
+		 		description: 'Do you allow Phratch to write files' localized.	
 			(aBuilder group: #visibility)
-				label: 'Category Visibility' translated;
-				description: 'Category Visibility' translated;
+				label: 'Category Visibility' localized;
+				description: 'Category Visibility' localized;
 				with: [ 
 					(PhratchCategory allSubclasses) do:[:e | 
 						(aBuilder setting: #visible) 
-							label: e label, ' visible' translated;
+							label: e label, ' visible' localized;
 		 					target: e;
-		 					description: 'Do you want to see this category ?' translated.
+		 					description: 'Do you want to see this category ?' localized.
 					].
 				].
 			(aBuilder group: #blockVisibility)
-				label: 'Block Visibility' translated;
-				description: 'Block Visibility' translated;
+				label: 'Block Visibility' localized;
+				description: 'Block Visibility' localized;
 				with: [ |allPragmas|
 					allPragmas := (Pragma
 						allNamed: #phratchItem:kind:category:defaultValues:subCategory:special:
@@ -244,17 +244,17 @@ PhratchInstaller class >> phratchSettingsOn: aBuilder [
 							
 						(aBuilder setting: #blockVisible) 
 							icon: ((e methodClass new blockFromSpec: prov color: (PhratchCategory blockColorFor: (e arguments at: 3))) imageForm);
-							label: "(e arguments at: 1), "' visible' translated;
+							label: "(e arguments at: 1), "' visible' localized;
 		 					target: (e arguments at: 1);
 							getSelector: #blockVisible;
 							setSelector: #blockVisible:;
-		 					description: 'Do you want to see this block ?' translated.
+		 					description: 'Do you want to see this block ?' localized.
 					].
 				].
 			(aBuilder launcher: #updatePhratchView)
 				target: PhratchFrameMorph "; targetSelector: #closeAndOpen";
 				script: #rebuildUI;
-				label: 'Update the view of Phratch' translated.
+				label: 'Update the view of Phratch' localized.
 		].
 ]
 

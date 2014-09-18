@@ -34,21 +34,21 @@ Class {
 }
 
 { #category : #utilities }
-CommandBlockMorph class >> argPermutationForSpec: spec withTranslation: translatedSpec [
+CommandBlockMorph class >> argPermutationForSpec: spec withTranslation: translatSpec [
 	"CommandBlockMorph argPermutationForSpec: '$Attributes$ of $Sprite$ of $Sprite$ of $SAList$' withTranslation: '$Attributes$ de $Sprite$ de $Sprite$ de $SAList$'"
 	"CommandBlockMorph argPermutationForSpec: '$Attributes$ of $Sprite$ of $Sprite$ of $SAList$' withTranslation: '$SAList$ de $Sprite$2 de $Sprite$1 de $Attributes$'"
 
-	| parsedSpec parsedTranslatedSpec parsedSpecArgs parsedTranslatedSpecArgs permutation a copiesSize n originalPermutation |
+	| parsedSpec parsedSpecArgs parsedTranslatSpecArgs permutation a copiesSize n originalPermutation parsedTranslatSpec |
 
 	parsedSpec := CommandBlockMorph parseCommandSpec: spec.
 	parsedSpecArgs := parsedSpec select: [ :s | CommandBlockMorph isArgSpec: s ].
-	parsedTranslatedSpec := CommandBlockMorph parseCommandSpec: translatedSpec.
-	parsedTranslatedSpecArgs := parsedTranslatedSpec select: [ :s | CommandBlockMorph isArgSpec: s ].
+	parsedTranslatSpec := CommandBlockMorph parseCommandSpec: translatSpec.
+	parsedTranslatSpecArgs := parsedTranslatSpec select: [ :s | CommandBlockMorph isArgSpec: s ].
 
 	permutation := #().
 	1 to: parsedSpecArgs size do: [ :i | permutation := permutation copyWith: i ].
 	originalPermutation := permutation.	"no change"
-	parsedSpecArgs = parsedTranslatedSpecArgs
+	parsedSpecArgs = parsedTranslatSpecArgs
 		ifTrue: [ ^ originalPermutation ].	"otherwise, calculate permutation"
 	1 to: parsedSpecArgs size do: [ :i | 
 		a := parsedSpecArgs at: i.
@@ -58,7 +58,7 @@ CommandBlockMorph class >> argPermutationForSpec: spec withTranslation: translat
 				permutation
 					at: i
 					put:
-						(parsedTranslatedSpecArgs
+						(parsedTranslatSpecArgs
 							indexOf: a
 							ifAbsent: [ ^ originalPermutation ]) ]
 			ifFalse: [ 
@@ -67,7 +67,7 @@ CommandBlockMorph class >> argPermutationForSpec: spec withTranslation: translat
 				permutation
 					at: i
 					put:
-						(parsedTranslatedSpecArgs
+						(parsedTranslatSpecArgs
 							indexOf: a , n asString
 							ifAbsent: [^ originalPermutation ]) ] ].
 	^ permutation

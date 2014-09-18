@@ -34,7 +34,7 @@ FileIOAskerDialog >> initialize [
 		no: true
 		okay: false
 		cancel: false.
-	self title: 'Allow File I/O' translated.
+	self title: 'Allow File I/O' localized.
 	self
 		message:
 			'This Panther project is trying to use file I/O. While file I/O

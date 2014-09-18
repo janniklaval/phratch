@@ -39,19 +39,19 @@ SketchMorph class >> withForm: aForm [
 SketchMorph >> addCustomMenuItems: aCustomMenu hand: aHandMorph [
 	super addCustomMenuItems: aCustomMenu hand: aHandMorph.
 	aCustomMenu addLine.
-	aCustomMenu add: 'grab from screen' translated action: #grabFromScreen.
-	aCustomMenu add: 'read from file' translated action: #readFromFile.
+	aCustomMenu add: 'grab from screen' localized action: #grabFromScreen.
+	aCustomMenu add: 'read from file' localized action: #readFromFile.
 	aCustomMenu addLine.
-	aCustomMenu add: 'save as BMP' translated action: #saveAsBMP.
-	aCustomMenu add: 'save as GIF' translated action: #saveAsGIF.
-	aCustomMenu add: 'save as JPEG' translated action: #saveAsJPEG.
+	aCustomMenu add: 'save as BMP' localized action: #saveAsBMP.
+	aCustomMenu add: 'save as GIF' localized action: #saveAsGIF.
+	aCustomMenu add: 'save as JPEG' localized action: #saveAsJPEG.
 	aCustomMenu addLine.
-	aCustomMenu add: 'set rotation center' translated action: #setRotationCenter.
-	aCustomMenu add: 'set rotation style' translated action: #setRotationStyle.
-	aCustomMenu add: 'erase pixels of color' translated action: #erasePixelsOfColor:.
-	aCustomMenu add: 'recolor of pixels of color' translated action: #recolorPixelsOfColor:.
+	aCustomMenu add: 'set rotation center' localized action: #setRotationCenter.
+	aCustomMenu add: 'set rotation style' localized action: #setRotationStyle.
+	aCustomMenu add: 'erase pixels of color' localized action: #erasePixelsOfColor:.
+	aCustomMenu add: 'recolor of pixels of color' localized action: #recolorPixelsOfColor:.
 	aCustomMenu addLine.
-	aCustomMenu add: 'repaint' translated action: #editDrawing
+	aCustomMenu add: 'repaint' localized action: #editDrawing
 ]
 
 { #category : #geometry }
@@ -242,7 +242,7 @@ SketchMorph >> readFromFile [
 
 	|  fileName |
 	fileName := UIManager default
-		request: 'Please enter the image file name' translated
+		request: 'Please enter the image file name' localized
 		initialAnswer: 'fileName'.
 	fileName isEmptyOrNil ifTrue: [^ self].
 	self form: (Form fromFileNamed: fileName).

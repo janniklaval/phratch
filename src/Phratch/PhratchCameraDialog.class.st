@@ -74,7 +74,7 @@ PhratchCameraDialog >> createButtons [
 { #category : #intialization }
 PhratchCameraDialog >> initialize [
 	super initialize.
-	self title: 'Camera' translated.
+	self title: 'Camera' localized.
 	self createButtons.
 	viewFinderMorph := ImageMorph new form: (Form extent: 320 @ 240 depth: 2) fillBlack.
 	mainColumn

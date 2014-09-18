@@ -21,7 +21,7 @@ HelpDialog class >> showForm: aForm [
 			no: false
 			okay: true
 			cancel: false;
-		title: 'help' translated;
+		title: 'help' localized;
 		helpForm: aForm;
 		extent: aForm extent + (80 @ 145);
 		yourself.

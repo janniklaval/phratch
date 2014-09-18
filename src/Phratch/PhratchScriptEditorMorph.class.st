@@ -399,6 +399,7 @@ PhratchScriptEditorMorph >> fullDrawOn: aCanvas [
 	frameInFront
 		ifFalse: [ ^ self ].
 	self drawFrameOn: clipC.
+	
 	aCanvas fullDrawMorph: tabPaneMorph
 ]
 
@@ -486,12 +487,12 @@ PhratchScriptEditorMorph >> scriptsMenu: aPosition [
 	| menu choice |
 	self target ifNil: [ ^ self ].
 	menu := MenuMorph new defaultTarget: self.
-	menu add: 'clean up' translated action: #cleanUp.
-	menu add: 'save picture of scripts' translated action: #saveScriptsToImage.
-	menu add: 'add comment' translated action: #addComment:.
-	menu add: 'undo last drop' translated action: #undoDrop.
+	menu add: 'clean up' localized action: #cleanUp.
+	menu add: 'save picture of scripts' localized action: #saveScriptsToImage.
+	menu add: 'add comment' localized action: #addComment:.
+	menu add: 'undo last drop' localized action: #undoDrop.
 	menu addLine.
-	menu add: 'make a block' translated action: #addCustomBlock.
+	menu add: 'make a block' localized action: #addCustomBlock.
 	choice := menu localize invokeModal: true.
 	choice ifNil: [ ^ self ].
 	choice = #addComment:

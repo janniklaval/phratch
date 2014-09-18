@@ -45,5 +45,5 @@ AlgorithmMorph >> getUserResponse [
 { #category : #initialization }
 AlgorithmMorph >> initialize [
 	super initialize.
-	self title: 'Algorithm viewer' translated.
+	self title: 'Algorithm viewer' localized.
 ]

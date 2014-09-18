@@ -1881,7 +1881,7 @@ ScriptablePhratchMorph >> editSpecId: id [
 		ifTrue: [ ^ self ].
 	bd := BlockDialog new.
 	bd
-		title: '?' translated;
+		title: '?' localized;
 		withButtonsForYes: false
 			no: false
 			okay: true
@@ -4219,15 +4219,6 @@ ScriptablePhratchMorph >> undeleteAttribute: aSymbol [
 	w := sf watcherForBlock: block.
 	w ifNil: [^ self].
 	w setCategoryColor: block color
-]
-
-{ #category : #byob }
-ScriptablePhratchMorph >> unloadUnusedCustomBlocks [
-
-	customBlocks ifNil: [^ self].
-	customBlocks do: [:block |
-		(self allInstancesOf: block id) isEmpty ifTrue: [
-			self deleteDefinitionId: block id]]
 ]
 
 { #category : #media }

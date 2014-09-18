@@ -62,7 +62,7 @@ PaintFrame class >> new [
 			no: false
 			okay: true
 			cancel: true;
-		title: 'Paint Editor' translated;
+		title: 'Paint Editor' localized;
 		extent: 800 @ 490;
 		fixLayout;
 		yourself

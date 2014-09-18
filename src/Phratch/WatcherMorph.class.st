@@ -334,13 +334,13 @@ WatcherMorph >> parameter [
 ]
 
 { #category : #private }
-WatcherMorph >> replace: argStr with: translatedArg in: s [
-	"Answer a copy of the given string in which the first (only) occurance of argStr is replaced by translatedArg."
+WatcherMorph >> replace: argStr with: translatArg in: s [
+	"Answer a copy of the given string in which the first (only) occurance of argStr is replaced by translatArg."
 
 	| i |
 	i := s findString: argStr startingAt: 1.
 	i = 0 ifTrue: [^ s].
-	^ ((s copyFrom: 1 to: i - 1), translatedArg, (s copyFrom: i + argStr size to: s size))
+	^ ((s copyFrom: 1 to: i - 1), translatArg, (s copyFrom: i + argStr size to: s size))
 
 ]
 
