@@ -170,7 +170,7 @@ DebuggerFrameMorph >> hasVars [
 { #category : #initialization }
 DebuggerFrameMorph >> initialize [
 	super initialize.
-	self title: 'Debugger' translated.
+	self title: 'Debugger' localized.
 	resizeMorph := PhratchResizeMorph ofType: #corner.
 	scroller := ScrollFrameMorph new
 		growthFraction: 0.0;
