@@ -37,54 +37,6 @@ ScriptablePhratchMorph >> drum: midiKey duration: beats elapsed: elapsedMSecs fr
 ]
 
 { #category : #'*PhratchSound' }
-ScriptablePhratchMorph >> importMedia: fileName [
-	"Import a new image from a file and add it to my media."
-
-	|  extensionLoc elList baseName fList isFirst |
-	extensionLoc := ( fileName) extension asLowercase.
-
-	elList := OrderedCollection new.
-
-	(#(aif aiff wav mp3) includes: extensionLoc) ifTrue: [
-		baseName := self mediaNameFromFileName: fileName default: 'sound'.
-		[elList addLast: (SoundMedia new loadFile: fileName)] ifError: [^ self]].
-
-	(#(jpg jpeg gif bmp png) includes: extensionLoc) ifTrue: [
-		baseName := self
-			mediaNameFromFileName: fileName
-			default: self defaultImageMedia mediaName.
-		fList := OrderedCollection new.
-		"extensionLoc = 'gif' 
-			ifTrue: 
-				[[fList := (GIFReadWriter new on: (FileStream oldFileNamed: fileName)) nextImageSet] ifError: [^ self]]
-			ifFalse: 
-				["[fList addLast: (Form fromFileNamed: fileName)] ifError: [^ self]"]".
-		fList do: [:f | 
-			elList addLast: (ImageMedia new form: (PhratchFrameMorph scaledFormForPaintEditor: f))]].
-
-	elList isEmpty ifTrue: [^ self].  "unknown file type; ignore"
-
-	isFirst := true.
-	elList do: [:el | 
-		el mediaName: (self unusedMediaNameFromBaseName: baseName).
-		media addLast: el.
-		isFirst ifTrue: [
-			isFirst := false. 
-			el isSound 
-				ifTrue: [
-					self undeleteAttribute: #sounds.
-					self propagateSounds
-					]
-				ifFalse: [
-					self lookLike: el mediaName.
-					self undeleteAttribute: #costumes.
-					self propagateCostumes]]].
-	
-	self updateMediaCategory.
-
-]
-
-{ #category : #'*PhratchSound' }
 ScriptablePhratchMorph >> importSound [
 	"Import a new sound from a file and add it to my media."
 
@@ -174,7 +126,7 @@ ScriptablePhratchMorph >> midiDrumMenu [
 		('Open Triangle' 81)
 	) do: [:pair |
 		menu
-			add: (self numberInParens: pair second), (pair first localizedMIDI)
+			add: (self numberInParens: pair second), (pair first localized)
 			value: pair second].
 	menu invokeModal.
 	^ menu 
@@ -328,7 +280,7 @@ ScriptablePhratchMorph >> midiInstrumentMenu [
 		('Gunshot' 128)
 	) do: [:pair |
 		menu
-			add: (self numberInParens: pair second), pair first localizedMIDI
+			add: (self numberInParens: pair second), pair first localized
 			value: pair second asString].
 	menu invokeModal.
 	^ menu
@@ -613,20 +565,6 @@ ScriptablePhratchMorph >> stopAllSounds [
 	stage := self ownerOrYourselfThatIsAPhratchStageMorph.
 	stage ifNotNil: [stage stopAllSounds].
 
-]
-
-{ #category : #'*PhratchSound' }
-ScriptablePhratchMorph >> stopPlaying [
-	"Stop playing all movies and sounds."
-
-	| firstCostume |
-	costume stopPlaying.
-	self filterReset.
-	self setVolumeTo: 100.	"reset volume"	"exit camera mode"
-	(costume isKindOf: CameraMedia)
-		ifFalse: [ ^ self ].
-	firstCostume := media detect: [ :el | el isImage ] ifNone: [ ^ self ].
-	self lookLike: firstCostume mediaName
 ]
 
 { #category : #'*PhratchSound' }

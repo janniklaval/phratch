@@ -37,14 +37,3 @@ PhratchProcess >> doPlaySoundAndWait [
 	self pushStackFrame: (PhratchStackFrame new shouldYield: true).
 
 ]
-
-{ #category : #'*PhratchSound' }
-PhratchProcess >> stop [
-	"Permanently terminates this process."
-
-	stackFrame ifNotNil: [stackFrame stopMIDI; stopTalkThinkAsk].
-	readyToYield := true.
-	readyToTerminate := true.
-	topBlock ifNotNil: [topBlock phratchProc: nil].
-
-]
