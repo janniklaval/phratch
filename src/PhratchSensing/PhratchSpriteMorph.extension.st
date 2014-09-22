@@ -20,6 +20,9 @@ PhratchSpriteMorph >> attribute: attr [
 	'costume #' localized = a ifTrue: [^ self costumeIndex].
 	'size' localized = a ifTrue: [^ self scale].
 	
+	(Smalltalk at: #PhratchCategorySound ifPresent:['volume' localized = a ifTrue: [^ self volume]]).
+	
+
 	'name' localized = a ifTrue: [^ self objName].
 	'prototype' localized = a ifTrue: [^ self prototype].
 	'owner' localized = a ifTrue: [^ self ownerSprite].
