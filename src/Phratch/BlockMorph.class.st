@@ -7,9 +7,7 @@ Class {
 	#superclass : #Morph,
 	#instVars : [
 		'isSpecialForm',
-		'oldColor',
 		'highlightColor1',
-		'highlightColor2',
 		'shadowColor',
 		'hadError',
 		'blockLayoutNeeded',
@@ -266,14 +264,6 @@ BlockMorph >> codeString [
 
 ]
 
-{ #category : #accessing }
-BlockMorph >> color: aColor [
-	"Remember the color of this block, for lighting-up purposes."
-
-	super color: aColor.
-	oldColor := aColor.
-]
-
 { #category : #private }
 BlockMorph >> commentLayoutChanged [
 
@@ -303,9 +293,7 @@ BlockMorph >> computeHighlightColors [
 	s := color saturation.
 	v := color brightness.
 	highlightColor1 := Color h: h s: (s - 0.13) v: (v + 0.1).
-	highlightColor2 := Color h: h s: s v: (v + 0.07).
 	shadowColor := color mixed: 0.7 with: Color black. 
-
 ]
 
 { #category : #byob }
@@ -385,7 +373,7 @@ BlockMorph >> drawBodyOn: aCanvas [
 		color: color.
 	aCanvas
 		fillRectangle: (self left@(self top + 2) corner: (self left + 2)@(self bottom - 7))
-		color: highlightColor2.
+		color: color.
 
 	aCanvas
 		fillRectangle: ((self right - 1)@(self top + 3) corner: self right@(self bottom - 7))
@@ -499,7 +487,7 @@ BlockMorph >> drawReporterBodyOn: aCanvas [
 		color: color.
 	aCanvas
 		fillRectangle: (self left@(self top + 2) corner: (self left + 2)@(self bottom - 3))
-		color: highlightColor2.
+		color: color.
 
 	aCanvas
 		fillRectangle: ((self right - 1)@(self top + 2) corner: self right@(self bottom - 3))
@@ -530,7 +518,7 @@ BlockMorph >> drawSmoothTopEdgeOn: aCanvas [
 	right := self width - 1.
 
 	self drawHLineFrom: 2 to: right - 2 y: 0 color: highlightColor1 on: aCanvas.
-	self drawHLineFrom: 1 to: right - 1 y: 1 color: highlightColor2 on: aCanvas.
+	self drawHLineFrom: 1 to: right - 1 y: 1 color: color on: aCanvas.
 	self drawHLineFrom: 0 to: right y: 2 color: color on: aCanvas.
 
 ]
@@ -544,7 +532,7 @@ BlockMorph >> drawStopBodyOn: aCanvas [
 
 	aCanvas
 		fillRectangle: (self left@(self top + 2) corner: (self left + 2)@(self bottom - 3))
-		color: highlightColor2.
+		color: color.
 
 	aCanvas
 		fillRectangle: ((self right - 1)@(self top + 2) corner: self right@(self bottom - 3))
@@ -563,8 +551,8 @@ BlockMorph >> drawTopEdgeOn: aCanvas [
 	self drawHLineFrom: 2 to: gapStart y: 0 color: highlightColor1 on: aCanvas.
 	self drawHLineFrom: gapEnd to: right - 2 y: 0 color: highlightColor1 on: aCanvas.
 
-	self drawHLineFrom: 1 to: gapStart y: 1 color: highlightColor2 on: aCanvas.
-	self drawHLineFrom: gapEnd to: right - 1 y: 1 color: highlightColor2 on: aCanvas.
+	self drawHLineFrom: 1 to: gapStart y: 1 color: color on: aCanvas.
+	self drawHLineFrom: gapEnd to: right - 1 y: 1 color: color on: aCanvas.
 
 	self drawHLineFrom: 0 to: gapStart + 1 y: 2 color: color on: aCanvas.
 	self drawHLineFrom: gapEnd - 1 to: right y: 2 color: color on: aCanvas.
@@ -831,7 +819,6 @@ BlockMorph >> initialize [
 	blockLayoutNeeded := true.
 	isSpecialForm := false.
 	color := Color r: 0.4 g: 0.7 b: 0.8.
-	oldColor := color.
 	phratchProc := nil.
 	hadError := false.
 	lastLayoutTime := 0.
@@ -1087,11 +1074,10 @@ BlockMorph >> layoutChanged [
 { #category : #accessing }
 BlockMorph >> litUp: aBoolean [
 	"If the argument true, light up this block. Otherwise, revert to it's old color."
-	"Note: We use super color: so we don't overwrite oldColor. We also force a world update to ensure that the highlighting is seen by the user."
+	"Note: we force a world update to ensure that the highlighting is seen by the user."
 ScriptablePhratchMorph traceMode ifTrue:[
 	aBoolean
-		ifTrue:	[super color: (Color h: 60 s: 0.9 v: 0.89)]
-		ifFalse:	[oldColor ifNotNil: [super color: oldColor]].
+		ifTrue:	[self color: (Color h: 60 s: 0.9 v: 0.89)].
 
 	aBoolean ifTrue: [
 		World
@@ -1531,7 +1517,6 @@ BlockMorph >> updateCacheForm [
 	"Create a cached Form of this stack's appearance."
 
 	| c  cacheForm |
-	oldColor ifNotNil: [color := oldColor].
 	c := FormCanvas extent: self fullBounds extent depth: 32.
 	c := c copyOffset: self topLeft negated.
 	self drawOn: c.

@@ -362,18 +362,6 @@ ScriptablePhratchMorph >> addGenericVariableBlocksTo: page x: x y: startY [
 				ifFalse: [ self varNames first ] ].
 	vName ifNil: [ vName := '' ].
 	varBlocks := OrderedCollection new.
-	block := SetterBlockMorph new
-		initSetterForVar: vName;
-		receiver: self blockReceiver;
-		yourself.
-	block expressionArg stringExpression: '0'.
-	varBlocks add: block.
-	block := SetterBlockMorph new
-		initChangerForVar: vName;
-		receiver: self blockReceiver;
-		yourself.
-	block expressionArg numExpression: '1'.
-	varBlocks add: block.
 	(self blocksFor: 'variables')
 		do: [ :b | 
 			(b isBlockMorph)
@@ -861,7 +849,7 @@ ScriptablePhratchMorph >> cameraIsOpen [
 { #category : #variables }
 ScriptablePhratchMorph >> changeVar: varName by: increment [
 	"Change the value of the given variable of this object by the given amount."
-	<phratchItem: 'change $Variable$ by $Number$' kind: #- category: 'variables' defaultValues: #('' 1) subCategory: #a4 special: #()>
+	<phratchItem: 'change $Variable$ by $Number$' kind: #- category: 'variables' defaultValues: #('' 1) subCategory: #a0 special: #()>
 	| stage n frame w |
 
 	(vars includesKey: varName asString) ifFalse: [
@@ -3959,7 +3947,7 @@ ScriptablePhratchMorph >> setSizeTo: percent [
 { #category : #variables }
 ScriptablePhratchMorph >> setVar: varName to: newValue [
 	"Set the value of the given variable of this object to the given value."
-	<phratchItem: 'set $Variable$ to $String$' kind: #- category: 'variables' defaultValues: #('' '0') subCategory: #a4 special: #()>
+	<phratchItem: 'set $Variable$ to $String$' kind: #- category: 'variables' defaultValues: #('' '0') subCategory: #a0 special: #()>
 	| vName stage sf w |
 
 	"OOP interface:"

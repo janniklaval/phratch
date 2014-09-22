@@ -236,7 +236,7 @@ IfElseBlockMorph >> drawVerticalBarOn: aCanvas [
 		color: color.
 	aCanvas
 		fillRectangle: (left@(top + 2) corner: (left + 2)@blockBottom)
-		color: highlightColor2.
+		color: color.
 
 	aCanvas
 		fillRectangle: (barRight@(topBarBottom + 4) corner: (barRight + 1)@blockBottom)

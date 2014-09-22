@@ -65,7 +65,6 @@ ReporterBlockMorph >> computeHighlightColors [
 	s := color saturation.
 	v := color brightness.
 	highlightColor1 := Color h: h s: (s - 0.13) v: (v + 0.17).
-	highlightColor2 := Color h: h s: s v: (v + 0.06).
 	shadowColor := color mixed: 0.8 with: Color black.
 
 ]
@@ -107,7 +106,7 @@ ReporterBlockMorph >> drawBooleanOn: aCanvas [
 	xInset := 0.
 	[topY >= 0] whileTrue: [
 		topY = 0 ifTrue: [c := highlightColor1].
-		topY = 1 ifTrue: [c := highlightColor2].
+		topY = 1 ifTrue: [c := color].
 		topY > 1 ifTrue: [c := color].
 		self addHLineFrom: xInset to: right - xInset y: topY color: c to: l.
 		(topY > 1) & (xInset > 0) ifTrue: [
@@ -159,8 +158,7 @@ ReporterBlockMorph >> drawNumericOn: aCanvas [
 		xInset := radius - (radius squared - (radius - topY - 1) squared) sqrt rounded.
 
 		topY = 0 ifTrue: [c := highlightColor1].
-		topY = 1 ifTrue: [c := highlightColor2].
-		topY > 1 ifTrue: [c := color].
+		topY >= 1 ifTrue: [c := color].
 		self addHLineFrom: xInset to: right - xInset y: topY color: c to: l.
 		(xInset > 0) & (topY > 1) ifTrue: [
 			self addPoint: xInset@topY color: highlightColor1 to: l.

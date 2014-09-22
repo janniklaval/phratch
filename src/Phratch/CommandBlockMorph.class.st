@@ -434,7 +434,7 @@ CommandBlockMorph >> drawBodyOn: aCanvas [
 	leftEdge do: [:rect |
 		aCanvas
 			fillRectangle: rect
-			color: highlightColor2].
+			color: color].
 
 	middle do: [:rect |
 		aCanvas

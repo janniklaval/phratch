@@ -65,7 +65,6 @@ CSlotMorph >> computeHighlightColors [
 	s := color saturation.
 	v := color brightness.
 	highlightColor1 := Color h: h s: (s - 0.13) v: (v + 0.1).
-	highlightColor2 := Color h: h s: s v: (v + 0.07).
 	shadowColor := color mixed: 0.55 with: Color black.
 
 ]
@@ -193,7 +192,7 @@ CSlotMorph >> drawVerticalBarOn: aCanvas [
 
 	aCanvas
 		fillRectangle: ((self bounds topRight + (-1@2)) corner: (self bounds corner - (0@3)))
-		color: highlightColor2.
+		color: color.
 
 ]
 

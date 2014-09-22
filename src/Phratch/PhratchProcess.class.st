@@ -915,10 +915,6 @@ PhratchProcess >> evaluateFor: aStageMorph [
 		(#closeCustomBlock = expression) ifTrue: [
 		^self closeCustomBlock]].
 
-	stackFrame shouldUnlight ifTrue: [
-		expression litUp: false.
-		^ self popStackFrame].
-
 	(expression isReporterScriptBlockMorph) ifTrue: [
 		self returnValueToParentFrame: expression evaluate.
 		^ self popStackFrame ].
@@ -1132,19 +1128,19 @@ PhratchProcess >> nop [
 { #category : #'BYOB-pause/resume' }
 PhratchProcess >> pause [
 	timeOffset := nil.
-	isPaused := true
+	isPaused := true.
+	doneWithDebugging := false
 ]
 
 { #category : #accessing }
 PhratchProcess >> popStackFrame [
 	"Pops the current stack frame off the top of the stack, so that the next one becomes the current frame."
 
-	|  frame   command |
+	|  frame  |
 
 	frame := stackFrame.
 	stackFrame := stackFrame parentFrame.
-
-	command := frame expression.
+	frame expression.
 
 	^self.
 
@@ -1189,9 +1185,6 @@ PhratchProcess >> returnValueToParentFrame: anObject [
 		obj fixInitialFrame].
 	stackFrame ifNil: [^ self].
 	f := stackFrame parentFrame.
-	[f notNil and: [f shouldUnlight ] ] whileTrue: [
-		f := f parentFrame]. 
-
 	f ifNotNil: [f addArgument: obj].
 
 	((blockToDebug isBlockMorph) and: [self currentBlock isReporterBlockMorph]) ifTrue: [
@@ -1297,11 +1290,6 @@ PhratchProcess >> stop [
 	readyToTerminate := true.
 	topBlock ifNotNil: [topBlock phratchProc: nil].
 
-]
-
-{ #category : #'BYOB-variables' }
-PhratchProcess >> temporaryVariables [
-	^tempVars
 ]
 
 { #category : #accessing }

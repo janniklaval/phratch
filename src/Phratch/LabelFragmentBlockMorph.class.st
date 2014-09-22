@@ -66,7 +66,7 @@ LabelFragmentBlockMorph >> drawOn: aCanvas [
 	toggle := 0.
 	[topY >= 0] whileTrue: [
 		topY = 0 ifTrue: [c := highlightColor1].
-		topY = 1 ifTrue: [c := highlightColor2].
+		topY = 1 ifTrue: [c := color].
 		topY > 1 ifTrue: [c := color].
 		self addHLineFrom: xInset to: right - xInset y: topY color: c to: l.
 		(topY > 1) & (xInset > 0) ifTrue: [

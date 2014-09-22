@@ -187,8 +187,8 @@ PhratchViewerMorph >> target: aPhratchObject [
 		ifTrue: [self currentCategory: currentCategory]
 		ifFalse: [self currentCategory: categories first].
 
-	self isInWorld ifTrue: [self world startSteppingSubmorphsOf: self].
-
+	"self isInWorld ifTrue: [self world startSteppingSubmorphsOf: self].
+"
 ]
 
 { #category : #private }
