@@ -231,7 +231,7 @@ PhratchScriptEditorMorph >> createTabPane [
 	tabOffForm := (PhratchFrameMorph skinAt: #tabOff).
 
 	"add the tabs"
-	(Smalltalk at: #PhratchCategorySound ifPresent:[#(Scripts Costumes Sounds)] ifAbsent: [#(Scripts Costumes)]) 
+	({#Scripts . #Costumes . Smalltalk at: #PhratchCategorySound ifPresent:[#Sounds]}) 
 	 do: [:spec |
 		tabID := spec asString.
 		tabLabel := tabID localized.
