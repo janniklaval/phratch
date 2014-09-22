@@ -53,3 +53,11 @@ PhratchFrameMorph >> newSound [
 	scriptsPane tabPane currentTab: 'Sounds'.
 	viewerPane target recordSound.
 ]
+
+{ #category : #'*PhratchSound' }
+PhratchFrameMorph >> openMIDI [
+	"Prompt the user to select a MIDI port number, then open it."
+
+	workPane openMIDI.
+
+]

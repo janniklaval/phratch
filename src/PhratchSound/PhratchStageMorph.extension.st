@@ -34,6 +34,33 @@ PhratchStageMorph >> notePlayerFor: aPhratchObject [
 ]
 
 { #category : #'*PhratchSound' }
+PhratchStageMorph >> openMIDI [
+	"Prompt the user to select a MIDI port number, then open it."
+
+	| possiblePorts dir menu |
+	self closeMIDI.
+	possiblePorts := (0 to: SimpleMIDIPort primPortCount - 1)
+		select: [ :i | 
+			dir := SimpleMIDIPort primPortDirectionalityOf: i.
+			{2 . 3} includes: dir ].	"out or in/out port"
+	possiblePorts size = 0
+		ifTrue: [ ^ self inform: 'No MIDI ports currently available.' ].
+	menu := MenuMorph new
+		defaultTarget: self;
+		title: 'MIDI port:' localized;
+		yourself.
+	possiblePorts
+		do: [ :i | 
+			menu
+				add: (SimpleMIDIPort portDescription: i)
+				target: self
+				selector: #midiPortNum:
+				argument: i ].
+	menu popUpInWorld.
+	self tryToOpenMidiPort
+]
+
+{ #category : #'*PhratchSound' }
 PhratchStageMorph >> setTempoTo: aNumber [
 
 	tempoBPM := (aNumber asNumberNoError within: 20 and: 500).
@@ -55,4 +82,29 @@ PhratchStageMorph >> tempo [
 
 	^ tempoBPM
 
+]
+
+{ #category : #'*PhratchSound' }
+PhratchStageMorph >> tryToOpenMidiPort [
+	"Attempt to open the MIDI port. First try the port selected by the user, if any. If that port number is not a MIDI output port, try to find another port number. If all measures fail, leave midiPort set to nil."
+
+	| possiblePorts dir portNum |
+	Smalltalk os isUnix
+		ifTrue: [ 
+			midiPort := nil.
+			^ self ].
+	possiblePorts := (0 to: SimpleMIDIPort primPortCount - 1)
+		select: [ :i | 
+			dir := SimpleMIDIPort primPortDirectionalityOf: i.
+			{2 . 3} includes: dir ].	"out or in/out port"
+	possiblePorts size = 0
+		ifTrue: [ 
+			midiPort := nil.
+			^ self ].	"no midi ports"
+	portNum := (possiblePorts includes: midiPortNum)
+		ifTrue: [ midiPortNum ]
+		ifFalse: [ possiblePorts first ].	"use the port requested by the user"	"use the first available port"
+	[ 
+	midiPort := SimpleMIDIPort openOnPortNumber: portNum.
+	midiPort ensureOpen ] ifError: [ midiPort := nil ]
 ]
