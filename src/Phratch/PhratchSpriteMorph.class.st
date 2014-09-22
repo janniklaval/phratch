@@ -1124,8 +1124,7 @@ PhratchSpriteMorph >> rightButtonMenu [
 	menu add: 'export this sprite' localized action: #exportObject.
 	
 	menu addLine.
-	menu add: 'duplicate' localized action: #duplicate.
-	menu add: 'clone' localized action: #spawn.
+	menu add: 'duplicate' localized action: #spawn.
 	menu add: 'delete' localized action: #undoableDeleteSprite.
 	menu addLine.
 	menu add: 'resize this sprite' localized action: #resizeHandle.

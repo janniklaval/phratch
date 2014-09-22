@@ -352,12 +352,11 @@ LibraryItemMorph >> rightButtonMenu [
 	menu add: 'export this sprite' localized action: #exportObject.
 
 	menu addLine.
-	menu add: 'duplicate' localized action: #duplicateNoAttach.
+	menu add: 'duplicate' localized action: #spawn.
 	menu add: 'delete' localized action: #undoableDeleteSprite.
 	(self target isPhratchSpriteMorph)
 		ifTrue: [ 
 			menu addLine.
-			menu add: 'clone' localized action: #spawn.
 			menu add: 'parent...' localized action: #choosePrototype.
 			self target instances size > 0
 				ifTrue: [ menu add: 'children...' localized target: [self childrenMenu] selector: #value argumentList: #() ].
