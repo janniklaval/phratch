@@ -280,13 +280,13 @@ ConfigurationOfPhratch >> baseline40: spec [
 			spec blessing: #baseline.
 			spec repository: 'http://smalltalkhub.com/mc/JLaval/Phratch/main'.
 			
-			spec project: 'Sound' with: [
+			"spec project: 'Sound' with: [
 				spec 
 					className: 'ConfigurationOfPharoSound';
 					file: 'ConfigurationOfPharoSound' ;
 					version: #stable;
 					repository: 'http://smalltalkhub.com/mc/PharoExtras/Sound/main'.
-			].
+			]."
 		
 			spec project: 'OSProcess' with: [
 				spec
