@@ -295,7 +295,7 @@ ConfigurationOfPhratch >> baseline40: spec [
 			spec repository: 'http://smalltalkhub.com/mc/JLaval/Phratch/main'.
 			spec
 				package: 'Phratch' with: [ 
-					spec requires: #('Sound' 'OSProcess')
+					spec requires: #('OSProcess')
 			].
 			spec
 				package: 'PhratchColor' with: [ 
@@ -420,7 +420,6 @@ ConfigurationOfPhratch >> version40: spec [
 				package: 'PhratchSensing';
 				package: 'PhratchDebugger'.
 			spec
-				project: 'Sound' with: #stable;
 				project: 'OSProcess' with: #stable.
 	].
 ]
