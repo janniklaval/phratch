@@ -2089,14 +2089,6 @@ PhratchFrameMorph >> open: aFileName [
 	]
 ]
 
-{ #category : #other }
-PhratchFrameMorph >> openMIDI [
-	"Prompt the user to select a MIDI port number, then open it."
-
-	workPane openMIDI.
-
-]
-
 { #category : #'file read/write' }
 PhratchFrameMorph >> openPhratchProject [
 	"Allow the user to select a project to open, then open that project."
@@ -2360,9 +2352,10 @@ PhratchFrameMorph >> projectIsEmpty [
 	allScriptables := workPane submorphs copyWith: workPane.
 	defaultCostumes := Set
 		with: ScriptablePhratchMorph defaultBackgroundForm.
-	defaultSnds := Set
+	defaultSnds := Set new.
+	Smalltalk at: #PhratchCategorySound ifPresent:[defaultSnds := Set
 		with: ScriptablePhratchMorph popSound
-		with: ScriptablePhratchMorph meowSound.
+		with: ScriptablePhratchMorph meowSound].
 
 	PhratchFrameMorph defaultSprite ifNotNil: [
 		PhratchFrameMorph defaultSprite media do: [:media |

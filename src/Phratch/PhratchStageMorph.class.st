@@ -542,33 +542,6 @@ PhratchStageMorph >> objName [
 
 ]
 
-{ #category : #midi }
-PhratchStageMorph >> openMIDI [
-	"Prompt the user to select a MIDI port number, then open it."
-
-	| possiblePorts dir menu |
-	self closeMIDI.
-	possiblePorts := (0 to: SimpleMIDIPort primPortCount - 1)
-		select: [ :i | 
-			dir := SimpleMIDIPort primPortDirectionalityOf: i.
-			{2 . 3} includes: dir ].	"out or in/out port"
-	possiblePorts size = 0
-		ifTrue: [ ^ self inform: 'No MIDI ports currently available.' ].
-	menu := MenuMorph new
-		defaultTarget: self;
-		title: 'MIDI port:' localized;
-		yourself.
-	possiblePorts
-		do: [ :i | 
-			menu
-				add: (SimpleMIDIPort portDescription: i)
-				target: self
-				selector: #midiPortNum:
-				argument: i ].
-	menu popUpInWorld.
-	self tryToOpenMidiPort
-]
-
 { #category : #'byob OOP' }
 PhratchStageMorph >> passiveLookLike: costumeName [
 	"Change to the costume with the given name. Noop if there is no costume of the given name in my library."
@@ -586,7 +559,7 @@ PhratchStageMorph >> pauseAllProcesses [
 
 	| |
 	"pause all sounds"
-	SoundPlayer pauseAll.
+	Smalltalk at: #PhratchCategorySound ifPresent:[SoundPlayer pauseAll].
 		
 	"clear all processes, including those with error feedback"
 "
@@ -677,7 +650,7 @@ PhratchStageMorph >> resumeAllProcesses [
 	"Pause all running Phratch processes."
 
 	"resume all sounds"
-	SoundPlayer resumeAll.
+	Smalltalk at: #PhratchCategorySound ifPresent:[SoundPlayer resumeAll].
 
 	"clear all processes, including those with error feedback"
 
@@ -905,12 +878,12 @@ PhratchStageMorph >> stopAll [
 	| sFrame |
 	World hands do: [:h | h newKeyboardFocus: nil; clearUnclaimedKeystrokes].
 	Sensor clearKeystate.
-	(Smalltalk at: #PhratchCategorySound ifPresent:[SoundPlayer stopPlayingAll]).
-	self class stopSoundRecorder.
+	(Smalltalk at: #PhratchCategorySound ifPresent:[SoundPlayer stopPlayingAll.
+	self class stopSoundRecorder]).
 	self stopAllProcesses.
 	self stopAsks.
 	self deleteAllClones.
-	self midiAllNotesOff.
+	(Smalltalk at: #PhratchCategorySound ifPresent:[self midiAllNotesOff]).
 	self stopPlaying.
 	(Smalltalk at: #PhratchCategorySound ifPresent:[self stopAllSounds]).
 	self allMorphsDo: [:m |
@@ -996,31 +969,6 @@ PhratchStageMorph >> transformFrom: uberMorph [
 	^ (owner transformFrom: uberMorph) composedWith: transform
 
 
-]
-
-{ #category : #midi }
-PhratchStageMorph >> tryToOpenMidiPort [
-	"Attempt to open the MIDI port. First try the port selected by the user, if any. If that port number is not a MIDI output port, try to find another port number. If all measures fail, leave midiPort set to nil."
-
-	| possiblePorts dir portNum |
-	Smalltalk os isUnix
-		ifTrue: [ 
-			midiPort := nil.
-			^ self ].
-	possiblePorts := (0 to: SimpleMIDIPort primPortCount - 1)
-		select: [ :i | 
-			dir := SimpleMIDIPort primPortDirectionalityOf: i.
-			{2 . 3} includes: dir ].	"out or in/out port"
-	possiblePorts size = 0
-		ifTrue: [ 
-			midiPort := nil.
-			^ self ].	"no midi ports"
-	portNum := (possiblePorts includes: midiPortNum)
-		ifTrue: [ midiPortNum ]
-		ifFalse: [ possiblePorts first ].	"use the port requested by the user"	"use the first available port"
-	[ 
-	midiPort := SimpleMIDIPort openOnPortNumber: portNum.
-	midiPort ensureOpen ] ifError: [ midiPort := nil ]
 ]
 
 { #category : #'event handling' }

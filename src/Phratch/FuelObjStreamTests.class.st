@@ -56,7 +56,7 @@ FuelObjStreamTests >> testFixedFormatClass [
 	self equalityTest: #(1 2 3) asByteArray.
 	self equalityTest: (String withAll: 'hello').
 
-	self equalityTest: (SoundBuffer fromArray: #(1 2 3 4)).
+"	self equalityTest: (SoundBuffer fromArray: #(1 2 3 4))."
 	self equalityTest: (Bitmap withAll: #(0 1 2 2147483647 2147483648 4294967295)).
 
 	self equalityTest: #(1 2 3) asOrderedCollection.
@@ -121,7 +121,7 @@ FuelObjStreamTests >> writeTestFile [
 	all add: 'This is a string.'.
 	all add: #thisIsASymbol.
 	all add: #(100 101 102 253 254 255) asByteArray.
-	all add: ScriptablePhratchMorph popSound samples.
+	Smalltalk at: #PhratchCategorySound ifPresent:[all add: ScriptablePhratchMorph popSound samples].
 	all add: (ImageMorph defaultForm asFormOfDepth: 32) bits.
 	all add: (Array with: 1 with: 2 with: 3).
 	all add: (Array with: 1 with: 2 with: 3) asOrderedCollection.

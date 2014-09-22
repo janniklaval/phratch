@@ -24,15 +24,12 @@ PhratchInstaller class >> beginInstall [
 	StartupLoader default addAtStartupInImageDirectory: items.
 	StartupLoader default loadFromDefaultLocations.
 
-	AbstractSound initialize.
-	SampledSound initialize.
+	"AbstractSound initialize.
+	SampledSound initialize."
 	
 	InputEventSensor addInstVarNamed: #keyPressed.
 
-	SoundSystem soundEnabled: true.
-
-
-	SoundPlayer stopReverb.
+	"SoundPlayer stopReverb."
 	(Workspace
 		openContents:
 			'"To try it out run the following expression:" ' 
@@ -191,7 +188,7 @@ PhratchInstaller class >> gotPhratchSkins [
 { #category : #'class initialization' }
 PhratchInstaller class >> initialize [
 "	InputEventSensor startUp."
-	SoundPlayer initialize; shutDown; startUp.
+	"SoundPlayer initialize; shutDown; startUp."
 	DeclaredSprites := OrderedCollection new.
 ]
 
