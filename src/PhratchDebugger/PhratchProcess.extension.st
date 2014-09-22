@@ -32,3 +32,8 @@ PhratchProcess >> jumpOver [
 	nextBlockToDebug := cb nextBlock.
 	isPaused := false
 ]
+
+{ #category : #'*PhratchDebugger' }
+PhratchProcess >> temporaryVariables [
+	^tempVars
+]
