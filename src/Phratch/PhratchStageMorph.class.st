@@ -401,7 +401,7 @@ PhratchStageMorph >> initialize [
 	self enableDragNDrop: true.
 	objName := 'Stage' localized.
 	costume := self defaultImageMedia.
-	media := OrderedCollection with: costume "with: SoundMedia new".
+	media := OrderedCollection with: costume with: SoundMedia new.
 	hPan := 0.
 	vPan := 0.
 	runningBlocks := OrderedCollection new.
@@ -904,14 +904,14 @@ PhratchStageMorph >> stopAll [
 	| sFrame |
 	World hands do: [:h | h newKeyboardFocus: nil; clearUnclaimedKeystrokes].
 	Sensor clearKeystate.
-	"SoundPlayer stopPlayingAll."
+	(Smalltalk at: #PhratchCategorySound ifPresent:[SoundPlayer stopPlayingAll]).
 	self class stopSoundRecorder.
 	self stopAllProcesses.
 	self stopAsks.
 	self deleteAllClones.
 	self midiAllNotesOff.
 	self stopPlaying.
-	"self stopAllSounds."
+	(Smalltalk at: #PhratchCategorySound ifPresent:[self stopAllSounds]).
 	self allMorphsDo: [:m |
 		(m isScriptablePhratchMorph) ifTrue: [m stopPlaying]].
 

@@ -717,10 +717,10 @@ PhratchFrameMorph >> closeMediaEditorsAndDialogs [
 		mList do: [:m | m cancelled; delete].
 		paintingInProgress := false].
 
-	"mList := PhratchSoundRecorderDialogMorph allInstances select: [:m | m isInWorld].
+	(Smalltalk at: #PhratchCategorySound ifPresent:[mList := PhratchSoundRecorderDialogMorph allInstances select: [:m | m isInWorld].
 	mList size > 0 ifTrue: [
 		(DialogBoxMorph ask: 'Close sound recorder?') ifFalse: [^ false].
-		mList do: [:m | m cancelled; delete]]."
+		mList do: [:m | m cancelled; delete]]]).
 
 	mList := DialogBoxMorph allInstances select: [:m | m isInWorld].
 	mList size > 0 ifTrue: [
@@ -1653,7 +1653,7 @@ current project."
 PhratchFrameMorph >> importSpriteOrProject: fileNameOrData [
 	"Read the sprite or project file and merge into the current project."
 
-	| data f importedStage defaultForm  |
+	| data f importedStage defaultForm defaultSound |
 	data := fileNameOrData.
 	(data isKindOf: FileReference) ifTrue: [  "read the contents of a local file"
 		fileNameOrData exists ifFalse: [^ self].
@@ -1682,12 +1682,13 @@ PhratchFrameMorph >> importSpriteOrProject: fileNameOrData [
 
 	"add imported background costumes and scripts to my stage, filtering out default items"
 	defaultForm := workPane defaultImageMedia form hibernateForPhratch.
-	"defaultSound := SoundMedia new sound."
+	(Smalltalk at: #PhratchCategorySound ifPresent:[defaultSound := SoundMedia new sound]).
 	importedStage media do: [:media |
 		(media isImage and: [media form hibernate bits ~= defaultForm bits])
 			ifTrue: [workPane addMediaItem: media].
-		"(media isSound and: [media sound samples ~= defaultSound samples])
-			ifTrue: [workPane addMediaItem: media]"].
+		(Smalltalk at: #PhratchCategorySound ifPresent:[(media isSound and: [media sound samples ~= defaultSound samples])
+			ifTrue: [workPane addMediaItem: media]])
+	].
 
 	"add imported global custom block definitions"
 	importedStage customBlocks ifNotNil: [
@@ -1713,8 +1714,8 @@ PhratchFrameMorph >> importSpriteOrProject: fileNameOrData [
 			m startStepping.
 			workPane sprites addLast: m.
 			self view: m tab: 'Scripts' category: 'motion'.
-			m referencePosition ifNotNil: [
-				m referencePosition: m referencePosition + (50@ -50) ].
+			m refPos ifNotNil: [
+				m referencePosition: m refPos + (50@ -50) ].
 			m layoutChanged.
 			m changed
 			]].
@@ -2573,8 +2574,8 @@ PhratchFrameMorph >> setDefaultSprite [
 			importedProject ifNil: [^ self].
 			
 			"add imported global custom block definitions"
-"
-			importedProject customBlocks ifNotNil: [
+
+"			importedProject customBlocks ifNotNil: [
 				importedProject customBlocks do: [:eachDef |
 					workPane sprites, {workPane} do: [:obj |
 						obj
@@ -2591,11 +2592,12 @@ PhratchFrameMorph >> setDefaultSprite [
 		(d / fName) asFileReference exists ifTrue: [
 			DefaultSprite := PhratchSpriteMorph new
 				importMedia: (d / fName) fullName;
-				"addMediaItem: (SoundMedia new
+				yourself.
+			(Smalltalk at: #PhratchCategorySound ifPresent:[
+				DefaultSprite addMediaItem: (SoundMedia new
 					mediaName: 'pop' localized;
 					sound: PhratchSpriteMorph popSound;
-		yourself);"
-		yourself.
+					yourself)]).
 			^ self]].
 
 ]
@@ -3016,7 +3018,7 @@ PhratchFrameMorph >> updateMediaCategoryFor: anObject [
 	"Update the media viewer for the given object's media category. Do nothing if the media category of the given object is not being viewed."
 
 	scriptsPane target = anObject ifTrue: [
-		scriptsPane categoryChanged: 'Sounds'.
+		(Smalltalk at: #PhratchCategorySound ifPresent:[scriptsPane categoryChanged: 'Sounds']).
 		scriptsPane categoryChanged: 'Costumes'].
 	viewerPane target = anObject ifTrue: [
 		viewerPane categoryChanged: 'Sound'].

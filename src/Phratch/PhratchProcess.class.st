@@ -1285,7 +1285,9 @@ PhratchProcess >> stepUntilDoneFor: aStageMorph [
 PhratchProcess >> stop [
 	"Permanently terminates this process."
 
-	stackFrame ifNotNil: [stackFrame "stopMIDI;" stopTalkThinkAsk].
+	stackFrame ifNotNil: [
+		(Smalltalk at: #PhratchCategorySound ifPresent:[stackFrame stopMIDI]). 
+		stackFrame stopTalkThinkAsk].
 	readyToYield := true.
 	readyToTerminate := true.
 	topBlock ifNotNil: [topBlock phratchProc: nil].

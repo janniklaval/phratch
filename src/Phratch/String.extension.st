@@ -73,10 +73,7 @@ String >> indexOfSeparatorStartingAt: index [
 String >> localized [
 	"Answer myself translated into the current Scratch language. If there is no translation for me, then answer myself."
 
-	| selfAsString |
-	selfAsString := self asString.
-	^( PhratchTranslator translationFor: selfAsString).
-
+	^ PhratchTranslator translationFor: self.
 ]
 
 { #category : #'*Phratch-Extensions' }

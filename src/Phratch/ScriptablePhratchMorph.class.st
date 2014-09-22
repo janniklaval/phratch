@@ -2458,10 +2458,11 @@ ScriptablePhratchMorph >> importMedia: fileName [
 
 	elList := OrderedCollection new.
 
-	"(#(aif aiff wav mp3) includes: extensionLoc) ifTrue: [
-		baseName := self mediaNameFromFileName: fileName default: 'sound'.
-		[elList addLast: (SoundMedia new loadFile: fileName)] ifError: [^ self]]."
-
+	(Smalltalk at: #PhratchCategorySound ifPresent:[
+		(#(aif aiff wav mp3) includes: extensionLoc) ifTrue: [
+			baseName := self mediaNameFromFileName: fileName default: 'sound'.
+			[elList addLast: (SoundMedia new loadFile: fileName)] ifError: [^ self]].
+	]).
 	(#(jpg jpeg gif bmp png) includes: extensionLoc) ifTrue: [
 		baseName := self
 			mediaNameFromFileName: fileName
@@ -4103,8 +4104,8 @@ ScriptablePhratchMorph >> stopPlaying [
 
 	| firstCostume |
 	costume stopPlaying.
-	"self filterReset."
-	"self setVolumeTo: 100."	"reset volume"	"exit camera mode"
+	self filterReset.
+	(Smalltalk at: #PhratchCategorySound ifPresent:[self setVolumeTo: 100]).	"reset volume"	"exit camera mode"
 	(costume isKindOf: CameraMedia)
 		ifFalse: [ ^ self ].
 	firstCostume := media detect: [ :el | el isImage ] ifNone: [ ^ self ].
