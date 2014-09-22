@@ -1,6 +1,29 @@
 Extension { #name : #SampledSound }
 
 { #category : #'*PhratchSound' }
+SampledSound >> currentPosition [
+	"Answer the current position of the playback head in seconds since the start of this sound (at the original sampling)."
+
+	| sampleIndex |
+	sampleIndex := indexHighBits + (scaledIndex >> IncrementFractionBits).
+	^ sampleIndex asFloat / originalSamplingRate
+
+]
+
+{ #category : #'*PhratchSound' }
+SampledSound >> equals: aSampledSound [
+	"Answer true if the receiver is exactly the same as the given SampledSound."
+
+	self == aSampledSound ifTrue: [^ true].
+
+	self class = aSampledSound class ifFalse: [^ false].
+	(originalSamplingRate = aSampledSound originalSamplingRate) ifFalse: [^ false].
+
+	^ samples = aSampledSound samples
+
+]
+
+{ #category : #'*PhratchSound' }
 SampledSound classSide >> findWAVEChunk: chunkID in: aBinaryStream ifAbsent: notFoundBlock [
 	"Search the given stream from its beginning for a chunk with the given four-letter id and answer the size of the chunk. The stream is left positioned at the start of the chunk data. If  no chunk of the given type is found, answer the result of evaluating notFoundBlock."
 

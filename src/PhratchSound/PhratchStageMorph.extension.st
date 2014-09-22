@@ -1,6 +1,42 @@
 Extension { #name : #PhratchStageMorph }
 
 { #category : #'*PhratchSound' }
+PhratchStageMorph >> closeMIDI [
+	"Close the MIDI port and clear the note player dictionary."
+
+	midiPort ifNotNil: [
+		midiPort close.
+		midiPort := nil].
+	notePlayerDict := Dictionary new.
+
+]
+
+{ #category : #'*PhratchSound' }
+PhratchStageMorph >> midiAllNotesOff [
+	"If the MIDI port is open, send an 'all notes off' command on every channel."
+
+	midiPort ifNil: [^ self].
+	midiPort ensureOpenIfFail: [self closeMIDI].
+	notePlayerDict do: [:player | player noteOff].
+
+]
+
+{ #category : #'*PhratchSound' }
+PhratchStageMorph >> midiPortNum [
+
+	^ midiPortNum
+
+]
+
+{ #category : #'*PhratchSound' }
+PhratchStageMorph >> midiPortNum: anInteger [
+
+	midiPortNum := anInteger.
+
+
+]
+
+{ #category : #'*PhratchSound' }
 PhratchStageMorph >> notePlayerFor: aPhratchObject [
 	"Answer a note player for the given object, creating one if necessary. Open the MIDI port if necessary."
 

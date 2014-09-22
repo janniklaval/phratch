@@ -72,6 +72,13 @@ ScriptablePhratchMorph >> isLoud [
 ]
 
 { #category : #'*PhratchSound' }
+ScriptablePhratchMorph class >> meowSound [
+
+	^ MeowSound ifNil: [MeowSound := SampledSound fromFileNamed: (((FileSystem workingDirectory / PhratchInstaller skinFolder) / 'Kitten.wav') fullName)]
+
+]
+
+{ #category : #'*PhratchSound' }
 ScriptablePhratchMorph >> midiDrumMenu [
 	"Provides a drop-down menu for setting the drum number."
 
@@ -367,6 +374,13 @@ ScriptablePhratchMorph >> playSound: soundName [
 	| snd |
 	snd := self soundNamed: soundName ifAbsent: [^ self].
 	snd playFromStart.
+
+]
+
+{ #category : #'*PhratchSound' }
+ScriptablePhratchMorph class >> popSound [
+
+	^ PopSound ifNil: [PopSound := SampledSound fromFileNamed: ((FileSystem workingDirectory / PhratchInstaller skinFolder/ 'Pop.wav') fullName)]
 
 ]
 
