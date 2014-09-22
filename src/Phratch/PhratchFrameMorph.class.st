@@ -94,8 +94,9 @@ PhratchFrameMorph class >> close [
 { #category : #'initialize-release' }
 PhratchFrameMorph class >> closeAndOpen [
 	"Close Phratch window but don't quit Pharo"
-	(DialogBoxMorph ask: 'Pay attention, you will loose your current project if not saved.')
-		ifFalse: [ ^ self ].
+	PhratchFrameMorph allInstances size > 0 ifTrue:[
+		(DialogBoxMorph ask: 'Pay attention, you will loose your current project if not saved.')
+			ifFalse: [ ^ self ]].
 	PhratchFrameMorph allInstancesDo: [ :i | i delete ].
 	PhratchFrameMorph open
 ]
@@ -192,7 +193,7 @@ PhratchFrameMorph class >> menuCommandOn: aBuilder [
 	(aBuilder item: #Phratch)
 		order: 0.1;
 		icon: ((ImageMorph withForm: (PhratchFrameMorph skinAt: 'phratchicon')) form magnifyBy: 0.38);
-		action:[self openOneInstance].
+		action:[self closeAndOpen].
 ]
 
 { #category : #'initialize-release' }
