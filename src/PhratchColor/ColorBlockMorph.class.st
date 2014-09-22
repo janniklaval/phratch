@@ -43,19 +43,19 @@ ColorBlockMorph >> drawOn: aCanvas [
 	xInset := 0.
 	[topY >= 0] whileTrue: [
 		topY = 0 ifTrue: [c := (highlightColor1 mixed: ((self height // 2) - topY / (self height) + 0.5) with: highlightColor1 dansDarker)].
-		topY = 1 ifTrue: [c := (highlightColor2 mixed: ((self height // 2) - topY / (self height) + 0.5) with: highlightColor2 dansDarker)].
+		topY = 1 ifTrue: [c := (color mixed: ((self height // 2) - topY / (self height) + 0.5) with: color dansDarker)].
 		topY > 1 ifTrue: [c := color lighter mixed: ((self height // 2) - topY / (self height) + 0.5) with: color dansDarker].
 		self drawHLineFrom: 0 to: right y: topY color: c on: aCanvas.
 		(topY > 1)" & (xInset > 0)" ifTrue: [
 			self drawPoint: 0@topY color: (highlightColor1 mixed: ((self height // 2) - topY / (self height) + 0.5) with: highlightColor1 dansDarker) on: aCanvas.
-			self drawPoint: 1@topY color: (highlightColor2 mixed: ((self height // 2) - topY / (self height) + 0.5) with: highlightColor2 dansDarker) on: aCanvas.
+			self drawPoint: 1@topY color: (color mixed: ((self height // 2) - topY / (self height) + 0.5) with: color dansDarker) on: aCanvas.
 			self drawPoint: (right - 1)@topY color: (shadowColor mixed: ((self height // 2) - topY / (self height) + 0.5) with: shadowColor dansDarker) on: aCanvas].
 
 		c := bottomY = (self height - 1) ifTrue: [(shadowColor mixed: (topY / (self height // 2) - 0.5) with: shadowColor dansDarker)] ifFalse: [color lighter mixed: (topY / (self height // 2) - 0.5) with: color dansDarker].
 		self drawHLineFrom: 0 to: right y: bottomY color: c on: aCanvas.
 		"xInset > 0 ifTrue: ["
 			self drawPoint: 0@bottomY color: (highlightColor1 mixed: (topY / (self height // 2) - 0.5) with: highlightColor1 dansDarker) on: aCanvas.
-			self drawPoint: 1@bottomY color: (highlightColor2 mixed: (topY / (self height // 2) - 0.5) with: highlightColor2 dansDarker) on: aCanvas.
+			self drawPoint: 1@bottomY color: (color mixed: (topY / (self height // 2) - 0.5) with: color dansDarker) on: aCanvas.
 			self drawPoint: (right - 1)@bottomY color: (shadowColor mixed: (topY / (self height // 2) - 0.5) with: shadowColor dansDarker) on: aCanvas"]".
 
 		xInset := xInset + 1.	
