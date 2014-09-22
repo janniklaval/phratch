@@ -29,7 +29,6 @@ PhratchInstaller class >> beginInstall [
 	
 	InputEventSensor addInstVarNamed: #keyPressed.
 
-	"SoundPlayer stopReverb."
 	(Workspace
 		openContents:
 			'"To try it out run the following expression:" ' 
@@ -187,8 +186,6 @@ PhratchInstaller class >> gotPhratchSkins [
 
 { #category : #'class initialization' }
 PhratchInstaller class >> initialize [
-"	InputEventSensor startUp."
-	"SoundPlayer initialize; shutDown; startUp."
 	DeclaredSprites := OrderedCollection new.
 ]
 

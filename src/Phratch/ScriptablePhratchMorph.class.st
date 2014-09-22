@@ -184,13 +184,6 @@ ScriptablePhratchMorph class >> keepOnStage: aBool [
 	KeepOnStage := aBool
 ]
 
-{ #category : #'forms/sounds/icons' }
-ScriptablePhratchMorph class >> meowSound [
-
-	^ MeowSound ifNil: [MeowSound := SampledSound fromFileNamed: (((FileSystem workingDirectory / PhratchInstaller skinFolder) / 'Kitten.wav') fullName)]
-
-]
-
 { #category : #accessing }
 ScriptablePhratchMorph class >> noviceMode [
 	^ NoviceMode  ifNil: [ NoviceMode := false ]
@@ -206,13 +199,6 @@ ScriptablePhratchMorph class >> phratchOrigin: aPoint [
 	"Set the origin for the Phratch coordinate system."
 
 	PhratchOrigin := aPoint.
-
-]
-
-{ #category : #'forms/sounds/icons' }
-ScriptablePhratchMorph class >> popSound [
-
-	^ PopSound ifNil: [PopSound := SampledSound fromFileNamed: ((FileSystem workingDirectory / PhratchInstaller skinFolder/ 'Pop.wav') fullName)]
 
 ]
 

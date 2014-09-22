@@ -219,8 +219,6 @@ PhratchFrameMorph class >> onFormBasicColor: aColor [
 
 { #category : #utilities }
 PhratchFrameMorph class >> open [
-"	InputEventSensor startUp."
-	"SoundPlayer initialize; shutDown; startUp. "
 	
 	^ self new startup openInWorld
 ]
@@ -1782,8 +1780,8 @@ PhratchFrameMorph >> installNewProject: newWorkpane [
 
 	newWorkpane isQuarterSize: workPane isQuarterSize.
 	newWorkpane bounds: workPane bounds.
-	newWorkpane midiPortNum: workPane midiPortNum.
-	workPane closeMIDI.
+	(Smalltalk at: #PhratchCategorySound ifPresent:[newWorkpane midiPortNum: workPane midiPortNum.
+	workPane closeMIDI]).
 
 	workPane owner replaceSubmorph: workPane by: newWorkpane.
 	workPane := newWorkpane.

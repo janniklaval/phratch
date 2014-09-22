@@ -1,17 +1,13 @@
-"
-A slider for a variable watcher.
-
-"
 Class {
 	#name : #WatcherSliderMorph,
-	#superclass : #SimpleSliderMorph,
+	#superclass : #PhratchSimpleSliderMorph,
 	#instVars : [
 		'forms'
 	],
 	#category : #'Phratch-UI-Watchers'
 }
 
-{ #category : #'event handling' }
+{ #category : #'as yet unclassified' }
 WatcherSliderMorph >> click: evt [
 
 	| delta |
@@ -21,19 +17,19 @@ WatcherSliderMorph >> click: evt [
 
 ]
 
-{ #category : #'event handling' }
+{ #category : #'as yet unclassified' }
 WatcherSliderMorph >> dragOffset [
 
 	^ self valueOfProperty: #dragOffset ifAbsent:[nil].
 ]
 
-{ #category : #'event handling' }
+{ #category : #'as yet unclassified' }
 WatcherSliderMorph >> dragOffset: anOffset [
 
 	^ self setProperty: #dragOffset toValue: anOffset
 ]
 
-{ #category : #drawing }
+{ #category : #'as yet unclassified' }
 WatcherSliderMorph >> drawOn: aCanvas [
 	"Draw my normalLeft/normalEdge/normalRight forms and extend the normalEdgeForm to the width of my bounds."
 
@@ -55,14 +51,14 @@ WatcherSliderMorph >> drawOn: aCanvas [
 
 ]
 
-{ #category : #'event handling' }
+{ #category : #'as yet unclassified' }
 WatcherSliderMorph >> handlesMouseDown: evt [
 
 	^ true
 
 ]
 
-{ #category : #initialization }
+{ #category : #'as yet unclassified' }
 WatcherSliderMorph >> initialize [
 
 	"setup forms before calling super initialize"
@@ -80,7 +76,7 @@ WatcherSliderMorph >> initialize [
 
 ]
 
-{ #category : #initialization }
+{ #category : #'as yet unclassified' }
 WatcherSliderMorph >> initializeSlider [
 
 	slider := ImageMorph new form: (forms at: 4).
@@ -88,7 +84,7 @@ WatcherSliderMorph >> initializeSlider [
 
 ]
 
-{ #category : #'event handling' }
+{ #category : #'as yet unclassified' }
 WatcherSliderMorph >> mouseDown: evt [
 
 	(slider containsPoint: evt cursorPoint) ifTrue: [
@@ -100,44 +96,44 @@ WatcherSliderMorph >> mouseDown: evt [
 
 ]
 
-{ #category : #'event handling' }
+{ #category : #'as yet unclassified' }
 WatcherSliderMorph >> mouseMove: evt [
 
 	self dragOffset ifNotNil: [self scrollAbsolute: evt].
 
 ]
 
-{ #category : #'event handling' }
+{ #category : #'as yet unclassified' }
 WatcherSliderMorph >> mouseUp: evt [
 	"Overidden to do nothing."
 
 ]
 
-{ #category : #private }
+{ #category : #'as yet unclassified' }
 WatcherSliderMorph >> sliderExtent [
 
 	^ slider extent
 
 ]
 
-{ #category : #'hacking - SPFA' }
+{ #category : #'as yet unclassified' }
 WatcherSliderMorph >> sliderThickness [
 
 	^ 0
 ]
 
-{ #category : #'hacking - SPFA' }
+{ #category : #'as yet unclassified' }
 WatcherSliderMorph >> sliderThickness: ignored [
 ]
 
-{ #category : #'event handling' }
+{ #category : #'as yet unclassified' }
 WatcherSliderMorph >> startDrag: evt [
 
 	self dragOffset: (slider extent // 2) negated.
 
 ]
 
-{ #category : #private }
+{ #category : #'as yet unclassified' }
 WatcherSliderMorph >> updateSliderPosition [
 	"Set my slider position to the variable's current value"
 

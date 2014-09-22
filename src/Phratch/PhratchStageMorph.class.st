@@ -133,17 +133,6 @@ PhratchStageMorph >> clearPenTrails [
 
 ]
 
-{ #category : #midi }
-PhratchStageMorph >> closeMIDI [
-	"Close the MIDI port and clear the note player dictionary."
-
-	midiPort ifNotNil: [
-		midiPort close.
-		midiPort := nil].
-	notePlayerDict := Dictionary new.
-
-]
-
 { #category : #'event handling' }
 PhratchStageMorph >> containsPoint: aPoint [
 
@@ -480,31 +469,6 @@ PhratchStageMorph >> lookLike: costumeName [
 { #category : #'looks ops' }
 PhratchStageMorph >> makeVisible [
 	"Do nothing. I'm always visible."
-
-]
-
-{ #category : #midi }
-PhratchStageMorph >> midiAllNotesOff [
-	"If the MIDI port is open, send an 'all notes off' command on every channel."
-
-	midiPort ifNil: [^ self].
-	midiPort ensureOpenIfFail: [self closeMIDI].
-	notePlayerDict do: [:player | player noteOff].
-
-]
-
-{ #category : #midi }
-PhratchStageMorph >> midiPortNum [
-
-	^ midiPortNum
-
-]
-
-{ #category : #midi }
-PhratchStageMorph >> midiPortNum: anInteger [
-
-	midiPortNum := anInteger.
-
 
 ]
 
