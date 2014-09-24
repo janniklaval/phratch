@@ -5,7 +5,7 @@ StandardFileStream class >> newPhratchFileNamed: fileName [
 	"Create a new file with the given name, and answer a stream opened for writing on that file. If the file already exists, ask the user what to do."
 
 	| dir localName choice newName fullName result ext |
-	fullName := fileName fullName.
+	fullName := fileName isString ifTrue:[fileName] ifFalse:[fileName fullName].
 	(self isAFileNamed: fullName) ifFalse: [
 		result := self new open: fullName forWrite: true.
 		result ifNil: [DialogBoxMorph inform: 'Could not write file' withDetails: 'Is the folder read-only?' localized].
