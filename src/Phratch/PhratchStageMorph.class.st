@@ -523,7 +523,7 @@ PhratchStageMorph >> pauseAllProcesses [
 
 	| |
 	"pause all sounds"
-	Smalltalk at: #PhratchCategorySound ifPresent:[SoundPlayer pauseAll].
+	Smalltalk at: #PhratchCategorySound ifPresent:[(Smalltalk at: #SoundPlayer) pauseAll].
 		
 	"clear all processes, including those with error feedback"
 "
@@ -614,7 +614,7 @@ PhratchStageMorph >> resumeAllProcesses [
 	"Pause all running Phratch processes."
 
 	"resume all sounds"
-	Smalltalk at: #PhratchCategorySound ifPresent:[SoundPlayer resumeAll].
+	Smalltalk at: #PhratchCategorySound ifPresent:[(Smalltalk at: #SoundPlayer) resumeAll].
 
 	"clear all processes, including those with error feedback"
 
@@ -842,7 +842,7 @@ PhratchStageMorph >> stopAll [
 	| sFrame |
 	World hands do: [:h | h newKeyboardFocus: nil; clearUnclaimedKeystrokes].
 	Sensor clearKeystate.
-	(Smalltalk at: #PhratchCategorySound ifPresent:[SoundPlayer stopPlayingAll.
+	(Smalltalk at: #PhratchCategorySound ifPresent:[(Smalltalk at: #SoundPlayer) stopPlayingAll.
 	self class stopSoundRecorder]).
 	self stopAllProcesses.
 	self stopAsks.

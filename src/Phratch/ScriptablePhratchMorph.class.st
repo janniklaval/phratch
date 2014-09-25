@@ -2447,7 +2447,7 @@ ScriptablePhratchMorph >> importMedia: fileName [
 	(Smalltalk at: #PhratchCategorySound ifPresent:[
 		(#(aif aiff wav mp3) includes: extensionLoc) ifTrue: [
 			baseName := self mediaNameFromFileName: fileName default: 'sound'.
-			[elList addLast: (SoundMedia new loadFile: fileName)] ifError: [^ self]].
+			[elList addLast: ((Smalltalk at: #SoundMedia) new loadFile: fileName)] ifError: [^ self]].
 	]).
 	(#(jpg jpeg gif bmp png) includes: extensionLoc) ifTrue: [
 		baseName := self

@@ -156,7 +156,7 @@ ExpressionArgMorphWithMenu >> mouseDown: evt [
 	 [(owner isBlockMorph) and: 
 	 [(rcvr := owner receiver) notNil]]) ifFalse: [^ PhratchError error: 'beep'.].
 	menu := rcvr perform: getMenuSelector.
-	(Smalltalk at: #PhratchCategorySound ifPresent:[(menu isKindOf: PhratchNoteSelector) ifTrue: [
+	(Smalltalk at: #PhratchCategorySound ifPresent:[(menu isKindOf: (Smalltalk at: #PhratchNoteSelector)) ifTrue: [
 		menu position: owner bottomLeft + (((owner width - menu width) // 2) @ -4).
 		]]).
 	menu ifNil:[^self].

@@ -716,7 +716,7 @@ PhratchFrameMorph >> closeMediaEditorsAndDialogs [
 		mList do: [:m | m cancelled; delete].
 		paintingInProgress := false].
 
-	(Smalltalk at: #PhratchCategorySound ifPresent:[mList := PhratchSoundRecorderDialogMorph allInstances select: [:m | m isInWorld].
+	(Smalltalk at: #PhratchCategorySound ifPresent:[mList := (Smalltalk at: #PhratchSoundRecorderDialogMorph) allInstances select: [:m | m isInWorld].
 	mList size > 0 ifTrue: [
 		(DialogBoxMorph ask: 'Close sound recorder?') ifFalse: [^ false].
 		mList do: [:m | m cancelled; delete]]]).
@@ -1681,7 +1681,7 @@ PhratchFrameMorph >> importSpriteOrProject: fileNameOrData [
 
 	"add imported background costumes and scripts to my stage, filtering out default items"
 	defaultForm := workPane defaultImageMedia form hibernateForPhratch.
-	(Smalltalk at: #PhratchCategorySound ifPresent:[defaultSound := SoundMedia new sound]).
+	(Smalltalk at: #PhratchCategorySound ifPresent:[defaultSound := (Smalltalk at: #SoundMedia) new sound]).
 	importedStage media do: [:media |
 		(media isImage and: [media form hibernate bits ~= defaultForm bits])
 			ifTrue: [workPane addMediaItem: media].
@@ -2586,7 +2586,7 @@ PhratchFrameMorph >> setDefaultSprite [
 				importMedia: (d / fName) fullName;
 				yourself.
 			(Smalltalk at: #PhratchCategorySound ifPresent:[
-				DefaultSprite addMediaItem: (SoundMedia new
+				DefaultSprite addMediaItem: ((Smalltalk at: #SoundMedia) new
 					mediaName: 'pop' localized;
 					sound: PhratchSpriteMorph popSound;
 					yourself)]).
