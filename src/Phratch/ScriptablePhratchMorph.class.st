@@ -3485,7 +3485,10 @@ ScriptablePhratchMorph >> penDown [
 ScriptablePhratchMorph >> perform: selector withArguments: argArray [ 
 
 	^ [super perform: selector withArguments: argArray] on: Error do:
-		[ phratchModel perform: selector withArguments: argArray ]
+		[ 
+		self = phratchModel ifFalse:[
+			phratchModel perform: selector withArguments: argArray ]
+		]
 ]
 
 { #category : #scripts }
