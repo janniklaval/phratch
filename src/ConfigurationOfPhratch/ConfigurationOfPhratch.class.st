@@ -279,14 +279,6 @@ ConfigurationOfPhratch >> baseline40: spec [
 	spec for: #common do: [
 			spec blessing: #baseline.
 			spec repository: 'http://smalltalkhub.com/mc/JLaval/Phratch/main'.
-			
-			"spec project: 'Sound' with: [
-				spec 
-					className: 'ConfigurationOfPharoSound';
-					file: 'ConfigurationOfPharoSound' ;
-					version: #stable;
-					repository: 'http://smalltalkhub.com/mc/PharoExtras/Sound/main'.
-			]."
 		
 			spec project: 'OSProcess' with: [
 				spec
@@ -357,7 +349,7 @@ ConfigurationOfPhratch >> stable: spec [
 	<symbolicVersion: #stable>
 	
 	spec for: #'pharo2.0.x' version: '1.0'. 
-	spec for: #'pharo3.0.x' version: '3.0'. 
+	spec for: #'pharo3.0.x' version: '4.0'. 
 ]
 
 { #category : #'as yet unclassified' }
@@ -411,15 +403,15 @@ ConfigurationOfPhratch >> version40: spec [
 	spec for: #common do: [
 			spec repository: 'http://smalltalkhub.com/mc/JLaval/Phratch/main'.
 			spec
-				package: 'Phratch';
-				package: 'PhratchColor';
-				package: 'PhratchFile';
-				package: 'PhratchList';
-				package: 'PhratchLooks';
-				package: 'PhratchMotion';
-				package: 'PhratchPen';
-				package: 'PhratchSensing';
-				package: 'PhratchDebugger'.
+				package: 'Phratch'with: 'Phratch-janniklaval.418';
+				package: 'PhratchColor'with: 'PhratchColor-janniklaval.7';
+				package: 'PhratchFile'with: 'PhratchFile-janniklaval.3';
+				package: 'PhratchList'with: 'PhratchList-jlaval.12';
+				package: 'PhratchLooks'with: 'PhratchLooks-janniklaval.11';
+				package: 'PhratchMotion'with: 'PhratchMotion-janniklaval.4';
+				package: 'PhratchPen'with: 'PhratchPen-janniklaval.4';
+				package: 'PhratchSensing'with: 'PhratchSensing-janniklaval.5';
+				package: 'PhratchDebugger'with: 'PhratchDebugger-janniklaval.4'.
 			spec
 				project: 'OSProcess' with: #stable.
 	].
