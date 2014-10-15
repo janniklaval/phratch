@@ -416,3 +416,23 @@ ConfigurationOfPhratch >> version40: spec [
 				project: 'OSProcess' with: #stable.
 	].
 ]
+
+{ #category : #'as yet unclassified' }
+ConfigurationOfPhratch >> version50: spec [
+	<version:'5.0' imports: #('4.0-baseline' )>
+	spec for: #common do: [
+			spec repository: 'http://smalltalkhub.com/mc/JLaval/Phratch/main'.
+			spec
+				package: 'Phratch';
+				package: 'PhratchColor';
+				package: 'PhratchFile';
+				package: 'PhratchList';
+				package: 'PhratchLooks';
+				package: 'PhratchMotion';
+				package: 'PhratchPen';
+				package: 'PhratchSensing';
+				package: 'PhratchDebugger'.
+			spec
+				project: 'OSProcess' with: #stable.
+	].
+]
