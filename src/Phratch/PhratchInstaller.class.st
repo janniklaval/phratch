@@ -329,6 +329,12 @@ PhratchInstaller class >> skinFolder [
 ]
 
 { #category : #'class initialization' }
+PhratchInstaller class >> updateDeclaredSprite [
+
+	DeclaredSprites := Smalltalk allClasses select: [:e | (Pragma allNamed: #phratchObject in:  e class) notEmpty ]
+]
+
+{ #category : #'class initialization' }
 PhratchInstaller class >> version [
 
 	^ '4.0'
