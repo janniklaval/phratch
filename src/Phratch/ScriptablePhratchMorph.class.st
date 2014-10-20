@@ -2169,7 +2169,7 @@ ScriptablePhratchMorph >> filteredForm [
 		[filterPack applyFiltersTo: self rotatedForm]
 						ifError: [PhratchError error:  'There is a problem with FilterPack'. filterPack := nil. ^ self rotatedForm]].
 
-	^ filterPack resultForm as8BitColorForm
+	^ filterPack resultForm
 
 ]
 

@@ -33,7 +33,6 @@ Class {
 		'hScrollbar',
 		'vScrollbar',
 		'transformButtons',
-		'canvasButtons',
 		'fileButtons',
 		'colorSquarePicker',
 		'colorPicker',
@@ -92,25 +91,18 @@ PaintFrame >> addButtons [
 		actionSelector: #eraseAll;
 		setProperty: #balloonText toValue: 'Clear canvas' localized; 
 		yourself.
-	fileButtons addMorphBack: (AlignmentMorph newSpacer: Color transparent).
 	fileButtons addMorphBack: b.
-
-	canvasButtons := AlignmentMorph newRow
-		color: Color transparent;
-		vResizing: #shrinkWrap;
-		inset: 0; 
-		yourself.
 
 	b := self makeButtonLabel: 'Undo' selector:  #undo.
 	b setProperty: #balloonText toValue: 'Undo' localized.
-	canvasButtons addMorphBack: b.
+	fileButtons addMorphBack: (AlignmentMorph newSpacer: Color transparent).
+	fileButtons addMorphBack: b.
 
 	b := self makeButtonLabel: 'Redo' selector:  #redo.
 	b setProperty: #balloonText toValue: 'Redo' localized.
-	canvasButtons addMorphBack: b.
+	fileButtons addMorphBack: b.
 
 	self addMorph: fileButtons.
-	self addMorph: canvasButtons.
 	self addMorph: self makeZoomBar.
 
 ]
@@ -357,9 +349,8 @@ PaintFrame >> fixLayout [
 
 	canvasMorph ifNil: [^ self].
 	canvasMorph position: (self right - canvasMorph width - 55)@(self top + 42).
-	canvasButtons position: (self left + 20)@(canvasMorph top + 80).
 	paletteMorph position:
-		(self left + 20)@(canvasButtons bottom + 5).
+		(self left + 20)@(canvasMorph top + 85).
 	hScrollbar
 		position: canvasMorph bottomLeft + (0@9);
 		width: canvasMorph width.
@@ -368,7 +359,7 @@ PaintFrame >> fixLayout [
 		height: canvasMorph height.
 
 	titleBin left: self left + ((self width - titleBin width) // 2) - 5.
-	fileButtons position: (self left + 20)@(canvasButtons top - 35).
+	fileButtons position: (self left + 20)@(canvasMorph top +45).
 	transformButtons position: (self left + 18)@(canvasMorph top).
 	colorSquarePicker position: (self left + 25)@(paletteMorph bottom - 55).
 	colorPickerButton position: (colorSquarePicker right + 5)@(colorSquarePicker top + 30).

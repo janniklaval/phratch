@@ -252,7 +252,7 @@ PaintPalette >> createOptionsPane [
 { #category : #drawing }
 PaintPalette >> drawOn: aCanvas [
 
-	color isTransparent ifTrue: [^ self].
+"	color isTransparent ifTrue: [^ self]."
 	aCanvas fillRectangle: self bounds color: color.
 ]
 
