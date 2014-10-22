@@ -203,7 +203,7 @@ ChoiceArgMorph >> options [
 ChoiceArgMorph >> options: stringList [
 
 	options := stringList asArray.
-	(options includes: choice) ifFalse: [self choice: options first].
+	(options includes: choice) ifFalse: [options isEmpty ifTrue: [self choice: ''] ifFalse:[ self choice: options first] ].
 
 ]
 
