@@ -1,4 +1,4 @@
-﻿msgid ""
+msgid ""
 msgstr ""
 "Project-Id-Version: Phratch\n"
 "Report-Msgid-Bugs-To: Jannik LAVAL <jannik.laval@gmail.com>\n"
@@ -2517,3 +2517,387 @@ msgstr ""
 
 msgid "Unload unused blocks"
 msgstr ""
+
+msgid "files" 
+msgstr "file"
+
+msgid "colors" 
+msgstr "colori"
+
+msgid "Arrow key move with speed $Number$" 
+msgstr "muovi di $Number$ quando si premono le frecce"
+
+msgid "go in between x: $Number$ y: $Number$ and x: $Number$ y: $Number$" 
+msgstr "vai tra x: $Number$ y: $Number$ e x: $Number$ y: $Number$"
+
+msgid "go $Number$ of the way to x: $Number$ y: $Number$" 
+msgstr "percorri 1 / $Number$ della distanza da x: $Number$ y: $Number$"
+
+msgid "if $Boolean$ bounce" 
+msgstr "se $Boolean$ rimbalza"
+
+msgid "if touching $Sprite$ bounce" 
+msgstr "se sta toccando $Sprite$ rimbalza"
+
+msgid "point at x:$Number$ y:$Number$" 
+msgstr "punta verso x:$Number$ y:$Number$"
+
+msgid "point at random coordinate" 
+msgstr "punta verso un punto scelto a caso"
+
+msgid "rotation style" 
+msgstr "stile di rotazione"
+
+msgid "set rotation style to $Rotation$" 
+msgstr "porta lo stile di rotazione a $Rotation$"
+
+msgid "draggable?" 
+msgstr "trascinabile"
+
+msgid "make undraggable" 
+msgstr "rendi non trascinabile"
+
+msgid "make draggable" 
+msgstr "rendi trascinabile"
+
+msgid "when $Sprite$ created" 
+msgstr "quando $Sprite$ viene creato"
+
+msgid "$Event$ received?" 
+msgstr "$Event$ ricevuto"
+
+msgid "if $Boolean$ then $Boolean$ else $Boolean$" 
+msgstr "se $Boolean$ allora $Boolean$ altrimenti $Boolean$"
+
+msgid "repeat $Number$ times" 
+msgstr "ripeti $Number$ volte"
+
+msgid "save project" 
+msgstr "salva il progetto"
+
+msgid "quit Phratch" 
+msgstr "chiudi Phratch"
+
+msgid "clone me" 
+msgstr "crea un clone di me stesso"
+
+msgid "Am I a clone?" 
+msgstr "sono un clone"
+
+msgid "delete me if I am a clone" 
+msgstr "cancellami se sono un clone"
+
+msgid "stop all scripts for $Event$" 
+msgstr "ferma tutti gli script attivati da $Event$"
+
+msgid "press green flag" 
+msgstr "premi la bandiera verde"
+
+msgid "pause" 
+msgstr "pausa"
+
+msgid "replace costume $Number$ with $NewCostume$" 
+msgstr "sostituisci costume $Number$ con $NewCostume$"
+
+msgid "add $NewCostume$ to costumes" 
+msgstr "aggiungi $NewCostume$ ai costumi"
+
+msgid "delete costume $Number$" 
+msgstr "rimuovi costume $Number$"
+
+msgid "$Effects$ effect" 
+msgstr "effetto $Effects$"
+
+msgid "width" 
+msgstr "larghezza"
+
+msgid "perimeter" 
+if perimeter as in "The perimeter of the cube is ..." then
+msgstr "perimetro"
+else if perimeter as in "Secure the perimeter!" then
+msgstr "perimetro"
+
+msgid "height" 
+msgstr "altezza"
+
+msgid "area" 
+if area as in "The area of the cube is ..." then
+msgstr "area"
+else if area as in "I lived in that area for many years" then
+msgstr "zona"
+
+msgid "set horizontal stretch to $Number$%" 
+msgstr "porta allungamento orizzontale a $Number$%"
+
+msgid "vertical flip" 
+msgstr "ribalta in verticale"
+
+msgid "vertical stretch" 
+msgstr "allungamento verticale"
+
+msgid "change horizontal stretch by $Number$%" 
+msgstr "cambia allungamento orizzontale di $Number$%"
+
+msgid "horizontal stretch" 
+msgstr "allungamento orizzontale"
+
+msgid "set vertical stretch to $Number$%" 
+msgstr "porta allungamento verticale a $Number$%"
+
+msgid "horizontal flip" 
+msgstr "ribalta in orizzontale"
+
+msgid "change vertical stretch by $Number$%" 
+msgstr "cambia allungamento verticale di $Number$%"
+
+msgid "camera is open?" 
+msgstr "webcam accesa"
+
+msgid "close camera" 
+msgstr "spegni webcam"
+
+msgid "do with camera open" 
+msgstr "ripeti mentre la webcam è accesa"
+
+msgid "open camera" 
+msgstr "accendi webcam"
+
+msgid "show dialog $String$ with text $String$" 
+msgstr "mostra avviso $String$ con testo $String$"
+
+msgid "ask $String$ in dialog" 
+msgstr "chiedi $String$ in finestra di dialogo"
+
+msgid "set sprite name to $String$" 
+msgstr "porta nome sprite a $String$"
+
+msgid "warn $String$" 
+msgstr "avviso $String$"
+
+msgid "key pressed" 
+msgstr "tasto premuto"
+
+msgid "get $Attributes$ of $Sprite$" 
+msgstr "attributo $Attributes$ di $Sprite$"
+
+msgid "attribute $Attributes$" 
+msgstr "attributo $Attributes$"
+
+msgid "date/time: $TimeDates$" 
+msgstr "data/ora: $TimeDates$"
+
+msgid "index of $String$ starting at $Number$ in $String$" 
+msgstr "posizione di $String$ in $Number$ a partire da $String$"
+
+msgid "letters $Number$ - $Number$ of $String$" 
+msgstr "caratteri tra $Number$ e $Number$ di $String$"
+
+msgid "join $String$ and $String$" 
+msgstr "unione di $String$ e $String$"
+
+msgid "factorial of $Number$" 
+msgstr "fattoriale di $Number$"
+
+msgid "$Number$ mod $Number$" 
+msgstr "$Number$ modulo $Number$"
+
+msgid "$Number$ is a Fibonacci number?" 
+msgstr "$Number$ è un numero di Fibonacci"
+
+msgid "$Number$ is prime?" 
+msgstr "$Number$ è un numero primo"
+
+msgid "$Number$ is an integer?" 
+msgstr "$Number$ è un numero intero"
+
+msgid "is $String$ nil?" 
+msgstr "$String$ è vuota"
+
+msgid "$String$ as boolean" 
+msgstr "$String$ come booleano"
+
+msgid "set $Attributes$ to $String$" 
+msgstr "porta attributo $Attributes$ a $String$"
+
+msgid "delete $Sprite$" 
+msgstr "cancella $Sprite$"
+
+msgid "clear pen trails" 
+msgstr "pulisci"
+
+msgid "pen color" 
+msgstr "colore penna"
+
+msgid "pen size" 
+msgstr "dimensione penna"
+
+msgid "pen hue" 
+msgstr "tonalità penna"
+
+msgid "pen shade" 
+msgstr "luminosità penna"
+
+msgid "make $String$" 
+msgstr "crea variabile $String$"
+
+msgid "delete $OSReporter$" 
+msgstr "cancella $OSReporter$"
+
+msgid "variable named $String$" 
+msgstr "variabile $String$"
+
+msgid "move $Variable$ to x: $Number$ y: $Number$" 
+msgstr "sposta $Variable$ a x: $Number$ y: $Number$"
+
+msgid "set layout of $Variable$ to $LayoutStyles$" 
+msgstr "mostra monitor di $Variable$ in formato $LayoutStyles$"
+
+msgid "make list $String$" 
+msgstr "crea lista $String$"
+
+msgid "delete list $String$" 
+msgstr "cancella lista $String$"
+
+msgid "hide list $List$" 
+msgstr "nascondi lista $List$"
+
+msgid "show list $List$" 
+msgstr "mostra lista $List$"
+
+msgid "first index of $String$ in $List$" 
+msgstr "posizione di $String$ in $List$"
+
+msgid "a List" 
+msgstr "una Lista"
+
+msgid "times $String$ appears in $List$" 
+msgstr "numero di occorrenze di $String$ in $List$"
+
+msgid "sort items of $List$ by numerical value" 
+msgstr "ordina $List$ in ordine numerico"
+
+msgid "sort items of $List$ by string value" 
+msgstr "ordina $List$ in ordine alfabetico"
+
+msgid "contents of file $String$" 
+msgstr "contenuto del file $String$"
+
+msgid "number of lines of file at URL $String$" 
+msgstr "numero di linee del file all'URL $String$"
+
+msgid "number of lines of file $String$" 
+msgstr "numero di linee del file $String$"
+
+msgid "create file $String$" 
+msgstr "crea file $String$"
+
+msgid "line $Number$ of file $String$" 
+msgstr "linea $Number$ del file $String$"
+
+msgid "delete file $String$" 
+msgstr "cancella file $String$"
+
+msgid "line $Number$ of file at URL $String$" 
+msgstr "linea $Number$ del file all'URL $String$"
+
+msgid "write $String$ to file $String$" 
+msgstr "aggiungi $String$ al file $String$"
+
+msgid "contents of file at URL $String$" 
+msgstr "contenuto del file all'URL $String$"
+
+msgid "clear file $String$" 
+msgstr "cancella file $String$"
+
+msgid "make a color" 
+msgstr "crea un colore"
+
+msgid "set $ColorVar$ to $Color$" 
+msgstr "porta $ColorVar$ a $Color$"
+
+msgid "hide color $ColorVar$" 
+msgstr "nascondi colore $ColorVar$"
+
+msgid "show color $ColorVar$" 
+msgstr "mostra colore $ColorVar$"
+
+msgid "delete color $String$" 
+msgstr "cancella colore $String$"
+
+msgid "make color $String$" 
+msgstr "crea colore $String$"
+
+msgid "a color" 
+msgstr "un colore"
+
+msgid "color of pixel x: $Number$ y: $Number$" 
+msgstr "colore del pixel x: $Number$ y: $Number$"
+
+msgid "$Color$ blue" 
+msgstr "$Color$ blu"
+
+msgid "color r: $Number$ g: $Number$ b: $Number$" 
+msgstr "colore r: $Number$ g: $Number$ b: $Number$"
+
+msgid "$Color$ green" 
+msgstr "$Color$ verde"
+
+msgid "$Color$ red" 
+msgstr "$Color$ rosso"
+
+msgid "$Color$ saturation" 
+msgstr "$Color$ saturazione"
+
+msgid "$Color$ brightness" 
+msgstr "$Color$ brillantezza"
+
+msgid "$Color$ hue" 
+msgstr "$Color$ tonalità"
+
+msgid "color h: $Number$ s: $Number$ b: $Number$" 
+msgstr "colore f: $Number$ m: $Number$ l: $Number$"
+
+msgid "mix $Color$ with $Color$" 
+msgstr "mix di $Color$ con $Color$"
+
+msgid "mix $Color$ $Number$ : $Number$ with $Color$" 
+msgstr "mix di $Color$ $Number$ : $Number$ con $Color$"
+
+msgid "color named $NamedColors$" 
+msgstr "colore $NamedColors$"
+
+msgid "$String$ as color" 
+msgstr "$String$ come colore"
+
+msgid "$Color$ as string" 
+msgstr "$Color$ come stringa"
+
+msgid "Allow Sprites offstage" 
+msgstr "Permetti agli Sprite di uscire dallo Stage"
+
+msgid "Thread safe scripts" 
+msgstr "Script Thread safe"
+
+msgid "Clear all Variables" 
+msgstr "Azzera tutte le Variabili"
+
+msgid "Settings" 
+msgstr "Impostazioni"
+
+msgid "Phratch Website" 
+msgstr "Sito Web di Phratch"
+
+msgid "Scratch Help Page" 
+msgstr "Pagine di Aiuto di Scratch"
+
+msgid "Help Screens" 
+msgstr "Schermate di Aiuto"
+
+msgid "BYOB Reference Manual" 
+msgstr "Manuale di riferimento di BYOB"
+
+msgid "Panther Tutorials" 
+msgstr "Tutorial su Panther"
+
+msgid "About Phratch" 
+msgstr "Informazioni su Phratch"
