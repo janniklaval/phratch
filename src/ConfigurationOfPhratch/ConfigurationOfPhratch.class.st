@@ -403,7 +403,7 @@ ConfigurationOfPhratch >> version40: spec [
 	spec for: #common do: [
 			spec repository: 'http://smalltalkhub.com/mc/JLaval/Phratch/main'.
 			spec
-				package: 'Phratch'with: 'Phratch-janniklaval.421';
+				package: 'Phratch'with: 'Phratch-janniklaval.422';
 				package: 'PhratchColor'with: 'PhratchColor-janniklaval.7';
 				package: 'PhratchFile'with: 'PhratchFile-janniklaval.3';
 				package: 'PhratchList'with: 'PhratchList-jlaval.12';
