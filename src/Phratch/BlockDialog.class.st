@@ -52,7 +52,7 @@ BlockDialog >> buildCategoryChooser [
 	maxExtent := 75 @ 0.
 	buttons := catList
 		collect: [ :cat | 
-			label := (PhratchTranslator translationFor: cat asString) capitalized.
+			label := (PhratchTranslator translationFor: cat label asString) capitalized.
 			
 			offForm := PhratchFrameMorph offFormBasicColor: cat color.
 			onForm := PhratchFrameMorph onFormBasicColor: cat color.
@@ -64,7 +64,7 @@ BlockDialog >> buildCategoryChooser [
 				setLabelColor: Color white;
 				target: self;
 				actionSelector: #category:;
-				arguments: (Array with: cat);
+				arguments: (Array with: cat label);
 				toggleButtonMode: true;
 				toggleMode: false.
 			 b leftJustifyInset: 10 .

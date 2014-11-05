@@ -2073,20 +2073,6 @@ PhratchFrameMorph >> notEditingBlockDefinition: aCustomBlockDefinition [
 	^ false
 ]
 
-{ #category : #'menu/button actions' }
-PhratchFrameMorph >> open: aFileName [ 
-	Smalltalk os isMacOSX ifTrue: [  
-		^ OSProcess command: ('open "', aFileName, '"').
-	].
-	Smalltalk os isUnix ifTrue:[
-		^ OSProcess command: ('xdg-open "', aFileName, '"').
-	].
-	Smalltalk os isWin32 ifTrue:[
-		"^NBWin32Shell shellOpen: '', aFileName, ''."
-		^ OSProcess command: ('cmd.exe /k "', aFileName, '"').
-	]
-]
-
 { #category : #'file read/write' }
 PhratchFrameMorph >> openPhratchProject [
 	"Allow the user to select a project to open, then open that project."

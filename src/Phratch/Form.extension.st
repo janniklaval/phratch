@@ -99,7 +99,6 @@ Form >> fillRadialFromXColorBlock: colorBlock center: aPoint [
 Form >> fishEye: power [
 	
 	| out centerX centerY scaledPower dx dy r ang srcX srcY xor yor pix |
-	self flag: 'make it faster'.
 	
 	out := self deepCopy.
 	out bits: self bits copy.
@@ -460,7 +459,6 @@ Form >> toThumbnail: extent borderWidth: borderWidth borderColor: backgroundColo
 { #category : #'*Phratch-Extensions' }
 Form >> whirl: degrees [
 	| centerX centerY radius scaleX scaleY out whirlRadians radiusSquared dx dy d factor ang sina cosa pix xor yor |
-	self flag: 'make it faster'.
 	out := self copy.
 	out bits: self bits copy.
 	centerX := self width / 2.

@@ -331,11 +331,11 @@ PhratchFilePicker >> getPhratchInfoFromFile [
 	[ f := (FileStream readOnlyFileNamed: fullName) binary ] ifError: [ ^ result ].
 	[ 
 	version := FuelObjStream phratchFileVersionFrom: (f next: 10) asString.
-	({1.2} includes: version)
+	({1 . 2} includes: version)
 		ifTrue: [ 
 			buf := f next: f uint32.
-			result := ((FuelObjStream new readObjFrom: (ReadStream on: buf)) associations collect: [ :each | each value ])
-				asDictionary ] ]
+			result := FuelObjStream new readObjFrom: (ReadStream on: buf)
+		 ] ]
 		ifError: [ :e | 
 			ScriptablePhratchMorph noviceMode ifFalse:[e signal].
 		].
