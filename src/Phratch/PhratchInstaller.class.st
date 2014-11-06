@@ -50,7 +50,7 @@ PhratchInstaller class >> downloadFileFromUrl: anUrl andUnzipIntoDirectory: aPat
 
 	UIManager default informUserDuring: 
 		[ :bar | 
-		(ZipArchive new readFrom: (ZnHTTPSocketFacade httpGet: anUrl)) 
+		(ZipArchive new readFrom: (ZnClient new get: anUrl)) 
 			extractAllTo: (aPath)
 			informing: bar 
 			overwrite: true
@@ -90,7 +90,7 @@ PhratchInstaller class >> getPhratchHelp [
 { #category : #installation }
 PhratchInstaller class >> getPhratchLicence [
 	UIManager inform:  'Downloading licence.txt'.
-	(FileStream newFileNamed: 'license.txt') nextPutAll: ((ZnHTTPSocketFacade httpGet: 'https://github.com/janniklaval/phratch/raw/master/license.txt'))
+	(FileStream newFileNamed: 'license.txt') nextPutAll: ((ZnClient new get: 'https://github.com/janniklaval/phratch/raw/master/license.txt'))
 ]
 
 { #category : #installation }
@@ -100,7 +100,7 @@ PhratchInstaller class >> getPhratchLocales [
 	{ 'eu' . 'is' . 'ne' . 'sv' . 'fa' . 'it' . 'nl' . 'th' . 'ar' . 'fi' . 'ja' . 'no' . 'tr' . 'bg' . 'fr' . 'ja_HIRA' . 'pl' . 'uk' . 'ca' . 'fr_CA' . 'kn' . 'pt' . 'vi' . 'cs' . 'gl' . 'ko' . 'pt_BR' . 'zh_CN' . 'da' . 'he' . 'lt' . 'ro' . 'zh_TW' . 'de' . 'hr' . 'mk' . 'ru' . 'el' . 'ht' . 'mn' . 'rw' . 'es' . 'hu' . 'mr' . 'sk' . 'et' . 'id' . 'ms' . 'sl' } do: [:lang | |f|
 		('locale' asFileReference) ensureCreateDirectory.
 		f:=( ('locale' asFileReference / lang,'po') writeStream).
-		f nextPutAll: (ZnHTTPSocketFacade httpGet: 'https://raw.github.com/janniklaval/phratch/master/locale/',lang,'.po' )
+		f nextPutAll: (ZnClient new get: 'https://raw.github.com/janniklaval/phratch/master/locale/',lang,'.po' )
 	].
 ]
 
