@@ -48,9 +48,11 @@ PhratchInstaller class >> declaredSprite [
 { #category : #installation }
 PhratchInstaller class >> downloadFileFromUrl: anUrl andUnzipIntoDirectory: aPath [
 
+	| i |
 	UIManager default informUserDuring: 
 		[ :bar | 
-		(ZipArchive new readFrom: (ZnClient new get: anUrl)) 
+		i:= ZnClient new get: anUrl.
+		(ZipArchive new readFrom: (ReadStream on: i from: 1 to: i size)) 
 			extractAllTo: (aPath)
 			informing: bar 
 			overwrite: true
@@ -337,5 +339,5 @@ PhratchInstaller class >> updateDeclaredSprite [
 { #category : #'class initialization' }
 PhratchInstaller class >> version [
 
-	^ '4.0'
+	^ '5.0 alpha'
 ]

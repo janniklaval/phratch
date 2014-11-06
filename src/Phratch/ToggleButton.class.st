@@ -43,8 +43,8 @@ ToggleButton class >> onForm: f1 offForm: f2 overForm: f3 [
 { #category : #menu }
 ToggleButton >> addCustomMenuItems: aCustomMenu hand: aHandMorph [
 	super addCustomMenuItems: aCustomMenu hand: aHandMorph.
-	aCustomMenu add: 'change action selector' localized action: #setActionSelector.
-	aCustomMenu add: 'change arguments' localized action: #setArguments
+	aCustomMenu add: 'change action selector' localized selector: #setActionSelector.
+	aCustomMenu add: 'change arguments' localized selector: #setArguments
 ]
 
 { #category : #accessing }

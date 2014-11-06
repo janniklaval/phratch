@@ -1120,20 +1120,20 @@ PhratchSpriteMorph >> rightButtonMenu [
 
 	| menu |
 	menu := MenuMorph new defaultTarget: self.
-	menu add: 'grab screen region for new costume' localized action: #grabFromScreen.
-	menu add: 'export this sprite' localized action: #exportObject.
+	menu add: 'grab screen region for new costume' localized selector: #grabFromScreen.
+	menu add: 'export this sprite' localized selector: #exportObject.
 	
 	menu addLine.
-	menu add: 'duplicate' localized action: #spawn.
-	menu add: 'delete' localized action: #undoableDeleteSprite.
+	menu add: 'duplicate' localized selector: #spawn.
+	menu add: 'delete' localized selector: #undoableDeleteSprite.
 	menu addLine.
-	menu add: 'resize this sprite' localized action: #resizeHandle.
-	menu add: 'rotate this sprite' localized action: #rotateHandle.
+	menu add: 'resize this sprite' localized selector: #resizeHandle.
+	menu add: 'rotate this sprite' localized selector: #rotateHandle.
 	self isNested
 		ifTrue: [ menu addLine ].
 	self hasSubsprites
-		ifTrue: [ menu add: 'detach all subsprites' localized action: #unhingeAll ].
-	ownerSprite ifNotNil: [ menu add: 'detach from '  localized, self ownerSprite objName action: #unhinge ].
+		ifTrue: [ menu add: 'detach all subsprites' localized selector: #unhingeAll ].
+	ownerSprite ifNotNil: [ menu add: 'detach from '  localized, self ownerSprite objName selector: #unhinge ].
 	menu
 		localize;
 		invokeModal

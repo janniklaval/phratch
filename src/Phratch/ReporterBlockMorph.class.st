@@ -482,7 +482,7 @@ ReporterBlockMorph >> lambdaMenu [
 	(owner isPhratchBlockPaletteMorph)
 		ifTrue: [ ^ self ].
 	(owner isReporterScriptBlockMorph)
-		ifFalse: [ menu add: 'quote' localized action: #lambdafied ].
+		ifFalse: [ menu add: 'quote' localized selector: #lambdafied ].
 	(choice := menu
 		localize;
 		popUpInWorld;

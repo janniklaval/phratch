@@ -629,9 +629,9 @@ PhratchStageMorph >> rightButtonMenu [
 
 	| menu |
 	menu := MenuMorph new defaultTarget: self.
-	menu add: 'grab screen region for new sprite' localized action: #grabSpriteFromScreen.
+	menu add: 'grab screen region for new sprite' localized selector: #grabSpriteFromScreen.
 	menu addLine.
-	menu add: 'save picture of stage...' localized action: #stageShot.
+	menu add: 'save picture of stage...' localized selector: #stageShot.
 	menu
 		localize;
 		invokeModal

@@ -273,16 +273,7 @@ PhratchHelp class >> launchWebsite [
 
 { #category : #generating }
 PhratchHelp class >> open: aFileName [ 
-	Smalltalk os isMacOSX ifTrue: [  
-		^ OSProcess command: ('open "', aFileName, '"').
-	].
-	Smalltalk os isUnix ifTrue:[
-		^ OSProcess command: ('xdg-open "', aFileName, '"').
-	].
-	Smalltalk os isWin32 ifTrue:[
-		"^NBWin32Shell shellOpen: '', aFileName, ''."
-		^ OSProcess command: ('cmd.exe /k "', aFileName, '"').
-	]
+	aFileName asUrl open
 ]
 
 { #category : #externalCall }
