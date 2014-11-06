@@ -2691,7 +2691,7 @@ PhratchFrameMorph >> startup [
 	BlockEditorFrameMorph resetDimensions.
 	ElementsEditorFrameMorph resetDimensions.
 	
-	DebuggerFrameMorph resetDimensions.
+	(Smalltalk at: #DebuggerFrameMorph) resetDimensions.
 
 	self updateProjectName.
 	author := ''.

@@ -24,11 +24,6 @@ PhratchInstaller class >> beginInstall [
 	StartupLoader default addAtStartupInImageDirectory: items.
 	StartupLoader default loadFromDefaultLocations.
 
-	"AbstractSound initialize.
-	SampledSound initialize."
-	
-	InputEventSensor addInstVarNamed: #keyPressed.
-
 	(Workspace
 		openContents:
 			'"To try it out run the following expression:" ' 

@@ -853,7 +853,7 @@ PhratchStageMorph >> stopAll [
 	self allMorphsDo: [:m |
 		(m isScriptablePhratchMorph) ifTrue: [m stopPlaying]].
 
-	DebuggerFrameMorph allInstancesDo: [:df | df delete ].
+	(Smalltalk at: #DebuggerFrameMorph) allInstancesDo: [:df | df delete ].
 
 	(sFrame := self ownerOrYourselfThatIsAPhratchFrameMorph) ifNotNil: [
 		sFrame scriptsPane allMorphsDo: [:m |
