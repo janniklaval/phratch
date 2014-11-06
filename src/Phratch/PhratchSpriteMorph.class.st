@@ -215,7 +215,7 @@ PhratchSpriteMorph >> copyForExport [
 
 ]
 
-{ #category : #private }
+{ #category : #accessing }
 PhratchSpriteMorph >> costumeChanged [
 
 	costumeChangeMSecs := Time millisecondClockValue.
