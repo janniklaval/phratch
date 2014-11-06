@@ -469,7 +469,7 @@ ConfigurationOfPhratch >> version40: spec [
 
 { #category : #'as yet unclassified' }
 ConfigurationOfPhratch >> version50: spec [
-	<version:'5.0' imports: #('4.0-baseline' )>
+	<version:'5.0' imports: #('5.0-baseline' )>
 	spec for: #common do: [
 			spec repository: 'http://smalltalkhub.com/mc/SeanDeNigris/SeansPlayground/main'.
 			spec package: 'NewExternalWebBrowser'.
