@@ -63,7 +63,7 @@ ScriptablePhratchMorph >> numFileLines: aFileNameString [
 ScriptablePhratchMorph >> numUrlFileLines: aURLString [
 	"Answer the number of lines in the given URL file."
 	<phratchItem: 'number of lines of file at URL $String$' kind: #ReporterBlockMorph category: 'files' defaultValues: #('http://') subCategory: #a special: #()>
-	^ (ZnHTTPSocketFacade httpGet: aURLString) contents lines size.
+	^ (ZnClient new get: aURLString) contents lines size.
 ]
 
 { #category : #'*PhratchFile' }
@@ -84,14 +84,14 @@ ScriptablePhratchMorph >> readFile: aFileNameString [
 ScriptablePhratchMorph >> readFromUrl: aURLString [
 	"Answer the contents of the given URL."
 	<phratchItem: 'contents of file at URL $String$' kind: #ReporterBlockMorph category: 'files' defaultValues: #('http://') subCategory: #a special: #()>
-	^ (ZnHTTPSocketFacade httpGet: aURLString) contents.
+	^ (ZnClient new get: aURLString) contents.
 ]
 
 { #category : #'*PhratchFile' }
 ScriptablePhratchMorph >> readLine: t1 FromUrl: t2 [ 
 	"Answer the contents of the given line of the given URL."
 	<phratchItem: 'line $Number$ of file at URL $String$' kind: #ReporterBlockMorph category: 'files' defaultValues: #(1 'http://') subCategory: #a special: #()>
-	^ (ZnHTTPSocketFacade httpGet: t2) contents lines at: t1 ifAbsent: [''].
+	^ (ZnClient new get: t2) contents lines at: t1 ifAbsent: [''].
 ]
 
 { #category : #'*PhratchFile' }
