@@ -358,18 +358,18 @@ DebuggerFrameMorph >> varMenu [
 	menu := MenuMorph new defaultTarget: self.
 	returnValue
 		ifNotNil: [ 
-			menu add: 'report value' localized action: nil.
+			menu add: 'report value' localized selector: nil.
 			menu addLine ].
 	vars := (thread currentBlock receiver isVariableFrame)
 		ifTrue: [ thread currentBlock receiver ]
 		ifFalse: [ thread temporaryVariables ].
-	vars vars keys asSortedCollection do: [ :vname | menu add: vname  action: nil ].
+	vars vars keys asSortedCollection do: [ :vname | menu add: vname  selector: nil ].
 	menu addLine.
 	env := thread currentEnvironment.
 	env
 		ifNotNil: [ 
 			env = vars
-				ifFalse: [ env vars keys asSortedCollection do: [ :vname | menu add: vname action: nil ] ] ].
+				ifFalse: [ env vars keys asSortedCollection do: [ :vname | menu add: vname selector: nil ] ] ].
 	menu build.
 	mh := menu  height.
 	mw := menu  width.
