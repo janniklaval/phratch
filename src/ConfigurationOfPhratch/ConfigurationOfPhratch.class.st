@@ -156,6 +156,14 @@ ConfigurationOfPhratch class >> unloadMetacello [
 ]
 
 { #category : #'as yet unclassified' }
+ConfigurationOfPhratch >> addInstVars [
+
+	InputEventSensor instVarIndexFor: #keyPressed ifAbsent: [InputEventSensor addInstVarNamed: #keyPressed].
+	(InputEventSensor hasClassVarNamed: #ButtonDecodeTable) ifFalse: [InputEventSensor addClassVarNamed: #ButtonDecodeTable].
+
+]
+
+{ #category : #'as yet unclassified' }
 ConfigurationOfPhratch >> baseline10: spec [
 	<version:'1.0-baseline'>
 	spec for: #common do: [
@@ -330,6 +338,7 @@ ConfigurationOfPhratch >> baseline40: spec [
 ConfigurationOfPhratch >> baseline50: spec [
 	<version:'5.0-baseline'>
 	spec for: #common do: [
+			spec preLoadDoIt: #addInstVars.
 			spec blessing: #baseline.
 			spec repository: 'http://smalltalkhub.com/mc/SeanDeNigris/SeansPlayground/main'.
 			spec
