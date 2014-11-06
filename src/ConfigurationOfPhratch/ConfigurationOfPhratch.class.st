@@ -327,6 +327,56 @@ ConfigurationOfPhratch >> baseline40: spec [
 ]
 
 { #category : #'as yet unclassified' }
+ConfigurationOfPhratch >> baseline50: spec [
+	<version:'5.0-baseline'>
+	spec for: #common do: [
+			spec blessing: #baseline.
+			spec repository: 'http://smalltalkhub.com/mc/SeanDeNigris/SeansPlayground/main'.
+			spec
+				package: 'NewExternalWebBrowser'.
+				
+			spec repository: 'http://smalltalkhub.com/mc/JLaval/Phratch/main'.
+			spec
+				package: 'Phratch' with: [ 
+					spec requires: #('NewExternalWebBrowser')
+			].
+			spec
+				package: 'PhratchColor' with: [ 
+					spec requires: #('Phratch')
+			].
+			spec
+				package: 'PhratchFile' with: [ 
+					spec requires: #('Phratch')
+			].
+			spec
+				package: 'PhratchList' with: [ 
+					spec requires: #('Phratch')
+			].
+			spec
+				package: 'PhratchLooks' with: [ 
+					spec requires: #('Phratch')
+			].
+			spec
+				package: 'PhratchMotion' with: [ 
+					spec requires: #('Phratch')
+			].
+			spec
+				package: 'PhratchPen' with: [ 
+					spec requires: #('Phratch')
+			].
+			spec
+				package: 'PhratchSensing' with: [ 
+					spec requires: #('Phratch')
+			].
+			spec
+				package: 'PhratchDebugger' with: [ 
+					spec requires: #('Phratch')
+			].
+	].
+			
+]
+
+{ #category : #'as yet unclassified' }
 ConfigurationOfPhratch >> project [
 	^ project ifNil: [
 		 | constructor |
@@ -421,6 +471,9 @@ ConfigurationOfPhratch >> version40: spec [
 ConfigurationOfPhratch >> version50: spec [
 	<version:'5.0' imports: #('4.0-baseline' )>
 	spec for: #common do: [
+			spec repository: 'http://smalltalkhub.com/mc/SeanDeNigris/SeansPlayground/main'.
+			spec package: 'NewExternalWebBrowser'.
+			
 			spec repository: 'http://smalltalkhub.com/mc/JLaval/Phratch/main'.
 			spec
 				package: 'Phratch';
@@ -432,7 +485,5 @@ ConfigurationOfPhratch >> version50: spec [
 				package: 'PhratchPen';
 				package: 'PhratchSensing';
 				package: 'PhratchDebugger'.
-			spec
-				project: 'OSProcess' with: #stable.
 	].
 ]
