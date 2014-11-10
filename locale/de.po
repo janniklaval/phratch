@@ -2454,7 +2454,7 @@ msgid "go in between x: $Number$ y: $Number$ and x: $Number$ y: $Number$"
 msgstr "Gehe zu Bereich zwischen x: $Number$ y: $Number$ und x: $Number$ y: $Number$"
 
 msgid "go $Number$ of the way to x: $Number$ y: $Number$" 
-msgstr "Gehe $Number$ in Richtung zu x: $Number$ y: $number$"
+msgstr "Gehe $Number$ in Richtung zu x: $Number$ y: $Number$"
 
 msgid "if $Boolean$ bounce" 
 msgstr "Falls $Boolean$ pralle ab"
