@@ -149,7 +149,7 @@ PhratchMinecraftMorph >> playerPositionX [
 { #category : #'as yet unclassified' }
 PhratchMinecraftMorph >> playerPositionX: aX y: aY z: aZ [
 	<phratchItem: 'set player position x $Number$ y $Number$ z $Number$' kind: #CommandBlockMorph category: 'minecraft' defaultValues: #(0 0 0) subCategory: #a special: #()>
-	^ minecraftObj playerTile: ('', aX, ',', aY, ',', aZ)
+	^ minecraftObj playerPos: {  aX. aY. aZ }
 ]
 
 { #category : #'as yet unclassified' }
