@@ -2646,7 +2646,7 @@ PhratchFrameMorph >> showPlay [
 PhratchFrameMorph >> showSettingBrowser [
 
 	<phratchMenu: 'Settings' category: 'edit' position: 7 sub:3 shift: false>
-	SettingBrowser new changePackageSet: {RPackageOrganizer default packageNamed: 'Phratch' . RPackageOrganizer default packageNamed: 'Settings-Network' . RPackageOrganizer default packageNamed: 'Graphics-Fonts' .RPackageOrganizer default packageNamed: 'Settings-FreeType' }; open
+	SettingBrowser new changePackageSet: {RPackageOrganizer default packageNamed: 'Phratch' . RPackageOrganizer default packageNamed: 'Network-Kernel' . RPackageOrganizer default packageNamed: 'Graphics-Fonts' .RPackageOrganizer default packageNamed: 'FreeType' }; open
 ]
 
 { #category : #watchers }
