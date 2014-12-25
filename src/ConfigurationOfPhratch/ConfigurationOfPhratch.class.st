@@ -464,7 +464,7 @@ ConfigurationOfPhratch >> version40: spec [
 			spec
 				package: 'Phratch'with: 'Phratch-janniklaval.422';
 				package: 'PhratchColor'with: 'PhratchColor-janniklaval.7';
-				package: 'PhratchFile'with: 'PhratchFile-janniklaval.3';
+				package: 'PhratchFile'with: 'PhratchFile-janniklaval.5';
 				package: 'PhratchList'with: 'PhratchList-jlaval.12';
 				package: 'PhratchLooks'with: 'PhratchLooks-janniklaval.11';
 				package: 'PhratchMotion'with: 'PhratchMotion-janniklaval.4';
