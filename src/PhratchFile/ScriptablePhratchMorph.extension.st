@@ -27,11 +27,11 @@ ScriptablePhratchMorph >> clearFile: aFileNameString [
 ScriptablePhratchMorph >> createFile: aFileNameString [
 	"Create the given file name."
 	<phratchItem: 'create file $String$' kind: #- category: 'files' defaultValues: #() subCategory: #a special: #()>
-	| f |
 	(self askForFileIO = true) ifFalse: [^ self].
-	aFileNameString asFileReference delete.
-	f := FileStream newFileNamed: aFileNameString.
-	f close
+	aFileNameString asFileReference ensureDelete.
+	(FileStream newFileNamed: aFileNameString) 
+		nextPutAll: '';
+		close.
 ]
 
 { #category : #'*PhratchFile' }
