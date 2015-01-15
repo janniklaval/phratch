@@ -488,12 +488,12 @@ PhratchScriptEditorMorph >> scriptsMenu: aPosition [
 	| menu choice |
 	self target ifNil: [ ^ self ].
 	menu := MenuMorph new defaultTarget: self.
-	menu add: 'clean up' localized selector: #cleanUp.
-	menu add: 'save picture of scripts' localized selector: #saveScriptsToImage.
-	menu add: 'add comment' localized selector: #addComment:.
-	menu add: 'undo last drop' localized selector: #undoDrop.
+	menu add: 'clean up' localized action: #cleanUp.
+	menu add: 'save picture of scripts' localized action: #saveScriptsToImage.
+	menu add: 'add comment' localized action: #addComment:.
+	menu add: 'undo last drop' localized action: #undoDrop.
 	menu addLine.
-	menu add: 'make a block' localized selector: #addCustomBlock.
+	menu add: 'make a block' localized action: #addCustomBlock.
 	choice := menu localize invokeModal: true.
 	choice ifNil: [ ^ self ].
 	choice = #addComment:

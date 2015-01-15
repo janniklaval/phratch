@@ -342,7 +342,7 @@ VariableBlockMorph >> rename [
 
 	choice := MenuMorph new defaultTarget: self.
 	list asArray do:[:aVarName |
-		choice add: aVarName selector: nil.	
+		choice add: aVarName action: nil.	
 	].
 	choice localize; popUpAt: self topRight inWorld: World.
 	

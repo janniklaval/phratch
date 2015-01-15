@@ -39,19 +39,19 @@ SketchMorph class >> withForm: aForm [
 SketchMorph >> addCustomMenuItems: aCustomMenu hand: aHandMorph [
 	super addCustomMenuItems: aCustomMenu hand: aHandMorph.
 	aCustomMenu addLine.
-	aCustomMenu add: 'grab from screen' localized selector: #grabFromScreen.
-	aCustomMenu add: 'read from file' localized selector: #readFromFile.
+	aCustomMenu add: 'grab from screen' localized action: #grabFromScreen.
+	aCustomMenu add: 'read from file' localized action: #readFromFile.
 	aCustomMenu addLine.
-	aCustomMenu add: 'save as BMP' localized selector: #saveAsBMP.
-	aCustomMenu add: 'save as GIF' localized selector: #saveAsGIF.
-	aCustomMenu add: 'save as JPEG' localized selector: #saveAsJPEG.
+	aCustomMenu add: 'save as BMP' localized action: #saveAsBMP.
+	aCustomMenu add: 'save as GIF' localized action: #saveAsGIF.
+	aCustomMenu add: 'save as JPEG' localized action: #saveAsJPEG.
 	aCustomMenu addLine.
-	aCustomMenu add: 'set rotation center' localized selector: #setRotationCenter.
-	aCustomMenu add: 'set rotation style' localized selector: #setRotationStyle.
-	aCustomMenu add: 'erase pixels of color' localized selector: #erasePixelsOfColor:.
-	aCustomMenu add: 'recolor of pixels of color' localized selector: #recolorPixelsOfColor:.
+	aCustomMenu add: 'set rotation center' localized action: #setRotationCenter.
+	aCustomMenu add: 'set rotation style' localized action: #setRotationStyle.
+	aCustomMenu add: 'erase pixels of color' localized action: #erasePixelsOfColor:.
+	aCustomMenu add: 'recolor of pixels of color' localized action: #recolorPixelsOfColor:.
 	aCustomMenu addLine.
-	aCustomMenu add: 'repaint' localized selector: #editDrawing
+	aCustomMenu add: 'repaint' localized action: #editDrawing
 ]
 
 { #category : #geometry }

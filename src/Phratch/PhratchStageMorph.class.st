@@ -629,9 +629,9 @@ PhratchStageMorph >> rightButtonMenu [
 
 	| menu |
 	menu := MenuMorph new defaultTarget: self.
-	menu add: 'grab screen region for new sprite' localized selector: #grabSpriteFromScreen.
+	menu add: 'grab screen region for new sprite' localized action: #grabSpriteFromScreen.
 	menu addLine.
-	menu add: 'save picture of stage...' localized selector: #stageShot.
+	menu add: 'save picture of stage...' localized action: #stageShot.
 	menu
 		localize;
 		invokeModal
@@ -853,7 +853,7 @@ PhratchStageMorph >> stopAll [
 	self allMorphsDo: [:m |
 		(m isScriptablePhratchMorph) ifTrue: [m stopPlaying]].
 
-	(Smalltalk at: #DebuggerFrameMorph) allInstancesDo: [:df | df delete ].
+	DebuggerFrameMorph allInstancesDo: [:df | df delete ].
 
 	(sFrame := self ownerOrYourselfThatIsAPhratchFrameMorph) ifNotNil: [
 		sFrame scriptsPane allMorphsDo: [:m |

@@ -382,7 +382,7 @@ PhratchCommentMorph >> rightButtonMenu [
 	| menu |
 	menu := MenuMorph new defaultTarget: self.
 	menu addLine.
-	menu add: 'delete' localized selector: #delete.
+	menu add: 'delete' localized action: #delete.
 	menu
 		localize;
 		invokeModal

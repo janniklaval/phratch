@@ -777,10 +777,10 @@ PhratchListMorph >> references: anObject [
 PhratchListMorph >> rightButtonMenu [
 	| menu |
 	menu := MenuMorph new defaultTarget: self.
-	menu add: 'export' localized selector: #exportList.
-	menu add: 'import' localized selector: #importList.
+	menu add: 'export' localized action: #exportList.
+	menu add: 'import' localized action: #importList.
 	menu addLine.
-	menu add: 'hide' localized selector: #delete.
+	menu add: 'hide' localized action: #delete.
 	menu localize.
 	menu labels
 		at: 2

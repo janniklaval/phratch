@@ -98,14 +98,14 @@ PhratchSimpleSliderMorph >> addSliderMenuItems: aCustomMenu hand: aHandMorph [
 	"Add items to set slider parameters"
 	aCustomMenu addLine.
 	""
-	aCustomMenu add: 'set action selector' translated selector: #setActionSelector.
-	aCustomMenu add: 'change arguments' translated selector: #setArguments.
+	aCustomMenu add: 'set action selector' translated action: #setActionSelector.
+	aCustomMenu add: 'change arguments' translated action: #setArguments.
 	""
-	aCustomMenu add: 'set minimum value' translated selector: #setMinVal.
-	aCustomMenu add: 'set maximum value' translated selector: #setMaxVal.
+	aCustomMenu add: 'set minimum value' translated action: #setMinVal.
+	aCustomMenu add: 'set maximum value' translated action: #setMaxVal.
 	""
-	aCustomMenu addUpdating: #descendingString selector: #toggleDescending.
-	aCustomMenu addUpdating: #truncateString selector: #toggleTruncate.
+	aCustomMenu addUpdating: #descendingString action: #toggleDescending.
+	aCustomMenu addUpdating: #truncateString action: #toggleTruncate.
 	
 ]
 
@@ -114,10 +114,10 @@ PhratchSimpleSliderMorph >> addTargetingMenuItems: aCustomMenu hand: aHandMorph 
 	"Add targeting menu items"
 	aCustomMenu addLine.
 
-	aCustomMenu add: 'set target' translated selector: #targetWith:.
-	aCustomMenu add: 'sight target' translated selector: #sightTargets:.
+	aCustomMenu add: 'set target' translated action: #targetWith:.
+	aCustomMenu add: 'sight target' translated action: #sightTargets:.
 	target
-		ifNotNil: [aCustomMenu add: 'clear target' translated selector: #clearTarget]
+		ifNotNil: [aCustomMenu add: 'clear target' translated action: #clearTarget]
 ]
 
 { #category : #private }

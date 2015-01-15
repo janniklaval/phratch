@@ -348,23 +348,23 @@ LibraryItemMorph >> rightButtonMenu [
 
 	| menu |
 	menu := MenuMorph new defaultTarget: self target.
-	menu add: 'show' localized selector: #makeVisible.
-	menu add: 'export this sprite' localized selector: #exportObject.
+	menu add: 'show' localized action: #makeVisible.
+	menu add: 'export this sprite' localized action: #exportObject.
 
 	menu addLine.
-	menu add: 'duplicate' localized selector: #spawn.
-	menu add: 'delete' localized selector: #undoableDeleteSprite.
+	menu add: 'duplicate' localized action: #spawn.
+	menu add: 'delete' localized action: #undoableDeleteSprite.
 	(self target isPhratchSpriteMorph)
 		ifTrue: [ 
 			menu addLine.
-			menu add: 'parent...' localized selector: #choosePrototype.
+			menu add: 'parent...' localized action: #choosePrototype.
 			self target instances size > 0
 				ifTrue: [ menu add: 'children...' localized target: [self childrenMenu] selector: #value argumentList: #() ].
 			self target isNested
 				ifTrue: [ menu addLine ].
 			self target hasSubsprites
-				ifTrue: [ menu add: 'detach all subsprites' localized selector: #unhingeAll ].
-			self target ownerSprite ifNotNil: [ menu add: 'detach from ' localized, self target ownerSprite objName selector: #unhinge ] ].
+				ifTrue: [ menu add: 'detach all subsprites' localized action: #unhingeAll ].
+			self target ownerSprite ifNotNil: [ menu add: 'detach from ' localized, self target ownerSprite objName action: #unhinge ] ].
 	menu
 		localize;
 		invokeModal

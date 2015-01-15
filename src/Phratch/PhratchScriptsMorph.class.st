@@ -168,16 +168,16 @@ PhratchScriptsMorph >> recordDroppedBlock: aBlockMorph bottom: stackBottom kicke
 PhratchScriptsMorph >> rightButtonMenu [
 	| menu be |
 	menu := MenuMorph new defaultTarget: self.
-	menu add: 'clean up' localized selector: #cleanUp.
-	menu add: 'save picture of scripts' localized selector: #saveScriptsToImage.
+	menu add: 'clean up' localized action: #cleanUp.
+	menu add: 'save picture of scripts' localized action: #saveScriptsToImage.
 	be := self ownerOrYourselfThatIsABlockEditorFrameMorph.
 	be
 		ifNotNil: [ 
 			be definition varNames size > 0
-				ifTrue: [ menu add: 'turn block variables into script variables' localized selector: #migrateBlockVars ] ].
-	menu add: 'undo last drop' localized selector: #undoLastDrop.
+				ifTrue: [ menu add: 'turn block variables into script variables' localized action: #migrateBlockVars ] ].
+	menu add: 'undo last drop' localized action: #undoLastDrop.
 	menu addLine.
-	menu add: 'make a block' localized selector: #makeNewBlock.
+	menu add: 'make a block' localized action: #makeNewBlock.
 	menu
 		localize;
 		invokeModal
