@@ -6,6 +6,17 @@ String >> asArgString [
 ]
 
 { #category : #'*Phratch-Extensions' }
+String >> asLegalSelector [
+	"'234znak 43 ) 2' asLegalSelector2"
+	
+	| toUse |
+ 	toUse := self select: [:char | char isAlphaNumeric].
+	(toUse size = 0 or: [ toUse first isLetter not ])
+		ifTrue: [ toUse := 'v', toUse ].
+	^ toUse uncapitalized asSymbol.
+]
+
+{ #category : #'*Phratch-Extensions' }
 String >> asNumberNoError [
 	"Convert the given string to a number without giving errors about its format. Ignore non-digit characters and allow a leading '+', which kids sometimes type. Answer zero if empty."
 
