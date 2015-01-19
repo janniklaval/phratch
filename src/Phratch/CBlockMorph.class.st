@@ -47,6 +47,16 @@ CBlockMorph >> attachBlock: aBlockMorph [
 	
 ]
 
+{ #category : #'as yet unclassified' }
+CBlockMorph >> attachBlockNested: aBlockMorph [
+	stretchHeight = 0
+		ifTrue: [ 
+			self position: aBlockMorph left @ (aBlockMorph top - self height + 4).
+			self bottomBlock nextBlock: aBlockMorph ]
+		ifFalse: [ nestedBlock := aBlockMorph ].
+	self addMorph: aBlockMorph
+]
+
 { #category : #private }
 CBlockMorph >> blockAttachPoints: aSet [
 	"Answer a collection of possible attachment points for me. Each entry is an Association mapping a point to the morph to which a dropping command block could be attached."
@@ -81,18 +91,6 @@ CBlockMorph >> bracketThickness [
 
 	^ CBlockBracketThickness
 
-]
-
-{ #category : #accessing }
-CBlockMorph >> closestAttachTargetIn: newOwner [
-	"Answer the closest block attachment point among the blocks and stack submorphs of the given morph. Answer nil if there are no blocks close enough to attach myself to."
-
-	
-	| best |
-	best := super closestAttachTargetIn: newOwner.
-	self stretchHeight:  0.
-	
-	^ best
 ]
 
 { #category : #geometry }
@@ -358,12 +356,15 @@ CBlockMorph >> printCodeOn: aStream indent: indent [
 
 { #category : #geometry }
 CBlockMorph >> stretchHeight: aNumber [
-
-	(stretchHeight = aNumber) ifTrue: [^ self].
+	stretchHeight = aNumber
+		ifTrue: [ ^ self ].
 	stretchHeight := aNumber.
 	blockLayoutNeeded := true.
-	self fixBlockLayout.
+	self fixBlockLayout.	"The part below is needed to render the streching bottom part of the block,
 
+	as it needs to be redrawn properly"
+	blockLayoutNeeded := false.
+	self layoutChanged
 ]
 
 { #category : #private }

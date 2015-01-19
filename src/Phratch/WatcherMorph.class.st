@@ -367,12 +367,12 @@ WatcherMorph >> rightButtonMenu [
 	hasSlider := self isVariableWatcher and: [phratchSlider notNil].
 
 	hasSlider not & isLarge not
-		ifTrue: [menu add: '* ', 'normal readout' localized,' *'	action: #showSmallReadout]
-		ifFalse: [menu add: '  ', 'normal readout' localized		action: #showSmallReadout].
+		ifTrue: [menu add: '* ', 'normal readout' localized,' *'	selector: #showSmallReadout]
+		ifFalse: [menu add: '  ', 'normal readout' localized		selector: #showSmallReadout].
 
 	hasSlider not & isLarge
-		ifTrue: [menu add: '* ', 'large readout' localized, ' *'		action: #showLargeReadout]
-		ifFalse: [menu add: '  ', 'large readout' localized			action: #showLargeReadout].
+		ifTrue: [menu add: '* ', 'large readout' localized, ' *'		selector: #showLargeReadout]
+		ifFalse: [menu add: '  ', 'large readout' localized			selector: #showLargeReadout].
 	
 	menu addLine.
 	readout addCustomMenuItems: menu.
@@ -380,14 +380,14 @@ WatcherMorph >> rightButtonMenu [
 	
 	self isVariableWatcher ifTrue: [
 		phratchSlider
-			ifNil: [menu add: '  ', 'slider' localized action: #showSlider]
+			ifNil: [menu add: '  ', 'slider' localized selector: #showSlider]
 			ifNotNil: [
-				menu add: '* ', 'slider' localized,' *' action: #showSlider.
+				menu add: '* ', 'slider' localized,' *' selector: #showSlider.
 				menu addLine.
-				menu add: '  ', 'set slider min and max' localized action: #setSliderMinAndMax]].
+				menu add: '  ', 'set slider min and max' localized selector: #setSliderMinAndMax]].
 
 	menu addLine.
-	menu add: '  ',  'hide' localized action: #delete.
+	menu add: '  ',  'hide' localized selector: #delete.
 	menu invokeModal.
 
 ]

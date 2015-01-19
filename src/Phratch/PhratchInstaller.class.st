@@ -24,11 +24,6 @@ PhratchInstaller class >> beginInstall [
 	StartupLoader default addAtStartupInImageDirectory: items.
 	StartupLoader default loadFromDefaultLocations.
 
-	"AbstractSound initialize.
-	SampledSound initialize."
-	
-	InputEventSensor addInstVarNamed: #keyPressed.
-
 	(Workspace
 		openContents:
 			'"To try it out run the following expression:" ' 
@@ -48,9 +43,11 @@ PhratchInstaller class >> declaredSprite [
 { #category : #installation }
 PhratchInstaller class >> downloadFileFromUrl: anUrl andUnzipIntoDirectory: aPath [
 
+	| i |
 	UIManager default informUserDuring: 
 		[ :bar | 
-		(ZipArchive new readFrom: (ZnHTTPSocketFacade httpGet: anUrl)) 
+		i:= ZnClient new get: anUrl.
+		(ZipArchive new readFrom: (ReadStream on: i from: 1 to: i size)) 
 			extractAllTo: (aPath)
 			informing: bar 
 			overwrite: true
@@ -90,7 +87,7 @@ PhratchInstaller class >> getPhratchHelp [
 { #category : #installation }
 PhratchInstaller class >> getPhratchLicence [
 	UIManager inform:  'Downloading licence.txt'.
-	(FileStream newFileNamed: 'license.txt') nextPutAll: ((ZnHTTPSocketFacade httpGet: 'https://github.com/janniklaval/phratch/raw/master/license.txt'))
+	(FileStream newFileNamed: 'license.txt') nextPutAll: ((ZnClient new get: 'https://github.com/janniklaval/phratch/raw/master/license.txt'))
 ]
 
 { #category : #installation }
@@ -100,7 +97,7 @@ PhratchInstaller class >> getPhratchLocales [
 	{ 'eu' . 'is' . 'ne' . 'sv' . 'fa' . 'it' . 'nl' . 'th' . 'ar' . 'fi' . 'ja' . 'no' . 'tr' . 'bg' . 'fr' . 'ja_HIRA' . 'pl' . 'uk' . 'ca' . 'fr_CA' . 'kn' . 'pt' . 'vi' . 'cs' . 'gl' . 'ko' . 'pt_BR' . 'zh_CN' . 'da' . 'he' . 'lt' . 'ro' . 'zh_TW' . 'de' . 'hr' . 'mk' . 'ru' . 'el' . 'ht' . 'mn' . 'rw' . 'es' . 'hu' . 'mr' . 'sk' . 'et' . 'id' . 'ms' . 'sl' } do: [:lang | |f|
 		('locale' asFileReference) ensureCreateDirectory.
 		f:=( ('locale' asFileReference / lang,'po') writeStream).
-		f nextPutAll: (ZnHTTPSocketFacade httpGet: 'https://raw.github.com/janniklaval/phratch/master/locale/',lang,'.po' )
+		f nextPutAll: (ZnClient new get: 'https://raw.github.com/janniklaval/phratch/master/locale/',lang,'.po' )
 	].
 ]
 
@@ -337,5 +334,5 @@ PhratchInstaller class >> updateDeclaredSprite [
 { #category : #'class initialization' }
 PhratchInstaller class >> version [
 
-	^ '4.0'
+	^ '5.0 alpha'
 ]

@@ -1125,11 +1125,11 @@ PhratchFrameMorph >> editMenu: aMenuTitleMorph [
 	(self menuPragmasFor: 'edit') do:[:e |
 		(previousSC notNil and: [previousSC ~~( e arguments at: 4)]) ifTrue:[menu addLine ].
 		(e arguments at: 5) ifFalse:[
-			menu add: (e arguments at: 1) localized action: e method selector
+			menu add: (e arguments at: 1) localized selector: e method selector
 		]
 		ifTrue: [ 
 			Sensor shiftPressed ifTrue: [
-				menu add: (e arguments at: 1) localized action: e method selector.
+				menu add: (e arguments at: 1) localized selector: e method selector.
 			] 
 		].
 		previousSC := e arguments at: 4.
@@ -1138,16 +1138,16 @@ PhratchFrameMorph >> editMenu: aMenuTitleMorph [
 	menu addLine.
 
 	menu add: ScriptablePhratchMorph keepOnStage not checkBoxString, 'Allow Sprites offstage' localized
-			action: #toggleKeepSpritesOnStage.
+			selector: #toggleKeepSpritesOnStage.
 
 	menu add: EventHatMorph threadSafeMode checkBoxString, 'Thread safe scripts' localized
-			action: #toggleThreadSafeMode.
+			selector: #toggleThreadSafeMode.
 	
 	Sensor shiftPressed ifTrue: [	self isDevelopmentMode ifTrue: [
 			menu addLine.
 		fillScreenFlag
-			ifTrue: [menu add: 'turn fill screen off' localized action: #fillScreenOff]
-			ifFalse: [menu add: 'turn fill screen on' localized action: #fillScreenOn].		
+			ifTrue: [menu add: 'turn fill screen off' localized selector: #fillScreenOff]
+			ifFalse: [menu add: 'turn fill screen on' localized selector: #fillScreenOn].		
 		]].
  
 	menu localize.
@@ -1397,11 +1397,11 @@ PhratchFrameMorph >> fileMenu: aMenuTitleMorph [
 	(self menuPragmasFor: 'file') do:[:e |
 		(previousSC notNil and: [previousSC ~~( e arguments at: 4)]) ifTrue:[menu addLine ].
 		(e arguments at: 5) ifFalse:[
-			menu add: (e arguments at: 1) localized action: e method selector
+			menu add: (e arguments at: 1) localized selector: e method selector
 		]
 		ifTrue: [ 
 			Sensor shiftPressed ifTrue: [
-				menu add: (e arguments at: 1) localized action: e method selector.
+				menu add: (e arguments at: 1) localized selector: e method selector.
 			] 
 		].
 		previousSC := e arguments at: 4.
@@ -1603,27 +1603,27 @@ PhratchFrameMorph >> helpMenu: aMenuTitleMorph [
 	(self menuPragmasFor: 'help') do:[:e |
 		(previousSC notNil and: [previousSC ~~( e arguments at: 4)]) ifTrue:[menu addLine ].
 		(e arguments at: 5) ifFalse:[
-			menu add: (e arguments at: 1) localized action: e method selector
+			menu add: (e arguments at: 1) localized selector: e method selector
 		]
 		ifTrue: [ 
 			Sensor shiftPressed ifTrue: [
-				menu add: (e arguments at: 1) localized action: e method selector.
+				menu add: (e arguments at: 1) localized selector: e method selector.
 			] 
 		].
 		previousSC := e arguments at: 4.
 	].
 
 	
-	menu add: 'Phratch Website' localized target: PhratchHelp action: #launchWebsite.
+	menu add: 'Phratch Website' localized target: PhratchHelp selector: #launchWebsite.
 	menu addLine.
-	menu add: 'Scratch Help Page' localized target: PhratchHelp action: #launchHelpPage.
-	menu add: 'Generated Block Doc' localized target: PhratchHelp action: #launchBlockDoc.
-	menu add: 'Help Screens' localized target: PhratchHelp action: #launchAllHelpScreens.
+	menu add: 'Scratch Help Page' localized target: PhratchHelp selector: #launchHelpPage.
+	menu add: 'Generated Block Doc' localized target: PhratchHelp selector: #launchBlockDoc.
+	menu add: 'Help Screens' localized target: PhratchHelp selector: #launchAllHelpScreens.
 	menu addLine.
-	menu add: 'BYOB Reference Manual' localized target: PhratchHelp action: #openBYOBManual.
-	menu add: 'Panther Tutorials' localized target: PhratchHelp action: #openPantherTutorials.
+	menu add: 'BYOB Reference Manual' localized target: PhratchHelp selector: #openBYOBManual.
+	menu add: 'Panther Tutorials' localized target: PhratchHelp selector: #openPantherTutorials.
 	menu addLine.
-	menu add: 'About Phratch' localized target: PhratchHelp action: #aboutPhratch.
+	menu add: 'About Phratch' localized target: PhratchHelp selector: #aboutPhratch.
 	menu localize.
 	"menu popUpAt: aMenuTitleMorph bottomLeft + (0 @ 10) inWorld: World"
 	menu popUpInWorld 
@@ -2646,7 +2646,7 @@ PhratchFrameMorph >> showPlay [
 PhratchFrameMorph >> showSettingBrowser [
 
 	<phratchMenu: 'Settings' category: 'edit' position: 7 sub:3 shift: false>
-	SettingBrowser new changePackageSet: {RPackageOrganizer default packageNamed: 'Phratch' . RPackageOrganizer default packageNamed: 'Settings-Network' . RPackageOrganizer default packageNamed: 'Graphics-Fonts' .RPackageOrganizer default packageNamed: 'Settings-FreeType' }; open
+	SettingBrowser new changePackageSet: {RPackageOrganizer default packageNamed: 'Phratch' . RPackageOrganizer default packageNamed: 'Network-Kernel' . RPackageOrganizer default packageNamed: 'Graphics-Fonts' .RPackageOrganizer default packageNamed: 'FreeType' }; open
 ]
 
 { #category : #watchers }
@@ -2691,7 +2691,7 @@ PhratchFrameMorph >> startup [
 	BlockEditorFrameMorph resetDimensions.
 	ElementsEditorFrameMorph resetDimensions.
 	
-	DebuggerFrameMorph resetDimensions.
+	(Smalltalk at: #DebuggerFrameMorph) resetDimensions.
 
 	self updateProjectName.
 	author := ''.

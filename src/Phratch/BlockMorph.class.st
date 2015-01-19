@@ -199,20 +199,23 @@ BlockMorph >> click: evt [
 BlockMorph >> closestAttachTargetIn: newOwner [
 	"Answer the closest block attachment point among the blocks and stack submorphs of the given morph. Answer nil if there are no blocks close enough to attach myself to."
 
-	| xThresh yThresh attachPoints best bestDist targetP dist ref |
+	| xThresh yThresh attachPoints best bestDist targetP dist ref topUsed bottomUsed |
 	xThresh := 65.
 	yThresh := self yThresh.
 	attachPoints := OrderedCollection new: 100.
-	newOwner allMorphs reject: [ :m | m == newOwner ]
+	topUsed := false.
+	bottomUsed := false.
+	newOwner allMorphs
+		reject: [ :m | m == newOwner ]
 		thenDo: [ :m | 
 			(m ~~ self
 				and: [ 
 					m ~~ self bottomBlock
 						and: [ 
 							m ~~ self topBlock
-								and: [ m ~~ self owner and: [ (m isBlockMorph) and: [ m isReporter not | (m isCommandScriptBlockMorph) ] ] ] ] ])
+								and: [ m ~~ self owner and: [ m isBlockMorph and: [ m isReporter not | m isCommandScriptBlockMorph ] ] ] ] ])
 				ifTrue: [ m blockAttachPoints: attachPoints ] ].
-	((self isHatBlockMorph) or: [ (self ownerOrYourselfThatIsAHatBlockMorph) notNil ])
+	(self isHatBlockMorph or: [ self ownerOrYourselfThatIsAHatBlockMorph notNil ])
 		ifTrue: [ 
 			"if I am a HatBlock or the bottom block of a HatBlock stack, I can only attach to the top block of a stack"
 			attachPoints := attachPoints select: [ :assoc | assoc value owner = newOwner and: [ assoc key y = assoc value top ] ] ].
@@ -229,26 +232,69 @@ BlockMorph >> closestAttachTargetIn: newOwner [
 	attachPoints
 		do: [ :assoc | 
 			targetP := assoc key.
-			ref :=  self left .
+			ref := self left.
 			(ref - targetP x) abs < xThresh
 				ifTrue: [ 
 					((self top - targetP y) abs < yThresh or: [ self nextBlock isNil and: [ (self bottom - targetP y) abs < yThresh ] ])
 						ifTrue: [ 
 							"targetP is within sticking range"
-							dist :=(self position - targetP) r .
+							dist := (self position - targetP) r.
 							dist < bestDist
 								ifTrue: [ 
-									"(self top - targetP y) abs < yThresh
+									(self top - targetP y) abs < yThresh
 										ifTrue: [ 
 											topUsed := true.
 											bottomUsed := false ].
 									(self nextBlock isNil and: [ (self bottom - targetP y) abs < yThresh ])
 										ifTrue: [ 
 											topUsed := false.
-											bottomUsed := true ]."
+											bottomUsed := true ].
 									best := assoc.
 									bestDist := dist ] ] ] ].	"special case for the auto-wrapping of c-shaped/if-else blocks"
-	
+	self isCBlockMorph
+		ifTrue: [ 
+			best
+				ifNotNil: [ 
+					bottomUsed
+						ifTrue: [ 
+							best value owner isBlockMorph
+								ifTrue: [ 
+									self stretchHeight: 0.
+									^ nil ] ].
+					(self isStopOrForever or: [ self bottomBlock isStopOrForever ])
+						ifTrue: [ 
+							bottomUsed
+								ifTrue: [ 
+									self stretchHeight: 0.
+									^ nil ] ].
+					(best key y = best value top
+						and: [ (self isForever or: [ self bottomBlock isForever ]) and: [ (self nestedBlockAt: best key y) isNil not ] ])
+						ifTrue: [ 
+							self stretchHeight: 0.
+							^ nil ].
+					(self nestedBlockAt: best key y)
+						ifNil: [ 
+							bottomUsed
+								ifTrue: [ 
+									self stretchHeight: 0.
+									best key y = best value bottom
+										ifTrue: [ ^ nil ].
+									(best key y = best value top and: [ best value owner isBlockMorph ])
+										ifTrue: [ ^ nil ].
+									(best key y = best value bottom and: [ best value owner isBlockMorph not ])
+										ifTrue: [ ^ nil ] ].
+							topUsed
+								ifTrue: [ 
+									(best key y = best value bottom and: [ best value nextBlock isNil not ])
+										ifTrue: [ 
+											self stretchHeight: 0.
+											^ nil ].
+									best key y = best value top
+										ifTrue: [ 
+											self stretchHeight: best value fullBounds height - 14.
+											^ best ] ].
+							self stretchHeight: 0 ] ].
+			best ifNil: [ self stretchHeight: 0 ] ].
 	^ best
 ]
 
@@ -969,89 +1015,92 @@ BlockMorph >> justDroppedInto: newOwner event: evt [
 
 	| frame targetAssoc targetP targetBlock bottomBlockUsed upperBlock |
 	bottomBlockUsed := false.
-
-	owner ifNil:	[^self].
-
-	(frame := newOwner ownerOrYourselfThatIsAPhratchFrameMorph)
-		ifNotNil: [frame projectModified].
-
-	((self ownerOrYourselfThatIsAPhratchViewerMorph) notNil) ifTrue: [
-		"delete myself when dropped in the blocks palette area"
-		self delete.
-		^ self].
-
-	((self ownerOrYourselfThatIsAPhratchBlockPaletteMorph) notNil) ifTrue: [
-		"delete myself when dropped in the blocks palette area of a Block Editor"
-		self delete.
-		^ self].
-
-	"blocks cannot be dropped onto the stage"
-	(owner isPhratchStageMorph) ifTrue: [
-		^ evt hand rejectDropMorph: self event: evt].
-
-	"okay to drop blocks into the world during development"
-	((owner == World) and: [ScriptablePhratchMorph noviceMode not]) ifTrue: [^ self].
-
-	((owner isPhratchScriptsMorph) or:
-	 [(owner isBlockMorph) or:
-	 [(owner isPhratchStageMorph) and: [self isReporter]]]) ifFalse: [
-		^ evt hand rejectDropMorph: self event: evt].
-
-	self isReporter ifTrue: [^ self handleReporterDrop].
-	(newOwner isPhratchScriptsMorph) ifTrue: [
-		newOwner recordDroppedBlock: self bottom: self bottomBlock kickedOut: nil].
-
+	owner ifNil: [ ^ self ].
+	(frame := newOwner ownerOrYourselfThatIsAPhratchFrameMorph) ifNotNil: [ frame projectModified ].
+	self ownerOrYourselfThatIsAPhratchViewerMorph notNil
+		ifTrue: [ 
+			"delete myself when dropped in the blocks palette area"
+			self delete.
+			^ self ].
+	self ownerOrYourselfThatIsAPhratchBlockPaletteMorph notNil
+		ifTrue: [ 
+			"delete myself when dropped in the blocks palette area of a Block Editor"
+			self delete.
+			^ self ].	"blocks cannot be dropped onto the stage"
+	owner isPhratchStageMorph
+		ifTrue: [ ^ evt hand rejectDropMorph: self event: evt ].	"okay to drop blocks into the world during development"
+	(owner == World and: [ ScriptablePhratchMorph noviceMode not ])
+		ifTrue: [ ^ self ].
+	(owner isPhratchScriptsMorph or: [ owner isBlockMorph or: [ owner isPhratchStageMorph and: [ self isReporter ] ] ])
+		ifFalse: [ ^ evt hand rejectDropMorph: self event: evt ].
+	self isReporter
+		ifTrue: [ ^ self handleReporterDrop ].
+	newOwner isPhratchScriptsMorph
+		ifTrue: [ newOwner recordDroppedBlock: self bottom: self bottomBlock kickedOut: nil ].
 	targetAssoc := self closestAttachTargetIn: newOwner.
-	targetAssoc ifNil: [
-		"(self bottomBlock isCBlockMorph) ifFalse: ["
+	targetAssoc
+		ifNil: [ 
+			"(self bottomBlock isCBlockMorph) ifFalse: ["
 			targetAssoc := self bottomBlock closestAttachTargetIn: newOwner.
-			targetAssoc ifNotNil:[
-				bottomBlockUsed := true.
-				(targetAssoc value owner isBlockMorph) ifTrue:[
-					targetAssoc := nil]]"]"].
-	targetAssoc ifNil: [^ self].
-
-	"make sure no processes are running"
-	self = self topBlock ifTrue: [self stop].
-
+			targetAssoc
+				ifNotNil: [ 
+					bottomBlockUsed := true.
+					targetAssoc value owner isBlockMorph
+						ifTrue: [ targetAssoc := nil ] ]	"]" ].
+	targetAssoc ifNil: [ ^ self ].	"make sure no processes are running"
+	self = self topBlock
+		ifTrue: [ self stop ].
 	targetP := targetAssoc key.
 	targetBlock := targetAssoc value.
-
-	self allMorphsDo: [:m | m == targetBlock ifTrue: [^self ]].	"avoid infinite recursion, kludge"
-
+	self
+		allMorphsDo: [ :m | 
+			m == targetBlock
+				ifTrue: [ ^ self ] ].	"avoid infinite recursion, kludge"
 	targetP y = targetBlock top
-		ifTrue: [
-			
-			((bottomBlockUsed not) and: [(self isCBlockMorph)]) ifTrue:[
-				self bottomBlock position: targetP x @ (targetP y - (self bottomBlock height) -4 ).
+		ifTrue: [ 
+			(bottomBlockUsed not and: [ self isCBlockMorph ])
+				ifTrue: [ 
+					"self bottomBlock position: targetP x @ (targetP y - (self bottomBlock height) -4 ).
+
 				upperBlock := self bottomBlock owner.
+
 				[upperBlock isBlockMorph] whileTrue: [
+
 					upperBlock nextBlock ifNotNil:[
+
 						upperBlock position: targetP x @ (upperBlock nextBlock position y - (upperBlock height) -4 ).
+
 						upperBlock := upperBlock owner]].
-				self bottomBlock attachBlock: targetBlock. ^self].
-			"for all other non-c-shaped blocks"
-			(bottomBlockUsed or:[((targetBlock owner isBlockMorph) not) and: [(self isCBlockMorph) not]]) ifTrue:[
-				self bottomBlock position: targetP x @ (targetP y - (self bottomBlock height - 4)).
-				upperBlock := self bottomBlock owner.
-				[upperBlock isBlockMorph] whileTrue: [
-					upperBlock nextBlock ifNotNil:[
-						upperBlock position: targetP x @ (upperBlock nextBlock position y - (upperBlock height - 4)).
-						upperBlock := upperBlock owner]]].
-			((bottomBlockUsed not) and: [targetBlock owner isBlockMorph]) ifTrue:[
-				self position: targetP x @ (targetP y - (self height - 4))].
-			(targetBlock owner isBlockMorph) ifTrue:[
-				self topBlock position: targetP x @ targetP y.
-				targetBlock owner attachBlock: self topBlock].
+
+				self bottomBlock attachBlock: targetBlock. ^self]."
+					targetBlock owner isBlockMorph
+						ifTrue: [ targetBlock owner attachBlock: self ]
+						ifFalse: [ self position: (targetP x - self bracketThickness) @ (targetP y - self topBarHeight - 3) ].
+					self bottomBlock attachBlockNested: targetBlock.
+					^ self ].	"for all other non-c-shaped blocks"
+			(bottomBlockUsed or: [ targetBlock owner isBlockMorph not and: [ self isCBlockMorph not ] ])
+				ifTrue: [ 
+					self bottomBlock position: targetP x @ (targetP y - (self bottomBlock height - 4)).
+					upperBlock := self bottomBlock owner.
+					[ upperBlock isBlockMorph ]
+						whileTrue: [ 
+							upperBlock nextBlock
+								ifNotNil: [ 
+									upperBlock position: targetP x @ (upperBlock nextBlock position y - (upperBlock height - 4)).
+									upperBlock := upperBlock owner ] ] ].
+			(bottomBlockUsed not and: [ targetBlock owner isBlockMorph ])
+				ifTrue: [ self position: targetP x @ (targetP y - (self height - 4)) ].
+			targetBlock owner isBlockMorph
+				ifTrue: [ 
+					self topBlock position: targetP x @ targetP y.
+					targetBlock owner attachBlock: self topBlock ].
 			targetBlock position: targetP x @ (self bottomBlock position y + self bottomBlock height + 4).
-			((bottomBlockUsed not) and: [((targetBlock owner isBlockMorph) not) and: [(self isCBlockMorph)]]) ifFalse:[
-				self bottomBlock attachBlock: targetBlock]]
-		ifFalse: [
-			self assert: [(self isHatBlockMorph) not].  "I am not a HatBlockMorph"
+			(bottomBlockUsed not and: [ targetBlock owner isBlockMorph not and: [ self isCBlockMorph ] ])
+				ifFalse: [ self bottomBlock attachBlock: targetBlock ] ]
+		ifFalse: [ 
+			self assert: [ self isHatBlockMorph not ].	"I am not a HatBlockMorph"
 			self position: targetP.
-
-			targetBlock attachBlock: self].
-
+			targetBlock attachBlock: self ]
 ]
 
 { #category : #accessing }

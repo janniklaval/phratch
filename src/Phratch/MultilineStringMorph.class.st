@@ -49,7 +49,7 @@ MultilineStringMorph class >> initialize [
 MultilineStringMorph >> addCustomMenuItems: aCustomMenu hand: aHandMorph [
 	super addCustomMenuItems: aCustomMenu hand: aHandMorph.
 	aCustomMenu addLine.
-	aCustomMenu add: 'set font' localized action: #fontMenu
+	aCustomMenu add: 'set font' localized selector: #fontMenu
 ]
 
 { #category : #editing }

@@ -246,7 +246,7 @@ PhratchPresenterMorph >> mouseUp: evt [
 
 	p := stage adjustedCursorPoint.
 	mouseFocus ifNotNil: [
-		mouseMoved ifFalse: [mouseFocus click: (MouseEvent new position)]].
+		mouseMoved ifFalse: [mouseFocus click: (MouseEvent new position"MorphicEvent new cursorPoint: p")]].
 
 	mouseFocus := nil.
 	dragOffset := nil.

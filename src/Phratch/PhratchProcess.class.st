@@ -877,7 +877,7 @@ PhratchProcess >> evaluateCommandFor: aStageMorph [
 		self currentBlock = nextBlockToDebug]) ifTrue: [
 			((PhratchFrameMorph someInstance viewMode = #presentation) | doneWithDebugging) ifFalse: [
 				self pause.
-				DebuggerFrameMorph new on: self]].
+				(Smalltalk at: #DebuggerFrameMorph) new on: self]].
 	
 	expression isSpecialForm ifTrue: [self evaluateSpecialForm. 
 		^expression litUp: false.].
@@ -1190,7 +1190,7 @@ PhratchProcess >> returnValueToParentFrame: anObject [
 	((blockToDebug isBlockMorph) and: [self currentBlock isReporterBlockMorph]) ifTrue: [
 			((PhratchFrameMorph someInstance viewMode = #presentation) | doneWithDebugging) ifFalse: [
 				self pause. 
-				DebuggerFrameMorph new on: self returnValue: obj]].
+				(Smalltalk at: #DebuggerFrameMorph) new on: self returnValue: obj]].
 
 
 ]
