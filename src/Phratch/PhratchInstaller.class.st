@@ -187,7 +187,7 @@ PhratchInstaller class >> gotPhratchSkins [
 PhratchInstaller class >> initialize [
 	DeclaredSprites := OrderedCollection new.
 	
-	(Smalltalk at: #FreeTypeSettings) perform: #updateFontsAtImageStartup: with: (true)
+	(Smalltalk at: #FreeTypeSettings) perform: #updateFontsAtImageStartup: with: (true).
 	FreeTypeSettings updateFreeType.
 	
 	(Smalltalk at: #StandardFonts) perform: #defaultFont: with: ((LogicalFont familyName: 'Arial Unicode MS' fallbackFamilyNames: nil pointSize: 10 stretchValue: 5 weightValue: 400 slantValue: 0)).
