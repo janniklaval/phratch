@@ -91,7 +91,7 @@ VariableDeclarationBlockMorph >> rootForGrabOf: aMorph [
 			self isPartsBin ifTrue: [
 				root = self nextBlock
 					ifTrue: [^root]
-					ifFalse: [^ root fullCopy]].
+					ifFalse: [^ root "fullCopy"]].
 			self dragNDropEnabled ifTrue: [^ root]].
 		root := root owner].
 
