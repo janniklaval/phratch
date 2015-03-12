@@ -648,7 +648,7 @@ PaintCanvas >> editForm: aForm regPoint: regPoint textBox: savedTextBox isStage:
 	| p |
 	canvasForm := Form extent: (aForm extent max: self extent) depth: 32.
 	p := (((canvasForm extent // 2) - regPoint) min: (canvasForm extent - aForm extent)) max: 0@0.
-	aForm displayOn: canvasForm at: p rule: Form paint.
+	aForm displayOn: canvasForm at: p rule: Form paint -1.
 	registrationPoint := p + regPoint.
 	bgForm := self makeCheckerboard.
 	self clearTextBox.
