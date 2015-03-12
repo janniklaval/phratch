@@ -9,7 +9,8 @@ Class {
 	#instVars : [
 		'scriptNameMorph',
 		'indicatorMorph',
-		'scriptOwner'
+		'scriptOwner',
+		'commandSpec'
 	],
 	#category : #'Phratch-Blocks'
 }
@@ -43,6 +44,20 @@ HatBlockMorph >> click: evt [
 		yourself].
 
 	super click: evt.
+
+]
+
+{ #category : #accessing }
+HatBlockMorph >> commandSpec [
+
+	^ commandSpec
+
+]
+
+{ #category : #accessing }
+HatBlockMorph >> commandSpec: aString [
+
+	commandSpec := aString
 
 ]
 

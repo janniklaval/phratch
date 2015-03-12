@@ -365,8 +365,7 @@ CommandBlockMorph >> commandSpec [
 { #category : #accessing }
 CommandBlockMorph >> commandSpec: aString [
 	"Set my command spec string. See my class comment."
-	"CommandBlockMorph new commandSpec: 'forward $Number$'"
-
+	"(CommandBlockMorph new commandSpec: 'forward $Number$') inspect"
 	commandSpec := aString.
 	numberArgFlags := nil.
 	self addLabel.

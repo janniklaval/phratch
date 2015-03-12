@@ -28,7 +28,8 @@ MouseClickEventHatMorph >> initialize [
 	super initialize.
 	self removeAllMorphs.
 
-	parts := PhratchTranslator labelPartsFor: 'when $Sprite$ clicked'.
+	commandSpec := 'when $Sprite$ clicked'.
+	parts := PhratchTranslator labelPartsFor: commandSpec.
 
 	s := StringMorph new contents: parts first; font: (PhratchFrameMorph getFont: #Label); color: Color white; 
 		yourself.

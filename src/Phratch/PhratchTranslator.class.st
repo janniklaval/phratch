@@ -8,6 +8,7 @@ Class {
 	#classVars : [
 		'ISODict',
 		'Language',
+		'PreviousTranslationDict',
 		'RenderCenterOffsetCache',
 		'RenderFont',
 		'RenderHintString',
@@ -17,25 +18,6 @@ Class {
 	],
 	#category : #'Phratch-Objects'
 }
-
-{ #category : #'language translation' }
-PhratchTranslator class >> addSensorTranslations [
-	"Add translations for the sensor names such as 'resistance-A' and 'A connected' from the translations of the root words if they exist."
-
-	| root prefix postfix |
-	root := TranslationDict at: 'connected' ifAbsent: [nil].
-	root ifNotNil: [
-		#(A B C D) do: [:ch |
-			prefix := ch asString, ' '.
-			TranslationDict at: (prefix, 'connected') put: (prefix, root)]].
-
-	root := TranslationDict at: 'resistance' ifAbsent: [nil].
-	root ifNotNil: [
-		#(A B C D) do: [:ch |
-			postfix := '-', ch asString.
-			TranslationDict at: ('resistance', postfix) put: (root, postfix)]].
-
-]
 
 { #category : #'Unicode rendering' }
 PhratchTranslator class >> centerOffsetForButtonWithFont: aStrikeFont [
@@ -62,6 +44,17 @@ PhratchTranslator class >> currentLanguage [
 
 	Language ifNil: [Language := 'en'].
 	^ Language
+
+]
+
+{ #category : #'language translation' }
+PhratchTranslator class >> englishTranslationFor: aString [
+
+	| s |
+	s := PreviousTranslationDict keyAtValue: aString ifAbsent: [aString].
+	s size = 0 ifTrue: [s := aString].
+	^ s
+
 
 ]
 
@@ -157,6 +150,7 @@ PhratchTranslator class >> initialize [
 	"PhratchTranslator initialize"
 
 	TranslationDict := Dictionary new.
+	PreviousTranslationDict := Dictionary new.
 	ISODict := Dictionary new.
 
 	self setRenderingHints.
@@ -321,12 +315,13 @@ PhratchTranslator class >> setLanguage: aString [
 
 	| dict allPragmas |
 	"default to English"
+
 	Language := 'en'. 
+	PreviousTranslationDict := TranslationDict.
 	TranslationDict := Dictionary new.
 	self setRenderingHints.  "clear rendering hints"
 
 	aString = 'en' ifTrue: [^ self].
-
 	dict := self importTranslation: aString, '.po'.
 	
 	allPragmas := Pragma allNamed: #phratchTranslation: in: self class.
@@ -337,8 +332,7 @@ PhratchTranslator class >> setLanguage: aString [
 		Language := aString.
 		TranslationDict := dict.
 		dict removeKey: '' ifAbsent: [].
-		self setRenderingHints.
-		self addSensorTranslations].
+		self setRenderingHints].
 
 ]
 

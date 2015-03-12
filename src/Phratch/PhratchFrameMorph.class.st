@@ -3019,6 +3019,22 @@ PhratchFrameMorph >> updatePanes [
 	self createStageButtonsPanel.
 	titlePane addMorph: stageButtonsPanel.
 
+	
+	PhratchScriptsMorph allInstances do:[:sm |
+		(sm allMorphs select:[:m | m isCommandBlockMorph])  
+			do:[:i | i commandSpec: (PhratchTranslator translationFor: (PhratchTranslator englishTranslationFor: i commandSpec)).].
+		(sm allMorphs select:[:m | m isHatBlockMorph])  
+			do:[:i | 
+				i commandSpec ifNotNil: [:cmd | 
+					|index|
+					index := 1.
+					(i submorphs select:[:s | s isStringMorph ] ) 
+						do: [:s | s contents: ((PhratchTranslator labelPartsFor: (i commandSpec)) at: index).
+						index := index+1.
+					]
+				].
+			].
+	].
 	scriptsPane tabPane delete.
 	scriptsPane createTabPane.
 

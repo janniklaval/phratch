@@ -60,8 +60,8 @@ EventHatMorph >> forStartEvent [
 	| parts s m |
 	super initialize.
 	self removeAllMorphs.
-
-	parts := PhratchTranslator labelPartsFor: 'when $Sprite$ clicked'.
+	commandSpec := 'when $Sprite$ clicked'.
+	parts := PhratchTranslator labelPartsFor: commandSpec.
 
 	s := StringMorph new contents: parts first; font: (PhratchFrameMorph getFont: #Label); color: Color white;
 		yourself.
@@ -98,8 +98,10 @@ EventHatMorph >> helpScreenName [
 EventHatMorph >> initialize [
 	| parts label |
 	super initialize.
-	self removeAllMorphs.
-	parts := PhratchTranslator labelPartsFor: 'when I receive $Event$'.
+	self removeAllMorphs.	
+	
+	commandSpec := 'when I receive $Event$'.
+	parts := PhratchTranslator labelPartsFor: commandSpec.
 	parts first size > 0
 		ifTrue: [ 
 			label := StringMorph contents: parts first font: (PhratchFrameMorph getFont: #Label).
