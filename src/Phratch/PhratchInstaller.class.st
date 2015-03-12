@@ -17,6 +17,11 @@ PhratchInstaller class >> beginInstall [
 			'You are about to install Phratch.', String cr, 'This process will modify some Smalltalk system classes and might subsequently break other projects from this working image.', String cr , 'This is your last chance to abort the installation.'.
 "
 	| items |
+	
+	FreeTypeSettings updateFreeType.
+
+	(Smalltalk at: #StandardFonts) perform: #defaultFont: with: ((LogicalFont familyName: 'Arial Unicode MS' fallbackFamilyNames: nil pointSize: 10 stretchValue: 5 weightValue: 400 slantValue: 0)).
+	
 	items := OrderedCollection new.
 	items add: (StartupAction
              name: 'Phratch external files'
