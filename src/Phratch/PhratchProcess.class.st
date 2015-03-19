@@ -30,8 +30,31 @@ Class {
 		'nextBlockToDebug',
 		'doneWithDebugging'
 	],
+	#classVars : [
+		'traceFlag'
+	],
 	#category : #'Phratch-Execution Engine'
 }
+
+{ #category : #'as yet unclassified' }
+PhratchProcess class >> toggleStepByStep [
+
+	ScriptablePhratchMorph traceMode: ScriptablePhratchMorph traceMode not.
+	PhratchProcess traceFlag: PhratchProcess traceFlag not.
+]
+
+{ #category : #'as yet unclassified' }
+PhratchProcess class >> traceFlag [
+
+	^ traceFlag ifNil: [ traceFlag := false ]
+]
+
+{ #category : #'as yet unclassified' }
+PhratchProcess class >> traceFlag: aBoolean [
+	"Set the error flag for this process."
+
+	traceFlag := aBoolean
+]
 
 { #category : #accessing }
 PhratchProcess >> answer [
@@ -870,9 +893,20 @@ PhratchProcess >> evaluateCommandFor: aStageMorph [
 	"Evaluates the current block. If the argument is non-nil, redraw the stage."
 
 	| expression |
+	
+	
 	expression := stackFrame expression.
+	
 	expression litUp: true.
-
+	
+	"self traceFlag ifTrue:[
+				answer := DialogBoxMorph askForTraceDebugModeTitle: self asString details: self codeString.
+				answer 
+					ifFalse:[ ^PhratchFrameMorph someInstance stopAll].
+				answer = #cancelled ifTrue:[self class toggleStepByStep].
+	].
+	
+"
 	((blockToDebug notNil and: [blockToDebug ~= self currentBlock]) or: [
 		self currentBlock = nextBlockToDebug]) ifTrue: [
 			((PhratchFrameMorph someInstance viewMode = #presentation) | doneWithDebugging) ifFalse: [
@@ -962,7 +996,7 @@ PhratchProcess >> evaluateSequence [
 
 	pc > blocks size
 		ifTrue:	[self popStackFrame]
-		ifFalse:	[stackFrame pc: pc + 1.
+		ifFalse:	[stackFrame pc: pc +1 .
 				self pushStackFrame: (PhratchStackFrame new expression: (blocks at: pc))].
 
 
@@ -1201,7 +1235,7 @@ PhratchProcess >> runStepFor: aStageMorph [
 
 	| expr isTimed |
 	"evaluate blocks until we're ready to yield"
-
+	
 	isTimed := stackFrame notNil and: [
 		(stackFrame expression isBlockMorph) and: [
 			stackFrame expression isTimed]].
@@ -1301,6 +1335,21 @@ PhratchProcess >> topBlock: aBlock [
 
 ]
 
+{ #category : #accessing }
+PhratchProcess >> traceFlag [
+	"Answer true if this process has stopped due to an error."
+
+	^ traceFlag
+
+]
+
+{ #category : #accessing }
+PhratchProcess >> traceFlag: aBoolean [
+	"Set the error flag for this process."
+
+	traceFlag := aBoolean
+]
+
 { #category : #copying }
 PhratchProcess >> veryDeepCopyWith: ignored [
 
@@ -1310,9 +1359,7 @@ PhratchProcess >> veryDeepCopyWith: ignored [
 { #category : #'private-evaluation' }
 PhratchProcess >> yield [
 	"Sets a flag indicating that we're ready to yield to another process."
-
 	readyToYield := true.
-
 	isPaused ifFalse: [
 		self popStackFrame ].
 ]

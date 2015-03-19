@@ -147,7 +147,7 @@ ScriptablePhratchMorph class >> initialize [
 	PhratchOrigin := 0@0.
 	TimerStartMSecs := Time millisecondClockValue.
 	BlockVisible := Set new.
-
+	TraceMode := false.
 	DoubleSize := false
 ]
 

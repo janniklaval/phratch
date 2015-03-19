@@ -1142,6 +1142,9 @@ PhratchFrameMorph >> editMenu: aMenuTitleMorph [
 
 	menu add: EventHatMorph threadSafeMode checkBoxString, 'Thread safe scripts' localized
 			selector: #toggleThreadSafeMode.
+			
+	menu add: PhratchProcess traceFlag checkBoxString, 'Step by step' localized
+			selector: #toggleStepByStep.
 	
 	Sensor shiftPressed ifTrue: [	self isDevelopmentMode ifTrue: [
 			menu addLine.
@@ -2816,6 +2819,12 @@ PhratchFrameMorph >> togglePause [
 		ifTrue: [self showPlay]
 		ifFalse: [self showPause]
 
+]
+
+{ #category : #byob }
+PhratchFrameMorph >> toggleStepByStep [
+
+	PhratchProcess toggleStepByStep
 ]
 
 { #category : #byob }

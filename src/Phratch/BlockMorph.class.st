@@ -13,7 +13,8 @@ Class {
 		'blockLayoutNeeded',
 		'lastLayoutTime',
 		'originalColor',
-		'phratchProc'
+		'phratchProc',
+		'colorFromCategory'
 	],
 	#classVars : [
 		'CBlockBracketThickness',
@@ -574,7 +575,7 @@ BlockMorph >> duplicate [
 
 { #category : #processes }
 BlockMorph >> evaluatePhratchProcess: aProcess stage: aStageMorph [
-
+	
 	^ aProcess evaluateCommandFor: aStageMorph
 ]
 
@@ -1077,13 +1078,24 @@ BlockMorph >> litUp: aBoolean [
 	"Note: we force a world update to ensure that the highlighting is seen by the user."
 ScriptablePhratchMorph traceMode ifTrue:[
 	aBoolean
-		ifTrue:	[self color: (Color h: 60 s: 0.9 v: 0.89)].
-
-	aBoolean ifTrue: [
-		World
-			cycleWhileWaitingMSecs: 1
-			doInput: true
-			doSteps: false].
+		ifTrue:	[
+			colorFromCategory := self color.
+			self color: (Color h: 60 s: 0.9 v: 0.89).
+			
+			"phratchProc traceFlag ifTrue:[
+				|answer|
+				answer := DialogBoxMorph askForTraceDebugModeTitle: self asString details: self codeString.
+				answer 
+					ifFalse:[phratchProc resume. ^PhratchFrameMorph someInstance stopAll].
+				answer = #cancelled ifTrue:[phratchProc class toggleStepByStep. self color: colorFromCategory].
+			]."
+			
+			World
+				cycleWhileWaitingMSecs: 1
+				doInput: true
+				doSteps: false
+			]
+		ifFalse: [self color: colorFromCategory].
 ]
 ]
 

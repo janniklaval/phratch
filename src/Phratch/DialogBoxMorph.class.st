@@ -49,6 +49,21 @@ DialogBoxMorph class >> ask: questionString [
 ]
 
 { #category : #'instance creation' }
+DialogBoxMorph class >> askForTraceDebugModeTitle: aTitle details: questionString [
+	"Put up an instance of me to ask a yes/no question but include a cancel button as well. Answer either a boolean or the symbol #cancelled."
+	"DialogBoxMorph askWithCancel: 'Save project before quitting?'"
+
+	| dialogBox |
+	dialogBox := self new
+		title: aTitle localized;
+		withButtonsForStep: true stop: true continue: true;
+		message: questionString localized;
+		yourself.
+	^ dialogBox getUserResponse
+
+]
+
+{ #category : #'instance creation' }
 DialogBoxMorph class >> askWithCancel: questionString [
 	"Put up an instance of me to ask a yes/no question but include a cancel button as well. Answer either a boolean or the symbol #cancelled."
 	"DialogBoxMorph askWithCancel: 'Save project before quitting?'"
@@ -60,7 +75,7 @@ DialogBoxMorph class >> askWithCancel: questionString [
 			no: true
 			okay: false
 			cancel: true;
-		message: questionString;
+		message: questionString localized;
 		yourself.
 	^ dialogBox getUserResponse
 
@@ -576,6 +591,35 @@ DialogBoxMorph >> title: aString [
 DialogBoxMorph >> wantsToBeDroppedInto: aMorph [
 "I don't wanna be dropped into a Stage"
 	^ (aMorph isPhratchStageMorph) not
+]
+
+{ #category : #initialization }
+DialogBoxMorph >> withButtonsForStep: yesFlag stop: noFlag continue: okayFlag [
+	"Replace my current buttons with the ones specified."
+	"Note: The button row morph was created by initialize; I just replace its contents with a new collection of buttons."
+
+	| spacer |
+	spacer := Morph new extent: 10@5; color: Color transparent;
+		yourself.
+	buttonRow removeAllMorphs.
+
+	buttonRow addMorphBack: (AlignmentMorph newSpacer: Color transparent).
+	buttonRow addMorphBack: spacer.
+	yesFlag ifTrue: [
+		buttonRow addMorphBack: (self buttonLabel: 'Step' localized action: #yes).
+		buttonRow addMorphBack: spacer fullCopy].
+
+	noFlag ifTrue: [
+		buttonRow addMorphBack: (self buttonLabel: 'Stop' localized action: #no).
+		buttonRow addMorphBack: spacer fullCopy].
+
+	okayFlag ifTrue: [
+		buttonRow addMorphBack: (self buttonLabel: 'Continue' localized action: #cancelled).
+		buttonRow addMorphBack: spacer fullCopy].
+
+	buttonRow submorphs do: [:b |
+		(b isResizableToggleButton) ifTrue: [tabFields add: b]].
+
 ]
 
 { #category : #initialization }

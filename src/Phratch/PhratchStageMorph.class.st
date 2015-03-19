@@ -825,7 +825,8 @@ PhratchStageMorph >> stepProcesses [
 
 	inProcessStep ifTrue: [^ self].
 	inProcessStep := true.
-	[self processesToRun do: [:p | (proc := p) runStepFor: self]]
+	[self processesToRun do: [:p | 
+		(proc := p) runStepFor: self]]
 				ifError: [proc errorFlag: true].
 
 	self removeTerminatedProcesses.
