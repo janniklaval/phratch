@@ -1084,9 +1084,11 @@ ScriptablePhratchMorph traceMode ifTrue:[
 			
 			"phratchProc traceFlag ifTrue:[
 				|answer|
+				phratchProc pause.
 				answer := DialogBoxMorph askForTraceDebugModeTitle: self asString details: self codeString.
+				phratchProc resume.
 				answer 
-					ifFalse:[phratchProc resume. ^PhratchFrameMorph someInstance stopAll].
+					ifFalse:[^PhratchFrameMorph someInstance stopAll].
 				answer = #cancelled ifTrue:[phratchProc class toggleStepByStep. self color: colorFromCategory].
 			]."
 			

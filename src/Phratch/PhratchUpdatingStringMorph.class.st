@@ -57,7 +57,7 @@ PhratchUpdatingStringMorph >> acceptValueFromTarget: v [
 { #category : #editing }
 PhratchUpdatingStringMorph >> addCustomMenuItems: menu [
 
-	menu add: 'decimal places...' localized target: self action: #setPrecision.
+	menu add: 'decimal places...' localized target: self selector: #setPrecision.
 ]
 
 { #category : #accessing }
