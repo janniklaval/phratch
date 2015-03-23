@@ -1,4 +1,4 @@
-msgid ""
+﻿msgid ""
 msgstr ""
 "Project-Id-Version: Phratch\n"
 "Report-Msgid-Bugs-To: Jannik LAVAL <jannik.laval@gmail.com>\n"
@@ -95,7 +95,7 @@ msgid "change $Variable$ by $Number$"
 msgstr "$Number$ بمقدار $Variable$ غيِّر"
 
 msgid "change pen color by $Number$"
-msgstr "$Number$ غيِّر لون القلم بمقدار"
+msgstr "$Number$ غيِّر لون القلم ب"
 
 msgid "change pen shade by $Number$"
 msgstr "$Number$ غيِّر تظليل القلم بمقدار"
@@ -113,10 +113,10 @@ msgid "change volume by $Number$"
 msgstr "$Number$ غيِّر شدة الصوت بمقدار"
 
 msgid "change x by $Number$"
-msgstr "$Number$ غيِّر الموضع س بمقدار"
+msgstr "$Number$ بمقدار x غيِّر الموضع "
 
 msgid "change y by $Number$"
-msgstr "$Number$ غيِّر الموضع ص بمقدار"
+msgstr "$Number$ بمقدار y غيِّر الموضع "
 
 msgid "clear"
 msgstr "امسح"
@@ -152,7 +152,7 @@ msgid "forever if $Boolean$"
 msgstr "$Boolean$ اختبر باستمرار إذا"
 
 msgid "glide $Number$ secs to x:$Number$ y:$Number$"
-msgstr "$Number$3 :ص $Number$2 :ثانية إلى الموضع س $Number$1 انزلق خلال"
+msgstr "$Number$3 :y $Number$2 : x ثانية إلى الموضع  $Number$1 انزلق خلال"
 
 msgid "go back $Number$ layers"
 msgstr "طبقة إلى الخلف $Number$ انتقل"
@@ -164,7 +164,7 @@ msgid "go to front"
 msgstr "انتقل إلى المقدمة"
 
 msgid "go to x:$Number$ y:$Number$"
-msgstr "$Number$2 :ص $Number$1 :اذهب إلى الموضع س"
+msgstr "$Number$2 :y $Number$1 :x اذهب إلى الموضع"
 
 msgid "hide"
 msgstr "اختف"
@@ -1387,10 +1387,10 @@ msgid "Accordion"
 msgstr "أوكورديون"
 
 msgid "Acoustic Bass"
-msgstr "Acoustic Bass"
+msgstr "آلة الباس"
 
 msgid "Acoustic Bass Drum"
-msgstr "Acoustic Bass Drum"
+msgstr "باس الطبل"
 
 msgid "Acoustic Grand"
 msgstr "Acoustic Grand"
@@ -1402,7 +1402,7 @@ msgid "Agogo"
 msgstr "Agogo"
 
 msgid "Alto Sax"
-msgstr "Alto Sax"
+msgstr "ألتو ساكس"
 
 msgid "Applause"
 msgstr "تصفيق"
@@ -1453,7 +1453,7 @@ msgid "Choir Aahs"
 msgstr "Choir Aahs"
 
 msgid "Church Organ"
-msgstr "Church Organ"
+msgstr "جهاز الكنيسة"
 
 msgid "Clarinet"
 msgstr "كلارينيت"
