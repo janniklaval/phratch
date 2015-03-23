@@ -1,6 +1,36 @@
-Extension { #name : #PhratchPlugin }
+"
+This plugin combines a number of primitives needed by Scratch including:
 
-{ #category : #'*PhratchPrimitiveSources' }
+  a. primitives that manipulate 24-bit color images (i.e. 32-bit deep Forms but alpha is ignored)
+  b. primitive to open browsers, find the user's documents folder, set the window title and other host OS functions
+
+This plugin includes new serial port primitives, including support for named serial ports. The underlying plugin code can support up to 32 simultaenously open ports.
+
+Port options for Set/GetOption primitives:
+  1. baud rate
+  2. data bits
+  3. stop bits
+  4. parity type
+  5. input flow control type
+  6. output flow control type
+
+Handshake lines (options 20-25 for Set/GetOption primitives):
+  20. DTR	(output line)
+  21. RTS	(output line)
+  22. CTS	(input line)
+  23. DSR	(input line)
+  24. CD		(input line)
+  25. RI		(input line)
+
+
+"
+Class {
+	#name : #PhratchPlugin,
+	#superclass : #Object,
+	#category : #PhratchPrimitiveSources
+}
+
+{ #category : #'as yet unclassified' }
 PhratchPlugin >> bitmap: bitmap at: i putH: hue s: saturation v: brightness [
 
 	| hI hF p q t v outPix |
@@ -31,7 +61,7 @@ PhratchPlugin >> bitmap: bitmap at: i putH: hue s: saturation v: brightness [
 
 ]
 
-{ #category : #'*PhratchPrimitiveSources' }
+{ #category : #'as yet unclassified' }
 PhratchPlugin >> checkedUnsignedIntPtrOf: oop [
 	"Return an unsigned int pointer to the first indexable word of oop, which must be a words object."
 
@@ -44,7 +74,7 @@ PhratchPlugin >> checkedUnsignedIntPtrOf: oop [
 
 ]
 
-{ #category : #'*PhratchPrimitiveSources' }
+{ #category : #'as yet unclassified' }
 PhratchPlugin >> hueFromR: r G: g B: b min: min max: max [
 	"Answer the hue, an angle between 0 and 360."
 
@@ -64,7 +94,7 @@ PhratchPlugin >> hueFromR: r G: g B: b min: min max: max [
 	^ result
 ]
 
-{ #category : #'*PhratchPrimitiveSources' }
+{ #category : #'as yet unclassified' }
 PhratchPlugin >> interpolate: pix1 and: pix2 frac: frac2 [
 	"Answer the interpolated pixel value between the given two pixel values. If either pixel is zero (transparent) answer the other pixel. If both pixels are  transparent, answer transparent. The fraction is between 0 and 1023, out of a total range of 1024."
 
@@ -84,7 +114,7 @@ PhratchPlugin >> interpolate: pix1 and: pix2 frac: frac2 [
 
 ]
 
-{ #category : #'*PhratchPrimitiveSources' }
+{ #category : #'as yet unclassified' }
 PhratchPlugin >> interpolatedFrom: bitmap x: xFixed y: yFixed width: w height: h [
 	"Answer the interpolated pixel value from the given bitmap at the given point. The x and y coordinates are fixed-point integers with 10 bits of fraction (i.e. they were multiplied by 1024, then truncated). If the given point is right on an edge, answer the nearest edge pixel value. If it is entirely outside of the image, answer 0 (transparent)."
 
@@ -121,7 +151,7 @@ PhratchPlugin >> interpolatedFrom: bitmap x: xFixed y: yFixed width: w height: h
 
 ]
 
-{ #category : #'*PhratchPrimitiveSources' }
+{ #category : #'as yet unclassified' }
 PhratchPlugin >> primClose [
 	"Close the given serial port."
 
@@ -137,7 +167,7 @@ PhratchPlugin >> primClose [
 
 ]
 
-{ #category : #'*PhratchPrimitiveSources' }
+{ #category : #'as yet unclassified' }
 PhratchPlugin >> primIsPortOpen [
 	"Answer the true if the given port is open."
 
@@ -154,7 +184,7 @@ PhratchPlugin >> primIsPortOpen [
 
 ]
 
-{ #category : #'*PhratchPrimitiveSources' }
+{ #category : #'as yet unclassified' }
 PhratchPlugin >> primOpenPortNamed [
 	"Open the port with the given name and baud rate."
 
@@ -189,7 +219,7 @@ PhratchPlugin >> primOpenPortNamed [
 
 ]
 
-{ #category : #'*PhratchPrimitiveSources' }
+{ #category : #'as yet unclassified' }
 PhratchPlugin >> primPortCount [
 	"Answer the number of serial ports."
 
@@ -205,7 +235,7 @@ PhratchPlugin >> primPortCount [
 
 ]
 
-{ #category : #'*PhratchPrimitiveSources' }
+{ #category : #'as yet unclassified' }
 PhratchPlugin >> primPortName [
 	"Get the name for the port with the given number. Fail if the port number is greater than the number of available ports. Port numbering starts with 1."
 
@@ -233,7 +263,7 @@ PhratchPlugin >> primPortName [
 
 ]
 
-{ #category : #'*PhratchPrimitiveSources' }
+{ #category : #'as yet unclassified' }
 PhratchPlugin >> primRead [
 	"Read data from the given serial port into the given buffer (a ByteArray or String). Answer the number of bytes read."
 
@@ -260,7 +290,7 @@ PhratchPlugin >> primRead [
 
 ]
 
-{ #category : #'*PhratchPrimitiveSources' }
+{ #category : #'as yet unclassified' }
 PhratchPlugin >> primSetOption [
 	"Return the given option value for the given serial port."
 
@@ -279,7 +309,7 @@ PhratchPlugin >> primSetOption [
 
 ]
 
-{ #category : #'*PhratchPrimitiveSources' }
+{ #category : #'as yet unclassified' }
 PhratchPlugin >> primWrite [
 	"Write data to the given serial port from the given buffer (a ByteArray or String). Answer the number of bytes written."
 
@@ -306,7 +336,7 @@ PhratchPlugin >> primWrite [
 
 ]
 
-{ #category : #'*PhratchPrimitiveSources' }
+{ #category : #'as yet unclassified' }
 PhratchPlugin >> primitiveBrightnessShift [
 	| inOop outOop shift in sz out pix r g b max min hue saturation brightness |
 	self export: true.
@@ -357,7 +387,7 @@ PhratchPlugin >> primitiveBrightnessShift [
 	^ 0
 ]
 
-{ #category : #'*PhratchPrimitiveSources' }
+{ #category : #'as yet unclassified' }
 PhratchPlugin >> primitiveDoubleSize [
 
 	| in out inOop outOop inW inH outW outH dstX dstY baseIndex pix i |
@@ -395,7 +425,7 @@ PhratchPlugin >> primitiveDoubleSize [
 
 ]
 
-{ #category : #'*PhratchPrimitiveSources' }
+{ #category : #'as yet unclassified' }
 PhratchPlugin >> primitiveFisheye [
 
 	| inOop outOop width in out sz height centerX centerY dx dy ang pix power r srcX srcY scaledPower |
@@ -461,7 +491,7 @@ PhratchPlugin >> primitiveFisheye [
 
 ]
 
-{ #category : #'*PhratchPrimitiveSources' }
+{ #category : #'as yet unclassified' }
 PhratchPlugin >> primitiveHalfSizeAverage [
 
 	| in inW inH out outW outH srcX srcY dstX dstY dstW dstH srcIndex dstIndex pixel r g b |
@@ -527,7 +557,7 @@ PhratchPlugin >> primitiveHalfSizeAverage [
 
 ]
 
-{ #category : #'*PhratchPrimitiveSources' }
+{ #category : #'as yet unclassified' }
 PhratchPlugin >> primitiveHueShift [
 	| inOop outOop shift in sz out pix r g b max min brightness saturation hue |
 	self export: true.
@@ -585,7 +615,7 @@ PhratchPlugin >> primitiveHueShift [
 	^ 0
 ]
 
-{ #category : #'*PhratchPrimitiveSources' }
+{ #category : #'as yet unclassified' }
 PhratchPlugin >> primitiveIsHidden [
 	"Answer true if the file or folder with the given path should be hidden from the user. On Windows, this is the value of the 'hidden' file property."
 
@@ -617,7 +647,7 @@ PhratchPlugin >> primitiveIsHidden [
 
 ]
 
-{ #category : #'*PhratchPrimitiveSources' }
+{ #category : #'as yet unclassified' }
 PhratchPlugin >> primitiveOpenURL [
 	"Open a web browser on the given URL."
 
@@ -648,7 +678,7 @@ PhratchPlugin >> primitiveOpenURL [
 
 ]
 
-{ #category : #'*PhratchPrimitiveSources' }
+{ #category : #'as yet unclassified' }
 PhratchPlugin >> primitiveScale [
 	"Scale using bilinear interpolation."
 
@@ -736,7 +766,7 @@ PhratchPlugin >> primitiveScale [
 	^ 0
 ]
 
-{ #category : #'*PhratchPrimitiveSources' }
+{ #category : #'as yet unclassified' }
 PhratchPlugin >> primitiveSetWindowTitle [
 	"Set the title of the Phratch window."
 
@@ -767,7 +797,7 @@ PhratchPlugin >> primitiveSetWindowTitle [
 
 ]
 
-{ #category : #'*PhratchPrimitiveSources' }
+{ #category : #'as yet unclassified' }
 PhratchPlugin >> primitiveShortToLongPath [
 	"On Windows, convert a short file/path name into a long one. Fail on other platforms."
 
@@ -802,7 +832,7 @@ PhratchPlugin >> primitiveShortToLongPath [
 
 ]
 
-{ #category : #'*PhratchPrimitiveSources' }
+{ #category : #'as yet unclassified' }
 PhratchPlugin >> primitiveWhirl [
 	| inOop outOop width degrees in out sz height centerX centerY radius scaleX scaleY whirlRadians radiusSquared dx dy d factor ang sina cosa pix |
 	self export: true.
