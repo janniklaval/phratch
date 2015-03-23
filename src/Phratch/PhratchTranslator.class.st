@@ -7,6 +7,7 @@ Class {
 	#superclass : #Object,
 	#classVars : [
 		'ISODict',
+		'IsRTL',
 		'Language',
 		'PreviousTranslationDict',
 		'RenderCenterOffsetCache',
@@ -18,6 +19,12 @@ Class {
 	],
 	#category : #'Phratch-Objects'
 }
+
+{ #category : #'as yet unclassified' }
+PhratchTranslator class >> IsRTL [
+
+	^ IsRTL
+]
 
 { #category : #'Unicode rendering' }
 PhratchTranslator class >> centerOffsetForButtonWithFont: aStrikeFont [
@@ -152,7 +159,7 @@ PhratchTranslator class >> initialize [
 	TranslationDict := Dictionary new.
 	PreviousTranslationDict := Dictionary new.
 	ISODict := Dictionary new.
-
+	IsRTL := false.
 	self setRenderingHints.
 
 ]
@@ -332,6 +339,7 @@ PhratchTranslator class >> setLanguage: aString [
 		Language := aString.
 		TranslationDict := dict.
 		dict removeKey: '' ifAbsent: [].
+		IsRTL := ((PhratchTranslator translationFor: 'Language-Direction') ifNil:['LTR']) beginsWith: 'RTL'.
 		self setRenderingHints].
 
 ]

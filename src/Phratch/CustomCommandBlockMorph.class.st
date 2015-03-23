@@ -406,7 +406,7 @@ CustomCommandBlockMorph >> labelMorphFor: aString [
 
 	isTemplate ifFalse: [^super labelMorphFor: aString].
 
-	s := aString.
+	PhratchTranslator IsRTL ifTrue:[s := aString reverse] ifFalse:[s := aString].
 	^ (BlockLabelFragmentMorph contents: s font: (PhratchFrameMorph getFont: #Label))
 		color: self labelColor;
 		updateFragment;

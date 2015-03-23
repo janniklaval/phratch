@@ -914,7 +914,7 @@ CommandBlockMorph >> labelColor [
 CommandBlockMorph >> labelMorphFor: aString [
 
 	| s |
-	s := aString.
+	PhratchTranslator IsRTL ifTrue:[s := aString reverse] ifFalse:[s := aString].
 	^ (StringMorph contents: s font: (PhratchFrameMorph getFont: #Label))
 		color: self labelColor
 
