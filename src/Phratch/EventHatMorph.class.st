@@ -12,7 +12,7 @@ Class {
 }
 
 { #category : #settings }
-EventHatMorph class >> blockTypeOn: aScriptablePhratchMorph spec: spec color: blockColor [
+EventHatMorph class >> blockTypeOn: aScriptablePhratchMorph spec: spec [
 	
 	|stage evtName|
 	
@@ -22,7 +22,7 @@ EventHatMorph class >> blockTypeOn: aScriptablePhratchMorph spec: spec color: bl
 	^ (self new 
 		scriptOwner: aScriptablePhratchMorph; 
 		eventName: evtName;
-		yourself) color: blockColor
+		yourself)
 ]
 
 { #category : #settings }

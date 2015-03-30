@@ -67,7 +67,6 @@ SetterBlockMorph >> initChangerForVar: varName [
 		var := receiver blockFromTuple: var receiver: receiver]."
 
 	self commandSpec: (PhratchTranslator translationFor: 'change $Variable$ by $String$').
-	argPermutation := CommandBlockMorph argPermutationForSpec: 'set $Variable$ to $String$' withTranslation: commandSpec.
 	self selector: #changeVar:by:.
 	self variable: var.
 
@@ -82,7 +81,6 @@ SetterBlockMorph >> initSetterForVar: varName [
 		var := receiver blockFromTuple: var receiver: receiver]."
 	
 	self commandSpec: (PhratchTranslator translationFor: 'set $Variable$ to $String$').
-	argPermutation := CommandBlockMorph argPermutationForSpec: 'set $Variable$ to $String$' withTranslation: commandSpec.
 	self selector: #setVar:to:.
 	self variable: var.
 

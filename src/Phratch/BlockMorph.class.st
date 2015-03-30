@@ -28,9 +28,8 @@ Class {
 { #category : #'class initialization' }
 BlockMorph class >> initBlock: aBlock on: aScriptablePhratchMorph withSpec: spec color: blockColor [
 
-	|blockLabelSpec argPermutation selector defaultArgs rcvr|
+	|blockLabelSpec selector defaultArgs rcvr|
 	blockLabelSpec := PhratchTranslator translationFor: (spec at: 1).
-	argPermutation := CommandBlockMorph argPermutationForSpec: (spec at: 1) withTranslation: blockLabelSpec.
 	selector := (spec at: 3) asSymbol.
 	defaultArgs := aScriptablePhratchMorph defaultArgsFor: spec.
 	
@@ -39,7 +38,6 @@ BlockMorph class >> initBlock: aBlock on: aScriptablePhratchMorph withSpec: spec
 		ifFalse: [ aScriptablePhratchMorph ownerOrYourselfThatIsAPhratchStageMorph ].
 		
 	^ aBlock
-		argPermutation: argPermutation;
 		color: blockColor;
 		selector: selector;
 		commandSpec: blockLabelSpec;
@@ -1282,11 +1280,6 @@ BlockMorph >> printCodeSubmorph: aMorph on: aStream [
 	({'?' . '%'} includes: aMorph contents)
 		ifTrue: [ aStream skip: -1 ].	"remove space before ? or %"
 	aStream nextPutAll: aMorph contents
-]
-
-{ #category : #byob }
-BlockMorph >> properties [
-	self valueOfProperty: #properties
 ]
 
 { #category : #accessing }

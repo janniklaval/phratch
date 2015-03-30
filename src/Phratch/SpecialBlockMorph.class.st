@@ -5,10 +5,10 @@ Class {
 }
 
 { #category : #utilities }
-SpecialBlockMorph class >> blockTypeOn: aScriptablePhratchMorph spec: spec color: blockColor [
+SpecialBlockMorph class >> blockTypeOn: aScriptablePhratchMorph spec: spec [
 	
 	|block|
-	block :=  super blockTypeOn: aScriptablePhratchMorph spec: spec color: blockColor.
+	block :=  super blockTypeOn: aScriptablePhratchMorph spec: spec.
 	block isSpecialForm: true.
 	^block
 ]

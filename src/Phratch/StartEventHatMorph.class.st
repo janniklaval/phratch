@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : #settings }
-StartEventHatMorph class >> blockTypeOn: aScriptablePhratchMorph spec: spec color: blockColor [
+StartEventHatMorph class >> blockTypeOn: aScriptablePhratchMorph spec: spec [
 	
-	^( self new forStartEvent scriptOwner: aScriptablePhratchMorph) color: blockColor
+	^( self new forStartEvent scriptOwner: aScriptablePhratchMorph)
 ]

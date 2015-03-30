@@ -5,10 +5,10 @@ Class {
 }
 
 { #category : #utilities }
-BooleanBlockMorph class >> blockTypeOn: aScriptablePhratchMorph spec: spec color: blockColor [
+BooleanBlockMorph class >> blockTypeOn: aScriptablePhratchMorph spec: spec [
 	
 	|block|
-	block :=  super blockTypeOn: aScriptablePhratchMorph spec: spec color: blockColor.
+	block :=  super blockTypeOn: aScriptablePhratchMorph spec: spec.
 	block isBoolean: true.
 	^block
 ]

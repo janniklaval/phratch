@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : #utilities }
-ReporterScriptBlockMorph class >> blockTypeOn: aScriptablePhratchMorph spec: spec color: blockColor [
+ReporterScriptBlockMorph class >> blockTypeOn: aScriptablePhratchMorph spec: spec [
 	
 	|block|
 	block :=  self new minArgs: 1.

@@ -34,48 +34,7 @@ Class {
 }
 
 { #category : #utilities }
-CommandBlockMorph class >> argPermutationForSpec: spec withTranslation: translatSpec [
-	"CommandBlockMorph argPermutationForSpec: '$Attributes$ of $Sprite$ of $Sprite$ of $SAList$' withTranslation: '$Attributes$ de $Sprite$ de $Sprite$ de $SAList$'"
-	"CommandBlockMorph argPermutationForSpec: '$Attributes$ of $Sprite$ of $Sprite$ of $SAList$' withTranslation: '$SAList$ de $Sprite$2 de $Sprite$1 de $Attributes$'"
-
-	| parsedSpec parsedSpecArgs parsedTranslatSpecArgs permutation a copiesSize n originalPermutation parsedTranslatSpec |
-
-	parsedSpec := CommandBlockMorph parseCommandSpec: spec.
-	parsedSpecArgs := parsedSpec select: [ :s | CommandBlockMorph isArgSpec: s ].
-	parsedTranslatSpec := CommandBlockMorph parseCommandSpec: translatSpec.
-	parsedTranslatSpecArgs := parsedTranslatSpec select: [ :s | CommandBlockMorph isArgSpec: s ].
-
-	permutation := #().
-	1 to: parsedSpecArgs size do: [ :i | permutation := permutation copyWith: i ].
-	originalPermutation := permutation.	"no change"
-	parsedSpecArgs = parsedTranslatSpecArgs
-		ifTrue: [ ^ originalPermutation ].	"otherwise, calculate permutation"
-	1 to: parsedSpecArgs size do: [ :i | 
-		a := parsedSpecArgs at: i.
-		copiesSize := (parsedSpecArgs select: [ :s | s = a ]) size.
-		copiesSize = 1
-			ifTrue: [ 
-				permutation
-					at: i
-					put:
-						(parsedTranslatSpecArgs
-							indexOf: a
-							ifAbsent: [ ^ originalPermutation ]) ]
-			ifFalse: [ 
-				"count copies until now"
-				n := ((parsedSpecArgs copyFrom: 1 to: i) select: [ :s | s = a ]) size.
-				permutation
-					at: i
-					put:
-						(parsedTranslatSpecArgs
-							indexOf: a , n asString
-							ifAbsent: [^ originalPermutation ]) ] ].
-	^ permutation
-
-]
-
-{ #category : #utilities }
-CommandBlockMorph class >> blockTypeOn: aScriptablePhratchMorph spec: spec color: blockColor [
+CommandBlockMorph class >> blockTypeOn: aScriptablePhratchMorph spec: spec [
 	
 	|block|
 	block :=  self new.
@@ -259,17 +218,10 @@ CommandBlockMorph >> argMorphs [
 ]
 
 { #category : #accessing }
-CommandBlockMorph >> argPermutation: aSet [
-
-	argPermutation := aSet
-
-]
-
-{ #category : #accessing }
 CommandBlockMorph >> args [
 	"Answer my arguments evaluated and permuted into the order expected by the underlying Squeak method."
 
-	^ self organizeArgs: (argMorphs collect: [:m | m evaluate]) asArray
+	^ (argMorphs collect: [:m | m evaluate]) asArray
 
 ]
 
@@ -277,9 +229,7 @@ CommandBlockMorph >> args [
 CommandBlockMorph >> argumentAt: index [
 	"Returns the argument morph at the given index."
 
-	argPermutation ifNil: [^argMorphs at: index].	"custom blocks don't need argPermutations"
-	^ argMorphs at: (argPermutation at: index).
-
+	^argMorphs at: index
 ]
 
 { #category : #evaluation }
@@ -441,7 +391,7 @@ CommandBlockMorph >> defaultArgs: defaultValues [
 
 	| argM defaultValue |
 	1 to: (defaultValues size min: argMorphs size) do: [:i |
-		argM := argMorphs at: (argPermutation at: i).
+		argM := argMorphs at: i.
 		defaultValue := defaultValues at: i.
 		(argM  isExpressionArgMorph)
 			ifTrue: [argM defaultValueFromSpec: defaultValue]
@@ -971,7 +921,6 @@ CommandBlockMorph >> numberArgFlags [
 	numberArgFlags ifNotNil: [^ numberArgFlags].
 
 	argSpecs := (CommandBlockMorph parseCommandSpec: commandSpec) select: [:s | CommandBlockMorph isArgSpec: s].
-	argSpecs := self organizeArgs: argSpecs.
 	numberArgFlags := argSpecs collect: [:spec |
 		argM := self uncoloredArgMorphFor: spec.
 		(argM isExpressionArgMorph)
@@ -1059,20 +1008,6 @@ CommandBlockMorph >> oldUncoloredArgMorphFor: specString [
 	$r  = code ifTrue: [^ 'Rotation'].
 			
 	^ 'Number'
-]
-
-{ #category : #evaluation }
-CommandBlockMorph >> organizeArgs: argList [
-	"Answer an arugments array in which all arguments have been rearranged to the original English permutation"
-
-	| newArgList |
-	argPermutation ifNil: [^ argList].
-	(#(+ - / * =) includes: selector) ifTrue: [^ argList].
-	newArgList := #().
-	1 to: argPermutation size do: [:i |
-		newArgList := newArgList copyWith: (argList at: (argPermutation at: i))].
-	^ newArgList
-
 ]
 
 { #category : #byob }
@@ -1452,7 +1387,6 @@ CommandBlockMorph >> veryDeepInner: deepCopier [
 	"Copy all of my instance variables.  Some need to be not copied at all, but shared.  	Warning!!  Every instance variable defined in this class must be handled.  We must also implement veryDeepFixupWith:.  See DeepCopier class comment."
 
 	super veryDeepInner: deepCopier.
-	argPermutation := argPermutation veryDeepCopyWith: deepCopier.
 	titleMorph := titleMorph veryDeepCopyWith: deepCopier.
 	stopFrame := nil
 ]

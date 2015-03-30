@@ -11,7 +11,7 @@ Class {
 }
 
 { #category : #utilities }
-MultiArgReporterBlockMorph class >> blockTypeOn: aScriptablePhratchMorph spec: spec color: blockColor [
+MultiArgReporterBlockMorph class >> blockTypeOn: aScriptablePhratchMorph spec: spec [
 	
 	|block selector|
 	selector := (spec at: 3) asSymbol.
@@ -112,8 +112,7 @@ MultiArgReporterBlockMorph >> adjustInternals [
 MultiArgReporterBlockMorph >> argumentAt: index [
 	"Returns the argument morph at the given index."
 
-	^argMorphs at: index.	"custom blocks don't need argPermutations"
-
+	^argMorphs at: index.
 ]
 
 { #category : #evaluation }
@@ -295,14 +294,6 @@ MultiArgReporterBlockMorph >> mouseDown: evt [
 		(removeElementMorph containsPoint: evt cursorPoint)
 			ifTrue: [^self removeItem ]].
 	^super mouseDown: evt
-]
-
-{ #category : #evaluation }
-MultiArgReporterBlockMorph >> organizeArgs: argList [
-	"Answer an arugments array in which all arguments have been rearranged to the original English permutation"
-
-	^ argList	"no permutations for these higher order blocks"
-
 ]
 
 { #category : #deleting }

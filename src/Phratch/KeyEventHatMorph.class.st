@@ -9,9 +9,9 @@ Class {
 }
 
 { #category : #settings }
-KeyEventHatMorph class >> blockTypeOn: aScriptablePhratchMorph spec: spec color: blockColor [
+KeyEventHatMorph class >> blockTypeOn: aScriptablePhratchMorph spec: spec [ 
 	
-	^ (self new scriptOwner: aScriptablePhratchMorph) color: blockColor
+	^ (self new scriptOwner: aScriptablePhratchMorph)
 ]
 
 { #category : #other }

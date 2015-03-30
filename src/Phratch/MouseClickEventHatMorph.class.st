@@ -9,9 +9,9 @@ Class {
 }
 
 { #category : #settings }
-MouseClickEventHatMorph class >> blockTypeOn: aScriptablePhratchMorph spec: spec color: blockColor [
+MouseClickEventHatMorph class >> blockTypeOn: aScriptablePhratchMorph spec: spec [
 	
-	^ (self new scriptOwner: aScriptablePhratchMorph) color: blockColor
+	^ (self new scriptOwner: aScriptablePhratchMorph)
 ]
 
 { #category : #other }

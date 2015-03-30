@@ -11,7 +11,7 @@ Class {
 }
 
 { #category : #utilities }
-MultiArgCommandBlockMorph class >> blockTypeOn: aScriptablePhratchMorph spec: spec color: blockColor [
+MultiArgCommandBlockMorph class >> blockTypeOn: aScriptablePhratchMorph spec: spec [
 	
 	|block|
 	block := self new.
@@ -112,9 +112,7 @@ MultiArgCommandBlockMorph >> adjustInternals [
 MultiArgCommandBlockMorph >> argumentAt: index [
 	"Returns the argument morph at the given index."
 
-	^argMorphs at: index.	"custom blocks don't need argPermutations"
-
-
+	^argMorphs at: index.
 ]
 
 { #category : #byob }

@@ -11,7 +11,7 @@ Class {
 }
 
 { #category : #utilities }
-CommandScriptBlockMorph class >> blockTypeOn: aScriptablePhratchMorph spec: spec color: blockColor [
+CommandScriptBlockMorph class >> blockTypeOn: aScriptablePhratchMorph spec: spec [
 	
 	|block|
 	block :=  self new.

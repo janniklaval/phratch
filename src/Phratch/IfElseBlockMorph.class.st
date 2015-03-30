@@ -18,7 +18,7 @@ Class {
 }
 
 { #category : #utilities }
-IfElseBlockMorph class >> blockTypeOn: aScriptablePhratchMorph spec: spec color: blockColor [
+IfElseBlockMorph class >> blockTypeOn: aScriptablePhratchMorph spec: spec [
 	
 	|block|
 	block :=  self new isSpecialForm: true.

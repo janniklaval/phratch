@@ -725,7 +725,7 @@ ScriptablePhratchMorph >> blockFromSpec: spec color: blockColor [
 		blockType := #CommandBlockMorph.
 	].
 	
-	block := (Smalltalk at: blockType) blockTypeOn: self spec: spec color: blockColor.
+	block := (Smalltalk at: blockType) blockTypeOn: self spec: spec.
 	
 	special :=  spec at: 4.
 	special do:[:sel |
