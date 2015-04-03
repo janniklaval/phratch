@@ -205,14 +205,12 @@ CustomCommandBlockMorph >> addLabelToNonTemplate [
 							ifTrue: [ 
 								(({CSlotMorph.
 								OSlotMorph.
-								CArgSlotMorph.
-								CReporterSlotMorph} includes: eachArg class) and: [ eachArg class = eachValue class ])
+								CArgSlotMorph} includes: eachArg class) and: [ eachArg class = eachValue class ])
 									ifTrue: [ self replaceArgMorph: eachArg by: eachValue ]
 									ifFalse: [ 
 										({CSlotMorph.
 										OSlotMorph.
-										CArgSlotMorph.
-										CReporterSlotMorph} includes: eachValue class)
+										CArgSlotMorph} includes: eachValue class)
 											ifTrue: [ 
 												((eachArg respondsTo: #attachBlock:) and: [ (eachValue respondsTo: #nestedBlock) and: [ eachValue nestedBlock notNil ] ])
 													ifTrue: [ eachArg attachBlock: eachValue nestedBlock ] ]
@@ -401,17 +399,16 @@ CustomCommandBlockMorph >> isTemplate: aBoolean [
 
 { #category : #template }
 CustomCommandBlockMorph >> labelMorphFor: aString [
-
 	| s |
-
-	isTemplate ifFalse: [^super labelMorphFor: aString].
-
-	PhratchTranslator IsRTL ifTrue:[s := aString reverse] ifFalse:[s := aString].
+	isTemplate
+		ifFalse: [ ^ super labelMorphFor: aString ].
+	s := PhratchTranslator IsRTL
+		ifTrue: [ aString reverse ]
+		ifFalse: [ aString ].
 	^ (BlockLabelFragmentMorph contents: s font: (PhratchFrameMorph getFont: #Label))
 		color: self labelColor;
 		updateFragment;
 		yourself
-
 ]
 
 { #category : #accessing }

@@ -41,7 +41,6 @@ Class {
 		'NoviceMode',
 		'PhratchOrigin',
 		'PopSound',
-		'RandomGen',
 		'Recorder',
 		'TimerStartMSecs',
 		'TraceMode'

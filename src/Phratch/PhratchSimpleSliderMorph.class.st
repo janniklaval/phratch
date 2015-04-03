@@ -240,19 +240,21 @@ the target when this slider is changed' translated
 
 { #category : #menu }
 PhratchSimpleSliderMorph >> setArguments [
-
 	| s newArgs newArgsArray |
 	s := WriteStream on: ''.
-	arguments do: [:arg | arg printOn: s. s nextPutAll: '. '].
+	arguments
+		do: [ :arg | 
+			arg printOn: s.
+			s nextPutAll: '. ' ].
 	newArgs := UIManager default
 		request:
-'Please type the arguments to be sent to the target
+			'Please type the arguments to be sent to the target
 when this button is pressed separated by periods' translated
 		initialAnswer: s contents.
-	newArgs isEmptyOrNil ifFalse: [
-		newArgsArray := Compiler evaluate: '{', newArgs, '}' for: self logged: false.
-		self arguments: newArgsArray].
-
+	newArgs isEmptyOrNil
+		ifTrue: [ ^ self ].
+	newArgsArray := Compiler evaluate: '{' , newArgs , '}' for: self logged: false.
+	self arguments: newArgsArray
 ]
 
 { #category : #menu }
@@ -269,15 +271,12 @@ PhratchSimpleSliderMorph >> setLabel [
 
 { #category : #menu }
 PhratchSimpleSliderMorph >> setMaxVal [
-
 	| newMaxVal |
-	newMaxVal := UIManager default
-		request: 'Maximum value?' translated
-		initialAnswer: maxVal printString.
-	newMaxVal isEmptyOrNil ifFalse: [
-		maxVal := newMaxVal asNumber.
-		minVal := minVal min: maxVal].
-
+	newMaxVal := UIManager default request: 'Maximum value?' translated initialAnswer: maxVal printString.
+	newMaxVal isEmptyOrNil
+		ifTrue: [ ^ self ].
+	maxVal := newMaxVal asNumber.
+	minVal := minVal min: maxVal
 ]
 
 { #category : #private }
@@ -289,15 +288,12 @@ PhratchSimpleSliderMorph >> setMaxVal: newMaxVal [
 
 { #category : #menu }
 PhratchSimpleSliderMorph >> setMinVal [
-
 	| newMinVal |
-	newMinVal := UIManager default
-		request: 'Minimum value?' translated
-		initialAnswer: minVal printString.
-	newMinVal isEmptyOrNil ifFalse: [
-		minVal := newMinVal asNumber.
-		maxVal := maxVal max: minVal].
-
+	newMinVal := UIManager default request: 'Minimum value?' translated initialAnswer: minVal printString.
+	newMinVal isEmptyOrNil
+		ifTrue: [ ^ self ].
+	minVal := newMinVal asNumber.
+	maxVal := maxVal max: minVal
 ]
 
 { #category : #menu }

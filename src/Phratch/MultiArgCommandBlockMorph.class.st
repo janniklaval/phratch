@@ -108,13 +108,6 @@ MultiArgCommandBlockMorph >> adjustInternals [
 	self commandSpec: newSpec
 ]
 
-{ #category : #evaluation }
-MultiArgCommandBlockMorph >> argumentAt: index [
-	"Returns the argument morph at the given index."
-
-	^argMorphs at: index.
-]
-
 { #category : #byob }
 MultiArgCommandBlockMorph >> fixBlockLayoutWrap [
 	"Update the positions of my submorphs."

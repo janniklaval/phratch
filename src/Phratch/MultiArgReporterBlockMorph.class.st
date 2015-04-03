@@ -109,13 +109,6 @@ MultiArgReporterBlockMorph >> adjustInternals [
 ]
 
 { #category : #evaluation }
-MultiArgReporterBlockMorph >> argumentAt: index [
-	"Returns the argument morph at the given index."
-
-	^argMorphs at: index.
-]
-
-{ #category : #evaluation }
 MultiArgReporterBlockMorph >> evaluate [
 	"Evalue this block with the given argument list."
 

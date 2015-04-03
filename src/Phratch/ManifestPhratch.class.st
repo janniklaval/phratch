@@ -1,18 +1,8 @@
 "
-I stores metadata on true and false positive critics. These meta data are used by the SmalllintManifestChecker and the critics Browser
+I store metadata for this package. These meta data are used by other tools such as the SmalllintManifestChecker and the critics Browser
 "
 Class {
 	#name : #ManifestPhratch,
-	#superclass : #Object,
+	#superclass : #PackageManifest,
 	#category : #Phratch
 }
-
-{ #category : #'meta data' }
-ManifestPhratch class >> rejectClasses [
-^ #()
-]
-
-{ #category : #'meta data' }
-ManifestPhratch class >> rejectRules [
-^ #()
-]

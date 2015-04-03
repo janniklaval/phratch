@@ -20,7 +20,6 @@ Class {
 	#superclass : #BlockMorph,
 	#instVars : [
 		'commandSpec',
-		'argPermutation',
 		'argMorphs',
 		'titleMorph',
 		'receiver',
@@ -862,12 +861,11 @@ CommandBlockMorph >> labelColor [
 
 { #category : #private }
 CommandBlockMorph >> labelMorphFor: aString [
-
 	| s |
-	PhratchTranslator IsRTL ifTrue:[s := aString reverse] ifFalse:[s := aString].
-	^ (StringMorph contents: s font: (PhratchFrameMorph getFont: #Label))
-		color: self labelColor
-
+	s := PhratchTranslator IsRTL
+		ifTrue: [ aString reverse ]
+		ifFalse: [ aString ].
+	^ (StringMorph contents: s font: (PhratchFrameMorph getFont: #Label)) color: self labelColor
 ]
 
 { #category : #private }

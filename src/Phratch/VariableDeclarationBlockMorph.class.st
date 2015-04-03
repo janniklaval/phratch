@@ -88,10 +88,7 @@ VariableDeclarationBlockMorph >> rootForGrabOf: aMorph [
 	root := aMorph.
 	[root = self] whileFalse: [
 		root owner == self ifTrue: [
-			self isPartsBin ifTrue: [
-				root = self nextBlock
-					ifTrue: [^root]
-					ifFalse: [^ root "fullCopy"]].
+			self isPartsBin ifTrue: [^root].
 			self dragNDropEnabled ifTrue: [^ root]].
 		root := root owner].
 
