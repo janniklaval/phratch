@@ -38,11 +38,10 @@ PhratchSoundRecorderDialogMorph class >> forClient: aScriptablePhratchMorph [
 PhratchSoundRecorderDialogMorph >> buttonType: type action: actionSelector [
 	"Answer a new button with the given type and selector. The button target will be me and it will use custom forms."
 
-	| onForm offForm overForm disabledForm |
+	| onForm offForm overForm |
 	onForm := PhratchFrameMorph skinAt: ('record', type, 'ButtonPressed').
 	offForm := PhratchFrameMorph skinAt: ('record', type, 'Button').
 	overForm := PhratchFrameMorph skinAt: ('record', type, 'ButtonOver').
-	disabledForm := PhratchFrameMorph skinAt: ('record', type, 'ButtonDisabled').
 
 	^ ToggleButton new
 		isMomentary: false;
