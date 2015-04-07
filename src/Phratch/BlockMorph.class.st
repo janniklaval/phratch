@@ -635,7 +635,7 @@ BlockMorph >> fullDrawOn: aCanvas [
 		cacheFeedbackForm := self updateCacheFeedbackForm.
 		aCanvas paintImage: cacheFeedbackForm at: (self fullBounds topLeft).
 			
-			self allMorphs allButLast do:[:e |[ aCanvas paintImage: e updateCacheFeedbackForm at: (e fullBounds topLeft - offset)] on: Error do:[PhratchError error: 'Error on updating morph']]
+			self allMorphs allButLast select:[:e | e isBlockMorph] thenDo:[:e |aCanvas paintImage: e updateCacheFeedbackForm at: (e fullBounds topLeft - offset)]
 			
 			].
 

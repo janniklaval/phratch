@@ -284,16 +284,16 @@ PhratchStageMorph >> drawQuarterSizeOn: aCanvas [
 	"Draw myself and my submorphs to an offscreen canvas, then scale down to quarter size and draw that on the given canvas."
 
 	| r c cache|
-
 	r := aCanvas clipRect intersect: (bounds origin extent: bounds extent // 2).
 
 	cache := Form extent: self extent depth: 32.
 	c := (FormCanvas on: cache)
 		copyOrigin: self position negated
 		clipRect: ((((r origin - bounds origin) * 2.0)) truncated extent: self extent).
-	super fullDrawOn: c.
 	
+	super fullDrawOn: c.
 	(cache magnifyBy: 0.5) displayOn: Display at: r origin.
+	
 	self updateAfterPopUp.
 ]
 
