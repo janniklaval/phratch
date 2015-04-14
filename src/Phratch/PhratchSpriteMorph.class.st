@@ -1309,14 +1309,6 @@ PhratchSpriteMorph >> scenes [
 
 ]
 
-{ #category : #accessing }
-PhratchSpriteMorph >> select: string where: aBoolean [
-	"Return my y position"
-	<phratchItem: 'select $String$ where $Boolean$' kind: #ReporterWatcherBlockMorph category: 'motion' defaultValues: #() subCategory: #xxx special: #()>
-	^ string
-
-]
-
 { #category : #'byob OOP' }
 PhratchSpriteMorph >> setRotationStyle: aNumber [
 	"Set my rotation style to #normal, #leftRight, or #none. Styles mean:
