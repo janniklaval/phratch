@@ -2640,7 +2640,7 @@ msgid "$String$ as boolean"
 msgstr "$String$ als boolscher Ausdruck"
 
 msgid "set $Attributes$ to $String$" 
-msgstr "ändere $Attributes$ auf $Strings$"
+msgstr "ändere $Attributes$ auf $String$"
 
 msgid "delete $Sprite$" 
 msgstr "lösche $Sprite$"
@@ -2676,10 +2676,10 @@ msgid "set layout of $Variable$ to $LayoutStyles$"
 msgstr "Ändere Layout von $Variable$ auf $LayoutStyles$"
 
 msgid "make list $String$" 
-msgstr "Erzeuge Liste $Strings$"
+msgstr "Erzeuge Liste $String$"
 
 msgid "delete list $String$" 
-msgstr "Lösche Liste $Strings$"
+msgstr "Lösche Liste $String$"
 
 msgid "hide list $List$" 
 msgstr "Verstecke Liste $List$"
