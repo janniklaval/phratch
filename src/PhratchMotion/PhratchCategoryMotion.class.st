@@ -1,3 +1,6 @@
+"
+I represent the Motion category of phratch
+"
 Class {
 	#name : #PhratchCategoryMotion,
 	#superclass : #PhratchCategory,
