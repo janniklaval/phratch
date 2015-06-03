@@ -1,3 +1,6 @@
+"
+I represent the Looks category of phratch
+"
 Class {
 	#name : #PhratchCategoryLooks,
 	#superclass : #PhratchCategory,
