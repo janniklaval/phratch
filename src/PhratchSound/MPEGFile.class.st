@@ -63,7 +63,7 @@ MPEGFile >> audioChannels: aStream [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #access }
 MPEGFile >> audioGetSample: aStream [
 	"Returns number of current sample, or -1 if error"
 	self hasAudio ifFalse: [^-1].
