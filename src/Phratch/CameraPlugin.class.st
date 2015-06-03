@@ -1,3 +1,6 @@
+"
+I am the plugin to connect the Camera
+"
 Class {
 	#name : #CameraPlugin,
 	#superclass : #Object,

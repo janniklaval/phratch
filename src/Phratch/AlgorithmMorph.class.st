@@ -1,3 +1,6 @@
+"
+I am the class that show the algorithm when selecting the ""show algorithm"" item on the right click menu of a hat block.
+"
 Class {
 	#name : #AlgorithmMorph,
 	#superclass : #ElementsEditorFrameMorph,

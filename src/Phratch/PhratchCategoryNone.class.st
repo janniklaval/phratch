@@ -1,3 +1,6 @@
+"
+I represent the None category of phratch
+"
 Class {
 	#name : #PhratchCategoryNone,
 	#superclass : #PhratchCategory,

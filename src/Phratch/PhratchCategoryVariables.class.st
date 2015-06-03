@@ -1,3 +1,6 @@
+"
+I represent the Variables category of phratch
+"
 Class {
 	#name : #PhratchCategoryVariables,
 	#superclass : #PhratchCategory,

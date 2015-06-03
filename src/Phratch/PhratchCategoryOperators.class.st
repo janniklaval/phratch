@@ -1,3 +1,6 @@
+"
+I represent the Operators category of phratch
+"
 Class {
 	#name : #PhratchCategoryOperators,
 	#superclass : #PhratchCategory,
