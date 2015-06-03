@@ -1,3 +1,6 @@
+"
+I represent the List category of phratch
+"
 Class {
 	#name : #PhratchCategoryList,
 	#superclass : #PhratchCategory,
