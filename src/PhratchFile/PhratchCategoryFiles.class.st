@@ -1,3 +1,6 @@
+"
+I represent the File category of phratch
+"
 Class {
 	#name : #PhratchCategoryFiles,
 	#superclass : #PhratchCategory,
