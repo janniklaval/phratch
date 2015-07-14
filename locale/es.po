@@ -2157,7 +2157,7 @@ msgid "date/time: $TimeDates$"
 msgstr "fecha/hora: $TimeDates$"
 
 msgid "index of $String$ starting at $Number$ in $String$" 
-msgstr "índice de $String$ comenzando en $Number$ en $Strings$"
+msgstr "índice de $String$ comenzando en $Number$ en $String$"
 
 msgid "letters $Number$ - $Number$ of $String$" 
 msgstr "letras $Number$ - $Number$ de $String$"
