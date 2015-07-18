@@ -966,7 +966,8 @@ BlockMorph >> isStopOrForever [
 BlockMorph >> justDroppedInto: newOwner event: evt [
 	"Handle being dropped into a new situation."
 
-	| frame targetAssoc targetP targetBlock bottomBlockUsed upperBlock |
+	|  targetAssoc targetP targetBlock bottomBlockUsed upperBlock frame |
+
 	bottomBlockUsed := false.
 
 	owner ifNil:	[^self].
@@ -990,6 +991,10 @@ BlockMorph >> justDroppedInto: newOwner event: evt [
 
 	"okay to drop blocks into the world during development"
 	((owner == World) and: [ScriptablePhratchMorph noviceMode not]) ifTrue: [^ self].
+
+	(owner isExternalScriptsMorph) ifTrue:[
+		self receiver: owner receiver. 
+	].
 
 	((owner isPhratchScriptsMorph) or:
 	 [(owner isBlockMorph) or:

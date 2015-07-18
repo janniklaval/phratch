@@ -1045,8 +1045,13 @@ CommandBlockMorph >> printCodeOn: aStream indent: indent [
 { #category : #accessing }
 CommandBlockMorph >> receiver [
 
-	^ receiver
+	"^ receiver
+"
 
+	^receiver ifNil: [
+		(owner respondsTo: #receiver)
+			ifTrue: [receiver := owner receiver]
+			ifFalse: [nil]]	
 ]
 
 { #category : #accessing }

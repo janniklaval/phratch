@@ -248,7 +248,7 @@ Morph >> ownerOrYourselfThatIsAPhratchFrameMorph [
 			(current isPhratchFrameMorph)
 				ifTrue: [ ^ current ].
 			current := current owner ].
-	^ current
+	^ nil
 ]
 
 { #category : #'*Phratch-Extensions-OwnerOrYourself' }
