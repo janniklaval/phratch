@@ -2604,7 +2604,7 @@ msgid "attribute $Attributes$"
 msgstr "Attribute $Attributes$"
 
 msgid "date/time: $TimeDates$" 
-msgstr "Datum/Uhrzeit: $TimeDate$"
+msgstr "Datum/Uhrzeit: $TimeDates$"
 
 msgid "index of $String$ starting at $Number$ in $String$" 
 msgstr "Position von $String$ beginnend an $Number$ in $String$"
