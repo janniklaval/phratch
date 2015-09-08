@@ -186,11 +186,11 @@ PhratchInstaller class >> gotPhratchSkins [
 { #category : #'class initialization' }
 PhratchInstaller class >> initialize [
 	DeclaredSprites := OrderedCollection new.
-	
-	(Smalltalk at: #FreeTypeSettings) perform: #updateFontsAtImageStartup: with: (true).
+ 	(Smalltalk at: #FreeTypeSettings) perform: #updateFontsAtImageStartup: with: (true).
 	FreeTypeSettings updateFreeType.
 	
 	(Smalltalk at: #StandardFonts) perform: #defaultFont: with: ((LogicalFont familyName: 'Arial Unicode MS' fallbackFamilyNames: nil pointSize: 10 stretchValue: 5 weightValue: 400 slantValue: 0)).
+	
 	
 ]
 
@@ -224,6 +224,7 @@ PhratchInstaller class >> phratchSettingsOn: aBuilder [
 		 					description: 'Do you want to see this category ?' localized.
 					].
 				].
+ 
 			(aBuilder group: #blockVisibility)
 				label: 'Block Visibility' localized;
 				description: 'Block Visibility' localized;
@@ -244,10 +245,12 @@ PhratchInstaller class >> phratchSettingsOn: aBuilder [
 						(aBuilder setting: #blockVisible) 
 							icon: ((e methodClass new blockFromSpec: prov color: (PhratchCategory blockColorFor: (e arguments at: 3))) imageForm);
 							label: "(e arguments at: 1), "' visible' localized;
-		 					target: (e arguments at: 1);
+		 					target: PhratchBlockSettings ;
+							targetSelector: (e arguments at: 1);
 							getSelector: #blockVisible;
 							setSelector: #blockVisible:;
 		 					description: 'Do you want to see this block ?' localized.
+					PhratchBlockSettings addConfiguredMessages: (e arguments at: 1).
 					].
 				].
 			(aBuilder launcher: #updatePhratchView)

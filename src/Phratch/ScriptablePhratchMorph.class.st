@@ -63,12 +63,12 @@ ScriptablePhratchMorph class >> blockVisible [
 ]
 
 { #category : #'panther-actions' }
-ScriptablePhratchMorph class >> blockVisible: aBlock [
+ScriptablePhratchMorph class >> blockVisible: aBlockName [
 
-	(self isBlockVisible: aBlock) ifTrue:[ 
-		BlockVisible add: aBlock]
+	(self isBlockVisible: aBlockName) ifTrue:[ 
+		BlockVisible add: aBlockName]
 	ifFalse:[
-		BlockVisible remove: aBlock ifAbsent:[]
+		BlockVisible remove: aBlockName ifAbsent:[]
 		]
 ]
 
@@ -151,9 +151,9 @@ ScriptablePhratchMorph class >> initialize [
 ]
 
 { #category : #'panther-actions' }
-ScriptablePhratchMorph class >> isBlockVisible: aBlock [
+ScriptablePhratchMorph class >> isBlockVisible: aBlockName [
 
-	^ (BlockVisible includes: aBlock) not.
+	^ (BlockVisible includes: aBlockName) not.
 	
 ]
 
