@@ -992,9 +992,9 @@ BlockMorph >> justDroppedInto: newOwner event: evt [
 	"okay to drop blocks into the world during development"
 	((owner == World) and: [ScriptablePhratchMorph noviceMode not]) ifTrue: [^ self].
 
-	(owner isExternalScriptsMorph) ifTrue:[
+	"(owner isExternalScriptsMorph) ifTrue:[
 		self receiver: owner receiver. 
-	].
+	]."
 
 	((owner isPhratchScriptsMorph) or:
 	 [(owner isBlockMorph) or:
