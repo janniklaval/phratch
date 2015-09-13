@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Phratch\n"
 "Report-Msgid-Bugs-To: Jannik LAVAL <jannik.laval@gmail.com>\n"
 "POT-Creation-Date: 2008-02-18 03:58-0400\n"
-"PO-Revision-Date: 2014-01-17 11:27-0400\n"
-"Last-Translator: claus kick <claus.kick@googlemail.com>\n"
+"PO-Revision-Date: 2015-09-11 20:27+0200\n"
+"Last-Translator: markus schlager <m.slg@gmx.de>\n"
 "Language-Team: Jannik LAVAL <jannik.laval@gmail.com>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -193,7 +193,7 @@ msgid "other"
 msgstr "andere"
 
 msgid "Block Editor"
-msgstr ""
+msgstr "Block-Editor"
 
 msgid "atomic"
 msgstr "atomisch"
@@ -238,7 +238,7 @@ msgid "Number"
 msgstr "Zahl"
 
 msgid "Text"
-msgstr ""
+msgstr "Text"
 
 msgid "Boolean (T/F)"
 msgstr "wahr/falsch"
@@ -601,15 +601,15 @@ msgstr "Malstift"
 # (Markus S.) war 'Stift runter', das aber bitte nicht. Darüber gab es bei uns an der Schule längere Diskussionen; aus Konsistenzgründen bitte immer Imperative auf den Kacheln.
 # (Jens) Tut mir leid, aber mit "senke Stift ab" und "hebe Stift an" werde mich wohl niemals anfreunden können.
 msgid "pen down"
-msgstr "Stift runter"
+msgstr "schalte Stift ein"
 
 msgid "pen down?"
-msgstr "Stift unten?"
+msgstr "Stift an?"
 
 # (Markus S.) war 'Stift hoch', das aber bitte nicht. Darüber gab es bei uns an der Schule längere Diskussionen; aus Konsistenzgründen bitte immer Imperative auf den Kacheln.
 # (Markus S.) war 'Stift hoch', das aber bitte nicht. Darüber gab es bei uns an der Schule längere Diskussionen; aus Konsistenzgründen bitte immer Imperative auf den Kacheln.
 msgid "pen up"
-msgstr "Stift hoch"
+msgstr "schalte Stift aus"
 
 msgid "pick random $Number$ to $Number$"
 msgstr "Zufallszahl von $Number$ bis $Number$"
@@ -1406,10 +1406,10 @@ msgid "New costume:"
 msgstr "Neues Kostüm:"
 
 msgid "New file name?"
-msgstr ""
+msgstr "Neuer Dateiname?"
 
 msgid "New Filename:"
-msgstr "Dateiname:"
+msgstr "Neuer Dateiname:"
 
 msgid "New sound:"
 msgstr "Neuer Klang:"
@@ -2586,7 +2586,7 @@ msgid "show dialog $String$ with text $String$"
 msgstr "Zeige Dialog $String$ mit Text $String$"
 
 msgid "ask $String$ in dialog" 
-msgstr "Frage $String% in Dialog"
+msgstr "Frage $String$ in Dialog"
 
 msgid "set sprite name to $String$" 
 msgstr "Setze Spritename auf $String$"
@@ -2601,7 +2601,7 @@ msgid "get $Attributes$ of $Sprite$"
 msgstr "zeige $Attributes$ von $Sprite$"
 
 msgid "attribute $Attributes$" 
-msgstr "Attribute $Attributes$"
+msgstr "Attribut $Attributes$"
 
 msgid "date/time: $TimeDates$" 
 msgstr "Datum/Uhrzeit: $TimeDates$"
@@ -2628,13 +2628,13 @@ msgid "$Number$ is prime?"
 msgstr "Ist $Number$ eine Primzahl?"
 
 msgid "$Number$ is an integer?" 
-msgstr "Ist $Numnber$ ein Integer?"
+msgstr "Ist $Number$ eine ganze Zahl?"
 
 msgid "is $String$ nil?" 
-msgstr "Ist $String% nil?"
+msgstr "Ist $String$ nil?"
 
 msgid "$Number$ as integer"
-msgstr "$Number$ als Integer"
+msgstr "$Number$ als ganze Zahl"
 
 msgid "$String$ as boolean" 
 msgstr "$String$ als boolscher Ausdruck"
@@ -2712,13 +2712,13 @@ msgid "number of lines of file $String$"
 msgstr "Anzahl Zeilen in Datei $String$"
 
 msgid "create file $String$" 
-msgstr "Erzeuge Datei $String$"
+msgstr "rzeuge Datei $String$"
 
 msgid "line $Number$ of file $String$" 
 msgstr "Zeile $Number$ von Datei $String$"
 
 msgid "delete file $String$" 
-msgstr "Lösche Datei $String$"
+msgstr "lösche Datei $String$"
 
 msgid "line $Number$ of file at URL $String$" 
 msgstr "Zeile $Number$ der Datei unter URL $String$"
@@ -2730,7 +2730,7 @@ msgid "contents of file at URL $String$"
 msgstr "Inhalt der Datei unter URL $String$"
 
 msgid "clear file $String$" 
-msgstr "Lösche Datei $String$"
+msgstr "leere Datei $String$"
 
 msgid "make a color" 
 msgstr "Erzeuge Farbe"
@@ -2784,13 +2784,13 @@ msgid "mix $Color$ with $Color$"
 msgstr "Mische $Color$ mit $Color$"
 
 msgid "mix $Color$ $Number$ : $Number$ with $Color$" 
-msgstr "Mische $Color$ $Number"$ : $Number$ mit $Color$"
+msgstr "Mische $Color$ $Number$ : $Number$ mit $Color$"
 
 msgid "color named $NamedColors$" 
 msgstr "Farbe $NamedColors$"
 
 msgid "$String$ as color" 
-msgstr "$String" als Farbe"
+msgstr "$String$" als Farbe"
 
 msgid "$Color$ as string" 
 msgstr "$Color$ als Text"
