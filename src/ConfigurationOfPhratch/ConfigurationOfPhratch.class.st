@@ -485,7 +485,7 @@ ConfigurationOfPhratch >> version41: spec [
 			
 			spec repository: 'http://smalltalkhub.com/mc/JLaval/Phratch/main'.
 			spec
-				package: 'Phratch' with:'Phratch-janniklaval.451';
+				package: 'Phratch' with:'Phratch-janniklaval.452';
 				package: 'PhratchColor'with:'PhratchColor-janniklaval.8';
 				package: 'PhratchFile'with:'PhratchFile-janniklaval.7';
 				package: 'PhratchList'with:'PhratchList-janniklaval.14';
