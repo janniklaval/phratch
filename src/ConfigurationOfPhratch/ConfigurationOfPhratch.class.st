@@ -477,6 +477,27 @@ ConfigurationOfPhratch >> version40: spec [
 ]
 
 { #category : #'as yet unclassified' }
+ConfigurationOfPhratch >> version41: spec [
+	<version:'4.1' imports: #('5.0-baseline' )>
+	spec for: #common do: [
+			spec repository: 'http://smalltalkhub.com/mc/SeanDeNigris/SeansPlayground/main'.
+			spec package: 'NewExternalWebBrowser'with: 'NewExternalWebBrowser-SeanDeNigris.3'.
+			
+			spec repository: 'http://smalltalkhub.com/mc/JLaval/Phratch/main'.
+			spec
+				package: 'Phratch' with:'Phratch-janniklaval.451';
+				package: 'PhratchColor'with:'PhratchColor-janniklaval.8';
+				package: 'PhratchFile'with:'PhratchFile-janniklaval.7';
+				package: 'PhratchList'with:'PhratchList-janniklaval.14';
+				package: 'PhratchLooks'with:'PhratchLooks-janniklaval.13';
+				package: 'PhratchMotion'with:'PhratchMotion-janniklaval.6';
+				package: 'PhratchPen'with:'PhratchPen-janniklaval.5';
+				package: 'PhratchSensing'with:'PhratchSensing-janniklaval.6';
+				package: 'PhratchDebugger'with:'PhratchDebugger-janniklaval.6'.
+	].
+]
+
+{ #category : #'as yet unclassified' }
 ConfigurationOfPhratch >> version50: spec [
 	<version:'5.0' imports: #('5.0-baseline' )>
 	spec for: #common do: [
