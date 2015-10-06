@@ -61,6 +61,9 @@ msgstr "$List$ に $String$ が含まれる"
 msgid "$Attributes$ of $Sprite$"
 msgstr "$Sprite$ の $Attributes$"
 
+msgid "myself"
+msgstr "自分自身"
+
 msgid "$Boolean$ and $Boolean$"
 msgstr "$Boolean$ かつ $Boolean$"
 
@@ -100,6 +103,9 @@ msgstr "$Variable$ を $Number$ ずつ変える"
 msgid "change pen color by $Number$"
 msgstr "ペンの色を $Number$ ずつ変える"
 
+msgid "change pen hue by $Number$"
+msgstr "ペンの色相を $Number$ ずつ変える"
+
 msgid "change pen shade by $Number$"
 msgstr "ペンの濃さを $Number$ ずつ変える"
 
@@ -130,11 +136,44 @@ msgstr "画像効果をなくす"
 msgid "color $ScreenColor$ is touching $ScreenColor$?"
 msgstr "$ScreenColor$ 色が $ScreenColor$ 色に触れた"
 
+msgid "distance to x $Number$ y $Number$"
+msgstr "x $Number$ y $Number$ までの距離"
+
+msgid "stage maximum x"
+msgstr "ステージの最大x"
+
+msgid "stage minimum x"
+msgstr "ステージの最小x"
+
+msgid "stage maximum y"
+msgstr "ステージの最大y"
+
+msgid "stage minimum y"
+msgstr "ステージの最小y"
+
 msgid "control"
 msgstr "制御"
 
 msgid "costume #"
 msgstr "コスチュームの番号"
+
+msgid "name"
+msgstr "名前"
+
+msgid "prototype"
+msgstr "複製元"
+
+msgid "owner"
+msgstr "親"
+
+msgid "parts"
+msgstr "部品"
+
+msgid "object $Sprite$"
+msgstr "オブジェクト $Sprite$"
+
+msgid "all sprites"
+msgstr "全てのスプライト"
 
 msgid "delete $ListDelete$ of $List$"
 msgstr "$ListDelete$ 番目を $List$ から削除する"
@@ -144,6 +183,9 @@ msgstr "向き"
 
 msgid "distance to $Sprite$"
 msgstr "$Sprite$ までの距離"
+
+msgid "select $String$ where $Boolean$"
+msgstr "$Boolean$ ならば $String$ を選択する"
 
 msgid "else"
 msgstr "でなければ"
@@ -158,7 +200,10 @@ msgid "glide $Number$ secs to x:$Number$ y:$Number$"
 msgstr "$Number$ 秒でx座標を $Number$ に、y座標を $Number$ に変える"
 
 msgid "go back $Number$ layers"
-msgstr "$Number$ 番目に移動"
+msgstr "レイヤー $Number$ 枚後ろに移動"
+
+msgid "come up $Number$ layers"
+msgstr "レイヤー $Number$ 枚前に移動"
 
 msgid "go to $Sprite$"
 msgstr "$Sprite$ へ行く"
@@ -256,6 +301,90 @@ msgstr "$Boolean$ ではない"
 msgid "operators"
 msgstr "演算"
 
+msgid "neg $Number$"
+msgstr "マイナス $Number$"
+
+msgid "pi"
+msgstr "π"
+
+msgid "newline"
+msgstr "改行"
+
+msgid "time"
+msgstr "時刻"
+
+msgid "hour"
+msgstr "時"
+
+msgid "minute"
+msgstr "分"
+
+msgid "second"
+msgstr "秒"
+
+msgid "date"
+msgstr "日付"
+
+msgid "day of month"
+msgstr "日"
+
+msgid "day of year"
+msgstr "年の何日目"
+
+msgid "weekday-name"
+msgstr "曜日"
+
+msgid "weekday-#"
+msgstr "曜日番号"
+
+msgid "month-name"
+msgstr "月名"
+
+msgid "month-#"
+msgstr "月"
+
+msgid "year"
+msgstr "年"
+
+msgid "$String$ as integer"
+msgstr "$String$ を小数点以下切捨て"
+
+msgid "ascii code of $String$"
+msgstr "$String$ の文字コード"
+
+msgid "ascii $Number$ as letter"
+msgstr "文字コード $Number$ の文字"
+
+msgid "is $String$ a $Type$ ?"
+msgstr "$String$ は $Type$ か?"
+
+msgid "number"
+msgstr "数"
+
+msgid "text"
+msgstr "文字列"
+
+msgid "boolean"
+msgstr "真偽値"
+
+msgid "command"
+msgstr "コマンド"
+
+msgid "reporter"
+msgstr "レポーター"
+
+msgid "predicate"
+msgstr "述語"
+
+msgid "object"
+msgstr "オブジェクト"
+
+msgid "$String$ is an integer?"
+msgstr "$String$ は整数か?"
+
+msgid "tab"
+msgstr "タブ"
+
 msgid "pen"
 msgstr "ペン"
 
@@ -331,6 +460,9 @@ msgstr "ペンの色を $Color$ にする"
 msgid "set pen color to $Number$"
 msgstr "ペンの色を $Number$ にする"
 
+msgid "set pen hue to $Number$"
+msgstr "ペンの色相を $Number$ にする"
+
 msgid "set pen shade to $Number$"
 msgstr "ペンの濃さを $Number$ にする"
 
@@ -354,6 +486,9 @@ msgstr "y座標を $Number$ にする"
 
 msgid "show"
 msgstr "表示する"
+
+msgid "variable?"
+msgstr "変数?"
 
 msgid "show variable $Variable$"
 msgstr "変数 $Variable$ を表示する"
@@ -644,6 +779,9 @@ msgstr "ドラッグして回転"
 msgid "draggable on website?"
 msgstr "Webサイト上でドラッグできるか?"
 
+msgid "self"
+msgstr "自分"
+
 msgid "duplicate"
 msgstr "複製"
 
@@ -785,6 +923,9 @@ msgstr "拡大"
 msgid "Grow sprite"
 msgstr "スプライトを大きくする"
 
+msgid "hello world"
+msgstr "ハローワールド"
+
 msgid "hello "
 msgstr "ハロー"
 
@@ -839,11 +980,11 @@ msgstr "画像を読み込む"
 msgid "Import List"
 msgstr "読み込みリスト"
 
-msgid "Import Project"
+msgid "Import project"
 msgstr "プロジェクトを読み込む"
 
-msgid "import project"
-msgstr "プロジェクトを読み込む"
+#msgid "import project"
+#msgstr "プロジェクトを読み込む"
 
 msgid "Import Sound"
 msgstr "音を読み込む"
@@ -898,6 +1039,12 @@ msgstr "リストを作る"
 
 msgid "Make a variable"
 msgstr "新しい変数を作る"
+
+msgid "swap $Variable$ and $Variable$"
+msgstr "変数 $Variable$ と変数 $Variable$ を交換する"
+
+msgid "set $Variable$ to $String$"
+msgstr "変数 $Variable$ の値を $String$ にする"
 
 msgid "Max:"
 msgstr "最大値:"
@@ -1139,7 +1286,7 @@ msgstr "保存する"
 msgid "Save a copy of the current project"
 msgstr "現在のプロジェクトのコピーを保存"
 
-msgid "Save As"
+msgid "Save as"
 msgstr "名前をつけて保存"
 
 msgid "Save changes before quitting?"
@@ -1358,7 +1505,7 @@ msgstr "変数名?"
 msgid "View on stage"
 msgstr "ステージの上に表示"
 
-msgid "What's your name?"
+msgid "What's your name?" #???
 msgstr "あなたの名前は何ですか?"
 
 msgid "whirl"
@@ -1949,6 +2096,15 @@ msgstr "回転のスタイル"
 msgid "set rotation style to $Rotation$"
 msgstr "回転のスタイルを $Rotation$ に設定"
 
+msgid "normal"
+msgstr "通常"
+
+msgid "leftRight"
+msgstr "左右"
+
+msgid "none"
+msgstr "なし"
+
 msgid "draggable?"
 msgstr "ドラッグできるか?"
 
@@ -1957,6 +2113,45 @@ msgstr "ドラッグできないようにする"
 
 msgid "make draggable"
 msgstr "ドラッグできるようにする"
+
+msgid "synchronous?"
+msgstr "同期しているか?"
+
+msgid "hidden?"
+msgstr "非表示?"
+
+msgid "layer"
+msgstr "レイヤー"
+
+msgid "color effect"
+msgstr "カラーエフェクト"
+
+msgid "フィッシュアイエフェクト"
+msgstr "広角レンズエフェクト"
+
+msgid "ghost effect"
+msgstr "ゴーストエフェクト"
+
+msgid "mosaic effect"
+msgstr "モザイクエフェクト"
+
+msgid "pixelate effect"
+msgstr "ピクセレートエフェクト"
+
+msgid "whirl effect"
+msgstr "うずまきエフェクト"
+
+msgid "pen down?"
+msgstr "ペンを下ろした?"
+
+msgid "anchor"
+msgstr "アンカー"
+
+msgid "children"
+msgstr "子供"
+
+msgid "parent"
+msgstr "親"
 
 msgid "when $Sprite$ created"
 msgstr "$Sprite$ が作られたとき"
@@ -1967,8 +2162,50 @@ msgstr "$Event$ を受け取ったか?"
 msgid "if $Boolean$ then $Boolean$ else $Boolean$"
 msgstr "もし $Boolean$ ならば $Boolean$ そうでなければ $Boolean$"
 
+msgid "if $Boolean$ then $String$ else $String$"
+msgstr "もし $Boolean$ ならば $String$ そうでなければ $String$"
+
 msgid "repeat $Number$ times"
 msgstr "$Number$ 回繰り返す"
+
+msgid "launch $CSlot$"
+msgstr "$CSlot$ を起動する"
+
+msgid "launch $CSlot$ $Input$ $SAList$"
+msgstr "$CSlot$ を起動する $Input$ $SAList$"
+
+msgid "launch $CSlot$ $Input$ $String$"
+msgstr "$CSlot$ を起動する $Input$ $String$"
+
+msgid "call $OSReporter$"
+msgstr "$OSReporter$ を呼び出す"
+
+msgid "call $OSReporter$ $Input$ $SAList$"
+msgstr "$OSReporter$ を呼び出す $Input$ $SAList$"
+
+msgid "call $OSReporter$ $Input$ $String$"
+msgstr "$OSReporter$ を呼び出す $Input$ $String$"
+
+msgid "report $String$"
+msgstr "報告 $String$"
+
+msgid "run $CSlot$"
+msgstr "$CSlot$ を実行する"
+
+msgid "run $CSlot$ $Input$ $SAList$"
+msgstr "$CSlot$ を実行する $Input$ $SAList$"
+
+msgid "run $CSlot$ $Input$ $String$"
+msgstr "$CSlot$ を実行する $Input$ $String$"
+
+msgid "the $SAReporter$ block"
+msgstr "$SAReporter$ ブロック"
+
+msgid "the script"
+msgstr "スクリプト"
+
+msgid "the script. Input names: $String$"
+msgstr "スクリプト 入力名: $String$"
 
 msgid "save project"
 msgstr "プロジェクトを保存"
@@ -1990,6 +2227,9 @@ msgstr "$Event$ に対するすべてのスクリプトを止める"
 
 msgid "press green flag"
 msgstr "緑の旗を押す"
+
+msgid "stop block"
+msgstr "停止"
 
 msgid "pause"
 msgstr "一時停止"
@@ -2057,6 +2297,12 @@ msgstr "カメラ撮影を始める"
 msgid "show dialog $String$ with text $String$"
 msgstr "ダイアログ $String$ を開いて $String$ を表示する"
 
+msgid "info"
+msgstr "情報"
+
+msgid "What's your name?"
+msgstr "あなたの名前は何ですか?"
+
 msgid "ask $String$ in dialog"
 msgstr "ダイアログで $String$ と聞く"
 
@@ -2065,6 +2311,9 @@ msgstr "スプライトの名前を $String$ にする"
 
 msgid "warn $String$"
 msgstr "$String$ と警告する"
+
+msgid "Invalid input"
+msgstr "無効な入力"
 
 msgid "key pressed"
 msgstr "押されたキー"
@@ -2079,10 +2328,10 @@ msgid "date/time: $TimeDates$"
 msgstr "日付/時刻: $TimeDates$"
 
 msgid "index of $String$ starting at $Number$ in $String$"
-msgstr "$String$ が $String$ の $Number$ 番目以降で現れる位置"
+msgstr "$String$ が $Number$ 番目以降で$String$ 中に現れる位置"
 
 msgid "letters $Number$ - $Number$ of $String$"
-msgstr "$String$ の $Number$ から $Number$ 番目までの文字"
+msgstr "$Number$ から $Number$ 番目までの $String$ 中の文字"
 
 msgid "join $String$ and $String$"
 msgstr "$String$ と $String$ をつなぐ"
@@ -2110,6 +2359,18 @@ msgstr "$String$ の真偽値"
 
 msgid "set $Attributes$ to $String$"
 msgstr "$Attributes$ の値を $String$ に設定"
+
+msgid "script variables"
+msgstr "スクリプト変数"
+
+msgid "delete variable $String$"
+msgstr "変数 $String$ を削除する"
+
+msgid "variable or list named $String$"
+msgstr "変数またはリスト $String$"
+
+msgid "Make a block"
+msgstr "ブロックを作る"
 
 msgid "delete $Sprite$"
 msgstr "$Sprite$ を削除する"
@@ -2161,6 +2422,27 @@ msgstr "$List$ に現れる $String$ の位置"
 
 msgid "a List"
 msgstr "リスト"
+
+msgid "a list"
+msgstr "リスト"
+
+msgid "list $MAAny$"
+msgstr "リスト $MAAny$"
+
+msgid "add $ListIndex$ to $ListIndex$ into $List$"
+msgstr "$ListIndex$ から $ListIndex$ までリスト $List$ に追加"
+
+msgid "swap $ListIndex$ and $ListIndex$ of $List$"
+msgstr "リスト $List$ の $ListIndex$ と $ListIndex$ を交換する"
+
+msgid "shuffle $List$"
+msgstr "リスト $List$ をシャッフルする"
+
+msgid "copy of $SAList$"
+msgstr "$SAList$ のコピー"
+
+msgid "make locale list $String$"
+msgstr "ローカルなリスト $String$ を作る"
 
 msgid "times $String$ appears in $List$"
 msgstr " $String$ が $List$ に現れる回数"
@@ -2261,6 +2543,9 @@ msgstr "$NamedColors$ の色"
 msgid "$String$ as color"
 msgstr "$String$ の色"
 
+#msgid "black"
+#msgstr "黒"
+
 msgid "$Color$ as string"
 msgstr "$Color$ の16進文字列"
 
@@ -2276,7 +2561,7 @@ msgstr "全ての変数をクリアする"
 msgid "Settings"
 msgstr "設定"
 
-msgid "Phratch Website"
+BBBmsgid "Phratch Website"
 msgstr "Phratchのウェブサイト"
 
 msgid "Scratch Help Page"
@@ -2293,4 +2578,42 @@ msgstr "Pantherチュートリアル"
 
 msgid "About Phratch"
 msgstr "Phratchについて"
+
+############################################
+# FORMATTING
+############################################
+
+msgid "design"
+msgstr "設計"
+
+msgid "here should hold $Boolean$"
+msgstr "$Boolean$ を確認する"
+
+msgid "achieve $Boolean$"
+msgstr "達成目標 $Boolean$"
+
+msgid "assuming $Boolean$"
+msgstr "前提条件 $Boolean$"
+
+msgid "assuming $Boolean$, \nachieve $Boolean$"
+msgstr "前提条件 $Boolean$, \n達成目標 $Boolean$"
+
+msgid "reset all assertion errors"
+msgstr "設計違反エラーをリセットする"
+
+############################################
+# MISSINGs
+############################################
+
+msgid "AddOns"
+msgstr "アドオン"
+
+msgid "Save state"
+msgstr "状態を保存"
+
+msgid "Export project"
+msgstr "プロジェクトを書き出す"
+
+msgid "Undo last drop"
+msgstr "プロジェクトを書き出す"
 
