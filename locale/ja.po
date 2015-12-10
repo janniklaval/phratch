@@ -71,7 +71,7 @@ msgid "$Boolean$ or $Boolean$"
 msgstr "$Boolean$ または $Boolean$ "
 
 msgid "$MathFunctions$ of $Number$"
-msgstr "$Number$ の $MathFunctions$"
+msgstr "$MathFunctions$ $Number$"
 
 msgid "$Number$ mod $Number$"
 msgstr "$Number$2 を $Number$1 で割った余り"
@@ -2617,3 +2617,32 @@ msgstr "プロジェクトを書き出す"
 msgid "Undo last drop"
 msgstr "プロジェクトを書き出す"
 
+msgid "replace background $Number$ with $NewCostume$"
+msgstr "背景 $Number$ を $NewCostume$ に置き換える"
+
+msgid "camera"
+msgstr "カメラ"
+
+msgid "stage"
+msgstr "ステージ"
+
+msgid "paint new"
+msgstr "新しい絵"
+
+msgid "add $NewCostume$ to backgrounds"
+msgstr "$NewCostume$ を背景に追加する"
+
+msgid "delete background $Number$"
+msgstr "背景 $Number$ を削除する"
+
+msgid "set horizontal pan to $Number$"
+msgstr "水平方向のパンを $Number$ に設定する"
+
+msgid "set vertical pan to $Number$"
+msgstr "垂直方向のパンを $Number$ に設定する"
+
+msgid "change horizontal pan by $Number$"
+msgstr"水平方向のパンを $Number$ 変化させる"
+
+msgid "change vertical pan by $Number$"
+msgstr "垂直方向のパンを $Number$ 変化させる"
