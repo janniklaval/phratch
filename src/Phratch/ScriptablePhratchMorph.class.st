@@ -852,8 +852,9 @@ ScriptablePhratchMorph >> changeVar: varName by: increment [
 					commandSpec: varName; 
 					yourself).
 			w ifNotNil: [
-				w setCategoryColor: (PhratchCategory blockColorFor: 'variables') ]].
-		^ self].
+				w setCategoryColor: (PhratchCategory blockColorFor: 'variables') ].
+			^self.
+		]].
 
 	n := vars at: varName asString ifAbsent: [^ self].
 	self setVar: varName to: n asNumberNoError + increment asNumberNoError.
