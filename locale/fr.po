@@ -415,6 +415,9 @@ msgstr "ajouter $Number$ à $Variable$ "
 msgid "change pen color by $Number$"
 msgstr "ajouter $Number$ à couleur du stylo"
 
+msgid "change pen hue by $Number$"
+msgstr "ajouter $Number$ à la teinte du stylo"
+
 msgid "change pen shade by $Number$"
 msgstr "ajouter $Number$ à l'intensité du stylo"
 
@@ -646,6 +649,9 @@ msgstr "mettre la couleur $Color$ pour le stylo"
 msgid "set pen color to $Number$"
 msgstr "choisir la couleur $Number$ pour le stylo"
 
+msgid "set pen hue to $Number$"
+msgstr "choisir la teinte $Number$ pour le stylo"
+
 msgid "set pen shade to $Number$"
 msgstr "choisir l'intensité $Number$ pour le stylo"
 
@@ -672,6 +678,9 @@ msgstr "montrer"
 
 msgid "show variable $Variable$"
 msgstr "afficher la variable $Variable$"
+
+msgid "delete variable $String$"
+msgstr "effacer la variable $String$"
 
 msgid "size"
 msgstr "taille"
@@ -1014,6 +1023,9 @@ msgstr "Exporter le costume"
 msgid "Export failed"
 msgstr "Echec de l'exportation"
 
+msgid "Export project"
+msgstr "Exporter le projet"
+
 msgid "Export Sound"
 msgstr "Exporter un son"
 
@@ -1158,10 +1170,7 @@ msgstr "Importer une image"
 msgid "Import List"
 msgstr "Importer une liste"
 
-msgid "Import Project"
-msgstr "Importer un projet"
-
-msgid "import project"
+msgid "Import project"
 msgstr "Importer un projet"
 
 msgid "Import Sound"
@@ -1205,6 +1214,9 @@ msgstr "Outil ligne (dessiner des lignes)"
 
 msgid "List name?"
 msgstr "Nom de la liste ?"
+
+msgid "variable or list named $String$"
+msgstr "variable ou liste nommée $String$"
 
 msgid "Low"
 msgstr "Bas"
@@ -1459,7 +1471,7 @@ msgstr "Enregistrer"
 msgid "Save a copy of the current project"
 msgstr "Enregistrer une copie du projet actuel"
 
-msgid "Save As"
+msgid "Save as"
 msgstr "Enregistrer sous"
 
 msgid "Save changes before quitting?"
@@ -1586,7 +1598,7 @@ msgid "Start green flag scripts"
 msgstr "Lancer les scripts en cliquant sur  le drapeau vert"
 
 msgid "Start Single Stepping"
-msgstr "Démarrer le pas-√†-pas"
+msgstr "Démarrer le pas-à-pas"
 
 msgid "stop"
 msgstr "arrêter"
@@ -1712,7 +1724,7 @@ msgstr "Zoom arrière"
 ############################################
 
 msgid "Accordion"
-msgstr "Accordéon "
+msgstr "Accordéon"
 
 msgid "Acoustic Bass"
 msgstr "Basse Acoustique"
@@ -1802,10 +1814,10 @@ msgid "Cowbell"
 msgstr "Cloches de vache"
 
 msgid "Crash Cymbal 1"
-msgstr "Cymbale Crash 1"
+msgstr "Cymbale crash 1"
 
 msgid "Crash Cymbal 2"
-msgstr "Cymbale Crash 2"
+msgstr "Cymbale crash 2"
 
 msgid "Distortion Guitar"
 msgstr "Guitare électrique à distorsion"
@@ -1817,10 +1829,10 @@ msgid "Dulcimer"
 msgstr "Dulcimer"
 
 msgid "Electric Bass (finger)"
-msgstr "Basse Electrique (doigt)"
+msgstr "Basse électrique (doigt)"
 
 msgid "Electric Bass (pick)"
-msgstr "Basse Electrique (pincée)"
+msgstr "Basse électrique (pincée)"
 
 msgid "Electric Clean Guitar"
 msgstr "Guitare électrique pure"
@@ -1832,7 +1844,7 @@ msgid "Electric Jazz Guitar"
 msgstr "Guitare électrique Jazz"
 
 msgid "Electric Muted Guitar"
-msgstr "Guitare Electrique muette"
+msgstr "Guitare électrique muette"
 
 msgid "Electric Piano 1"
 msgstr "Piano électrique 1"
@@ -1877,7 +1889,7 @@ msgid "Flute"
 msgstr "Flûte"
 
 msgid "French Horn"
-msgstr "Cor Français"
+msgstr "Cor français"
 
 msgid "Fretless Bass"
 msgstr "Basse acoustique"
@@ -1886,10 +1898,10 @@ msgid "Glockenspiel"
 msgstr "Glockenspiel"
 
 msgid "Guitar Fret Noise"
-msgstr "Bruit de Frette (Guitare )"
+msgstr "Bruit de frette (Guitare)"
 
 msgid "Guitar Harmonics"
-msgstr "Harmoniques guitare "
+msgstr "Harmoniques guitare"
 
 msgid "Gunshot"
 msgstr "Coup de feu"
@@ -1904,7 +1916,7 @@ msgid "Harpsichord"
 msgstr "Clavecin"
 
 msgid "Helicopter"
-msgstr "Hélicoptère "
+msgstr "Hélicoptère"
 
 msgid "Hi Bongo"
 msgstr "Bongo haut"
@@ -2012,7 +2024,7 @@ msgid "Mute Triangle"
 msgstr "Triangle muet"
 
 msgid "Muted Trumpet"
-msgstr "Trompette bouch√©e"
+msgstr "Trompette bouchée"
 
 msgid "Nylon String Guitar"
 msgstr "Guitare à cordes nylon"
@@ -2096,10 +2108,10 @@ msgid "Ride Bell"
 msgstr "Cloche Ride"
 
 msgid "Ride Cymbal 1"
-msgstr "Cymbale Ride 1"
+msgstr "Cymbale ride 1"
 
 msgid "Ride Cymbal 2"
-msgstr "Cymbale Ride 2"
+msgstr "Cymbale ride 2"
 
 msgid "Rock Organ"
 msgstr "Orgue rock"
@@ -2183,7 +2195,7 @@ msgid "Tambourine"
 msgstr "Tambourin"
 
 msgid "Tango Accordion"
-msgstr "Accord√©on Tango"
+msgstr "Accordéon Tango"
 
 msgid "Telephone Ring"
 msgstr "Sonnerie de téléphone"
@@ -2236,11 +2248,6 @@ msgstr "Bloc de bois"
 msgid "Xylophone"
 msgstr "Xylophone"
 
-
-
-
-
-
 msgid "object $Sprite$"
 msgstr "objet $Sprite$"
 
@@ -2250,412 +2257,419 @@ msgstr "attribut $Sprite$"
 msgid "hidden?"
 msgstr "caché?"
 
-
-
-msgid "files" 
+msgid "files"
 msgstr "fichiers"
 
-msgid "colors" 
+msgid "colors"
 msgstr "couleurs"
 
-msgid "Arrow key move with speed $Number$" 
+msgid "Arrow key move with speed $Number$"
 msgstr "avancer avec les touches flêches avec une vitesse de $Number$"
 
-msgid "go in between x: $Number$ y: $Number$ and x: $Number$ y: $Number$" 
+msgid "go in between x: $Number$ y: $Number$ and x: $Number$ y: $Number$"
 msgstr "aller entre x: $Number$ y: $Number$ et x: $Number$ y: $Number$"
 
-msgid "go $Number$ of the way to x: $Number$ y: $Number$" 
+msgid "go $Number$ of the way to x: $Number$ y: $Number$"
 msgstr "aller de $Number$ pas dans la direction x: $Number$ y: $Number$"
 
-msgid "if $Boolean$ bounce" 
+msgid "if $Boolean$ bounce"
 msgstr "si $Boolean$, rebondit"
 
-msgid "if touching $Sprite$ bounce" 
+msgid "if touching $Sprite$ bounce"
 msgstr "si touche $Sprite$, rebondit"
 
-msgid "point at x:$Number$ y:$Number$" 
+msgid "point at x:$Number$ y:$Number$"
 msgstr "pointe vers x:$Number$ y:$Number$"
 
-msgid "point at random coordinate" 
+msgid "point at random coordinate"
 msgstr "pointe vers des coordonnées aléatoires"
 
-msgid "rotation style" 
+msgid "rotation style"
 msgstr "style de rotation"
 
-msgid "set rotation style to $Rotation$" 
+msgid "set rotation style to $Rotation$"
 msgstr "fixer le style de rotation à $Rotation$"
 
-msgid "draggable?" 
+msgid "draggable?"
 msgstr "déplaçable ?"
 
-msgid "make undraggable" 
+msgid "make undraggable"
 msgstr "rendre non déplaçable"
 
-msgid "make draggable" 
+msgid "make draggable"
 msgstr "rendre déplaçable"
 
-msgid "when $Sprite$ created" 
+msgid "when $Sprite$ created"
 msgstr "quand $Sprite$ est créé"
 
-msgid "$Event$ received?" 
+msgid "$Event$ received?"
 msgstr "$Event$ reçu ?"
 
-msgid "if $Boolean$ then $Boolean$ else $Boolean$" 
+msgid "if $Boolean$ then $Boolean$ else $Boolean$"
 msgstr "si $Boolean$ alors $Boolean$ sinon $Boolean$"
 
-msgid "repeat $Number$ times" 
+msgid "if $Boolean$ then $String$ else $String$"
+msgstr "si $Boolean$ alors $String$ sinon $String$"
+
+msgid "repeat $Number$ times"
 msgstr "répéter $Number$ fois"
 
-msgid "save project" 
+msgid "save project"
 msgstr "sauvegarder le  projet"
 
-msgid "quit Phratch" 
+msgid "quit Phratch"
 msgstr "quitter Phratch"
 
-msgid "clone me" 
+msgid "clone me"
 msgstr "clone moi"
 
-msgid "Am I a clone?" 
+msgid "Am I a clone?"
 msgstr "Suis-je un clone"
 
-msgid "delete me if I am a clone" 
+msgid "delete me if I am a clone"
 msgstr "supprime moi si je suis un clone"
 
-msgid "stop all scripts for $Event$" 
+msgid "stop all scripts for $Event$"
 msgstr "arrêter tous les scripts pour $Event$"
 
-msgid "press green flag" 
+msgid "press green flag"
 msgstr "appuyer sur le drapeau vert"
 
-msgid "pause" 
+msgid "pause"
 msgstr "pause"
 
-msgid "replace costume $Number$ with $NewCostume$" 
+msgid "replace costume $Number$ with $NewCostume$"
 msgstr "remplacer le costume $Number$ par $NewCostume$"
 
-msgid "add $NewCostume$ to costumes" 
+msgid "add $NewCostume$ to costumes"
 msgstr "ajouter $NewCostume$ aux costumes"
 
-msgid "delete costume $Number$" 
+msgid "delete costume $Number$"
 msgstr "supprimer le costume $Number$"
 
-msgid "$Effects$ effect" 
+msgid "$Effects$ effect"
 msgstr "effet $Effects$"
 
-msgid "width" 
+msgid "width"
 msgstr "largeur"
 
-msgid "perimeter" 
+msgid "perimeter"
 msgstr "périmètre"
 
-msgid "height" 
+msgid "height"
 msgstr "hauteur"
 
-msgid "area" 
+msgid "area"
 msgstr "aire"
 
-msgid "set horizontal stretch to $Number$%" 
+msgid "set horizontal stretch to $Number$%"
 msgstr "fixer l'étirement horizontal à $Number$%"
 
-msgid "vertical flip" 
+msgid "vertical flip"
 msgstr "flip vertical"
 
-msgid "vertical stretch" 
+msgid "vertical stretch"
 msgstr "étirement vertical"
 
-msgid "change horizontal stretch by $Number$%" 
+msgid "change horizontal stretch by $Number$%"
 msgstr "changer l'étirement horizontal de $Number$%"
 
-msgid "horizontal stretch" 
+msgid "horizontal stretch"
 msgstr "étirement horizontal"
 
-msgid "set vertical stretch to $Number$%" 
+msgid "set vertical stretch to $Number$%"
 msgstr "fixer l'étirement vertical à $Number$%"
 
-msgid "horizontal flip" 
+msgid "horizontal flip"
 msgstr "flip horizontal"
 
-msgid "change vertical stretch by $Number$%" 
+msgid "change vertical stretch by $Number$%"
 msgstr "changer l'étirement vertical de $Number$%"
 
-msgid "camera is open?" 
+msgid "camera is open?"
 msgstr "caméra allumée ?"
 
-msgid "close camera" 
+msgid "close camera"
 msgstr "éteindre la caméra"
 
-msgid "do with camera open" 
+msgid "do with camera open"
 msgstr "faire avec la caméra allumée"
 
-msgid "open camera" 
+msgid "open camera"
 msgstr "allumer la caméra"
 
-msgid "show dialog $String$ with text $String$" 
+msgid "show dialog $String$ with text $String$"
 msgstr "montrer une boite de dialogue $String$ avec le texte $String$"
 
-msgid "ask $String$ in dialog" 
+msgid "ask $String$ in dialog"
 msgstr "demander $String$ dans une boite de dialogue"
 
-msgid "set sprite name to $String$" 
+msgid "set sprite name to $String$"
 msgstr "fixer le nom du lutin à $String$"
 
-msgid "warn $String$" 
+msgid "warn $String$"
 msgstr "avertir $String$"
 
-msgid "key pressed" 
+msgid "key pressed"
 msgstr "touche appuyée"
 
-msgid "get $Attributes$ of $Sprite$" 
+msgid "get $Attributes$ of $Sprite$"
 msgstr "obtenir $Attributes$ de $Sprite$"
 
-msgid "attribute $Attributes$" 
+msgid "attribute $Attributes$"
 msgstr "attribut $Attributes$"
 
-msgid "date/time: $TimeDates$" 
+msgid "date/time: $TimeDates$"
 msgstr "date/heure: $TimeDates$"
 
-msgid "index of $String$ starting at $Number$ in $String$" 
+msgid "index of $String$ starting at $Number$ in $String$"
 msgstr "indice de $String$ commençant à $Number$ dans $String$"
 
-msgid "letters $Number$ - $Number$ of $String$" 
+msgid "letters $Number$ - $Number$ of $String$"
 msgstr "lettres $Number$ à $Number$ de $String$"
 
-msgid "join $String$ and $String$" 
+msgid "join $String$ and $String$"
 msgstr "unir $String$ et $String$"
 
-msgid "factorial of $Number$" 
-msgstr "factorielle of $Number$"
+msgid "factorial of $Number$"
+msgstr "factorielle de $Number$"
 
-msgid "$Number$ mod $Number$" 
+msgid "$Number$ as integer"
+msgstr "$Number$ vers entier"
+
+msgid "$Number$ mod $Number$"
 msgstr "$Number$ modulo $Number$"
 
-msgid "$Number$ is a Fibonacci number?" 
+msgid "$Number$ is a Fibonacci number?"
 msgstr "$Number$ est un nombre de Fibonacci ?"
 
-msgid "$Number$ is prime?" 
+msgid "$Number$ is prime?"
 msgstr "$Number$ est premier ?"
 
-msgid "$Number$ is an integer?" 
+msgid "$Number$ is an integer?"
 msgstr "$Number$ est un entier ?"
 
-msgid "is $String$ nil?" 
+msgid "is $String$ nil?"
 msgstr "$String$ est vide ?"
 
-msgid "$String$ as boolean" 
+msgid "$String$ as boolean"
 msgstr "$String$ en booléen"
 
-msgid "set $Attributes$ to $String$" 
+msgid "set $Attributes$ to $String$"
 msgstr "fixer $Attributes$ à $String$"
 
-msgid "delete $Sprite$" 
+msgid "delete $Sprite$"
 msgstr "supprimer $Sprite$"
 
-msgid "clear pen trails" 
+msgid "clear pen trails"
 msgstr "effacer les traces de stylo"
 
-msgid "pen color" 
+msgid "pen color"
 msgstr "couleur du stylo"
 
-msgid "pen size" 
+msgid "pen size"
 msgstr "taille du stylo"
 
-msgid "pen hue" 
+msgid "pen hue"
 msgstr "teinte du stylo"
 
-msgid "pen shade" 
+msgid "pen shade"
 msgstr "ombre du stylo"
 
-msgid "make $String$" 
+msgid "make $String$"
 msgstr "définir $String$"
 
-msgid "delete $OSReporter$" 
+msgid "delete $OSReporter$"
 msgstr "supprimer $OSReporter$"
 
-msgid "variable named $String$" 
+msgid "variable named $String$"
 msgstr "variable nommée $String$"
 
-msgid "move $Variable$ to x: $Number$ y: $Number$" 
+msgid "move $Variable$ to x: $Number$ y: $Number$"
 msgstr "déplacer $Variable$ à x: $Number$ y: $Number$"
 
-msgid "set layout of $Variable$ to $LayoutStyles$" 
+msgid "set layout of $Variable$ to $LayoutStyles$"
 msgstr "fixer la disposition de $Variable$ avec $LayoutStyles$"
 
-msgid "make list $String$" 
+msgid "make list $String$"
 msgstr "définir la liste $String$"
 
-msgid "delete list $String$" 
+msgid "delete list $String$"
 msgstr "supprimer la liste $String$"
 
-msgid "hide list $List$" 
+msgid "hide list $List$"
 msgstr "cacher la liste $List$"
 
-msgid "show list $List$" 
+msgid "show list $List$"
 msgstr "montrer la liste $List$"
 
-msgid "first index of $String$ in $List$" 
+msgid "first index of $String$ in $List$"
 msgstr "premier indice de $String$ dans $List$"
 
-msgid "a List" 
+msgid "a List"
 msgstr "une liste"
 
-msgid "times $String$ appears in $List$" 
+msgid "times $String$ appears in $List$"
 msgstr "nombre d'apparition de  $String$ dans $List$"
 
-msgid "sort items of $List$ by numerical value" 
+msgid "sort items of $List$ by numerical value"
 msgstr "ordonner les éléments de $List$ dans l'ordre numérique"
 
-msgid "sort items of $List$ by string value" 
+msgid "sort items of $List$ by string value"
 msgstr "ordonner les éléments de $List$ dans l'ordre alphabétique"
 
-msgid "contents of file $String$" 
+msgid "contents of file $String$"
 msgstr "contenu du fichier $String$"
 
-msgid "number of lines of file at URL $String$" 
+msgid "number of lines of file at URL $String$"
 msgstr "nombre de lignes du fichier à l'URL $String$"
 
-msgid "number of lines of file $String$" 
+msgid "number of lines of file $String$"
 msgstr "nombre de lignes du fichier $String$"
 
-msgid "create file $String$" 
+msgid "create file $String$"
 msgstr "créer le fichier $String$"
 
-msgid "line $Number$ of file $String$" 
+msgid "line $Number$ of file $String$"
 msgstr "ligne $Number$ du fichier $String$"
 
-msgid "delete file $String$" 
+msgid "delete file $String$"
 msgstr "supprimer le fichier $String$"
 
-msgid "line $Number$ of file at URL $String$" 
+msgid "line $Number$ of file at URL $String$"
 msgstr "ligne $Number$ du fichier à l'URL $String$"
 
-msgid "write $String$ to file $String$" 
+msgid "write $String$ to file $String$"
 msgstr "écrire $String$ dans le fichier $String$"
 
-msgid "contents of file at URL $String$" 
+msgid "contents of file at URL $String$"
 msgstr "contenu du fichier à l'URL $String$"
 
-msgid "clear file $String$" 
+msgid "clear file $String$"
 msgstr "vider le fichier $String$"
 
-msgid "make a color" 
+msgid "make a color"
 msgstr "créer une couleur"
 
-msgid "set $ColorVar$ to $Color$" 
+msgid "set $ColorVar$ to $Color$"
 msgstr "fixer $ColorVar$ à $Color$"
 
-msgid "hide color $ColorVar$" 
+msgid "hide color $ColorVar$"
 msgstr "cacher la couleur $ColorVar$"
 
-msgid "show color $ColorVar$" 
+msgid "show color $ColorVar$"
 msgstr "montrer la couleur $ColorVar$"
 
-msgid "delete color $String$" 
+msgid "delete color $String$"
 msgstr "supprimer la couleur $String$"
 
-msgid "make color $String$" 
+msgid "make color $String$"
 msgstr "créer la couleur $String$"
 
-msgid "a color" 
+msgid "a color"
 msgstr "une couleur"
 
-msgid "color of pixel x: $Number$ y: $Number$" 
+msgid "color of pixel x: $Number$ y: $Number$"
 msgstr "couleur du pixel x: $Number$ y: $Number$"
 
-msgid "$Color$ blue" 
+msgid "$Color$ blue"
 msgstr "bleu de $Color$"
 
-msgid "color r: $Number$ g: $Number$ b: $Number$" 
+msgid "color r: $Number$ g: $Number$ b: $Number$"
 msgstr "couleur r: $Number$ g: $Number$ b: $Number$"
 
-msgid "$Color$ green" 
+msgid "$Color$ green"
 msgstr "vert de $Color$"
 
-msgid "$Color$ red" 
+msgid "$Color$ red"
 msgstr "rouge de $Color$"
 
-msgid "$Color$ saturation" 
+msgid "$Color$ saturation"
 msgstr "saturation de $Color$"
 
-msgid "$Color$ brightness" 
+msgid "$Color$ brightness"
 msgstr "luminosité de $Color$"
 
-msgid "$Color$ hue" 
+msgid "$Color$ hue"
 msgstr "teinte de $Color$"
 
-msgid "color h: $Number$ s: $Number$ b: $Number$" 
+msgid "color h: $Number$ s: $Number$ b: $Number$"
 msgstr "couleur h: $Number$ s: $Number$ b: $Number$"
 
-msgid "mix $Color$ with $Color$" 
+msgid "mix $Color$ with $Color$"
 msgstr "mixer $Color$ avec $Color$"
 
-msgid "mix $Color$ $Number$ : $Number$ with $Color$" 
+msgid "mix $Color$ $Number$ : $Number$ with $Color$"
 msgstr "mixer $Color$ $Number$% : $Number$% avec $Color$"
 
-msgid "color named $NamedColors$" 
+msgid "color named $NamedColors$"
 msgstr "couleur nommée $NamedColors$"
 
-msgid "$String$ as color" 
+msgid "$String$ as color"
 msgstr "$String$ en couleur"
 
-msgid "$Color$ as string" 
+msgid "$Color$ as string"
 msgstr "$Color$ en chaine de caractères"
 
-msgid "Allow Sprites offstage" 
+msgid "Allow Sprites offstage"
 msgstr "Permettre les lutins hors scène"
 
-msgid "Thread safe scripts" 
+msgid "Thread safe scripts"
 msgstr "Scripts à fil sécurisé"
 
-msgid "Clear all Variables" 
+msgid "Clear all Variables"
 msgstr "Nettoyer toutes les variables"
 
-msgid "Settings" 
+msgid "Settings"
 msgstr "Paramètres"
 
-msgid "Phratch Website" 
+msgid "Phratch Website"
 msgstr "Site web de Phratch"
 
-msgid "Scratch Help Page" 
+msgid "Scratch Help Page"
 msgstr "Page d'aide de Scratch"
 
-msgid "Help Screens" 
+msgid "Help Screens"
 msgstr "Ecran d'aide"
 
-msgid "BYOB Reference Manual" 
+msgid "BYOB Reference Manual"
 msgstr "Manuel de référence de BYOB"
 
-msgid "Panther Tutorials" 
+msgid "Panther Tutorials"
 msgstr "Tutoriels de Panther"
 
-msgid "About Phratch" 
+msgid "About Phratch"
 msgstr "A propos de Phratch"
 
-msgid "hStretch" 
+msgid "hStretch"
 msgstr "Etirement horizontal"
 
-msgid "vStretch" 
+msgid "vStretch"
 msgstr "Etirement vertical"
 
-msgid "v flip" 
+msgid "v flip"
 msgstr "retournement vertical"
 
-msgid "h flip" 
+msgid "h flip"
 msgstr "retournement horizontal"
 
-msgid "change hStretch by $Number$" 
+msgid "change hStretch by $Number$"
 msgstr "modifier l'étirement horizontal de $Number$"
 
-msgid "set vStretch to $Number$" 
+msgid "set vStretch to $Number$"
 msgstr "mettre l'étirement vertical à $Number$"
 
-msgid "set hStretch to $Number$" 
+msgid "set hStretch to $Number$"
 msgstr "mettre l'étirement horizontal à $Number$"
 
-msgid "set size to $Number$" 
-msgstr "mettre la taille à $Number$" 
+msgid "set size to $Number$"
+msgstr "mettre la taille à $Number$"
 
-msgid "change vStretch by $Number$" 
-msgstr "modifier l'étirement vertical de $Number$" 
+msgid "change vStretch by $Number$"
+msgstr "modifier l'étirement vertical de $Number$"
 
-msgid "self" 
+msgid "self"
 msgstr "soi"
+
+msgid "make locale list $String$"
+msgstr "créer une liste locale $String$"
