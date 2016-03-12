@@ -1700,10 +1700,10 @@ msgstr "tournoyer"
 msgid "world"
 msgstr "monde"
 
-msgid "Write Multiple Project Summaries"
+msgid "Write multiple project summaries"
 msgstr "Ecrire les résumés de plusieurs projets"
 
-msgid "Write Project Summary"
+msgid "Write project summary"
 msgstr "Ecrire le résumé du projet"
 
 msgid "Yes"
@@ -2736,3 +2736,30 @@ msgstr "mode fenêtré"
 
 msgid "turn fill screen on"
 msgstr "mode plein écran"
+
+msgid "Algorithm viewer"
+msgstr "Algorithme"
+
+msgid "end"
+msgstr "end"
+
+msgid "else"
+msgstr "sinon"
+
+msgid "when"
+msgstr "quand"
+
+msgid "green flag"
+msgstr "le drapeau vert"
+
+msgid "becomes true"
+msgstr "devient vrai"
+
+msgid "created"
+msgstr "est créé"
+
+msgid "key pressed"
+msgstr "est appuyé"
+
+msgid "clicked"
+msgstr "est cliqué"
