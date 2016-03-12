@@ -2741,7 +2741,7 @@ msgid "Algorithm viewer"
 msgstr "Algorithme"
 
 msgid "end"
-msgstr "end"
+msgstr "fin"
 
 msgid "else"
 msgstr "sinon"
@@ -2763,3 +2763,9 @@ msgstr "est appuyé"
 
 msgid "clicked"
 msgstr "est cliqué"
+
+msgid "edit block for developer"
+msgstr "Editeur de block pour développeur"
+
+msgid "show algorithm"
+msgstr "voir l'algorithme"
