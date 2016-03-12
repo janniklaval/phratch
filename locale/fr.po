@@ -204,6 +204,9 @@ msgstr "exécuter comme un bloc simple"
 msgid "edit"
 msgstr "éditer"
 
+msgid "show block"
+msgstr "montrer le block"
+
 msgid "delete block definition"
 msgstr "suprimer la définition du bloc"
 
@@ -398,7 +401,7 @@ msgid "ask $String$ and wait"
 msgstr "demander $String$ et attendre"
 
 msgid "background #"
-msgstr "arrière-plan n°"
+msgstr "n° arrière-plan"
 
 msgid "broadcast $Event$"
 msgstr "envoyer à tous $Event$"
@@ -407,7 +410,7 @@ msgid "broadcast $Event$ and wait"
 msgstr "envoyer à tous $Event$ et attendre"
 
 msgid "change $Effects$ effect by $Number$"
-msgstr "ajouter $Number$ à l'effet $Effects$"
+msgstr "Changer l'effet $Effects$ de $Number$"
 
 msgid "change $Variable$ by $Number$"
 msgstr "ajouter $Number$ à $Variable$ "
@@ -635,7 +638,7 @@ msgid "sensor %h?"
 msgstr "capteur %h activé?"
 
 msgid "set $Effects$ effect to $Number$"
-msgstr "choisir l'effet $Effects$ pour $Number$"
+msgstr "donner à l'effet $Effects$ la valeur $Number$"
 
 msgid "set $Variable$ to $Number$"
 msgstr " $Variable$ prend la valeur $Number$"
@@ -2449,6 +2452,9 @@ msgstr "$Number$ est premier ?"
 msgid "$Number$ is an integer?"
 msgstr "$Number$ est un entier ?"
 
+msgid "$String$ is an integer?"
+msgstr "$String$ est un entier ?"
+
 msgid "is $String$ nil?"
 msgstr "$String$ est vide ?"
 
@@ -2673,3 +2679,60 @@ msgstr "soi"
 
 msgid "make locale list $String$"
 msgstr "créer une liste locale $String$"
+
+msgid "stage maximum x"
+msgstr "x maximum de la scène"
+
+msgid "stage maximum y"
+msgstr "y maximum de la scène"
+
+msgid "stage minimum x"
+msgstr "x minimum de la scène"
+
+msgid "stage minimum y"
+msgstr "y minimum de la scène"
+
+msgid "delete background $Number$"
+msgstr "supprimer l'arrière plan n° $Number$"
+
+msgid "replace background $Number$ with $NewCostume$"
+msgstr "remplacer l'arrière plan n° $Number$ avec $NewCostume$"
+
+msgid "add $NewCostume$ to backgrounds"
+msgstr "ajouter l'arrière plan $NewCostume$"
+
+msgid "change vertical pan by $Number$"
+msgstr "changer la position verticale de $Number$"
+
+msgid "change horizontal pan by $Number$"
+msgstr "changer la position horizontale de $Number$"
+
+msgid "set vertical pan to $Number$"
+msgstr "fixer la position verticale à $Number$"
+
+msgid "set horizontal pan to $Number$"
+msgstr "fixer la position horizontale à $Number$"
+
+msgid "Step by step"
+msgstr "pas à pas"
+
+msgid "Generated Block doc"
+msgstr "Documentation des blocks"
+
+msgid "Exit user mode"
+msgstr "Passer en mode développeur"
+
+msgid "Enter user mode"
+msgstr "Passer en mode utilisateur"
+
+msgid "Save image in user mode"
+msgstr "Sauvegarder en mode utilisateur"
+
+msgid "close"
+msgstr "fermer"
+
+msgid "turn fill screen off"
+msgstr "mode fenêtré"
+
+msgid "turn fill screen on"
+msgstr "mode plein écran"
