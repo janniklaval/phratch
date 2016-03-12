@@ -408,7 +408,7 @@ ConfigurationOfPhratch >> stable: spec [
 	<symbolicVersion: #stable>
 	
 	spec for: #'pharo2.0.x' version: '1.0'. 
-	spec for: #'pharo3.0.x' version: '4.0'. 
+	spec for: #'pharo3.0.x' version: '4.1'. 
 ]
 
 { #category : #'as yet unclassified' }
@@ -485,7 +485,7 @@ ConfigurationOfPhratch >> version41: spec [
 			
 			spec repository: 'http://smalltalkhub.com/mc/JLaval/Phratch/main'.
 			spec
-				package: 'Phratch' with:'Phratch-janniklava.453';
+				package: 'Phratch' with:'Phratch-janniklaval.454';
 				package: 'PhratchColor'with:'PhratchColor-janniklaval.8';
 				package: 'PhratchFile'with:'PhratchFile-janniklava.8';
 				package: 'PhratchList'with:'PhratchList-janniklaval.14';
