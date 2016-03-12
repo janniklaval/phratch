@@ -47,9 +47,11 @@ CreationEventHatMorph >> printHatNameOn: aStream [
 	"Append a human-readable string for this hat block's name to the given stream."
 
 	aStream
-		nextPutAll: 'when ';
-		nextPutAll: self receiverName;
-		nextPutAll: ' created';
+		nextPutAll: 'when' localized;
+		nextPutAll: ' ';
+		nextPutAll: self receiverName localized;
+		nextPutAll: ' ';
+		nextPutAll: 'created' localized;
 		cr
 ]
 

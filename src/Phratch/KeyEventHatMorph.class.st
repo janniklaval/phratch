@@ -63,9 +63,11 @@ KeyEventHatMorph >> printHatNameOn: aStream [
 	"Append a human-readable string for this hat block's name to the given stream."
 
 	aStream
-		nextPutAll: 'when ';
-		nextPutAll: scriptNameMorph choice;
-		nextPutAll: ' key pressed';
+		nextPutAll: 'when' localized;
+		nextPutAll: ' ';
+		nextPutAll: scriptNameMorph choice localized;
+		nextPutAll: ' ';
+		nextPutAll: 'key pressed' localized;
 		cr
 ]
 

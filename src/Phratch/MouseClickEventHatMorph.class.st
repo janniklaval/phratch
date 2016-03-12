@@ -53,9 +53,11 @@ MouseClickEventHatMorph >> printHatNameOn: aStream [
 	"Append a human-readable string for this hat block's name to the given stream."
 
 	aStream
-		nextPutAll: 'when ';
-		nextPutAll: self receiverName;
-		nextPutAll: ' clicked';
+		nextPutAll: 'when' localized;
+		nextPutAll: ' ';
+		nextPutAll: self receiverName localized;
+		nextPutAll: ' ';
+		nextPutAll: 'clicked' localized;
 		cr
 ]
 
