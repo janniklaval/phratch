@@ -1,5 +1,5 @@
 "
-I represent the File category of phratch
+I represent the File category of phratch. Inside, there is a lot of blocks for manipulating files
 "
 Class {
 	#name : #PhratchCategoryFiles,
