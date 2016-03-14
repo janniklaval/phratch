@@ -1,4 +1,5 @@
-Phratch Copyright (c) 2013 Jannik Laval. Based on Scratch.
+Phratch is licensed under LGPL License
+Copyright (c) 2013 Jannik Laval. Based on Scratch.
 
 Phratch Logo and Phratch Robot imagesCopyright (c) 2013 Natacha Perrin.All rights reserved.
 
