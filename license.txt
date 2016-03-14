@@ -1,4 +1,4 @@
-Phratch is licensed under LGPL License
+Phratch is licensed under GPL_v3 License
 Copyright (c) 2013 Jannik Laval. Based on Scratch.
 
 Phratch Logo and Phratch Robot imagesCopyright (c) 2013 Natacha Perrin.All rights reserved.
