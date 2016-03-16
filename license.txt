@@ -2,7 +2,9 @@ Phratch is licensed under GPL_v2 License
 Copyright (c) 2013 Jannik Laval. 
 All right reserved
 
-Phratch Logo and Phratch Robot imagesCopyright (c) 2013 Natacha Perrin.All rights reserved.
+Phratch Logo and Phratch Robot images under CC-BY-SACopyright (c) 2013 Natacha Perrin.All rights reserved.
+
+Phratch Logo and Phratch Robot images are licensed under the Creative Commons Attribution 4.0 International License. To view a copy of this license, visit http://creativecommons.org/licenses/by/4.0/.
 
 Phratch is based on Scratch under GPL_v2 License
 Copyright (c) 2009 Massachusetts Institute of Technology
