@@ -57,7 +57,7 @@ ScriptablePhratchMorph >> addGlobalColor [
 ScriptablePhratchMorph >> colorAsString: aColor [
 	"Give the RGB string representation of the given color"
 	<phratchItem: '$Color$ as string' kind: #ReporterWatcherBlockMorph category: 'colors' defaultValues: #() subCategory: #a7 special: #()>
-	^ aColor asHTMLColor
+	^'#',  aColor asHexString
 ]
 
 { #category : #'*PhratchColor' }
