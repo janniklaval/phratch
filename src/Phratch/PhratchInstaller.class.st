@@ -23,6 +23,9 @@ PhratchInstaller class >> beginInstall [
 	items add: (StartupAction
              name: 'Phratch external files'
              code: [PhratchInstaller externalVerification.]).
+	items add: (StartupAction
+             name: 'Phratch window size'
+             code: [PhratchInstaller fixWindowSize.]).
 	StartupLoader default addAtStartupInImageDirectory: items.
 	StartupLoader default loadFromDefaultLocations.
 
@@ -67,6 +70,18 @@ PhratchInstaller class >> externalVerification [
 	PhratchInstaller gotPhratchMedia ifFalse: [PhratchInstaller getPhratchMedia].
 	PhratchInstaller gotPhratchHelp ifFalse: [PhratchInstaller getPhratchHelp].
 	PhratchInstaller gotBYOBManual ifFalse: [PhratchInstaller getBYOBManual].
+
+]
+
+{ #category : #installation }
+PhratchInstaller class >> fixWindowSize [
+
+	"Display fullscreen: true.
+	1 second wait.
+	p:= DisplayScreen actualScreenSize.
+	Display fullscreen: false."
+	DisplayScreen hostWindowTitle: 'phratch'.
+	"DisplayScreen hostWindowSize: ((p x * 19/20) asInteger @ (p y * 19/20) asInteger)."
 
 ]
 
@@ -256,7 +271,7 @@ PhratchInstaller class >> phratchSettingsOn: aBuilder [
 			(aBuilder launcher: #updatePhratchView)
 				target: PhratchFrameMorph "; targetSelector: #closeAndOpen";
 				script: #rebuildUI;
-				label: 'Update the view of Phratch' localized.
+				label: 'Update Phratch display' localized.
 		].
 ]
 
