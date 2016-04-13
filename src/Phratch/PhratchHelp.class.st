@@ -273,7 +273,7 @@ PhratchHelp class >> launchWebsite [
 
 { #category : #generating }
 PhratchHelp class >> open: aFileName [ 
-	aFileName asUrl open
+	WebBrowser openOn: aFileName
 ]
 
 { #category : #externalCall }
