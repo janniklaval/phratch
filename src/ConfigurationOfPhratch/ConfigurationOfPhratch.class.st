@@ -340,14 +340,16 @@ ConfigurationOfPhratch >> baseline50: spec [
 	spec for: #common do: [
 			spec preLoadDoIt: #addInstVars.
 			spec blessing: #baseline.
-			spec repository: 'http://smalltalkhub.com/mc/SeanDeNigris/SeansPlayground/main'.
-			spec
-				package: 'NewExternalWebBrowser'.
+			spec project: 'WebBrowser' with: [
+				spec
+					repository: 'http://smalltalkhub.com/mc/TorstenBergmann/WebBrowser/main'; 
+					className: 'ConfigurationOfWebBrowser';
+					version: #stable ].
 				
 			spec repository: 'http://smalltalkhub.com/mc/JLaval/Phratch/main'.
 			spec
 				package: 'Phratch' with: [ 
-					spec requires: #('NewExternalWebBrowser')
+					spec requires: #('WebBrowser')
 			].
 			spec
 				package: 'PhratchColor' with: [ 
