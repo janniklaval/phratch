@@ -503,8 +503,8 @@ ConfigurationOfPhratch >> version41: spec [
 ConfigurationOfPhratch >> version50: spec [
 	<version:'5.0' imports: #('5.0-baseline' )>
 	spec for: #common do: [
-			spec repository: 'http://smalltalkhub.com/mc/SeanDeNigris/SeansPlayground/main'.
-			spec package: 'NewExternalWebBrowser'.
+			spec
+				project: 'WebBrowser' with: #stable.
 			
 			spec repository: 'http://smalltalkhub.com/mc/JLaval/Phratch/main'.
 			spec
