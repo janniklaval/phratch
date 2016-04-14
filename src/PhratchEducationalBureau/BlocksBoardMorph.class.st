@@ -34,12 +34,9 @@ BlocksBoardMorph class >> showBlocksBoard [
 BlocksBoardMorph >> addReadouts [
 	| t1 t2 t3 t4 t5 |
 	column := AlignmentMorph newColumn centering: #center;
-			 hResizing: #spaceFill;
+			 hResizing: #shrinkWrap;
 			 vResizing: #shrinkWrap;
-			 color: (Color
-					r: 193 / 255
-					g: 36 / 255
-					b: 39 / 255);
+			 color: (PhratchEducationalBureau color);
 			 borderWidth: 2;
 			 borderColor: (Color
 					r: 148 / 255
@@ -77,12 +74,14 @@ BlocksBoardMorph >> addReadouts [
 		t6 = 15 ifFalse: [t1 addMorphBack: (AlignmentMorph new color: column color;
 				 extent: 10 @ 1;
 				 hResizing: #spaceFill)].
-		readouts at: t6 put: t4].
+		readouts at: t6 put: t4.
+		].
 	t1 addMorphBack: (Morph new color: column color;
 		 extent: 1 @ 3).
 	column addMorphBack: t1.
 	column position: self position - 2.
 	self addMorph: column.
+	column extent: column extent +20.
 	self extent: column extent - 4
 ]
 
@@ -397,7 +396,7 @@ BlocksBoardMorph >> step [
 	1 to: 15 do: 
 		[:t2 | 
 		(readouts at: t2)
-			contents: (self stringFor: (self sensor: t2)).
+			contents: ' ',(self stringFor: (self sensor: t2)).
 		lastString at: t2 put: (PhratchEducationalBureau characterAt: (self sensor: t2)).
 		t1 := (readouts at: t2) owner.
 		(t1 respondsTo: #fixLayout)
