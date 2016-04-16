@@ -340,16 +340,14 @@ ConfigurationOfPhratch >> baseline50: spec [
 	spec for: #common do: [
 			spec preLoadDoIt: #addInstVars.
 			spec blessing: #baseline.
-			spec project: 'WebBrowser' with: [
-				spec
-					repository: 'http://smalltalkhub.com/mc/TorstenBergmann/WebBrowser/main'; 
-					className: 'ConfigurationOfWebBrowser';
-					version: #stable ].
+			spec repository: 'http://smalltalkhub.com/mc/SeanDeNigris/SeansPlayground/main'.
+			spec
+				package: 'NewExternalWebBrowser'.
 				
 			spec repository: 'http://smalltalkhub.com/mc/JLaval/Phratch/main'.
 			spec
 				package: 'Phratch' with: [ 
-					spec requires: #('WebBrowser')
+					spec requires: #('NewExternalWebBrowser')
 			].
 			spec
 				package: 'PhratchColor' with: [ 
@@ -410,7 +408,7 @@ ConfigurationOfPhratch >> stable: spec [
 	<symbolicVersion: #stable>
 	
 	spec for: #'pharo2.0.x' version: '1.0'. 
-	spec for: #'pharo3.0.x' version: '4.1'. 
+	spec for: #'pharo3.0.x' version: '4.0'. 
 ]
 
 { #category : #'as yet unclassified' }
@@ -487,7 +485,7 @@ ConfigurationOfPhratch >> version41: spec [
 			
 			spec repository: 'http://smalltalkhub.com/mc/JLaval/Phratch/main'.
 			spec
-				package: 'Phratch' with:'Phratch-janniklaval.454';
+				package: 'Phratch' with:'Phratch-janniklava.fix.453';
 				package: 'PhratchColor'with:'PhratchColor-janniklaval.8';
 				package: 'PhratchFile'with:'PhratchFile-janniklava.8';
 				package: 'PhratchList'with:'PhratchList-janniklaval.14';
@@ -503,8 +501,8 @@ ConfigurationOfPhratch >> version41: spec [
 ConfigurationOfPhratch >> version50: spec [
 	<version:'5.0' imports: #('5.0-baseline' )>
 	spec for: #common do: [
-			spec
-				project: 'WebBrowser' with: #stable.
+			spec repository: 'http://smalltalkhub.com/mc/SeanDeNigris/SeansPlayground/main'.
+			spec package: 'NewExternalWebBrowser'.
 			
 			spec repository: 'http://smalltalkhub.com/mc/JLaval/Phratch/main'.
 			spec
