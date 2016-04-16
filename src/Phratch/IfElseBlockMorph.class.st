@@ -399,7 +399,7 @@ IfElseBlockMorph >> printCodeOn: aStream indent: indent [
 	aStream cr.
 	trueBlock ifNotNil: [trueBlock printCodeOn: aStream indent: indent + 1].
 	indent timesRepeat: [aStream nextPutAll: '    '].
-	aStream nextPutAll: 'else' localized; cr.
+	aStream nextPutAll: 'else'; cr.
 	falseBlock ifNotNil: [falseBlock printCodeOn: aStream indent: indent + 1].
 	nextBlock ifNotNil: [nextBlock printCodeOn: aStream indent: indent].
 

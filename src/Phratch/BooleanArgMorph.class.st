@@ -90,6 +90,6 @@ BooleanArgMorph >> isBooleanArgMorph [
 BooleanArgMorph >> printArgOn: aStream [
 	"Print this argument morph on the given stream."
 
-	aStream nextPutAll: 'false' localized.
+	aStream nextPutAll: 'false'.
 
 ]

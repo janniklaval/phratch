@@ -166,7 +166,7 @@ ScriptablePhratchMorph class >> isSpriteSpecificTarget: anObject selector: selec
 	self flag: 'This is crappy, it gives another receiver than the one expected. Should be removed, but carefully '.
 	(anObject isPhratchSpriteMorph) ifFalse: [^ false].
 	i := selector asString
-		findAnySubstring: #('answer' 'key' 'Loud' 'mouse' 'soundLevel' 'tempo' 'timer')
+		findAnySubStr: #('answer' 'key' 'Loud' 'mouse' 'soundLevel' 'tempo' 'timer')
 		startingAt: 1.
 	^ i > selector asString size
 

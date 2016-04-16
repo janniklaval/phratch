@@ -493,21 +493,21 @@ CustomCommandBlockMorph >> rightButtonMenu [
 
 	| menu choice |
 	menu := MenuMorph new defaultTarget: self.
-	menu add: 'help' localized value: #presentHelpScreen.
+	menu add: 'help' value: #presentHelpScreen.
 	menu addLine.
 	isTemplate 
-		ifTrue: [menu add: 'change category' localized value: #editSpec ]
-		ifFalse: [menu add: 'edit' localized value: #editScript].
+		ifTrue: [menu add: 'change category' value: #editSpec ]
+		ifFalse: [menu add: 'edit' value: #editScript].
 
 	((owner isPhratchBlockPaletteMorph) or: [isTemplate]) ifFalse: [
 		menu addLine.
-		menu add: 'duplicate' localized value: #duplicate.
+		menu add: 'duplicate' value: #duplicate.
 
 		(self owner isBlockMorph) ifFalse: [  "can't yet delete a blocks inside a script"
-			menu add: 'delete' localized value: #delete]].
+			menu add: 'delete' value: #delete]].
 
 	(owner isPhratchBlockPaletteMorph) ifTrue: [
-		menu add: 'delete block definition' localized value: #deleteDefinition ].
+		menu add: 'delete block definition' value: #deleteDefinition ].
 
 	menu localize; invokeModal.
 	choice := menu selectedValue ifNil: [^ self].

@@ -209,7 +209,7 @@ HatBlockMorph >> printCodeOn: aStream indent: indent [
 	self printHatNameOn: aStream.
 	self nextBlock ifNotNil: [self nextBlock printCodeOn: aStream indent: indent + 1].
 	indent timesRepeat: [aStream nextPutAll: '    '].
-	aStream nextPutAll: 'end' localized; cr.
+	aStream nextPutAll: 'end'; cr.
 
 ]
 

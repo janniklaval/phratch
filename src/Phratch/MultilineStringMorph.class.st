@@ -141,7 +141,7 @@ MultilineStringMorph >> contents [
 MultilineStringMorph >> contents: aStringOrText [
 	"Set my contents to the given String or Text. Break into lines, emove non-printing characters, and replace tabs with sequences of spaces."
 
-	lines := (self replaceTabs: aStringOrText) substrings: String cr.
+	lines := (self replaceTabs: aStringOrText) subStrings: String cr.
 	lines := lines copyWith: self emptyLine.
 	self lineWrapFrom: 1.
 

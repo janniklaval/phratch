@@ -475,20 +475,20 @@ CustomReporterBlockMorph >> rightButtonMenu [
 	| menu choice |
 	self isTemplate ifTrue: [^ self].
 	menu := MenuMorph new defaultTarget: self.
-	menu add: 'help' localized value: #presentHelpScreen.
+	menu add: 'help' value: #presentHelpScreen.
 	menu addLine.
-	menu add: 'edit' localized value: #editScript.
+	menu add: 'edit' value: #editScript.
 
 	(owner isPhratchBlockPaletteMorph) ifFalse: [
 
-		menu add: 'relabel' localized value: #rename.
+		menu add: 'relabel' value: #rename.
 		menu addLine.
-		menu add: 'duplicate' localized value: #duplicate.
+		menu add: 'duplicate' value: #duplicate.
 		(self owner isBlockMorph) ifFalse: [  "can't yet delete a blocks inside a script"
-			menu add: 'delete' localized value: #delete]].
+			menu add: 'delete' value: #delete]].
 
 	(owner isPhratchBlockPaletteMorph) ifTrue: [
-		menu add: 'delete block definition' localized value: #deleteDefinition ].
+		menu add: 'delete block definition' value: #deleteDefinition ].
 
 	"^ (menu localize; invokeModal) selectedValue"
 	menu localize; invokeModal.

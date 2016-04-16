@@ -1203,7 +1203,7 @@ PhratchFrameMorph >> enterPresentationMode [
 	self delete.
 
 	Display fillBlack.
-	Display fullscreenMode: true.
+	Display fullScreenMode: true.
 	TaskbarMorph allInstances do: [: e | e hide ].
 
 	World restoreDisplay.
@@ -1273,7 +1273,7 @@ PhratchFrameMorph >> exitPresentationMode [
 
 	TaskbarMorph allInstances do: [: e | e show ].
 
-		Display fullscreenMode: false.
+		Display fullScreenMode: false.
 		World restoreDisplay.
 
 
@@ -1420,7 +1420,7 @@ PhratchFrameMorph >> fillScreenOff [
 	"Stop filling the entire screen. Useful during development."
 
 	<phratchMenu: 'Exit user mode' category: 'file' position: 12 sub:5 shift: true>
-	Display fullscreenMode: false.
+	Display fullScreenMode: false.
 	World restoreDisplay.
 
 	fillScreenFlag := false.
@@ -1777,6 +1777,10 @@ PhratchFrameMorph >> installNewProject: newWorkpane [
 
 	| viewTarget |
 	self stopAll.
+
+	FreeTypeSystemSettings loadFt2Library ifTrue:[
+	FreeTypeSystemSettings loadFt2Library: false.
+	FreeTypeSystemSettings loadFt2Library: true].
 
 	newWorkpane class = PhratchStageMorph
 		ifFalse: [^ self inform: 'Incompatible Phratch file format'].
@@ -2697,7 +2701,6 @@ PhratchFrameMorph >> startup [
 	(Smalltalk at: #DebuggerFrameMorph) resetDimensions.
 
 	self updateProjectName.
-	
 	author := ''.
 	justSaved := true.
 
@@ -3079,7 +3082,6 @@ PhratchFrameMorph >> updateProjectName [
 	projectTitleMorph contents size > 0
 		ifTrue: [ projectTitleMorph contents , '- PHR' ]
 		ifFalse: [ 'PHR ' , PhratchInstaller version].
-	self updateWindowsName: projectName.
 	self fixLayout
 ]
 
@@ -3095,14 +3097,6 @@ PhratchFrameMorph >> updateViewModeButtons [
 		(b actionSelector = #enterPresentationMode and: [viewMode = #presentation])
 			ifTrue: [b on]].
 
-]
-
-{ #category : #private }
-PhratchFrameMorph >> updateWindowsName: nameOfProject [
-	"Update the project name display in the Phratch title bar."
-
-	DisplayScreen hostWindowTitle: ('phratch - ', nameOfProject).
-	
 ]
 
 { #category : #private }
