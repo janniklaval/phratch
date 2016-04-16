@@ -141,9 +141,11 @@ ProcedureHatBlockMorph >> nextBlock [
 ProcedureHatBlockMorph >> printHatNameOn: aStream [
 	"Append a human-readable string for this hat block's name to the given stream."
 
-	aStream nextPutAll: 'when '.
+	aStream nextPutAll: 'when' localized.
+	aStream nextPutAll: ' '.
 	self printCodeSubmorph: argMorph on: aStream.
-	aStream nextPutAll: ' becomes true'; cr.
+	aStream nextPutAll: ' '.
+	aStream nextPutAll: 'becomes true' localized; cr.
 
 ]
 

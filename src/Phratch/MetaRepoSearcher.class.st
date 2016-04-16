@@ -7,15 +7,7 @@ Class {
 { #category : #projects }
 MetaRepoSearcher class >> listOfProjects [
 
-	| lst res conf proj |
-	lst := (MetacelloConfigurationBrowserPane retrieveConfigurationsFrom: 'http://smalltalkhub.com/mc/JLaval/PhratchMetaRepo/main').
-	res := OrderedCollection new.
-	lst do:[:e |
-		conf := ((e subStrings: '-') first).
-		proj := conf copyFrom: 16 to: conf size.
-		res add: (proj -> conf)
-	].
-	^res
+	^((Metacello new smalltalkhubUser: 'JLaval' project: 'PhratchMetaRepo') configuration: [:spec | true ]; list) collect: [ :e | e name -> e className ]
 ]
 
 { #category : #projects }

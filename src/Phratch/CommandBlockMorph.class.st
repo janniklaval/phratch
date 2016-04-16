@@ -1095,7 +1095,7 @@ CommandBlockMorph >> rightButtonMenu [
 
 	| menu choice spec |
 	menu := MenuMorph new defaultTarget: self.
-	menu add: 'help' value: #presentHelpScreen.
+	menu add: 'help' localized value: #presentHelpScreen.
 
 	(owner isPhratchBlockPaletteMorph) ifFalse: [
 		menu addLine.
@@ -1107,31 +1107,31 @@ CommandBlockMorph >> rightButtonMenu [
 			#(and or) with: #(& |) do: [:s :op | menu add: s value: op]].
 
 		menu addLine.
-		menu add: 'duplicate' value: #duplicate.
+		menu add: 'duplicate' localized value: #duplicate.
 		(self isVariableBlockMorph) ifTrue: [
-			menu add: 'relabel' value: #rename].
+			menu add: 'relabel' localized value: #rename].
 		(self owner isBlockMorph) ifFalse: [  "can't yet delete a blocks inside a script"
-			menu add: 'delete' value: #delete]].
+			menu add: 'delete' localized value: #delete]].
 
 	(self isVariableBlockMorph)
-		ifTrue: [ menu add: 'delete' value: #deleteVariable: target: (self receiver) arguments: {self variable}.
+		ifTrue: [ menu add: 'delete' localized value: #deleteVariable: target: (self receiver) arguments: {self variable}.
 		].
 	
 	(self isListContentsBlockMorph)
-		ifTrue: [ menu add: 'delete' value: #deleteList: target: (self receiver) arguments: {self selectorAndArg second}.
+		ifTrue: [ menu add: 'delete' localized value: #deleteList: target: (self receiver) arguments: {self selectorAndArg second}.
 		].
 		
 	menu addLine.
 
 	self isInheritableAttribute ifTrue: [
 		self isDeletedAttribute 
-			ifTrue: [menu add: 'disinherit' value: #disinheritAttribute]
-			ifFalse: [menu add: 'inherit' value: #inheritAttribute]].
+			ifTrue: [menu add: 'disinherit' localized value: #disinheritAttribute]
+			ifFalse: [menu add: 'inherit' localized value: #inheritAttribute]].
 	
-	menu add: 'show block' value: #showElements.
+	menu add: 'show block' localized value: #showElements.
 	
 	ScriptablePhratchMorph noviceMode ifFalse:[
-		menu add: 'edit block for developer' value: #editElements.
+		menu add: 'edit block for developer' localized value: #editElements.
 	].
 
 	

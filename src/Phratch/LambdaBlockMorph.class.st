@@ -307,13 +307,13 @@ LambdaBlockMorph >> rightButtonMenu [
 	| menu choice block vn atomic |
 	atomic := self checkBoxLabelled: 'atomic' marked: self isAtomic width: 0.
 	menu := MenuMorph new defaultTarget: self.
-	menu add: 'help' value: #presentHelpScreen.
+	menu add: 'help' localized value: #presentHelpScreen.
 	menu addLine.
-	menu add: 'duplicate' value: #duplicate.
+	menu add: 'duplicate' localized value: #duplicate.
 	(self owner isBlockMorph)
 		ifFalse: [ 
 			"can't yet delete a blocks inside a script"
-			menu add: 'delete' value: #delete ].
+			menu add: 'delete' localized value: #delete ].
 	menu addLine.
 	menu addIcon: atomic tooltip: 'execute as single block' value: #toggleAtomicity.	"
 	menu add: (isAtomic ifTrue: ['atomic -> interleafed'] ifFalse: ['interleafed -> atomic']) action: #toggleAtomicity.

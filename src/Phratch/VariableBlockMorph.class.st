@@ -368,12 +368,12 @@ VariableBlockMorph >> rightButtonMenu [
 		or: [owner isVariableDeclarationBlockMorph])
 		ifFalse: [ ^super rightButtonMenu ].
 	menu := MenuMorph new defaultTarget: self.
-	menu add: 'help' value: #presentHelpScreen.
+	menu add: 'help' localized value: #presentHelpScreen.
 	menu addLine.
-	menu add: 'edit...' value: #editName.
+	menu add: 'edit...' localized value: #editName.
 	menu addLine.
-	menu add: 'delete' value: #deleteTemplate.
-	menu add: 'duplicate' value: #duplicate.
+	menu add: 'delete' localized value: #deleteTemplate.
+	menu add: 'duplicate' localized value: #duplicate.
 	menu localize; invokeModal.
 	choice := menu selectedValue ifNil: [^ self].
 	self perform: choice.

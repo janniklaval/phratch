@@ -1328,14 +1328,14 @@ BlockMorph >> rightButtonMenu [
 
 	| menu choice |
 	menu := MenuMorph new defaultTarget: self.
-	menu add: 'help' value: #presentHelpScreen.
+	menu add: 'help' localized value: #presentHelpScreen.
 
 	(owner isPhratchBlockPaletteMorph) ifFalse: [
 		menu addLine.
-		menu add: 'duplicate' value: #duplicate.	
+		menu add: 'duplicate' localized value: #duplicate.	
 		(self owner isBlockMorph) ifFalse: [  "we can't yet delete a blocks inside a script"
 			menu add: 'delete' value: #delete].
-		menu add: 'show algorithm' value: #showCodeString.	
+		menu add: 'show algorithm' localized value: #showCodeString.	
 		].
 	
 	menu localize; invokeModal.
