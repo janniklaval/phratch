@@ -305,7 +305,8 @@ BlocksBoardMorph >> rightButtonMenu [
 	t1 add: 'select serial/USB port' value: #selectPort.
 	self portIsOpen ifTrue: [t1 add: 'close port' value: #stopReadingData].
 	t1 addLine.
-	t1 add: 'hide' value: #delete.
+	t1 add: 'hide' value: #hide.
+	"t1 add: 'close' value: #delete."
 	t1 localize; invokeModal.
 	choice := t1 selectedValue ifNil: [^ self].
 	self perform: choice.
