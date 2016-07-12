@@ -33,6 +33,7 @@ BlocksBoardMorph class >> showBlocksBoard [
 { #category : #initialization }
 BlocksBoardMorph >> addReadouts [
 	| t1 t2 t3 t4 t5 |
+	
 	column := AlignmentMorph newColumn centering: #center;
 			 hResizing: #shrinkWrap;
 			 vResizing: #shrinkWrap;
@@ -51,12 +52,12 @@ BlocksBoardMorph >> addReadouts [
 	column addMorphBack: (Morph new color: column color;
 		 extent: 5 @ 3).
 	self removeAllMorphs.
-	readouts := Array new: 15.
+	readouts := Array new: 10.
 	t1 := AlignmentMorph newRow color: column color;
 			 inset: 2.
 	t1 addMorphBack: (Morph new color: column color;
 		 extent: 1 @ 3).
-	1 to: 15 do: 
+	1 to: 10 do: 
 		[:t6 | 
 		t2 := AlignmentMorph newColumn color: column color;
 				 inset: 2.
@@ -71,7 +72,7 @@ BlocksBoardMorph >> addReadouts [
 		t3 addMorph: t4.
 		t2 addMorphBack: t3.
 		t1 addMorphBack: t2.
-		t6 = 15 ifFalse: [t1 addMorphBack: (AlignmentMorph new color: column color;
+		t6 = 10 ifFalse: [t1 addMorphBack: (AlignmentMorph new color: column color;
 				 extent: 10 @ 1;
 				 hResizing: #spaceFill)].
 		readouts at: t6 put: t4.
@@ -121,7 +122,7 @@ BlocksBoardMorph >> blockReadAll [
 BlocksBoardMorph >> blockReadValueAt: anIndex [
 	<phratchItem: 'read at $Number$' kind: #ReporterBlockMorph category: 'educational bureau' defaultValues: #('1') subCategory: #b special: #()>
 	
-	^ self lastString at: anIndex asInteger
+	^ (self lastString at: anIndex asInteger) asString
 ]
 
 { #category : #initialization }
@@ -143,7 +144,7 @@ BlocksBoardMorph >> closePort [
 			port close].
 	port := nil.
 	sensorValues atAllPut: 0.
-	1 to: 15 do: [:t1 | (readouts at: t1)
+	1 to: 10 do: [:t1 | (readouts at: t1)
 			contents: ' '].
 	scanState := #off.
 	self step
@@ -164,33 +165,20 @@ BlocksBoardMorph >> initFieldsFrom: t1 version: t2 [
 BlocksBoardMorph >> initialize [
 	super initialize.
 	self initializeSkin.
-	self setMyName: 'Educ-Bureau'.
-	sensorValues := Array new: 15 withAll: 0.
-	curSlot := 0.
-	slotValue := 0.
-	scanState := #off.
-	self addReadouts.
-	lastString := ByteString new: 15.
 	
-	self gotoX: -216 y: 156.
 ]
 
 { #category : #initialization }
 BlocksBoardMorph >> initializeSkin [
-	|        |
-	"botSkin := Form fromFileNamed: (FileSystem workingDirectory / 'ScratchSkin' / 'defaultSpriteCostume.png').
-
-	botImage := ImageMedia new form: botSkin.
-	botImage mediaName: (self unusedMediaNameFromBaseName: (self defaultImageMedia mediaName)).
-	media addLast: botImage.
-	self lookLike: botImage mediaName.
-	self updateMediaCategory."
+	self setMyName: 'Educ-Bureau'.
+	sensorValues := Array new: 10 withAll: 0.
+	curSlot := 0.
+	slotValue := 0.
+	scanState := #off.
+	self addReadouts.
+	lastString := ByteString new: 10.
 	
-	"workpane := self ownerOrYourselfThatIsAPhratchStageMorph ifNil: [PhratchStageMorph allInstances first].
-	self position: workpane position + 20.
-	workpane addMorph: self.
-	self tryToOpenPort.
-	World startSteppingSubmorphsOf: self"
+	self gotoX: -216 y: 156.
 ]
 
 { #category : #accessing }
@@ -366,7 +354,7 @@ BlocksBoardMorph >> selectPort [
 { #category : #'sensor ops' }
 BlocksBoardMorph >> sensor: t1 [ 
 	t1 < 1 ifTrue: [^ 0].
-	t1 > 15 ifTrue: [^ 0].
+	t1 > 10 ifTrue: [^ 0].
 	^ sensorValues at: t1
 ]
 
@@ -394,7 +382,7 @@ BlocksBoardMorph >> step [
 		ifTrue: [self processIncomingData]
 		ifFalse: [port := nil].
 	self updateTitle.
-	1 to: 15 do: 
+	1 to: 10 do: 
 		[:t2 | 
 		(readouts at: t2)
 			contents: ' ',(self stringFor: (self sensor: t2)).

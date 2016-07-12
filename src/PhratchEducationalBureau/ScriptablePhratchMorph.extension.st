@@ -27,5 +27,5 @@ ScriptablePhratchMorph >> blockRead: anObject atValue: anIndex [
 	aSpriteOrStage := self coerceSpriteArg: anObject.
 
 	(aSpriteOrStage isScriptablePhratchMorph) ifFalse: [^ 0].
-	^ aSpriteOrStage lastString at: anIndex asInteger
+	^ (aSpriteOrStage lastString at: anIndex asInteger) asString
 ]

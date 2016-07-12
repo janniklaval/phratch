@@ -172,20 +172,26 @@ PhratchEducationalBureau class >> viewerPageFor: aScriptablePhratchMorph [
 
 		"Answer a morph containing my variables."
 
-	| page x y maxX addButton |
+	| page x y maxX addButton addButton2 |
 	page := PhratchBlockPaletteMorph new
 		color: (Color r: 0.8 g: 0.8 b: 1.0);
 		borderWidth: 0.
 
 	addButton := PhratchFrameMorph
-		buttonLabel: 'Connect Table' localized
+		buttonLabel: 'Connect Table 10' localized
 		selector: #addTable.
 	
+	addButton2 := PhratchFrameMorph
+		buttonLabel: 'Connect Table 15' localized
+		selector: #addTable15.
+		
 	x := 13.
 	y:= 10.
 	page addMorph: (addButton target: aScriptablePhratchMorph; position: x@7).
 	y := addButton bottom + 3.
 
+	page addMorph: (addButton2 target: aScriptablePhratchMorph; position: x@y).
+	y := addButton2 bottom + 3.
 	"aScriptablePhratchMorph addGenericEv3BlocksTo: page x: x y: y."
 	
 	(aScriptablePhratchMorph blocksFor: self label) do: [:blockOrSym |
