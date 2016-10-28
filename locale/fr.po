@@ -413,7 +413,7 @@ msgid "change $Effects$ effect by $Number$"
 msgstr "Changer l'effet $Effects$ de $Number$"
 
 msgid "change $Variable$ by $Number$"
-msgstr "ajouter $Number$ à $Variable$ "
+msgstr "à $Variable$, ajouter $Number$"
 
 msgid "change pen color by $Number$"
 msgstr "ajouter $Number$ à couleur du stylo"
