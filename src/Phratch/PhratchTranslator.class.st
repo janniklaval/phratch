@@ -420,9 +420,11 @@ PhratchTranslator class >> translationFor: englishString [
 	"Return the translation of the given (English) string for the current language. If there is no entry for the given string, return the original string."
 
 	| s |
-	s := TranslationDict at: englishString ifAbsent: [englishString].
+	self currentLanguage = 'en' ifFalse:[
+	s := TranslationDict at: englishString ifAbsent: [Transcript show: '"', englishString, '"', ' is not translated in language ', PhratchTranslator currentLanguage, String cr .englishString].
 	s size = 0 ifTrue: [s := englishString].
-	^ s
+	^ s].
+^englishString
 
 
 ]

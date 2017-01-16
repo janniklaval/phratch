@@ -288,3 +288,31 @@ PhratchHelp class >> openPantherTutorials [
 	Cursor wait showWhile: ["PhratchPlugin primOpenURL:" self open: 'http://pantherprogramming.weebly.com/panther-tutorials.html'].
 
 ]
+
+{ #category : #externalCall }
+PhratchHelp class >> presentHelpScreen: aBlockMorph [
+	"Answer the name of the help screen for this block, or nil if no help is available."
+
+	| fr |
+	fr := aBlockMorph ownerOrYourselfThatIsAPhratchFrameMorph.
+	fr
+		ifNil: [ ^ nil ]
+		ifNotNil: [ [ fr presentHelpScreen: aBlockMorph helpScreenName ]
+				on: Error
+				do: [ | allPragmas aP prov form comment |
+					allPragmas := (Pragma
+						allNamed: #phratchItem:kind:category:defaultValues:subCategory:special:
+						in: ScriptablePhratchMorph) asOrderedCollection.
+					ScriptablePhratchMorph allSubclasses 
+						do:
+							[ :aSC | allPragmas addAll: (Pragma allNamed: #phratchItem:kind:category:defaultValues:subCategory:special: in: aSC) ].
+					allPragmas.
+					aP := allPragmas detect: [ :p | p method selector = aBlockMorph selector ].
+					prov := { aP arguments at: 1 . aP arguments at: 2 . aP method selector . aP arguments at: 6},  (aP arguments at: 4).
+					comment := aP method comment.
+					comment ifNil: [ comment := '' ] ifNotNil: [ comment := comment copyFrom: 2 to: comment size - 1].
+					form := (aP methodClass new blockFromSpec: prov color: (PhratchCategory blockColorFor: (aP arguments at: 3)))
+						imageForm.
+					HelpDialog inform: comment title: 'Help' form: form ] ]
+
+]

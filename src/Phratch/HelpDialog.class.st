@@ -12,6 +12,26 @@ Class {
 }
 
 { #category : #'instance creation' }
+HelpDialog class >> inform: informationString title: titleString form: aForm [
+	"Put up an instance of me to give the user an informational message and wait until they click the 'ok' button before proceeding."
+	"DialogBoxMorph inform: 'Operation complete.' title: 'Status'"
+
+	| dialogBox |
+	dialogBox := self new
+		withButtonsForYes: false no: false okay: true cancel: false;
+		title: titleString localized;
+		extent: aForm extent + (80 @ 300);
+		yourself.
+	dialogBox
+		message: informationString localized
+		font: (StrikeFont fontName: 'VerdanaBold' size: 13).
+	dialogBox
+		helpForm: aForm.
+		
+	^ dialogBox getUserResponse
+]
+
+{ #category : #'instance creation' }
 HelpDialog class >> showForm: aForm [
 	"HelpDialogMorph showForm: (Form fromFileNamed: 'move.gif')"
 
@@ -51,6 +71,6 @@ HelpDialog >> initialize [
 	imageMorph := ImageMorph new form: (Form extent: 32@32 depth: 1).
 	imageMorph position: 36@55.
 
-	mainColumn addMorph: imageMorph.
+	mainColumn addMorph:  imageMorph.
 
 ]
