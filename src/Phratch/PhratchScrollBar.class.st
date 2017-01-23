@@ -64,7 +64,6 @@ PhratchScrollBar >> drawHSliderOn: aCanvas [
 		on: aCanvas.
 	aCanvas translucentImage: sliderStartForm at: (leftX @ y).
 	aCanvas translucentImage: sliderEndForm at: ((rightX - sliderEndForm width + 1) @ y).
-
 ]
 
 { #category : #drawing }
@@ -131,7 +130,6 @@ PhratchScrollBar >> drawVSliderOn: aCanvas [
 		on: aCanvas.
 	aCanvas translucentImage: sliderStartForm at: (x @ topY).
 	aCanvas translucentImage: sliderEndForm at: (x @ (bottomY - sliderEndForm height + 1)).
-
 ]
 
 { #category : #initialization }
@@ -151,7 +149,6 @@ PhratchScrollBar >> hFrameForm: frameForm sliderForm: sliderForm [
 	sliderMiddleForm := sliderForm copy: (7@0 extent: 1@h).
 	sliderEndForm := sliderForm copy: (8@0 corner: sliderForm extent).
 
-	sliderInsets := 3@3 corner: 3@5.
 	self extent: 200 @ frameStartForm height.
 
 ]
@@ -184,7 +181,7 @@ PhratchScrollBar >> initialize [
 	selector := nil.
 	sliderStart := 0.
 	sliderLength := 50.
-	sliderInsets := 3@3 corner: 0@5.
+	sliderInsets := (3@4) corner: (3@5).
 	dragOffset := 0.
 
 ]
@@ -347,7 +344,6 @@ PhratchScrollBar >> vFrameForm: frameForm sliderForm: sliderForm [
 	sliderMiddleForm := sliderForm copy: (0@(7) extent: w@1).
 	sliderEndForm := sliderForm copy: (0@(11) corner: sliderForm extent).
 
-	sliderInsets := 3@3 corner: 0@5.
 	self extent: frameStartForm width @ 200.
 
 ]

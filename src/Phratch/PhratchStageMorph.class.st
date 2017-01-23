@@ -324,13 +324,13 @@ PhratchStageMorph >> drawSubmorphsOn: aCanvas [
 PhratchStageMorph >> exportFileName: fileName [
 	| form fName |
 	form := self stageShotForm.
-	form depth <= 8
+	"form depth <= 8
 		ifTrue: [ 
 			fName := (fileName asLowercase endsWith: '.gif')
 				ifTrue: [ fileName ]
 				ifFalse: [ fileName , '.gif' ].
 			GIFReadWriter putForm: form colorReduced8Bit onFileNamed: fName.
-			^ self ].
+			^ self ]."
 	fName := (fileName asLowercase endsWith: '.bmp')
 		ifTrue: [ fileName ]
 		ifFalse: [ fileName , '.bmp' ].

@@ -44,7 +44,7 @@ PhratchThumbnailMorph >> drawOn: aCanvas [
 { #category : #accessing }
 PhratchThumbnailMorph >> extent: aPoint [
 "Only use squares"
-	self form: (ColorForm extent: aPoint depth: 16).
+	self form: (Form extent: aPoint depth: 16).
 	self form fillColor: Color transparent.
 	self form border: self form boundingBox width: 1.
 	showDirection := true.

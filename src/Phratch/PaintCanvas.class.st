@@ -550,7 +550,7 @@ PaintCanvas >> drawRegistrationPointOnBufferSrcRect: srcRect dstRect: dstRect [
 		ifFalse: [ 0 ].
 	bitBlt := (BitBlt toForm: bufferForm)
 		clipRect: dstRect;
-		fillColor: (ColorForm new quickHighLight: bufferForm depth);
+		fillColor: (Form new quickHighLight: bufferForm depth);
 		combinationRule: Form reverse; 
 		yourself.
 	(registrationPoint x between: srcRect left and: srcRect right)
@@ -576,7 +576,7 @@ PaintCanvas >> drawSelectionOnBufferSrcRect: srcRect dstRect: dstRect [
  
 	bitBlt := (BitBlt toForm: bufferForm)
 		clipRect: dstRect;
-		fillColor: (ColorForm new quickHighLight: bufferForm depth);
+		fillColor: (Form new quickHighLight: bufferForm depth);
 		combinationRule: Form reverse; 
 		yourself.
 

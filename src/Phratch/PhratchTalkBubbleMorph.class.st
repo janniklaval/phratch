@@ -58,7 +58,6 @@ PhratchTalkBubbleMorph >> initialize [
 	self initFromForm: (PhratchFrameMorph skinAt: #talkBubbleFrame).
 	self beThoughtBubble: false.
 	pointLeft := false.
-
 	contentsMorph := StringMorph new
 		contents: '';
 		font: (PhratchFrameMorph getFont: #TalkBubble);
@@ -66,8 +65,7 @@ PhratchTalkBubbleMorph >> initialize [
 	contentsMorph
 		borderWidth: 0;
 		lock.
-	self addMorph: contentsMorph.
-
+	self addMorph: contentsMorph
 ]
 
 { #category : #geometry }
@@ -96,25 +94,19 @@ PhratchTalkBubbleMorph >> message: aString [
 	"(PhratchTalkBubbleMorph new message: 'Hccfdsdsjkefbv  berv ssello!') openInWorld"
 
 	| maxWidth xOffset |
-	
 	maxWidth := 145.
-	(aString isString)
-		ifTrue: [
-			contentsMorph
+	aString isString
+		ifTrue: [ contentsMorph
 				width: maxWidth;
 				contents: aString;
 				fitContents ]
-		ifFalse: [
-			contentsMorph := aString.
+		ifFalse: [ contentsMorph := aString.
 			self addMorphFront: contentsMorph ].
-
-
-	self extent: contentsMorph extent + (15@23).
+	self extent: contentsMorph extent + (15 @ 23).
 	xOffset := contentsMorph width >= maxWidth
-		ifTrue: [10]
-		ifFalse: [((self width - contentsMorph width) // 2) ].
-	contentsMorph position: self position + (xOffset @ 5).
-
+		ifTrue: [ 10 ]
+		ifFalse: [ (self width - contentsMorph width) // 2 ].
+	contentsMorph position: self position + (xOffset @ 5)
 ]
 
 { #category : #accessing }

@@ -57,14 +57,14 @@ ImageMedia >> exportFilename: fileName for: stageOrSprite [
 
 	| myForm f fName |
 	myForm := self compositeForm.	"save as GIF if image has under 256 colors"
-	(myForm depth <= 8 or: [ myForm couldBeColorReduced ])
+	"(myForm depth <= 8 or: [ myForm couldBeColorReduced ])
 		ifTrue: [ 
 			f := myForm colorReduced8Bit.
 			fName := (fileName asLowercase endsWith: '.gif')
 				ifTrue: [ fileName ]
 				ifFalse: [ fileName , '.gif' ].
 			GIFReadWriter putForm: f onFileNamed: fName.
-			^ self ].	"otherwise, save as BMP to retain color resolution"
+			^ self ].	" "otherwise, save as BMP to retain color resolution"
 	fName := (fileName asLowercase endsWith: '.bmp')
 		ifTrue: [ fileName ]
 		ifFalse: [ fileName , '.bmp' ].
@@ -262,7 +262,7 @@ ImageMedia >> thumbnailFormExtent: extent [
 	"Answer a Form of the given extent containing a thumbnail of me."
 
 	| f compositeF scale shrunk |
-	f := (ColorForm extent: extent depth: 16) fillColor: Color transparent.
+	f := (Form extent: extent depth: 16) fillColor: Color transparent.
 	form
 		ifNotNil: [ 
 			compositeF := self compositeForm.

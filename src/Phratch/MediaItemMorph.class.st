@@ -163,6 +163,7 @@ MediaItemMorph >> buildSubmorphs [
 	numberMorphTopRight := numberMorph topRight.
 
 	thumbHeight := 0 max: (rightMorph height - (2 * highlightPadding y)).
+
 	thumbnailMorph := ImageMorph new.
 	thumbnailMorph form: (media thumbnailFormExtent: thumbHeight asPoint).
 	thumbnailMorph width > thumbHeight ifTrue: [

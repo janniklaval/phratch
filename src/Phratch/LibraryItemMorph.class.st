@@ -71,7 +71,7 @@ LibraryItemMorph >> buildSubmorphs [
 	"LibraryItemMorph open"
 
 	thumbnailMorph := ImageMorph new
-		form: (ColorForm extent: thumbWidth@thumbWidth depth: 16) fillWhite;
+		form: (Form extent: thumbWidth@thumbWidth depth: 16) fillWhite;
 		position: ((self width - thumbWidth) // 2) @ 0;
 		yourself.
 	self addMorph: thumbnailMorph.

@@ -323,13 +323,13 @@ PaintFrame >> export [
 	f ifNil: [ ^ self ].
 	f close.
 	f delete.
-	form colorsUsed size < 255
+	"form colorsUsed size < 255
 		ifTrue: [ 
 			fName := (fName asLowercase endsWith: '.gif')
 				ifTrue: [ fName ]
 				ifFalse: [ fName , '.gif' ].
 			GIFReadWriter putForm: form colorReduced8Bit onFileNamed: fName.
-			^ self ].
+			^ self ]."
 	fName := (fName asLowercase endsWith: '.bmp')
 		ifTrue: [ fName ]
 		ifFalse: [ fName , '.bmp' ].

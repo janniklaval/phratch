@@ -120,6 +120,6 @@ PhratchMedia >> suspendPlaying [
 PhratchMedia >> thumbnailFormExtent: extent [
 	"Answer a Form of the given extent containing a thumbnail of me. This default implementation answers a blank thumbnail."
 
-	^ (ColorForm extent: extent depth: 2) fillWhite
+	^ (Form extent: extent depth: 2) fillWhite
 
 ]

@@ -134,7 +134,7 @@ CameraMedia >> motionStep [
 
 	(historyForm isNil or:
 	 [historyForm extent ~= frameForm extent]) ifTrue: [
-		historyForm := ColorForm extent: frameForm extent depth: 8.
+		historyForm := Form extent: frameForm extent depth: 16.
 		historyForm colors:
 			(Array with: Color transparent), (Array new: 255 withAll: Color blue)].
 
@@ -172,7 +172,7 @@ CameraMedia >> thumbnailFormExtent: extent [
 	"Answer a Form of the given extent containing a thumbnail of me."
 
 	| f scale shrunk |
-	f := (ColorForm extent: extent depth: 16) fillColor: Color gray.
+	f := (Form extent: extent depth: 16) fillColor: Color gray.
 	frameForm ifNotNil: [
 		scale := (f width / frameForm width) min: (f height / frameForm height).
 		shrunk := (frameForm asFormOfDepth: 16) magnify: frameForm boundingBox by: scale smoothing: 1.
