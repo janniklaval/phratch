@@ -70,6 +70,7 @@ PhratchInstaller class >> externalVerification [
 	PhratchInstaller gotPhratchMedia ifFalse: [PhratchInstaller getPhratchMedia].
 	PhratchInstaller gotPhratchHelp ifFalse: [PhratchInstaller getPhratchHelp].
 	PhratchInstaller gotBYOBManual ifFalse: [PhratchInstaller getBYOBManual].
+	PhratchInstaller gotPhratchFont ifFalse: [PhratchInstaller getPhratchFont].
 
 ]
 
@@ -91,6 +92,15 @@ PhratchInstaller class >> getBYOBManual [
 	self
 		downloadFileFromUrl: 'https://github.com/janniklaval/phratch/raw/master/Manual.zip' 
 		andUnzipIntoDirectory: FileSystem workingDirectory
+]
+
+{ #category : #installation }
+PhratchInstaller class >> getPhratchFont [
+	UIManager inform: 'Downloading Fonts'.
+	(FileSystem workingDirectory / 'Fonts') ensureCreateDirectory.
+	self
+		downloadFileFromUrl: 'http://software.sil.org/downloads/d/andika/Andika-5.000.zip'
+		andUnzipIntoDirectory: FileSystem workingDirectory / 'Fonts'.
 ]
 
 { #category : #installation }
@@ -155,6 +165,11 @@ PhratchInstaller class >> getPhratchSkins [
 { #category : #installation }
 PhratchInstaller class >> gotBYOBManual [
 	^ (FileSystem workingDirectory / 'Manual') exists
+]
+
+{ #category : #installation }
+PhratchInstaller class >> gotPhratchFont [
+	^ (FileSystem workingDirectory / 'Fonts') exists
 ]
 
 { #category : #installation }
