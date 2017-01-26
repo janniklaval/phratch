@@ -124,7 +124,7 @@ PhratchFrameMorph class >> getFont: aSymbol [
 	|  fonts  |
 	fonts := {#Arg				->	1.
 #Label			->	1.
-#MenuTitle		->	5.
+#MenuTitle		->	2.
 #Button			->	1.
 #Category		->	1.
 #Tab						->		2.
@@ -173,7 +173,9 @@ PhratchFrameMorph class >> getFont: aSymbol [
 #FrameMorphProjectTitle		->		4.
 } asDictionary.
 
-	^ StrikeFont fontName: (StandardFonts defaultFont familyName) size: (StandardFonts defaultFont  pointSize + (fonts at: aSymbol))
+	^ LogicalFont 
+		familyName: (StandardFonts defaultFont familyName) 
+		pointSize: (StandardFonts defaultFont  pointSize + (fonts at: aSymbol))
 ]
 
 { #category : #'class initialization' }
@@ -842,11 +844,11 @@ PhratchFrameMorph >> createMenuPanel [
 	| menuSpecs m |
 	"create panel"
 	menuPanel := AlignmentMorph new
-		cellPositioning: #leftCenter;
+		cellPositioning: #center;
 		color: Color transparent;
 		centering: #center;
 		inset: 0;
-		height: 0;
+		height: 10;
 		yourself.	"will grow as needed"
 
 	self addShortcutButtonsTo: menuPanel.
@@ -1778,10 +1780,6 @@ PhratchFrameMorph >> installNewProject: newWorkpane [
 	| viewTarget |
 	self stopAll.
 
-	FreeTypeSystemSettings loadFt2Library ifTrue:[
-		FreeTypeSystemSettings loadFt2Library: false.
-		FreeTypeSystemSettings loadFt2Library: true].
-
 	newWorkpane class = PhratchStageMorph
 		ifFalse: [^ self inform: 'Incompatible Phratch file format'].
 
@@ -2020,6 +2018,7 @@ PhratchFrameMorph >> newPhratchProject [
 	projectName := ''.
 	projectInfo := Dictionary new.
 
+	PhratchInstaller selectFontForLocale.
 	newProject := PhratchStageMorph new.
 	sprite := PhratchFrameMorph defaultSprite fullCopy.
 	sprite position: (240@180) - sprite extent.

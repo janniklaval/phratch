@@ -216,12 +216,15 @@ PhratchInstaller class >> gotPhratchSkins [
 { #category : #'class initialization' }
 PhratchInstaller class >> initialize [
 	DeclaredSprites := OrderedCollection new.
- 	(Smalltalk at: #FreeTypeSettings) perform: #updateFontsAtImageStartup: with: (true).
-	FreeTypeSettings updateFreeType.
-	
-	(Smalltalk at: #StandardFonts) perform: #defaultFont: with: ((LogicalFont familyName: 'Arial Unicode MS' fallbackFamilyNames: nil pointSize: 10 stretchValue: 5 weightValue: 400 slantValue: 0)).
-	
-	
+	self selectFontForLocale
+]
+
+{ #category : #'class initialization' }
+PhratchInstaller class >> isLocaleAndikaFontCompatible [
+"Include here locale compatible with Latin or Cyrillic alphabets"
+	^ #('bg' 'ca' 'cs' 'da' 'de' 'es' 'en' 'et' 'fi' 'fr' 'fr_CA' 'gl' 'hr' 'ht' 'hu' 'id' 
+	'is' 'it' 'lt' 'mk' 'mn' 'nl' 'no' 'pl'	'pt' 'pt_BR' 'ro' 'ru' 'rw' 'sk' 'sl' 'sv' 'tr' 
+	'uk' 'vi') includes: PhratchTranslator currentLanguage.
 ]
 
 { #category : #installation }
@@ -358,6 +361,37 @@ PhratchInstaller class >> saveImageForEndUserSilently [
 	Smalltalk snapshot: true andQuit: true.
 	frame startup.
 
+]
+
+{ #category : #'class initialization' }
+PhratchInstaller class >> selectFontForLocale [
+	| font |
+	self isLocaleAndikaFontCompatible 
+		ifTrue: [
+			FreeTypeFontProvider current 
+				updateFromFile: FileSystem workingDirectory / 'Fonts' / 'Andika-5.000' / 'Andika-R.ttf'.
+			FreeTypeFontProvider current buildFamilies.
+			font := LogicalFont familyName: 'Andika' pointSize: 10] 
+		ifFalse: [
+			(Smalltalk at: #FreeTypeSettings) perform: #updateFontsAtImageStartup: with: true.
+			FreeTypeSettings updateFreeType.
+			FreeTypeSystemSettings loadFt2Library ifTrue:[
+				FreeTypeSystemSettings loadFt2Library: false.
+				FreeTypeSystemSettings loadFt2Library: true].
+			font := LogicalFont 
+				familyName: 'Arial Unicode MS'
+				fallbackFamilyNames: nil
+				pointSize: 10
+				stretchValue: 5
+				weightValue: 400
+				slantValue: 0.
+			(Smalltalk at: #FreeTypeSettings) perform: #updateFontsAtImageStartup: with: false].
+	(Smalltalk at: #StandardFonts)
+		perform: #defaultFont:
+		with: font.
+	(Smalltalk at: #StandardFonts)
+		perform: #menuFont:
+		with: font
 ]
 
 { #category : #installation }
