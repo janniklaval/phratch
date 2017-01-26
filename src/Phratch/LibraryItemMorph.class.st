@@ -534,7 +534,7 @@ LibraryItemMorph >> updateThumbnail [
 	((target isPhratchSpriteMorph) and: [ target hasSubsprites ])
 		ifTrue: [ 
 			1 to: (target subsprites size min: 3) do: [ :idx | 
-				subs := ((target subsprites at: idx) imageForm asFormOfDepth: 8)
+				subs := ((target subsprites at: idx) imageForm asFormOfDepth: 16)
 					toThumbnail: smallSize
 					borderWidth: 0
 					borderColor: Color transparent.
@@ -560,7 +560,7 @@ LibraryItemMorph >> updateThumbnail [
 	anchor
 		ifTrue: [ 
 			(WarpBlt toForm: form)
-				sourceForm: (target ownerSprite imageForm asFormOfDepth: 8);
+				sourceForm: (target ownerSprite imageForm asFormOfDepth: 16);
 				cellSize: 2;
 				combinationRule: Form paint;
 				copyQuad: f boundingBox innerCorners toRect: (0 @ 0 extent: smallSize)	"do smoothing; this also installs a colormap"	"anchor displayOn: form at: 0@0" ].

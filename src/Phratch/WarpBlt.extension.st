@@ -28,9 +28,9 @@ WarpBlt class >> rotatePhratch: srcForm degrees: angleInDegrees center: rotation
 
 	"make a Form to hold the result and do the rotation"
 	warpSrc := srcForm.
-	(srcForm isKindOf: ColorForm) ifTrue: [
+"	(srcForm isKindOf: ColorForm) ifTrue: [
 		warpSrc := Form extent: srcForm extent depth: 16.
-		srcForm displayOn: warpSrc].
+		srcForm displayOn: warpSrc]."
 	dstForm := Form extent: dstExtent depth: (warpSrc depth max: 16).
 
 	(WarpBlt toForm: dstForm)

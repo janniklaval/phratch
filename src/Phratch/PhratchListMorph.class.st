@@ -890,7 +890,7 @@ PhratchListMorph >> sublistIcon [
 	form := slot imageForm.
 	form replaceColor: (form colorAt: 2@2) withColor: (PhratchCategory blockColorFor: 'list').
 	halfList := slot extent + 1.
-	big := Form extent: halfList x @ (halfList y * 2) depth: 8.
+	big := Form extent: halfList x @ (halfList y * 2) depth: 16.
 	(WarpBlt toForm: big)
 		sourceForm: form;
 		cellSize: 2; 

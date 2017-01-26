@@ -75,7 +75,7 @@ PaintCanvas class >> brushCursorSize: brushSize color: brushColor scale: scale [
 	| outline f cm hole c |
 	(BrushDict includesKey: brushSize) ifFalse: [
 		outline := Form dotOfSize: brushSize.
-		f := ColorForm extent: outline extent depth: 2.
+		f := Form extent: outline extent depth: 2.
 		cm := Bitmap with: 0 with: (brushSize > 2 ifTrue: [1] ifFalse: [2]).
 		(BitBlt toForm: f)
 			sourceForm: outline;

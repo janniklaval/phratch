@@ -170,7 +170,7 @@ ReporterBlockDropTargetMorph >> step [
 			feedbackMorph
 				color: (feedbackColor);
 				bounds: (targetArg bounds insetBy: 3).
-			lambdaMorph := ImageMorph new form: ((b imageForm outlineWidth: 3 color: Color gray depth: 8) 
+			lambdaMorph := ImageMorph new form: ((b imageForm outlineWidth: 3 color: Color gray depth: 16) 
 														withOutlineColor: Color lightGray lighter width: 1)].
 	
 		lambdaMorph ifNotNil: [

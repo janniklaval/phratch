@@ -88,7 +88,7 @@ PhratchFilePickerImageEntry >> name: aString dir: owningDirectory isDirectory: d
 	thumbnailMorph := ImageMorph new.
 	entryIsDirectory
 		ifTrue: [thumbnailMorph form: (PhratchFrameMorph skinAt: #bigFolderIcon)]
-		ifFalse: [thumbnailMorph form: ((Form extent: 4@4 depth: 8) fillColor: Color transparent)].
+		ifFalse: [thumbnailMorph form: ((Form extent: 4@4 depth: 16) fillColor: Color transparent)].
 
 	thumbnailMorph top: self bottom - thumbnailMorph height - 23.
 	thumbnailMorph left: self left + ((self width - thumbnailMorph width) // 2).

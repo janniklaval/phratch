@@ -1515,7 +1515,7 @@ BlockMorph >> updateCacheFeedbackForm [
 	^ (self updateCacheForm)
 		outlineWidth: 3
 		color: outlineColor
-		depth: 8.
+		depth: 16.
 
 ]
 

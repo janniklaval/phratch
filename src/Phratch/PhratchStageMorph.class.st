@@ -219,7 +219,7 @@ PhratchStageMorph >> drawNewCostume [
 
 	| oldCostumeName newName newImage |
 	oldCostumeName := costume mediaName.
-	newImage := ImageMedia new form: (Form extent:  (480.0@360.0) depth: 8).
+	newImage := ImageMedia new form: (Form extent:  (480.0@360.0) depth: 16).
 	newName := (self unusedMediaNameFromBaseName: self defaultImageMedia mediaName).
  	newImage mediaName: newName.
 	media addLast: newImage.
@@ -736,8 +736,8 @@ PhratchStageMorph >> stageShotSized: size [
 		copyQuad: (0@0 extent: canvas extent) innerCorners toRect: thumbForm boundingBox.
 
 	thumbForm := thumbForm colorReduced.  "first try to make a ColorForm with exact colors"
-	thumbForm depth > 8 ifTrue: [
-		thumbForm := thumbForm asFormOfDepth: 8].  "if that fails, use the closest 8-bit colors"
+	"thumbForm depth > 8 ifTrue: [
+		thumbForm := thumbForm asFormOfDepth: 8]."  "if that fails, use the closest 8-bit colors"
 	^ thumbForm
 
 

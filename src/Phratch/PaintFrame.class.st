@@ -524,7 +524,7 @@ PaintFrame >> oldCostumeName: aString deleteOnCancel: aBoolean [
 
 	oldCostumeName := aString.
 	deleteSpriteOnCancel := aBoolean.
-	aBoolean ifTrue: [canvasMorph editForm: (Form extent: 4@4 depth: 8)].  "clears cat"
+	aBoolean ifTrue: [canvasMorph editForm: (Form extent: 4@4 depth: 16)].  "clears cat"
 
 ]
 

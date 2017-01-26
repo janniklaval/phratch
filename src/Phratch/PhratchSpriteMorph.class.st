@@ -306,54 +306,45 @@ PhratchSpriteMorph >> drawTalkBubbleOn: aCanvas [
 
 { #category : #nesting }
 PhratchSpriteMorph >> feedbackMorph [
-
-	|outline1 outline2 rf stage realPos|
+	| outline1 outline2 rf stage realPos |
 	rf := self rotatedForm.
-	outline1 := Form extent: (rf extent + (4@4)) depth: 8.
-	outline2 := Form extent: (rf extent + (6@6)) depth: 8.
-
+	outline1 := Form extent: rf extent + (4 @ 4) depth: 16.
+	outline2 := Form extent: rf extent + (6 @ 6) depth: 16.
 	(WarpBlt toForm: outline1)
 		sourceForm: rf;
-		cellSize: 2; 
+		cellSize: 2;
 		combinationRule: Form over;
 		copyQuad: rf boundingBox innerCorners toRect: (outline1 boundingBox insetBy: 2).
-
 	outline1 := outline1
 		outlineWidth: 2
 		color: (Color yellow mixed: 0.5 with: Color white)
-		depth: 8.
-
+		depth: 16.
 	(WarpBlt toForm: outline2)
 		sourceForm: rf;
-		cellSize: 2; 
+		cellSize: 2;
 		combinationRule: Form over;
 		copyQuad: rf boundingBox innerCorners toRect: (outline2 boundingBox insetBy: 3).
-
 	outline2 := outline2
 		outlineWidth: 3
-		color: ("Color gray "Color yellow mixed: 0.2 with: Color white)
-		depth: 8.
-
+		color: (Color yellow mixed: 0.2 with: Color white)
+		depth: 16.	"Color gray "
 	(WarpBlt toForm: outline2)
 		sourceForm: outline1;
-		cellSize: 2; 
+		cellSize: 2;
 		combinationRule: Form paint;
 		copyQuad: outline1 boundingBox innerCorners toRect: (outline2 boundingBox insetBy: 3).
-
 	stage := self ownerOrYourselfThatIsAPhratchStageMorph.
-	(stage notNil and: [stage isQuarterSize]) ifTrue: [
-		outline2 := outline2 magnifyBy: 0.5.
-		realPos := stage position + (self position - stage position / 2).
-		^ImageMorph new form:  outline2;
-			position: realPos - (3 @ 3);
-			yourself ].
-		
-
-	^ImageMorph new form:  outline2;
+	(stage notNil and: [ stage isQuarterSize ])
+		ifTrue: [ outline2 := outline2 magnifyBy: 0.5.
+			realPos := stage position + ((self position - stage position) / 2).
+			^ ImageMorph new
+				form: outline2;
+				position: realPos - (3 @ 3);
+				yourself ].
+	^ ImageMorph new
+		form: outline2;
 		position: self position - (6 @ 6);
 		yourself
-
-
 ]
 
 { #category : #nesting }

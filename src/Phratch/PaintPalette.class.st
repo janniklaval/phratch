@@ -592,7 +592,7 @@ PaintPalette >> updateOptionsPane [
 					form := Form extent: 16 @ 17 depth: 16.
 					(FormCanvas on: form) fillOval: form boundingBox color: self color1 ]
 				ifFalse: [ 
-					form := Form extent: 16 @ 17 depth: 8.
+					form := Form extent: 16 @ 17 depth: 16.
 					form fillColor: self color1 ].
 			formMorph := ImageMorph new
 				form: form;
@@ -621,7 +621,7 @@ PaintPalette >> updateOptionsPane [
 					form := Form extent: 16 @ 17 depth: 16.
 					(FormCanvas on: form) frameOval: form boundingBox width: 2 color: self color1 ]
 				ifFalse: [ 
-					form := Form extent: 16 @ 17 depth: 8.
+					form := Form extent: 16 @ 17 depth: 16.
 					form border: (0 @ 0 extent: 16 @ 17) width: 2 fillColor: self color1 ].
 			formMorph := ImageMorph new
 				form: form;

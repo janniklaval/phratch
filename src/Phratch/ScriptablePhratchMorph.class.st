@@ -1249,7 +1249,7 @@ ScriptablePhratchMorph >> defaultImageMedia [
 	"Placeholder image media."
 
 	^ ImageMedia new
-		form: (Form extent: 8@8 depth: 8) fillWhite;
+		form: (Form extent: 8@8 depth: 16) fillWhite;
 		mediaName: ('costume' localized, '1');
 		yourself
 
@@ -1725,7 +1725,7 @@ ScriptablePhratchMorph >> drawNewCostume [
 
 	| oldCostumeName newName newImage |
 	oldCostumeName := costume mediaName.
-	newImage := ImageMedia new form: (Form extent:  4@4 depth: 8).
+	newImage := ImageMedia new form: (Form extent:  4@4 depth: 16).
 	newName := (self unusedMediaNameFromBaseName: self defaultImageMedia mediaName).
  	newImage mediaName: newName.
 	media addLast: newImage.
