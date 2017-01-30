@@ -391,7 +391,12 @@ PhratchInstaller class >> selectFontForLocale [
 		with: font.
 	(Smalltalk at: #StandardFonts)
 		perform: #menuFont:
-		with: font
+		with: font.
+	(Smalltalk at: #StandardFonts)
+		perform: #balloonFont:
+		with: font.
+	BalloonMorph setBalloonColorTo: Color yellow muchLighter.
+
 ]
 
 { #category : #installation }
