@@ -1009,7 +1009,7 @@ PhratchStageMorph >> userSelectSpriteDefault: defaultSprite butNotAnyOf: exclude
 	current := (defaultSprite isPhratchSpriteMorph)
 		ifTrue: [ defaultSprite objName ]
 		ifFalse: [ 'none' ].
-	menu title: 'current parent: ' , current.
+	menu addTitle: 'current parent: ' , current.
 	sprites
 		do: [ :each | 
 			(excludeArray includes: each)
