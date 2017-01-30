@@ -242,7 +242,7 @@ PhratchLibraryMorph >> makeNewSpriteButtons: aPhratchFrameMorph [
 		button
 			target: aPhratchFrameMorph;
 			actionSelector: (spec at: 2);
-			setProperty: #balloonText toValue: (spec at: 3) localized.
+			helpText: (spec at: 3) localized.
 		button].
 
 	butonExtent := 37@27.

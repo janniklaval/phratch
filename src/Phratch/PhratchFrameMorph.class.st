@@ -132,8 +132,8 @@ PhratchFrameMorph class >> getFont: aSymbol [
 #TalkBubble					->		3.
 #ToolTip						->		4.
 #ReporterToolTip				->		5.
-#XYReadout					->		1.
-#XYReadoutBold				->		1.
+#XYReadout					->		0.
+#XYReadoutBold				->		0.
 #CostumesPage				->		2.
 #SoundsPage					->		2.
 #ViewerPage				->		2.
@@ -929,7 +929,7 @@ PhratchFrameMorph >> createStageButtonsPanel [
 			target: self;
 			actionSelector: (spec at: 2);
 			isMomentary: true;
-			setProperty: #balloonText toValue: (spec at: 3) localized.
+			helpText: (spec at: 3) localized.
 
 		stageButtonsPanel addMorphBack: button.
 		bName = #pause ifTrue: [
@@ -974,7 +974,7 @@ PhratchFrameMorph >> createToolbar [
 			target: self;
 			actionSelector: (spec at: 2);
 			isMomentary: true;
-			setProperty: #balloonText toValue: (spec at: 3) localized.
+			helpText: (spec at: 3) localized.
 		toolbarPanel addMorphBack: button].
 
 	self addMorph: toolbarPanel.
@@ -1007,7 +1007,7 @@ PhratchFrameMorph >> createViewModeButtonsPanel [
 			target: self;
 			actionSelector: (spec at: 2);
 			alphaOn: true;
-			setProperty: #balloonText toValue: (spec at: 3) localized.
+			helpText: (spec at: 3) localized.
 		viewModeButtonsPanel
 			addMorphBack: button;
 			addMorphBack: (Morph new extent: 1@5; color: Color transparent;

@@ -490,7 +490,7 @@ PhratchSpriteMorph >> heading [
 
 	result := self rotationDegrees + 90.
 	result > 180 ifTrue: [result := result - 360].
-	^ result
+	^ result rounded
 
 
 ]
@@ -1582,7 +1582,7 @@ PhratchSpriteMorph >> xpos [
 		(self deletedAttributes includes: att) ifTrue: [
 			^ self prototype get: att]].
 
-	^ self referencePosition x
+	^ self referencePosition x rounded
 
 ]
 
@@ -1604,7 +1604,7 @@ PhratchSpriteMorph >> ypos [
 		(self deletedAttributes includes: att) ifTrue: [
 			^ self prototype get: att]].
 
-	^ self referencePosition y
+	^ self referencePosition y rounded
 
 ]
 

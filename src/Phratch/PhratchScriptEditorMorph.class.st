@@ -48,7 +48,7 @@ PhratchScriptEditorMorph >> addLockButton [
 	lockButton
 		target: self;
 		actionSelector: #toggleSpriteDraggable;
-		setBalloonText: 'draggable on website?' localized;
+		helpText: 'draggable on website?' localized;
 		actWhen: #buttonUp;
 		isMomentary: true;
 		position: (nameMorph right + 4)@(nameMorph top + ((nameMorph height - lockButton height) / 2)).
@@ -88,15 +88,15 @@ PhratchScriptEditorMorph >> addReadouts [
 				contents: s;
 				font: (PhratchFrameMorph getFont: #XYReadout);
 				position: x @ y;
-		yourself.
+				yourself.
 			readout := (PhratchUpdatingStringMorph on: self target selector: spec second)
 				font: (PhratchFrameMorph getFont: #XYReadoutBold);
 				color: (Color gray: 0.2);
-				contents: '-000.0';
+				contents: '-100';
 				growable: false;
 				stepTime: 100;
 				position: (label right + 4) @ y;
-		yourself.	"this sets the readout size"
+				yourself.	"this sets the readout size"
 			self
 				addMorph: label;
 				addMorph: readout.
@@ -104,7 +104,7 @@ PhratchScriptEditorMorph >> addReadouts [
 				add: label;
 				add: readout.
 			readout startStepping.
-			x := readout right + 2 ].
+			x := x + (label stringWidth: ('x: -100')) + 10].
 	penReadout := Morph new extent: 15 @ 5.
 	penReadout
 		position: (lockButton right + 4) @ (nameMorph top + ((nameMorph height - penReadout height) / 2));
@@ -140,7 +140,7 @@ PhratchScriptEditorMorph >> addRotationButtons [
 			target: self;
 			arguments: (Array with: style);
 			actionSelector: #setRotationStyle:;
-			setBalloonText: pair second localized;
+			helpText: pair second localized;
 			actWhen: #buttonDown;
 			position: x@y.
 		self addMorph: button.
