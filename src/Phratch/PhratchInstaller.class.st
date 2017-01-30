@@ -216,7 +216,7 @@ PhratchInstaller class >> gotPhratchSkins [
 { #category : #'class initialization' }
 PhratchInstaller class >> initialize [
 	DeclaredSprites := OrderedCollection new.
-	self selectFontForLocale
+
 ]
 
 { #category : #'class initialization' }

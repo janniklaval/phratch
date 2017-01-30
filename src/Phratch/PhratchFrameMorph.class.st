@@ -1931,7 +1931,7 @@ PhratchFrameMorph >> makeXYReadout [
 		stepTime: 150;
 		growable: false;
 		yourself.
-	readoutX width: (readoutX stringWidth: '-1000').
+	readoutX width: (readoutX stringWidth: '-100') asInteger.
 	labelY :=  labelX fullCopy contents: 'y:' .
 	readoutY := readoutX fullCopy getSelector: #mouseY.
 	spaceWidth := ((readoutX stringWidth: ' ') * 0.8) asInteger.
@@ -1939,9 +1939,9 @@ PhratchFrameMorph >> makeXYReadout [
 	panel addMorph: (labelX position: 0 @ 0).
 	panel addMorph: (readoutX position: labelX topRight + (spaceWidth @ 0)) .
 	 
-	panel addMorph: (labelY position: (labelX right + readoutX width + 8) @ labelX top).
+	panel addMorph: (labelY position: (readoutX stringWidth: 'x: -100  ') asInteger @ labelX top).
 	panel addMorph: (readoutY position: labelY topRight + (spaceWidth @ 0)) .
-	 panel extent: (readoutX right max: readoutY right) @ labelY bottom.
+	 panel extent: (readoutX stringWidth: 'x: -100 y: -100 ') asInteger@ labelY bottom.
 	^ panel
 ]
 
@@ -1969,14 +1969,14 @@ PhratchFrameMorph >> mouseDown: evt [
 { #category : #other }
 PhratchFrameMorph >> mouseX [
 
-	^ workPane mouseX
+	^ workPane mouseX asInteger
 
 ]
 
 { #category : #other }
 PhratchFrameMorph >> mouseY [
 
-	^ workPane mouseY
+	^ workPane mouseY asInteger
 
 ]
 

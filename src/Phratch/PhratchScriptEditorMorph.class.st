@@ -92,7 +92,7 @@ PhratchScriptEditorMorph >> addReadouts [
 			readout := (PhratchUpdatingStringMorph on: self target selector: spec second)
 				font: (PhratchFrameMorph getFont: #XYReadoutBold);
 				color: (Color gray: 0.2);
-				contents: '-000';
+				contents: '-000.0';
 				growable: false;
 				stepTime: 100;
 				position: (label right + 4) @ y;

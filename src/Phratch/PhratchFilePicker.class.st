@@ -48,7 +48,7 @@ PhratchFilePicker >> buildButtons [
 
 	| b f |
 	topBarMorph := AlignmentMorph newRow
-		cellPositioning: #leftCenter;
+		cellPositioning: #topLeft;
 		hResizing: #spaceFill;
 		vResizing: #rigid;
 		centering: #center;
@@ -99,7 +99,7 @@ PhratchFilePicker >> buildButtons [
 		label: "(UTF8 withAll: '<directory>')"'<directory>' font: (PhratchFrameMorph getFont: #FilePickerDirectoryName);
 		leftJustifyInset: 9.
 
-	self addMorphFront: (directoryBarArrowMorph position: self topLeft + ((b left - 32)@((40 - directoryBarArrowMorph height)// 2 ))).
+	self addMorphFront: (directoryBarArrowMorph position: self topLeft + ((b left - 32)@((50 - directoryBarArrowMorph height)// 2 ))).
 	self addMorphBack: (topBarMorph position: self topLeft + (5@5)).
 
 ]
