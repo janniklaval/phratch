@@ -93,8 +93,8 @@ PhratchBlockPaletteMorph >> updateWatcherButtonsForFrame: frame [
 			sprite := reporter getAssociatedSprite.
 			selAndArg := reporter selectorAndArg.
 			(frame watcherShowingFor: sprite selectorAndArg: selAndArg)
-				ifTrue: [b on; setProperty: #balloonText toValue: 'Remove viewer from stage' localized]
-				ifFalse: [b off; setProperty: #balloonText toValue: 'View on stage' localized]]].
+				ifTrue: [b on; helpText: 'Remove viewer from stage' localized]
+				ifFalse: [b off; helpText: 'View on stage' localized]]].
 
 ]
 

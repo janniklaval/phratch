@@ -62,7 +62,7 @@ PaintFrame class >> new [
 			okay: true
 			cancel: true;
 		title: 'Paint Editor' localized;
-		extent: 800 @ 490;
+		extent: 900 @ 490;
 		fixLayout;
 		yourself
 
@@ -80,7 +80,7 @@ PaintFrame >> addButtons [
 		yourself.
 
 	b := self makeButtonLabel: 'Import' selector:  #import.
-	b setProperty: #balloonText toValue: 'Import an image on top of your current canvas' localized.
+	b helpText: 'Import an image on top of your current canvas' localized.
 	fileButtons addMorphBack: b.
 
 	b := ResizableToggleButton new
@@ -89,17 +89,17 @@ PaintFrame >> addButtons [
 		label: 'Clear' localized font: (PhratchFrameMorph getFont: #PaintUtilityButton);
 		target: canvasMorph;
 		actionSelector: #eraseAll;
-		setProperty: #balloonText toValue: 'Clear canvas' localized; 
+		helpText: 'Clear canvas' localized; 
 		yourself.
 	fileButtons addMorphBack: b.
 
 	b := self makeButtonLabel: 'Undo' selector:  #undo.
-	b setProperty: #balloonText toValue: 'Undo' localized.
+	b helpText: 'Undo' localized.
 	fileButtons addMorphBack: (AlignmentMorph newSpacer: Color transparent).
 	fileButtons addMorphBack: b.
 
 	b := self makeButtonLabel: 'Redo' selector:  #redo.
-	b setProperty: #balloonText toValue: 'Redo' localized.
+	b helpText: 'Redo' localized.
 	fileButtons addMorphBack: b.
 
 	self addMorph: fileButtons.
@@ -184,7 +184,7 @@ PaintFrame >> addSetRotationCenterButton [
 	setRotationCenterButton
 		target: paletteMorph;
 		actionSelector: #toggleRotationPoint;
-		setProperty: #balloonText toValue: 'Position the cross-hair to set the rotation center' localized.
+		helpText: 'Position the cross-hair to set the rotation center' localized.
 	spacer := Morph new extent: 6@3; color: Color transparent; 
 		yourself.
 	setRotationLabel := StringMorph contents: 'Set costume center' localized.
@@ -241,7 +241,7 @@ PaintFrame >> addTransformButtons [
 					isMomentary: true;
 					toggleMode: false;
 					actionSelector: (n at: 2);
-					setProperty: #balloonText toValue: (n at: 3) localized; 
+					helpText: (n at: 3) localized; 
 		yourself.
 				transformButtons addMorphBack: b]].
 
@@ -346,7 +346,6 @@ PaintFrame >> extent: aPoint [
 
 { #category : #geometry }
 PaintFrame >> fixLayout [
-
 	canvasMorph ifNil: [^ self].
 	canvasMorph position: (self right - canvasMorph width - 55)@(self top + 42).
 	paletteMorph position:
@@ -454,7 +453,7 @@ PaintFrame >> makeZoomBar [
 			actionSelector: #scaleCanvas:;
 			arguments: (Array with: n);
 			borderWidth: 0;
-			setProperty: #balloonText toValue: ('Zoom ', n asString) localized.
+			helpText: ('Zoom ', n asString) localized.
 		zoomBar addMorphBack: b.
 
 		#out = n ifTrue: [
@@ -466,7 +465,7 @@ PaintFrame >> makeZoomBar [
 					target: self;
 					actionSelector: #scaleCanvas:;
 					arguments: (Array with: scale);
-					setProperty: #balloonText toValue: scale asString, 'x'.
+					helpText: scale asString, 'x'.
 				zoomBar addMorphBack: t.
 				zoomBar addMorphBack: (Morph new extent: 2@2; color: Color transparent; 
 		yourself)]]].

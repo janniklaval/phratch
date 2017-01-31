@@ -117,8 +117,7 @@ BlockEditorFrameMorph >> buildAtomicityToggle [
 		label: 'atomic' localized
 		font: labelFont;
 		setLabelColor: (Color gray: 0.3);
-
-		setProperty: #balloonText toValue: 'execute as single block' localized.
+		helpText: 'execute as single block' localized.
 
 	mainColumn addMorph: atomicityToggle.
 	atomicityToggle on. 

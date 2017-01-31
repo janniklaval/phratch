@@ -485,9 +485,7 @@ LibraryItemMorph >> updateNameAndInfo [
 	target prototype ifNotNil: [
 		txt := (txt, ' kind of: ', target prototype objName)].
 
-	self
-		setProperty: #balloonText
-		toValue: txt.
+	self setBalloonText: txt.
 
 	nameMorph ifNotNil:[
 		(target isScriptablePhratchMorph) ifFalse: [

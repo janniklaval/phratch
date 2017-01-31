@@ -145,7 +145,7 @@ PhratchPresenterMorph >> initialize [
 			actionSelector: spec second;
 			isMomentary: true;
 			actWhen: #buttonUp;
-			setProperty: #balloonText toValue: spec third localized;
+			helpText: spec third localized;
 			drawToolTipAbove: true;
 			off.
 		#togglePause = spec second ifTrue: [pauseButton := button].

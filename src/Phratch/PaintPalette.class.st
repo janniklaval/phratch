@@ -68,7 +68,7 @@ PaintPalette >> addToolbarButtons [
 			toggleMode: false;
 			actionSelector: #mode:;
 			arguments: (Array with: bName);
-			setProperty: #balloonText toValue: bTip localized;
+			helpText: bTip localized;
 			actWhen: #buttonDown; 
 		yourself.
 		firstRow addMorphBack: b].
@@ -94,7 +94,7 @@ PaintPalette >> addToolbarButtons [
 			toggleMode: false;
 			actionSelector: #mode:;
 			arguments: (Array with: bName);
-			setProperty: #balloonText toValue: bTip localized;
+			helpText: bTip localized;
 			actWhen: #buttonDown; 
 		yourself.
 		secondRow addMorphBack: b.
@@ -235,7 +235,7 @@ PaintPalette >> color2: aColor [
 PaintPalette >> createColorSwitcher [
 
 	colorSwitcher := PaintColorSwitcher new.
-	colorSwitcher setProperty: #balloonText toValue: 'Switch colors' localized.
+	colorSwitcher setBalloonText: 'Switch colors' localized.
 	self addMorph: colorSwitcher.
 
 ]

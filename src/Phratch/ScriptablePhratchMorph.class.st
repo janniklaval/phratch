@@ -1210,7 +1210,7 @@ ScriptablePhratchMorph >> createToggleButtonFor: block [
 		target: block;
 		actionSelector: #toggleWatcher;
 		borderWidth: 0;
-		setProperty: #balloonText toValue: 'View on stage' localized.
+		helpText: 'View on stage' localized.
 
 	^ toggleButton
 
