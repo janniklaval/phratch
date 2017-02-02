@@ -1742,6 +1742,7 @@ PhratchFrameMorph >> initialize [
 	author := ''.
 	viewMode := #normal.
 
+	PhratchInstaller selectFontForLocale.
 	self createBasicPanes.
 	self createLogo.
 	self createMenuPanel.
@@ -2018,7 +2019,6 @@ PhratchFrameMorph >> newPhratchProject [
 	projectName := ''.
 	projectInfo := Dictionary new.
 
-	PhratchInstaller selectFontForLocale.
 	newProject := PhratchStageMorph new.
 	sprite := PhratchFrameMorph defaultSprite fullCopy.
 	sprite position: (240@180) - sprite extent.
@@ -2602,6 +2602,7 @@ PhratchFrameMorph >> setLanguage: aString [
 			tempJustSaved := justSaved.
 
 			PhratchTranslator setLanguage: (PhratchTranslator isoCodeForName: aString).
+			PhratchInstaller selectFontForLocale.
 			viewerPane rebuildCategorySelectors.
 
 			self updatePanes.
