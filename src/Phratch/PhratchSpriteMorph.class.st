@@ -473,6 +473,11 @@ PhratchSpriteMorph >> grabFromScreen [
 
 ]
 
+{ #category : #'as yet unclassified' }
+PhratchSpriteMorph >> handlesDropShadowInHand [
+	^ false
+]
+
 { #category : #nesting }
 PhratchSpriteMorph >> hasSubsprites [
 	^subsprites size > 0
@@ -1397,7 +1402,6 @@ PhratchSpriteMorph >> spreadToFollowers [
 { #category : #'event handling' }
 PhratchSpriteMorph >> startDrag: evt [
 	"This is a drag gesture; pick me up."
-
 	self holdSubsprites.
 	super startDrag: evt.
 
@@ -1562,6 +1566,11 @@ PhratchSpriteMorph >> virtualScale [
 
 	^virtualScale ifNil: [
 		virtualScale := self realScale]
+]
+
+{ #category : #rounding }
+PhratchSpriteMorph >> wantsRoundedCorners [
+	^ true
 ]
 
 { #category : #'motion ops' }
