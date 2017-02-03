@@ -35,12 +35,12 @@ Scratch is developed by the Lifelong Kindergarten Group at the MIT Media Lab,
 with support from the National Science Foundation, Microsoft, Intel,
 Nokia, and MIT Media Lab research consortia.
 
-For more information, see https://code.google.com/p/phratch/
+For more information, see http://www.phratch.com/
 http://byob.berkeley.edu
 http://scratch.mit.edu and http://chirp.scratchr.org.
 for license, see license.txt in folder.
 
-Please report bugs to https://code.google.com/p/phratch/issues/list.
+Please report bugs to github.com/janniklaval/phratch/.
 '
 		font: (PhratchFrameMorph getFont: #AboutPhratch).
 	dialogBox

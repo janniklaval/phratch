@@ -360,51 +360,6 @@ PhratchFrameMorph class >> workpaneExtent [
 
 ]
 
-{ #category : #'menu/button actions' }
-PhratchFrameMorph >> aboutPhratch [
-	| dialogBox |
-	dialogBox := DialogBoxMorph new
-		title: 'About Phratch' localized;
-		withButtonsForYes: false
-			no: false
-			okay: true
-			cancel: false;
-		yourself.
-	dialogBox
-		message:
-			'Phratch ', PhratchInstaller version, '
-Copyright (c) 2014 Jannik Laval.
-All rights reserved.
-
-Phratch Logo and Phratch Robot images
-Copyright (c) 2013 Natacha Perrin.
-All rights reserved.
-
-Phratch is based on Scratch
-Copyright (C)  2009 Massachusetts Institute of Technology.
-All rights reserved.
-
-Scratch is developed by the Lifelong Kindergarten Group at the MIT Media Lab,
-with support from the National Science Foundation, Microsoft, Intel,
-Nokia, and MIT Media Lab research consortia.
-
-For more information, see https://code.google.com/p/phratch/
-http://byob.berkeley.edu
-http://scratch.mit.edu and http://chirp.scratchr.org.
-for license, see license.txt in folder.
-
-Please report bugs to https://code.google.com/p/phratch/issues/list.
-'
-		font: (PhratchFrameMorph getFont: #AboutPhratch).
-	dialogBox
-		setBalloonText:
-			(CommandBlockMorph new
-				color: (PhratchCategory blockColorFor: 'control');
-				commandSpec: 'B Y $OSReporter$ B';
-		yourself) asLambda displayForm.
-	dialogBox getUserResponse
-]
-
 { #category : #other }
 PhratchFrameMorph >> addAndView: aSpriteMorph [
 	"Add given morph to the work pane and view it."

@@ -403,6 +403,5 @@ PhratchInstaller class >> updateDeclaredSprite [
 
 { #category : #'class initialization' }
 PhratchInstaller class >> version [
-
-	^ '4.1'
+	^ '5.0'
 ]
