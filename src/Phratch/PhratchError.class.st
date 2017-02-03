@@ -12,19 +12,15 @@ PhratchError class >> error [
 
 { #category : #'error handling' }
 PhratchError class >> error: aMessage [
-	
-	ScriptablePhratchMorph noviceMode ifTrue:[
-		^Beeper beep]
-	ifFalse:[
-		^super error: aMessage
-	]
-
+	ScriptablePhratchMorph noviceMode
+		ifTrue: [ Beeper beep ].
+	^ self errorWithDialog: aMessage
 ]
 
 { #category : #'error handling' }
 PhratchError class >> errorWithDialog: aMessage [
 	
-	DialogBoxMorph inform: aMessage.
+	DialogBoxMorph inform: aMessage title: 'an error occured !'.
 	ScriptablePhratchMorph noviceMode ifFalse:[
 		^super error: aMessage
 	]
