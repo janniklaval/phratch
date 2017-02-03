@@ -366,37 +366,27 @@ PhratchInstaller class >> saveImageForEndUserSilently [
 { #category : #'class initialization' }
 PhratchInstaller class >> selectFontForLocale [
 	| font |
+	"Shake a bit FreeType"
+	FreeTypeSystemSettings loadFt2Library ifTrue:[
+		FreeTypeSystemSettings loadFt2Library: false.
+		FreeTypeSystemSettings loadFt2Library: true].
 	self isLocaleAndikaFontCompatible 
 		ifTrue: [
 			FreeTypeFontProvider current 
 				updateFromFile: FileSystem workingDirectory / 'Fonts' / 'Andika-5.000' / 'Andika-R.ttf'.
-			FreeTypeFontProvider current buildFamilies.
+			FreeTypeFontProvider current updateAvailableFontFamilies.
 			font := LogicalFont familyName: 'Andika' pointSize: 10] 
 		ifFalse: [
-			(Smalltalk at: #FreeTypeSettings) perform: #updateFontsAtImageStartup: with: true.
+			FreeTypeSettings updateFontsAtImageStartup: true.
 			FreeTypeSettings updateFreeType.
-			FreeTypeSystemSettings loadFt2Library ifTrue:[
-				FreeTypeSystemSettings loadFt2Library: false.
-				FreeTypeSystemSettings loadFt2Library: true].
 			font := LogicalFont 
 				familyName: 'Arial Unicode MS'
-				fallbackFamilyNames: nil
-				pointSize: 10
-				stretchValue: 5
-				weightValue: 400
-				slantValue: 0.
-			(Smalltalk at: #FreeTypeSettings) perform: #updateFontsAtImageStartup: with: false].
-	(Smalltalk at: #StandardFonts)
-		perform: #defaultFont:
-		with: font.
-	(Smalltalk at: #StandardFonts)
-		perform: #menuFont:
-		with: font.
-	(Smalltalk at: #StandardFonts)
-		perform: #balloonFont:
-		with: font.
+				fallbackFamilyNames: nil pointSize: 10 stretchValue: 5	weightValue: 400 slantValue: 0.
+			FreeTypeSettings updateFontsAtImageStartup: false].
+	StandardFonts defaultFont: font.
+	StandardFonts menuFont: font.
+	StandardFonts balloonFont: font.
 	BalloonMorph setBalloonColorTo: Color yellow muchLighter.
-
 ]
 
 { #category : #installation }
