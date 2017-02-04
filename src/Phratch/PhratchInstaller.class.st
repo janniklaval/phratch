@@ -223,7 +223,7 @@ PhratchInstaller class >> initialize [
 PhratchInstaller class >> isLocaleAndikaFontCompatible [
 "Include here locale compatible with Latin or Cyrillic alphabets"
 	^ #('bg' 'ca' 'cs' 'da' 'de' 'es' 'en' 'et' 'fi' 'fr' 'fr_CA' 'gl' 'hr' 'ht' 'hu' 'id' 
-	'is' 'it' 'lt' 'mk' 'mn' 'nl' 'no' 'pl'	'pt' 'pt_BR' 'ro' 'ru' 'rw' 'sk' 'sl' 'sv' 'tr' 
+	'is' 'it' 'lt' 'mk' 'mn' 'nl' 'no' 'pl' 'pt' 'pt_BR' 'ro' 'ru' 'rw' 'sk' 'sl' 'sv' 'tr' 
 	'uk' 'vi') includes: PhratchTranslator currentLanguage.
 ]
 
