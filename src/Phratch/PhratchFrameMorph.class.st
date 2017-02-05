@@ -1530,14 +1530,15 @@ PhratchFrameMorph >> fullDrawOn: aCanvas [
 		viewerPane fullDrawOn: aCanvas.
 		^ self].
 
-	(readoutPane bounds containsRect: damageR) ifTrue: [
+	(libraryPane bounds containsRect: damageR) ifTrue: [
+		libraryPane fullDrawOn: aCanvas.
 		readoutPane fullDrawOn: aCanvas.
 		^ self].
 
-	(libraryPane bounds containsRect: damageR) ifTrue: [
-		libraryPane fullDrawOn: aCanvas.
+	(readoutPane bounds containsRect: damageR) ifTrue: [
+		readoutPane fullDrawOn: aCanvas.
 		^ self].
-
+	
 	super fullDrawOn: aCanvas.
 
 ]
