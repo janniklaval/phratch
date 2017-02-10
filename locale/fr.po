@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Phratch\n"
 "Report-Msgid-Bugs-To: Jannik LAVAL <jannik.laval@gmail.com>\n"
 "POT-Creation-Date: 2008-02-18 03:58-0400\n"
-"PO-Revision-Date: 2014-01-17 11:27-0400\n"
+"PO-Revision-Date: 2017-02-07 17:29+0100\n"
 "Last-Translator:  Laurent Laffont <lolgzs@gresille.org>\n"
 "Language-Team: Jannik LAVAL <jannik.laval@gmail.com>\n"
 "Language: fr\n"
@@ -61,37 +61,37 @@ msgid "with input list"
 msgstr "avec liste d'entrées"
 
 msgid "run $CSlot$"
-msgstr "exécute $CSlot$"
+msgstr "exécuter $CSlot$"
 
 msgid "run $CSlot$ $Input$ $String$"
-msgstr "exécute $CSlot$ $Input$ $String$"
+msgstr "exécuter $CSlot$ $Input$ $String$"
 
 msgid "run $CSlot$ $Input$ $SAList$"
-msgstr "exécute $CSlot$ $Input$ $SAList$"
+msgstr "exécuter $CSlot$ $Input$ $SAList$"
 
 msgid "launch $CSlot$"
-msgstr "lance $CSlot$"
+msgstr "lancer $CSlot$"
 
 msgid "launch $CSlot$ $Input$ $String$"
-msgstr "lance $CSlot$ $Input$ $String$"
+msgstr "lancer $CSlot$ $Input$ $String$"
 
 msgid "launch $CSlot$ $Input$ $SAList$"
-msgstr "lance $CSlot$ $Input$ $SAList$"
+msgstr "lancer $CSlot$ $Input$ $SAList$"
 
 msgid "call $OSReporter$"
-msgstr "appelle $OSReporter$"
+msgstr "appeler $OSReporter$"
 
 msgid "call $OSReporter$ $Input$ $String$"
-msgstr "appelle $OSReporter$ $Input$ $String$"
+msgstr "appeler $OSReporter$ $Input$ $String$"
 
 msgid "call $OSReporter$ $Input$ $SAList$"
-msgstr "appelle $OSReporter$ $Input$ $SAList$"
+msgstr "appeler $OSReporter$ $Input$ $SAList$"
 
 msgid "stop block"
-msgstr "arrête le bloc"
+msgstr "arrêter le bloc"
 
 msgid "report $String$"
-msgstr "retourne $String$"
+msgstr "retourner $String$"
 
 msgid "is $String$ a $Type$ ?"
 msgstr "est-ce que $String$ est un(e) $Type$ ?"
@@ -109,7 +109,7 @@ msgid "the $SAReporter$ block. Input names: $String$"
 msgstr "le bloc $SAReporter$. Eingabenamen: $String$"
 
 msgid "set $Variable$ to $String$"
-msgstr "donne à $Variable$ la valeur $String$"
+msgstr "fixer $Variable$ à $String$"
 
 msgid "change $Variable$ by $String$"
 msgstr "change $Variable$ par $String$"
@@ -151,7 +151,7 @@ msgid "predicate"
 msgstr "prédicat"
 
 msgid "edit elements"
-msgstr "modifie les éléments"
+msgstr "modifier les éléments"
 
 msgid "Undo last drop"
 msgstr "Annule le dernier drop"
@@ -265,7 +265,7 @@ msgid "Single input."
 msgstr "Entrée simple."
 
 msgid "Default value:"
-msgstr "Valeur par défaut:"
+msgstr "Valeur par défaut :"
 
 msgid "Multiple inputs (value is list of inputs)"
 msgstr "Entrées multiples (la valeur est une liste d'entrées)"
@@ -410,10 +410,10 @@ msgid "broadcast $Event$ and wait"
 msgstr "envoyer à tous $Event$ et attendre"
 
 msgid "change $Effects$ effect by $Number$"
-msgstr "Changer l'effet $Effects$ de $Number$"
+msgstr "changer l'effet $Effects$ de $Number$"
 
 msgid "change $Variable$ by $Number$"
-msgstr "à $Variable$, ajouter $Number$"
+msgstr "ajouter à $Variable$ $Number$"
 
 msgid "change pen color by $Number$"
 msgstr "ajouter $Number$ à couleur du stylo"
@@ -449,7 +449,7 @@ msgid "clear graphic effects"
 msgstr "annuler les effets graphiques"
 
 msgid "color $ScreenColor$ is touching $ScreenColor$?"
-msgstr "couleur $ScreenColor$ touche $ScreenColor$?"
+msgstr "couleur $ScreenColor$ touche $ScreenColor$ ?"
 
 msgid "control"
 msgstr "contrôle"
@@ -458,13 +458,13 @@ msgid "costume #"
 msgstr "costume n°"
 
 msgid "delete $ListDelete$ of $List$"
-msgstr "supprimer l'élément $ListDelete$ de la liste $List$"
+msgstr "supprimer $ListDelete$ de $List$"
 
 msgid "direction"
 msgstr "direction"
 
 msgid "distance to $Sprite$"
-msgstr "distance de $Sprite$"
+msgstr "distance à $Sprite$"
 
 msgid "else"
 msgstr "sinon"
@@ -476,7 +476,7 @@ msgid "forever if $Boolean$"
 msgstr "répéter indéfiniment si $Boolean$"
 
 msgid "glide $Number$ secs to x:$Number$ y:$Number$"
-msgstr "glisser en $Number$ secondes à x:$Number$ y:$Number$"
+msgstr "glisser en $Number$ s vers x :$Number$ y :$Number$"
 
 msgid "go back $Number$ layers"
 msgstr "déplacer de $Number$ plans arrière"
@@ -488,7 +488,7 @@ msgid "go to front"
 msgstr "envoyer au premier plan"
 
 msgid "go to x:$Number$ y:$Number$"
-msgstr "aller à x:$Number$ y:$Number$"
+msgstr "aller à x :$Number$ y :$Number$"
 
 msgid "hide"
 msgstr "cacher"
@@ -503,7 +503,7 @@ msgid "if on edge, bounce"
 msgstr "rebondir si le bord est atteint"
 
 msgid "insert $String$ at $ListIndex$ of $List$"
-msgstr "insérer $String$ en position $ListIndex$ de la liste $List$"
+msgstr "insérer $String$ à $ListIndex$ dans $List$"
 
 msgid "item $ListIndex$ of $List$"
 msgstr "élément $ListIndex$ de $List$"
@@ -512,7 +512,7 @@ msgid "join $String$ $String$"
 msgstr "regroupe $String$ $String$"
 
 msgid "key $Keys$ pressed?"
-msgstr "touche $Keys$ pressée?"
+msgstr "touche $Keys$ pressée ?"
 
 msgid "length of $List$"
 msgstr "longueur de $List$"
@@ -530,7 +530,7 @@ msgid "looks"
 msgstr "apparence"
 
 msgid "loud?"
-msgstr "son fort?"
+msgstr "son fort ?"
 
 msgid "loudness"
 msgstr "volume sonore"
@@ -554,7 +554,7 @@ msgid "motor power $Number$"
 msgstr "puissance du moteur $Number$"
 
 msgid "mouse down?"
-msgstr "souris pressée?"
+msgstr "souris pressée ?"
 
 msgid "mouse x"
 msgstr "souris x"
@@ -581,7 +581,7 @@ msgid "pen"
 msgstr "stylo"
 
 msgid "pen down"
-msgstr "stylo en position d'écriture"
+msgstr "baisser le stylo"
 
 msgid "pen up"
 msgstr "relever le stylo"
@@ -602,7 +602,7 @@ msgid "play sound $SoundNames$ until done"
 msgstr "jouer le son $SoundNames$ jusqu'au bout"
 
 msgid "point in direction $Directions$"
-msgstr "se diriger en faisant un angle de $Directions$"
+msgstr "pointer dans la direction $Directions$"
 
 msgid "point towards $Sprite$"
 msgstr "se diriger vers $Sprite$"
@@ -614,7 +614,7 @@ msgid "repeat until $Boolean$"
 msgstr "répéter jusqu'à $Boolean$"
 
 msgid "replace item $ListIndex$ of $List$ with $String$"
-msgstr "remplacer l'élément $ListIndex$ de la liste $List$ par $String$"
+msgstr "remplacer élément $ListIndex$ de $List$ par $String$"
 
 msgid "reset timer"
 msgstr "réinitialiser le chronomètre"
@@ -635,46 +635,46 @@ msgid "sensing"
 msgstr "capteurs"
 
 msgid "sensor %h?"
-msgstr "capteur %h activé?"
+msgstr "capteur %h activé ?"
 
 msgid "set $Effects$ effect to $Number$"
-msgstr "donner à l'effet $Effects$ la valeur $Number$"
+msgstr "fixer l'effet $Effects$ à $Number$"
 
 msgid "set $Variable$ to $Number$"
-msgstr " $Variable$ prend la valeur $Number$"
+msgstr "fixer $Variable$ à $Number$"
 
 msgid "set instrument to $Instruments$"
 msgstr "choisir l'instrument n° $Instruments$"
 
 msgid "set pen color to $Color$"
-msgstr "mettre la couleur $Color$ pour le stylo"
+msgstr "fixer la couleur du stylo à $Color$"
 
 msgid "set pen color to $Number$"
-msgstr "choisir la couleur $Number$ pour le stylo"
+msgstr "fixer la couleur du stylo à $Number$"
 
 msgid "set pen hue to $Number$"
-msgstr "choisir la teinte $Number$ pour le stylo"
+msgstr "fixer la teinte du style à $Number$"
 
 msgid "set pen shade to $Number$"
-msgstr "choisir l'intensité $Number$ pour le stylo"
+msgstr "fixer l'intensité du stylo à $Number$"
 
 msgid "set pen size to $Number$"
-msgstr "mettre la taille $Number$ pour le stylo"
+msgstr "fixer la taille du stylo à $Number$"
 
 msgid "set size to $Number$%"
-msgstr "choisir $Number$ % de la taille initiale"
+msgstr "fixer la taille à $Number$ %"
 
 msgid "set tempo to $Number$ bpm"
-msgstr "choisir le tempo à $Number$ bpm"
+msgstr "fixer le tempo à $Number$ bpm"
 
 msgid "set volume to $Number$%"
-msgstr "choisir le volume au niveau $Number$%"
+msgstr "fixer le volume à $Number$%"
 
 msgid "set x to $Number$"
-msgstr "donner la valeur $Number$ à x"
+msgstr "fixer x à $Number$"
 
 msgid "set y to $Number$"
-msgstr "donner la valeur $Number$ à y"
+msgstr "fixer y à $Number$"
 
 msgid "show"
 msgstr "montrer"
@@ -722,10 +722,10 @@ msgid "timer"
 msgstr "chronomètre"
 
 msgid "touching $Sprite$?"
-msgstr "$Sprite$ touché?"
+msgstr "$Sprite$ touché ?"
 
 msgid "touching color $ScreenColor$?"
-msgstr "couleur $ScreenColor$ touchée?"
+msgstr "couleur $ScreenColor$ touchée ?"
 
 msgid "true"
 msgstr "vrai"
@@ -919,7 +919,7 @@ msgid "delete"
 msgstr "supprimer"
 
 msgid "Delete"
-msgstr "Supprimer"
+msgstr "Supprimer le lutin"
 
 msgid "Delete a list"
 msgstr "Effacer une liste"
@@ -979,7 +979,7 @@ msgid "duplicate"
 msgstr "dupliquer"
 
 msgid "Duplicate"
-msgstr "Dupliquer"
+msgstr "Copier le lutin"
 
 msgid "edge"
 msgstr "bord"
@@ -1114,16 +1114,16 @@ msgid "grab screen region for new sprite"
 msgstr "capturer une partie de l'écran comme nouveau lutin"
 
 msgid "Grow"
-msgstr "Faire grandir"
+msgstr "Agrandir"
 
 msgid "Grow sprite"
-msgstr "Faire grandir le lutin"
+msgstr "Agrandir le lutin"
 
 msgid "hello "
 msgstr "salut"
 
 msgid "Hello!"
-msgstr "Salut!"
+msgstr "Salut !"
 
 msgid "help"
 msgstr "aide"
@@ -1186,7 +1186,7 @@ msgid "Is the folder read-only?"
 msgstr "Le dossier est-il en lecture seule ?"
 
 msgid "JPEG Quality (10-100)?"
-msgstr "Qualité JPEG (10-100)"
+msgstr "Qualité JPEG (10-100) ?"
 
 msgid "kbytes"
 msgstr "koctets"
@@ -1367,7 +1367,7 @@ msgid "Password:"
 msgstr "Mot de passe :"
 
 msgid "Percent? (100 gives original size)"
-msgstr "Pourcent? (100 = taille d'origine)"
+msgstr "Pourcentage ? (100 = taille d'origine)"
 
 msgid "Pictures"
 msgstr "Images"
@@ -1457,16 +1457,16 @@ msgid "right arrow"
 msgstr "flèche droite"
 
 msgid "Rotate clock-wise"
-msgstr "Rotation horaire"
+msgstr "Pivoter à droite"
 
 msgid "Rotate counter-clock-wise"
-msgstr "Rotation anti-horaire"
+msgstr "Pivoter à gauche"
 
 msgid "rotate this sprite"
 msgstr "pivoter ce lutin"
 
 msgid "Rotation degrees?"
-msgstr "Degrés de rotation"
+msgstr "Degrés de rotation ?"
 
 msgid "Save"
 msgstr "Enregistrer"
@@ -1478,7 +1478,7 @@ msgid "Save as"
 msgstr "Enregistrer sous"
 
 msgid "Save changes before quitting?"
-msgstr "Enregistrer les modifications avant de quitter"
+msgstr "Enregistrer les modifications avant de quitter ?"
 
 msgid "Save failed"
 msgstr "L'enregistrement a échoué"
@@ -1502,7 +1502,7 @@ msgid "Save the current project"
 msgstr "Enregistrer le projet actuel"
 
 msgid "Save the current project?"
-msgstr "Enregistrer le projet actuel?"
+msgstr "Enregistrer le projet actuel ?"
 
 msgid "Save this project"
 msgstr "Enregistrer ce projet"
@@ -1556,7 +1556,7 @@ msgid "Simulation"
 msgstr "Simulation"
 
 msgid "Single-step speed?"
-msgstr "Vitesse du pas-à-pas"
+msgstr "Vitesse du pas-à-pas ?"
 
 msgid "slider"
 msgstr "potentiomètre"
@@ -1686,13 +1686,13 @@ msgid "Uploading"
 msgstr "Envoi"
 
 msgid "Variable name?"
-msgstr "Nom de variable?"
+msgstr "Nom de variable ?"
 
 msgid "View on stage"
 msgstr "Afficher sur la scène"
 
 msgid "What's your name?"
-msgstr "Quel est votre nom"
+msgstr "Quel est votre nom ?"
 
 msgid "whirl"
 msgstr "tournoyer"
@@ -2258,7 +2258,7 @@ msgid "attribute $Sprite$"
 msgstr "attribut $Sprite$"
 
 msgid "hidden?"
-msgstr "caché?"
+msgstr "caché ?"
 
 msgid "files"
 msgstr "fichiers"
@@ -2270,10 +2270,10 @@ msgid "Arrow key move with speed $Number$"
 msgstr "avancer avec les touches flêches avec une vitesse de $Number$"
 
 msgid "go in between x: $Number$ y: $Number$ and x: $Number$ y: $Number$"
-msgstr "aller entre x: $Number$ y: $Number$ et x: $Number$ y: $Number$"
+msgstr "aller entre x : $Number$ y : $Number$ et x : $Number$ y : $Number$"
 
 msgid "go $Number$ of the way to x: $Number$ y: $Number$"
-msgstr "aller de $Number$ pas dans la direction x: $Number$ y: $Number$"
+msgstr "aller de $Number$ pas dans la direction x : $Number$ y : $Number$"
 
 msgid "if $Boolean$ bounce"
 msgstr "si $Boolean$, rebondit"
@@ -2282,10 +2282,10 @@ msgid "if touching $Sprite$ bounce"
 msgstr "si touche $Sprite$, rebondit"
 
 msgid "point at x:$Number$ y:$Number$"
-msgstr "pointe vers x:$Number$ y:$Number$"
+msgstr "pointer vers x:$Number$ y:$Number$"
 
 msgid "point at random coordinate"
-msgstr "pointe vers des coordonnées aléatoires"
+msgstr "pointer vers des coordonnées aléatoires"
 
 msgid "rotation style"
 msgstr "style de rotation"
@@ -2327,7 +2327,7 @@ msgid "clone me"
 msgstr "clone moi"
 
 msgid "Am I a clone?"
-msgstr "Suis-je un clone"
+msgstr "suis-je un clone ?"
 
 msgid "delete me if I am a clone"
 msgstr "supprime moi si je suis un clone"
@@ -2492,7 +2492,7 @@ msgid "variable named $String$"
 msgstr "variable nommée $String$"
 
 msgid "move $Variable$ to x: $Number$ y: $Number$"
-msgstr "déplacer $Variable$ à x: $Number$ y: $Number$"
+msgstr "déplacer $Variable$ à x : $Number$ y : $Number$"
 
 msgid "set layout of $Variable$ to $LayoutStyles$"
 msgstr "fixer la disposition de $Variable$ avec $LayoutStyles$"
@@ -2519,10 +2519,10 @@ msgid "times $String$ appears in $List$"
 msgstr "nombre d'apparition de  $String$ dans $List$"
 
 msgid "sort items of $List$ by numerical value"
-msgstr "ordonner les éléments de $List$ dans l'ordre numérique"
+msgstr "ordonner numériquement $List$"
 
 msgid "sort items of $List$ by string value"
-msgstr "ordonner les éléments de $List$ dans l'ordre alphabétique"
+msgstr "ordonner alphabétiquement $List$"
 
 msgid "contents of file $String$"
 msgstr "contenu du fichier $String$"
@@ -2576,13 +2576,13 @@ msgid "a color"
 msgstr "une couleur"
 
 msgid "color of pixel x: $Number$ y: $Number$"
-msgstr "couleur du pixel x: $Number$ y: $Number$"
+msgstr "couleur du pixel x : $Number$ y : $Number$"
 
 msgid "$Color$ blue"
 msgstr "bleu de $Color$"
 
 msgid "color r: $Number$ g: $Number$ b: $Number$"
-msgstr "couleur r: $Number$ g: $Number$ b: $Number$"
+msgstr "couleur r : $Number$ g : $Number$ b : $Number$"
 
 msgid "$Color$ green"
 msgstr "vert de $Color$"
@@ -2600,13 +2600,13 @@ msgid "$Color$ hue"
 msgstr "teinte de $Color$"
 
 msgid "color h: $Number$ s: $Number$ b: $Number$"
-msgstr "couleur h: $Number$ s: $Number$ b: $Number$"
+msgstr "couleur h : $Number$ s : $Number$ b : $Number$"
 
 msgid "mix $Color$ with $Color$"
 msgstr "mixer $Color$ avec $Color$"
 
 msgid "mix $Color$ $Number$ : $Number$ with $Color$"
-msgstr "mixer $Color$ $Number$% : $Number$% avec $Color$"
+msgstr "mixer $Color$ $Number$% et $Number$% de $Color$"
 
 msgid "color named $NamedColors$"
 msgstr "couleur nommée $NamedColors$"
@@ -2663,16 +2663,16 @@ msgid "change hStretch by $Number$"
 msgstr "modifier l'étirement horizontal de $Number$"
 
 msgid "set vStretch to $Number$"
-msgstr "mettre l'étirement vertical à $Number$"
+msgstr "fixer l'étirement vertical à $Number$"
 
 msgid "set hStretch to $Number$"
-msgstr "mettre l'étirement horizontal à $Number$"
+msgstr "fixer l'étirement horizontal à $Number$"
 
 msgid "set size to $Number$"
-msgstr "mettre la taille à $Number$"
+msgstr "fixer la taille à $Number$"
 
 msgid "change vStretch by $Number$"
-msgstr "modifier l'étirement vertical de $Number$"
+msgstr "ajouter $Number$ à l'étirement vertical"
 
 msgid "self"
 msgstr "soi"
