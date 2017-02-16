@@ -3,20 +3,19 @@ msgstr ""
 "Project-Id-Version: Phratch\n"
 "Report-Msgid-Bugs-To: Jannik LAVAL <jannik.laval@gmail.com>\n"
 "POT-Creation-Date: 2008-02-18 03:58-0400\n"
-"PO-Revision-Date: 2017-02-07 17:29+0100\n"
-"Last-Translator:  Laurent Laffont <lolgzs@gresille.org>\n"
+"PO-Revision-Date: 2017-02-16 21:38+0100\n"
+"Last-Translator: Laurent Laffont <lolgzs@gresille.org>\n"
 "Language-Team: Jannik LAVAL <jannik.laval@gmail.com>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Pootle 1.2.0\n"
+"X-Generator: Poedit 1.8.11\n"
 
-############################################
+# ###########################################
 # FORMATTING
-############################################
-
+# ###########################################
 # Language name as you'd like it to appear in the Languages menu
 # (Required)
 msgid "Language-Name"
@@ -50,10 +49,9 @@ msgstr ""
 msgid "Linux-Font"
 msgstr ""
 
-############################################
+# ###########################################
 # BYOB
-############################################
-
+# ###########################################
 msgid "with inputs"
 msgstr "avec entrées"
 
@@ -163,7 +161,7 @@ msgid "Single Stepping"
 msgstr "Single Stepping"
 
 msgid "Allow Sprites offstage"
-msgstr "Allow Sprites offstage"
+msgstr "Permettre les Sprites hors cadre"
 
 msgid "Zebra Coloring"
 msgstr "Zebra Coloring"
@@ -171,8 +169,11 @@ msgstr "Zebra Coloring"
 msgid "check to allow sprites to move offscreen"
 msgstr "cocher pour autoriser les lutins à quitter l'écran"
 
-msgid "check to alternate color contrast among nested reporters with the same color"
-msgstr "cocher pour alterner le contraste couleur parmis les fonctions emboitées de même couleur"
+msgid ""
+"check to alternate color contrast among nested reporters with the same color"
+msgstr ""
+"cocher pour alterner le contraste couleur parmis les fonctions emboitées de "
+"même couleur"
 
 msgid "Compile This Project"
 msgstr "Compiler ce projet en .exe"
@@ -184,7 +185,7 @@ msgid "Join Mesh"
 msgstr "Join Mesh"
 
 msgid "BYOB Reference Manual"
-msgstr "BYOB Reference Manual (engl.)"
+msgstr "Manuel de référence de BYOB"
 
 msgid "About BYOB"
 msgstr "A propos de BYOB"
@@ -310,7 +311,7 @@ msgid "check to squeeze more computational steps into one display cycle"
 msgstr "cocher pour plus de puissance de calcul dans un cycle d'affichage"
 
 msgid "Thread safe scripts"
-msgstr "Thread safe scripts"
+msgstr "Scripts à fil sécurisé"
 
 msgid "check to disallow script reentrancy"
 msgstr "cocher pour interdire aux scripts d'être ré-entrant"
@@ -340,7 +341,7 @@ msgid "BYOB Website"
 msgstr "Site web de BYOB"
 
 msgid "Scratch Help Page"
-msgstr "Scratch Help Page"
+msgstr "Page d'aide de Scratch"
 
 msgid "Predicate"
 msgstr "Prédicat"
@@ -366,10 +367,9 @@ msgstr "cocher pour contraster la couleur des blocs lexicaux"
 msgid "Unload unused blocks"
 msgstr "Efface les blocs inutilisés"
 
-############################################
+# ###########################################
 # BLOCKS
-############################################
-
+# ###########################################
 msgid "%H sensor value"
 msgstr "valeur du capteur %H"
 
@@ -389,7 +389,7 @@ msgid "$MathFunctions$ of $Number$"
 msgstr "$MathFunctions$ de $Number$"
 
 msgid "$Number$ mod $Number$"
-msgstr "$Number$ mod $Number$"
+msgstr "$Number$ modulo $Number$"
 
 msgid "add $String$ to $List$"
 msgstr "ajouter $String$ à $List$"
@@ -733,9 +733,6 @@ msgstr "vrai"
 msgid "turn $Number$ degrees"
 msgstr "tourner de $Number$ degrés"
 
-msgid "variables"
-msgstr "variables"
-
 msgid "volume"
 msgstr "volume"
 
@@ -760,11 +757,9 @@ msgstr "position x"
 msgid "y position"
 msgstr "position y"
 
-
-############################################
+# ###########################################
 # USER INTERFACE
-############################################
-
+# ###########################################
 msgid "(empty)"
 msgstr "(vide)"
 
@@ -1063,7 +1058,8 @@ msgid "File not found"
 msgstr "Fichier introuvable"
 
 msgid "Fill tool (fill areas with color or gradient)"
-msgstr "Outil pot de peinture (remplir des zones avec une couleur ou un dégradé)"
+msgstr ""
+"Outil pot de peinture (remplir des zones avec une couleur ou un dégradé)"
 
 msgid "first"
 msgstr "premier"
@@ -1135,7 +1131,7 @@ msgid "Help Page"
 msgstr "Page d'aide"
 
 msgid "Help Screens"
-msgstr "Ecrans d'aide"
+msgstr "Ecran d'aide"
 
 msgid "Hide Motor Blocks"
 msgstr "Cacher les blocs moteur"
@@ -1238,7 +1234,6 @@ msgstr "Max. :"
 
 msgid "meow"
 msgstr "miaou"
-
 
 msgid "Message name:"
 msgstr "Nom du message :"
@@ -1639,7 +1634,6 @@ msgstr "Outil texte (modifier la couche texte)"
 msgid "That variable name is already in use"
 msgstr "Ce nom de variable est déjà utilisé"
 
-
 msgid "that way"
 msgstr "Dans ce sens"
 
@@ -1721,11 +1715,9 @@ msgstr "Zoom avant"
 msgid "Zoom out"
 msgstr "Zoom arrière"
 
-
-############################################
+# ###########################################
 # MIDI INSTRUMENTS
-############################################
-
+# ###########################################
 msgid "Accordion"
 msgstr "Accordéon"
 
@@ -2440,9 +2432,6 @@ msgstr "factorielle de $Number$"
 msgid "$Number$ as integer"
 msgstr "$Number$ vers entier"
 
-msgid "$Number$ mod $Number$"
-msgstr "$Number$ modulo $Number$"
-
 msgid "$Number$ is a Fibonacci number?"
 msgstr "$Number$ est un nombre de Fibonacci ?"
 
@@ -2617,12 +2606,6 @@ msgstr "$String$ en couleur"
 msgid "$Color$ as string"
 msgstr "$Color$ en chaine de caractères"
 
-msgid "Allow Sprites offstage"
-msgstr "Permettre les lutins hors scène"
-
-msgid "Thread safe scripts"
-msgstr "Scripts à fil sécurisé"
-
 msgid "Clear all Variables"
 msgstr "Nettoyer toutes les variables"
 
@@ -2631,15 +2614,6 @@ msgstr "Paramètres"
 
 msgid "Phratch Website"
 msgstr "Site web de Phratch"
-
-msgid "Scratch Help Page"
-msgstr "Page d'aide de Scratch"
-
-msgid "Help Screens"
-msgstr "Ecran d'aide"
-
-msgid "BYOB Reference Manual"
-msgstr "Manuel de référence de BYOB"
 
 msgid "Panther Tutorials"
 msgstr "Tutoriels de Panther"
@@ -2743,9 +2717,6 @@ msgstr "Algorithme"
 msgid "end"
 msgstr "fin"
 
-msgid "else"
-msgstr "sinon"
-
 msgid "when"
 msgstr "quand"
 
@@ -2757,9 +2728,6 @@ msgstr "devient vrai"
 
 msgid "created"
 msgstr "est créé"
-
-msgid "key pressed"
-msgstr "est appuyé"
 
 msgid "clicked"
 msgstr "est cliqué"
