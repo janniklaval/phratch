@@ -26,8 +26,8 @@ PhratchInstaller class >> beginInstall [
 	items add: (StartupAction
              name: 'Phratch window size'
              code: [PhratchInstaller fixWindowSize.]).
-	StartupLoader default addAtStartupInImageDirectory: items.
-	StartupLoader default loadFromDefaultLocations.
+	StartupPreferencesLoader default addAtStartupInImageDirectory: items.
+	StartupPreferencesLoader default loadFromDefaultLocations.
 
 	(Workspace
 		openContents:
@@ -99,7 +99,7 @@ PhratchInstaller class >> getPhratchFont [
 	UIManager inform: 'Downloading Fonts'.
 	(FileSystem workingDirectory / 'Fonts') ensureCreateDirectory.
 	self
-		downloadFileFromUrl: 'http://software.sil.org/downloads/d/andika/Andika-5.000.zip'
+		downloadFileFromUrl: 'https://software.sil.org/downloads/r/andika/AndikaNewBasic-5.500.zip'
 		andUnzipIntoDirectory: FileSystem workingDirectory / 'Fonts'.
 ]
 
