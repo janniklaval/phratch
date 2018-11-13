@@ -2,7 +2,6 @@ Class {
 	#name : #ResizableToggleButton,
 	#superclass : #SimpleButtonMorph,
 	#instVars : [
-		'label',
 		'iconMorph',
 		'current',
 		'normal',

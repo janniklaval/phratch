@@ -373,7 +373,7 @@ PhratchInstaller class >> selectFontForLocale [
 	self isLocaleAndikaFontCompatible 
 		ifTrue: [
 			FreeTypeFontProvider current 
-				updateFromFile: FileSystem workingDirectory / 'Fonts' / 'Andika-5.000' / 'Andika-R.ttf'.
+				updateFromFile: FileSystem workingDirectory / 'Fonts' / 'AndikaNewBasic-5.500' / 'AndikaNewBasic-R.ttf'.
 			FreeTypeFontProvider current updateAvailableFontFamilies.
 			font := LogicalFont familyName: 'Andika' pointSize: 10] 
 		ifFalse: [
