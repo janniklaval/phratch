@@ -190,12 +190,13 @@ PhratchFrameMorph class >> initialize [
 
 { #category : #'scratch skin' }
 PhratchFrameMorph class >> menuCommandOn: aBuilder [
-
-	<worldMenu>  
+	<worldMenu>
 	(aBuilder item: #Phratch)
 		order: 0.1;
-		icon: ((ImageMorph withForm: (PhratchFrameMorph skinAt: 'phratchicon')) form magnifyBy: 0.38);
-		action:[self closeAndOpen].
+		icon:
+			((PhratchFrameMorph skinAt: 'phratchicon')
+				ifNotNil: [ :img | (ImageMorph withForm: img) form magnifyBy: 0.38 ]);
+		action: [ self closeAndOpen ]
 ]
 
 { #category : #'initialize-release' }
