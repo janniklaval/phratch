@@ -268,24 +268,25 @@ PhratchFrameMorph class >> readSkin [
 { #category : #'scratch skin' }
 PhratchFrameMorph class >> readSkinFrom: aDirectory [
 	"Read the Forms for my skin from the given directory and store them in myskin dictionary."
-	| dict img i  fn1|
+
+	| dict img i fn1 |
 	dict := Dictionary new.
-	aDirectory fileNames do:  [:fn |
-		fn1 := fn.
-		Cursor read showWhile: [
-			img := [Form fromFileNamed: ((aDirectory /  fn) fullName )] ifError: [nil]].
-		
-		img ifNotNil: [
-			i := fn findLast: [:c | c = $.].
-			i = 0 ifFalse: [fn1 := fn copyFrom: 1 to: i - 1].
-			dict at: fn1 asSymbol put: img].
-			].
+	aDirectory exists
+		ifTrue: [ aDirectory fileNames
+				do: [ :fn | 
+					fn1 := fn.
+					Cursor read
+						showWhile: [ img := [ Form fromFileNamed: (aDirectory / fn) fullName ]
+								ifError: [ nil ] ].
+					img
+						ifNotNil: [ i := fn findLast: [ :c | c = $. ].
+							i = 0
+								ifFalse: [ fn1 := fn copyFrom: 1 to: i - 1 ].
+							dict at: fn1 asSymbol put: img ] ] ].
 	PhratchSkin := dict.
-
-	img := PhratchSkin at: #scriptsPaneTexture ifAbsent: [nil].
-	(img notNil and: [img depth ~= 32]) ifTrue: [
-		PhratchSkin at: #scriptsPaneTexture put: (img asFormOfDepth: 32)].
-
+	img := PhratchSkin at: #scriptsPaneTexture ifAbsent: [ nil ].
+	(img notNil and: [ img depth ~= 32 ])
+		ifTrue: [ PhratchSkin at: #scriptsPaneTexture put: (img asFormOfDepth: 32) ].
 	^ PhratchSkin
 ]
 
