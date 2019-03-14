@@ -6,8 +6,11 @@ Class {
 
 { #category : #projects }
 MetaRepoSearcher class >> listOfProjects [
-
-	^((Metacello new smalltalkhubUser: 'JLaval' project: 'PhratchMetaRepo') configuration: [:spec | true ]; list) collect: [ :e | e name -> e className ]
+	^ ((Metacello new
+		smalltalkhubUser: 'JLaval'
+		project: 'PhratchMetaRepo')
+		configuration: [ :spec | true ];
+		list) roots collect: [ :e | e name -> e className ]
 ]
 
 { #category : #projects }
