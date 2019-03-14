@@ -1,13 +1,13 @@
 Extension { #name : #SoundPlayer }
 
 { #category : #'*PhratchSound' }
-SoundPlayer classSide >> clearPausedSounds [
+SoundPlayer class >> clearPausedSounds [
 
 	PausedSounds := OrderedCollection new
 ]
 
 { #category : #'*PhratchSound' }
-SoundPlayer classSide >> pauseAll [
+SoundPlayer class >> pauseAll [
 	self clearPausedSounds.
 	ActiveSounds do: [:each |
 		self pausedSounds add: each.
@@ -15,13 +15,13 @@ SoundPlayer classSide >> pauseAll [
 ]
 
 { #category : #'*PhratchSound' }
-SoundPlayer classSide >> pausedSounds [
+SoundPlayer class >> pausedSounds [
 
 	^ PausedSounds ifNil: [OrderedCollection new]
 ]
 
 { #category : #'*PhratchSound' }
-SoundPlayer classSide >> resumeAll [
+SoundPlayer class >> resumeAll [
 
 	ActiveSounds addAll: self pausedSounds.
 	ActiveSounds do: [:each | 

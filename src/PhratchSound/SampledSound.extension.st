@@ -24,7 +24,7 @@ SampledSound >> equals: aSampledSound [
 ]
 
 { #category : #'*PhratchSound' }
-SampledSound classSide >> findWAVEChunk: chunkID in: aBinaryStream ifAbsent: notFoundBlock [
+SampledSound class >> findWAVEChunk: chunkID in: aBinaryStream ifAbsent: notFoundBlock [
 	"Search the given stream from its beginning for a chunk with the given four-letter id and answer the size of the chunk. The stream is left positioned at the start of the chunk data. If  no chunk of the given type is found, answer the result of evaluating notFoundBlock."
 
 	| id count |
@@ -47,7 +47,7 @@ SampledSound classSide >> findWAVEChunk: chunkID in: aBinaryStream ifAbsent: not
 ]
 
 { #category : #'*PhratchSound' }
-SampledSound classSide >> fromFileNamed: fileName [
+SampledSound class >> fromFileNamed: fileName [
 	"Read a sound from the file of the given name. The resulting sound may be a SampledSound (mono) or a MixedSound (stereo)."
 	"(SampledSound fromFileNamed: 'test.aif') play"
 
@@ -72,7 +72,7 @@ SampledSound classSide >> fromFileNamed: fileName [
 ]
 
 { #category : #'*PhratchSound' }
-SampledSound classSide >> readAIFFrom: aBinaryStream [
+SampledSound class >> readAIFFrom: aBinaryStream [
 	"Read a sound in AIFF format from the given stream."
 
 	| aiff channels samplingRate |
@@ -93,7 +93,7 @@ SampledSound classSide >> readAIFFrom: aBinaryStream [
 ]
 
 { #category : #'*PhratchSound' }
-SampledSound classSide >> readMP3FromFileNamed: fileName [
+SampledSound class >> readMP3FromFileNamed: fileName [
 	"Read a sound in MP3 format from the file with the given name. Answer true if successful."
 
 	| mpegFile channels sampleCount samplingRate buf1 snd buf2 |
@@ -125,7 +125,7 @@ SampledSound classSide >> readMP3FromFileNamed: fileName [
 ]
 
 { #category : #'*PhratchSound' }
-SampledSound classSide >> readSNDFrom: aBinaryStream [
+SampledSound class >> readSNDFrom: aBinaryStream [
 	"Read a sound in Sun Audio format from the given stream."
 	"A few formats in use:
 		1	muLaw
@@ -168,7 +168,7 @@ SampledSound classSide >> readSNDFrom: aBinaryStream [
 ]
 
 { #category : #'*PhratchSound' }
-SampledSound classSide >> readWAVFrom: aBinaryStream [
+SampledSound class >> readWAVFrom: aBinaryStream [
 	"Answer a new instance of me from the windows WAV file with the given name. Currently, only formats 1 (uncompressed 8-bit or 16-bit) and 7 (muLaw) WAV files can be read."
 	"A few formats in use:
 		 1	PCM audio in integer format
@@ -207,7 +207,7 @@ SampledSound classSide >> readWAVFrom: aBinaryStream [
 		ifFalse: [
 			data := SoundBuffer newMonoSampleCount: count // 2.
 			aBinaryStream next: (count // 4) into: data startingAt: 1.  "size is in 32-bit words"
-			Smalltalk isBigEndian ifTrue: [data reverseEndiannessStereo: (channels = 2)]].
+			EndianDetector isBigEndian ifTrue: [data reverseEndiannessStereo: (channels = 2)]].
 
 	"build sound object"
 	channels = 1 ifTrue: [^ self samples: data samplingRate: samplingRate].
