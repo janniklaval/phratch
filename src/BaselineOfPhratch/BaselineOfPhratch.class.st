@@ -4,7 +4,7 @@ Class {
 	#category : #BaselineOfPhratch
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #baseline }
 BaselineOfPhratch >> addInstVars [
 
 	InputEventSensor instVarIndexFor: #keyPressed ifAbsent: [InputEventSensor addInstVarNamed: #keyPressed].
@@ -12,12 +12,13 @@ BaselineOfPhratch >> addInstVars [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #baseline }
 BaselineOfPhratch >> baseline: spec [
 	<baseline>
 	spec
 		for: #common
 		do: [ spec preLoadDoIt: #addInstVars.
+			spec postLoadDoIt: #postLoad.
 			self deps: spec.
 			spec package: 'Phratch' with: [ spec requires: #('WebBrowser') ].
 			spec package: 'PhratchColor' with: [ spec requires: #('Phratch') ].
@@ -34,7 +35,7 @@ BaselineOfPhratch >> baseline: spec [
 				with: [ spec requires: #('Phratch') ] ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #baseline }
 BaselineOfPhratch >> deps: spec [
 	<baseline>
 	spec
@@ -43,4 +44,9 @@ BaselineOfPhratch >> deps: spec [
 				repository: 'http://smalltalkhub.com/mc/TorstenBergmann/WebBrowser/main';
 				className: 'ConfigurationOfWebBrowser';
 				version: #stable ]
+]
+
+{ #category : #baseline }
+BaselineOfPhratch >> postLoad [
+	Smalltalk at: #MenubarMorph ifPresent: [ :morph | morph reset ]
 ]
