@@ -20,11 +20,13 @@ MetaRepoSearcher class >> loadProject: aConfigurationString [
 	[ Metacello new
 		baseline: (aConfigurationString withoutPrefix: 'BaselineOf');
 		repository: 'github://grype/PhratchMetaRepo';
-		load ]
+		get.
+	(Smalltalk at: aConfigurationString asString asSymbol) project
+		latestVersion load ]
 		on: Error
-		do: [ : err | ^ PhratchError
+		do: [ :err | 
+			^ PhratchError
 				errorWithDialog: 'You need an Internet connection to load AddOns.' ].
-	
 	DialogBoxMorph inform: aConfigurationString , ' installed'.
 	PhratchFrameMorph rebuildUI
 ]
