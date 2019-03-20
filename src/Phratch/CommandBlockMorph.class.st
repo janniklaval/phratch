@@ -1,0 +1,1395 @@
+"
+I represent a command or reporter. I have a label and may also have one or more arguments. The label text, number of arguments, and ordering of arguments and keywords are defined by my commandSpec string. This string consists of a sequence of keywords interspersed with argument specifications that indicate where the arguments appear. Here are some possible argument specifications:
+
+	%b	- boolean
+	%c	- color
+	%C	- color (chosen with eyedropper, not palette)
+	%m	- morph reference
+	%n	- number
+	%s	- string
+
+Examples:
+
+	%b and %b
+	%m's color %C sees %C
+	repeat %n times
+
+"
+Class {
+	#name : #CommandBlockMorph,
+	#superclass : #BlockMorph,
+	#instVars : [
+		'commandSpec',
+		'argMorphs',
+		'titleMorph',
+		'receiver',
+		'selector',
+		'isTimed',
+		'numberArgFlags',
+		'key',
+		'stopFrame'
+	],
+	#category : #'Phratch-Blocks'
+}
+
+{ #category : #utilities }
+CommandBlockMorph class >> blockTypeOn: aScriptablePhratchMorph spec: spec [
+	
+	|block|
+	block :=  self new.
+	^block
+]
+
+{ #category : #utilities }
+CommandBlockMorph class >> isArgSpec: aString [
+	"Answer true if the given string is an argument specification."
+	^ ((aString size > 1) and: [aString first = $$ and:[aString last = $$]])
+
+]
+
+{ #category : #utilities }
+CommandBlockMorph class >> maxSize [
+
+	^ 1000
+]
+
+{ #category : #utilities }
+CommandBlockMorph class >> parseCommandSpec: aCommandSpec [
+	"Answer an array of token strings containing my keywords and argument specs."
+	"CommandBlockMorph parseCommandSpec: '$blah$ to $blah$'"
+
+	| result len i j spec k |
+	result := OrderedCollection new.
+	spec := aCommandSpec.
+	len := aCommandSpec size.
+
+	i := 1.
+	[(i < len) and: [(spec at: i) isSeparator]] whileTrue: [i := i + 1].
+	[i <= len] whileTrue: [
+		j := spec indexOf: $$ startingAt: i.
+		j > 0
+			ifTrue: [
+				j > i ifTrue: [result addLast: (spec copyFrom: i to: j - 1)].
+				j < len
+					ifTrue: [k := j + 1.
+						((spec at: k) isLetter | (spec at: k) isDigit)
+							ifTrue: [[(k+1 <= len) and: [(spec at: k+1) ~= $$]] whileTrue:[
+								k := k + 1].
+								(k >= len)
+									ifTrue: [result addLast: (spec copyFrom: j to: len).
+										i := len + 1]
+									ifFalse: [result addLast: (spec copyFrom: j to: k+1).
+										i := k+2]]
+							ifFalse: [result addLast: '$'.
+										i := j + 1]]
+					ifFalse: [result addLast: '$'.
+						i := j + 2]]
+			ifFalse: [
+				result addLast: (spec copyFrom: i to: len).
+				i := len + 1]].
+
+	result := result select: [:s | s ~= ' '].
+	^ result asArray collect: [:s | s trimBoth].
+]
+
+{ #category : #byob }
+CommandBlockMorph >> addArg: argMorph [
+	"private"
+
+		argMorphs add: argMorph.
+		self addMorphBack: argMorph.
+		self layoutChanged
+]
+
+{ #category : #private }
+CommandBlockMorph >> addCommandIcons [
+	"Add additional icons to certain blocks. Do nothing if this isn't one of those blocks."
+
+	| f m |
+	#turnLeft: = selector
+		ifTrue: [ 
+			f := PhratchFrameMorph skinAt: #turnCCW ifAbsent: [ ^ self ].
+			m := self firstSubmorph delete.
+			self addMorphFront: (ImageMorph new form: f).
+			self addMorphFront: m ].
+	#turnRight: = selector
+		ifTrue: [ 
+			f := PhratchFrameMorph skinAt: #turnCW ifAbsent: [ ^ self ].
+			m := self firstSubmorph delete.
+			self addMorphFront: (ImageMorph new form: f).
+			self addMorphFront: m ].
+	#stopAll = selector
+		ifFalse: [ ^ self ].
+	f := PhratchFrameMorph skinAt: #stopButton ifAbsent: [ ^ self ].
+	self addMorphBack: (ImageMorph new form: f)
+]
+
+{ #category : #private }
+CommandBlockMorph >> addLabel [
+	"Add a label for my command and arguments. This is the method that really creates the whole block."
+
+	"Details: We remove all the pieces of this block, and then reassemble them, being careful not to destroy any argument morphs that we might still want to use. This is helpful if someone adds/removes parameters from a hat block."
+
+	"attempt to embed ReporterScripts more gracefully. Has some issues, 
+		commented out for now, (jens)"
+
+	"self adjustReporterLayoutForLambda."
+
+	| tokens args nextArgIndex m next slot |
+	commandSpec ifNil: [ ^ self ].	"we make sure not to remove the next block."
+	next := self nextBlock.
+	
+	self removeAllMorphsIn: (self submorphs reject: [ :t | t = next ]).
+	tokens := CommandBlockMorph parseCommandSpec: commandSpec.
+	args := tokens select: [ :s | CommandBlockMorph isArgSpec: s ].	"remove any excess arg morphs from the list."
+	[ argMorphs size > args size ]
+		whileTrue: [ 
+			m := argMorphs last.
+			argMorphs remove: m.	"if the argument we're throwing out is anything complicated, we'd like to keep it around in the world."
+			(m isBlockMorph)
+				ifTrue: [ m openInWorld ] ].	"create new arg morphs."
+	[ argMorphs size < args size ] whileTrue: [ argMorphs addLast: (self argMorphFor: (args at: argMorphs size + 1)) ].
+	nextArgIndex := 1.
+	tokens
+		do: [ :s | 
+			(CommandBlockMorph isArgSpec: s)
+				ifTrue: [ 
+					"check if the arg type has changed (jens)"
+					m := argMorphs at: nextArgIndex.
+					(m isArgMorph)
+						ifTrue: [ 
+							slot := self uncoloredArgMorphFor: s.
+							m class = slot class
+								ifFalse: [ 
+									m := slot.
+									argMorphs at: nextArgIndex put: m ] ].
+					nextArgIndex := nextArgIndex + 1 ]
+				ifFalse: [ m := self labelMorphFor: s ].
+			self addMorphBack: m ].
+	self isReporter
+		ifFalse: [ ^ self ].
+	m := submorphs last.
+	(m isChoiceArgMorph) | (m isSpriteArgMorph)
+		ifTrue: [ 
+			"add spacer"
+			self
+				addMorphBack:
+					(Morph new
+						color: Color transparent;
+						extent: 2 @ 5;
+						yourself) ]
+]
+
+{ #category : #private }
+CommandBlockMorph >> argMorphFor: specString [
+	"Answer an argument morph for the given argument specification string. Set it's color appropriately."
+
+	| m |
+	m := self uncoloredArgMorphFor: specString.
+	(m isColorArgMorph)
+		ifTrue: [m color: Color random].
+	^ m
+
+]
+
+{ #category : #private }
+CommandBlockMorph >> argMorphToReplace: aMorph [
+	"Answer a new argument morph to be used to replace the given morph. Answer nil if the given morph is not one of my argMorphs."
+
+	| i argSpecs  argM   |
+	i := argMorphs indexOf: aMorph ifAbsent: [^ nil].
+	argSpecs := (CommandBlockMorph parseCommandSpec: commandSpec) select: [:s | CommandBlockMorph isArgSpec: s].
+	i > argSpecs size ifTrue: [^ nil].
+	argM := self argMorphFor: (argSpecs at: i).
+
+	(#setVar:to: = selector and: [(argSpecs at: i) = '$Number$']) ifTrue: [
+		^ argM stringExpression: '0'].
+
+	^ argM
+
+]
+
+{ #category : #accessing }
+CommandBlockMorph >> argMorphs [
+
+	^ argMorphs
+
+]
+
+{ #category : #accessing }
+CommandBlockMorph >> args [
+	"Answer my arguments evaluated and permuted into the order expected by the underlying Squeak method."
+
+	^ (argMorphs collect: [:m | m evaluate]) asArray
+
+]
+
+{ #category : #evaluation }
+CommandBlockMorph >> argumentAt: index [
+	"Returns the argument morph at the given index."
+
+	^argMorphs at: index
+]
+
+{ #category : #evaluation }
+CommandBlockMorph >> argumentCount [
+	"Returns the number of arguments to this command block."
+
+	^ argMorphs size
+
+]
+
+{ #category : #'*Phratch-DefaultArguments' }
+CommandBlockMorph >> asArgumentWrapper [
+
+	^ ExpressionWrapper with: self
+]
+
+{ #category : #byob }
+CommandBlockMorph >> asLambda [
+
+	| lambda |
+	lambda := CommandScriptBlockMorph new
+		receiver: ScriptablePhratchMorph new;
+		isSpecialForm: false;
+		minArgs: 1;
+		commandSpec: '.';
+		selector: #procedure;
+		yourself.
+	lambda attachBlock: self.
+	^ lambda evaluate
+]
+
+{ #category : #byob }
+CommandBlockMorph >> blockWidth [
+	^self width
+]
+
+{ #category : #'*Phratch-objects' }
+CommandBlockMorph >> changeLabel [
+	| tokens args nextArgIndex m next slot |
+	commandSpec ifNil: [ ^ self ].	"we make sure not to remove the next block."
+	next := self nextBlock.
+	"self isCBlockMorph ifTrue:[next := super nextBlock.]."
+	
+	self removeAllMorphsIn: (self submorphs reject: [ :t | t = next or:[t isBlockMorph]]).
+	tokens := CommandBlockMorph parseCommandSpec: commandSpec.
+	args := tokens select: [ :s | CommandBlockMorph isArgSpec: s ].	"remove any excess arg morphs from the list."
+	[ argMorphs size > args size ]
+		whileTrue: [ 
+			m := argMorphs last.
+			argMorphs remove: m.	"if the argument we're throwing out is anything complicated, we'd like to keep it around in the world."
+			(m isBlockMorph)
+				ifTrue: [ m openInWorld ] ].	"create new arg morphs."
+	[ argMorphs size < args size ] whileTrue: [ argMorphs addLast: (self argMorphFor: (args at: argMorphs size + 1)) ].
+	nextArgIndex := 1.
+	tokens
+		do: [ :s | 
+			(CommandBlockMorph isArgSpec: s)
+				ifTrue: [ 
+					"check if the arg type has changed (jens)"
+					m := argMorphs at: nextArgIndex.
+					(m isArgMorph)
+						ifTrue: [ 
+							slot := self uncoloredArgMorphFor: s.
+							m class = slot class
+								ifFalse: [ 
+									m := slot.
+									argMorphs at: nextArgIndex put: m ] ].
+					nextArgIndex := nextArgIndex + 1 ]
+				ifFalse: [ m := self labelMorphFor: s ].
+			self addMorphBack: m ].
+	self isReporter
+		ifFalse: [ ^ self ].
+	m := submorphs last.
+	(m isChoiceArgMorph) | (m isSpriteArgMorph)
+		ifTrue: [ 
+			"add spacer"
+			self
+				addMorphBack:
+					(Morph new
+						color: Color transparent;
+						extent: 2 @ 5;
+						yourself) ]
+]
+
+{ #category : #'*Phratch-objects' }
+CommandBlockMorph >> changeLanguageString [
+
+	self hasSubmorphs ifTrue:[self submorphsDo: [:sm | sm changeLanguageString]].
+	self translateCommandSpec: (PhratchTranslator translationFor: (PhratchTranslator englishTranslationFor: self commandSpec))
+]
+
+{ #category : #evaluation }
+CommandBlockMorph >> coerceArgs: argList [
+	"Answer an arguments array in which all arguments that should be numbers have been coerced to numbers if necessary."
+
+	| args specialCommands ignoreCases numFlags |
+	args := argList asArray.
+	specialCommands := #(
+		lookLike: showBackground:
+		playSound: doPlaySoundAndWait
+		"setVar:to:").
+
+	ignoreCases := Dictionary new.
+	ignoreCases
+		at: #deleteLine:ofList: put: 1;
+		at: #getLine:ofList: put: 1;
+		at: #insert:at:ofList: put: 2;
+		at: #setLine:ofList:to: put: 1.
+
+	(specialCommands includes: selector) ifFalse: [
+		"ensure args are numbers where numbers are expected"
+		numFlags := self numberArgFlags.
+
+		(ignoreCases keys includes: selector) ifTrue: [
+			numFlags at: (ignoreCases at: selector) put: false ].
+
+		1 to: args size do: [:i |
+			(numFlags at: i) ifTrue: [args at: i put: (args at: i) asNumberNoError]]].
+
+	^ args
+
+]
+
+{ #category : #accessing }
+CommandBlockMorph >> color: aColor [
+
+	super color: aColor.
+	self layoutChanged.
+
+]
+
+{ #category : #accessing }
+CommandBlockMorph >> commandSpec [
+
+	^ commandSpec
+
+]
+
+{ #category : #accessing }
+CommandBlockMorph >> commandSpec: aString [
+	"Set my command spec string. See my class comment."
+	"(CommandBlockMorph new commandSpec: 'forward $Number$') inspect"
+	commandSpec := aString.
+	numberArgFlags := nil.
+	self addLabel.
+	self addCommandIcons.
+
+]
+
+{ #category : #private }
+CommandBlockMorph >> deepCopy [
+
+	^ self veryDeepCopy
+]
+
+{ #category : #accessing }
+CommandBlockMorph >> defaultArgs: defaultValues [
+	"Set the default values of my arguments from the given list."
+
+	| argM defaultValue |
+	1 to: (defaultValues size min: argMorphs size) do: [:i |
+		argM := argMorphs at: i.
+		defaultValue := defaultValues at: i.
+		(argM  isExpressionArgMorph)
+			ifTrue: [argM defaultValueFromSpec: defaultValue]
+			ifFalse: [argM defaultValue: defaultValue]].
+
+
+]
+
+{ #category : #byob }
+CommandBlockMorph >> drawBodyOn: aCanvas [ 
+
+	| leftEdge middle rightEdge l m r cArgs relevant |
+
+	leftEdge := Array with: (self left@(self top + 2) corner: (self left + 2)@(self bottom - 7)).
+	middle := Array with: (self left@(self top + 5) corner: (self right - 1)@(self bottom - 7)).
+	rightEdge := Array with: ((self right - 1)@(self top + 3) corner: self right@(self bottom - 7)).
+
+	cArgs := self nonControlFlowSubmorphs select: [:s | 
+		(s isCArgSlotMorph) 
+		or: [(s isCReporterSlotMorph)
+		or: [(s isMultiArgMorph) 
+			and: [#(loop reporterSlot) includes: s type]]]].
+
+	cArgs do: [:c |
+		relevant := c bounds.
+		(c isMultiArgMorph) ifTrue: [
+			relevant := c transparentRect].
+
+		l := OrderedCollection new.
+		leftEdge do: [:rect |
+			l addAll: (rect areasOutside: relevant)].
+		leftEdge := l.
+
+		m := OrderedCollection new.
+		middle do: [:rect |
+			m addAll: (rect areasOutside: relevant)].
+		middle := m.
+	
+		r := OrderedCollection new.
+		rightEdge do: [:rect |
+			r addAll: (rect areasOutside: relevant)].
+		rightEdge := r].
+
+
+	leftEdge do: [:rect |
+		aCanvas
+			fillRectangle: rect
+			color: color].
+
+	middle do: [:rect |
+		aCanvas
+			fillRectangle: rect
+			color: color].
+
+	rightEdge do: [:rect |
+		aCanvas
+			fillRectangle: rect
+			color: shadowColor]
+
+]
+
+{ #category : #byob }
+CommandBlockMorph >> drawInlinePaletteOn: aCanvas [
+
+	| templates |
+	templates := submorphs select: [:m |
+		(m isReporterBlockMorph)
+		and: [m isBlockTemplate ]].
+
+
+	templates do: [:t |
+		aCanvas paintImage: ((t imageForm withOutlineColor: color width: 1) withRaisedOutlineColor: color width: 1) 
+					at: t position - 2].
+
+"
+	argMorphs do: [:m |
+		(#booleanslot = (self typeOfArg: m)
+		and: [m isReporterBlockMorph]) ifTrue: [
+			aCanvas paintImage: (m imageForm outlineHalfEmbeddedAdjustedColor: color) 
+					at: m position - 1]]
+
+"
+
+]
+
+{ #category : #elements }
+CommandBlockMorph >> editElements [
+	| cls sel |
+	sel := selector.
+	cls := receiver phratchModel class classThatUnderstands: sel.
+
+	cls ifNil: [cls := PhratchProcess].
+	(cls canUnderstand: sel)
+		ifFalse: [isSpecialForm ifTrue: [
+			(#(getBlockVar: getVar:) includes: sel) ifTrue: [sel := #getVar].
+			(#(setBlockVar:to: setVar:to:) includes: sel) ifTrue: [sel := #setVar].
+			(#(changeBlockVar:by: changeVar:by:) includes: sel) ifTrue: [sel := #changeVar]]].
+	
+	[(cls methodNamed: sel) browse ] on: Error do: [cls browse].
+]
+
+{ #category : #evaluation }
+CommandBlockMorph >> evaluate [
+	^ self evaluateWithArgs: self args
+
+]
+
+{ #category : #evaluation }
+CommandBlockMorph >> evaluateInfixWithArgs: rawArgs [
+	"Evalue an infix operator with the given arguments list. Special case for comparison operatores when both operands are strings. Reverse order of comparison operands in RTL languages."
+
+	"Note: The strings 'true' and 'false' in either English or the current language are equal to the boolean value that they name."
+
+	| args result arg1 arg2 |
+	args := rawArgs.
+	#= = selector
+		ifTrue: [ 
+			"special case: check for equality between a boolean and the special strings 'true' or 'false'"
+			((args first isString) and: [ args second isBoolean ])
+				ifTrue: [ 
+					args first = 'true'
+						ifTrue: [ ^ args second ].
+					args first = 'false'
+						ifTrue: [ ^ args second not ].
+					args first = (PhratchTranslator translationFor: 'true')
+						ifTrue: [ ^ args second ].
+					args first = (PhratchTranslator translationFor: 'false')
+						ifTrue: [ ^ args second not ] ].
+			((args first isBoolean) and: [ args second isString ])
+				ifTrue: [ 
+					args second = 'true'
+						ifTrue: [ ^ args first ].
+					args second = 'false'
+						ifTrue: [ ^ args first not ].
+					args second = (PhratchTranslator translationFor: 'true')
+						ifTrue: [ ^ args first ].
+					args second = (PhratchTranslator translationFor: 'false')
+						ifTrue: [ ^ args first not ] ] ].
+	(#(#< #= #>) includes: selector)
+		ifTrue: [ 
+			((args first isString) or: [ args second isString ])
+				ifTrue: [ 
+					arg1 := receiver interpretStringAsNumberIfPossible: args first.
+					arg2 := receiver interpretStringAsNumberIfPossible: args second.
+					((arg1 isString) and: [ arg2 isString ])
+						ifTrue: [ 
+							result := args first compare: args second.
+							#< = selector
+								ifTrue: [ ^ result = 1 ].
+							#= = selector
+								ifTrue: [ ^ result = 2 ].
+							#> = selector
+								ifTrue: [ ^ result = 3 ] ].
+					((arg1 isNumber) and: [ arg2 isNumber ])
+						ifTrue: [ ^ arg1 perform: selector with: arg2 ].
+					^ false ]
+				ifFalse: [ 
+					(args first isPhratchListMorph)
+						ifTrue: [ ^ args first equals: args second ].
+					(args second isPhratchListMorph)
+						ifTrue: [ ^ args second equals: args first ] ] ].
+	(#(#& #|) includes: selector)
+		ifTrue: [ ^ args first perform: selector with: args second ].
+	((args first isScriptablePhratchMorph) or: [ args second isScriptablePhratchMorph ])
+		ifTrue: [ ^ args first = args second ].
+	^ args first asNumberNoError perform: selector with: args second asNumberNoError
+]
+
+{ #category : #evaluation }
+CommandBlockMorph >> evaluateWithArgs: rawArgs [
+	"Evalue this block with the given argument list."
+
+	| args |
+	"special case for math and boolean infix operators"
+	selector isInfix ifTrue: [^ self evaluateInfixWithArgs: rawArgs].
+
+	args := self coerceArgs: rawArgs.
+
+	"special case for unary operators"
+	(#(abs not rounded sqrt truncated) includes: selector) ifTrue: [^ args first perform: selector].
+
+	^ receiver perform: selector withArguments: args
+
+]
+
+{ #category : #private }
+CommandBlockMorph >> fixBlockLayout [
+	"Update the positions of my submorphs."
+
+	self fixBlockLayoutWrap
+]
+
+{ #category : #private }
+CommandBlockMorph >> fixBlockLayoutNoWrap [
+	"Update the positions of my submorphs."
+
+	| isFirst h x minXForArgs hAdjust nextB w space |
+	blockLayoutNeeded
+		ifFalse: [ ^ self ].
+	space := 4.
+	self isCustomBlock
+		ifTrue: [ 
+			self isTemplate
+				ifTrue: [ space := 2 ] ].
+	super fixBlockLayout.
+	self position.
+	self extent.
+	hAdjust := 4.
+	isFirst := true.
+	h := 14.	"minimum height"
+	self nonControlFlowSubmorphs
+		do: [ :m | 
+			(m isBlockMorph)
+				ifTrue: [ m fixBlockLayout ].
+			(m isArgMorph)
+				ifTrue: [ m fixArgLayout ].
+			(isFirst and: [ (m isStringMorph) not ])
+				ifTrue: [ 
+					"extra space when an arg overlaps with notch"
+					h := h max: m height + 3.
+					hAdjust := 1 ].
+			isFirst := false.
+			h := ((m isCommandBlockMorph) and: [ m isBlockTemplate ])
+				ifTrue: [ h max: m height + 2 ]
+				ifFalse: [ h max: m height ] ].
+	minXForArgs := ((self isCBlockMorph) or: [ self isIfElseBlockMorph ])
+		ifTrue: [ self left + PuzzleInset + PuzzleWidth + 8 ]
+		ifFalse: [ self left ].
+	h := h + 10.
+	self isReporter
+		ifTrue: [ 
+			h := h - 2.
+			hAdjust := 2 ].
+	self isStop
+		ifTrue: [ 
+			h := h - 5.
+			hAdjust := 0 ].
+	x := self left + 5.
+	self nonControlFlowSubmorphs
+		do: [ :m | 
+			(m isStringMorph)
+				ifTrue: [ 
+					(m isBlockLabelFragmentMorph)
+						ifFalse: [ m color: self labelColor ] ]
+				ifFalse: [ x := x max: minXForArgs ].
+			m position: x @ (self top + ((h - hAdjust - m height) // 2)).
+			x := x + m width + space ].
+	w := x - self left max: 37.
+	((self isCBlockMorph) or: [ self isIfElseBlockMorph ])
+		ifTrue: [ w := w max: 71 ].
+	self extent: w @ h.
+	(nextB := self nextBlock)
+		ifNotNil: [ 
+			(self isCBlockMorph)
+				ifFalse: [ 
+					 nextB position: self left @ (self bottom - 4)].
+			nextB fixBlockLayout ]
+]
+
+{ #category : #byob }
+CommandBlockMorph >> fixBlockLayoutWrap [
+	"Update the positions of my submorphs."
+
+	| parts lines line h x y minXForArgs nextB w space left maxX maxHeight mh |
+	(self isCustomBlock and: [ self isTemplate ])
+		ifTrue: [ ^ self fixBlockLayoutNoWrap ].
+	blockLayoutNeeded
+		ifFalse: [ ^ self ].
+	parts := self nonControlFlowSubmorphs.
+	lines := OrderedCollection new.	"distribute parts horizontally and cut up into lines"
+	line := OrderedCollection new.
+	x := self left + 5.
+	left := x.
+	maxX := x.
+	minXForArgs := self left.
+	space := 4.
+	parts
+		do: [ :m | 
+			((m isCArgSlotMorph)
+				or: [ (m isCReporterSlotMorph) or: [ (m isMultiArgMorph) and: [ m isWrapping ] ] ])
+				ifTrue: [ 
+					line isEmpty
+						ifFalse: [ lines add: line ].
+					m left: left.	"self"
+					lines add: (OrderedCollection with: m).
+					(m isMultiArgMorph)
+						ifTrue: [ m fixArgLayout ]
+						ifFalse: [ m fixBlockLayout ].
+					((m isCArgSlotMorph) or: [ m isCReporterSlotMorph ])
+						ifTrue: [ m width: 40 ].
+					line := OrderedCollection new.
+					maxX := maxX max: left + m width.
+					x := left ]
+				ifFalse: [ 
+					x - left > self class maxSize
+						ifTrue: [ 
+							lines add: line.
+							line := OrderedCollection new.
+							x := left ].
+					(m isBlockMorph)
+						ifTrue: [ m fixBlockLayout ].
+					(m isArgMorph)
+						ifTrue: [ m fixArgLayout ].
+					(m isStringMorph)
+						ifTrue: [ m color: self labelColor ]
+						ifFalse: [ x := x max: minXForArgs ].
+					m left: x.
+					(m fullBounds right - left > self class maxSize and: [ line isEmpty not ])
+						ifTrue: [ 
+							lines add: line.
+							line := OrderedCollection new.
+							m left: left.
+							line add: m.
+							x := left ]
+						ifFalse: [ line add: m ].
+					x := x + m fullBounds width + space.
+					maxX := maxX max: x ] ].
+	x = left
+		ifFalse: [ lines add: line ].
+	w := maxX - self left max: 37.	"distribute lines vertically"
+	space := 2.
+	y := self top + 2.	"4"	"space"
+	lines
+		do: [ :eachLine | 
+			maxHeight := 14.
+			eachLine
+				do: [ :m | 
+					mh := ((m isReporterBlockMorph)
+						and: [ m isBlockTemplate or: [ ((m isCArgSlotMorph) or: [ m isOSlotMorph ]) and: [ m isEmptySlot not ] ] ])
+						ifTrue: [ 
+							m == eachLine first
+								ifTrue: [ m height + 10 ]
+								ifFalse: [ m height + 5 ] ]
+						ifFalse: [ 
+							((m isCArgSlotMorph) or: [ m isOSlotMorph ])
+								ifTrue: [ m height + 5 ]
+								ifFalse: [ m height ] ].
+					maxHeight := mh max: maxHeight.
+					((m isCArgSlotMorph) or: [ m isCReporterSlotMorph ])
+						ifTrue: [ maxHeight := m height - 4 ] ].
+			eachLine do: [ :m | m top: y + ((maxHeight - m height) // 2) + 1 ].
+			y := y + maxHeight + space ].	"adjust CArgSlots"
+	parts
+		do: [ :m | 
+			((m isCArgSlotMorph) or: [ m isCReporterSlotMorph ])
+				ifTrue: [ m width: w - 5 ] ].
+	h := self isStop
+		ifTrue: [ y - self top + space ]
+		ifFalse: [ y - self top + space + 4 ].
+	parts size > 0
+		ifTrue: [ 
+			((parts last isCArgSlotMorph) or: [ parts last isCReporterSlotMorph ])
+				ifTrue: [ h := h + space + 5 ] ].
+	self extent: w @ h.	"adjust Multi-CArgSlots"
+	parts
+		do: [ :m | 
+			(m isMultiArgMorph)
+				ifTrue: [ m loopsWidth: w - 5 ] ].
+	(nextB := self nextBlock)
+		ifNotNil: [ 
+			nextB position: self left @ (self bottom - 4).
+			nextB fixBlockLayout ]
+]
+
+{ #category : #accessing }
+CommandBlockMorph >> helpScreenName [
+	"Answer the name of the help screen for this block, or nil if no help is available."
+
+	selector isInfix ifTrue: [
+		'+' = selector ifTrue: [^ 'minus'].
+		'-' = selector ifTrue: [^ 'minus'].
+		'*' = selector ifTrue: [^ 'minus'].
+		'/' = selector ifTrue: [^ 'minus'].
+
+		'<' = selector ifTrue: [^ 'lessThan'].
+		'=' = selector ifTrue: [^ 'equals'].
+		'>' = selector ifTrue: [^ 'greaterThan'].
+
+		'&' = selector ifTrue: [^ 'and'].
+		'|' = selector ifTrue: [^ 'or'].
+
+		'\\' = selector ifTrue: [^ 'mod'].
+
+		^ nil].
+
+	"answer the selector with colons mapped to underscores"
+	^ selector asString collect: [:ch | ch = $: ifTrue: [$_] ifFalse: [ch]]
+
+]
+
+{ #category : #initialization }
+CommandBlockMorph >> initialize [
+
+	super initialize.
+	commandSpec := ''.
+	argMorphs := OrderedCollection new.
+	receiver := nil.
+	selector := nil.
+	isTimed := false.
+
+]
+
+{ #category : #byob }
+CommandBlockMorph >> isCShape [
+
+	^ argMorphs anySatisfy: [:am | 
+		am isCArgSlotMorph]
+]
+
+{ #category : #testing }
+CommandBlockMorph >> isCommandBlockMorph [
+
+	^ true
+]
+
+{ #category : #accessing }
+CommandBlockMorph >> isForever [
+
+	^ ({#doForever . #doForeverIf } includes: selector)
+
+]
+
+{ #category : #byob }
+CommandBlockMorph >> isMaxNestedAt: int [
+	"kludge-alert!"
+
+	^ (receiver isVariableFrame) and:[ receiver isMaxNestedAt: int + 1]
+]
+
+{ #category : #accessing }
+CommandBlockMorph >> isStop [
+
+	^ #(doReturn stopAll doAnswer doStopBlock) includes: selector
+
+]
+
+{ #category : #accessing }
+CommandBlockMorph >> isTimed [
+
+	^ isTimed
+
+]
+
+{ #category : #accessing }
+CommandBlockMorph >> isTimed: aBoolean [
+	"Indicates that this block's evaluate method will be called repeatedly throughout some time interval."
+
+	isTimed := aBoolean.
+]
+
+{ #category : #evaluation }
+CommandBlockMorph >> key [
+	^ key
+]
+
+{ #category : #evaluation }
+CommandBlockMorph >> key: aKey [
+	key := aKey 
+]
+
+{ #category : #private }
+CommandBlockMorph >> labelColor [
+	"Answer a label color, either black or white, that maximizes the contrast with my color."
+
+	^ LabelColor
+
+]
+
+{ #category : #private }
+CommandBlockMorph >> labelMorphFor: aString [
+	| s |
+	s := PhratchTranslator IsRTL
+		ifTrue: [ aString reverse ]
+		ifFalse: [ aString ].
+	^ (StringMorph contents: s font: (PhratchFrameMorph getFont: #Label)) color: self labelColor
+]
+
+{ #category : #private }
+CommandBlockMorph >> mapReceiver: oldObj to: newObj [
+	"Used in cloning an object to make blocks that refererred to the original object new refer to the new copy."
+
+	receiver == oldObj ifTrue: [receiver := newObj].
+	argMorphs do: [:arg |
+		(arg isCommandBlockMorph) ifTrue: [
+			arg mapReceiver: oldObj to: newObj]].
+
+]
+
+{ #category : #byob }
+CommandBlockMorph >> nests: aCommandBlock [
+
+	| cslots |
+	cslots := argMorphs select: [:am | am isCArgSlotMorph].
+	cslots do: [:cs |
+		cs nestedBlock ifNotNil: [
+			(cs nestedBlock blockSequence includes: aCommandBlock)
+				ifTrue: [^ true]]].
+	^ false
+
+]
+
+{ #category : #private }
+CommandBlockMorph >> nextBlock [
+	"Answer the block following myself in the block sequence or nil if I am the last block in the sequence. Each block is a submorph of the previous block."
+
+	^ self submorphs
+		detect: [:m | (m isBlockMorph) and: [(argMorphs includes: m) not]]
+		ifNone: [nil]
+
+]
+
+{ #category : #private }
+CommandBlockMorph >> nextBlock: aBlock [
+	"Add the given block as the block following me. Delete old nextBlock, if any."
+
+	self nextBlock ifNotNil: [self nextBlock delete].
+	self addMorph: aBlock.
+
+]
+
+{ #category : #accessing }
+CommandBlockMorph >> numberArgFlags [
+	"Answer an array of booleans indicating which of my arguments must be numbers. Compute on first use and cache the result."
+
+	| argSpecs argM |
+	numberArgFlags ifNotNil: [^ numberArgFlags].
+
+	argSpecs := (CommandBlockMorph parseCommandSpec: commandSpec) select: [:s | CommandBlockMorph isArgSpec: s].
+	numberArgFlags := argSpecs collect: [:spec |
+		argM := self uncoloredArgMorphFor: spec.
+		(argM isExpressionArgMorph)
+			ifTrue: [
+				(argM isKindOf: ExpressionArgMorphWithMenu)
+					ifTrue: [
+						argM isNumberExpression or:
+						[#(listIndexMenu listIndexForDeleteMenu) includes: argM menuSelector]]
+					ifFalse: [argM isNumberExpression]]
+			ifFalse: [false]].
+
+	^ numberArgFlags
+
+]
+
+{ #category : #private }
+CommandBlockMorph >> oldUncoloredArgMorphFor: specString [
+	"Answer an argument morph for the given argument specification string."
+
+	| code |
+	code := specString copyFrom: 2 to: specString size-1.
+	
+	$a	= code ifTrue: [^ 'Attributes'].
+	$b	= code ifTrue: [^ 'Boolean'].
+	$c	= code ifTrue: [^ 'Color'].
+	$C	= code ifTrue: [^ 'ScreenColor']. 
+	$d	= code ifTrue: [^ 'Directions'].
+	$D	= code ifTrue: [^ 'Drums'].
+	$e	= code ifTrue: [^ 'Event'].
+	$f	= code ifTrue: [^ 'MathFunctions'].
+	$3	= code ifTrue: [^ 'Constants'].
+	$g	= code ifTrue: [^ 'Effects'].
+	$4 	= code ifTrue: [^ 'ColorVar'].
+	$I 	= code ifTrue: [^ 'Instruments'].
+	$i 	= code ifTrue: [^ 'ListIndex'].
+	$k 	= code ifTrue: [^ 'Keys'].
+	$5 	= code ifTrue: [^ 'NamedColors'].
+	$L 	= code ifTrue: [^ 'List'].
+	$l 	= code ifTrue: [^ 'Costumes'].
+	$m 	= code ifTrue: [^ 'Sprite'].
+	$n 	= code ifTrue: [^ 'Number'].
+	$N 	= code ifTrue: [^ 'Notes'].
+	$s 	= code ifTrue: [^ 'String'].
+	$S 	= code ifTrue: [^ 'SoundNames'].
+	$6 	= code ifTrue: [^ 'TimeDates'].
+	$7 	= code ifTrue: [^ 'LayoutStyles'].
+	$v 	= code ifTrue: [^ 'Variable'].
+	$x 	= code ifTrue: [^ 'SceneNames'].
+	$8 	= code ifTrue: [^ 'NewCostume'].
+	$y 	= code ifTrue: [^ 'ListDelete'].
+	$B  = code ifTrue: [^ 'BlockId'].
+	"special args"
+	$o  = code ifTrue: [ ^ 'CSlot'].
+	$E  = code ifTrue: [ ^ 'CSlot'].
+	$O  = code ifTrue: [ ^ 'MACommand'].
+	$r  = code ifTrue: [ ^ 'OSReporter'].
+	$R  = code ifTrue: [ ^ 'MAReporter'].
+	$p  = code ifTrue: [ ^ 'OSBoolean'].
+	$P  = code ifTrue: [ ^ 'MAPredicate'].
+	$t  = code ifTrue: [ ^ 'SAList'].
+	$u  = code ifTrue: [ ^ 'MAList'].
+	$T  = code ifTrue: [ ^ 'Text'].
+	$U  = code ifTrue: [ ^ 'MAText'].
+	$V  = code ifTrue: [ ^ 'MABoolean'].
+	$w  = code ifTrue: [ ^ 'MANumber'].
+	$X  = code ifTrue: [ ^ 'MAAny'].
+	$z  = code ifTrue: [ ^ 'SpecialVar'].
+	$Z  = code ifTrue: [ ^ 'SAReporter'].
+	$Y  = code ifTrue: [ ^ 'SABoolean'].
+	
+	$A = code ifTrue: [ ^ 'Input'].
+	$F  = code ifTrue: [ ^ 'Type'].
+
+	$G  = code ifTrue: [ ^ 'CArgSlot'].
+	$J  = code ifTrue: [ ^ 'Loop'].
+
+	$j  = code ifTrue: [ ^ 'UnEExp'].
+	$q  = code ifTrue: [ ^ 'MAUneval'].
+	$Q  = code ifTrue: [ ^ 'UnEBool'].
+	$K  = code ifTrue: [ ^ 'MAUnEBool'].
+
+	$1  = code ifTrue: [ ^ 'SAObjS'].
+	$2  = code ifTrue: [ ^ 'MAObjS'].	
+	
+	$r  = code ifTrue: [^ 'Rotation'].
+			
+	^ 'Number'
+]
+
+{ #category : #byob }
+CommandBlockMorph >> phratchObject [
+
+	| be sm sf so |
+	be := self ownerOrYourselfThatIsABlockEditorFrameMorph.
+	be isNil
+		ifTrue: [
+			sm := self ownerOrYourselfThatIsAPhratchScriptsMorph.
+			sf := self ownerOrYourselfThatIsAPhratchFrameMorph.
+			sm isNil | sf isNil ifTrue: [^ nil].
+			so := sf phratchObjects detect: [:obj | obj blocksBin = sm] ifNone: [sf workPane]]
+		ifFalse: [so := be template receiver].
+	^so
+]
+
+{ #category : #private }
+CommandBlockMorph >> printCodeOn: aStream indent: indent [
+	"Append a human-readable string for this block on the given stream."
+
+	| nextB hasFinalSpace |
+	indent timesRepeat: [aStream nextPutAll: '    '].
+	nextB := self nextBlock.
+	hasFinalSpace := false.
+	submorphs do: [:m |
+		m ~~ nextB ifTrue: [
+			self printCodeSubmorph: m on: aStream.
+			hasFinalSpace := true.
+			aStream space]].
+	hasFinalSpace ifTrue: [aStream skip: -1].
+	aStream cr.
+	self nextBlock ifNotNil: [self nextBlock printCodeOn: aStream indent: indent].
+
+]
+
+{ #category : #accessing }
+CommandBlockMorph >> receiver [
+
+	"^ receiver
+"
+
+	^receiver ifNil: [
+		(owner respondsTo: #receiver)
+			ifTrue: [receiver := owner receiver]
+			ifFalse: [nil]]	
+]
+
+{ #category : #accessing }
+CommandBlockMorph >> receiver: anObject [
+	"Set my receiver object."
+
+	receiver := anObject.
+
+]
+
+{ #category : #byob }
+CommandBlockMorph >> references: obj [
+	"kludge-alert: answer true if any part of me contains a reference to obj"
+
+	^ (receiver isVariableFrame) and: [receiver references: obj]
+]
+
+{ #category : #private }
+CommandBlockMorph >> replaceArgMorph: oldMorph by: newMorph [
+	"Replace oldMorph with newMorph in my argMorphs and submorphs lists. This is done when dropping a reporter block onto one of my arguments."
+
+	argMorphs := argMorphs collect: [:m |
+		m == oldMorph ifTrue: [newMorph] ifFalse: [m]].
+	self replaceSubmorph: oldMorph by: newMorph.
+
+	"attempt at a more graceful way to embed ReporterScripts,
+	has some issues, commented out for now (jens) "
+
+"
+	(newMorph = argMorphs first and: [ 
+		(newMorph isReporterScriptBlockMorph) or: [
+			oldMorph isReporterScriptBlockMorph]]) ifTrue: [
+			self addLabel].
+"
+	self layoutChanged.
+
+]
+
+{ #category : #byob }
+CommandBlockMorph >> rightButtonMenu [
+
+	| menu choice spec |
+	menu := MenuMorph new defaultTarget: self.
+	menu add: 'help' localized value: #presentHelpScreen.
+
+	(owner isPhratchBlockPaletteMorph) ifFalse: [
+		menu addLine.
+		(#(+ - * / \\) includes: selector) ifTrue: [
+			#(+ - * / mod) with: #(+ - * / \\) do: [:s :op | menu add: s value: op]].
+		(#(< = >) includes: selector) ifTrue: [
+			#(< = >) do: [:op | menu add: op value: op]].
+		(#(& |) includes: selector) ifTrue: [
+			#(and or) with: #(& |) do: [:s :op | menu add: s value: op]].
+
+		menu addLine.
+		menu add: 'duplicate' localized value: #duplicate.
+		(self isVariableBlockMorph) ifTrue: [
+			menu add: 'relabel' localized value: #rename].
+		(self owner isBlockMorph) ifFalse: [  "can't yet delete a blocks inside a script"
+			menu add: 'delete' localized value: #delete]].
+
+	(self isVariableBlockMorph)
+		ifTrue: [ menu add: 'delete' localized value: #deleteVariable: target: (self receiver) arguments: {self variable}.
+		].
+	
+	(self isListContentsBlockMorph)
+		ifTrue: [ menu add: 'delete' localized value: #deleteList: target: (self receiver) arguments: {self selectorAndArg second}.
+		].
+		
+	menu addLine.
+
+	self isInheritableAttribute ifTrue: [
+		self isDeletedAttribute 
+			ifTrue: [menu add: 'disinherit' localized value: #disinheritAttribute]
+			ifFalse: [menu add: 'inherit' localized value: #inheritAttribute]].
+	
+	menu add: 'show block' localized value: #showElements.
+	
+	ScriptablePhratchMorph noviceMode ifFalse:[
+		menu add: 'edit block for developer' localized value: #editElements.
+	].
+
+	
+	(choice := (menu localize; invokeModal"popUpAt: World activeHand position  inWorld:   World"; yourself)selectedValue) ifNil: [^ self].
+	(#(presentHelpScreen duplicate rename delete showElements editElements inheritAttribute disinheritAttribute) includes: choice) ifTrue: [^ self perform: choice].
+
+	"change operator"
+	spec := '$Number$ ', choice, ' $Number$'.
+	'\\' = choice ifTrue: [spec := PhratchTranslator translationFor: '$Number$ mod $Number$'].
+	'&' = choice	ifTrue: [spec := PhratchTranslator translationFor: '$Boolean$ and $Boolean$'].
+	'|' = choice	ifTrue: [spec := PhratchTranslator translationFor: '$Boolean$ or $Boolean$'].
+
+	self commandSpec: spec.
+	self selector: choice.
+
+]
+
+{ #category : #byob }
+CommandBlockMorph >> scriptVars [
+	"private - answer the names of all script variables reachable by myself"
+
+	| blockVars o be |
+
+	blockVars := Set new.
+	o := owner.
+	[ (o isBlockMorph) or: [o isArgMorph]] whileTrue: [
+		o isLambdaForm ifTrue: [
+			blockVars addAll: o allVarNames ].
+		(o isVariableDeclarationBlockMorph) ifTrue: [
+			blockVars addAll: o variables ].
+		(o isProcedureHatBlockMorph) ifTrue: [
+			blockVars addAll: o argMorph allVarNames ].
+		(o isReporterBlockDropTargetMorph)
+			ifTrue: [
+				be := o ownerOrYourselfThatIsABlockEditorFrameMorph.
+				blockVars addAll: be template allVarNames.
+				o := be hat bottomBlock.
+				(o isVariableDeclarationBlockMorph) ifTrue: [
+					blockVars addAll: o variables ].
+				(o isProcedureHatBlockMorph) ifTrue: [
+					blockVars addAll: o argMorph allVarNames ]].
+		o := o owner].
+	^blockVars
+]
+
+{ #category : #accessing }
+CommandBlockMorph >> selector [
+
+	^ selector
+
+]
+
+{ #category : #accessing }
+CommandBlockMorph >> selector: aSymbol [
+
+	selector := aSymbol.
+
+]
+
+{ #category : #accessing }
+CommandBlockMorph >> selectorAndArg [
+	"Answer an array containing my selector and argument (if any)."
+
+	| args |
+	args := self args.
+	^ Array with: selector with: (args size = 0 ifTrue: [nil] ifFalse: [args first])
+
+]
+
+{ #category : #elements }
+CommandBlockMorph >> showElements [
+	| cls sel |
+	sel := selector.
+	cls := receiver class classThatUnderstands: sel.
+
+	cls ifNil: [cls := PhratchProcess].
+	(cls canUnderstand: sel)
+		ifFalse: [isSpecialForm ifTrue: [
+			(#(getBlockVar: getVar:) includes: sel) ifTrue: [sel := #getVar].
+			(#(setBlockVar:to: setVar:to:) includes: sel) ifTrue: [sel := #setVar].
+			(#(changeBlockVar:by: changeVar:by:) includes: sel) ifTrue: [sel := #changeVar]]].
+	
+	ElementsEditorFrameMorph new 
+		onMethod: sel ofClass: cls
+]
+
+{ #category : #byob }
+CommandBlockMorph >> start [
+
+	| stage rcvr |
+	self stop.
+	self receiver ifNil: [^ self].
+	phratchProc ifNotNil: [^ self].  "this stack is already running"
+
+	rcvr := self receiver.
+	(rcvr isScriptablePhratchMorph)
+		ifTrue: [ (stage := rcvr ownerOrYourselfThatIsAPhratchStageMorph) ifNil: [^ self]]
+		ifFalse: [stage := (self ownerOrYourselfThatIsAPhratchFrameMorph) workPane].	
+
+	phratchProc := stage startProcessFor: self.
+	self changed.
+
+]
+
+{ #category : #byob }
+CommandBlockMorph >> stopFrame [
+	^ stopFrame
+]
+
+{ #category : #byob }
+CommandBlockMorph >> stopFrame: aFrame [
+
+		stopFrame := aFrame
+]
+
+{ #category : #private }
+CommandBlockMorph >> tabToNextField: evt [
+	"Move the keyboard focus to the next submorph that responds to keyboard events."
+
+	| fields current |
+	fields := self topBlock tabFields "allMorphs select: [:m | m isExpressionArgMorph]".
+
+	current := (1 to: fields size) detect: [:i | (fields at: i) labelMorph == evt hand keyboardFocus] ifNone: [fields size].
+	evt hand newKeyboardFocus: (fields at: (current \\ fields size) + 1) labelMorph.
+
+]
+
+{ #category : #byob }
+CommandBlockMorph >> tabToPreviousField: evt [
+	"Move the keyboard focus to the previous submorph that responds to keyboard events."
+
+	| fields current |
+	fields := self topBlock tabFields  " allMorphs select: [:m | m isExpressionArgMorph]".
+
+	current := (1 to: fields size) detect: [:i | (fields at: i) labelMorph == evt hand keyboardFocus] ifNone: [fields size].
+	evt hand newKeyboardFocus: (fields at: ((current - 1 \\ fields size) max: 1)) labelMorph.
+
+
+]
+
+{ #category : #'*Phratch-objects' }
+CommandBlockMorph >> translateCommandSpec: aString [
+
+	commandSpec := aString.
+	numberArgFlags := nil.
+	self changeLabel.
+	self addCommandIcons.
+]
+
+{ #category : #byob }
+CommandBlockMorph >> typeOfArg: aMorph [
+	"answer a symbol representing the type of my argument morph being aMorph"
+
+	| idx tokens args spec specs |
+	idx := argMorphs indexOf: aMorph.
+	tokens := CommandBlockMorph parseCommandSpec: commandSpec.
+	args := tokens select: [:s | CommandBlockMorph isArgSpec: s].
+	args size < idx ifTrue: [^ #any].
+	spec := args at: idx.
+	'$String$' = spec ifTrue: [^#any].
+
+	specs := Dictionary new.
+	specs
+		at: #command put: '$CSlot$';
+		at: #commandList put: '$MACommand$';
+		at: #reporter put: '$OSReporter$';
+		at: #colorReporter put: '$Effects$';
+		at: #repoerterList put: '$MAReporter$';
+		at: #predicate put: '$OSBoolean$';
+		at: #predicateList put: '$MAPredicate$';
+		at: #list put: '$SAList$';
+		at: #listList put: '$MAList$';
+		at: #text put: '$Text$';
+		at: #textList put: '$MAText$';
+		at: #any put: '$String$';
+		at: #anyList put:  '$MAAny$';
+		at: #boolean put: '$Boolean$';
+		at: #booleanList put: '$MABoolean$';
+		at: #number put: '$Number$';
+		at: #numberList put: '$MANumber$';
+		at: #template put: '$SpecialVar$';
+		at: #booleanslot put: '$SABoolean$';
+		at: #unevaluated put: '$UnEExp$';
+		at: #unevaluatedList put: '$MAUneval$';
+		at: #loop put: '$CArgSlot$';
+		at: #unevaluatedBoolean put: '$UnEBool$';
+		at: #unevaluatedBooleanList put: '$MAUnEBool$'.
+
+	specs keysDo: [:t |
+		spec = (specs at: t) ifTrue: [^t]].
+	^#any
+]
+
+{ #category : #accessing }
+CommandBlockMorph >> uncoloredArgMorphFor: specString [
+	"Answer an argument morph for the given argument specification string."
+
+	| code allPragmas prag |
+	code := specString copyFrom: 2 to: specString size - 1.
+	allPragmas := Pragma allNamed: #phratchType: in: PhratchType sortedByArgument: 1.
+	prag := allPragmas detect: [ :pragma | (pragma arguments at: 1) asString = code asString ] ifNone: [ nil ].
+	prag isNil
+		ifTrue: [
+			 prag := allPragmas detect: [ :pragma | (self oldUncoloredArgMorphFor: specString) asString = code asString ] ifNone: [ nil ].
+		].
+	
+	^ PhratchType new
+				receiver: self receiver;
+				perform: prag method selector
+]
+
+{ #category : #private }
+CommandBlockMorph >> updateReferencesUsing: aDictionary [
+	"Update my arg morphs."
+
+	super updateReferencesUsing: aDictionary.
+	argMorphs := argMorphs collect: [:m | aDictionary at: m ifAbsent: [m]].
+
+]
+
+{ #category : #byob }
+CommandBlockMorph >> varNamesMenu [
+
+	| blockVars objVars obj | 
+
+	obj := self phratchObject.
+	obj ifNil: [^#()].
+	blockVars := self scriptVars asSortedCollection asArray.
+	objVars := obj varNamesMenu asOrderedCollection.
+	objVars removeAllSansError: blockVars.
+
+	(#(
+		doRun
+		doRunBlockWithArgs
+		doFork
+		doForkBlockWithArgs
+		doReport
+		doCallBlockWithArgs
+	) includes: selector )	
+		ifTrue: [ ^ (objVars copyWith: #-), blockVars, #('')].
+
+	^ (objVars copyWith: #-), blockVars
+]
+
+{ #category : #copying }
+CommandBlockMorph >> veryDeepFixupWith: deepCopier [
+	"If fields were weakly copied, fix them here.  If they were in the tree being copied, fix them up, otherwise point to the originals."
+
+	super veryDeepFixupWith: deepCopier.
+	receiver := deepCopier references at: receiver ifAbsent: [receiver].
+	argMorphs := argMorphs collect: [:m | deepCopier references at: m ifAbsent: [m]]
+]
+
+{ #category : #copying }
+CommandBlockMorph >> veryDeepInner: deepCopier [
+	"Copy all of my instance variables.  Some need to be not copied at all, but shared.  	Warning!!  Every instance variable defined in this class must be handled.  We must also implement veryDeepFixupWith:.  See DeepCopier class comment."
+
+	super veryDeepInner: deepCopier.
+	titleMorph := titleMorph veryDeepCopyWith: deepCopier.
+	stopFrame := nil
+]
